@@ -8,6 +8,7 @@
 #include <vector>
 #include "IterativeSolver.h"
 #include "SimpleVector.h"
+#include "PagedVector.h"
 
 TEST(TestIterativeSolver, small_eigenproblem) {
   for (size_t n = 1; n < 20; n++) {
@@ -99,4 +100,33 @@ TEST(TestIterativeSolver, small_eigenproblem) {
   }
 }
 
-
+using v = LinearAlgebra::PagedVector<double>;
+static v calculate_residual(const v x) {
+  auto n = (size_t) std::sqrt((double) x.size());
+  v result(x);
+  result.scal(0);
+  for (size_t i = 0; i < n; i++)
+    result[i * (n + 1)] = -3;
+  result.axpy(4, x);
+  return result;
+}
+TEST(TestIterativeSolver, small_linear_with_diis) {
+  std::vector<v> solution, residual;
+  constexpr size_t n = 2;
+  solution.emplace_back(n * n);
+  residual.emplace_back(n * n);
+  solution.back().scal(0);
+  for (size_t i = 0; i < solution.back().size(); i++)
+    solution.back()[i] = -.001 * i;
+  LinearAlgebra::DIIS<v> solver;
+  solver.m_verbosity = 2;
+  solver.setThresholds(1e-20);
+  for (auto iteration = 0; iteration < 5; iteration++) {
+    std::cout << "solution.front() " << solution.front() << std::endl;
+    residual.front() = calculate_residual(solution.front());
+    std::cout << "residual.front() " << residual.front() << std::endl;
+    solver.addVector(solution, residual);
+    solution.front().axpy(-1,residual.front());
+    if (solver.endIteration(solution, residual)) break;
+  }
+}
