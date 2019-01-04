@@ -151,12 +151,13 @@ class IterativeSolver {
 
   void addVector(vectorSet& parameters, vectorSet& action) {
     vectorSetP parametersP;
-    addVector(parameters, action, parametersP);
+    //TODO std::vector no good because copy unavoidable
+//    addVector(parameters, action, parametersP);
     return;
   }
 
   void
-  addVector(vectorSet& parameters, vectorSet& action, vectorSetP& parametersP) {
+  addVector(T& parameters, T& action, std::vector<T>& parametersP) {
     vectorSet other;
     addVector(parameters, action, parametersP, other);
     return;
