@@ -108,8 +108,11 @@ class IterativeSolver {
 
  protected:
   using value_type = typename T::value_type; ///< The underlying type of elements of vectors
-  using vectorSet = typename std::vector<T>; ///< Container of vectors
+  using vectorSet = typename std::vector<std::reference_wrapper<T> >; ///< Container of vectors
   using vectorSetP = typename std::vector<std::vector<value_type> >; ///<Container of P-space parameters
+  static vectorSet nullVectorSet;
+  static vectorSetP nullVectorSetP;
+  static std::vector<T> nullStdVector;
  public:
   using scalar_type = decltype(std::declval<T>().dot(std::declval<const T&>())); ///< The type of scalar products of vectors
   /*!
@@ -125,8 +128,8 @@ class IterativeSolver {
    */
   void addVector(vectorSet& parameters,
                  vectorSet& action,
-                 vectorSetP& parametersP,
-                 vectorSet& other) {
+                 vectorSetP& parametersP = nullVectorSetP,
+                 vectorSet& other = nullVectorSet) {
 //   if (m_rhs.size())
 //    xout << "addVector entry m_rhs.back()="<<this->m_rhs.back()<<std::endl;
     m_active.resize(parameters.size(), true);
@@ -148,20 +151,18 @@ class IterativeSolver {
     solveReducedProblem();
     doInterpolation(parameters, action, parametersP, other);
   }
-
-  void addVector(vectorSet& parameters, vectorSet& action) {
-    vectorSetP parametersP;
-    //TODO std::vector no good because copy unavoidable
-//    addVector(parameters, action, parametersP);
-    return;
+  void addVector(std::vector<T>& parameters,
+                 std::vector<T>& action,
+                 vectorSetP& parametersP = nullVectorSetP,
+                 std::vector<T>& other = nullStdVector) {
+    addVector(
+        vectorSet(parameters.begin(), parameters.end()),
+        vectorSet(action.begin(), action.end()),
+        parametersP,
+        vectorSet(other.begin(), other.end())
+    );
   }
 
-  void
-  addVector(T& parameters, T& action, std::vector<T>& parametersP) {
-    vectorSet other;
-    addVector(parameters, action, parametersP, other);
-    return;
-  }
 
  public:
   /*!
@@ -185,7 +186,7 @@ class IterativeSolver {
             vectorSet& parameters,
             vectorSet& action,
             vectorSetP& parametersP,
-            vectorSet& other) {
+            vectorSet& other = nullVectorSet) {
     auto oldss = m_subspaceMatrix.rows();
     m_active.resize(parameters.size(), true);
 //    xout << "oldss " << oldss << ", Pvectors,size() " << Pvectors.size() << std::endl;
@@ -249,12 +250,19 @@ class IterativeSolver {
 //      xout << " after doInterpolation, parameters=" << parameters[ll]<< std::endl;
 //      xout << " after doInterpolation, g.w=" << parameters[ll]->dot(*action[ll]) << std::endl;
   }
-
-  void addP(std::vector<Pvector> Pvectors, const scalar_type* PP, vectorSet& parameters, vectorSet& action,
-            vectorSetP& parametersP) {
-    vectorSet other;
-    return addP(Pvectors, PP, parameters, action, parametersP, other);
+  void addP(std::vector<Pvector> Pvectors, const scalar_type* PP,
+            std::vector<T>& parameters,
+            std::vector<T>& action,
+            vectorSetP& parametersP,
+            std::vector<T>& other = nullStdVector) {
+    addP(Pvectors, PP,
+         vectorSet(parameters.begin(), parameters.end()),
+         vectorSet(action.begin(), action.end()),
+         parametersP,
+         vectorSet(other.begin(), other.end())
+    );
   }
+
 
   /*!
    * \brief Remove completely the whole P space
@@ -281,6 +289,12 @@ class IterativeSolver {
     if (m_error >= m_thresh) adjustUpdate(solution);
     report();
     return m_error < m_thresh;
+  }
+  bool endIteration(std::vector<T>& solution, const std::vector<T>& residual) {
+    return endIteration(
+        vectorSet(solution.begin(), solution.end()),
+        vectorSet(residual.begin(), residual.end())
+    );
   }
 
   /*!
@@ -335,6 +349,16 @@ class IterativeSolver {
     }
 //   for (auto k=0; k<indices.size(); k++) xout << "suggest P "<< indices[k] <<" : "<<values[k]<<std::endl;
     return indices;
+  }
+  std::vector<size_t> suggestP(const std::vector<T>& solution,
+                               const std::vector<T>& residual,
+                               const size_t maximumNumber = 1000,
+                               const scalar_type threshold = 0) {
+    return suggestP(
+        vectorSet(solution.begin(), solution.end()),
+        vectorSet(residual.begin(), residual.end()),
+        maximumNumber, threshold
+    );
   }
 
   /*!
@@ -996,7 +1020,7 @@ class LinearEquations : public IterativeSolver<T> {
   using typename IterativeSolver<T>::scalar_type;
   using typename IterativeSolver<T>::value_type;
  public:
-  using vectorSet = typename std::vector<T>; ///< Container of vectors
+  using vectorSet = typename std::vector<std::reference_wrapper<T> >; ///< Container of vectors
   using IterativeSolver<T>::m_verbosity;
 
   /*!
@@ -1005,7 +1029,7 @@ class LinearEquations : public IterativeSolver<T> {
    * \param augmented_hessian If zero, solve the inhomogeneous equations unmodified. If 1, solve instead
    * the augmented hessian problem. Other values scale the augmented hessian damping.
    */
-  explicit LinearEquations(const vectorSet& rhs, scalar_type augmented_hessian = 0)
+  explicit LinearEquations(const vectorSet rhs, scalar_type augmented_hessian = 0)
 //    : m_linear(true)
 //    , IterativeSolver<T>::m_orthogonalize(true)
 //    , IterativeSolver<T>::m_residual_eigen(false)
@@ -1017,6 +1041,12 @@ class LinearEquations : public IterativeSolver<T> {
     this->m_augmented_hessian = augmented_hessian;
     addEquations(rhs);
   }
+
+  explicit LinearEquations(const std::vector<T>& rhs, scalar_type augmented_hessian = 0)
+      : LinearEquations(vectorSet(rhs.begin(), rhs.end()),augmented_hessian) {}
+
+  explicit LinearEquations(const T& rhs, scalar_type augmented_hessian=0)
+      : LinearEquations(vectorSet(1,rhs),augmented_hessian) {}
 
   /*!
    * \brief add one or more equations to the set to be solved, by specifying their right-hand-side vector
@@ -1031,6 +1061,12 @@ class LinearEquations : public IterativeSolver<T> {
                                LINEARALGEBRA_DISTRIBUTED
                                    | LINEARALGEBRA_OFFLINE); // TODO template-ise these options
 //   xout << "addEquations makes m_rhs.back()="<<this->m_rhs.back()<<std::endl;
+  }
+  void addEquations(const std::vector<T>& rhs) {
+    addEquations(vectorSet(rhs.begin(),rhs.end()));
+  }
+  void addEquations(const T& rhs) {
+    addEquations(vectorSet(1,rhs));
   }
 
  protected:
