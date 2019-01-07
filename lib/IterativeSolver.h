@@ -109,12 +109,7 @@ class IterativeSolver {
  protected:
   using value_type = typename T::value_type; ///< The underlying type of elements of vectors
   using vectorSet = typename std::vector<T>; ///< Container of vectors
-  using vectorRefSet = typename std::vector<std::reference_wrapper<T> >; ///< Container of vectors
-  using constVectorRefSet = typename std::vector<std::reference_wrapper<const T> >; ///< Container of vectors
   using vectorSetP = typename std::vector<std::vector<value_type> >; ///<Container of P-space parameters
-  static vectorSet nullVectorSet;
-  static vectorSetP nullVectorSetP;
-  static std::vector<T> nullStdVector;
  public:
   using scalar_type = decltype(std::declval<T>().dot(std::declval<const T&>())); ///< The type of scalar products of vectors
   /*!
@@ -128,10 +123,10 @@ class IterativeSolver {
    * \param other Optional additional vectors that should be interpolated like the residual.
    * corresponding element of other contains data to be used.
    */
-  void addVector(vectorRefSet parameters,
-                 vectorRefSet action,
-                 vectorSetP& parametersP = nullVectorSetP,
-                 vectorRefSet other = nullVectorSet) {
+  void addVector(vectorSet& parameters,
+                 vectorSet& action,
+                 vectorSetP& parametersP,
+                 vectorSet& other) {
 //   if (m_rhs.size())
 //    xout << "addVector entry m_rhs.back()="<<this->m_rhs.back()<<std::endl;
     m_active.resize(parameters.size(), true);
@@ -153,18 +148,19 @@ class IterativeSolver {
     solveReducedProblem();
     doInterpolation(parameters, action, parametersP, other);
   }
-  void addVector(std::vector<T>& parameters,
-                 std::vector<T>& action,
-                 vectorSetP& parametersP = nullVectorSetP,
-                 std::vector<T>& other = nullStdVector) {
-    addVector(
-        vectorRefSet(parameters.begin(), parameters.end()),
-        vectorRefSet(action.begin(), action.end()),
-        parametersP,
-        vectorRefSet(other.begin(), other.end())
-    );
+
+  void addVector(vectorSet& parameters, vectorSet& action) {
+    vectorSetP parametersP;
+    addVector(parameters, action, parametersP);
+    return;
   }
 
+  void
+  addVector(vectorSet& parameters, vectorSet& action, vectorSetP& parametersP) {
+    vectorSet other;
+    addVector(parameters, action, parametersP, other);
+    return;
+  }
 
  public:
   /*!
@@ -185,10 +181,10 @@ class IterativeSolver {
    * \param other On exit, interpolation of the other vectors
    */
   void addP(std::vector<Pvector> Pvectors, const scalar_type* PP,
-            vectorRefSet parameters,
-            vectorRefSet action,
+            vectorSet& parameters,
+            vectorSet& action,
             vectorSetP& parametersP,
-            vectorRefSet other = nullVectorSet) {
+            vectorSet& other) {
     auto oldss = m_subspaceMatrix.rows();
     m_active.resize(parameters.size(), true);
 //    xout << "oldss " << oldss << ", Pvectors,size() " << Pvectors.size() << std::endl;
@@ -252,19 +248,12 @@ class IterativeSolver {
 //      xout << " after doInterpolation, parameters=" << parameters[ll]<< std::endl;
 //      xout << " after doInterpolation, g.w=" << parameters[ll]->dot(*action[ll]) << std::endl;
   }
-  void addP(std::vector<Pvector> Pvectors, const scalar_type* PP,
-            std::vector<T>& parameters,
-            std::vector<T>& action,
-            vectorSetP& parametersP,
-            std::vector<T>& other = nullStdVector) {
-    addP(Pvectors, PP,
-         vectorRefSet(parameters.begin(), parameters.end()),
-         vectorRefSet(action.begin(), action.end()),
-         parametersP,
-         vectorRefSet(other.begin(), other.end())
-    );
-  }
 
+  void addP(std::vector<Pvector> Pvectors, const scalar_type* PP, vectorSet& parameters, vectorSet& action,
+            vectorSetP& parametersP) {
+    vectorSet other;
+    return addP(Pvectors, PP, parameters, action, parametersP, other);
+  }
 
   /*!
    * \brief Remove completely the whole P space
@@ -286,17 +275,11 @@ class IterativeSolver {
      * \param residual The residual after interpolation.
      * \return true if convergence reached for all roots
      */
-  bool endIteration(vectorRefSet solution, constVectorRefSet residual) {
+  bool endIteration(vectorSet& solution, const vectorSet& residual) {
     calculateErrors(solution, residual);
     if (m_error >= m_thresh) adjustUpdate(solution);
     report();
     return m_error < m_thresh;
-  }
-  bool endIteration(std::vector<T>& solution, const std::vector<T>& residual) {
-    return endIteration(
-        vectorRefSet(solution.begin(), solution.end()),
-        constVectorRefSet(residual.begin(), residual.end())
-    );
   }
 
   /*!
@@ -317,8 +300,8 @@ class IterativeSolver {
    * indicate an energy improvement in the next iteration of this amount or more.
    * \return
    */
-  std::vector<size_t> suggestP(constVectorRefSet solution,
-                               constVectorRefSet residual,
+  std::vector<size_t> suggestP(const vectorSet& solution,
+                               const vectorSet& residual,
                                const size_t maximumNumber = 1000,
                                const scalar_type threshold = 0) {
     std::map<size_t, scalar_type> result;
@@ -327,7 +310,7 @@ class IterativeSolver {
       if (m_active[kkk]) {
         std::vector<size_t> indices;
         std::vector<scalar_type> values;
-        std::tie(indices, values) = solution[kkk].get().select(residual[kkk], maximumNumber, threshold);
+        std::tie(indices, values) = solution[kkk].select(residual[kkk], maximumNumber, threshold);
 //     xout <<"indices.size()="<<indices.size()<<std::endl;
 //     for (auto k=0; k<indices.size(); k++) xout << "select "<< indices[k] <<" : "<<values[k]<<std::endl;
         for (size_t i = 0; i < indices.size(); i++)
@@ -351,16 +334,6 @@ class IterativeSolver {
     }
 //   for (auto k=0; k<indices.size(); k++) xout << "suggest P "<< indices[k] <<" : "<<values[k]<<std::endl;
     return indices;
-  }
-  std::vector<size_t> suggestP(const std::vector<T>& solution,
-                               const std::vector<T>& residual,
-                               const size_t maximumNumber = 1000,
-                               const scalar_type threshold = 0) {
-    return suggestP(
-        constVectorRefSet(solution.begin(), solution.end()),
-        constVectorRefSet(residual.begin(), residual.end()),
-        maximumNumber, threshold
-    );
   }
 
   /*!
@@ -409,7 +382,7 @@ class IterativeSolver {
   ///< - m_options["convergence"]=="residual": m_errors() returns the norm of the residual vector
 
  private:
-  void adjustUpdate(vectorRefSet solution) {
+  void adjustUpdate(vectorSet& solution) {
 //         xout << "m_errors[0] "<<m_errors[0]<<", m_thresh "<<m_thresh<<std::endl;
     for (size_t k = 0; k < solution.size(); k++)
       m_active[k] = (m_errors[k] >= m_thresh || m_minIterations > m_iterations);
@@ -422,29 +395,29 @@ class IterativeSolver {
           if (m_active[kkk]) {
             for (size_t i = 0; i < m_Pvectors.size(); i++) {
               const auto& p = m_Pvectors[i];
-              scalar_type s = -solution[kkk].get().dot(p) / m_subspaceOverlap(i, i);
-              solution[kkk].get().axpy(s, p);
+              scalar_type s = -solution[kkk].dot(p) / m_subspaceOverlap(i, i);
+              solution[kkk].axpy(s, p);
             }
             for (size_t ll = 0; ll < m_solutions.size(); ll++) {
               for (size_t lll = 0; lll < m_solutions[ll].size(); lll++) {
                 if (m_vector_active[ll][lll]) {
                   scalar_type s =
                       -(m_solutions[ll][lll].dot(solution[kkk])) / (m_solutions[ll][lll].dot(m_solutions[ll][lll]));
-                  solution[kkk].get().axpy(s, m_solutions[ll][lll]);
+                  solution[kkk].axpy(s, m_solutions[ll][lll]);
                 }
               }
             }
             for (size_t lll = 0; lll < kkk; lll++) {
               if (m_active[lll]) {
-                scalar_type s = solution[lll].get().dot(solution[kkk]);
-                solution[kkk].get().axpy(-s, solution[lll]);
+                scalar_type s = solution[lll].dot(solution[kkk]);
+                solution[kkk].axpy(-s, solution[lll]);
               }
             }
-            scalar_type s = solution[kkk].get().dot(solution[kkk]);
+            scalar_type s = solution[kkk].dot(solution[kkk]);
             if (s <= 0)
               m_active[kkk] = false;
             else
-              solution[kkk].get().scal(1 / std::sqrt(s));
+              solution[kkk].scal(1 / std::sqrt(s));
           }
         }
 //          xout << "IterativeSolverBase::adjustUpdate solution after orthogonalization: "<<solution[0]<<std::endl;
@@ -651,18 +624,18 @@ for (auto repeat=0; repeat<1; ++repeat)
    * @param solutionP On exit, the solution projected to the P space
    * @param other On exit, interpolation of the other vectors
    */
-  void doInterpolation(vectorRefSet solution, vectorRefSet residual,
+  void doInterpolation(vectorSet& solution, vectorSet& residual,
                        vectorSetP& solutionP,
-                       vectorRefSet other) {
-    for (auto& s : solution) s.get().scal(0);
-    for (auto& s : residual) s.get().scal(0);
+                       vectorSet& other) {
+    for (auto& s : solution) s.scal(0);
+    for (auto& s : residual) s.scal(0);
     size_t nP = m_Pvectors.size();
     solutionP.resize(residual.size());
-    for (auto& s : other) s.get().scal(0);
+    for (auto& s : other) s.scal(0);
     for (size_t kkk = 0; kkk < residual.size() && kkk < static_cast<size_t>(m_interpolation.rows()); kkk++) {
       solutionP[kkk].resize(nP);
       for (size_t l = 0; l < nP; l++)
-        solution[kkk].get().axpy((solutionP[kkk][l] = this->m_interpolation(l, kkk)), m_Pvectors[l]);
+        solution[kkk].axpy((solutionP[kkk][l] = this->m_interpolation(l, kkk)), m_Pvectors[l]);
 //      xout << "square norm of solution after P contribution " << solution[kkk]->dot(*solution[kkk]) << std::endl;
       size_t l = nP;
       for (size_t ll = 0; ll < this->m_solutions.size(); ll++) {
@@ -672,9 +645,9 @@ for (auto repeat=0; repeat<1; ++repeat)
               xout << "IterativeSolver::doInterpolation kkk=" << kkk << ", ll=" << ll << ", lll=" << lll << ", l=" << l
                    << std::endl;
             if (m_verbosity > 3) xout << "Interpolation:\n" << this->m_interpolation(l, kkk) << std::endl;
-            solution[kkk].get().axpy(this->m_interpolation(l, kkk), this->m_solutions[ll][lll]);
-            residual[kkk].get().axpy(this->m_interpolation(l, kkk), this->m_residuals[ll][lll]);
-            if (other.size() > kkk) other[kkk].get().axpy(this->m_interpolation(l, kkk), this->m_others[ll][lll]);
+            solution[kkk].axpy(this->m_interpolation(l, kkk), this->m_solutions[ll][lll]);
+            residual[kkk].axpy(this->m_interpolation(l, kkk), this->m_residuals[ll][lll]);
+            if (other.size() > kkk) other[kkk].axpy(this->m_interpolation(l, kkk), this->m_others[ll][lll]);
             l++;
           }
         }
@@ -684,8 +657,8 @@ for (auto repeat=0; repeat<1; ++repeat)
 //      xout << "m_residual_eigen " << m_residual_eigen << std::endl;
 //      xout << "g.w before axpy contribution " << solution[kkk]->dot(*residual[kkk]) << std::endl;
       if (m_residual_eigen || (m_residual_rhs && m_augmented_hessian > 0))
-        residual[kkk].get().axpy(-this->m_subspaceEigenvalues(kkk).real(), solution[kkk]);
-      if (m_residual_rhs) residual[kkk].get().axpy(-1, this->m_rhs[kkk]);
+        residual[kkk].axpy(-this->m_subspaceEigenvalues(kkk).real(), solution[kkk]);
+      if (m_residual_rhs) residual[kkk].axpy(-1, this->m_rhs[kkk]);
 //    xout << "residual after axpy "<<residual[kkk]<<std::endl;
 //      xout << "solution after axpy "<<solution[kkk]<<std::endl;
 //      xout << "square norm of solution after axpy contribution " << solution[kkk]->dot(*solution[kkk]) << std::endl;
@@ -694,7 +667,7 @@ for (auto repeat=0; repeat<1; ++repeat)
 
   }
 
-  void calculateErrors(const vectorRefSet solution, constVectorRefSet residual) {
+  void calculateErrors(const vectorSet& solution, const vectorSet& residual) {
     auto errortype = 0; // step . residual
     if (this->m_options.count("convergence") && this->m_options.find("convergence")->second == "step") errortype = 1;
     if (this->m_options.count("convergence") && this->m_options.find("convergence")->second == "residual")
@@ -714,8 +687,8 @@ for (auto repeat=0; repeat<1; ++repeat)
       for (size_t k = 0; k < solution.size(); k++) {
         m_errors.push_back(m_active[k] ?
                            std::fabs(
-                               residual[k].get().dot(errortype == 2 ? residual[k].get() : solution[k].get())
-                                   / solution[k].get().dot(solution[k].get())
+                               residual[k].dot(errortype == 2 ? residual[k] : solution[k])
+                                   / solution[k].dot(solution[k])
                            )
                                        : 0);
 //        xout << "solution . solution " << solution[k]->dot(*solution[k]) << std::endl;
@@ -723,8 +696,7 @@ for (auto repeat=0; repeat<1; ++repeat)
 //        xout << "residual . residual " << residual[k]->dot(*residual[k]) << std::endl;
       }
     } else {
-//      vectorSet step = solution;
-      vectorSet step(solution.begin(),solution.end());
+      vectorSet step = solution;
       for (size_t k = 0; k < solution.size(); k++) {
         step[k].axpy(-1, m_solutions[m_lastVectorIndex][k]);
         m_errors.push_back(
@@ -749,7 +721,7 @@ for (auto repeat=0; repeat<1; ++repeat)
   }
 
  protected:
-  static void copyvec(std::vector<vectorSet>& history, const vectorRefSet newvec) {
+  static void copyvec(std::vector<vectorSet>& history, const vectorSet& newvec) {
     vectorSet newcopy;
     newcopy.reserve(newvec.size());
     for (auto& v : newvec)
@@ -761,7 +733,7 @@ for (auto repeat=0; repeat<1; ++repeat)
  public:
 
   size_t
-  addVectorSet(const vectorRefSet solution, const vectorRefSet residual, const vectorRefSet other) {
+  addVectorSet(const vectorSet& solution, const vectorSet& residual, const vectorSet& other) {
 //   xout << "addVectorSet entry"<<std::endl;
     //      if (residual.m_vector_active.front()==0) xout <<"warning: inactive residual"<<std::endl;
     //      if (solution.m_vector_active.front()==0) xout <<"warning: inactive solution"<<std::endl;
@@ -776,8 +748,8 @@ for (auto repeat=0; repeat<1; ++repeat)
     m_vector_active.emplace_back();
     for (size_t k = 0; k < solution.size(); k++) m_vector_active.back().push_back(m_active[k]);
 //   xout << "addVectorSet after emplace_back()"<<std::endl;
-    const vectorRefSet& residual1 = residual;
-    const vectorRefSet& solution1 = solution;//      for (size_t kkk=0; kkk<solution.size(); kkk++)
+    const vectorSet& residual1 = residual;
+    const vectorSet& solution1 = solution;//      for (size_t kkk=0; kkk<solution.size(); kkk++)
 //   for (size_t kkk=0; kkk<solution.size(); kkk++)
 //             xout << "solution: "<<solution[kkk]<<std::endl;
 //         for (size_t kkk=0; kkk<residual.size(); kkk++)
@@ -802,8 +774,8 @@ for (auto repeat=0; repeat<1; ++repeat)
     for (size_t kkk = 0; kkk < residual1.size(); kkk++) {
       if (m_active[kkk]) {
         for (auto l = 0; l < nP; l++) {
-          m_PQMatrix(l, k) = residual1[kkk].get().dot(m_Pvectors[l]);
-          m_PQOverlap(l, k) = solution1[kkk].get().dot(m_Pvectors[l]);
+          m_PQMatrix(l, k) = residual1[kkk].dot(m_Pvectors[l]);
+          m_PQOverlap(l, k) = solution1[kkk].dot(m_Pvectors[l]);
         }
         size_t l = 0;
         for (size_t ll = 0; ll < m_solutions.size(); ll++) {
@@ -1024,8 +996,6 @@ class LinearEquations : public IterativeSolver<T> {
   using typename IterativeSolver<T>::value_type;
  public:
   using vectorSet = typename std::vector<T>; ///< Container of vectors
-  using vectorRefSet = typename std::vector<std::reference_wrapper<T> >; ///< Container of vectors
-  using constVectorRefSet = typename std::vector<std::reference_wrapper<const T> >; ///< Container of vectors
   using IterativeSolver<T>::m_verbosity;
 
   /*!
@@ -1034,7 +1004,7 @@ class LinearEquations : public IterativeSolver<T> {
    * \param augmented_hessian If zero, solve the inhomogeneous equations unmodified. If 1, solve instead
    * the augmented hessian problem. Other values scale the augmented hessian damping.
    */
-  explicit LinearEquations(constVectorRefSet rhs, scalar_type augmented_hessian = 0)
+  explicit LinearEquations(const vectorSet& rhs, scalar_type augmented_hessian = 0)
 //    : m_linear(true)
 //    , IterativeSolver<T>::m_orthogonalize(true)
 //    , IterativeSolver<T>::m_residual_eigen(false)
@@ -1047,27 +1017,11 @@ class LinearEquations : public IterativeSolver<T> {
     addEquations(rhs);
   }
 
-  explicit LinearEquations(const vectorSet& rhs, scalar_type augmented_hessian = 0) {
-    auto rhsr = constVectorRefSet(rhs.begin(), rhs.end());
-    this->m_linear = true;
-    this->m_residual_rhs = true;
-    this->m_augmented_hessian = augmented_hessian;
-    addEquations(rhsr);
-  }
-
-  explicit LinearEquations(const T& rhs, scalar_type augmented_hessian = 0) {
-    auto rhsr = constVectorRefSet(1, rhs);
-    this->m_linear = true;
-    this->m_residual_rhs = true;
-    this->m_augmented_hessian = augmented_hessian;
-    addEquations(rhsr);
-  }
-
   /*!
    * \brief add one or more equations to the set to be solved, by specifying their right-hand-side vector
    * \param rhs right-hand-side vectors to be added
    */
-  void addEquations(constVectorRefSet rhs) {
+  void addEquations(const vectorSet& rhs) {
 //   for (const auto &v : rhs) this->m_rhs.push_back(v);
     this->m_rhs.clear();
     this->m_rhs.reserve(rhs.size());
@@ -1076,12 +1030,6 @@ class LinearEquations : public IterativeSolver<T> {
                                LINEARALGEBRA_DISTRIBUTED
                                    | LINEARALGEBRA_OFFLINE); // TODO template-ise these options
 //   xout << "addEquations makes m_rhs.back()="<<this->m_rhs.back()<<std::endl;
-  }
-  void addEquations(const std::vector<T>& rhs) {
-    addEquations(vectorSet(rhs.begin(),rhs.end()));
-  }
-  void addEquations(const T& rhs) {
-    addEquations(vectorSet(1,rhs));
   }
 
  protected:
