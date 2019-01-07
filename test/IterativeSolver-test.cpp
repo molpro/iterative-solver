@@ -145,7 +145,6 @@ void DIISTest(int verbosity = 0,
               double svdThreshold = 1e-10,
               enum DIIS<ptype>::DIISmode_type mode = DIIS<ptype>::DIISmode,
               double difficulty = 0.1) {
-  using vectorSet = std::vector<ptype>;
   using scalar = typename DIIS<ptype>::scalar_type;
   static struct {
     void operator()(const ptype& psx, ptype& outputs) const {

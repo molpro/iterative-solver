@@ -40,39 +40,43 @@ template <class T>
 static T nullVector;
 template <class T>
 static std::vector<T> nullStdVector;
+template<class T>
+static std::vector<typename T::value_type> nullVectorP;
 template <class T>
 static std::vector<std::vector<typename T::value_type> > nullVectorSetP;
-template <class T>
+template<class T>
 static std::vector<std::reference_wrapper<T> > nullVectorRefSet;
+template <class T>
+static std::vector<std::vector<std::reference_wrapper<typename T::value_type> > > nullVectorRefSetP;
 
 /*!
-* \brief A base class for iterative solvers for linear and non-linear equations, and linear eigensystems.
-*
-* The calling program should set up its own iterative loop, and in each iteration
-* - calculate
-* the action of the matrix on the current expansion vector (linear), or the actual
-* residual (non-linear)
-* - make a call to addVector() which takes the current and previous parameters and proposes
-* an improved estimate, and the best estimate of the residual vector.
-* - calculate a new solution (non-linear) or expansion vector (linear) by implementing
-* appropriate preconditioning on the residual
-* -  make a call to endIteration()
-*
-* Classes that derive from this will, in the simplest case, need to provide just the solveReducedProblem() method that governs how the parameter and residual vectors from successive iterations
-* should be combined to form an optimum solution with minimal residual.
-*
-* The underlying vector spaces are accessed through instances of the vectorSet<scalar> class (or derivatives). These consist of a set of pointers to vector<scalar> objects, which are the vectors themselves; the vectorSet<scalar>
-* object has dimension greater than one in, for example, multi-root diagonalisations where the residual is calculated simultaneously for a number of vectors.
-* Two instances of vectorSet<scalar> have to be passed to iterate() or solve(),
-* and these are used to construct solutions and residuals;
-* this class also creates unlimited additional instances of vectorSet<scalar>,
-* and in memory-sensitive environments, consideration might be given to implementing a derivative of vectorSet<scalar> where the data is resident in external storage.
-* The additional instances are created with hints that they may be stored offline passed to
-* the copy constructor.
-* The use of pointers in vectorSet<scalar> supports polymorphism: the user is free to
-* present instances of classes deriving from vector<scalar>, and thereby implement
-* any special storage arrangements desired.
-*/
+ * \brief A base class for iterative solvers for linear and non-linear equations, and linear eigensystems.
+ *
+ * The calling program should set up its own iterative loop, and in each iteration
+ * - calculate
+ * the action of the matrix on the current expansion vector (linear), or the actual
+ * residual (non-linear)
+ * - make a call to addVector() which takes the current and previous parameters and proposes
+ * an improved estimate, and the best estimate of the residual vector.
+ * - calculate a new solution (non-linear) or expansion vector (linear) by implementing
+ * appropriate preconditioning on the residual
+ * -  make a call to endIteration()
+ *
+ * Classes that derive from this will, in the simplest case, need to provide just the solveReducedProblem() method that governs how the parameter and residual vectors from successive iterations
+ * should be combined to form an optimum solution with minimal residual.
+ *
+ * The underlying vector spaces are accessed through instances of the T class.
+ * - Both scalar (T) and vector(std::vector<T>) interfaces are provided to the class functions addVector(), endIteration()
+ * - The class T must provide the following functions
+ *   - scalar_type dot(const T& y) - scalar product of two vectors
+ *   - void axpy(scalar_type a, const T& y) add a multiple a of y to *this; scalar_type is deduced from the return type of dot()
+ *   - scal(scalar_type a) scale *this by a. In the special case a==0, *this on entry might be uninitialised.
+ *   - T(const T&, unsigned int option=0) - copy constructor containing an additional int argument that advise the implementation of T on where to store its data. If zero, it should try to
+ * store in memory; if 1 or 3, it may store offline, and if 2 or 3, distributed. These options are presented when copies of input solution and residual
+ * vectors are taken to store the history, and if implemented, can save memory.
+ *
+ * @tparam T The class encapsulating solution and residual vectors
+ */
 template<class T>
 class IterativeSolver {
  public:
@@ -119,7 +123,10 @@ class IterativeSolver {
   using vectorSet = typename std::vector<T>; ///< Container of vectors
   using vectorRefSet = typename std::vector<std::reference_wrapper<T> >; ///< Container of vectors
   using constVectorRefSet = typename std::vector<std::reference_wrapper<const T> >; ///< Container of vectors
-  using vectorSetP = typename std::vector<std::vector<value_type> >; ///<Container of P-space parameters
+  using vectorP = typename std::vector<value_type>; ///<P-space parameters
+  using vectorRefSetP = typename std::vector<std::reference_wrapper<vectorP> >; ///<Container of P-space parameters
+  using constVectorRefSetP = typename std::vector<std::reference_wrapper<const vectorP> >; ///<Container of P-space parameters
+  using vectorSetP = typename std::vector<vectorP>; ///<Container of P-space parameters
  public:
   using scalar_type = decltype(std::declval<T>().dot(std::declval<const T&>())); ///< The type of scalar products of vectors
   /*!
@@ -135,7 +142,7 @@ class IterativeSolver {
    */
   void addVector(vectorRefSet parameters,
                  vectorRefSet action,
-                 vectorSetP& parametersP = nullVectorSetP<T>,
+                 vectorRefSetP parametersP = nullVectorRefSetP<T>,
                  vectorRefSet other = nullVectorRefSet<T>) {
 //   if (m_rhs.size())
 //    xout << "addVector entry m_rhs.back()="<<this->m_rhs.back()<<std::endl;
@@ -165,18 +172,18 @@ class IterativeSolver {
     addVector(
         vectorRefSet(parameters.begin(), parameters.end()),
         vectorRefSet(action.begin(), action.end()),
-        parametersP,
+        vectorRefSetP(parametersP.begin(), parametersP.end()),
         vectorRefSet(other.begin(), other.end())
     );
   }
   void addVector(T& parameters,
                  T& action,
-                 vectorSetP& parametersP = nullVectorSetP<T>,
+                 vectorP& parametersP = nullVectorP<T>,
                  T& other = nullVector<T>) {
     addVector(
         vectorRefSet(1,parameters),
         vectorRefSet(1,action),
-        parametersP,
+        vectorRefSetP(1, parametersP),
         vectorRefSet(1,other)
     );
   }
@@ -203,7 +210,7 @@ class IterativeSolver {
   void addP(std::vector<Pvector> Pvectors, const scalar_type* PP,
             vectorRefSet parameters,
             vectorRefSet action,
-            vectorSetP& parametersP,
+            vectorRefSetP parametersP,
             vectorRefSet other = nullVectorRefSet<T>) {
     auto oldss = m_subspaceMatrix.rows();
     m_active.resize(parameters.size(), true);
@@ -213,7 +220,6 @@ class IterativeSolver {
     Eigen::Index oldNP = m_PQMatrix.rows();
     Eigen::Index newNP = oldNP + Pvectors.size();
     assert(newNP + m_QQMatrix.rows() == m_subspaceOverlap.rows());
-    parametersP.resize(newNP);
     m_PQMatrix.conservativeResize(newNP, m_QQMatrix.rows());
     m_PQOverlap.conservativeResize(newNP, m_QQMatrix.rows());
     m_subspaceRHS.conservativeResize(newNP, m_rhs.size());
@@ -276,8 +282,20 @@ class IterativeSolver {
     addP(Pvectors, PP,
          vectorRefSet(parameters.begin(), parameters.end()),
          vectorRefSet(action.begin(), action.end()),
-         parametersP,
+         vectorRefSetP(parametersP.begin(), parametersP.end()),
          vectorRefSet(other.begin(), other.end())
+    );
+  }
+  void addP(Pvector Pvectors, const scalar_type* PP,
+            T& parameters,
+            T& action,
+            vectorP& parametersP,
+            T& other = nullStdVector<T>) {
+    addP(Pvectors, PP,
+         vectorRefSet(1, parameters),
+         vectorRefSet(1, action),
+         vectorRefSetP(1, parametersP),
+         vectorRefSet(1, other)
     );
   }
 
@@ -674,17 +692,17 @@ for (auto repeat=0; repeat<1; ++repeat)
    * @param other On exit, interpolation of the other vectors
    */
   void doInterpolation(vectorRefSet solution, vectorRefSet residual,
-                       vectorSetP& solutionP,
+                       vectorRefSetP solutionP,
                        vectorRefSet other) {
     for (auto& s : solution) s.get().scal(0);
     for (auto& s : residual) s.get().scal(0);
     size_t nP = m_Pvectors.size();
-    solutionP.resize(residual.size());
+    assert(nP == 0 || solutionP.size() == residual.size());
     for (auto& s : other) s.get().scal(0);
     for (size_t kkk = 0; kkk < residual.size() && kkk < static_cast<size_t>(m_interpolation.rows()); kkk++) {
-      solutionP[kkk].resize(nP);
+      if (nP > 0)solutionP[kkk].get().resize(nP);
       for (size_t l = 0; l < nP; l++)
-        solution[kkk].get().axpy((solutionP[kkk][l] = this->m_interpolation(l, kkk)), m_Pvectors[l]);
+        solution[kkk].get().axpy((solutionP[kkk].get()[l] = this->m_interpolation(l, kkk)), m_Pvectors[l]);
 //      xout << "square norm of solution after P contribution " << solution[kkk]->dot(*solution[kkk]) << std::endl;
       size_t l = nP;
       for (size_t ll = 0; ll < this->m_solutions.size(); ll++) {
