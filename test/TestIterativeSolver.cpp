@@ -107,7 +107,8 @@ static v calculate_residual(const v x) {
   result.scal(0);
   for (size_t i = 0; i < n; i++)
     result[i * (n + 1)] = -3;
-  result.axpy(4, x);
+  for (size_t i = 0; i < n*n; i++)
+    result[i] += x[i]*(i+1);
   return result;
 }
 TEST(TestIterativeSolver, small_linear_with_diis) {
@@ -116,12 +117,12 @@ TEST(TestIterativeSolver, small_linear_with_diis) {
   solution.emplace_back(n * n);
   residual.emplace_back(n * n);
   solution.back().scal(0);
-  for (size_t i = 0; i < solution.back().size(); i++)
-    solution.back()[i] = -.001 * i;
+  solution.back()[0]=solution.back()[3]=1;
+  solution.back()[1]=solution.back()[2]=1;
   LinearAlgebra::DIIS<v> solver;
   solver.m_verbosity = 2;
   solver.setThresholds(1e-20);
-  for (auto iteration = 0; iteration < 5; iteration++) {
+  for (auto iteration = 0; iteration < 12; iteration++) {
     std::cout << "solution.front() " << solution.front() << std::endl;
     residual.front() = calculate_residual(solution.front());
     std::cout << "residual.front() " << residual.front() << std::endl;
