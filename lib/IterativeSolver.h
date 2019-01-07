@@ -36,6 +36,14 @@ extern std::ostream &xout;
  */
 namespace LinearAlgebra {
 typedef std::map<std::string, std::string> optionMap;
+template <class T>
+static T nullVector;
+template <class T>
+static std::vector<T> nullStdVector;
+template <class T>
+static std::vector<std::vector<typename T::value_type> > nullVectorSetP;
+template <class T>
+static std::vector<std::reference_wrapper<T> > nullVectorRefSet;
 
 /*!
 * \brief A base class for iterative solvers for linear and non-linear equations, and linear eigensystems.
@@ -112,9 +120,6 @@ class IterativeSolver {
   using vectorRefSet = typename std::vector<std::reference_wrapper<T> >; ///< Container of vectors
   using constVectorRefSet = typename std::vector<std::reference_wrapper<const T> >; ///< Container of vectors
   using vectorSetP = typename std::vector<std::vector<value_type> >; ///<Container of P-space parameters
-  static vectorSet nullVectorSet;
-  static vectorSetP nullVectorSetP;
-  static std::vector<T> nullStdVector;
  public:
   using scalar_type = decltype(std::declval<T>().dot(std::declval<const T&>())); ///< The type of scalar products of vectors
   /*!
@@ -130,8 +135,8 @@ class IterativeSolver {
    */
   void addVector(vectorRefSet parameters,
                  vectorRefSet action,
-                 vectorSetP& parametersP = nullVectorSetP,
-                 vectorRefSet other = nullVectorSet) {
+                 vectorSetP& parametersP = nullVectorSetP<T>,
+                 vectorRefSet other = nullVectorRefSet<T>) {
 //   if (m_rhs.size())
 //    xout << "addVector entry m_rhs.back()="<<this->m_rhs.back()<<std::endl;
     m_active.resize(parameters.size(), true);
@@ -155,13 +160,24 @@ class IterativeSolver {
   }
   void addVector(std::vector<T>& parameters,
                  std::vector<T>& action,
-                 vectorSetP& parametersP = nullVectorSetP,
-                 std::vector<T>& other = nullStdVector) {
+                 vectorSetP& parametersP = nullVectorSetP<T>,
+                 std::vector<T>& other = nullStdVector<T>) {
     addVector(
         vectorRefSet(parameters.begin(), parameters.end()),
         vectorRefSet(action.begin(), action.end()),
         parametersP,
         vectorRefSet(other.begin(), other.end())
+    );
+  }
+  void addVector(T& parameters,
+                 T& action,
+                 vectorSetP& parametersP = nullVectorSetP<T>,
+                 T& other = nullVector<T>) {
+    addVector(
+        vectorRefSet(1,parameters),
+        vectorRefSet(1,action),
+        parametersP,
+        vectorRefSet(1,other)
     );
   }
 
@@ -188,7 +204,7 @@ class IterativeSolver {
             vectorRefSet parameters,
             vectorRefSet action,
             vectorSetP& parametersP,
-            vectorRefSet other = nullVectorSet) {
+            vectorRefSet other = nullVectorRefSet<T>) {
     auto oldss = m_subspaceMatrix.rows();
     m_active.resize(parameters.size(), true);
 //    xout << "oldss " << oldss << ", Pvectors,size() " << Pvectors.size() << std::endl;
@@ -256,7 +272,7 @@ class IterativeSolver {
             std::vector<T>& parameters,
             std::vector<T>& action,
             vectorSetP& parametersP,
-            std::vector<T>& other = nullStdVector) {
+            std::vector<T>& other = nullStdVector<T>) {
     addP(Pvectors, PP,
          vectorRefSet(parameters.begin(), parameters.end()),
          vectorRefSet(action.begin(), action.end()),
@@ -296,6 +312,12 @@ class IterativeSolver {
     return endIteration(
         vectorRefSet(solution.begin(), solution.end()),
         constVectorRefSet(residual.begin(), residual.end())
+    );
+  }
+  bool endIteration(T& solution, const T& residual) {
+    return endIteration(
+        vectorRefSet(1, solution),
+        constVectorRefSet(1, residual)
     );
   }
 
