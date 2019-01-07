@@ -327,7 +327,7 @@ class IterativeSolver {
       if (m_active[kkk]) {
         std::vector<size_t> indices;
         std::vector<scalar_type> values;
-        std::tie(indices, values) = solution[kkk].select(residual[kkk], maximumNumber, threshold);
+        std::tie(indices, values) = solution[kkk].get().select(residual[kkk], maximumNumber, threshold);
 //     xout <<"indices.size()="<<indices.size()<<std::endl;
 //     for (auto k=0; k<indices.size(); k++) xout << "select "<< indices[k] <<" : "<<values[k]<<std::endl;
         for (size_t i = 0; i < indices.size(); i++)
@@ -422,29 +422,29 @@ class IterativeSolver {
           if (m_active[kkk]) {
             for (size_t i = 0; i < m_Pvectors.size(); i++) {
               const auto& p = m_Pvectors[i];
-              scalar_type s = -solution[kkk].dot(p) / m_subspaceOverlap(i, i);
-              solution[kkk].axpy(s, p);
+              scalar_type s = -solution[kkk].get().dot(p) / m_subspaceOverlap(i, i);
+              solution[kkk].get().axpy(s, p);
             }
             for (size_t ll = 0; ll < m_solutions.size(); ll++) {
               for (size_t lll = 0; lll < m_solutions[ll].size(); lll++) {
                 if (m_vector_active[ll][lll]) {
                   scalar_type s =
                       -(m_solutions[ll][lll].dot(solution[kkk])) / (m_solutions[ll][lll].dot(m_solutions[ll][lll]));
-                  solution[kkk].axpy(s, m_solutions[ll][lll]);
+                  solution[kkk].get().axpy(s, m_solutions[ll][lll]);
                 }
               }
             }
             for (size_t lll = 0; lll < kkk; lll++) {
               if (m_active[lll]) {
-                scalar_type s = solution[lll].dot(solution[kkk]);
-                solution[kkk].axpy(-s, solution[lll]);
+                scalar_type s = solution[lll].get().dot(solution[kkk]);
+                solution[kkk].get().axpy(-s, solution[lll]);
               }
             }
-            scalar_type s = solution[kkk].dot(solution[kkk]);
+            scalar_type s = solution[kkk].get().dot(solution[kkk]);
             if (s <= 0)
               m_active[kkk] = false;
             else
-              solution[kkk].scal(1 / std::sqrt(s));
+              solution[kkk].get().scal(1 / std::sqrt(s));
           }
         }
 //          xout << "IterativeSolverBase::adjustUpdate solution after orthogonalization: "<<solution[0]<<std::endl;
@@ -723,7 +723,8 @@ for (auto repeat=0; repeat<1; ++repeat)
 //        xout << "residual . residual " << residual[k]->dot(*residual[k]) << std::endl;
       }
     } else {
-      vectorSet step = solution;
+//      vectorSet step = solution;
+      vectorSet step(solution.begin(),solution.end());
       for (size_t k = 0; k < solution.size(); k++) {
         step[k].axpy(-1, m_solutions[m_lastVectorIndex][k]);
         m_errors.push_back(
