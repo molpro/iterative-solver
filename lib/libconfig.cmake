@@ -7,6 +7,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         $<INSTALL_INTERFACE:include>
         )
 target_compile_definitions(${PROJECT_NAME} PRIVATE NOMAIN)
+if (MOLPRO)
+    target_include_directories(${PROJECT_NAME} PRIVATE "${MOLPRO}/src")
+endif ()
 
 install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}/ DESTINATION include)
 
@@ -42,7 +45,8 @@ if (FLAGS)
         set(CONFIG_CPPFLAGS "${CONFIG_CPPFLAGS} -D${flag}")
     endforeach ()
 endif ()
-set(CONFIG_FCFLAGS "${CMAKE_Fortran_MODDIR_FLAG} ${CMAKE_INSTALL_PREFIX}/include")
+#set(CONFIG_FCFLAGS "${CMAKE_Fortran_MODDIR_FLAG}${CMAKE_INSTALL_PREFIX}/include")
+set(CONFIG_FCFLAGS "-I${CMAKE_INSTALL_PREFIX}/include") #TODO should not be hard-wired -I
 set(CONFIG_LDFLAGS "-L${CMAKE_INSTALL_PREFIX}/lib")
 set(CONFIG_LIBS "-l${PROJECT_NAME}")
 configure_file(config.in ${PROJECT_NAME}-config @ONLY)
