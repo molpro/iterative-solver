@@ -2,7 +2,7 @@ PROGRAM Linear_Eigensystem_Benchmark
   USE Iterative_Solver
   USE ProfilerF
   TYPE(Profiler) :: p
-  INTEGER, PARAMETER :: n = 1000000, nroot = 3
+  INTEGER, PARAMETER :: n = 2000000, nroot = 3
   !DOUBLE PRECISION, DIMENSION (n, n) :: m
   DOUBLE PRECISION, DIMENSION (n, nroot) :: c, g
   DOUBLE PRECISION, DIMENSION (nroot) :: e, error
