@@ -507,6 +507,7 @@ class PagedVector {
    */
   void sync() {
     if (m_replicated) {
+#ifdef HAVE_MPI_H
 // std::cout <<m_mpi_rank<<"before broadcast this="<<*this<<std::endl;
       size_t lenseg = ((m_size - 1) / m_mpi_size + 1);
 //    std::cout <<m_mpi_rank<<"lenseg="<<lenseg<<std::endl;
@@ -535,6 +536,7 @@ class PagedVector {
         }
         MPI_Allgatherv(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL,&m_cache.buffer[0],chunks,displs,MPI_DOUBLE,m_communicator); // May want to try non-blocking
       }
+#endif
     m_sync = true;
     }
   }
