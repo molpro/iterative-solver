@@ -565,17 +565,20 @@ class optTest {
   }
 
  public:
-  bool run() {
+  int run(int verbosity = 0) {
     std::size_t n = exact.size();
-    std::cout << "optimize " << name << "(" << n << ") with " << method << std::endl;
+    if (verbosity > 0)
+      std::cout << "optimize " << name << "(" << n << ") with " << method << std::endl;
     IterativeSolver::Optimize<pv> solver(std::regex_replace(method, std::regex("-iterate"), ""));
-    solver.m_verbosity = 2;
+    solver.m_verbosity = verbosity;
     solver.m_maxIterations = 1000;
     solver.m_thresh = 1e-12;
 //    solver.m_Wolfe_1=.8;
 //    solver.m_linesearch_tolerance = .0001;
-    std::cout << "Wolfe condition parameters: " << solver.m_Wolfe_1 << ", " << solver.m_Wolfe_2 << std::endl;
-    std::cout << "initial="<<initial<<", hessian="<<hessian<<std::endl;
+    if (verbosity > 0) {
+      std::cout << "Wolfe condition parameters: " << solver.m_Wolfe_1 << ", " << solver.m_Wolfe_2 << std::endl;
+      std::cout << "initial=" << initial << ", hessian=" << hessian << std::endl;
+    }
     pv g(n);
     pv x(n);
     for (auto i = 0; i < n; i++) x.put(&initial, 1, i);
@@ -592,9 +595,12 @@ class optTest {
     scalar dist = 0;
     for (int k = 0; k < n; k++) dist += std::pow(xx[k] - exact[k], 2);
     dist = std::sqrt(dist);
-    std::cout << "Distance of solution from exact solution: " << dist << std::endl;
-    std::cout << "Error=" << solver.errors().front() << " after " << solver.iterations() << " iterations" << std::endl;
-    return dist < 1e-5 && solver.errors().front() < 1e-5;
+    if (verbosity > 0) {
+      std::cout << "Distance of solution from exact solution: " << dist << std::endl;
+      std::cout << "Error=" << solver.errors().front() << " after " << solver.iterations() << " iterations"
+                << std::endl;
+    }
+    return (dist < 1e-5 && solver.errors().front() < 1e-5) ? solver.iterations() : 1000000;
   }
 
 };
@@ -618,7 +624,7 @@ TEST(trigonometric, Optimize) {
       return value;
     }
   };
-  ASSERT_TRUE (Test().run());
+  ASSERT_LE (Test().run(), 5);
 }
 
 TEST(Rosenbrock, Optimize) {
@@ -636,20 +642,20 @@ TEST(Rosenbrock, Optimize) {
       g[1] = 200 * (x[1] - std::pow(x[0], 2));
       scalar value = 100 * std::pow(x[1] - std::pow(x[0], 2), 2)
           + std::pow(x[0] - 1, 2);
-      std::cout << "x="<<x[0]<<","<<x[1]<<"; g="<<g[0]<<","<<g[1]<<std::endl;
+//      std::cout << "x=" << x[0] << "," << x[1] << "; g=" << g[0] << "," << g[1] << std::endl;
       return value;
     }
   };
-  ASSERT_TRUE (Test(1).run());
-  ASSERT_TRUE (Test(.5,1000).run());
-  ASSERT_TRUE (Test(.5,100).run());
-  ASSERT_TRUE (Test(.5,10).run());
-  ASSERT_TRUE (Test(1.5,1000).run());
-  ASSERT_TRUE (Test(1.5,100).run());
-  ASSERT_TRUE (Test(1.5,10).run());
-  ASSERT_TRUE (Test(2.0,1000).run());
-  ASSERT_TRUE (Test(2.0,100).run());
-  ASSERT_TRUE (Test(2.0,10).run());
-  ASSERT_TRUE (Test(2.99,100).run());
+  ASSERT_LE (Test(1).run(), 1);
+  ASSERT_LE (Test(.5, 1000).run(), 30);
+  ASSERT_LE (Test(.5, 100).run(), 50);
+  ASSERT_LE (Test(.5, 10).run(), 50);
+  ASSERT_LE (Test(1.5, 1000).run(), 50);
+  ASSERT_LE (Test(1.5, 100).run(), 50);
+  ASSERT_LE (Test(1.5, 10).run(), 52);
+  ASSERT_LE (Test(2.0, 1000).run(), 50);
+  ASSERT_LE (Test(2.0, 100).run(), 53);
+  ASSERT_LE (Test(2.0, 10).run(), 58);
+  ASSERT_LE (Test(2.99, 100).run(1), 54);
 }
 
