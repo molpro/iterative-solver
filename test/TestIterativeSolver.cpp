@@ -650,6 +650,6 @@ TEST(Rosenbrock, Optimize) {
   ASSERT_TRUE (Test(2.0,1000).run());
   ASSERT_TRUE (Test(2.0,100).run());
   ASSERT_TRUE (Test(2.0,10).run());
-  ASSERT_TRUE (Test(3.0,100).run());
+  ASSERT_TRUE (Test(2.99,100).run());
 }
 
