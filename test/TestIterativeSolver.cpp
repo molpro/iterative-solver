@@ -643,19 +643,21 @@ TEST(Rosenbrock, Optimize) {
       scalar value = 100 * std::pow(x[1] - std::pow(x[0], 2), 2)
           + std::pow(x[0] - 1, 2);
 //      std::cout << "x=" << x[0] << "," << x[1] << "; g=" << g[0] << "," << g[1] << std::endl;
+//      std::cout << "Rosenbrock residual() at "<<x[0]<<","<<x[1]<<", function="<<value<<", gradient="<<g[0]<<","<<g[1] << std::endl;
       return value;
     }
   };
-  ASSERT_LE (Test(1).run(), 1);
-  ASSERT_LE (Test(.5, 1000).run(), 30);
-  ASSERT_LE (Test(.5, 100).run(), 50);
-  ASSERT_LE (Test(.5, 10).run(), 50);
-  ASSERT_LE (Test(1.5, 1000).run(), 50);
-  ASSERT_LE (Test(1.5, 100).run(), 50);
-  ASSERT_LE (Test(1.5, 10).run(), 52);
-  ASSERT_LE (Test(2.0, 1000).run(), 50);
-  ASSERT_LE (Test(2.0, 100).run(), 53);
-  ASSERT_LE (Test(2.0, 10).run(), 58);
-  ASSERT_LE (Test(2.99, 100).run(1), 54);
+  std::map<double, int> expected_iterations; // to catch performance regressions
+  expected_iterations[-20] = 63;
+  expected_iterations[-2] = 27;
+  expected_iterations[-1] = 32;
+  expected_iterations[0.01] = 35;
+  expected_iterations[1] = 1;
+  expected_iterations[2] = 30;
+  expected_iterations[3] = 41;
+  expected_iterations[8] = 56;
+  expected_iterations[30] = 88;
+  for (const auto& x : expected_iterations)
+    ASSERT_LE (Test(x.first, 800 * x.first * x.first).run(0), x.second);
 }
 
