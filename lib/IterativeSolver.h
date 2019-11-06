@@ -923,16 +923,16 @@ class Base {
                       const vectorSet& subtract = vectorSet()
   ) {
     vectorSet newcopy;
-    newcopy.reserve(newvec.size());
+    history.emplace_back(newcopy);
+    history.back().reserve(newvec.size());
     for (auto& v : newvec)
-      newcopy.emplace_back(v,
+      history.back().emplace_back(v,
                            LINEARALGEBRA_DISTRIBUTED
                                | LINEARALGEBRA_OFFLINE // TODO template-ise these options
       );
     if (!subtract.empty())
       for (size_t k = 0; k < newvec.size(); k++)
-        newcopy[k].axpy(-1, subtract[k]); // TODO not the most efficient because on disk already
-    history.emplace_back(newcopy);
+        history.back()[k].axpy(-1, subtract[k]); // TODO not the most efficient because on disk already
   }
   static void copyvec(vectorSet& copy,
                       const vectorRefSet source
@@ -1843,10 +1843,10 @@ IterativeSolverOptimizeInitialize(size_t n,
 extern "C" void IterativeSolverFinalize();
 
 extern "C" int
-IterativeSolverAddVector(double* parameters, double* action, double* parametersP);
+IterativeSolverAddVector(double* parameters, double* action, double* parametersP, int sync);
 
 extern "C" int
-IterativeSolverAddValue(double* parameters, double value, double* action);
+IterativeSolverAddValue(double* parameters, double value, double* action, int sync);
 
 extern "C" int IterativeSolverEndIteration(double* c, double* g, double* error);
 
