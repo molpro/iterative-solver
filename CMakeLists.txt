@@ -38,7 +38,7 @@ if (MPI_MPICXX_FOUND)
     message("MPI build of ${CMAKE_CURRENT_SOURCE_DIR} for ${CMAKE_PROJECT_NAME} with CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} Fortran=${CMAKE_Fortran_COMPILER}")
 else ()
     message("Serial build of ${CMAKE_CURRENT_SOURCE_DIR} for ${CMAKE_PROJECT_NAME} with CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} Fortran=${CMAKE_Fortran_COMPILER}")
-endif (MPI_CXX_FOUND)
+endif (MPI_MPICXX_FOUND)
 
 
 if (FORTRAN)
