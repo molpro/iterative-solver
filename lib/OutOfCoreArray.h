@@ -68,12 +68,8 @@ class OutOfCoreArray {
         m_data(nullptr),
         m_sync(true),
         m_segment_offset(seg_offset()),
-        m_segment_length(seg_length()) {
-//   init(option);
-//    std::cout <<" OutOfCoreArray constructor length="<<length<<", option "<<( option)<<std::endl;
-//    std::cout <<"LINEARALGEBRA_OFFLINE & option "<<(LINEARALGEBRA_OFFLINE & option)<<std::endl;
-//    std::cout <<"cache preferred length "<<m_cache.preferred_length<<std::endl;
-//   std::cout << m_mpi_rank << " in constructor m_segment_length="<<m_segment_length<<", m_segment_offset="<<m_segment_offset<<std::endl;
+        m_segment_length(seg_length()),
+        m_file(make_file()) {
   }
   /*!
    * @brief Copy constructor
@@ -86,7 +82,8 @@ class OutOfCoreArray {
         m_communicator(source.m_communicator), m_mpi_size(mpi_size()), m_mpi_rank(mpi_rank()),
         m_sync(source.m_sync),
         m_segment_offset(seg_offset()),
-        m_segment_length(seg_length()) {
+        m_segment_length(seg_length()),
+        m_file(make_file()) {
 #ifdef TIMING
     auto start=std::chrono::steady_clock::now();
 #endif
@@ -114,7 +111,8 @@ class OutOfCoreArray {
         m_data(buffer),
         m_sync(true),
         m_segment_offset(0),
-        m_segment_length(m_size) {
+        m_segment_length(m_size),
+        m_file(std::fstream()) {
 //    std::cout << "OutOfCoreArray map constructor "<<buffer<<" : "<<&(*this)[0]<<std::endl;
   }
 
@@ -123,6 +121,22 @@ class OutOfCoreArray {
   bool synchronised() const { return m_sync; }
 
  private:
+  std::fstream make_file() {
+    std::fstream file;
+    char* tmpname = strdup("tmpfileXXXXXX");
+    {
+      auto ifile =
+          mkstemp(tmpname); // actually create the file atomically with the name to avoid race resulting in duplicates or conflicts
+      if (ifile < 0) throw std::runtime_error(std::string("Cannot open cache file ") + tmpname);
+      close(ifile);
+    }
+    file.open(tmpname, std::ios::out | std::ios::in | std::ios::binary);
+    if (!file.is_open()) throw std::runtime_error(std::string("Cannot open cache file ") + tmpname);
+    unlink(tmpname);
+    free(tmpname);
+    return file;
+  }
+
   int mpi_size() {
 #ifdef HAVE_MPI_H
     int result;
@@ -152,6 +166,7 @@ class OutOfCoreArray {
   bool m_sync; //!< whether replicated data is in sync on all processes
   size_t m_segment_offset; //!< offset in the overall data object of this process' data
   size_t m_segment_length; //!< length of this process' data
+  mutable std::fstream m_file;
 
   /*!
  * Calculate the segment length for asynchronous operations on replicated vectors
@@ -186,17 +201,17 @@ class OutOfCoreArray {
  public:
   /*!
    * \brief Update a range of the object data with the contents of a provided buffer
-   * \param buffer
-   * \param length
-   * \param offset
+   * \param buffer The provided data segment
+   * \param length Length of data
+   * \param offset Offset in the object of buffer[0]
    */
   void put(const T* buffer, size_t length, size_t offset) {
-//   std::cout << "OutOfCoreArray::put() length="<<length<<", offset="<<offset<<std::endl;
-//   for (size_t k=0; k<length; k++) std::cout << " "<<buffer[k]; std::cout << std::endl;
-//   std::cout << "cache from "<<m_cache.offset<<" for "<<m_cache.length<<std::endl;
-//   for (size_t k=0; k<m_cache.length; k++) std::cout << " "<<m_cache.buffer[k]; std::cout << std::endl;
-//     std::cout << "m_segment_offset "<<m_segment_offset<<std::endl;
-    // first of all, focus attention only on that part of buffer which appears in [m_segment_offset,m_segment_offset+m_segment_length)
+    if (m_data != nullptr) { // data in buffer
+      std::copy(buffer, buffer + length, m_data + offset);
+      return;
+    }
+    if (offset > m_segment_offset + m_segment_length or offset + length < m_segment_offset)
+      return;
     size_t buffer_offset = 0;
     if (offset < m_segment_offset) {
       buffer_offset = m_segment_offset - offset;
@@ -206,49 +221,8 @@ class OutOfCoreArray {
     if (offset + length > std::min(m_size, m_segment_offset + m_segment_length))
       length = std::min(m_size,
                         m_segment_offset + m_segment_length) - offset;
-
-    // now make addresses relative to this mpi-rank's segment
-    offset -= this->m_segment_offset; // the offset in the segment of the first usable element of buffer
-//   buffer_offset += 0*this->m_segment_offset; // the offset in buffer of its first usable element
-
-//   std::cout << "adjusted offset="<<offset<<", buffer_offset="<<buffer_offset<<std::endl;
-
-    // first of all, process that part of the data in the initial cache window
-    for (size_t k = std::max(offset, m_cache.offset); k < std::min(offset + length, m_cache.offset + m_cache.length);
-         k++) { // k is offset in segment
-      m_cache.buffer[k - m_cache.offset] = buffer[k + buffer_offset - offset];
-      m_cache.dirty = true;
-//    std::cout <<"in initial window, k="<<k<<", m_cache_buffer["<<k-m_cache.offset<<"]=buffer["<<k+buffer_offset-offset<<"]="<<buffer[k+buffer_offset-offset]<<std::endl;
-    }
-
-//   std::cout <<"after initial window"<<std::endl;
-    // next, process the data appearing before the initial cache window
-    size_t initial_cache_offset = m_cache.offset;
-    size_t initial_cache_length = m_cache.length;
-    for (m_cache.move(offset); m_cache.length && m_cache.offset < initial_cache_offset; ++m_cache) {
-//    std::cout << "cache segment buffer range "<<std::max(offset,m_cache.offset)+buffer_offset-offset<<" : "<<m_cache.offset+m_cache.length+buffer_offset-offset<<std::endl;
-      for (size_t k = std::max(offset, m_cache.offset);
-           k < m_cache.offset + m_cache.length && k < initial_cache_offset && k + buffer_offset < offset + length;
-           k++) { // k is offset in segment
-//     if (k+buffer_offset<offset) std::cout <<"accessing data before buffer"<<std::endl;
-//     if (k+buffer_offset-offset>length) std::cout <<"accessing data after buffer"<<std::endl;
-        m_cache.buffer[k - m_cache.offset] = buffer[k + buffer_offset - offset];
-      }
-//    std::cout <<"processed preceding window"<<std::endl;
-      m_cache.dirty = true;
-    }
-
-    // finally, process the data appearing after the initial cache window
-//std::cout << "initial_cache_offset="<<initial_cache_offset<<std::endl;
-    for (m_cache.move(initial_cache_offset + initial_cache_length); m_cache.length && m_cache.offset < offset + length;
-         ++m_cache) {
-      for (size_t k = m_cache.offset; k < m_cache.offset + m_cache.length && k < offset + length; k++)
-        m_cache.buffer[k - m_cache.offset] = buffer[k + buffer_offset - offset];
-//    std::cout <<"processed following window"<<std::endl;
-      m_cache.dirty = true;
-    }
-
-//   std::cout << "OutOfCoreArray::put() ends length="<<length<<", offset="<<offset<<std::endl;
+    m_file.seekp(offset * sizeof(T));
+    m_file.write((const char*) buffer + buffer_offset, length * sizeof(T));
   }
 
   /*!
@@ -258,8 +232,12 @@ class OutOfCoreArray {
    * @param offset
    */
   void get(T* buffer, size_t length, size_t offset) const {
-
-    // first of all, focus attention only on that part of buffer which appears in [m_segment_offset,m_segment_offset+m_segment_length)
+    if (m_data != nullptr) { // data in buffer
+      std::copy(m_data + offset, m_data + offset + length, buffer);
+      return;
+    }
+    if (offset > m_segment_offset + m_segment_length or offset + length < m_segment_offset)
+      return;
     size_t buffer_offset = 0;
     if (offset < m_segment_offset) {
       buffer_offset = m_segment_offset - offset;
@@ -269,74 +247,8 @@ class OutOfCoreArray {
     if (offset + length > std::min(m_size, m_segment_offset + m_segment_length))
       length = std::min(m_size,
                         m_segment_offset + m_segment_length) - offset;
-
-    // now make addresses relative to this mpi-rank's segment
-    offset -= this->m_segment_offset; // the offset in the segment of the first usable element of buffer
-    buffer_offset += 0 * this->m_segment_offset; // the offset in buffer of its first usable element
-
-//   std::cout << "adjusted offset="<<offset<<", buffer_offset="<<buffer_offset<<std::endl;
-
-    // first of all, process that part of the data in the initial cache window
-    for (size_t k = std::max(offset, m_cache.offset); k < std::min(offset + length, m_cache.offset + m_cache.length);
-         k++) { // k is offset in segment
-      buffer[k + buffer_offset - offset] = m_cache.buffer[k - m_cache.offset];
-//    std::cout <<"in initial window, k="<<k<<", m_cache_buffer["<<k-m_cache.offset<<"]=buffer["<<k+buffer_offset-offset<<"]="<<buffer[k+buffer_offset-offset]<<std::endl;
-    }
-
-    // next, process the data appearing before the initial cache window
-    size_t initial_cache_offset = m_cache.offset;
-    size_t initial_cache_length = m_cache.length;
-    for (m_cache.move(offset); m_cache.length && m_cache.offset < initial_cache_offset; ++m_cache) {
-//    std::cout <<"new cache window offset="<<m_cache.offset<<", length="<<m_cache.length<<std::endl;
-      for (size_t k = std::max(offset, m_cache.offset);
-           k < m_cache.offset + m_cache.length && k < initial_cache_offset && k + buffer_offset < offset + length;
-           k++) { // k is offset in segment
-//     std::cout << "in loop k="<<k<<", buffer_offset="<<buffer_offset<<", offset="<<offset<<" index="<<k+buffer_offset-offset<<std::endl;
-        buffer[k + buffer_offset - offset] = m_cache.buffer[k - m_cache.offset];
-//    std::cout <<"in preceding window, k="<<k<<", m_cache_buffer["<<k-m_cache.offset<<"]=buffer["<<k+buffer_offset-offset<<"]="<<buffer[k+buffer_offset-offset]<<std::endl;
-      }
-//    std::cout <<"processed preceding window"<<std::endl;
-    }
-
-    // finally, process the data appearing after the initial cache window
-    for (m_cache.move(initial_cache_offset + initial_cache_length); m_cache.length && m_cache.offset < offset + length;
-         ++m_cache) {
-      for (size_t k = m_cache.offset; k < m_cache.offset + m_cache.length && k < offset + length; k++)
-        buffer[k + buffer_offset - offset] = m_cache.buffer[k - m_cache.offset];
-//    std::cout <<"processed following window"<<std::endl;
-    }
-
-//   for (size_t k=0; k<length; k++) std::cout << " "<<buffer[k]; std::cout << std::endl;
-//   std::cout << "OutOfCoreArray::get() ends, length="<<length<<", offset="<<offset<<std::endl;
-  }
-
-  /*!
-   * @brief Return a reference to an element of the data
-   * @param pos Offset of the data
-   * @return
-   */
-  const T& operator[](size_t pos) const {
-    if (pos >= m_cache.offset + m_segment_offset + m_cache.length
-        || pos < m_cache.offset + m_segment_offset) { // cache not mapping right sector
-//    std::cout << "cache miss"<<std::endl;
-      if (pos >= m_segment_offset + m_segment_length || pos < m_segment_offset)
-        throw std::logic_error("operator[] finds index out of range");
-      m_cache.move(pos - m_segment_offset);
-//    std::cout << "cache offset="<<m_cache.offset<<", cache length=" <<m_cache.length<<std::endl;
-    }
-    return m_cache.buffer[pos - m_cache.offset - m_segment_offset];
-  }
-
-  /*!
-   * @brief Return a reference to an element of the data
-   * @param pos Offset of the data
-   * @return
-   */
-  T& operator[](size_t pos) {
-    T* result;
-    result = &const_cast<T&>(static_cast<const OutOfCoreArray*>(this)->operator[](pos));
-    m_cache.dirty = true;
-    return *result;
+    m_file.seekp(offset * sizeof(T));
+    m_file.read((const char*) buffer + buffer_offset, length * sizeof(T));
   }
 
   /*!
@@ -354,12 +266,13 @@ class OutOfCoreArray {
   std::string str(int verbosity = 0, unsigned int columns = UINT_MAX) const {
     std::ostringstream os;
     os << "OutOfCoreArray object:";
-    for (size_t k = 0; k < m_segment_length; k++)
-      os << " " << (*this)[m_segment_offset + k];
+    //TODO implement or delete the function
+//    for (size_t k = 0; k < m_segment_length; k++)
+//      os << " " << (*this)[m_segment_offset + k];
     os << std::endl;
     return os.str();
   }
-
+// TODO below here needs implementing
   /*
    * \brief replicate the vectors over the MPI ranks
    * \return

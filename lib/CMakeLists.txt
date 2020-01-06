@@ -3,6 +3,7 @@ add_library(${PROJECT_NAME} STATIC
         SimpleVector.h
         PagedVector.h
         OpaqueVector.h
+        OutOfCoreArray.h
         IterativeSolver.cpp IterativeSolver.h
         ${CMAKE_CURRENT_BINARY_DIR}/IterativeSolver-config.h
         )
