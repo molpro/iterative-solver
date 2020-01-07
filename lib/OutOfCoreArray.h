@@ -69,6 +69,7 @@ class OutOfCoreArray {
         m_sync(true),
         m_segment_offset(seg_offset()),
         m_segment_length(seg_length()),
+        m_buf_size(0),
         m_file(make_file()) {
   }
   /*!
@@ -77,17 +78,32 @@ class OutOfCoreArray {
    * @param option
    * @param mpi_communicator
    */
-  OutOfCoreArray(const OutOfCoreArray& source)
+  OutOfCoreArray(const OutOfCoreArray& source, size_t default_buffer_size = 10485760)
       : m_size(source.m_size),
         m_communicator(source.m_communicator), m_mpi_size(mpi_size()), m_mpi_rank(mpi_rank()),
         m_sync(source.m_sync),
         m_segment_offset(seg_offset()),
         m_segment_length(seg_length()),
+        m_buf_size(m_segment_length > default_buffer_size ? default_buffer_size : m_segment_length),
         m_file(make_file()) {
 #ifdef TIMING
     auto start=std::chrono::steady_clock::now();
 #endif
-    *this = source;
+    int cache_length = m_buf_size;
+    int offset = 0;
+    m_file.seekp(offset * sizeof(T));
+    m_file.write((const char*) source.m_data + offset, cache_length * sizeof(T));
+    offset = cache_length;
+    while ((m_segment_length-offset)/m_buf_size != 0) {
+      m_file.write((const char*) source.m_data + offset, cache_length * sizeof(T));
+      offset += cache_length;
+    }
+    if (offset < m_segment_length) {
+        cache_length = m_segment_length-offset;
+        m_file.write((const char*) source.m_data + offset, cache_length * sizeof(T));
+    }
+    // close file??
+    // makes put() obsolete?
 #ifdef TIMING
     auto end=std::chrono::steady_clock::now();
     std::cout <<" OutOfCoreArray copy constructor length="<<m_size<<", option "<<( option)
@@ -107,11 +123,12 @@ class OutOfCoreArray {
 
   OutOfCoreArray(T* buffer, size_t length, MPI_Comm mpi_communicator = MPI_COMM_COMPUTE)
       : m_size(length),
-        m_communicator(MPI_COMM_COMPUTE), m_mpi_size(mpi_size()), m_mpi_rank(mpi_rank()),
-        m_data(buffer),
+        m_communicator(mpi_communicator), m_mpi_size(mpi_size()), m_mpi_rank(mpi_rank()),
+        m_segment_offset(seg_offset()),
+        m_segment_length(seg_length()),
+        m_data(buffer+m_segment_offset),
         m_sync(true),
-        m_segment_offset(0),
-        m_segment_length(m_size),
+        m_buf_size(0),
         m_file(std::fstream()) {
 //    std::cout << "OutOfCoreArray map constructor "<<buffer<<" : "<<&(*this)[0]<<std::endl;
   }
@@ -166,6 +183,7 @@ class OutOfCoreArray {
   bool m_sync; //!< whether replicated data is in sync on all processes
   size_t m_segment_offset; //!< offset in the overall data object of this process' data
   size_t m_segment_length; //!< length of this process' data
+  size_t m_buf_size; //!< buffer size
   mutable std::fstream m_file;
 
   /*!
@@ -278,42 +296,24 @@ class OutOfCoreArray {
    * \return
    */
   void sync() {
-    if (m_replicated) {
 #ifdef HAVE_MPI_H
-      // std::cout <<m_mpi_rank<<"before broadcast this="<<*this<<std::endl;
-            size_t alpha = m_size/m_mpi_size;
-            size_t beta = m_size%m_mpi_size;
-      //    std::cout <<m_mpi_rank<<"lenseg="<<lenseg<<std::endl;
-            if (m_cache.io) { // ! this needs to be probably re-written ! - has not been touched after moving from axpy() (still MPI_Bcast())
-              //size_t lenseg = ((m_size - 1) / m_mpi_size + 1);
-              size_t lenseg = seg_length();;
-              for (int rank = 0; rank < m_mpi_size; rank++) {
-                for (m_cache.move(lenseg * rank, std::min(m_cache.preferred_length, lenseg));
-                     m_cache.length && m_cache.offset < lenseg * (rank + 1); ++m_cache) {
-                  size_t l = std::min(m_cache.length, (rank + 1) * lenseg - m_cache.offset);
-      //      std::cout << m_mpi_rank<<"broadcast from "<<rank<<" offset="<<m_cache.offset<<", length="<<l<<std::endl;
-      //      std::cout <<m_mpi_rank<<"before Bcast"; for (auto i=0; i<l; i++) std::cout <<" "<<m_cache.buffer[i]; std::cout <<std::endl;
-                  if (l > 0)
-                    MPI_Bcast(m_cache.buffer, l, MPI_DOUBLE, rank, m_communicator); // needs attention for non-double
-      //      std::cout <<m_mpi_rank<<"after Bcast m_cache.length="<<m_cache.length<<", lenseg="<<lenseg<<", m_cache.offset="<<m_cache.offset<<std::endl;
-      //      std::cout <<m_mpi_rank<<"after Bcast"; for (auto i=0; i<l; i++) std::cout <<" "<<m_cache.buffer[i]; std::cout <<std::endl;
-                  if (rank != m_mpi_rank) m_cache.dirty = true;
-      //       usleep(100);
-                }
-              }
-            } else {
-              int chunks[m_mpi_size];
-              int displs[m_mpi_size];
-              for (int i = 0; i < m_mpi_size; i++) {
-                  chunks[i] = (i < beta) ? alpha+1 : alpha;
-                  displs[i] = (i < beta) ? chunks[i]*i : chunks[i]*i + beta;
-      //            if (m_mpi_rank == 0) std::cout<<"Chunk: "<<chunks[i]<<" Displ: "<<displs[i]<<std::endl;
-              }
-              MPI_Allgatherv(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL,&m_cache.buffer[0],chunks,displs,MPI_DOUBLE,m_communicator); // May want to try non-blocking
-            }
+    //std::cout <<m_mpi_rank<<"before broadcast this="<<*this<<std::endl;
+      if (m_data != nullptr) {
+          size_t alpha = m_size/m_mpi_size;
+          size_t beta = m_size%m_mpi_size;
+          int chunks[m_mpi_size];
+          int displs[m_mpi_size];
+          for (int i = 0; i < m_mpi_size; i++) {
+              chunks[i] = (i < beta) ? alpha+1 : alpha;
+              displs[i] = (i < beta) ? chunks[i]*i : chunks[i]*i + beta;
+              //            if (m_mpi_rank == 0) std::cout<<"Chunk: "<<chunks[i]<<" Displ: "<<displs[i]<<std::endl;
+          }
+          MPI_Allgatherv(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL,&m_data[0],chunks,displs,MPI_DOUBLE,m_communicator);
+          m_sync = true;
+      } else {
+          throw std::logic_error("Distributed data can not be out of sync");
+      }
 #endif
-      m_sync = true;
-    }
   }
 
   /*!
@@ -323,7 +323,8 @@ class OutOfCoreArray {
    * \return
    */
   void axpy(scalar_type a, const OutOfCoreArray<T>& other) {
-    if (this->m_size != m_size) throw std::logic_error("mismatching lengths");
+    if (this->m_size != other.m_size) throw std::logic_error("mismatching lengths"); // correct?
+
     if (this->m_replicated == other.m_replicated) {
       if (this->m_cache.io && other.m_cache.io) {
         size_t l = std::min(m_cache.length, other.m_cache.length);
