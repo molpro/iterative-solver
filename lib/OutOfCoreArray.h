@@ -81,6 +81,7 @@ class OutOfCoreArray {
   OutOfCoreArray(const OutOfCoreArray& source, size_t default_buffer_size = 10485760)
       : m_size(source.m_size),
         m_communicator(source.m_communicator), m_mpi_size(mpi_size()), m_mpi_rank(mpi_rank()),
+        m_data(nullptr),
         m_sync(source.m_sync),
         m_segment_offset(seg_offset()),
         m_segment_length(seg_length()),
@@ -89,20 +90,22 @@ class OutOfCoreArray {
 #ifdef TIMING
     auto start=std::chrono::steady_clock::now();
 #endif
-    int cache_length = m_buf_size;
-    int offset = 0;
-    m_file.seekp(offset * sizeof(T));
-    m_file.write((const char*) source.m_data + offset, cache_length * sizeof(T));
-    offset = cache_length;
+    if (!m_sync) {
+        source.sync();
+        m_sync = true;
+    }
+    size_t offset = 0;
     while ((m_segment_length-offset)/m_buf_size != 0) {
-      m_file.write((const char*) source.m_data + offset, cache_length * sizeof(T));
-      offset += cache_length;
+        m_file.seekp(offset * sizeof(T));
+        m_file.write((const char*) source.m_data + offset, m_buf_size * sizeof(T));
+        offset += m_buf_size;
     }
     if (offset < m_segment_length) {
-        cache_length = m_segment_length-offset;
-        m_file.write((const char*) source.m_data + offset, cache_length * sizeof(T));
+        size_t rest = m_segment_length-offset;
+        m_file.seekp(offset * sizeof(T));
+        m_file.write((const char*) source.m_data + offset, rest * sizeof(T));
     }
-    // close file??
+    // close file?? re-wind??
     // makes put() obsolete?
 #ifdef TIMING
     auto end=std::chrono::steady_clock::now();
@@ -255,16 +258,15 @@ class OutOfCoreArray {
       return;
     }
     if (offset > m_segment_offset + m_segment_length or offset + length < m_segment_offset)
-      return;
+      return; // through exception??
     size_t buffer_offset = 0;
     if (offset < m_segment_offset) {
       buffer_offset = m_segment_offset - offset;
       offset = m_segment_offset;
-      length -= m_segment_offset - offset;
+      length -= m_segment_offset - buffer_offset;
     }
-    if (offset + length > std::min(m_size, m_segment_offset + m_segment_length))
-      length = std::min(m_size,
-                        m_segment_offset + m_segment_length) - offset;
+    if ((offset + length) > (m_segment_offset + m_segment_length))
+      length = (m_segment_offset + m_segment_length) - offset;
     m_file.seekp(offset * sizeof(T));
     m_file.read((const char*) buffer + buffer_offset, length * sizeof(T));
   }
@@ -323,90 +325,31 @@ class OutOfCoreArray {
    * \return
    */
   void axpy(scalar_type a, const OutOfCoreArray<T>& other) {
-    if (this->m_size != other.m_size) throw std::logic_error("mismatching lengths"); // correct?
-
-    if (this->m_replicated == other.m_replicated) {
-      if (this->m_cache.io && other.m_cache.io) {
-        size_t l = std::min(m_cache.length, other.m_cache.length);
-        for (m_cache.move(0, l), other.m_cache.move(0, l); m_cache.length; ++m_cache, ++other.m_cache)
-          for (size_t i = 0; i < m_cache.length; i++) {
-            m_cache.buffer[i] += a * other.m_cache.buffer[i];
-            m_cache.dirty = true;
-          }
-      } else if (other.m_cache.io) {
-        size_t offset = 0;
-        for (other.m_cache.ensure(0); other.m_cache.length; offset += other.m_cache.length, ++other.m_cache) {
-          for (size_t i = 0; i < other.m_cache.length; i++) {
-            m_cache.buffer[offset + i] += a * other.m_cache.buffer[i];
-          }
+    if (this->m_size != other.m_size) throw std::logic_error("mismatching lengths"); //m_size -> other.m_size - correct?
+    if (this->m_data != nullptr) {
+        if (other.m_data == nullptr) {
+            T buffer[other.m_buf_size];
+            size_t offset = 0;
+            while ((m_segment_length-offset)/other.m_buf_size != 0) {
+                other.get(&buffer[0],other.m_buf_size,offset);
+                for (size_t i = 0; i < other.m_buf_size; i++)
+                    m_data[offset+i] += a * buffer[i]; //or use BLAS
+                offset += other.m_buf_size;
+            }
+            if (offset < m_segment_length) {
+                size_t cache_length = m_segment_length-offset;
+                other.get(&buffer[0],cache_length,offset);
+                for (size_t i = 0; i < cache_length; i++)
+                    m_data[offset+i] += a * buffer[i]; //or use BLAS
+            } // Too lengthy? Wrap in a function?
+        } else { // Not expected!? Should check if the same vector => "==" operator needed??
+            for (size_t i = 0; i < m_segment_length; i++) // check that of same length?
+                m_data[i] += a * other.m_data[i]; //or use BLAS
         }
-      } else if (this->m_cache.io) {
-        size_t offset = 0;
-        for (m_cache.ensure(0); m_cache.length; offset += m_cache.length, ++m_cache) {
-          for (size_t i = 0; i < m_cache.length; i++)
-            m_cache.buffer[i] += a * other.m_cache.buffer[offset + i];
-          m_cache.dirty = true;
-        }
-      } else if (this->m_replicated) {
-        size_t seglength = seg_length();
-        size_t segoffset = seg_offset();
-        for (size_t i = 0; i < seglength; i++)
-          m_cache.buffer[segoffset + i] += a * other.m_cache.buffer[segoffset + i];
-      } else {
-        for (size_t i = 0; i < this->m_segment_length; i++)
-          m_cache.buffer[i] += a * other.m_cache.buffer[i];
-      }
-    } else if (this->m_replicated) { // this is replicated, other is not replicated
-      if (m_cache.io && other.m_cache.io) {
-        auto l = std::min(m_cache.preferred_length, other.m_cache.preferred_length);
-        for (other.m_cache.move(0, l), m_cache.move(other.m_segment_offset,
-                                                    l); other.m_cache.length; ++m_cache, ++other.m_cache) {
-          for (size_t i = 0; i < other.m_cache.length; i++)
-            m_cache.buffer[i] += a * other.m_cache.buffer[i];
-          m_cache.dirty = true;
-        }
-      } else if (m_cache.io) {
-        for (m_cache.ensure(other.m_segment_offset);
-             m_cache.offset < other.m_segment_offset + other.m_segment_length && m_cache.length; ++m_cache) {
-          for (size_t i = 0; i < m_cache.length; i++)
-            m_cache.buffer[i] += a * other.m_cache.buffer[m_cache.offset - other.m_segment_offset + i];
-          m_cache.dirty = true;
-        }
-      } else if (other.m_cache.io) {
-        for (other.m_cache.ensure(0); other.m_cache.length; ++other.m_cache)
-          for (size_t i = 0; i < other.m_cache.length; i++)
-            m_cache.buffer[other.m_cache.offset + other.m_segment_offset + i] += a * other.m_cache.buffer[i];
-      } else {
-        for (size_t i = 0; i < other.m_segment_length; i++)
-          m_cache.buffer[other.m_segment_offset + i] += a * other.m_cache.buffer[i];
-      }
-
-    } else { // this is not replicated, other is replicated
-      if (m_cache.io && other.m_cache.io) {
-        auto l = std::min(m_cache.preferred_length, other.m_cache.preferred_length);
-        for (other.m_cache.move(m_segment_offset, l), m_cache.move(0, l); m_cache.length; ++m_cache, ++other.m_cache) {
-          for (size_t i = 0; i < m_cache.length; i++)
-            m_cache.buffer[i] += a * other.m_cache.buffer[i];
-          m_cache.dirty = true;
-        }
-      } else if (m_cache.io) {
-        for (m_cache.ensure(0); m_cache.length; ++m_cache) {
-          for (size_t i = 0; i < m_cache.length; i++)
-            m_cache.buffer[i] += a * other.m_cache.buffer[m_cache.offset + m_segment_offset + i];
-          m_cache.dirty = true;
-        }
-      } else if (other.m_cache.io) {
-        for (other.m_cache.ensure(m_segment_offset);
-             other.m_cache.offset < m_segment_offset + m_segment_length && other.m_cache.length; ++other.m_cache)
-          for (size_t i = 0;
-               i < std::min(other.m_cache.length, m_segment_offset + m_segment_length - other.m_cache.offset); i++)
-            m_cache.buffer[other.m_cache.offset - m_segment_offset + i] += a * other.m_cache.buffer[i];
-      } else {
-        for (size_t i = 0; i < m_segment_length; i++)
-          m_cache.buffer[i] += a * other.m_cache.buffer[m_segment_offset + i];
-      }
+        m_sync = false;
+    } else { // Not expected!?
+        throw std::logic_error("Axpy should not be called for a vector written to disk");
     }
-    if (m_replicated) m_sync = false;
   }
 
   /*!
@@ -416,9 +359,11 @@ class OutOfCoreArray {
     * \return
     */
   void axpy(scalar_type a, const std::map<size_t, T>& other) {
+    if (this->m_data == nullptr) throw std::logic_error("Axpy should not be called for a vector written to disk");
     for (const auto& o: other)
       if (o.first >= m_segment_offset && o.first < m_segment_offset + m_segment_length)
-        (*this)[o.first] += a * o.second;
+        this->m_data[o.first-m_segment_offset] += a * o.second;
+    m_sync = false;
   }
 
   /*!
@@ -426,114 +371,93 @@ class OutOfCoreArray {
    * \param other The object to be contracted with this.
    * \return
    */
-  scalar_type dot(const OutOfCoreArray<T, default_offline_buffer_size>& other) const {
-    if (this->m_size != m_size) throw std::logic_error("mismatching lengths");
+  scalar_type dot(const OutOfCoreArray<T>& other) const {
+    if (this->m_size != other.m_size) throw std::logic_error("mismatching lengths");
     scalar_type result = 0;
     if (this == &other) {
-      if (m_cache.io) {
-        for (m_cache.ensure(0); m_cache.length; ++m_cache) {
-          for (size_t i = 0; i < m_cache.length; i++) {
-            result += m_cache.buffer[i] * m_cache.buffer[i];
-          }
-        }
-      } else if (this->m_replicated) {
-        size_t seglength = seg_length();
-        size_t segoffset = seg_offset();
-        for (size_t i = 0; i < seglength; i++)
-          result += m_cache.buffer[segoffset + i] * m_cache.buffer[segoffset + i];
-      } else {
-        for (size_t i = 0; i < this->m_segment_length; i++)
-          result += m_cache.buffer[i] * m_cache.buffer[i];
-      }
-    } else {
-      if (this->m_replicated == other.m_replicated) {
-        if (this->m_cache.io && other.m_cache.io) {
-          size_t l = std::min(m_cache.length, other.m_cache.length);
-          for (m_cache.move(0, l), other.m_cache.move(0, l); m_cache.length; ++m_cache, ++other.m_cache)
-            for (size_t i = 0; i < m_cache.length; i++)
-              result += m_cache.buffer[i] * other.m_cache.buffer[i];
-        } else if (other.m_cache.io) {
-          size_t offset = 0;
-          for (other.m_cache.ensure(0); other.m_cache.length; offset += other.m_cache.length, ++other.m_cache) {
-            for (size_t i = 0; i < other.m_cache.length; i++) {
-              result += m_cache.buffer[offset + i] * other.m_cache.buffer[i];
+        if (this->m_data != nullptr) {
+            for (size_t i = 0; i < m_segment_length; i++)
+                result += m_data[i]*m_data[i]; //or use BLAS
+        } else {
+            T buffer[m_buf_size];
+            size_t offset = 0;
+            while ((m_segment_length-offset)/m_buf_size != 0) {
+                get(&buffer[0],m_buf_size,offset);
+                for (size_t i = 0; i < m_buf_size; i++)
+                    result += buffer[i] * buffer[i]; //or use BLAS
+                offset += m_buf_size;
             }
-          }
-        } else if (this->m_cache.io) {
-          size_t offset = 0;
-          for (m_cache.ensure(0); m_cache.length; offset += m_cache.length, ++m_cache)
-            for (size_t i = 0; i < m_cache.length; i++)
-              result += m_cache.buffer[i] * other.m_cache.buffer[offset + i];
-        } else if (this->m_replicated) { // both are replicated
-          size_t seglength = seg_length();
-          size_t segoffset = seg_offset();
-          for (size_t i = 0; i < seglength; i++)
-            result += m_cache.buffer[segoffset + i] * other.m_cache.buffer[segoffset + i];
-        } else { // both are distributed
-//          size_t l = std::min(m_cache.length, other.m_cache.length); // FIXME puzzle as to what this is
-          //std::cout<<"Rank "<<m_mpi_rank<<" "; for (auto i=0; i<m_segment_length; i++) std::cout <<" "<<m_cache.buffer[i]; std::cout <<std::endl;
-          for (size_t i = 0; i < this->m_segment_length; i++)
-            result += m_cache.buffer[i] * other.m_cache.buffer[i];
+            if (offset < m_segment_length) {
+                size_t cache_length = m_segment_length-offset;
+                get(&buffer[0],cache_length,offset);
+                for (size_t i = 0; i < cache_length; i++)
+                    result += buffer[i] * buffer[i]; //or use BLAS
+            }
         }
-      } else if (this->m_replicated) { // this is replicated, other is not replicated
-        if (m_cache.io && other.m_cache.io) {
-          auto l = std::min(m_cache.preferred_length, other.m_cache.preferred_length);
-          for (other.m_cache.move(0, l), m_cache.move(other.m_segment_offset,
-                                                      l); other.m_cache.length; ++m_cache, ++other.m_cache) {
-            for (size_t i = 0; i < other.m_cache.length; i++)
-              result += m_cache.buffer[i] * other.m_cache.buffer[i];
-          }
-        } else if (m_cache.io) {
-          for (m_cache.ensure(other.m_segment_offset);
-               m_cache.offset < other.m_segment_offset + other.m_segment_length && m_cache.length; ++m_cache) {
-            for (size_t i = 0;
-                 i < std::min(m_cache.length, other.m_segment_offset + other.m_segment_length - m_cache.offset); i++)
-              result += m_cache.buffer[i] * other.m_cache.buffer[m_cache.offset - other.m_segment_offset + i];
-          }
-        } else if (other.m_cache.io) {
-          for (other.m_cache.ensure(0); other.m_cache.length; ++other.m_cache)
-            for (size_t i = 0; i < other.m_cache.length; i++)
-              result += m_cache.buffer[other.m_cache.offset + other.m_segment_offset + i] * other.m_cache.buffer[i];
+    } else {
+        if (this->m_data != nullptr) {
+            if (other.m_data != nullptr) {
+                for (size_t i = 0; i < m_segment_length; i++) // check m_segment_length == other.m_segment_length?
+                    result += m_data[i]*other.m_data[i]; //or use BLAS
+            } else {
+                T buffer[other.m_buf_size];
+                size_t offset = 0;
+                while ((m_segment_length-offset)/other.m_buf_size != 0) {
+                    get(&buffer[0],other.m_buf_size,offset);
+                    for (size_t i = 0; i < other.m_buf_size; i++)
+                        result += m_data[offset+i] * buffer[i]; //or use BLAS
+                    offset += other.m_buf_size;
+                }
+                if (offset < m_segment_length) {
+                    size_t cache_length = m_segment_length-offset;
+                    get(&buffer[0],cache_length,offset);
+                    for (size_t i = 0; i < cache_length; i++)
+                        result += m_data[offset+i] * buffer[i]; //or use BLAS
+                }
+            }
         } else {
-          for (size_t i = 0; i < other.m_segment_length; i++)
-            result += m_cache.buffer[other.m_segment_offset + i] * other.m_cache.buffer[i];
+            if (other.m_data != nullptr) {
+                T buffer[m_buf_size];
+                size_t offset = 0;
+                while ((m_segment_length-offset)/m_buf_size != 0) {
+                    get(&buffer[0],m_buf_size,offset);
+                    for (size_t i = 0; i < m_buf_size; i++)
+                        result += buffer[i] * other.m_data[offset+i]; //or use BLAS
+                    offset += m_buf_size;
+                }
+                if (offset < m_segment_length) {
+                    size_t cache_length = m_segment_length-offset;
+                    get(&buffer[0],cache_length,offset);
+                    for (size_t i = 0; i < cache_length; i++)
+                        result += buffer[i] * other.m_data[offset+i]; //or use BLAS
+                }
+            } else {
+                T lbuffer[m_buf_size], rbuffer[other.m_buf_size]; //check same length??
+                size_t offset = 0;
+                while ((m_segment_length-offset)/m_buf_size != 0) {
+                    get(&lbuffer[0],m_buf_size,offset);
+                    get(&rbuffer[0],other.m_buf_size,offset);
+                    for (size_t i = 0; i < m_buf_size; i++)
+                        result += lbuffer[i] * rbuffer[i]; //or use BLAS
+                    offset += m_buf_size;
+                }
+                if (offset < m_segment_length) {
+                    size_t rest = m_segment_length-offset;
+                    get(&lbuffer[0],rest,offset);
+                    get(&rbuffer[0],rest,offset);
+                    for (size_t i = 0; i < rest; i++)
+                        result += lbuffer[i] * rbuffer[i]; //or use BLAS
+                }
+            }
         }
-
-      } else { // this is not replicated, other is replicated
-        if (m_cache.io && other.m_cache.io) {
-          auto l = std::min(m_cache.preferred_length, other.m_cache.preferred_length);
-          for (other.m_cache.move(m_segment_offset, l), m_cache.move(0, l); m_cache.length;
-               ++m_cache, ++other.m_cache) {
-            for (size_t i = 0; i < m_cache.length; i++)
-              result += m_cache.buffer[i] * other.m_cache.buffer[i];
-          }
-        } else if (m_cache.io) {
-          for (m_cache.ensure(0); m_cache.length; ++m_cache) {
-            for (size_t i = 0; i < m_cache.length; i++)
-              result += m_cache.buffer[i] * other.m_cache.buffer[m_cache.offset + m_segment_offset + i];
-          }
-        } else if (other.m_cache.io) {
-//      std::cout << "hello12"<<std::endl;
-          for (other.m_cache.ensure(m_segment_offset);
-               other.m_cache.offset < m_segment_offset + m_segment_length && other.m_cache.length; ++other.m_cache)
-            for (size_t i = 0;
-                 i < std::min(other.m_cache.length, m_segment_offset + m_segment_length - other.m_cache.offset); i++)
-              result += m_cache.buffer[other.m_cache.offset - m_segment_offset + i] * other.m_cache.buffer[i];
-        } else {
-          for (size_t i = 0; i < m_segment_length; i++)
-            result += m_cache.buffer[i] * other.m_cache.buffer[m_segment_offset + i];
-        }
-      }
     }
 #ifdef HAVE_MPI_H
-    //    std::cout <<m_mpi_rank<<" dot result before reduce="<<result<<std::endl;
-    //if (!m_replicated || !other.m_replicated) {
-      double resultLocal = result;
-      double resultGlobal = result;
-      MPI_Allreduce(&resultLocal, &resultGlobal, 1, MPI_DOUBLE, MPI_SUM, m_communicator);
-      result = resultGlobal;
-      //    std::cout <<m_mpi_rank<<" dot result after reduce="<<result<<std::endl;
-    //}
+    //std::cout <<m_mpi_rank<<" dot result before reduce="<<result<<std::endl;
+    double resultLocal = result;
+    double resultGlobal = result;
+    MPI_Allreduce(&resultLocal, &resultGlobal, 1, MPI_DOUBLE, MPI_SUM, m_communicator);
+    result = resultGlobal;
+    // std::cout <<m_mpi_rank<<" dot result after reduce="<<result<<std::endl;
 #endif
     return result;
   }
@@ -545,27 +469,36 @@ class OutOfCoreArray {
    */
   scalar_type dot(const std::map<size_t, T>& other) const {
     scalar_type result = 0;
-    if (m_replicated) {
-      size_t seglength = seg_length();
-      size_t segoffset = seg_offset();
-      for (const auto& o: other)
-        if (o.first >= segoffset && o.first < segoffset + seglength)
-          result += o.second * (*this)[o.first];
+    if (this->m_data != 0) {
+        for (const auto& o: other)
+            if (o.first >= m_segment_offset && o.first < m_segment_offset + m_segment_length)
+                result += o.second * this->m_data[o.first-m_segment_offset];
     } else {
-      for (const auto& o: other)
-        if (o.first >= m_segment_offset && o.first < m_segment_offset + m_segment_length)
-          result += o.second * (*this)[o.first];
+        T buffer[m_buf_size];
+        size_t offset = 0;
+        while ((m_segment_length-offset)/m_buf_size != 0) {
+            get(&buffer[0],m_buf_size,offset);
+            for (const auto& o: other)
+                if (o.first >= m_segment_offset+offset && o.first < m_segment_offset+offset + m_buf_size)
+                    result += o.second * buffer[o.first-m_segment_offset-offset]; //or use BLAS
+            offset += m_buf_size;
+        }
+        if (offset < m_segment_length) {
+            size_t rest = m_segment_length-offset;
+            get(&buffer[0],rest,offset);
+            for (const auto& o: other)
+                if (o.first >= m_segment_offset+offset && o.first < m_segment_offset+offset + rest)
+                    result += o.second * buffer[o.first-m_segment_offset-offset]; //or use BLAS
+        }
     }
 #ifdef HAVE_MPI_H
-    //if (!m_replicated) {
-      double resultLocal = result;
-      MPI_Allreduce(&resultLocal,
-                    &result,
-                    1,
-                    MPI_DOUBLE,
-                    MPI_SUM,
-                    m_communicator); // FIXME needs attention for non-double
-    //}
+    double resultLocal = result;
+    MPI_Allreduce(&resultLocal,
+            &result,
+            1,
+            MPI_DOUBLE,
+            MPI_SUM,
+            m_communicator); // FIXME needs attention for non-double
 #endif
     return result;
   }
@@ -575,15 +508,15 @@ class OutOfCoreArray {
      * \param a The factor to scale by. If a is zero, then the current contents of the object are ignored.
      */
   void scal(scalar_type a) {
-    for (m_cache.ensure(0); m_cache.length; ++m_cache) {
-      if (a != 0)
-        for (size_t i = 0; i < m_cache.length; i++)
-          m_cache.buffer[i] *= a;
-      else
-        for (size_t i = 0; i < m_cache.length; i++)
-          m_cache.buffer[i] = 0;
-      m_cache.dirty = true;
-    }
+      if (this->m_data == nullptr) throw std::logic_error("Scal() should not be called for a vector written to disk");
+      if (a != 0) {
+          for (size_t i = 0; i < m_segment_length; i++)
+              this->m_data[i] *= a;
+      } else {
+          for (size_t i = 0; i < m_segment_length; i++)
+              this->m_data[i] = 0;
+      }
+      m_sync = false;
   }
 
   /*!
