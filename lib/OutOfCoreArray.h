@@ -528,53 +528,68 @@ class OutOfCoreArray {
     * @return index, value pairs. value is the product of the matrix element and the corresponding element of measure.
     *
     */
-  std::tuple<std::vector<size_t>, std::vector<T> > select(
+  std::tuple<std::vector<size_t>, std::vector<T> > select( //needs allgatherv??
       const OutOfCoreArray<T>& measure,
       const size_t maximumNumber = 1000,
       const scalar_type threshold = 0
   ) const {
-    std::multimap<T, size_t, std::greater<T> > sortlist;
+    typedef std::multimap<T, size_t, std::greater<T> > MyMap;
+    MyMap sortlist;
     const auto& measur = dynamic_cast <const OutOfCoreArray<T>&> (measure);
-    if (this->m_size != m_size) throw std::logic_error("mismatching lengths");
-    if (this->m_replicated != measur.m_replicated) throw std::logic_error("mismatching replication status");
-    if (this == &measur) {
-      for (m_cache.ensure(0); m_cache.length; ++m_cache) {
-        for (size_t i = 0; i < m_cache.length; i++) {
-          auto test = m_cache.buffer[i] * m_cache.buffer[i];
-          if (test > threshold) {
-            sortlist.insert(std::make_pair(test, i));
-            if (sortlist.size() > maximumNumber) sortlist.erase(std::prev(sortlist.end()));
-          }
+    if (this->m_size != measur.m_size) throw std::logic_error("mismatching lengths");
+    if (this->m_data == nullptr && measur.m_data != nullptr) throw std::logic_error("mismatching distribution status");
+    if (this->m_data != nullptr && measur.m_data == nullptr) throw std::logic_error("mismatching distribution status");
+    if (this->m_data != nullptr) {
+        if (this == &measur) {
+            for (size_t i = 0; i < m_segment_length; i++) {
+                auto test = m_data[i] * m_data[i];
+                if (test > threshold) {
+                    sortlist.insert(std::make_pair(test, i + m_segment_offset));
+                    if (sortlist.size() > maximumNumber) sortlist.erase(std::prev(sortlist.end()));
+                }
+            }
+        } else {
+            for (size_t i = 0; i < m_segment_length; i++) {
+                auto test = m_data[i] * measur.m_data[i];
+                if (test > threshold) {
+                    sortlist.insert(std::make_pair(test, i + m_segment_offset));
+                    if (sortlist.size() > maximumNumber) sortlist.erase(std::prev(sortlist.end()));
+                }
+            }
         }
-      }
     } else {
-      for (m_cache.ensure(0), measur.m_cache.move(0, m_cache.length); m_cache.length; ++m_cache, ++measur.m_cache) {
-        for (size_t i = 0; i < m_cache.length; i++) {
-          scalar_type test = m_cache.buffer[i] * measur.m_cache.buffer[i];
-          if (test < 0) test = -test;
-          if (test > threshold) {
-            sortlist.insert(std::make_pair(test, i));
-            if (sortlist.size() > maximumNumber) sortlist.erase(std::prev(sortlist.end()));
-          }
-        }
-      }
+        throw std::logic_error("vectors on disk not expected in select()"); //correct?
     }
-#ifdef HAVE_MPI_H
-    if (!m_replicated) {
-      throw std::logic_error("incomplete MPI implementation");
-    }
-#endif
-    while (sortlist.size() > maximumNumber) sortlist.erase(std::prev(sortlist.end()));
+    while (sortlist.size() > maximumNumber) sortlist.erase(std::prev(sortlist.end())); //redundant?
     std::vector<size_t> indices;
     indices.reserve(sortlist.size());
     std::vector<T> values;
     values.reserve(sortlist.size());
-    for (const auto& p : sortlist) {
-      indices.push_back(p.second);
-      values.push_back(p.first);
+    std::transform(sortlist.begin(), sortlist.end(), std::back_inserter(indices), //or indices.begin()?
+                   [](const typename MyMap::value_type& val){return val.second;} );
+    std::transform(sortlist.begin(), sortlist.end(), std::back_inserter(values),
+                   [](const typename MyMap::value_type& val){return val.first;} );
+#ifdef HAVE_MPI_H
+    std::vector<size_t> long_indices;
+    long_indices.reserve(sortlist.size() * m_mpi_size);
+    std::vector<T> long_values;
+    long_values.reserve(sortlist.size() * m_mpi_size);
+    MPI_Allgather(values.data(), sortlist.size(), MPI_DOUBLE,
+            long_values.data(), sortlist.size(), MPI_DOUBLE, m_communicator); //non-blocking??
+    MPI_Allgather(indices.data(), sortlist.size(), MPI_INT,
+                  long_indices.data(), sortlist.size(), MPI_INT, m_communicator); //non-blocking??
+    MyMap fsortlist;
+    for (size_t i = 0; i < long_indices.size(); i++) {
+        fsortlist.insert(std::make_pair(long_values[i], long_indices[i]));
+        if (fsortlist.size() > maximumNumber) fsortlist.erase(std::prev(fsortlist.end()));
     }
+    while (fsortlist.size() > maximumNumber) fsortlist.erase(std::prev(fsortlist.end())); //redundant?
+    std::transform(fsortlist.begin(), fsortlist.end(), indices.begin(),
+                   [](const typename MyMap::value_type& val){return val.second;} );
+    std::transform(fsortlist.begin(), fsortlist.end(), values.begin(),
+                   [](const typename MyMap::value_type& val){return val.first;} );
+#endif
     return std::make_tuple(indices, values);
-
   };
 
   /*!
@@ -582,80 +597,7 @@ class OutOfCoreArray {
    * \param other The source of data.
    * \return
    */
-  OutOfCoreArray& operator=(const OutOfCoreArray& other) {
-    assert(m_size == other.m_size);
-    if (!m_cache.io && !other.m_cache.io) { // std::cout << "both in memory"<<std::endl;
-      size_t off = (m_replicated && !other.m_replicated) ? other.m_segment_offset : 0;
-      size_t otheroff = (!m_replicated && other.m_replicated) ? m_segment_offset : 0;
-      for (size_t i = 0; i < std::min(m_segment_length, other.m_segment_length); i++)
-        m_cache.buffer[off + i] = other.m_cache.buffer[otheroff + i];
-    } else if (m_cache.io && other.m_cache.io) { // std::cout << "both cached"<<std::endl;
-      size_t cachelength = std::min(m_cache.preferred_length, other.m_cache.preferred_length);
-      size_t off = 0, otheroff = 0;
-      m_cache.move((!m_replicated || other.m_replicated) ? 0 : other.m_segment_offset, cachelength);
-      other.m_cache.move((m_replicated || !other.m_replicated) ? 0 : m_segment_offset, cachelength);
-      while (m_cache.length && other.m_cache.length && off < m_segment_length && otheroff < other.m_segment_length) {
-        for (size_t i = 0; i < m_cache.length; i++)
-          m_cache.buffer[off + i] = other.m_cache.buffer[otheroff + i];
-        m_cache.dirty = true;
-        if (m_cache.io) ++m_cache; else off += cachelength;
-        if (other.m_cache.io) ++other.m_cache; else otheroff += cachelength;
-      }
-    } else if (m_cache.io) { // std::cout<< "source in memory, result cached"<<std::endl;
-      size_t cachelength = m_cache.preferred_length;
-      size_t off = 0;
-      size_t otheroff = (m_replicated == other.m_replicated) ? 0 : m_segment_offset;
-      m_cache.move((m_replicated == other.m_replicated) ? 0 : other.m_segment_offset, cachelength);
-      other.m_cache.move(0, other.m_segment_length);
-      while (m_cache.length && off < m_segment_length && otheroff < other.m_segment_length) {
-        for (size_t i = 0; i < m_cache.length; i++) {
-          m_cache.buffer[off + i] = other.m_cache.buffer[otheroff + i];
-          //     if (pr) std::cout <<m_mpi_rank<<" buffer["<<off+i<<"]="<<m_cache.buffer[off+i]<<std::endl;
-        }
-        m_cache.dirty = true;
-        ++m_cache;
-        otheroff += cachelength;
-      }
-    } else if (other.m_cache.io) { // std::cout << "source cached, result in memory"<<std::endl;
-      size_t cachelength = other.m_cache.preferred_length;
-      size_t otheroff = 0;
-      size_t off = (m_replicated == other.m_replicated) ? 0 : other.m_segment_offset;
-      m_cache.move(0, m_segment_length);
-      other.m_cache.move((m_replicated == other.m_replicated) ? 0 : m_segment_offset, cachelength);
-      while (other.m_cache.length && off < m_segment_length && otheroff < other.m_segment_length) {
-        for (size_t i = 0; i < other.m_cache.length; i++) {
-          m_cache.buffer[off + i] = other.m_cache.buffer[otheroff + i];
-        }
-        off += cachelength;
-        ++other.m_cache;
-      }
-    }
-    m_cache.dirty = true;
-#ifdef HAVE_MPI_H
-    if (m_replicated && !other.m_replicated) { // replicated <- distributed
-      size_t lenseg = ((m_size - 1) / m_mpi_size + 1);
-      for (int rank = 0; rank < m_mpi_size; rank++) {
-        size_t off = lenseg * rank;
-        if (m_cache.io) {
-          for (m_cache.ensure(off); m_cache.length && off < lenseg * (rank + 1); off += m_cache.length, ++m_cache)
-            MPI_Bcast(m_cache.buffer,
-                      m_cache.length,
-                      MPI_DOUBLE,
-                      rank,
-                      m_communicator); // FIXME needs attention for non-double
-        } else {
-          if (lenseg > 0 && m_size > off)
-            MPI_Bcast(&m_cache.buffer[off],
-                      std::min(lenseg, m_size - off),
-                      MPI_DOUBLE,
-                      rank,
-                      m_communicator); // FIXME needs attention for non-double
-        }
-      }
-    }
-#endif
-    return *this;
-  }
+  OutOfCoreArray& operator=(const OutOfCoreArray& other) = delete;
 
   /*!
    * @brief Test for equality of two objects
