@@ -1,16 +1,26 @@
 PROGRAM Linear_Eigensystem_Benchmark
   USE Iterative_Solver
   USE ProfilerF
+#ifdef HAVE_MPI_H
+  include 'mpif.h'
+#endif
   TYPE(Profiler) :: p
   INTEGER, PARAMETER :: n = 2000000, nroot = 3
   !DOUBLE PRECISION, DIMENSION (n, n) :: m
   DOUBLE PRECISION, DIMENSION (n, nroot) :: c, g
   DOUBLE PRECISION, DIMENSION (nroot) :: e, error
   DOUBLE PRECISION :: su
-  INTEGER :: i, j, root
+  INTEGER :: i, j, root, ierr
   LOGICAL :: converged, update
   PRINT *, 'Fortran binding of IterativeSolver'
-  p=Profiler('Benchmark')
+#ifdef HAVE_MPI_H
+  call MPI_Init(ierr)
+  PRINT *, 'Using parallel version'
+  p=Profiler('Benchmark',MPI_COMM_WORLD)
+#else
+  PRINT *, 'Using serial version'
+  p=Profiler('Benchmark')   
+#endif
   !m = 1; DO i = 1, n; m(i, i) = 3 * i; END DO
   CALL Iterative_Solver_Linear_Eigensystem_Initialize(n, nroot, thresh = 1d-7, verbosity = 1)
   c = 0; DO i = 1, nroot; c(i, i) = 1;
@@ -45,4 +55,7 @@ PROGRAM Linear_Eigensystem_Benchmark
   PRINT *, 'error =', error, ' eigenvalue =', e
   CALL Iterative_Solver_Finalize
   call p%print(6)
+#ifdef HAVE_MPI_H
+  call MPI_Finalize(ierr)
+#endif
 END PROGRAM Linear_Eigensystem_Benchmark
