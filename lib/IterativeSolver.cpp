@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <stack>
+#include "ProfilerSingle.h"
 
 // C interface to IterativeSolver
 //using v = LinearAlgebra::PagedVector<double>;
@@ -17,13 +18,31 @@ IterativeSolverLinearEigensystemInitialize(size_t n,
                                            double thresh,
                                            unsigned int maxIterations,
                                            int verbosity,
-                                           int orthogonalize) {
+                                           int orthogonalize,
+                                           const char* fname,
+                                           int fcomm) {
+  std::shared_ptr<Profiler> profiler = nullptr;
 #ifdef HAVE_MPI_H
   int flag;
   MPI_Initialized(&flag);
-  if (!flag) MPI_Init(0, nullptr);
+  MPI_Comm pcomm;
+  if (!flag) {
+     MPI_Init(0, nullptr);
+     pcomm = MPI_COMM_WORLD;
+  } else {
+     pcomm = MPI_Comm_f2c(fcomm); // Check it's not MPI_COMM_NULL? Will crash if handle is invalid.
+  }
+  if (fname != NULL) {
+     std::string pname(fname);
+     profiler = ProfilerSingle::instance(pname,pcomm);
+  }
+#else
+  if (fname != NULL) {
+     std::string pname(fname);
+     profiler = ProfilerSingle::instance(pname);
+  }
 #endif
-  instances.push(std::make_unique<IterativeSolver::LinearEigensystem<v> >(IterativeSolver::LinearEigensystem<v>()));
+  instances.push(std::make_unique<IterativeSolver::LinearEigensystem<v> >(IterativeSolver::LinearEigensystem<v>(profiler)));
   auto& instance = instances.top();
   instance->m_dimension = n;
   instance->m_roots = nroot;
@@ -126,6 +145,7 @@ extern "C" int IterativeSolverAddValue(double* parameters, double value, double*
 extern "C" int IterativeSolverAddVector(double* parameters, double* action, double* parametersP, int sync) {
   std::vector<v> cc, gg;
   auto& instance = instances.top();
+  auto p = instance->m_profiler->push("AddVector");
   cc.reserve(instance->m_roots); // very important for avoiding copying of memory-mapped vectors in emplace_back below
   gg.reserve(instance->m_roots);
   std::vector<std::vector<typename v::value_type> > ccp(instance->m_roots);
@@ -133,8 +153,11 @@ extern "C" int IterativeSolverAddVector(double* parameters, double* action, doub
     cc.emplace_back(&parameters[root * instance->m_dimension], instance->m_dimension);
     gg.emplace_back(&action[root * instance->m_dimension], instance->m_dimension);
   }
+  instance->m_profiler->start("AddVector:Update");
   bool update = instance->addVector(cc, gg, ccp);
+  instance->m_profiler->stop("AddVector:Update");
 
+  instance->m_profiler->start("AddVector:Sync");
   for (size_t root = 0; root < instance->m_roots; root++) {
 #ifdef HAVE_MPI_H
     if (sync) {
@@ -145,6 +168,7 @@ extern "C" int IterativeSolverAddVector(double* parameters, double* action, doub
     for (size_t i = 0; i < ccp[0].size(); i++)
       parametersP[root * ccp[0].size() + i] = ccp[root][i];
   }
+  instance->m_profiler->stop("AddVector:Sync");
   return update ? 1 : 0;
 }
 
