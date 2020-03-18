@@ -50,11 +50,15 @@ PROGRAM Linear_Eigensystem_Benchmark
       END DO
       call p%stop('update')
     END IF
+    call p%start('End_Iter')
     converged = Iterative_Solver_End_Iteration(c, g, error)
+    call p%stop('End_Iter')
     IF (converged) EXIT
   END DO
   PRINT *, 'error =', error, ' eigenvalue =', e
+  call p%start('Finalize')
   CALL Iterative_Solver_Finalize
+  call p%stop('Finalize')
   call p%print(6)
 #ifdef HAVE_MPI_H
   call MPI_Finalize(ierr)

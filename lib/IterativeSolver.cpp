@@ -145,7 +145,7 @@ extern "C" int IterativeSolverAddValue(double* parameters, double value, double*
 extern "C" int IterativeSolverAddVector(double* parameters, double* action, double* parametersP, int sync) {
   std::vector<v> cc, gg;
   auto& instance = instances.top();
-  auto p = instance->m_profiler->push("AddVector");
+  if (instance->m_profiler != nullptr) instance->m_profiler->start("AddVector");
   cc.reserve(instance->m_roots); // very important for avoiding copying of memory-mapped vectors in emplace_back below
   gg.reserve(instance->m_roots);
   std::vector<std::vector<typename v::value_type> > ccp(instance->m_roots);
@@ -153,11 +153,11 @@ extern "C" int IterativeSolverAddVector(double* parameters, double* action, doub
     cc.emplace_back(&parameters[root * instance->m_dimension], instance->m_dimension);
     gg.emplace_back(&action[root * instance->m_dimension], instance->m_dimension);
   }
-  instance->m_profiler->start("AddVector:Update");
+  if (instance->m_profiler != nullptr) instance->m_profiler->start("AddVector:Update");
   bool update = instance->addVector(cc, gg, ccp);
-  instance->m_profiler->stop("AddVector:Update");
+  if (instance->m_profiler != nullptr) instance->m_profiler->stop("AddVector:Update");
 
-  instance->m_profiler->start("AddVector:Sync");
+  if (instance->m_profiler != nullptr) instance->m_profiler->start("AddVector:Sync");
   for (size_t root = 0; root < instance->m_roots; root++) {
 #ifdef HAVE_MPI_H
     if (sync) {
@@ -168,20 +168,25 @@ extern "C" int IterativeSolverAddVector(double* parameters, double* action, doub
     for (size_t i = 0; i < ccp[0].size(); i++)
       parametersP[root * ccp[0].size() + i] = ccp[root][i];
   }
-  instance->m_profiler->stop("AddVector:Sync");
+  if (instance->m_profiler != nullptr) instance->m_profiler->stop("AddVector:Sync");
+  if (instance->m_profiler != nullptr) instance->m_profiler->stop("AddVector");
   return update ? 1 : 0;
 }
 
 extern "C" int IterativeSolverEndIteration(double* solution, double* residual, double* error) {
   std::vector<v> cc, gg;
   auto& instance = instances.top();
+  if (instance->m_profiler != nullptr) instance->m_profiler->start("EndIter");
   cc.reserve(instance->m_roots); // very important for avoiding copying of memory-mapped vectors in emplace_back below
   gg.reserve(instance->m_roots);
   for (size_t root = 0; root < instance->m_roots; root++) {
     cc.emplace_back(&solution[root * instance->m_dimension], instance->m_dimension);
     gg.emplace_back(&residual[root * instance->m_dimension], instance->m_dimension);
   }
+  if (instance->m_profiler != nullptr) instance->m_profiler->start("EndIter:Body");
   bool result = instance->endIteration(cc, gg);
+  if (instance->m_profiler != nullptr) instance->m_profiler->stop("EndIter:Body");
+  if (instance->m_profiler != nullptr) instance->m_profiler->start("EndIter:Sync");
   for (size_t root = 0; root < instance->m_roots; root++) {
 #ifdef HAVE_MPI_H
     if (!cc[root].synchronised()) cc[root].sync();
@@ -189,6 +194,8 @@ extern "C" int IterativeSolverEndIteration(double* solution, double* residual, d
 #endif
     error[root] = instance->errors()[root];
   }
+  if (instance->m_profiler != nullptr) instance->m_profiler->stop("EndIter:Sync");
+  if (instance->m_profiler != nullptr) instance->m_profiler->stop("EndIter");
   return result;
 }
 
