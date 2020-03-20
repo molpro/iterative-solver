@@ -32,13 +32,13 @@ IterativeSolverLinearEigensystemInitialize(size_t n,
   } else {
      pcomm = MPI_Comm_f2c(fcomm); // Check it's not MPI_COMM_NULL? Will crash if handle is invalid.
   }
-  if (fname != NULL) {
-     std::string pname(fname);
+  std::string pname(fname);
+  if (!pname.empty()) {
      profiler = ProfilerSingle::instance(pname,pcomm);
   }
 #else
-  if (fname != NULL) {
-     std::string pname(fname);
+  std::string pname(fname);
+  if (!pname.empty()) {
      profiler = ProfilerSingle::instance(pname);
   }
 #endif
