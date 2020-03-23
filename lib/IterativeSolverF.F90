@@ -16,8 +16,8 @@ CONTAINS
   !> \brief Finds the lowest eigensolutions of a matrix using Davidson's method, i.e. preconditioned Lanczos.
   !> Example of simplest use: @include LinearEigensystemExampleF.F90
   !> Example including use of P space: @include LinearEigensystemExampleF-Pspace.F90
-  SUBROUTINE Iterative_Solver_Linear_Eigensystem_Initialize(nq, nroot, pname, pcomm, thresh, maxIterations, verbosity, &
-                                                            orthogonalize)
+  SUBROUTINE Iterative_Solver_Linear_Eigensystem_Initialize(nq, nroot, thresh, maxIterations, verbosity, &
+                                                            orthogonalize, pname, pcomm)
     INTEGER, INTENT(in) :: nq !< dimension of matrix
     INTEGER, INTENT(in) :: nroot !< number of eigensolutions desired
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
@@ -72,6 +72,7 @@ CONTAINS
     ENDIF
     CALL Iterative_Solver_Linear_Eigensystem_InitializeC(m_nq, m_nroot, threshC, maxIterationsC, verbosityC, orthogonalizeC, &
                                                          pnameC, pcommC)
+    DEALLOCATE(pnameC)
   END SUBROUTINE Iterative_Solver_Linear_Eigensystem_Initialize
 
   !> \brief Finds the solutions of linear equation systems using a generalisation of Davidson's method, i.e. preconditioned Lanczos
