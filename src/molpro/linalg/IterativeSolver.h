@@ -992,8 +992,26 @@ protected:
   std::unique_ptr<slowvector> m_best_r, m_best_v;
   double m_best_f;
 
-  bool interpolatedMinimum(value_type& x, double& f, value_type x0, value_type x1, double f0, double f1, value_type g0,
-                           value_type g1) {
+  /*!
+   * @brief 4-parameter interpolation of function with value and derivative supplied at two points, followed by
+   * evaluation of minimum of interpolant.
+   * @param x Resulting position of minimum
+   * @param f Interpolated function value at the minimum
+   * @param xmin Smallest acceptable position of minimum. If no minimum is found in [xmin,xmax], x=xmin is returned if
+   * f0<f1, and the function returns false.
+   * @param xmax Largest acceptable position of minimum. If no minimum is found in [xmin,xmax], x=xmax is returned if
+   * f0>f1, and the function returns false.
+   * @param x0 First input point.
+   * @param x1 Second input point.
+   * @param f0 Function value at x0.
+   * @param f1 Function value at x1.
+   * @param g0 Derivative value at x0.
+   * @param g1 Derivative value at x1.
+   * @param method Specify interpolating function.
+   * @return True if interpolation was successful and the interpolant has a valid minimum.
+   */
+  bool interpolatedMinimum(value_type& x, double& f, value_type xmin, value_type xmax, value_type x0, value_type x1,
+                           double f0, double f1, value_type g0, value_type g1, std::string method = "cubic") {
     if (std::abs(2 * f1 - g1 - 2 * f0 - g0) < 1e-10) { // cubic coefficient is zero
       auto c2 = (g1 - g0) / 2;
       if (c2 < 0)
@@ -1054,7 +1072,8 @@ protected:
       double finterp;
       //      molpro::cout << "before interpolatedMinimum" << std::endl;
       value_type alpha;
-      auto interpolated = interpolatedMinimum(alpha, finterp, 0, 1, f0, f1, g0, g1);
+      auto interpolated = interpolatedMinimum(alpha, finterp, 1 - m_linesearch_grow_factor, m_linesearch_grow_factor, 0,
+                                              1, f0, f1, g0, g1);
       //      molpro::cout << "interpolated: " << interpolated << ", alpha " <<
       //      alpha
       //                   << ", finterp " << finterp << std::endl;

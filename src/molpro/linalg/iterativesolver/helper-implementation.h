@@ -182,9 +182,9 @@ void molpro::linalg::iterativesolver::helper<value_type>::eigenproblem(
   assert((subspaceEigenvectors - subspaceEigenvectors.real()).norm() < 1e-12);
   assert((subspaceEigenvalues - subspaceEigenvalues.real()).norm() < 1e-12);
   //    if constexpr (std::is_class<value_type>::value) {
-  Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(eigenvectors.data(), dimension, dimension) =
+  Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(eigenvectors.data(), dimension, Hbar.cols()) =
       subspaceEigenvectors.real();
-  Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, 1>> ev(eigenvalues.data(), dimension);
+  Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, 1>> ev(eigenvalues.data(), Hbar.cols());
   ev = subspaceEigenvalues.real();
   //    } else {
   //      Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(m_evec_xx.data(), dimension, dimension)
