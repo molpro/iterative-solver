@@ -992,6 +992,7 @@ protected:
   std::unique_ptr<slowvector> m_best_r, m_best_v;
   double m_best_f;
 
+  friend class IterativeSolverTester;
   /*!
    * @brief 4-parameter interpolation of function with value and derivative supplied at two points, followed by
    * evaluation of minimum of interpolant.
@@ -1010,32 +1011,63 @@ protected:
    * @param method Specify interpolating function.
    * @return True if interpolation was successful and the interpolant has a valid minimum.
    */
+  bool interpolatedMinimumDefaultExtrapolate(value_type& x, double& f, value_type xmin, value_type xmax, value_type x0,
+                                             value_type x1, double f0, double f1, value_type g0, value_type g1) {
+    if (f1 < f0) {
+      x = ((xmax - xmin) * (x1 - x0) > 0 ? xmax : xmin);
+      f = f1 + (x - x1) * g1;
+//      molpro::cout << "default extrapolate to 1, x=" << x << ", f=" << f << std::endl;
+    } else {
+      x = ((xmax - xmin) * (x0 - x1) > 0 ? xmax : xmin);
+      f = f0 + (x - x0) * g0;
+//      molpro::cout << "default extrapolate to 0, x=" << x << ", f=" << f << std::endl;
+    }
+    return false;
+  }
   bool interpolatedMinimum(value_type& x, double& f, value_type xmin, value_type xmax, value_type x0, value_type x1,
                            double f0, double f1, value_type g0, value_type g1, std::string method = "cubic") {
-    if (std::abs(2 * f1 - g1 - 2 * f0 - g0) < 1e-10) { // cubic coefficient is zero
-      auto c2 = (g1 - g0) / 2;
-      if (c2 < 0)
-        return false;
-      x = x0 + (-0.5 * g0 / c2) * (x1 - x0);
-      f = f0 + g0 * x + c2 * x * x;
+    auto range = x1 - x0;
+    auto g0n = g0 * range; // gradient with respect to fraction of distance from x0 to x1
+    auto g1n = g1 * range; // gradient with respect to fraction of distance from x0 to x1
+    if (method == "cubic") {
+      if (std::abs(2 * f1 - 2 * f0 - (g0 + g1) * range) < 1e-10) { // cubic coefficient is zero
+        auto c2 = (g1 - g0) / (2 * range);
+        //        molpro::cout << "c2=" << c2 << std::endl;
+        if (c2 < 0) // quadratic with maximum. Extrapolate to lowest constraint
+          return interpolatedMinimumDefaultExtrapolate(x, f, xmin, xmax, x0, x1, f0, f1, g0, g1);
+        auto c1 = (f1 - f0) / range - c2 * (x1 + x0);
+        //        molpro::cout << "c1=" << c1 << std::endl;
+        auto xquad = (-0.5 * c1 / c2);
+        auto fmin = f0 + g0 * (xmin - x0) + c2 * (xmin - x0) * (xmin - x0);
+        auto fmax = f0 + g0 * (xmax - x0) + c2 * (xmax - x0) * (xmax - x0);
+        x = xquad;
+        //        molpro::cout << "xquad="<<xquad<<", xmin="<<xmin<<", xmax="<<xmax<<std::endl;
+        if (xquad < xmin or xquad > xmax)
+          x = (fmin < fmax) ? xmin : xmax;
+        f = f0 + g0 * (x - x0) + c2 * (x - x0) * (x - x0);
+        //        molpro::cout << "x=" << x << ", f=" << f << std::endl;
+        return x == xquad;
+      }
+      auto discriminant = (std::pow(3 * f0 - 3 * f1 + g0n, 2) + (6 * f0 - 6 * f1 + g0n) * g1n + std::pow(g1n, 2));
+//      molpro::cout << "discriminant " << discriminant << std::endl;
+      if (discriminant < 0) // cubic has no turning points
+        return interpolatedMinimumDefaultExtrapolate(x, f, xmin, xmax, x0, x1, f0, f1, g0, g1);
+
+      auto alpham = (2 * f0 - 2 * f1 + g0n + g1n == 0) ? (g0n / (2 * f1 - 2 * f0 - 2 * g1n))
+                                                       : (3 * f0 - 3 * f1 + 2 * g0n + g1n - std::sqrt(discriminant)) /
+                                                             (3 * (2 * f0 - 2 * f1 + g0n + g1n));
+      auto alphap = (2 * f0 - 2 * f1 + g0n + g1n == 0) ? (g0n / (2 * f1 - 2 * f0 - 2 * g1n))
+                                                       : (3 * f0 - 3 * f1 + 2 * g0n + g1n + std::sqrt(discriminant)) /
+                                                             (3 * (2 * f0 - 2 * f1 + g0n + g1n));
+      auto fm =
+          f0 + alpham * (g0n + alpham * (-3 * f0 + 3 * f1 - 2 * g0n - g1n + alpham * (2 * f0 - 2 * f1 + g0n + g1n)));
+      auto fp =
+          f0 + alphap * (g0n + alphap * (-3 * f0 + 3 * f1 - 2 * g0n - g1n + alphap * (2 * f0 - 2 * f1 + g0n + g1n)));
+      f = std::min(fm, fp);
+      x = x0 + (fm < fp ? alpham : alphap) * (x1 - x0);
       return true;
     }
-    auto discriminant = (std::pow(3 * f0 - 3 * f1 + g0, 2) + (6 * f0 - 6 * f1 + g0) * g1 + std::pow(g1, 2));
-    //    molpro::cout << "discriminant " << discriminant << std::endl;
-    if (discriminant < 0)
-      return false; // cubic has no turning points
-
-    auto alpham = (2 * f0 - 2 * f1 + g0 + g1 == 0)
-                      ? (g0 / (2 * f1 - 2 * f0 - 2 * g1))
-                      : (3 * f0 - 3 * f1 + 2 * g0 + g1 - std::sqrt(discriminant)) / (3 * (2 * f0 - 2 * f1 + g0 + g1));
-    auto alphap = (2 * f0 - 2 * f1 + g0 + g1 == 0)
-                      ? (g0 / (2 * f1 - 2 * f0 - 2 * g1))
-                      : (3 * f0 - 3 * f1 + 2 * g0 + g1 + std::sqrt(discriminant)) / (3 * (2 * f0 - 2 * f1 + g0 + g1));
-    auto fm = f0 + alpham * (g0 + alpham * (-3 * f0 + 3 * f1 - 2 * g0 - g1 + alpham * (2 * f0 - 2 * f1 + g0 + g1)));
-    auto fp = f0 + alphap * (g0 + alphap * (-3 * f0 + 3 * f1 - 2 * g0 - g1 + alphap * (2 * f0 - 2 * f1 + g0 + g1)));
-    f = std::min(fm, fp);
-    x = x0 + (fm < fp ? alpham : alphap) * (x1 - x0);
-    return true;
+    return false;
   }
 
   bool solveReducedProblem() override {

@@ -869,3 +869,88 @@ TEST(Rosenbrock, DISABLED_Optimize) {
   for (const auto& x : expected_iterations)
     ASSERT_LE(Test(x.first, 800 * x.first * x.first).run(0), x.second);
 }
+
+class molpro::linalg::IterativeSolverTester {
+  using value_type = double;
+  molpro::linalg::Optimize<molpro::linalg::SimpleArray<value_type>> solver;
+
+public:
+  bool interpolatedMinimum(value_type& x, double& f, value_type xmin, value_type xmax, value_type x0, value_type x1,
+                           double f0, double f1, value_type g0, value_type g1, std::string method = "cubic") {
+    return solver.interpolatedMinimum(x, f, xmin, xmax, x0, x1, f0, f1, g0, g1, method);
+  }
+};
+TEST(IterativeSolver, interpolatedMinimum) {
+  double x;
+  double f;
+  molpro::linalg::IterativeSolverTester solver;
+  //  // x^2
+  //  EXPECT_TRUE(solver.interpolatedMinimum(x, f, 0, 1, 0, 1, 0, 1, 0, 2));
+  //  EXPECT_EQ(x, 0);
+  //  EXPECT_EQ(f, 0);
+  //  // x(x-1)^2
+  //  EXPECT_TRUE(solver.interpolatedMinimum(x, f, 0, 1, 0, 1, 0, 0, 1, 0));
+  //  EXPECT_EQ(x, 1);
+  //  EXPECT_EQ(f, 0);
+  for (const auto& method : std::vector<std::string>{"cubic"}) {
+
+//    std::cout << "Method " << method << std::endl;
+    for (double x0 = 0; x0 < 1.1; x0 += 1)
+      for (double x1 = 2; x1 < 4.1; x1 += 2) {
+        double xmin = -3;
+        double xmax = 4;
+        {
+//          std::cout << "f=7-(x-7)^2 g=14-2x" << std::endl;
+          auto f0 = 7 - (x0 - 7) * (x0 - 7), g0 = 14 - 2 * x0;
+          auto f1 = 7 - (x1 - 7) * (x1 - 7), g1 = 14 - 2 * x1;
+          EXPECT_FALSE(solver.interpolatedMinimum(x, f, xmin, xmax, x0, x1, f0, f1, g0, g1, method));
+          EXPECT_EQ(x, xmin);
+          EXPECT_EQ(f, f0 > f1 ? f1 + g1 * (xmin - x1) : f0 + g0 * (xmin - x0));
+        }
+        {
+//          std::cout << "f=7+(x-7)^2 g=14-2x" << std::endl;
+          auto f0 = 7 + (x0 - 7) * (x0 - 7), g0 = -14 + 2 * x0;
+          auto f1 = 7 + (x1 - 7) * (x1 - 7), g1 = -14 + 2 * x1;
+          //        molpro::cout << "x0=" << x0 << " f0=" << f0 << " g0=" << g0 << std::endl;
+          //        molpro::cout << "x1=" << x1 << " f1=" << f1 << " g1=" << g1 << std::endl;
+          EXPECT_FALSE(solver.interpolatedMinimum(x, f, xmin, xmax, x0, x1, f0, f1, g0, g1, method));
+          EXPECT_EQ(x, xmax);
+          EXPECT_EQ(f, 7 + (x - 7) * (x - 7));
+        }
+        {
+//          std::cout << "f=2+(x-2)^2 g=2(x-2)" << std::endl;
+          auto f0 = 2 + (x0 - 2) * (x0 - 2), g0 = -4 + 2 * x0;
+          auto f1 = 2 + (x1 - 2) * (x1 - 2), g1 = -4 + 2 * x1;
+          //        molpro::cout << "x0=" << x0 << " f0=" << f0 << " g0=" << g0 << std::endl;
+          //        molpro::cout << "x1=" << x1 << " f1=" << f1 << " g1=" << g1 << std::endl;
+          EXPECT_TRUE(solver.interpolatedMinimum(x, f, xmin, xmax, x0, x1, f0, f1, g0, g1, method));
+          EXPECT_EQ(x, 2);
+          EXPECT_EQ(f, 2 + (x - 2) * (x - 2));
+        }
+        {
+//          std::cout << "f=2+x(x-2)^2 g=3x^2-8x+4" << std::endl;
+          auto f0 = 2 + (x0) * (x0 - 2) * (x0 - 2), g0 = (3 * x0 - 2) * (x0 - 2);
+          auto f1 = 2 + (x1) * (x1 - 2) * (x1 - 2), g1 = (3 * x1 - 2) * (x1 - 2);
+//          molpro::cout << "x0=" << x0 << " f0=" << f0 << " g0=" << g0 << std::endl;
+//          molpro::cout << "x1=" << x1 << " f1=" << f1 << " g1=" << g1 << std::endl;
+          EXPECT_TRUE(solver.interpolatedMinimum(x, f, xmin, xmax, x0, x1, f0, f1, g0, g1, method));
+          EXPECT_EQ(x, 2);
+          EXPECT_EQ(f, 2 + x * (x - 2) * (x - 2));
+        }
+        {
+//          std::cout << "f=x(x^2+1) g=3x^2+1" << std::endl;
+          auto f0 = 2 + (x0) * (x0 * x0 + 1), g0 = (3 * x0 * x0 + 1);
+          auto f1 = 2 + (x1) * (x1 * x1 + 1), g1 = (3 * x1 * x1 + 1);
+//          molpro::cout << "x0=" << x0 << " f0=" << f0 << " g0=" << g0 << std::endl;
+//          molpro::cout << "x1=" << x1 << " f1=" << f1 << " g1=" << g1 << std::endl;
+          EXPECT_FALSE(solver.interpolatedMinimum(x, f, xmin, xmax, x0, x1, f0, f1, g0, g1, method));
+          EXPECT_EQ(x, xmin);
+          EXPECT_EQ(f, f0 + (xmin - x0) * g0);
+        }
+      }
+  }
+  // 7x+3
+  //  EXPECT_FALSE(solver.interpolatedMinimum(x, f, 0, 1, -3, 4, 3, 10, 7, 7));
+  //  EXPECT_EQ(x, -3);
+  //  EXPECT_EQ(f, -18);
+}
