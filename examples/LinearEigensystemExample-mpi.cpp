@@ -49,14 +49,11 @@ void update(std::vector<Rvector>& psc, const std::vector<Rvector>& psg, size_t n
   for (size_t k = 0; k < nwork; k++) {
     auto range = psg[k].distribution().range(mpi_rank);
     assert(range == psc[k].distribution().range(mpi_rank));
-    std::vector<double> c_chunk(range.second - range.first);
-    std::vector<double> g_chunk(range.second - range.first);
-    psc[k].get(range.first, range.second - 1, c_chunk.data());
-    psg[k].get(range.first, range.second - 1, g_chunk.data());
+    auto c_chunk = psc[k].local_buffer();
+    auto g_chunk = psg[k].local_buffer();
     for (size_t i = range.first; i < range.second; i++) {
-      c_chunk[i - range.first] -= g_chunk[i - range.first] / (1e-12 - shift[k] + matrix(i, i));
+      (*c_chunk)[i - range.first] -= (*g_chunk)[i - range.first] / (1e-12 - shift[k] + matrix(i, i));
     }
-    psc[k].put(range.first, range.second - 1, c_chunk.data());
   }
   MPI_Barrier(MPI_COMM_WORLD);
 }
@@ -142,7 +139,7 @@ int main(int argc, char* argv[]) {
         for (size_t root = 0; root < solver.m_roots; root++) {
           auto result = std::sqrt(handlers.rr().dot(g[root], g[root]));
           if (mpi_rank == 0)
-            std::cout << " "<<result;
+            std::cout << " " << result;
         }
         if (mpi_rank == 0)
           std::cout << std::endl;
