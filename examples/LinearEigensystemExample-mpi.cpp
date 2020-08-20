@@ -2,9 +2,9 @@
 #include <fstream>
 #include <iomanip>
 #include <molpro/linalg/array/ArrayHandlerDistr.h>
+#include <molpro/linalg/array/ArrayHandlerDistrSparse.h>
 #include <molpro/linalg/array/ArrayHandlerIterable.h>
 #include <molpro/linalg/array/ArrayHandlerIterableSparse.h>
-#include <molpro/linalg/array/ArrayHandlerDistrSparse.h>
 #include <molpro/linalg/array/ArrayHandlerSparse.h>
 #include <molpro/linalg/array/DistrArrayMPI3.h>
 #include <molpro/linalg/array/util/Distribution.h>
@@ -12,11 +12,11 @@
 #include <vector>
 
 using molpro::linalg::array::ArrayHandler;
+using molpro::linalg::array::ArrayHandlerDistr;
+using molpro::linalg::array::ArrayHandlerDistrSparse;
 using molpro::linalg::array::ArrayHandlerIterable;
 using molpro::linalg::array::ArrayHandlerIterableSparse;
 using molpro::linalg::array::ArrayHandlerSparse;
-using molpro::linalg::array::ArrayHandlerDistrSparse;
-using molpro::linalg::array::ArrayHandlerDistr;
 using molpro::linalg::iterativesolver::ArrayHandlers;
 // Find lowest eigensolutions of a matrix obtained from an external file
 using Rvector = molpro::linalg::array::DistrArrayMPI3;
@@ -48,14 +48,14 @@ void update(std::vector<Rvector>& psc, const std::vector<Rvector>& psg, size_t n
   for (size_t k = 0; k < nwork; k++) {
     auto range = psg[k].distribution().range(mpi_rank);
     assert(range == psc[k].distribution().range(mpi_rank));
-    std::vector<double> c_chunk(range.second-range.first);
-    std::vector<double> g_chunk(range.second-range.first);
-    psc[k].get(range.first,range.second-1,c_chunk.data());
-    psg[k].get(range.first,range.second-1,g_chunk.data());
+    std::vector<double> c_chunk(range.second - range.first);
+    std::vector<double> g_chunk(range.second - range.first);
+    psc[k].get(range.first, range.second - 1, c_chunk.data());
+    psg[k].get(range.first, range.second - 1, g_chunk.data());
     for (size_t i = range.first; i < range.second; i++) {
-      c_chunk[i-range.first] -= g_chunk[i-range.first] / (1e-12 - shift[k] + matrix(i, i));
+      c_chunk[i - range.first] -= g_chunk[i - range.first] / (1e-12 - shift[k] + matrix(i, i));
     }
-    psc[k].put(range.first,range.second-1,c_chunk.data());
+    psc[k].put(range.first, range.second - 1, c_chunk.data());
   }
 }
 
@@ -80,15 +80,15 @@ int main(int argc, char* argv[]) {
       diagonals.reserve(n);
       for (auto i = 0; i < n; i++)
         diagonals.push_back(matrix(i, i));
-      auto rr = std::make_shared<ArrayHandlerDistr<Rvector,Rvector>>();
-      auto qq = std::make_shared<ArrayHandlerDistr<Qvector,Qvector>>();
-      auto pp = std::make_shared<ArrayHandlerSparse<Pvector,Pvector>>();
-      auto rq = std::make_shared<ArrayHandlerDistr<Rvector,Qvector>>();
+      auto rr = std::make_shared<ArrayHandlerDistr<Rvector, Rvector>>();
+      auto qq = std::make_shared<ArrayHandlerDistr<Qvector, Qvector>>();
+      auto pp = std::make_shared<ArrayHandlerSparse<Pvector, Pvector>>();
+      auto rq = std::make_shared<ArrayHandlerDistr<Rvector, Qvector>>();
       auto rp = std::make_shared<ArrayHandlerDistrSparse<Rvector, Pvector>>();
-      auto qr = std::make_shared<ArrayHandlerDistr<Qvector,Rvector>>();
+      auto qr = std::make_shared<ArrayHandlerDistr<Qvector, Rvector>>();
       auto qp = std::make_shared<ArrayHandlerDistrSparse<Qvector, Pvector>>();
       auto handlers = ArrayHandlers<Rvector, Rvector, Pvector>{rr, qq, pp, rq, rp, qr, qp};
-//      auto handlers = ArrayHandlers<Rvector, Qvector, Pvector>{};
+      //      auto handlers = ArrayHandlers<Rvector, Qvector, Pvector>{};
       molpro::linalg::LinearEigensystem<Rvector, Qvector, Pvector> solver{handlers};
       solver.m_verbosity = 1;
       solver.m_roots = nroot;
@@ -111,7 +111,8 @@ int main(int argc, char* argv[]) {
       for (auto iter = 0; iter < 100; iter++) {
         action(x, g);
         nwork = solver.addVector(x, g, Pcoeff);
-        solver.report();
+        if (mpi_rank == 0)
+          solver.report();
         if (nwork == 0)
           break;
         update(x, g, nwork, solver.working_set_eigenvalues());
@@ -130,4 +131,5 @@ int main(int argc, char* argv[]) {
       }
     }
   }
+  MPI_Finalize();
 }
