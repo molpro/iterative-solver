@@ -1,6 +1,7 @@
 #include "molpro/linalg/IterativeSolver.h"
 #include <fstream>
 #include <iomanip>
+#include <molpro/linalg/array/ArrayHandlerDistr.h>
 #include <molpro/linalg/array/ArrayHandlerIterable.h>
 #include <molpro/linalg/array/ArrayHandlerIterableSparse.h>
 #include <molpro/linalg/array/ArrayHandlerSparse.h>
@@ -13,6 +14,7 @@ using molpro::linalg::array::ArrayHandler;
 using molpro::linalg::array::ArrayHandlerIterable;
 using molpro::linalg::array::ArrayHandlerIterableSparse;
 using molpro::linalg::array::ArrayHandlerSparse;
+using molpro::linalg::array::ArrayHandlerDistr;
 using molpro::linalg::iterativesolver::ArrayHandlers;
 // Find lowest eigensolutions of a matrix obtained from an external file
 using Rvector = molpro::linalg::array::DistrArrayMPI3;
@@ -76,6 +78,14 @@ int main(int argc, char* argv[]) {
       diagonals.reserve(n);
       for (auto i = 0; i < n; i++)
         diagonals.push_back(matrix(i, i));
+//      auto rr = std::make_shared<ArrayHandlerDistr<Rvector,Rvector>>();
+//      auto qq = std::make_shared<ArrayHandlerDistr<Qvector,Qvector>>();
+//      auto rq = std::make_shared<ArrayHandlerDistr<Rvector,Qvector>>();
+//      auto pp = std::make_shared<ArrayHandlerSparse<Pvector,Pvector>();
+//      auto rp = std::make_shared<ArrayHandlerIterableSparse<Rvector, std::map<size_t, double>>>();
+//      auto qr = std::make_shared<ArrayHandlerIterable<Rvector>>();
+//      auto qp = std::make_shared<ArrayHandlerIterableSparse<Rvector, std::map<size_t, double>>>();
+//      auto handlers = ArrayHandlers<Rvector, Rvector, std::map<size_t, double>>{rr, qq, pp, rq, rp, qr, qp};
       auto handlers = ArrayHandlers<Rvector, Qvector, Pvector>{};
       molpro::linalg::LinearEigensystem<Rvector, Qvector, Pvector> solver{handlers};
       solver.m_verbosity = 1;
