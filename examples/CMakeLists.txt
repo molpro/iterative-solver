@@ -17,7 +17,7 @@ set(EXAMPLES DIISexample.cpp
         LinearEquationsExample.cpp
         ${ITERATIVESOLVER_FORTRAN_EXAMPLES}
         )
-if (LINEARALGEBRA_ARRAY_MPI3)
+if (LINEARALGEBRA_ARRAY_MPI3 AND MPI)
     list(APPEND EXAMPLES
             LinearEigensystemExample-mpi.cpp
             )
