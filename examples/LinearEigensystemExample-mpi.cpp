@@ -34,11 +34,16 @@ void action(const std::vector<Rvector>& psx, std::vector<Rvector>& outputs) {
     psx[k].get(0, n - 1, allx.data());
     auto range = outputs[k].distribution().range(mpi_rank);
     outputs[k].fill(0);
+    std::cout << "MPI rank="<<mpi_rank<<"; allx:";
+    for (const auto& x : allx)
+      std::cout << " " << x;
+    std::cout << std::endl;
     for (size_t i = range.first; i < range.second; i++) {
       double result = 0;
       for (size_t j = 0; j < n; j++)
         result += matrix(i, j) * allx[j];
       outputs[k].set(i, result);
+      std::cout << "result "<<i<<" "<<result<<std::endl;
     }
   }
 }
@@ -61,13 +66,16 @@ void update(std::vector<Rvector>& psc, const std::vector<Rvector>& psg, size_t n
 
 int main(int argc, char* argv[]) {
   MPI_Init(&argc, &argv);
+  int mpi_size;
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
   for (const auto& file : std::vector<std::string>{"hf", "bh"}) {
     for (const auto& nroot : std::vector<int>{1, 2, 4}) {
       if (mpi_rank == 0) {
-        molpro::cout << "\n\n*** " << file << ", " << nroot << " roots" << std::endl;
         std::ifstream f(std::string{"examples/"} + file + ".hamiltonian");
         f >> n;
+        molpro::cout << "\n*** " << file << " (dimension " << n << "), " << nroot << " roots, mpi_size = " << mpi_size
+                     << std::endl;
         hmat.resize(n * n);
         for (auto i = 0; i < n * n; i++)
           f >> hmat[i];
