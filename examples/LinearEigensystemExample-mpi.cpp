@@ -69,7 +69,9 @@ int main(int argc, char* argv[]) {
   for (const auto& file : std::vector<std::string>{"hf", "bh"}) {
     for (const auto& nroot : std::vector<int>{1, 2, 4}) {
       if (mpi_rank == 0) {
-        std::ifstream f(std::string{"examples/"} + file + ".hamiltonian");
+        std::string prefix{argv[0]};
+        prefix.resize(prefix.find_last_of("/"));
+        std::ifstream f(prefix + "/examples/" + file + ".hamiltonian");
         f >> n;
         molpro::cout << "\n*** " << file << " (dimension " << n << "), " << nroot << " roots, mpi_size = " << mpi_size
                      << std::endl;
@@ -142,7 +144,7 @@ int main(int argc, char* argv[]) {
         for (size_t root = 0; root < solver.m_roots; root++) {
           auto result = std::sqrt(handlers.rr().dot(g[root], g[root]));
           if (mpi_rank == 0)
-            std::cout << " "<<result;
+            std::cout << " " << result;
         }
         if (mpi_rank == 0)
           std::cout << std::endl;
