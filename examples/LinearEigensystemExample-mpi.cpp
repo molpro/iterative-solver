@@ -34,18 +34,14 @@ void action(const std::vector<Rvector>& psx, std::vector<Rvector>& outputs) {
     psx[k].get(0, n - 1, allx.data());
     auto range = outputs[k].distribution().range(mpi_rank);
     outputs[k].fill(0);
-    std::cout << "MPI rank="<<mpi_rank<<"; allx:";
-    for (const auto& x : allx)
-      std::cout << " " << x;
-    std::cout << std::endl;
     for (size_t i = range.first; i < range.second; i++) {
       double result = 0;
       for (size_t j = 0; j < n; j++)
         result += matrix(i, j) * allx[j];
       outputs[k].set(i, result);
-      std::cout << "result "<<i<<" "<<result<<std::endl;
     }
   }
+  MPI_Barrier(MPI_COMM_WORLD);
 }
 
 void update(std::vector<Rvector>& psc, const std::vector<Rvector>& psg, size_t nwork,
@@ -61,10 +57,6 @@ void update(std::vector<Rvector>& psc, const std::vector<Rvector>& psg, size_t n
       c_chunk[i - range.first] -= g_chunk[i - range.first] / (1e-12 - shift[k] + matrix(i, i));
     }
     psc[k].put(range.first, range.second - 1, c_chunk.data());
-    std::cout << "MPI rank="<<mpi_rank<<"; c_chunk:";
-    for (const auto& x : c_chunk)
-      std::cout << " " << x;
-    std::cout << std::endl;
   }
   MPI_Barrier(MPI_COMM_WORLD);
 }
@@ -130,17 +122,45 @@ int main(int argc, char* argv[]) {
           break;
         update(x, g, nwork, solver.working_set_eigenvalues());
       }
-      std::cout << "Error={ ";
-      for (const auto& e : solver.errors())
-        std::cout << e << " ";
-      std::cout << "} after " << solver.iterations() << " iterations" << std::endl;
-      for (size_t root = 0; root < solver.m_roots; root++) {
-        std::cout << "Eigenvalue " << std::fixed << std::setprecision(9) << solver.eigenvalues()[root] << std::endl;
-        //        solver.solution(root, x.front(), g.front(), Pcoeff.front());
-        //        std::cout << "Eigenvector: (norm=" << std::sqrt(x[0].dot(x[0])) << "): ";
-        //        for (size_t k = 0; k < n; k++)
-        //          std::cout << " " << (x[0])[k];
-        //        std::cout << std::endl;
+      if (mpi_rank == 0) {
+        std::cout << "Error={ ";
+        for (const auto& e : solver.errors())
+          std::cout << e << " ";
+        std::cout << "} after " << solver.iterations() << " iterations" << std::endl;
+        for (size_t root = 0; root < solver.m_roots; root++) {
+          std::cout << "Eigenvalue " << std::fixed << std::setprecision(9) << solver.eigenvalues()[root] << std::endl;
+        }
+      }
+      {
+        auto working_set = solver.working_set();
+        working_set.resize(solver.m_roots);
+        std::iota(working_set.begin(), working_set.end(), 0);
+        solver.solution(working_set, x, g);
+        MPI_Barrier(MPI_COMM_WORLD);
+        if (mpi_rank == 0)
+          std::cout << "Residual norms:";
+        for (size_t root = 0; root < solver.m_roots; root++) {
+          auto result = std::sqrt(handlers.rr().dot(g[root], g[root]));
+          if (mpi_rank == 0)
+            std::cout << " "<<result;
+        }
+        if (mpi_rank == 0)
+          std::cout << std::endl;
+        if (mpi_rank == 0)
+          std::cout << "Eigenvector orthonormality:\n";
+        for (size_t root = 0; root < solver.m_roots; root++) {
+          for (size_t soot = 0; soot < solver.m_roots; soot++) {
+            auto result = handlers.rr().dot(x[root], x[soot]);
+            if (mpi_rank == 0)
+              std::cout << " " << result;
+          }
+          if (mpi_rank == 0)
+            std::cout << std::endl;
+          //        std::cout << "Eigenvector: (norm=" << std::sqrt(x[0].dot(x[0])) << "): ";
+          //        for (size_t k = 0; k < n; k++)
+          //          std::cout << " " << (x[0])[k];
+          //        std::cout << std::endl;
+        }
       }
     }
   }
