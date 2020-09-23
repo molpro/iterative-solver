@@ -25,3 +25,20 @@ if (MPI)
         add_test(${t} ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $ENV{MPIPROCS} ${MPIEXEC_PREFLAGS} "${CMAKE_CURRENT_BINARY_DIR}/${t}.exe" ${MPIEXEC_POSTFLAGS})
     endforeach ()
 endif ()
+
+#
+#include(FetchContent)
+#FetchContent_Declare(
+#        multiprecision
+#        GIT_REPOSITORY https://github.com/boostorg/multiprecision.git
+#        GIT_TAG boost-1.74.0
+#        GIT_SHALLOW ON
+#)
+#FetchContent_MakeAvailable(multiprecision)
+find_package(Boost)
+
+if (Boost_FOUND)
+    add_executable(quad_precision_benchmark.exe quad_precision_benchmark.cpp)
+    #    target_include_directories(quad_precision_benchmark.exe PUBLIC ${CMAKE_BINARY_DIR}/_deps/multiprecision-src/include)
+    target_link_libraries(quad_precision_benchmark.exe PUBLIC Profiler Boost::headers)
+endif ()
