@@ -304,6 +304,8 @@ protected:
   double m_convergence_threshold{1.0e-10}; //!< errors less than this mark a converged solution
   std::shared_ptr<Statistics> m_stats;
   std::shared_ptr<Logger> m_logger;
+public:
+  double convergence_threshold() const {return m_convergence_threshold;}
 };
 
 } // namespace molpro::linalg::itsolv
