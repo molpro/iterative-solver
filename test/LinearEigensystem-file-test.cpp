@@ -246,7 +246,7 @@ TEST(IterativeSolver, file_eigen) {
   }
 }
 
-TEST(IterativeSolver, file_optimize_eigenvalue) {
+TEST(IterativeSolver, DISABLED_file_optimize_eigenvalue) {
   for (const auto& file : std::vector<std::string>{"bh"}) {
     load_matrix(file);
     {
@@ -351,7 +351,7 @@ TEST(IterativeSolver, file_optimize_eigenvalue) {
   }
 }
 
-TEST(IterativeSolver, file_diis_eigenvalue) {
+TEST(IterativeSolver, DISABLED_file_diis_eigenvalue) {
   for (const auto& file : std::vector<std::string>{"bh"}) {
     std::vector<double> expected_eigenvalues;
     expected_eigenvalues.push_back(-25.127071042);
