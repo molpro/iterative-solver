@@ -2,9 +2,7 @@
 #include "util.h"
 #include "util/Distribution.h"
 
-namespace molpro {
-namespace linalg {
-namespace array {
+namespace molpro::linalg::array {
 using util::Task;
 namespace {
 
@@ -16,9 +14,8 @@ int mpi_rank(MPI_Comm comm) {
 
 } // namespace
 
-DistrArrayDisk::DistrArrayDisk(std::unique_ptr<Distribution> distr, MPI_Comm commun,
-                               std::shared_ptr<molpro::Profiler> prof)
-    : DistrArray(distr->border().second, commun, std::move(prof)), m_distribution(std::move(distr)) {}
+DistrArrayDisk::DistrArrayDisk(std::unique_ptr<Distribution> distr, MPI_Comm commun)
+    : DistrArray(distr->border().second, commun), m_distribution(std::move(distr)) {}
 
 DistrArrayDisk::DistrArrayDisk() = default;
 
@@ -35,8 +32,8 @@ DistrArrayDisk::DistrArrayDisk(DistrArrayDisk&& source) noexcept
     : DistrArray(source), m_distribution(std::move(source.m_distribution)) {
   using std::swap;
   if (source.m_allocated) {
-    swap(m_allocated , source.m_allocated);
-    swap(m_view_buffer , source.m_view_buffer);
+    swap(m_allocated, source.m_allocated);
+    swap(m_view_buffer, source.m_view_buffer);
     swap(m_owned_buffer, source.m_owned_buffer);
   }
 }
@@ -52,7 +49,7 @@ DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source) : m_sou
     m_snapshot_buffer.resize(m_size);
     m_buffer = &m_snapshot_buffer[0];
     m_dump = true;
-    source.get(start(), start() + size() - 1, m_buffer);
+    source.get(start(), start() + size(), m_buffer);
   } else {
     m_buffer = source.m_view_buffer.data();
     m_dump = false;
@@ -63,7 +60,7 @@ bool DistrArrayDisk::LocalBufferDisk::is_snapshot() { return !m_snapshot_buffer.
 
 DistrArrayDisk::LocalBufferDisk::~LocalBufferDisk() {
   if (m_dump)
-    m_source.put(start(), start() + size() - 1, m_buffer);
+    m_source.put(start(), start() + size(), m_buffer);
 }
 
 void DistrArrayDisk::allocate_buffer() {
@@ -111,7 +108,7 @@ void DistrArrayDisk::flush() {
   auto rank = mpi_rank(communicator());
   index_type lo, hi;
   std::tie(lo, hi) = distribution().range(rank);
-  put(lo, hi - 1, m_view_buffer.data());
+  put(lo, hi, m_view_buffer.data());
 }
 
 const DistrArray::Distribution& DistrArrayDisk::distribution() const {
@@ -198,6 +195,4 @@ std::unique_ptr<Task<std::unique_ptr<const DistrArray::LocalBuffer>>> DistrArray
           std::launch::async, [this]() -> auto { return this->local_buffer(); }));
 }
 
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg::array

@@ -1,14 +1,12 @@
 #include <iomanip>
 #include <molpro/linalg/IterativeSolver.h>
-#include <molpro/linalg/array/ArrayHandlerIterable.h>
-#include <molpro/linalg/array/ArrayHandlerIterableSparse.h>
 #include <molpro/linalg/array/ArrayHandlerSparse.h>
 
 using molpro::linalg::array::ArrayHandler;
 using molpro::linalg::array::ArrayHandlerIterable;
 using molpro::linalg::array::ArrayHandlerIterableSparse;
 using molpro::linalg::array::ArrayHandlerSparse;
-using molpro::linalg::iterativesolver::ArrayHandlers;
+using molpro::linalg::itsolv::ArrayHandlers;
 
 template <class T>
 std::ostream& operator<<(std::ostream& o, const std::vector<T>& v) {
@@ -136,14 +134,7 @@ int main(int argc, char* argv[]) {
         diagonals.push_back(matrix(i, i));
       std::cout << std::endl;
 
-      auto rr = std::make_shared<ArrayHandlerIterable<pv>>();
-      auto qq = std::make_shared<ArrayHandlerIterable<pv>>();
-      auto pp = std::make_shared<ArrayHandlerSparse<std::map<size_t, double>>>();
-      auto rq = std::make_shared<ArrayHandlerIterable<pv>>();
-      auto rp = std::make_shared<ArrayHandlerIterableSparse<pv, std::map<size_t, double>>>();
-      auto qr = std::make_shared<ArrayHandlerIterable<pv>>();
-      auto qp = std::make_shared<ArrayHandlerIterableSparse<pv, std::map<size_t, double>>>();
-      auto handlers = ArrayHandlers<pv, pv, std::map<size_t, double>>{rr, qq, pp, rq, rp, qr, qp};
+      auto handlers = std::make_shared<ArrayHandlers<pv, pv, std::map<size_t, double>>>();
       molpro::linalg::LinearEigensystem<pv> solver{handlers};
       solver.m_verbosity = 1;
       solver.m_roots = nroot;
@@ -170,7 +161,7 @@ int main(int argc, char* argv[]) {
       std::cout << "Error={ ";
       for (const auto& e : solver.errors())
         std::cout << e << " ";
-      std::cout << "} after " << solver.iterations() << " iterations" << std::endl;
+      std::cout << "} after " << solver.statistics().iterations << " iterations" << std::endl;
       for (size_t root = 0; root < solver.m_roots; root++) {
         std::cout << "Eigenvalue " << std::fixed << std::setprecision(9) << solver.eigenvalues()[root] << std::endl;
         solver.solution(root, x.front(), g.front(), Pcoeff.front());

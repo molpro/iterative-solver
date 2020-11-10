@@ -21,6 +21,8 @@ using molpro::linalg::array::util::LockMPI3;
 using molpro::linalg::array::util::PHDF5Handle;
 using molpro::linalg::array::util::ScopeLock;
 using molpro::linalg::test::mpi_comm;
+using molpro::linalg::test::test_file_hdf5_n1;
+using molpro::linalg::test::test_file_hdf5_n2;
 
 using ::testing::ContainerEq;
 using ::testing::DoubleEq;
@@ -67,6 +69,7 @@ TEST_F(DistrArrayHDF5_SetUp, constructor_dummy_with_fhandle) {
 }
 
 TEST_F(DistrArrayHDF5_SetUp, constructor_fhandle_size) {
+  ASSERT_TRUE(fhandle_n1);
   auto a = DistrArrayHDF5{fhandle_n1, size};
   LockMPI3 lock{mpi_comm};
   {
@@ -92,18 +95,6 @@ TEST_F(DistrArrayHDF5_SetUp, constructor_fhandle_size) {
     auto l = lock.scope();
     EXPECT_FALSE(a.dataset_is_open());
   }
-}
-
-TEST_F(DistrArrayHDF5_SetUp, constructor_copy) {
-  auto a = DistrArrayHDF5{fhandle_n1, size};
-  DistrArrayHDF5 b{a};
-  ScopeLock l{mpi_comm};
-  EXPECT_EQ(b.file_handle(), a.file_handle());
-  EXPECT_EQ(b.communicator(), a.communicator());
-  EXPECT_EQ(b.size(), a.size());
-  EXPECT_EQ(b.empty(), a.empty());
-  EXPECT_TRUE(b.distribution().compatible(a.distribution()));
-  EXPECT_TRUE(b.compatible(a));
 }
 
 TEST_F(DistrArrayHDF5_SetUp, constructor_move) {
@@ -145,7 +136,7 @@ TEST_F(DistrArrayHDF5_SetUp, constructor_copy_from_distr_array) {
     EXPECT_EQ(a_disk.file_handle(), fhandle_n1);
     EXPECT_EQ(a_disk.communicator(), a_mem.communicator());
     EXPECT_EQ(a_disk.size(), a_mem.size());
-    EXPECT_TRUE(a_disk.empty());
+    EXPECT_FALSE(a_disk.empty());
     EXPECT_TRUE(a_disk.distribution().compatible(a_mem.distribution()));
   }
   a_disk.open_access();
@@ -156,6 +147,21 @@ TEST_F(DistrArrayHDF5_SetUp, constructor_copy_from_distr_array) {
   }
 }
 #endif
+
+TEST_F(DistrArrayHDF5_SetUp, CreateTempCopy) {
+  LockMPI3 lock{mpi_comm};
+  auto a = DistrArrayHDF5(fhandle_n1, size);
+  std::string fname;
+  {
+    auto b = DistrArrayHDF5::CreateTempCopy(a);
+    fname = b.file_handle()->file_name();
+    b.open_access();
+    auto l = lock.scope();
+    ASSERT_TRUE(file_exists(fname));
+  }
+  auto l = lock.scope();
+  ASSERT_FALSE(file_exists(fname));
+}
 
 struct DistrArrayHDF5_Fixture : DistrArrayHDF5_SetUp {
   void SetUp() override {
@@ -173,8 +179,8 @@ struct DistrArrayHDF5_Fixture : DistrArrayHDF5_SetUp {
 
 TEST_F(DistrArrayHDF5_Fixture, put_get) {
   auto ref_vec = std::vector<double>(size, 0.3);
-  a.put(0, size - 1, &ref_vec[0]);
-  auto vec = a.get(0, size - 1);
+  a.put(0, size, &ref_vec[0]);
+  auto vec = a.get(0, size);
   ScopeLock l{mpi_comm};
   ASSERT_EQ(vec.size(), size);
   EXPECT_THAT(vec, Pointwise(DoubleEq(), ref_vec));
@@ -198,9 +204,10 @@ TEST_F(DistrArrayHDF5_Fixture, allocate_buffer_flush) {
     auto l = lock.scope();
     EXPECT_THAT(vec, Each(DoubleEq(zero)));
   }
-  a.flush();
-  a.free_buffer();
   a.sync();
+  a.flush();
+  a.sync();
+  a.free_buffer();
   vec = a.vec();
   {
     auto l = lock.scope();

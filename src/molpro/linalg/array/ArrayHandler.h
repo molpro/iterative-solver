@@ -1,15 +1,18 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_ARRAYHANDLER_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_ARRAYHANDLER_H
+#include <algorithm>
 #include <functional>
 #include <list>
+#include <map>
 #include <memory>
 #include <set>
-#include <algorithm>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
-namespace molpro {
-namespace linalg {
-namespace array {
+#include <molpro/linalg/array/type_traits.h>
+
+namespace molpro::linalg::array {
 namespace util {
 
 struct ArrayHandlerError : public std::logic_error {
@@ -96,25 +99,6 @@ struct RefEqual {
     return std::addressof(l.get()) == std::addressof(r.get());
   }
 };
-
-template <class... Ts>
-using void_t = void;
-
-template <class A, class = void>
-struct has_mapped_type : std::false_type {};
-
-template <class A>
-struct has_mapped_type<A, void_t<typename A::mapped_type>> : std::true_type {};
-
-template <class A, bool = has_mapped_type<A>()>
-struct mapped_or_value_type {
-  using value = typename A::value_type;
-};
-
-template <class A>
-struct mapped_or_value_type<A, true> {
-  using value = typename A::mapped_type;
-};
 } // namespace util
 
 /*!
@@ -174,15 +158,29 @@ protected:
   ArrayHandler(const ArrayHandler &) = default;
 
 public:
-  using value_type_L = typename util::mapped_or_value_type<AL>::value;
-  using value_type_R = typename util::mapped_or_value_type<AR>::value;
+  using value_type_L = typename array::mapped_or_value_type_t<AL>;
+  using value_type_R = typename array::mapped_or_value_type_t<AR>;
   using value_type = decltype(value_type_L{} * value_type_R{});
+  using value_type_abs = decltype(check_abs<value_type>());
 
   virtual AL copy(const AR &source) = 0;
+  //! Copy content of y into x
+  virtual void copy(AL &x, const AR &y) = 0;
   virtual void scal(value_type alpha, AL &x) = 0;
   virtual void fill(value_type alpha, AL &x) = 0;
   virtual void axpy(value_type alpha, const AR &x, AL &y) = 0;
   virtual value_type dot(const AL &x, const AR &y) = 0;
+  /*!
+   * @brief Select n indices with largest by absolute value contributions to the dot product
+   *
+   * This is necessary for perturbation theory.
+   *
+   * @param n number of indices to select
+   * @param x left array
+   * @param y right array
+   * @return map of indices and corresponding x,y product
+   */
+  virtual std::map<size_t, value_type_abs> select_max_dot(size_t n, const AL &x, const AR &y) = 0;
 
   //! Destroys ArrayHandler instance and invalidates any LazyHandler it created. Invalidated handler will not evaluate.
   virtual ~ArrayHandler() {
@@ -368,8 +366,6 @@ public:
   virtual ProxyHandle lazy_handle() = 0;
 };
 
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg::array
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_ARRAYHANDLER_H

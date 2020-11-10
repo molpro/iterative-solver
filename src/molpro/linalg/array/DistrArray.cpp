@@ -1,16 +1,13 @@
 #include "DistrArray.h"
-#include "util.h"
+#include "util/select_max_dot.h"
 #include <algorithm>
 #include <functional>
-#include <molpro/Profiler.h>
+#include <iostream>
 #include <numeric>
 
-namespace molpro {
-namespace linalg {
-namespace array {
+namespace molpro::linalg::array {
 
-DistrArray::DistrArray(size_t dimension, MPI_Comm commun, std::shared_ptr<molpro::Profiler> prof)
-    : m_dimension(dimension), m_communicator(commun), m_prof(std::move(prof)) {}
+DistrArray::DistrArray(size_t dimension, MPI_Comm commun) : m_dimension(dimension), m_communicator(commun) {}
 
 void DistrArray::sync() const { MPI_Barrier(m_communicator); }
 
@@ -40,7 +37,6 @@ void DistrArray::zero() { fill(0); }
 void DistrArray::fill(DistrArray::value_type val) {
   if (empty())
     error("DistrArray::fill cannot fill empty array");
-  util::ScopeProfiler p{m_prof, "Array::fill"};
   auto lb = local_buffer();
   for (auto& el : *lb)
     el = val;
@@ -54,7 +50,6 @@ void DistrArray::axpy(value_type a, const DistrArray& y) {
     error(name + " cannot use empty arrays");
   if (a == 0)
     return;
-  util::ScopeProfiler p{m_prof, name};
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
@@ -71,7 +66,6 @@ void DistrArray::axpy(value_type a, const DistrArray& y) {
 }
 
 void DistrArray::scal(DistrArray::value_type a) {
-  util::ScopeProfiler p{m_prof, "Array::scal"};
   auto x = local_buffer();
   for (auto& el : *x)
     el *= a;
@@ -80,7 +74,6 @@ void DistrArray::scal(DistrArray::value_type a) {
 void DistrArray::add(const DistrArray& y) { return axpy(1, y); }
 
 void DistrArray::add(DistrArray::value_type a) {
-  util::ScopeProfiler p{m_prof, "Array::add"};
   auto x = local_buffer();
   for (auto& el : *x)
     el += a;
@@ -91,7 +84,6 @@ void DistrArray::sub(const DistrArray& y) { return axpy(-1, y); }
 void DistrArray::sub(DistrArray::value_type a) { return add(-a); }
 
 void DistrArray::recip() {
-  util::ScopeProfiler p{m_prof, "Array::recip"};
   auto x = local_buffer();
   for (auto& el : *x)
     el = 1. / el;
@@ -103,7 +95,6 @@ void DistrArray::times(const DistrArray& y) {
     error(name + " incompatible arrays");
   if (empty() || y.empty())
     error(name + " cannot use empty arrays");
-  util::ScopeProfiler p{m_prof, name};
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
@@ -120,7 +111,6 @@ void DistrArray::times(const DistrArray& y, const DistrArray& z) {
     error(name + " array z is incompatible");
   if (empty() || y.empty() || z.empty())
     error(name + " cannot use empty arrays");
-  util::ScopeProfiler p{m_prof, name};
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   auto loc_z = z.local_buffer();
@@ -136,7 +126,6 @@ DistrArray::value_type DistrArray::dot(const DistrArray& y) const {
     error(name + " array x is incompatible");
   if (empty() || y.empty())
     error(name + " calling dot on empty arrays");
-  util::ScopeProfiler p{m_prof, name};
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
@@ -155,7 +144,6 @@ void DistrArray::_divide(const DistrArray& y, const DistrArray& z, DistrArray::v
     error(name + " array z is incompatible");
   if (empty() || y.empty() || z.empty())
     error(name + " calling divide with an empty array");
-  util::ScopeProfiler p{m_prof, name};
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   auto loc_z = z.local_buffer();
@@ -179,11 +167,108 @@ void DistrArray::_divide(const DistrArray& y, const DistrArray& z, DistrArray::v
 }
 
 namespace util {
+std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, double>& local_selection,
+                                                  MPI_Comm communicator) {
+  auto indices = std::vector<unsigned long>();
+  auto values = std::vector<double>();
+  indices.reserve(n);
+  values.reserve(n);
+  for (const auto& el : local_selection) {
+    indices.push_back(el.first);
+    values.push_back(el.second);
+  }
+  indices.resize(n);
+  values.resize(n);
+  int n_dummy = static_cast<int>(n) - local_selection.size();
+  MPI_Request requests[3];
+  int comm_rank, comm_size;
+  MPI_Comm_rank(communicator, &comm_rank);
+  MPI_Comm_size(communicator, &comm_size);
+  if (comm_rank == 0) {
+    auto n_tot = n * comm_size;
+    auto n_dummy_elements = std::vector<int>(comm_size, 0);
+    MPI_Igather(&n_dummy, 1, MPI_INT, &n_dummy_elements[0], 1, MPI_INT, 0, communicator, &requests[0]);
+    indices.resize(n_tot);
+    values.resize(n_tot);
+    MPI_Igather(MPI_IN_PLACE, n, MPI_UNSIGNED_LONG, &indices[0], n, MPI_UNSIGNED_LONG, 0, communicator, &requests[1]);
+    MPI_Igather(MPI_IN_PLACE, n, MPI_DOUBLE, &values[0], n, MPI_UNSIGNED_LONG, 0, communicator, &requests[2]);
+    MPI_Waitall(3, requests, MPI_STATUSES_IGNORE);
+    local_selection.clear();
+    using pair_t = std::pair<double, size_t>;
+    auto pq = std::priority_queue<pair_t, std::vector<pair_t>, std::greater<>>();
+    for (size_t i = 0; i < n; ++i)
+      pq.emplace(std::numeric_limits<double>::min(), std::numeric_limits<unsigned long>::max());
+    for (size_t i = 0, ii = 0; i < comm_size; ++i) {
+      for (size_t j = 0; j < n - n_dummy_elements[i]; ++j, ++ii) {
+        pq.emplace(values[ii], indices[ii]);
+        pq.pop();
+      }
+      ii += n_dummy_elements[i];
+    }
+    indices.resize(n);
+    values.resize(n);
+    for (size_t i = 0; i < n; ++i) {
+      values[i] = pq.top().first;
+      indices[i] = pq.top().second;
+      pq.pop();
+    }
+  } else {
+    MPI_Igather(&n_dummy, 1, MPI_INT, nullptr, 1, MPI_INT, 0, communicator, &requests[0]);
+    MPI_Igather(&indices[0], n, MPI_UNSIGNED_LONG, nullptr, n, MPI_UNSIGNED_LONG, 0, communicator, &requests[1]);
+    MPI_Igather(&values[0], n, MPI_DOUBLE, nullptr, n, MPI_DOUBLE, 0, communicator, &requests[2]);
+    MPI_Waitall(3, requests, MPI_STATUSES_IGNORE);
+  }
+  MPI_Ibcast(&indices[0], n, MPI_UNSIGNED_LONG, 0, communicator, &requests[0]);
+  MPI_Ibcast(&values[0], n, MPI_DOUBLE, 0, communicator, &requests[1]);
+  MPI_Waitall(2, requests, MPI_STATUSES_IGNORE);
+  local_selection.clear();
+  for (size_t i = 0; i < n; ++i)
+    local_selection.emplace(indices[i], values[i]);
+  return local_selection;
+}
+} // namespace util
+
+std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, const DistrArray& y) const {
+  if (!compatible(y))
+    error("DistrArray::select_max_dot: incompatible arrays");
+  if (empty() || y.empty())
+    error("DistrArray::select_max_dot: arrays are empty");
+  if (n > size() || n > y.size())
+    error("DistrArray::select_max_dot: n is too large");
+  auto xbuf = local_buffer();
+  auto ybuf = y.local_buffer();
+  auto local_selection =
+      util::select_max_dot<LocalBuffer, LocalBuffer, value_type, value_type>(std::min(n, xbuf->size()), *xbuf, *ybuf);
+  auto shifted_local_selection = decltype(local_selection)();
+  for (auto& el : local_selection)
+    shifted_local_selection.emplace(xbuf->start() + el.first, el.second);
+  return util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
+}
+
+std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, const DistrArray::SparseArray& y) const {
+  auto name = std::string("DistrArray::select_max_dot:");
+  if (empty())
+    error(name + " array is empty");
+  if (size() < y.rbegin()->first + 1)
+    error(name + " sparse array x is too large");
+  if (empty() || y.empty())
+    error(name + " arrays are empty");
+  if (n > size() || n > y.size())
+    error(" n is too large");
+  auto xbuf = local_buffer();
+  auto local_selection = util::select_max_dot_iter_sparse<LocalBuffer, SparseArray, value_type, value_type>(
+      std::min(n, xbuf->size()), *xbuf, y);
+  auto shifted_local_selection = decltype(local_selection)();
+  for (auto& el : local_selection)
+    shifted_local_selection.emplace(xbuf->start() + el.first, el.second);
+  return util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
+}
+
+namespace util {
 template <class Compare>
 std::list<std::pair<unsigned long, double>> extrema(const DistrArray& x, int n) {
   if (x.empty())
     return {};
-  util::ScopeProfiler p{x.m_prof, "Array::extrema"};
   auto buffer = x.local_buffer();
   auto length = buffer->size();
   auto nmin = length > n ? n : length;
@@ -304,7 +389,6 @@ void DistrArray::copy(const DistrArray& y) {
     error(name + " incompatible arrays");
   if (empty() != y.empty())
     error(name + " one of the arrays is empty");
-  util::ScopeProfiler p{m_prof, name};
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
@@ -319,7 +403,6 @@ void DistrArray::copy_patch(const DistrArray& y, DistrArray::index_type start, D
     error(name + " incompatible arrays");
   if (empty() != y.empty())
     error(name + " one of the arrays is empty");
-  util::ScopeProfiler p{m_prof, name};
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
@@ -340,14 +423,15 @@ DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
     error(name + " calling dot on empty arrays");
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is incompatible");
-  util::ScopeProfiler p{m_prof, name};
   auto loc_x = local_buffer();
   double res = 0;
-  index_type i;
-  value_type v;
-  for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size()); ++it) {
-    std::tie(i, v) = *it;
-    res += (*loc_x)[i - loc_x->start()] * v;
+  if (loc_x->size() > 0) {
+    index_type i;
+    value_type v;
+    for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size() - 1); ++it) {
+      std::tie(i, v) = *it;
+      res += (*loc_x)[i - loc_x->start()] * v;
+    }
   }
   MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_DOUBLE, MPI_SUM, communicator());
   return res;
@@ -361,26 +445,25 @@ void DistrArray::axpy(value_type a, const SparseArray& y) {
     error(name + " calling dot on empty arrays");
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is incompatible");
-  util::ScopeProfiler p{m_prof, name};
   auto loc_x = local_buffer();
-  index_type i;
-  value_type v;
-  if (a == 1)
-    for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size()); ++it) {
-      std::tie(i, v) = *it;
-      (*loc_x)[i - loc_x->start()] += v;
-    }
-  else if (a == -1)
-    for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size()); ++it) {
-      std::tie(i, v) = *it;
-      (*loc_x)[i - loc_x->start()] -= v;
-    }
-  else
-    for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size()); ++it) {
-      std::tie(i, v) = *it;
-      (*loc_x)[i - loc_x->start()] += a * v;
-    }
+  if (loc_x->size() > 0) {
+    index_type i;
+    value_type v;
+    if (a == 1)
+      for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size() - 1); ++it) {
+        std::tie(i, v) = *it;
+        (*loc_x)[i - loc_x->start()] += v;
+      }
+    else if (a == -1)
+      for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size() - 1); ++it) {
+        std::tie(i, v) = *it;
+        (*loc_x)[i - loc_x->start()] -= v;
+      }
+    else
+      for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size() - 1); ++it) {
+        std::tie(i, v) = *it;
+        (*loc_x)[i - loc_x->start()] += a * v;
+      }
+  }
 }
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg::array

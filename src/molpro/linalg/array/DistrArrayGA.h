@@ -1,12 +1,10 @@
-#ifndef GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAYGA_H
-#define GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAYGA_H
+#ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYGA_H
+#define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYGA_H
 #include <map>
 
 #include "molpro/linalg/array/DistrArray.h"
 
-namespace molpro {
-namespace linalg {
-namespace array {
+namespace molpro::linalg::array {
 
 /*!
  * @brief Distributed array which uses Global Arrays for managing the array buffer and RMA calls
@@ -25,7 +23,7 @@ protected:
 
 public:
   DistrArrayGA();
-  DistrArrayGA(size_t dimension, MPI_Comm commun, std::shared_ptr<Profiler> prof = nullptr);
+  DistrArrayGA(size_t dimension, MPI_Comm commun);
   //! Make a copy of source, allocating buffer if necessary.
   DistrArrayGA(const DistrArrayGA &source);
   //! Copy source, allocating buffer if necessary.
@@ -71,8 +69,6 @@ protected:
   Distribution make_distribution() const;
 };
 
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg::array
 
-#endif // GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAYGA_H
+#endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYGA_H

@@ -1,13 +1,10 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_PHDF5HANDLE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_PHDF5HANDLE_H
 
-#include "molpro/linalg/array/HDF5Handle.h"
+#include <molpro/linalg/array/HDF5Handle.h>
 #include <mpi.h>
 
-namespace molpro {
-namespace linalg {
-namespace array {
-namespace util {
+namespace molpro::linalg::array::util {
 /*!
  * @brief HDF5Handle that opens a file in parallel mode. Any operation that needs to open or close a file is collective.
  */
@@ -23,6 +20,7 @@ public:
   //! @copydoc HDF5Handle::HDF5Handle(hid_t, bool)
   //! @param comm communicator
   PHDF5Handle(hid_t hid, MPI_Comm comm, bool transfer_ownership = false);
+  ~PHDF5Handle() override;
 
   //! @copydoc HDF5Handle::HDF5Handle(const HDF5Handle&)
   //! @param comm assign a different communicator
@@ -48,13 +46,11 @@ public:
   MPI_Comm communicator() const { return m_comm; }
 
 protected:
-  MPI_Comm m_comm; //!< processes in this communicator have parallel access to the file
+  MPI_Comm m_comm = MPI_COMM_NULL; //!< processes in this communicator have parallel access to the file
   hid_t _open_plist() override;
 };
 
-} // namespace util
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+extern template struct TempHandle<PHDF5Handle>;
+} // namespace molpro::linalg::array::util
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_PHDF5HANDLE_H

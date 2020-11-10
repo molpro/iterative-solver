@@ -1,6 +1,7 @@
-#ifndef GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAY_H
-#define GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAY_H
+#ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAY_H
+#define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAY_H
 #include <cmath>
+#include <cstdlib>
 #include <list>
 #include <map>
 #include <memory>
@@ -9,13 +10,7 @@
 
 #include <molpro/linalg/array/Span.h>
 
-namespace molpro {
-class Profiler;
-}
-
-namespace molpro {
-namespace linalg {
-namespace array {
+namespace molpro::linalg::array {
 namespace util {
 template <typename Ind>
 class Distribution;
@@ -94,20 +89,20 @@ class Distribution;
  */
 class DistrArray {
 public:
+  using distributed_array = void; //!< a compile time tag that this is a distributed array
   using value_type = double;
   using index_type = unsigned long int;
   using SparseArray = std::map<unsigned long int, double>;
   using Distribution = util::Distribution<index_type>;
 
 protected:
-  index_type m_dimension = 0;   //!< number of elements in the array
+  index_type m_dimension = 0;              //!< number of elements in the array
   MPI_Comm m_communicator = MPI_COMM_NULL; //!< Outer communicator
   //! Initializes array without allocating any memory
-  DistrArray(size_t dimension, MPI_Comm commun, std::shared_ptr<molpro::Profiler> prof);
+  DistrArray(size_t dimension, MPI_Comm commun);
   DistrArray() = default;
 
 public:
-  std::shared_ptr<molpro::Profiler> m_prof = nullptr; //!< optional profiler
   virtual ~DistrArray() = default;
 
   //! return a copy of the communicator
@@ -161,12 +156,12 @@ public:
   [[nodiscard]] virtual value_type at(index_type ind) const = 0;
   //! Set one element to a scalar. Global operation. @todo rename to put
   virtual void set(index_type ind, value_type val) = 0;
-  //! Gets buffer[lo:hi] from global array (hi inclusive, i.e. not pythonic). Blocking.
+  //! Gets buffer[lo:hi) from global array (hi is past-the-end). Blocking.
   virtual void get(index_type lo, index_type hi, value_type *buf) const = 0;
   [[nodiscard]] virtual std::vector<value_type> get(index_type lo, index_type hi) const = 0;
-  //! array[lo:hi] = data[:] (hi inclusive, i.e. not pythonic). Blocking
+  //! array[lo:hi) = data[:] (hi is past-the-end). Blocking
   virtual void put(index_type lo, index_type hi, const value_type *data) = 0;
-  //!  array[lo:hi] += scaling_constant * data[:] (hi inclusive, i.e. not pythonic). Blocking
+  //!  array[lo:hi) += scaling_constant * data[:] (hi is past-the-end). Blocking
   virtual void acc(index_type lo, index_type hi, const value_type *data) = 0;
   /*!
    * @brief gets elements with discontinuous indices from array. Blocking
@@ -292,6 +287,9 @@ public:
    * @return list of indices for smallest n values, or empty list if array is empty.
    */
   [[nodiscard]] std::vector<index_type> min_loc_n(int n) const;
+
+  [[nodiscard]] std::map<size_t, value_type> select_max_dot(size_t n, const DistrArray &y) const;
+  [[nodiscard]] std::map<size_t, value_type> select_max_dot(size_t n, const SparseArray &y) const;
   //! @}
 
   //! Set all local elements to zero.
@@ -311,9 +309,9 @@ struct CompareAbs {
 };
 template <class Compare>
 [[nodiscard]] std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(const DistrArray &x, int n);
+std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, double> &local_selection,
+                                                  MPI_Comm communicator);
 } // namespace util
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg::array
 
-#endif // GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAY_H
+#endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAY_H

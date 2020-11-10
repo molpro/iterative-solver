@@ -1,11 +1,9 @@
 #include "DistrArrayMPI3.h"
-#include "util.h"
 #include "util/Distribution.h"
 #include <algorithm>
+#include <string>
 #include <tuple>
-namespace molpro {
-namespace linalg {
-namespace array {
+namespace molpro::linalg::array {
 
 namespace {
 int comm_size(MPI_Comm comm) {
@@ -23,14 +21,13 @@ int comm_rank(MPI_Comm comm) {
 
 DistrArrayMPI3::DistrArrayMPI3() = default;
 
-DistrArrayMPI3::DistrArrayMPI3(size_t dimension, MPI_Comm commun, std::shared_ptr<Profiler> prof)
+DistrArrayMPI3::DistrArrayMPI3(size_t dimension, MPI_Comm commun)
     : DistrArrayMPI3(std::make_unique<Distribution>(
                          util::make_distribution_spread_remainder<index_type>(dimension, comm_size(commun))),
-                     commun, std::move(prof)) {}
+                     commun) {}
 
-DistrArrayMPI3::DistrArrayMPI3(std::unique_ptr<Distribution> distribution, MPI_Comm commun,
-                               std::shared_ptr<Profiler> prof)
-    : DistrArray(distribution->border().second, commun, std::move(prof)), m_distribution(std::move(distribution)) {
+DistrArrayMPI3::DistrArrayMPI3(std::unique_ptr<Distribution> distribution, MPI_Comm commun)
+    : DistrArray(distribution->border().second, commun), m_distribution(std::move(distribution)) {
   if (m_distribution->border().first != 0)
     DistrArray::error("Distribution of array must start from 0");
 }
@@ -80,7 +77,7 @@ void DistrArrayMPI3::allocate_buffer(Span<value_type> buffer) {
 bool DistrArrayMPI3::empty() const { return !m_allocated; }
 
 DistrArrayMPI3::DistrArrayMPI3(const DistrArrayMPI3& source)
-    : DistrArray(source.size(), source.communicator(), source.m_prof),
+    : DistrArray(source.size(), source.communicator()),
       m_distribution(source.m_distribution ? std::make_unique<Distribution>(*source.m_distribution) : nullptr) {
   if (!source.empty()) {
     DistrArrayMPI3::allocate_buffer();
@@ -88,9 +85,17 @@ DistrArrayMPI3::DistrArrayMPI3(const DistrArrayMPI3& source)
   }
 }
 
+DistrArrayMPI3::DistrArrayMPI3(const DistrArray& source)
+    : DistrArray(source), m_distribution(std::make_unique<Distribution>(source.distribution())) {
+  if (!source.empty()) {
+    DistrArrayMPI3::allocate_buffer();
+    DistrArray::copy(source);
+  }
+}
+
 DistrArrayMPI3::DistrArrayMPI3(DistrArrayMPI3&& source) noexcept
-    : DistrArray(source.m_dimension, source.m_communicator, source.m_prof), m_win(source.m_win),
-      m_allocated(source.m_allocated), m_distribution(std::move(source.m_distribution)) {
+    : DistrArray(source.m_dimension, source.m_communicator), m_win(source.m_win), m_allocated(source.m_allocated),
+      m_distribution(std::move(source.m_distribution)) {
   source.m_allocated = false;
 }
 
@@ -104,7 +109,6 @@ DistrArrayMPI3& DistrArrayMPI3::operator=(const DistrArrayMPI3& source) {
   } else {
     allocate_buffer();
     copy(source);
-    m_prof = source.m_prof;
   }
   return *this;
 }
@@ -119,7 +123,6 @@ void swap(DistrArrayMPI3& a1, DistrArrayMPI3& a2) noexcept {
   using std::swap;
   swap(a1.m_dimension, a2.m_dimension);
   swap(a1.m_communicator, a2.m_communicator);
-  swap(a1.m_prof, a2.m_prof);
   swap(a1.m_distribution, a2.m_distribution);
   swap(a1.m_allocated, a2.m_allocated);
   swap(a1.m_win, a2.m_win);
@@ -151,20 +154,19 @@ std::unique_ptr<DistrArrayMPI3::LocalBuffer> DistrArrayMPI3::local_buffer() {
 
 DistrArray::value_type DistrArrayMPI3::at(index_type ind) const {
   value_type val;
-  get(ind, ind, &val);
+  get(ind, ind + 1, &val);
   return val;
 }
-void DistrArrayMPI3::set(index_type ind, value_type val) { put(ind, ind, &val); }
+void DistrArrayMPI3::set(index_type ind, value_type val) { put(ind, ind + 1, &val); }
 
 void DistrArrayMPI3::_get_put(index_type lo, index_type hi, const value_type* buf, RMAType option) {
-  if (lo > hi)
+  if (lo >= hi)
     return;
   auto name = std::string{"DistrArrayMPI3::_get_put"};
-  if (hi >= m_dimension)
+  if (hi > m_dimension)
     error(name + " out of bounds");
   if (empty())
     error(name + " called on an empty array");
-  util::ScopeProfiler prof{m_prof, name};
   index_type p_lo, p_hi;
   std::tie(p_lo, p_hi) = m_distribution->cover(lo, hi);
   auto* curr_buf = const_cast<value_type*>(buf);
@@ -172,11 +174,10 @@ void DistrArrayMPI3::_get_put(index_type lo, index_type hi, const value_type* bu
   for (size_t i = p_lo; i < p_hi + 1; ++i) {
     index_type bound_lo, bound_hi;
     std::tie(bound_lo, bound_hi) = m_distribution->range(i);
-    --bound_hi;
     auto local_lo = std::max(lo, bound_lo);
     auto local_hi = std::min(hi, bound_hi);
     MPI_Aint offset = (local_lo - bound_lo);
-    int count = (int(local_hi - local_lo) + 1);
+    int count = (int(local_hi - local_lo));
     if (option == RMAType::get)
       MPI_Rget(curr_buf, count, MPI_DOUBLE, i, offset, count, MPI_DOUBLE, m_win, &requests[i - p_lo]);
     else if (option == RMAType::put)
@@ -193,9 +194,9 @@ void DistrArrayMPI3::get(index_type lo, index_type hi, value_type* buf) const {
 }
 
 std::vector<DistrArrayMPI3::value_type> DistrArrayMPI3::get(index_type lo, index_type hi) const {
-  if (lo > hi)
+  if (lo >= hi)
     return {};
-  auto val = std::vector<value_type>(hi - lo + 1);
+  auto val = std::vector<value_type>(hi - lo);
   get(lo, hi, val.data());
   return val;
 }
@@ -227,7 +228,6 @@ void DistrArrayMPI3::_gather_scatter(const std::vector<index_type>& indices, std
     error(name + " data buffer is too small");
   if (empty())
     error(name + " called on an empty array");
-  util::ScopeProfiler prof{m_prof, name};
   auto requests = std::vector<MPI_Request>(indices.size());
   for (size_t i = 0; i < indices.size(); ++i) {
     int p;
@@ -244,7 +244,7 @@ void DistrArrayMPI3::_gather_scatter(const std::vector<index_type>& indices, std
   }
   MPI_Waitall(requests.size(), requests.data(), MPI_STATUSES_IGNORE);
 }
-std::vector<DistrArrayMPI3::value_type> DistrArrayMPI3::vec() const { return get(0, m_dimension - 1); }
+std::vector<DistrArrayMPI3::value_type> DistrArrayMPI3::vec() const { return get(0, m_dimension); }
 
 void DistrArrayMPI3::acc(index_type lo, index_type hi, const value_type* data) { _get_put(lo, hi, data, RMAType::acc); }
 
@@ -268,6 +268,4 @@ DistrArrayMPI3::LocalBufferMPI3::LocalBufferMPI3(DistrArrayMPI3& source) {
   MPI_Win_get_attr(source.m_win, MPI_WIN_BASE, &m_buffer, &flag);
 }
 
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg::array

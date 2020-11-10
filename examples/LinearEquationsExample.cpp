@@ -20,7 +20,7 @@
 using molpro::linalg::array::ArrayHandlerIterable;
 using molpro::linalg::array::ArrayHandlerIterableSparse;
 using molpro::linalg::array::ArrayHandlerSparse;
-using molpro::linalg::iterativesolver::ArrayHandlers;
+using molpro::linalg::itsolv::ArrayHandlers;
 
 constexpr bool check = true;
 constexpr bool print = false;
@@ -38,11 +38,33 @@ using pv = std::vector<scalar>;
 #endif
 using vectorSet = std::vector<pv>;
 constexpr scalar alpha = 300; // separation of diagonal elements
-// TODO nP>0
-constexpr size_t nP = 0;    // number in initial P-space
-constexpr size_t nRoot = 2; // number of equations
+constexpr size_t nRoot = 2;   // number of equations
 
 scalar matrix(const size_t i, const size_t j) { return (i == j ? alpha * (i + 1) : 0) + i + j; }
+
+template <class T>
+std::ostream& operator<<(std::ostream& o, const std::array<T, n>& v) {
+  bool init{true};
+  for (const auto& element : v) {
+    o << (init ? "{" : " ") << element;
+    init = false;
+  }
+  if (not init)
+    o << "}";
+  return o;
+}
+
+template <class T>
+std::ostream& operator<<(std::ostream& o, const std::vector<T>& v) {
+  bool init{true};
+  for (const auto& element : v) {
+    o << (init ? "{" : " ") << element;
+    init = false;
+  }
+  if (not init)
+    o << "}";
+  return o;
+}
 
 void action(const vectorSet& psx, vectorSet& outputs, size_t nroot) {
   for (size_t k = 0; k < nroot; k++) {
@@ -50,19 +72,6 @@ void action(const vectorSet& psx, vectorSet& outputs, size_t nroot) {
       outputs[k][i] = 0;
       for (size_t j = 0; j < n; j++)
         outputs[k][i] += matrix(i, j) * psx[k][j];
-    }
-  }
-}
-
-void actionP(const std::vector<std::map<size_t, scalar>> pspace, const std::vector<std::vector<scalar>>& psx,
-             vectorSet& outputs, size_t nroot) {
-  const size_t nP = pspace.size();
-  for (size_t k = 0; k < nroot; k++) {
-    for (size_t p = 0; p < nP; p++) {
-      for (const auto& pc : pspace[p]) {
-        for (size_t j = 0; j < n; j++)
-          outputs[k][j] += matrix(pc.first, j) * pc.second * psx[k][p];
-      }
     }
   }
 }
@@ -98,40 +107,36 @@ int main(int argc, char* argv[]) {
   }
   std::vector<double> augmented_hessian_factors = {0, .001, .01, .1, 1};
   for (const auto& augmented_hessian_factor : augmented_hessian_factors) {
+    //    if (nRoot > 1 and augmented_hessian_factor > 0) // TODO multiroot AH not yet working
+    //      continue;
     std::cout << "Augmented hessian factor = " << augmented_hessian_factor << std::endl;
-    auto rr = std::make_shared<ArrayHandlerIterable<pv>>();
-    auto qq = std::make_shared<ArrayHandlerIterable<pv>>();
-    auto pp = std::make_shared<ArrayHandlerSparse<std::map<size_t, double>>>();
-    auto rq = std::make_shared<ArrayHandlerIterable<pv>>();
-    auto rp = std::make_shared<ArrayHandlerIterableSparse<pv, std::map<size_t, double>>>();
-    auto qr = std::make_shared<ArrayHandlerIterable<pv>>();
-    auto qp = std::make_shared<ArrayHandlerIterableSparse<pv, std::map<size_t, double>>>();
-    auto handlers = ArrayHandlers<pv, pv, std::map<size_t, double>>{rr, qq, pp, rq, rp, qr, qp};
-    molpro::linalg::LinearEquations<pv> solver(b, handlers, augmented_hessian_factor);
+    auto handlers = std::make_shared<ArrayHandlers<pv, pv, std::map<size_t, double>>>();
+    auto solver = molpro::linalg::LinearEquations<pv>(b, handlers, augmented_hessian_factor);
     solver.m_verbosity = 1;
     solver.m_roots = nRoot;
     solver.m_thresh = 1e-6;
     size_t p = 0;
     std::vector<scalar> PP;
-    std::vector<std::map<size_t, scalar>> pspace(nP);
-    for (auto& pc : pspace) {
-      pc.clear();
-      pc[p] = 1;
-      for (size_t q = 0; q < nP; q++)
-        PP.push_back(matrix(p, q));
-      ++p;
-    }
-    std::vector<std::vector<scalar>> Pcoeff(solver.m_roots);
-    for (size_t i = 0; i < solver.m_roots; ++i)
-      Pcoeff[i].resize(nP);
-    auto nwork = solver.addP(pspace, PP.data(), x, g, Pcoeff);
+    size_t nwork = nRoot;
+    for (size_t root = 0; root < nRoot; root++)
+      x[root] = b[root];
     for (auto iter = 0; iter < 100; iter++) {
-      actionP(pspace, Pcoeff, g, nwork);
+      //      for (auto v = 0; v < nwork; v++) {
+      //        std::cout << "start of iteration x " << x[v] << std::endl;
+      //        std::cout << "start of iteration g " << g[v] << std::endl;
+      //      }
+      action(x, g, nwork);
+      nwork = solver.addVector(x, g);
+      //      for (auto v = 0; v < nwork; v++) {
+      //        std::cout << "after addVector x " << x[v] << std::endl;
+      //        std::cout << "after addVector g " << g[v] << std::endl;
+      //      }
       update(x, g, nwork);
+      //      for (auto v = 0; v < nwork; v++) {
+      //        std::cout << "after update x " << x[v] << std::endl;
+      //      }
       if (rank == 0)
         solver.report();
-      action(x, g, nwork);
-      nwork = solver.addVector(x, g, Pcoeff);
       if (nwork == 0)
         break;
     }
@@ -139,7 +144,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Error={ ";
     for (const auto& e : solver.errors())
       std::cout << e << " ";
-    std::cout << "} after " << solver.iterations() << " iterations" << std::endl;
+    std::cout << "} after " << solver.statistics().iterations << " iterations" << std::endl;
     if (check or print) {
       std::vector<int> roots(solver.m_roots);
       std::iota(roots.begin(), roots.end(), 0);

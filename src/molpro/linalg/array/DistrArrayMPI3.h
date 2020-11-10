@@ -1,11 +1,9 @@
-#ifndef GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAYMPI3_H
-#define GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAYMPI3_H
+#ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYMPI3_H
+#define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYMPI3_H
 #include <molpro/linalg/array/DistrArray.h>
 #include <mpi.h>
 
-namespace molpro {
-namespace linalg {
-namespace array {
+namespace molpro::linalg::array {
 
 /*!
  * @brief Implementation of distributed array using MPI3 RMA operations
@@ -37,21 +35,20 @@ public:
    *
    * @param dimension overall size of array
    * @param commun MPI communicator
-   * @param prof
    */
-  DistrArrayMPI3(size_t dimension, MPI_Comm commun, std::shared_ptr<Profiler> prof = nullptr);
+  DistrArrayMPI3(size_t dimension, MPI_Comm commun);
 
   /*!
    * @brief Creates distributed array using MPI3 RMA routines and specified distribution.
    *
    * @param distribution specification of how array is distributed among processes
    * @param commun MPI communicator
-   * @param prof
    */
-  DistrArrayMPI3(std::unique_ptr<Distribution> distribution, MPI_Comm commun, std::shared_ptr<Profiler> prof = nullptr);
+  DistrArrayMPI3(std::unique_ptr<Distribution> distribution, MPI_Comm commun);
 
   //! Copy constructor allocates the buffer if source is not empty
   DistrArrayMPI3(const DistrArrayMPI3 &source);
+  DistrArrayMPI3(const DistrArray &source);
   DistrArrayMPI3(DistrArrayMPI3 &&source) noexcept;
   DistrArrayMPI3 &operator=(const DistrArrayMPI3 &source);
   DistrArrayMPI3 &operator=(DistrArrayMPI3 &&source) noexcept;
@@ -100,8 +97,6 @@ protected:
   void _gather_scatter(const std::vector<index_type> &indices, std::vector<value_type> &data, RMAType option);
 };
 
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg::array
 
-#endif // GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAYMPI3_H
+#endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYMPI3_H

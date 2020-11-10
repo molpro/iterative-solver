@@ -1,13 +1,11 @@
-#ifndef GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAYHDF5_H
-#define GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAYHDF5_H
+#ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYHDF5_H
+#define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYHDF5_H
 #include <hdf5.h>
 #include <string>
 
 #include "molpro/linalg/array/DistrArrayDisk.h"
 
-namespace molpro {
-namespace linalg {
-namespace array {
+namespace molpro::linalg::array {
 namespace util {
 class PHDF5Handle;
 }
@@ -38,8 +36,7 @@ public:
   //! Constructor for a blank object. The blank is only useful as a temporary. Move a valid object inside the blank to
   //! make it usable.
   DistrArrayHDF5();
-  //! Copies the array from source. Copies to the memory view if it was allocated, otherwise copies directly from disk.
-  DistrArrayHDF5(const DistrArrayHDF5 &source);
+  DistrArrayHDF5(const DistrArrayHDF5 &source) = delete;
   //! Takes ownership of source content.
   DistrArrayHDF5(DistrArrayHDF5 &&source) noexcept;
 
@@ -53,10 +50,8 @@ public:
    *
    * @param file_handle handle for opening the HDF5 group where array is/will be stored.
    * @param dimension size of array. If dataset already exists it will be resized to dimension.
-   * @param prof profiler
    */
-  DistrArrayHDF5(std::shared_ptr<util::PHDF5Handle> file_handle, size_t dimension,
-                 std::shared_ptr<Profiler> prof = nullptr);
+  DistrArrayHDF5(const std::shared_ptr<util::PHDF5Handle> &file_handle, size_t dimension);
   /*!
    * @brief Create a disk array with file and distribution assigned.
    *
@@ -64,10 +59,8 @@ public:
    *
    * @param file_handle handle for opening the HDF5 group where array is/will be stored.
    * @param distribution specifies how array is distributed among processes
-   * @param prof profiler
    */
-  DistrArrayHDF5(std::shared_ptr<util::PHDF5Handle> file_handle, std::unique_ptr<Distribution> distribution,
-                 std::shared_ptr<Profiler> prof = nullptr);
+  DistrArrayHDF5(const std::shared_ptr<util::PHDF5Handle> &file_handle, std::unique_ptr<Distribution> distribution);
   /*!
    * @brief Create a dummy disk array with a file assigned.
    *
@@ -75,15 +68,22 @@ public:
    * object will be a dummy, still useful for later copying a valid array into it.
    *
    * @param file_handle handle for opening the HDF5 group where array is/will be stored.
-   * @param prof
    */
-  DistrArrayHDF5(std::shared_ptr<util::PHDF5Handle> file_handle, std::shared_ptr<Profiler> prof = nullptr);
+  explicit DistrArrayHDF5(const std::shared_ptr<util::PHDF5Handle> &file_handle);
   /*!
    * @brief Creates a disk array by copying source to disk.
    * @param source a distributed array
    * @param file_handle handle for opening the HDF5 group where array is/will be stored.
    */
   DistrArrayHDF5(const DistrArray &source, std::shared_ptr<util::PHDF5Handle> file_handle);
+
+  /*!
+   * @brief Create a copy of source array using a temporary file which will be erased on destruction
+   * @param source array to be copied
+   * @param base_name base name for the temporary file. It will form the first part of the temporary array name. The
+   * middle will be chosen to be unique and the suffix will be ".hdf5"
+   */
+  static DistrArrayHDF5 CreateTempCopy(const DistrArray &source, const std::string &base_name = ".temp_array");
 
   /*!
    * @brief Copies the array from source.
@@ -141,7 +141,5 @@ public:
   bool dataset_is_open() const;
 };
 
-} // namespace array
-} // namespace linalg
-} // namespace molpro
-#endif // GCI_SRC_MOLPRO_GCI_ARRAY_DISTRARRAYHDF5_H
+} // namespace molpro::linalg::array
+#endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYHDF5_H

@@ -1,8 +1,7 @@
 #include "PHDF5Handle.h"
-namespace molpro {
-namespace linalg {
-namespace array {
-namespace util {
+#include "util/TempHandle.h"
+
+namespace molpro::linalg::array::util {
 hid_t PHDF5Handle::_open_plist() {
   auto plist_id = H5Pcreate(H5P_FILE_ACCESS);
   H5Pset_fapl_mpio(plist_id, m_comm, MPI_INFO_NULL);
@@ -41,8 +40,25 @@ PHDF5Handle& PHDF5Handle::operator=(PHDF5Handle&& source) noexcept {
   source = dummy;
   return *this;
 }
+PHDF5Handle::~PHDF5Handle() {
+  int rank;
+  MPI_Comm_rank(communicator(), &rank);
+  PHDF5Handle::close_file();
+  if (m_erase_file_on_destroy) {
+    if (rank == 0)
+      if (file_exists(file_name()))
+        std::remove(file_name().c_str());
+    MPI_Barrier(communicator());
+    m_erase_file_on_destroy = false;
+  } else if (m_erase_group_on_destroy) {
+    PHDF5Handle::open_file(Access::read_write);
+    PHDF5Handle::open_group();
+    H5Ldelete(file_id(), group_name().c_str(), H5P_DEFAULT);
+    PHDF5Handle::close_file();
+    MPI_Barrier(communicator());
+    m_erase_group_on_destroy = false;
+  }
+}
 
-} // namespace util
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+template struct TempHandle<PHDF5Handle>;
+} // namespace molpro::linalg::array::util

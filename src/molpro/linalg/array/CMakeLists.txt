@@ -2,6 +2,7 @@ if (MPI)
     set(HDF5_PREFER_PARALLEL ON)
 endif ()
 find_package(HDF5 REQUIRED COMPONENTS C)
+find_package(Threads)
 
 if (MPI AND NOT HDF5_IS_PARALLEL)
     message(FATAL_ERROR "Parallel HDF5 is required when building LinearAlgebra with MPI on")
@@ -10,7 +11,9 @@ endif ()
 LibraryManager_Append(${PROJECT_NAME}
         SOURCES HDF5Handle.cpp
         PUBLIC_HEADER HDF5Handle.h ArrayHandler.h ArrayHandlerIterable.h ArrayHandlerSparse.h
-        ArrayHandlerIterableSparse.h ArrayHandlerFactory.h Span.h
+        ArrayHandlerIterableSparse.h ArrayHandlerDefault.h ArrayHandlerDDisk.h ArrayHandlerDDiskDistr.h
+        ArrayHandlerDistrDDisk.h ArrayHandlerDDiskSparse.h Span.h type_traits.h
+        default_handler.h
         )
 if (MPI)
     LibraryManager_Append(${PROJECT_NAME} PUBLIC_HEADER ArrayHandlerDistr.h ArrayHandlerDistrSparse.h)
@@ -18,11 +21,6 @@ endif ()
 target_link_libraries(${PROJECT_NAME} PUBLIC ${HDF5_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${HDF5_INCLUDE_DIRS})
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${HDF5_DEFINITIONS})
-if (MPI AND LINEARALGEBRA_ARRAY_HDF5)
-    LibraryManager_Append(${PROJECT_NAME}
-            PUBLIC_HEADER ArrayHandlerFactory.h
-            )
-endif ()
 
 if (MPI)
     LibraryManager_Append(${PROJECT_NAME}
@@ -32,8 +30,9 @@ if (MPI)
 
     if (LINEARALGEBRA_ARRAY_MPI3)
         message(STATUS "Building ${PROJECT_NAME} with MPI3 Array")
-        target_compile_definitions(${PROJECT_NAME} PUBLIC LINEARALGEBRA_ARRAY_MPI3)
-        LibraryManager_Append(${PROJECT_NAME} SOURCES DistrArrayMPI3.cpp PUBLIC_HEADER DistrArrayMPI3.h)
+        target_compile_definitions(${PROJECT_NAME} PUBLIC LINEARALGEBRA_ARRAY_MPI3 LINEARALGEBRA_ARRAY_FILE)
+        LibraryManager_Append(${PROJECT_NAME} SOURCES DistrArrayMPI3.cpp DistrArrayFile.cpp
+                                              PUBLIC_HEADER DistrArrayMPI3.h DistrArrayFile.h)
     endif ()
 
     if (LINEARALGEBRA_ARRAY_GA)
@@ -48,6 +47,7 @@ if (MPI)
         set(HDF5_PREFER_PARALLEL ON)
         find_package(HDF5 REQUIRED COMPONENTS C)
         target_compile_definitions(${PROJECT_NAME} PUBLIC LINEARALGEBRA_ARRAY_HDF5)
+        target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
         LibraryManager_Append(${PROJECT_NAME}
                 SOURCES DistrArrayHDF5.cpp
                 PUBLIC_HEADER DistrArrayHDF5.h)

@@ -4,9 +4,7 @@
 #include "molpro/linalg/array/DistrArray.h"
 #include "molpro/linalg/array/Span.h"
 
-namespace molpro {
-namespace linalg {
-namespace array {
+namespace molpro::linalg::array {
 namespace util {
 template <typename Result>
 class Task;
@@ -100,6 +98,8 @@ class Task;
  *
  */
 class DistrArrayDisk : public DistrArray {
+public:
+  using disk_array = void; //!< a compile time tag that this is a distributed disk array
 protected:
   bool m_allocated = false;       //!< Flags that the memory view buffer has been allocated
   Span<value_type> m_view_buffer; //!< memory view buffer either wraps allocated buffer or stores user supplied buffer
@@ -107,7 +107,7 @@ protected:
   std::unique_ptr<Distribution> m_distribution; //!< describes distribution of array among processes
   using DistrArray::DistrArray;
 
-  DistrArrayDisk(std::unique_ptr<Distribution> distr, MPI_Comm commun, std::shared_ptr<molpro::Profiler> prof);
+  DistrArrayDisk(std::unique_ptr<Distribution> distr, MPI_Comm commun);
   DistrArrayDisk();
   DistrArrayDisk(const DistrArrayDisk &source);
   DistrArrayDisk(DistrArrayDisk &&source) noexcept;
@@ -184,8 +184,6 @@ public:
   std::unique_ptr<util::Task<std::unique_ptr<const LocalBuffer>>> tlocal_buffer() const;
 };
 
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg::array
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYDISK_H

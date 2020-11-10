@@ -10,7 +10,6 @@
 #include <memory>
 #include <type_traits>
 
-#include <molpro/linalg/array/ArrayHandlerIterable.h>
 #include <molpro/linalg/array/ArrayHandlerIterableSparse.h>
 #include <molpro/linalg/array/ArrayHandlerSparse.h>
 
@@ -18,9 +17,17 @@ using molpro::linalg::array::ArrayHandler;
 using molpro::linalg::array::ArrayHandlerIterable;
 using molpro::linalg::array::ArrayHandlerIterableSparse;
 using molpro::linalg::array::ArrayHandlerSparse;
-using molpro::linalg::iterativesolver::ArrayHandlers;
-namespace molpro {
-namespace linalg {
+using molpro::linalg::itsolv::ArrayHandlers;
+namespace molpro::linalg {
+
+TEST(LinearEigensystem, copy_constructor) {
+  using R = std::vector<double>;
+  auto handlers = std::make_shared<ArrayHandlers<R>>();
+  auto solver1 = molpro::linalg::LinearEigensystem<R>(handlers);
+  ASSERT_EQ(solver1.handlers(), handlers);
+  auto solver2 = molpro::linalg::LinearEigensystem<R>(solver1);
+  ASSERT_EQ(solver2.handlers(), solver1.handlers());
+}
 
 template <class T>
 void syncr(T& x, std::true_type) {
@@ -101,8 +108,8 @@ static void DavidsonTest(size_t dimension, size_t roots = 1, int verbosity = 0, 
   auto rp = std::make_shared<ArrayHandlerIterableSparse<ptype, std::map<size_t, double>>>();
   auto qr = std::make_shared<ArrayHandlerIterable<ptype>>();
   auto qp = std::make_shared<ArrayHandlerIterableSparse<ptype, std::map<size_t, double>>>();
-  auto handlers = ArrayHandlers<ptype, ptype, std::map<size_t, double>>{rr, qq, pp, rq, rp, qr, qp};
-  LinearEigensystem<ptype> d{handlers};
+  auto handlers = std::make_shared<ArrayHandlers<ptype, ptype, std::map<size_t, double>>>(rr, qq, pp, rq, rp, qr, qp);
+  auto d = LinearEigensystem<ptype>{handlers};
   molpro::linalg::array::ArrayHandlerIterable<ptype> handler{};
   d.m_roots = roots;
   d.m_verbosity = verbosity;
@@ -501,8 +508,7 @@ void RSPTTest(size_t n, double alpha) { // TODO conversion not finished
                << ", average iterations=" << iterations / sample << ", maximum iterations=" << maxIterations
                << ", nfail=" << nfail << std::endl;
 }
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg
 
 #ifdef ITERATIVESOLVER_FORTRAN
 extern "C" {

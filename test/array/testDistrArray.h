@@ -142,6 +142,31 @@ TYPED_TEST_P(TestDistrArray, move_assignment_op_allocated) {
   ASSERT_THAT(*b.local_buffer(), Each(DoubleEq(alpha)));
 }
 
+TYPED_TEST_P(TestDistrArray, select_max_dot) {
+  LockMPI3 lock{mpi_comm};
+  const size_t dim = 30;
+  const size_t n = 5; // values to select
+  TypeParam x{dim, mpi_comm};
+  TypeParam y{dim, mpi_comm};
+  x.allocate_buffer();
+  y.allocate_buffer();
+  y.fill(1);
+  int rank, comm_size;
+  MPI_Comm_rank(mpi_comm, &rank);
+  MPI_Comm_size(mpi_comm, &comm_size);
+  auto buffer = x.local_buffer();
+  std::iota(buffer->begin(), buffer->end(), typename TypeParam::value_type(buffer->start()));
+  x.sync();
+  auto selection_ref = std::map<size_t, typename TypeParam::value_type>();
+  for (size_t i = 0; i < n; ++i)
+    selection_ref[dim - 1 - i] = dim - 1 - i;
+  auto selection = x.select_max_dot(n, y);
+  {
+    auto l = lock.scope();
+    ASSERT_THAT(selection, ContainerEq(selection_ref));
+  }
+}
+
 template <typename Array>
 class DistArrayInitializationF : public Array, public ::testing::Test {
 public:
@@ -216,7 +241,7 @@ TYPED_TEST_P(DistArrayInitializationF, get) {
     data.assign(data.size(), 0);
     TypeParam::get(0, 10, data.data());
     ASSERT_THAT(ref_vec, Pointwise(DoubleEq(), data));
-    data = TypeParam::get(0, this->dim - 1);
+    data = TypeParam::get(0, this->dim);
     auto same_as_vec = TypeParam::vec();
     ASSERT_THAT(data, Pointwise(DoubleEq(), same_as_vec));
   }
@@ -229,8 +254,8 @@ TYPED_TEST_P(DistArrayInitializationF, put) {
     auto l = this->lock.scope();
     auto range = std::vector<double>(this->dim);
     std::iota(range.begin(), range.end(), this->m_comm_rank);
-    TypeParam::put(0, this->dim - 1, range.data());
-    auto from_ga_buffer = TypeParam::get(0, this->dim - 1);
+    TypeParam::put(0, this->dim, range.data());
+    auto from_ga_buffer = TypeParam::get(0, this->dim);
     ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), range));
   }
   TypeParam::sync();
@@ -356,7 +381,7 @@ TYPED_TEST_P(DistrArrayRangeF, min_loc_n_reverse) {
   int n = 10;
   std::reverse(this->values.begin(), this->values.end());
   if (this->p_rank == 0)
-    TypeParam::put(0, this->dim - 1, this->values.data());
+    TypeParam::put(0, this->dim, this->values.data());
   TypeParam::sync();
   auto ref_minloc_ind = std::vector<typename TypeParam::index_type>(n);
   std::iota(ref_minloc_ind.rbegin(), ref_minloc_ind.rend(), this->dim - n);
@@ -579,8 +604,8 @@ TYPED_TEST_P(DistrArrayCollectiveOpF, axpy_map) {
 
 TYPED_TEST_P(DistrArrayCollectiveOpF, dot_array) {
   if (this->p_rank == 0) {
-    this->a.put(0, this->dim - 1, this->range_alpha.data());
-    this->b.put(0, this->dim - 1, this->range_beta.data());
+    this->a.put(0, this->dim, this->range_alpha.data());
+    this->b.put(0, this->dim, this->range_beta.data());
   }
   this->a.sync();
   auto ga_dot = this->a.dot(this->b);
@@ -594,7 +619,7 @@ TYPED_TEST_P(DistrArrayCollectiveOpF, dot_array) {
 
 TYPED_TEST_P(DistrArrayCollectiveOpF, dot_map) {
   if (this->p_rank == 0)
-    this->a.put(0, this->dim - 1, this->range_alpha.data());
+    this->a.put(0, this->dim, this->range_alpha.data());
   this->a.sync();
   auto ga_dot = this->a.dot(this->sparse_array);
   double ref_dot = 0.;
@@ -703,7 +728,8 @@ REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeF, gather, scatter, scatter_acc, at, 
                             min_abs_n, max_abs_n, scal_double, add_double, sub_double, recip);
 REGISTER_TYPED_TEST_SUITE_P(TestDistrArray, constructor, constructor_copy, constructor_copy_allocated,
                             copy_assignment_op, copy_assignment_op_allocated, constructor_move,
-                            constructor_move_allocated, move_assignment_op, move_assignment_op_allocated);
+                            constructor_move_allocated, move_assignment_op, move_assignment_op_allocated,
+                            select_max_dot);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayCollectiveOpF, add, sub, axpy, axpy_map, dot_array, dot_map, times,
                             divide_append_negative, divide_append_positive, divide_overwrite_positive);
 

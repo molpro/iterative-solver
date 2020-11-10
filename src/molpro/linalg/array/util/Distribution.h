@@ -6,10 +6,7 @@
 #include <utility>
 #include <vector>
 
-namespace molpro {
-namespace linalg {
-namespace array {
-namespace util {
+namespace molpro::linalg::array::util {
 
 /*!
  * @brief Specifies distribution of a contiguous array into non-overlapping chunks
@@ -43,12 +40,12 @@ public:
   /*!
    * @brief Maps fist and last index in the array to a pair of chunks encapsulating the corresponding range
    * @param lo first index of range
-   * @param hi last index of range
+   * @param hi past-the-end index of range
    * @return pair of first and last chunk indices encapsulating this range, or size() if range is outside of border()
    */
   std::pair<int, int> cover(index_type lo, index_type hi) const {
-    assert(lo <= hi);
-    return {cover(lo), cover(hi)};
+    assert(lo < hi);
+    return {cover(lo), cover(hi - 1)};
   };
 
   /*!
@@ -111,9 +108,6 @@ Distribution<Ind> make_distribution_spread_remainder(size_t dimension, int n_chu
   return {chunk_borders};
 }
 
-} // namespace util
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+} // namespace molpro::linalg::array::util
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_UTIL_DISTRIBUTION_H

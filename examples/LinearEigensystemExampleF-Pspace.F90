@@ -1,4 +1,4 @@
-!> @examples LinearEigensystemExampleF-Pspace.F90
+!> @examples LinearEigensystemExampleF-Pspace-mpi.F90
 !> This is an examples of use of the LinearEigensystem framework for iterative
 !> finding of the lowest few eigensolutions of a large matrix.
 !> A P-space is explicitly declared.
@@ -37,7 +37,7 @@ PROGRAM Linear_Eigensystem_Example
     END DO
   END DO
   CALL Iterative_Solver_Add_P(nP, offsets, indices, coefficients, pp, c, g, p)
-  DO iter = 1, 10
+  DO iter = 1, n
     e = Iterative_Solver_Eigenvalues()
     DO root = 1, nroot
       DO i = 1, nP

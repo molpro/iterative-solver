@@ -1,13 +1,11 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_HDF5HANDLE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_HDF5HANDLE_H
 #include <hdf5.h>
+#include <molpro/linalg/array/util/TempHandle.h>
 #include <string>
 #include <utility>
 
-namespace molpro {
-namespace linalg {
-namespace array {
-namespace util {
+namespace molpro::linalg::array::util {
 
 /*!
  * @brief Manages opening/closing HDF5 files and groups.
@@ -80,7 +78,7 @@ public:
    */
   HDF5Handle() = default;
   //! Create a handle with file assigned to it with ownership
-  HDF5Handle(std::string file);
+  explicit HDF5Handle(std::string file);
   //! Create a handle with file and group assigned to it with ownership
   HDF5Handle(std::string file, std::string group);
   /*!
@@ -104,8 +102,12 @@ public:
    * @param hid hdf5 id to an open object.
    * @param transfer_ownership whether to take ownership of the object
    */
-  HDF5Handle(hid_t hid, bool transfer_ownership = false);
+  explicit HDF5Handle(hid_t hid, bool transfer_ownership = false);
 
+  /*!
+   * @brief On destruction closes any hdf5 objects that are owned. If m_erase_on_destroy is true than also erases the
+   * underlying file
+   */
   virtual ~HDF5Handle();
 
   /*!
@@ -171,6 +173,11 @@ public:
    * @return id of hdf5 object. Returns hid_default if a group was already assigned on construction.
    */
   virtual hid_t open_group(const std::string &group);
+  /*!
+   * @brief Assign a new group, closing the old one
+   * @param group new group name, should be an absolute path
+   */
+  void assign_group(const std::string &group);
   //! Closes the file if it is open, also closes the group. If handle is not owning, the underlying object is not closed
   virtual void close_file();
   //! Closes the group if it is open. If handle is not owning, the underlying object is not closed.
@@ -207,6 +214,26 @@ public:
   //! Returns true if the handle does not have an hdf5 object assigned to it
   bool empty() const;
 
+  /*!
+   * @brief Sets m_erase_file_on_destroy flag to value.
+   * @note Setting the flag to true can fail if the underlying file is not erasable, e.g. handle does not own the file.
+   * @param value new value for the flag
+   * @return Returns true if the flag was set, or false if it remains the same.
+   */
+  bool set_erase_file_on_destroy(bool value);
+  //! Returns true if the underlying file will be erased when the handle is destroyed
+  bool erase_file_on_destroy() const { return m_erase_file_on_destroy; }
+
+  /*!
+   * @brief Sets the flag to unlink the group when this object is destroyed.
+   * @note The group must own the object.
+   * @param value new value for the flag
+   * @return Returns true if the flag was set, or false if it remains the same.
+   */
+  bool set_erase_group_on_destroy(bool value);
+  //! Returns true the group will be unlinked on destruction
+  bool erase_group_on_destroy() const { return m_erase_group_on_destroy; }
+
   //! Default value of hid used by the handle. It is always used if the hid is not related to a valid hdf5 object.
   static const hid_t hid_default = -1;
 
@@ -217,7 +244,11 @@ protected:
   std::string m_group_name;        //!< path to the group in hdf5 file
   bool m_file_owner = false;       //!< flags that the file was open by this instance and should be closed by it
   bool m_group_owner = false;      //!< flags that the group was open by this instance and should be closed by it
-  virtual hid_t _open_plist();     //!< returns property list for opening the file
+  bool m_erase_file_on_destroy =
+      false; //!< flags that the underlying file should be erased when the handle is destroyed
+  bool m_erase_group_on_destroy = false; //!< flags that the group should be unlinked when the handle is destroyed
+  virtual hid_t _open_plist();           //!< returns property list for opening the file
+  virtual bool erasable();               //!< returns true if it would be possible to erase the file
 };
 
 //! Returns true if the file exists
@@ -248,9 +279,7 @@ std::string hdf5_get_file_name(hid_t id);
 //!
 htri_t hdf5_link_exists(hid_t id, std::string path);
 
-} // namespace util
-} // namespace array
-} // namespace linalg
-} // namespace molpro
+extern template struct TempHandle<HDF5Handle>;
+} // namespace molpro::linalg::array::util
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_HDF5HANDLE_H
