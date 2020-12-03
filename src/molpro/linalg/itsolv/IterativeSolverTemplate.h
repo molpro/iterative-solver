@@ -1,6 +1,7 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_ITERATIVESOLVERTEMPLATE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_ITERATIVESOLVERTEMPLATE_H
 #include <iostream>
+#include <molpro/iostream.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
 #include <molpro/linalg/itsolv/Logger.h>
 #include <molpro/linalg/itsolv/subspace/ISubspaceSolver.h>
@@ -8,7 +9,6 @@
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/subspace/util.h>
 #include <molpro/linalg/itsolv/wrap.h>
-#include <molpro/iostream.h>
 
 namespace molpro::linalg::itsolv {
 namespace detail {
@@ -131,6 +131,8 @@ template <template <class, class, class> class Solver, class R, class Q, class P
 class IterativeSolverTemplate : public Solver<R, Q, P> {
 public:
   using typename Solver<R, Q, P>::fapply_on_p_type;
+  using typename Solver<R, Q, P>::fapply_on_r_type;
+  using typename Solver<R, Q, P>::fprecondition_type;
   using typename Solver<R, Q, P>::scalar_type;
   using typename Solver<R, Q, P>::value_type;
   using typename Solver<R, Q, P>::VectorP;
@@ -142,202 +144,241 @@ public:
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
 
 public:
-  /*!
-   * @brief Adds new parameters and corresponding action to the subspace and solves the corresponding problem.
-   *
-   * @param parameters new parameters for the R space
-   * @param action corresponding action
-   * @param pparams P space components of the working set solutions
-   * @return
-   */
-  size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& actions,
-                    const fapply_on_p_type& apply_p = fapply_on_p_type{}) override {
-    m_logger->msg("IterativeSolverTemplate::add_vector  iteration = " + std::to_string(m_stats->iterations) +
-                      ", apply_p = " + std::to_string(bool(apply_p)),
-                  Logger::Trace);
-    m_logger->msg("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = " +
-                      std::to_string(parameters.size()) + ", " + std::to_string(actions.size()) + ", " +
-                      std::to_string(m_working_set.size()) + ", ",
-                  Logger::Debug);
-    std::vector<VectorP> pparams; // TODO move deeper to where it is really needed
-    auto nW = std::min(m_working_set.size(), parameters.size());
-    auto cwparams = cwrap<R>(begin(parameters), begin(parameters) + nW);
-    auto cwactions = cwrap<R>(begin(actions), begin(actions) + nW);
-    m_stats->r_creations += nW;
-    m_xspace->update_qspace(cwparams, cwactions);
-    return solve_and_generate_working_set(parameters, actions, pparams, apply_p);
+  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
+             const fprecondition_type& precondition = fprecondition_type{}) override {
+    CVecRef<P> pparams;
+    array::Span<value_type> pp_action_matrix;
+    return solve(parameters, actions, apply_r, pparams, pp_action_matrix, fapply_on_p_type{}, precondition);
   }
+
+  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
+             const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
+             const fapply_on_p_type& apply_p, const fprecondition_type& precondition = fprecondition_type{}) override {
+    // TODO implement diagonal-element preconditioner
+    auto maxit = 100;  // TODO parameterise
+    int verbosity = 1; // TODO parameterise
+    size_t nwork = parameters.size();
+    for (auto iter = 0; iter < maxit; iter++) {
+      //      if (iter == 0 && np > 0) {
+      // TODO implement P space
+      //        nwork = this->add_p(cwrap(pspace), Span<double>(PP.data(), PP.size()), wrap(x),
+      //                              molpro::linalg::itsolv::wrap(g), apply_p_wrapper);
+      //    } else
+      {
+        apply_r(cwrap(parameters), actions);
+        nwork = this->add_vector(parameters, actions, apply_p);
+        if (verbosity > 0)
+          std::cout << "solver.add_vector returns nwork=" << nwork << std::endl;
+      }
+      if (nwork == 0)
+        break;
+      precondition(actions, parameters, this->working_set_eigenvalues());
+      if (verbosity > 0)
+        report();
+      nwork = this->end_iteration(parameters, actions);
+      if (verbosity > 0)
+        std::cout << "solver.end_iteration returns nwork=" << nwork << std::endl;
+      if (nwork == 0)
+        break;
+    }
+    return nwork == 0;
+  };
+  /*!
+ * @brief Adds new parameters and corresponding action to the subspace and solves the corresponding problem.
+ *
+ * @param parameters new parameters for the R space
+ * @param action corresponding action
+ * @param pparams P space components of the working set solutions
+ * @return
+ */
+size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& actions,
+                  const fapply_on_p_type& apply_p = fapply_on_p_type{}) override {
+  m_logger->msg("IterativeSolverTemplate::add_vector  iteration = " + std::to_string(m_stats->iterations) +
+                    ", apply_p = " + std::to_string(bool(apply_p)),
+                Logger::Trace);
+  m_logger->msg("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = " +
+                    std::to_string(parameters.size()) + ", " + std::to_string(actions.size()) + ", " +
+                    std::to_string(m_working_set.size()) + ", ",
+                Logger::Debug);
+  std::vector<VectorP> pparams; // TODO move deeper to where it is really needed
+  auto nW = std::min(m_working_set.size(), parameters.size());
+  auto cwparams = cwrap<R>(begin(parameters), begin(parameters) + nW);
+  auto cwactions = cwrap<R>(begin(actions), begin(actions) + nW);
+  m_stats->r_creations += nW;
+  m_xspace->update_qspace(cwparams, cwactions);
+  return solve_and_generate_working_set(parameters, actions, pparams, apply_p);
+}
 
 public:
-  size_t add_vector(std::vector<R>& parameters, std::vector<R>& actions,
-                    const fapply_on_p_type& apply_p = fapply_on_p_type{}) override {
-    return add_vector(wrap(parameters), wrap(actions), apply_p);
+size_t add_vector(std::vector<R>& parameters, std::vector<R>& actions,
+                  const fapply_on_p_type& apply_p = fapply_on_p_type{}) override {
+  return add_vector(wrap(parameters), wrap(actions), apply_p);
+}
+size_t add_vector(R& parameters, R& actions) override {
+  auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
+  auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
+  return add_vector(wparams, wactions);
+}
+
+// FIXME Currently only works if called on an empty subspace. Either enforce it or generalise.
+size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix, const VecRef<R>& parameters,
+             const VecRef<R>& actions, const fapply_on_p_type& apply_p) override {
+  std::vector<VectorP> parametersP;
+  if (not pparams.empty() and pparams.size() < n_roots())
+    throw std::runtime_error("P space must be empty or at least as large as number of roots sought");
+  m_xspace->update_pspace(pparams, pp_action_matrix);
+  return solve_and_generate_working_set(parameters, actions, parametersP, apply_p);
+};
+
+void clearP() override {}
+
+void solution(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual) override {
+  detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
+                             m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP,
+                             m_xspace->dimensions().oQ, m_xspace->dimensions().oD, *m_handlers);
+  detail::construct_solution(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
+                             m_xspace->actionsd(), m_xspace->dimensions().oP, m_xspace->dimensions().oQ,
+                             m_xspace->dimensions().oD, *m_handlers);
+  detail::construct_residual(roots, m_subspace_solver->eigenvalues(), cwrap(parameters), residual, m_handlers->rr());
+};
+
+void solution(const std::vector<int>& roots, std::vector<R>& parameters, std::vector<R>& residual) override {
+  return solution(roots, wrap(parameters), wrap(residual));
+}
+
+void solution_params(const std::vector<int>& roots, std::vector<R>& parameters) override {
+  return solution_params(roots, wrap(parameters));
+}
+
+void solution_params(const std::vector<int>& roots, const VecRef<R>& parameters) override {
+  detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
+                             m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP,
+                             m_xspace->dimensions().oQ, m_xspace->dimensions().oD, *m_handlers);
+};
+
+// TODO Implement this
+std::vector<size_t> suggest_p(const CVecRef<R>& solution, const CVecRef<R>& residual, size_t max_number,
+                              double threshold) override {
+  return {};
+}
+
+const std::vector<int>& working_set() const override { return m_working_set; }
+
+size_t n_roots() const override { return m_nroots; }
+
+void set_n_roots(size_t roots) override {
+  m_nroots = roots;
+  m_working_set.resize(roots);
+  std::iota(begin(m_working_set), end(m_working_set), (int)0);
+}
+
+void set_options(const std::shared_ptr<Options>& options) override {
+  if (options->n_roots)
+    set_n_roots(options->n_roots.value());
+  if (options->convergence_threshold)
+    set_convergence_threshold(options->convergence_threshold.value());
+}
+
+std::shared_ptr<Options> get_options() const override {
+  auto options = std::make_shared<Options>();
+  options->n_roots = n_roots();
+  options->convergence_threshold = convergence_threshold();
+  return options;
+}
+
+const std::vector<scalar_type>& errors() const override { return m_errors; }
+
+const Statistics& statistics() const override { return *m_stats; }
+
+void report(std::ostream& cout) const override {
+  cout << "iteration " << m_stats->iterations;
+  if (not m_errors.empty()) {
+    auto it_max_error = std::max_element(m_errors.cbegin(), m_errors.cend());
+    if (n_roots() > 1)
+      cout << ", error[" << std::distance(m_errors.cbegin(), it_max_error) << "] = ";
+    else
+      cout << ", error = ";
+    cout << *it_max_error << std::endl;
   }
-  size_t add_vector(R& parameters, R& actions) override {
-    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
-    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
-    return add_vector(wparams, wactions);
-  }
+}
 
-  // FIXME Currently only works if called on an empty subspace. Either enforce it or generalise.
-  size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix, const VecRef<R>& parameters,
-               const VecRef<R>& actions, const fapply_on_p_type& apply_p) override {
-    std::vector<VectorP> parametersP;
-    if (not pparams.empty() and pparams.size() < n_roots())
-      throw std::runtime_error("P space must be empty or at least as large as number of roots sought");
-    m_xspace->update_pspace(pparams, pp_action_matrix);
-    return solve_and_generate_working_set(parameters, actions, parametersP, apply_p);
-  };
+void report() const override { report(molpro::cout); }
 
-  void clearP() override {}
-
-  void solution(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual) override {
-    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP,
-                               m_xspace->dimensions().oQ, m_xspace->dimensions().oD, *m_handlers);
-    detail::construct_solution(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
-                               m_xspace->actionsd(), m_xspace->dimensions().oP, m_xspace->dimensions().oQ,
-                               m_xspace->dimensions().oD, *m_handlers);
-    detail::construct_residual(roots, m_subspace_solver->eigenvalues(), cwrap(parameters), residual, m_handlers->rr());
-  };
-
-  void solution(const std::vector<int>& roots, std::vector<R>& parameters, std::vector<R>& residual) override {
-    return solution(roots, wrap(parameters), wrap(residual));
-  }
-
-  void solution_params(const std::vector<int>& roots, std::vector<R>& parameters) override {
-    return solution_params(roots, wrap(parameters));
-  }
-
-  void solution_params(const std::vector<int>& roots, const VecRef<R>& parameters) override {
-    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP,
-                               m_xspace->dimensions().oQ, m_xspace->dimensions().oD, *m_handlers);
-  };
-
-  // TODO Implement this
-  std::vector<size_t> suggest_p(const CVecRef<R>& solution, const CVecRef<R>& residual, size_t max_number,
-                                double threshold) override {
-    return {};
-  }
-
-  const std::vector<int>& working_set() const override { return m_working_set; }
-
-  size_t n_roots() const override { return m_nroots; }
-
-  void set_n_roots(size_t roots) override {
-    m_nroots = roots;
-    m_working_set.resize(roots);
-    std::iota(begin(m_working_set), end(m_working_set), (int)0);
-  }
-
-  void set_options(const std::shared_ptr<Options>& options) override {
-    if (options->n_roots)
-      set_n_roots(options->n_roots.value());
-    if (options->convergence_threshold)
-      set_convergence_threshold(options->convergence_threshold.value());
-  }
-
-  std::shared_ptr<Options> get_options() const override {
-    auto options = std::make_shared<Options>();
-    options->n_roots = n_roots();
-    options->convergence_threshold = convergence_threshold();
-    return options;
-  }
-
-  const std::vector<scalar_type>& errors() const override { return m_errors; }
-
-  const Statistics& statistics() const override { return *m_stats; }
-
-  void report(std::ostream& cout) const override {
-    cout << "iteration " << m_stats->iterations;
-    if (not m_errors.empty()) {
-      auto it_max_error = std::max_element(m_errors.cbegin(), m_errors.cend());
-      if (n_roots() > 1)
-        cout << ", error[" << std::distance(m_errors.cbegin(), it_max_error) << "] = ";
-      else
-        cout << ", error = ";
-      cout << *it_max_error << std::endl;
-    }
-  }
-
-  void report() const override { report(molpro::cout); }
-
-  void set_convergence_threshold(double thresh) override { m_convergence_threshold = thresh; }
-  double convergence_threshold() const override { return m_convergence_threshold; }
-  //! Access dimensions of the subspace
-  const subspace::Dimensions& dimensions() const override { return m_xspace->dimensions(); }
+void set_convergence_threshold(double thresh) override { m_convergence_threshold = thresh; }
+double convergence_threshold() const override { return m_convergence_threshold; }
+//! Access dimensions of the subspace
+const subspace::Dimensions& dimensions() const override { return m_xspace->dimensions(); }
 
 protected:
-  IterativeSolverTemplate(std::shared_ptr<subspace::IXSpace<R, Q, P>> xspace,
-                          std::shared_ptr<subspace::ISubspaceSolver<R, Q, P>> solver,
-                          std::shared_ptr<ArrayHandlers<R, Q, P>> handlers, std::shared_ptr<Statistics> stats,
-                          std::shared_ptr<Logger> logger)
-      : m_handlers(std::move(handlers)), m_xspace(std::move(xspace)), m_subspace_solver(std::move(solver)),
-        m_stats(std::move(stats)), m_logger(std::move(logger)) {}
+IterativeSolverTemplate(std::shared_ptr<subspace::IXSpace<R, Q, P>> xspace,
+                        std::shared_ptr<subspace::ISubspaceSolver<R, Q, P>> solver,
+                        std::shared_ptr<ArrayHandlers<R, Q, P>> handlers, std::shared_ptr<Statistics> stats,
+                        std::shared_ptr<Logger> logger)
+    : m_handlers(std::move(handlers)), m_xspace(std::move(xspace)), m_subspace_solver(std::move(solver)),
+      m_stats(std::move(stats)), m_logger(std::move(logger)) {}
 
-  /*!
-   * @brief Solves the subspace problems and selects the working set of roots, returning their parameters and residual
-   * in parameters and action
-   * @param parameters container for storing parameters of the working set
-   * @param action container for storing the residual of the working set
-   * @param pparams projection of the working set on to the P space
-   * @param apply_p function that accumulates action from the P space projection of parameters
-   * @return size of the working set
-   */
-  size_t solve_and_generate_working_set(const VecRef<R>& parameters, const VecRef<R>& action,
-                                        std::vector<VectorP>& pparams, const fapply_on_p_type& apply_p) {
-    m_subspace_solver->solve(*m_xspace, n_roots());
-    auto nsol = m_subspace_solver->size();
-    std::vector<std::pair<Q, Q>> temp_solutions{};
-    for (const auto& batch : detail::parameter_batches(nsol, parameters.size())) {
-      auto [start_sol, end_sol] = batch;
-      auto roots = std::vector<int>(end_sol - start_sol);
-      std::iota(begin(roots), end(roots), start_sol);
-      detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                                 m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP,
-                                 m_xspace->dimensions().oQ, m_xspace->dimensions().oD, *m_handlers);
-      detail::construct_solution(action, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
-                                 m_xspace->actionsd(), m_xspace->dimensions().oP, m_xspace->dimensions().oQ,
-                                 m_xspace->dimensions().oD, *m_handlers);
-      auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP,
-                                                m_xspace->dimensions().nP);
-      detail::normalise(roots.size(), parameters, action, m_handlers->rr(), *m_logger);
-      if (apply_p) {
-        apply_p(pvectors, m_xspace->cparamsp(), action);
-      } else {
-        detail::remove_p_component(parameters, roots, m_subspace_solver->solutions(), m_xspace->cparamsp(),
-                                   m_xspace->dimensions().oP, m_handlers->rp());
-      }
-      detail::construct_residual(roots, m_subspace_solver->eigenvalues(), cwrap(parameters), action, m_handlers->rr());
-      auto errors = std::vector<scalar_type>(roots.size(), 0);
-      detail::update_errors(errors, cwrap(action), m_handlers->rr());
-      for (size_t i = 0; i < roots.size(); ++i)
-        temp_solutions.emplace_back(m_handlers->qr().copy(parameters[i]), m_handlers->qr().copy(action[i]));
-      m_subspace_solver->set_error(roots, errors);
+/*!
+ * @brief Solves the subspace problems and selects the working set of roots, returning their parameters and residual
+ * in parameters and action
+ * @param parameters container for storing parameters of the working set
+ * @param action container for storing the residual of the working set
+ * @param pparams projection of the working set on to the P space
+ * @param apply_p function that accumulates action from the P space projection of parameters
+ * @return size of the working set
+ */
+size_t solve_and_generate_working_set(const VecRef<R>& parameters, const VecRef<R>& action,
+                                      std::vector<VectorP>& pparams, const fapply_on_p_type& apply_p) {
+  m_subspace_solver->solve(*m_xspace, n_roots());
+  auto nsol = m_subspace_solver->size();
+  std::vector<std::pair<Q, Q>> temp_solutions{};
+  for (const auto& batch : detail::parameter_batches(nsol, parameters.size())) {
+    auto [start_sol, end_sol] = batch;
+    auto roots = std::vector<int>(end_sol - start_sol);
+    std::iota(begin(roots), end(roots), start_sol);
+    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
+                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP,
+                               m_xspace->dimensions().oQ, m_xspace->dimensions().oD, *m_handlers);
+    detail::construct_solution(action, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
+                               m_xspace->actionsd(), m_xspace->dimensions().oP, m_xspace->dimensions().oQ,
+                               m_xspace->dimensions().oD, *m_handlers);
+    auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP,
+                                              m_xspace->dimensions().nP);
+    detail::normalise(roots.size(), parameters, action, m_handlers->rr(), *m_logger);
+    if (apply_p) {
+      apply_p(pvectors, m_xspace->cparamsp(), action);
+    } else {
+      detail::remove_p_component(parameters, roots, m_subspace_solver->solutions(), m_xspace->cparamsp(),
+                                 m_xspace->dimensions().oP, m_handlers->rp());
     }
-    m_errors = m_subspace_solver->errors();
-    m_working_set = detail::select_working_set(parameters.size(), m_errors, m_convergence_threshold);
-    for (size_t i = 0; i < m_working_set.size(); ++i) {
-      auto root = m_working_set[i];
-      m_handlers->rq().copy(parameters[i], temp_solutions.at(root).first);
-      m_handlers->rq().copy(action[i], temp_solutions.at(root).second);
-    }
-    pparams = detail::construct_vectorP(m_working_set, m_subspace_solver->solutions(), m_xspace->dimensions().oP,
-                                        m_xspace->dimensions().nP);
-    m_logger->msg("add_vector::errors = ", begin(m_errors), end(m_errors), Logger::Trace, 6);
-    return m_working_set.size();
+    detail::construct_residual(roots, m_subspace_solver->eigenvalues(), cwrap(parameters), action, m_handlers->rr());
+    auto errors = std::vector<scalar_type>(roots.size(), 0);
+    detail::update_errors(errors, cwrap(action), m_handlers->rr());
+    for (size_t i = 0; i < roots.size(); ++i)
+      temp_solutions.emplace_back(m_handlers->qr().copy(parameters[i]), m_handlers->qr().copy(action[i]));
+    m_subspace_solver->set_error(roots, errors);
   }
+  m_errors = m_subspace_solver->errors();
+  m_working_set = detail::select_working_set(parameters.size(), m_errors, m_convergence_threshold);
+  for (size_t i = 0; i < m_working_set.size(); ++i) {
+    auto root = m_working_set[i];
+    m_handlers->rq().copy(parameters[i], temp_solutions.at(root).first);
+    m_handlers->rq().copy(action[i], temp_solutions.at(root).second);
+  }
+  pparams = detail::construct_vectorP(m_working_set, m_subspace_solver->solutions(), m_xspace->dimensions().oP,
+                                      m_xspace->dimensions().nP);
+  m_logger->msg("add_vector::errors = ", begin(m_errors), end(m_errors), Logger::Trace, 6);
+  return m_working_set.size();
+}
 
-  std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;                    //!< Array handlers
-  std::shared_ptr<subspace::IXSpace<R, Q, P>> m_xspace;                  //!< manages the subspace and associated data
-  std::shared_ptr<subspace::ISubspaceSolver<R, Q, P>> m_subspace_solver; //!< solves the subspace problem
-  std::vector<double> m_errors;                                          //!< errors from the most recent solution
-  std::vector<int> m_working_set;                                        //!< indices of roots in the working set
-  size_t m_nroots{0};                      //!< number of roots the solver is searching for
-  double m_convergence_threshold{1.0e-10}; //!< errors less than this mark a converged solution
-  std::shared_ptr<Statistics> m_stats;     //!< accumulates statistics of operations performed by the solver
-  std::shared_ptr<Logger> m_logger;        //!< logger
+std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;                    //!< Array handlers
+std::shared_ptr<subspace::IXSpace<R, Q, P>> m_xspace;                  //!< manages the subspace and associated data
+std::shared_ptr<subspace::ISubspaceSolver<R, Q, P>> m_subspace_solver; //!< solves the subspace problem
+std::vector<double> m_errors;                                          //!< errors from the most recent solution
+std::vector<int> m_working_set;                                        //!< indices of roots in the working set
+size_t m_nroots{0};                                                    //!< number of roots the solver is searching for
+double m_convergence_threshold{1.0e-10}; //!< errors less than this mark a converged solution
+std::shared_ptr<Statistics> m_stats;     //!< accumulates statistics of operations performed by the solver
+std::shared_ptr<Logger> m_logger;        //!< logger
 };
 
 } // namespace molpro::linalg::itsolv

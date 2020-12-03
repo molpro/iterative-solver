@@ -32,6 +32,13 @@ public:
                                            //!< for the corresponding P space parameter
   //! Function type for applying matrix to the P space vectors and accumulating result in a residual
   using fapply_on_p_type = std::function<void(const std::vector<VectorP>&, const CVecRef<P>&, const VecRef<R>&)>;
+  //! Function type for applying matrix to, or evaluating residual of, some R space vectors and accumulating result in a
+  //! residual, possibly with return of a function value
+  using fapply_on_r_type = std::function<scalar_type(const CVecRef<R>&, const VecRef<R>&)>;
+  //! Function type for applying preconditioner to some R space vectors
+  //! The second parameter may be used as a scratch vector
+  //! The third parameter contains the corresponding eigenvalues in the case of linear eigensystem
+  using fprecondition_type = std::function<void(const VecRef<R>&, const VecRef<R>&, const std::vector<scalar_type>&)>;
 
   virtual ~IterativeSolver() = default;
   IterativeSolver() = default;
@@ -39,6 +46,43 @@ public:
   IterativeSolver<R, Q, P>& operator=(const IterativeSolver<R, Q, P>&) = delete;
   IterativeSolver(IterativeSolver<R, Q, P>&&) noexcept = default;
   IterativeSolver<R, Q, P>& operator=(IterativeSolver<R, Q, P>&&) noexcept = default;
+
+  /*!
+   * @brief Simplified one-call solver
+   * @param parameters A set of scratch vectors. On entry, these vectors should be filled with starting guesses.
+   * Where possible, the number of vectors should be equal to the number of solutions sought, but a smaller array is
+   * permitted.
+   * @param actions A set of scratch vectors. It should have the same size as parameters.
+   * @param apply_r Function that (linear) applies the kernel matrix to a vector, or (non-linear) evaluates the residual
+   * and, where appropriate, function value.
+   * @param precondition Function that applies a preconditioner to a residual, resulting in a predicted step towards
+   * solution. If omitted, the first element of actions will be taken to be the diagonal elements of the kernel
+   * matrix, and an appropriate preconditioner function will be generated.
+   * @return true if the solution was found
+   */
+  virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
+                     const fprecondition_type& precondition = fprecondition_type{}) = 0;
+  /*!
+   * @brief Simplified one-call solver with fixed P space
+   * @param parameters A set of scratch vectors. On entry, these vectors should be filled with starting guesses.
+   * Where possible, the number of vectors should be equal to the number of solutions sought, but a smaller array is
+   * permitted.
+   * @param actions A set of scratch vectors. It should have the same size as parameters.
+   * @param apply_r Function that (linear) applies the kernel matrix to a vector, or (non-linear) evaluates the residual
+   * and, where appropriate, function value.
+   * @param pparams the vectors to add. Each Pvector specifies a sparse vector in the underlying space
+   * @param pp_action_matrix Matrix projected onto the existing+new, new P space. It should be provided as a
+   * 1-dimensional array, with the existing+new index running fastest.
+   * @param apply_p A function that evaluates the action of the matrix on vectors in the P space
+   * @param precondition Function that applies a preconditioner to a residual, resulting in a predicted step towards
+   * solution. If omitted, the first element of actions will be taken to be the diagonal elements of the kernel
+   * matrix, and an appropriate preconditioner function will be generated.
+   * @return true if the solution was found
+   */
+  virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
+                     const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
+                     const fapply_on_p_type& apply_p,
+                     const fprecondition_type& precondition = fprecondition_type{}) = 0;
 
   //  virtual size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& action, fapply_on_p_type& apply_p) = 0;
   //  virtual size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& action, std::vector<VectorP>& pparams) =
@@ -68,7 +112,6 @@ public:
    * \param parameters Used as scratch working space
    * \param action  On exit, the  residual of the interpolated solution.
    * The contribution from the new, and any existing, P parameters is missing, and should be added in subsequently.
-   * \param parametersP On exit, the interpolated solution projected onto the P space.
    * \param apply_p A function that evaluates the action of the matrix on vectors in the P space
    * \return The number of vectors contained in parameters, action, parametersP
    */
