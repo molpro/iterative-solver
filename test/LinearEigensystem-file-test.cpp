@@ -27,7 +27,7 @@ struct LinearEigensystemF : ::testing::Test {
   using vectorP = std::vector<scalar>;
 
   size_t n = 0;
-  size_t verbosity = 0;
+  size_t verbosity = 1;
   MatrixXdc hmat;
 
   void load_matrix(int dimension, const std::string& type = "", double param = 1, bool hermitian = true) {
@@ -219,14 +219,15 @@ struct LinearEigensystemF : ::testing::Test {
           }
           return 0;
         };
+//        for (size_t k = 0; k < psg.size() && k < shift.size(); k++)
+//          for (size_t i = 0; i < n; i++) {
+//            psg[k][i] = -psg[k][i] / (1e-12 - shift[k] + hmat(i, i));
         auto precondition_wrapper = [this](auto& g, const auto& scratch, const std::vector<double>& eigenvalues) {
           //          return update(unwrap(g), eigenvalues);
-          size_t k = 0;
-          for (auto& g1 : g) {
-            auto gg = g1.get();
+          for (size_t k = 0; k < eigenvalues.size(); k++) {
+            auto gg = g[k].get();
             for (size_t i = 0; i < n; i++)
-              gg[i] = gg[i] / (1e-12 - eigenvalues[k] + hmat(i, i));
-            k++;
+              gg[i] = -gg[i] / (1e-12 - eigenvalues[k] + hmat(i, i));
           }
         };
 
@@ -307,7 +308,8 @@ struct LinearEigensystemF : ::testing::Test {
 };
 
 TEST_F(LinearEigensystemF, file_eigen) {
-  for (const auto& file : std::vector<std::string>{"phenol", "bh", "hf"}) {
+//  for (const auto& file : std::vector<std::string>{"phenol", "bh", "hf"}) {
+  for (const auto& file : std::vector<std::string>{ "bh", "hf"}) {
     load_matrix(file, file == "phenol" ? 0 : 1e-8);
     test_eigen(file, true);
     test_eigen(file, false);
