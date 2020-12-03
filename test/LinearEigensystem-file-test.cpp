@@ -186,7 +186,7 @@ struct LinearEigensystemF : ::testing::Test {
     return options;
   }
 
-  void test_eigen(const std::string& title = "") {
+  void test_eigen(const std::string& title = "", bool simple = true) {
     auto d = (hmat - hmat.transpose()).norm();
     bool hermitian = d < 1e-10;
     auto [expected_eigensolutions, expected_eigenvalues] = solve_full_problem(hermitian);
@@ -196,7 +196,8 @@ struct LinearEigensystemF : ::testing::Test {
     for (int nroot = 1; nroot <= n && nroot <= 28; nroot += std::max(size_t{1}, n / 100)) {
       for (auto np = 0; np <= n && np <= 100 && (hermitian or np == 0); np += std::max(nroot, int(n) / 10)) {
         molpro::cout << "\n\n*** " << title << ", " << nroot << " roots, problem dimension " << n
-                     << ", pspace dimension " << np << std::endl;
+                     << ", pspace dimension " << np << ", " << (simple ? "simple" : "full") << " interface"
+                     << std::endl;
 
         auto [solver, logger] = molpro::test::create_LinearEigensystem();
         auto options = set_options(solver, logger, nroot, np, hermitian);
@@ -208,28 +209,53 @@ struct LinearEigensystemF : ::testing::Test {
         auto apply_p_wrapper = [this](const auto& pvectors, const auto& pspace, const auto& action) {
           return this->apply_p(pvectors, pspace, action);
         };
+        auto apply_r_wrapper = [this](const auto& psx, const auto& outputs) -> double {
+          //        return action(c, g);
+          for (size_t k = 0; k < psx.size(); k++) {
+            auto x = Eigen::Map<const Eigen::VectorXd>(psx.at(k).get().data(), psx.at(k).get().size());
+            auto r = Eigen::Map<Eigen::VectorXd>(outputs.at(k).get().data(), psx.at(k).get().size());
+            r.fill(0);
+            r += hmat * x;
+          }
+          return 0;
+        };
+        auto precondition_wrapper = [this](auto& g, const auto& scratch, const std::vector<double>& eigenvalues) {
+          //          return update(unwrap(g), eigenvalues);
+          size_t k = 0;
+          for (auto& g1 : g) {
+            auto gg = g1.get();
+            for (size_t i = 0; i < n; i++)
+              gg[i] = gg[i] / (1e-12 - eigenvalues[k] + hmat(i, i));
+            k++;
+          }
+        };
 
         size_t n_iter = 1;
-        for (auto iter = 0; iter < 100; iter++, ++n_iter) {
-          if (iter == 0 && np > 0) {
-            nwork = solver->add_p(cwrap(pspace), Span<double>(PP.data(), PP.size()), wrap(x),
-                                  molpro::linalg::itsolv::wrap(g), apply_p_wrapper);
-          } else {
-            action(x, g);
-            nwork = solver->add_vector(x, g, apply_p_wrapper);
+        if (simple) {
+          solver->solve(wrap(x), wrap(g), apply_r_wrapper, precondition_wrapper);
+        } else {
+
+          for (auto iter = 0; iter < 100; iter++, ++n_iter) {
+            if (iter == 0 && np > 0) {
+              nwork = solver->add_p(cwrap(pspace), Span<double>(PP.data(), PP.size()), wrap(x),
+                                    molpro::linalg::itsolv::wrap(g), apply_p_wrapper);
+            } else {
+              action(x, g);
+              nwork = solver->add_vector(x, g, apply_p_wrapper);
+              if (verbosity > 0)
+                std::cout << "solver.add_vector returns nwork=" << nwork << std::endl;
+            }
+            if (nwork == 0)
+              break;
+            update(g, solver->working_set_eigenvalues());
             if (verbosity > 0)
-              std::cout << "solver.add_vector returns nwork=" << nwork << std::endl;
+              solver->report();
+            nwork = solver->end_iteration(x, g);
+            if (verbosity > 0)
+              std::cout << "solver.end_iteration returns nwork=" << nwork << std::endl;
+            if (nwork == 0)
+              break;
           }
-          if (nwork == 0)
-            break;
-          update(g, solver->working_set_eigenvalues());
-          if (verbosity > 0)
-            solver->report();
-          nwork = solver->end_iteration(x, g);
-          if (verbosity > 0)
-            std::cout << "solver.end_iteration returns nwork=" << nwork << std::endl;
-          if (nwork == 0)
-            break;
         }
         std::cout << "Error={ ";
         for (const auto& e : solver->errors())
@@ -248,10 +274,12 @@ struct LinearEigensystemF : ::testing::Test {
                     ::testing::Pointwise(::testing::DoubleNear(2e-9),
                                          std::vector<double>(expected_eigenvalues.data(),
                                                              expected_eigenvalues.data() + solver->n_roots())));
-        const auto nR_creations = solver->statistics().r_creations;
-        if (verbosity > 0)
-          std::cout << "R creations = " << nR_creations << std::endl;
-        EXPECT_LE(nR_creations, (nroot + 1) * n_iter);
+        if (not simple) {
+          const auto nR_creations = solver->statistics().r_creations;
+          if (verbosity > 0)
+            std::cout << "R creations = " << nR_creations << std::endl;
+          EXPECT_LE(nR_creations, (nroot + 1) * n_iter);
+        }
         std::vector<std::vector<double>> parameters, residuals;
         std::vector<int> roots;
         for (int root = 0; root < solver->n_roots(); root++) {
@@ -281,7 +309,8 @@ struct LinearEigensystemF : ::testing::Test {
 TEST_F(LinearEigensystemF, file_eigen) {
   for (const auto& file : std::vector<std::string>{"phenol", "bh", "hf"}) {
     load_matrix(file, file == "phenol" ? 0 : 1e-8);
-    test_eigen(file);
+    test_eigen(file, true);
+    test_eigen(file, false);
   }
 }
 
