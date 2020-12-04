@@ -36,9 +36,10 @@ public:
   //! residual, possibly with return of a function value
   using fapply_on_r_type = std::function<scalar_type(const CVecRef<R>&, const VecRef<R>&)>;
   //! Function type for applying preconditioner to some R space vectors
-  //! The second parameter may be used as a scratch vector
-  //! The third parameter contains the corresponding eigenvalues in the case of linear eigensystem
-  using fprecondition_type = std::function<void(const VecRef<R>&, const VecRef<R>&, const std::vector<scalar_type>&)>;
+  //! The second parameter on entry contains the parameter values, and may be used as a scratch vector
+  //! The third parameter is the calling solver instance.
+//  using fprecondition_type = std::function<void(const VecRef<R>& residuals, const VecRef<R>& parameters, const IterativeSolver& solver)>;
+  using fprecondition_type = std::function<void(const VecRef<R>& residuals, const VecRef<R>& parameters, const std::vector<scalar_type>& eigenvalues)>;
 
   virtual ~IterativeSolver() = default;
   IterativeSolver() = default;
