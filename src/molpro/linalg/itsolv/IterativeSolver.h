@@ -39,8 +39,7 @@ public:
   //! Function type for applying preconditioner to some R space vectors
   //! The second parameter on entry contains the parameter values, and may be used as a scratch vector
   //! The third parameter is the calling solver instance.
-//  using fprecondition_type = std::function<void(const VecRef<R>& residuals, const VecRef<R>& parameters, const IterativeSolver& solver)>;
-  using fprecondition_type = std::function<void(const VecRef<R>& residuals, const VecRef<R>& parameters, const std::vector<scalar_type>& eigenvalues)>;
+  using fprecondition_type = std::function<void(const VecRef<R>& residuals, const VecRef<R>& parameters)>;
 
   virtual ~IterativeSolver() = default;
   IterativeSolver() = default;

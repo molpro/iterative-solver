@@ -147,13 +147,13 @@ public:
       //    } else
       {
         apply_r(cwrap(parameters), actions);
-        nwork = this->add_vector(parameters, actions, apply_p);
+        nwork = this->add_vector(parameters, actions);
         if (verbosity > 0)
           std::cout << "solver.add_vector returns nwork=" << nwork << std::endl;
       }
       if (nwork == 0)
         break;
-      precondition(actions, parameters, this->working_set_eigenvalues());
+      precondition(actions, parameters);
       if (verbosity > 0)
         report();
       nwork = this->end_iteration(parameters, actions);
