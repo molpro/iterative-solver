@@ -127,14 +127,6 @@ public:
 public:
   bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
              const fprecondition_type& precondition = fprecondition_type{}) override {
-    CVecRef<P> pparams;
-    array::Span<value_type> pp_action_matrix;
-    return solve(parameters, actions, apply_r, pparams, pp_action_matrix, fapply_on_p_type{}, precondition);
-  }
-
-  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
-             const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
-             const fapply_on_p_type& apply_p, const fprecondition_type& precondition = fprecondition_type{}) override {
     // TODO implement diagonal-element preconditioner
     auto maxit = 100;  // TODO parameterise
     int verbosity = 1; // TODO parameterise

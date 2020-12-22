@@ -63,31 +63,7 @@ public:
    */
   virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
                      const fprecondition_type& precondition = fprecondition_type{}) = 0;
-  /*!
-   * @brief Simplified one-call solver with fixed P space
-   * @param parameters A set of scratch vectors. On entry, these vectors should be filled with starting guesses.
-   * Where possible, the number of vectors should be equal to the number of solutions sought, but a smaller array is
-   * permitted.
-   * @param actions A set of scratch vectors. It should have the same size as parameters.
-   * @param apply_r Function that (linear) applies the kernel matrix to a vector, or (non-linear) evaluates the residual
-   * and, where appropriate, function value.
-   * @param pparams the vectors to add. Each Pvector specifies a sparse vector in the underlying space
-   * @param pp_action_matrix Matrix projected onto the existing+new, new P space. It should be provided as a
-   * 1-dimensional array, with the existing+new index running fastest.
-   * @param apply_p A function that evaluates the action of the matrix on vectors in the P space
-   * @param precondition Function that applies a preconditioner to a residual, resulting in a predicted step towards
-   * solution. If omitted, the first element of actions will be taken to be the diagonal elements of the kernel
-   * matrix, and an appropriate preconditioner function will be generated.
-   * @return true if the solution was found
-   */
-  virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
-                     const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
-                     const fapply_on_p_type& apply_p,
-                     const fprecondition_type& precondition = fprecondition_type{}) = 0;
 
-  //  virtual size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& action, fapply_on_p_type& apply_p) = 0;
-  //  virtual size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& action, std::vector<VectorP>& pparams) =
-  //  0;
   /*!
    * \brief Take, typically, a current solution and residual, and add it to the solution space.
    * \param parameters On input, the current solution or expansion vector. On exit, undefined.
