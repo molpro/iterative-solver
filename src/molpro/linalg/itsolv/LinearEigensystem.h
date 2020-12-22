@@ -37,6 +37,7 @@ public:
                        handlers, std::make_shared<Statistics>(), logger_),
         logger(logger_) {
     set_hermiticity(m_hermiticity);
+    this->m_normalise_solution = false;
   }
 
   /*!
@@ -57,14 +58,15 @@ public:
    */
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
     if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
+      m_resetting_in_progress = true;
       this->m_working_set = m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
                                                   propose_rspace_norm_thresh, propose_rspace_svd_thresh,
                                                   *this->m_handlers, *this->m_logger);
     } else {
-      this->m_working_set =
-          detail::propose_rspace(*static_cast<ILinearEigensystem<R, Q, P>*>(this), parameters, action, *this->m_xspace,
-                                 *this->m_subspace_solver, *this->m_handlers, *this->m_logger,
-                                 propose_rspace_svd_thresh, propose_rspace_norm_thresh, m_max_size_qspace);
+      m_resetting_in_progress = false;
+      this->m_working_set = detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
+                                                   *this->m_handlers, *this->m_logger, propose_rspace_svd_thresh,
+                                                   propose_rspace_norm_thresh, m_max_size_qspace);
     }
     this->m_stats->iterations++;
     return this->working_set().size();
@@ -84,6 +86,15 @@ public:
       eval.emplace_back(this->m_subspace_solver->eigenvalues().at(i));
     }
     return eval;
+  }
+
+  void set_value_errors() override {
+    auto current_values = this->m_subspace_solver->eigenvalues();
+    this->m_value_errors.assign(current_values.size(), std::numeric_limits<scalar_type>::max());
+    for (size_t i = 0; i < std::min(m_last_values.size(), current_values.size()); i++)
+      this->m_value_errors[i] = std::abs(current_values[i] - m_last_values[i]);
+    if (!m_resetting_in_progress)
+      m_last_values = current_values;
   }
 
   void report(std::ostream& cout) const override {
@@ -118,25 +129,23 @@ public:
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
     subspace_solver->set_hermiticity(hermitian);
   }
-  bool get_hermiticity()const override { return m_hermiticity; }
+  bool get_hermiticity() const override { return m_hermiticity; }
 
-  void set_options(const std::shared_ptr<Options>& options) override {
+  void set_options(const Options& options) override {
     SolverTemplate::set_options(options);
     auto opt = CastOptions::LinearEigensystem(options);
-    if (opt) {
-      if (opt->reset_D)
-        set_reset_D(opt->reset_D.value());
-      if (opt->reset_D_max_Q_size)
-        set_reset_D_maxQ_size(opt->reset_D_max_Q_size.value());
-      if (opt->max_size_qspace)
-        set_max_size_qspace(opt->max_size_qspace.value());
-      if (opt->norm_thresh)
-        propose_rspace_norm_thresh = opt->norm_thresh.value();
-      if (opt->svd_thresh)
-        propose_rspace_svd_thresh = opt->svd_thresh.value();
-      if (opt->hermiticity)
-        set_hermiticity(opt->hermiticity.value());
-    }
+    if (opt.reset_D)
+      set_reset_D(opt.reset_D.value());
+    if (opt.reset_D_max_Q_size)
+      set_reset_D_maxQ_size(opt.reset_D_max_Q_size.value());
+    if (opt.max_size_qspace)
+      set_max_size_qspace(opt.max_size_qspace.value());
+    if (opt.norm_thresh)
+      propose_rspace_norm_thresh = opt.norm_thresh.value();
+    if (opt.svd_thresh)
+      propose_rspace_svd_thresh = opt.svd_thresh.value();
+    if (opt.hermiticity)
+      set_hermiticity(opt.hermiticity.value());
   }
 
   std::shared_ptr<Options> get_options() const override {
@@ -153,13 +162,22 @@ public:
 
   std::shared_ptr<Logger> logger;
   double propose_rspace_norm_thresh = 1e-10; //!< vectors with norm less than threshold can be considered null.
-  double propose_rspace_svd_thresh = 1e-4;   //!< the smallest singular value in the subspace that can be allowed when
+  double propose_rspace_svd_thresh = 1e-12;  //!< the smallest singular value in the subspace that can be allowed when
                                              //!< constructing the working set. Smaller singular values will lead to
                                              //!< deletion of parameters from the Q space
 protected:
+  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
+    assert(params.size() >= roots.size());
+    const auto& eigvals = eigenvalues();
+    for (size_t i = 0; i < roots.size(); ++i)
+      this->m_handlers->rr().axpy(-eigvals.at(roots[i]), params.at(i), actions.at(i));
+  }
+
   int m_max_size_qspace = std::numeric_limits<int>::max(); //!< maximum size of Q space
   detail::DSpaceResetter<Q> m_dspace_resetter;             //!< resets D space
-  bool m_hermiticity = true;                               //!< whether the problem is hermitian or not
+  bool m_hermiticity = false;                              //!< whether the problem is hermitian or not
+  std::vector<double> m_last_values;                       //!< The values from the previous iteration
+  bool m_resetting_in_progress = false;                    //!< whether D space resetting is in progress
 };
 
 } // namespace molpro::linalg::itsolv

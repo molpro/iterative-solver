@@ -54,7 +54,7 @@ std::stack<Instance> instances;
 } // namespace
 
 extern "C" void IterativeSolverLinearEigensystemInitialize(size_t n, size_t nroot, size_t range_begin, size_t range_end,
-                                                           double thresh, int hermitian, int verbosity,
+                                                           double thresh, double thresh_value, int hermitian, int verbosity,
                                                            const char* fname, int64_t fcomm, int lmppx) {
   std::shared_ptr<Profiler> profiler = nullptr;
   std::string pname(fname);
@@ -91,6 +91,7 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t n, size_t nroo
   if (solver_cast) {
     solver_cast->set_hermiticity(hermitian);
     solver_cast->set_convergence_threshold(thresh);
+    solver_cast->set_convergence_threshold_value(thresh_value);
 //    solver_cast->propose_rspace_norm_thresh = 1.0e-14;
 //    solver_cast->set_max_size_qspace(10);
 //    solver_cast->set_reset_D(50);
@@ -108,7 +109,7 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t n, size_t nroo
 }
 
 extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot, size_t range_begin, size_t range_end,
-                                                         const double* rhs, double aughes, double thresh, int hermitian,
+                                                         const double* rhs, double aughes, double thresh, double thresh_value, int hermitian,
                                                          int verbosity, const char* fname, int64_t fcomm, int lmppx) {
   /*
     std::shared_ptr<Profiler> profiler = nullptr;
@@ -188,7 +189,7 @@ extern "C" void IterativeSolverDIISInitialize(size_t n, size_t range_begin, size
     */
 }
 
-extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t range_begin, size_t range_end, double thresh,
+extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t range_begin, size_t range_end, double thresh, double thresh_value,
                                                   int verbosity, char* algorithm, int minimize, const char* fname,
                                                   int64_t fcomm, int lmppx) {
   /*
@@ -316,60 +317,8 @@ extern "C" size_t IterativeSolverAddVector(double* parameters, double* action, i
   }
   if (instance.prof != nullptr)
     instance.prof->stop("AddVector:Sync");
-  if (mpi_rank == 0)
-    instance.solver->report();
-  if (instance.prof != nullptr)
-    instance.prof->stop("AddVector");
-  return working_set_size;
-}
-
-extern "C" size_t IterativeSolverPspaceAddVector(double* parameters, double* action, int sync, int lmppx,
-                                                 void (*func)(const double*, double*, const size_t, const size_t*)) {
-  std::vector<Rvector> cc, gg;
-  auto& instance = instances.top();
-  instance.apply_on_p_fort = func;
-  if (instance.prof != nullptr)
-    instance.prof->start("AddVector");
-  cc.reserve(instance.solver->n_roots()); // TODO: should that be size of working set instead?
-  gg.reserve(instance.solver->n_roots());
-  MPI_Comm ccomm = (lmppx != 0) ? MPI_COMM_SELF : instance.comm;
-  int mpi_rank;
-  MPI_Comm_rank(ccomm, &mpi_rank);
-  for (size_t root = 0; root < instance.solver->n_roots(); root++) {
-    cc.emplace_back(instance.dimension, ccomm);
-    auto ccrange = cc.back().distribution().range(mpi_rank);
-    auto ccn = ccrange.second - ccrange.first;
-    cc.back().allocate_buffer(
-        Span<typename Rvector::value_type>(&parameters[root * instance.dimension + ccrange.first], ccn));
-    gg.emplace_back(instance.dimension, ccomm);
-    auto ggrange = gg.back().distribution().range(mpi_rank);
-    auto ggn = ggrange.second - ggrange.first;
-    gg.back().allocate_buffer(
-        Span<typename Rvector::value_type>(&action[root * instance.dimension + ggrange.first], ggn));
-  }
-  using vectorP = std::vector<double>;
-  using molpro::linalg::itsolv::CVecRef;
-  using molpro::linalg::itsolv::VecRef;
-  std::function<void(const std::vector<vectorP>&, const CVecRef<Pvector>&, const VecRef<Rvector>&)> apply_on_p =
-      apply_on_p_c;
-  if (instance.prof != nullptr)
-    instance.prof->start("AddVector:Update");
-  size_t working_set_size = instance.solver->add_vector(cc, gg, apply_on_p_c);
-  if (instance.prof != nullptr)
-    instance.prof->stop("AddVector:Update");
-
-  if (instance.prof != nullptr)
-    instance.prof->start("AddVector:Sync");
-  for (size_t root = 0; root < instance.solver->n_roots(); root++) {
-    if (sync) {
-      gather_all(cc[root].distribution(), ccomm, &parameters[root * instance.dimension]);
-      gather_all(gg[root].distribution(), ccomm, &action[root * instance.dimension]);
-    }
-  }
-  if (instance.prof != nullptr)
-    instance.prof->stop("AddVector:Sync");
-  if (mpi_rank == 0)
-    instance.solver->report();
+  //if (mpi_rank == 0)
+  //  instance.solver->report();
   if (instance.prof != nullptr)
     instance.prof->stop("AddVector");
   return working_set_size;
@@ -398,7 +347,10 @@ extern "C" void IterativeSolverSolution(int nroot, int* roots, double* parameter
     gg.back().allocate_buffer(
         Span<typename Rvector::value_type>(&action[root * instance.dimension + ggrange.first], ggn));
   }
-  const std::vector<int> croots(roots, roots + nroot);
+  std::vector<int> croots;
+  for (int i = 0; i < nroot; i++){
+    croots.push_back(*(roots+i));
+  }
   if (instance.prof != nullptr)
     instance.prof->start("Solution:Call");
   instance.solver->solution(croots, cc, gg);
@@ -415,8 +367,8 @@ extern "C" void IterativeSolverSolution(int nroot, int* roots, double* parameter
   }
   if (instance.prof != nullptr)
     instance.prof->stop("Solution:Sync");
-  if (mpi_rank == 0)
-    instance.solver->report();
+  //if (mpi_rank == 0)
+  //  instance.solver->report();
   if (instance.prof != nullptr)
     instance.prof->stop("Solution");
 }

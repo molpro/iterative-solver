@@ -28,6 +28,7 @@ class IterativeSolver {
 public:
   using value_type = typename R::value_type;                          ///< The underlying type of elements of vectors
   using scalar_type = typename array::ArrayHandler<R, Q>::value_type; ///< The type of scalar products of vectors
+  using value_type_abs = typename array::ArrayHandler<R, R>::value_type_abs;
   using VectorP = std::vector<value_type>; //!< type for vectors projected on to P space, each element is a coefficient
                                            //!< for the corresponding P space parameter
   //! Function type for applying matrix to the P space vectors and accumulating result in a residual
@@ -96,17 +97,15 @@ public:
    * \param apply_p A function that evaluates the action of the matrix on vectors in the P space
    * \return The size of the new working set.
    */
-  virtual size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& actions,
-                            const fapply_on_p_type& apply_p = fapply_on_p_type{}) = 0;
+  virtual size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) = 0;
 
   // FIXME this should be removed in favour of VecRef interface
-  //  virtual size_t add_vector(std::vector<R>& parameters, std::vector<R>& action, fapply_on_p_type& apply_p) = 0;
-  virtual size_t add_vector(std::vector<R>& parameters, std::vector<R>& action,
-                            const fapply_on_p_type& apply_p = fapply_on_p_type{}) = 0;
+  virtual size_t add_vector(std::vector<R>& parameters, std::vector<R>& action) = 0;
   virtual size_t add_vector(R& parameters, R& action) = 0;
 
   /*!
    * \brief Add P-space vectors to the expansion set for linear methods.
+   * \note the apply_p function is stored and used by the solver internally.
    * \param Pparams the vectors to add. Each Pvector specifies a sparse vector in the underlying space
    * \param pp_action_matrix Matrix projected onto the existing+new, new P space. It should be provided as a
    * 1-dimensional array, with the existing+new index running fastest.
@@ -117,7 +116,7 @@ public:
    * \return The number of vectors contained in parameters, action, parametersP
    */
   virtual size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
-                       const VecRef<R>& parameters, const VecRef<R>& action, const fapply_on_p_type& apply_p) = 0;
+                       const VecRef<R>& parameters, const VecRef<R>& action, fapply_on_p_type apply_p) = 0;
 
   // FIXME Is this needed?
   virtual void clearP() = 0;
@@ -166,10 +165,14 @@ public:
   virtual void set_convergence_threshold(double thresh) = 0;
   //! Reports the convergence threshold
   virtual double convergence_threshold() const = 0;
+  //! Sets the value convergence threshold
+  virtual void set_convergence_threshold_value(double thresh) = 0;
+  //! Reports the value convergence threshold
+  virtual double convergence_threshold_value() const = 0;
   virtual const subspace::Dimensions& dimensions() const = 0;
   // FIXME Missing parameters: SVD threshold
   //! Set all spcecified options. This is no different than using setters, but can be used with forward declaration.
-  virtual void set_options(const std::shared_ptr<Options>& options) = 0;
+  virtual void set_options(const Options& options) = 0;
   //! Return all options. This is no different than using getters, but can be used with forward declaration.
   virtual std::shared_ptr<Options> get_options() const = 0;
 };
@@ -195,11 +198,9 @@ template <class R, class Q, class P>
 class ILinearEquations : public IterativeSolver<R, Q, P> {
 public:
   using typename IterativeSolver<R, Q, P>::scalar_type;
-  //! eigenvalues of augmented Hessian method, if it was used
-  virtual std::vector<scalar_type> eigenvalues() const = 0;
-  void add_equations(const std::vector<R>& rhs) = 0;
-  void add_equations(const R& rhs) = 0;
-  virtual const std::vector<Q>& rhs() const = 0;
+  virtual void add_equations(const CVecRef<R>& rhs) = 0;
+  virtual void add_equations(const R& rhs) = 0;
+  virtual CVecRef<Q> rhs() const = 0;
   //! Sets hermiticity of kernel
   virtual void set_hermiticity(bool hermitian) = 0;
   //! Gets hermiticity of kernel, if true than it is hermitian, otherwise it is not
