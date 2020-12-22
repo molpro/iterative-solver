@@ -53,10 +53,12 @@ struct LinearEigensystemF : ::testing::Test {
       hmat(i, i) += degeneracy_split * i;
   }
 
-  void action(const std::vector<Rvector>& psx, std::vector<Rvector>& outputs) {
+  void action(const std::vector<Rvector>& psx, std::vector<Rvector>& outputs) { action(wrap(psx), wrap(outputs)); }
+
+  void action(const CVecRef<Rvector>& psx, const VecRef<Rvector>& outputs) {
     for (size_t k = 0; k < psx.size(); k++) {
-      auto x = Eigen::Map<const Eigen::VectorXd>(psx.at(k).data(), psx.at(k).size());
-      auto r = Eigen::Map<Eigen::VectorXd>(outputs.at(k).data(), psx.at(k).size());
+      auto x = Eigen::Map<const Eigen::VectorXd>(psx.at(k).get().data(), psx.at(k).get().size());
+      auto r = Eigen::Map<Eigen::VectorXd>(outputs.at(k).get().data(), psx.at(k).get().size());
       r.fill(0);
       r += hmat * x;
     }
@@ -74,11 +76,17 @@ struct LinearEigensystemF : ::testing::Test {
     }
   }
 
-  void update(std::vector<Rvector>& psg, std::vector<scalar> shift = std::vector<scalar>()) {
-    for (size_t k = 0; k < psg.size() && k < shift.size(); k++)
+  void update(std::vector<Rvector>& psg, const std::vector<scalar>& shift = std::vector<scalar>()) {
+    update(wrap(psg), shift);
+  }
+
+  void update(const VecRef<Rvector>& psg, const std::vector<scalar>& shift = std::vector<scalar>()) {
+    for (size_t k = 0; k < psg.size() && k < shift.size(); k++) {
+      auto& g = psg[k].get();
       for (size_t i = 0; i < n; i++) {
-        psg[k][i] = -psg[k][i] / (1e-12 - shift[k] + hmat(i, i));
+        g[i] *= -1. / (1e-12 - shift[k] + hmat(i, i));
       }
+    }
   }
 
   std::tuple<std::map<double, std::vector<double>>, std::vector<double>> solve_full_problem(bool hermitian) {
@@ -221,7 +229,7 @@ struct LinearEigensystemF : ::testing::Test {
     return std::make_tuple(x, g);
   };
 
-  void test_eigen(const std::string& title = "", const int n_working_vectors_max = 0) {
+  void test_eigen(const std::string& title = "", const int n_working_vectors_max = 0, const bool simple = false) {
     bool hermitian = check_mat_hermiticity();
     auto [expected_eigensolutions, expected_eigenvalues] = solve_full_problem(hermitian);
     check_eigenvectors_map(expected_eigensolutions, expected_eigenvalues);
@@ -237,21 +245,32 @@ struct LinearEigensystemF : ::testing::Test {
         int nwork = nroot;
         auto [x, g] = initialize_subspace(np, nroot, n_working_vectors_max, solver);
         size_t n_iter = 2;
-        for (auto iter = 1; iter < 100; iter++, ++n_iter) {
-          action(x, g);
-          nwork = solver->add_vector(x, g);
-          if (verbosity > 0)
-            std::cout << "solver.add_vector returns nwork=" << nwork << std::endl;
-          if (nwork == 0)
-            break;
-          update(g, solver->working_set_eigenvalues());
-          if (verbosity > 0)
-            solver->report();
-          nwork = solver->end_iteration(x, g);
-          if (verbosity > 0)
-            std::cout << "solver.end_iteration returns nwork=" << nwork << std::endl;
-          if (nwork == 0)
-            break;
+        if (simple) {
+          auto apply_r = [this](const CVecRef<Rvector>& param, const VecRef<Rvector>& action) -> double {
+            this->action(param, action);
+            return 0.;
+          };
+          auto precondition = [this, &solver](const VecRef<Rvector>& residual, const VecRef<Rvector>& params) {
+            update(residual, solver->working_set_eigenvalues());
+          };
+          solver->solve(wrap(x), wrap(g), apply_r, precondition);
+        } else {
+          for (auto iter = 1; iter < 100; iter++, ++n_iter) {
+            action(x, g);
+            nwork = solver->add_vector(x, g);
+            if (verbosity > 0)
+              std::cout << "solver.add_vector returns nwork=" << nwork << std::endl;
+            if (nwork == 0)
+              break;
+            update(g, solver->working_set_eigenvalues());
+            if (verbosity > 0)
+              solver->report();
+            nwork = solver->end_iteration(x, g);
+            if (verbosity > 0)
+              std::cout << "solver.end_iteration returns nwork=" << nwork << std::endl;
+            if (nwork == 0)
+              break;
+          }
         }
         if (verbosity > 0)
           solver->report();
@@ -275,7 +294,9 @@ struct LinearEigensystemF : ::testing::Test {
         const auto nR_creations = solver->statistics().r_creations;
         if (verbosity > 0)
           std::cout << "R creations = " << nR_creations << std::endl;
-        EXPECT_LE(nR_creations, (nroot + 1) * n_iter);
+        if (not simple) {
+          EXPECT_LE(nR_creations, (nroot + 1) * n_iter);
+        }
         std::vector<std::vector<double>> parameters, residuals;
         std::vector<int> roots;
         for (int root = 0; root < solver->n_roots(); root++) {
