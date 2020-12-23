@@ -131,12 +131,12 @@ public:
     // TODO assert that a reasonable subspace has been constructed
     auto nwork = parameters.size();
     for (auto iter = 0; iter < m_max_iter && nwork > 0; iter++) {
-      apply_r(cwrap<R>(parameters.begin(), parameters.begin() + nwork),
-              wrap<R>(actions.begin(), actions.begin() + nwork));
+      apply_r(cwrap(parameters.begin(), parameters.begin() + nwork),
+              wrap(actions.begin(), actions.begin() + nwork));
       nwork = this->add_vector(parameters, actions);
       if (nwork > 0) {
-        precondition(wrap<R>(actions.begin(), actions.begin() + nwork),
-                     wrap<R>(parameters.begin(), parameters.begin() + nwork));
+        precondition(wrap(actions.begin(), actions.begin() + nwork),
+                     wrap(parameters.begin(), parameters.begin() + nwork));
         if (m_verbosity >= Verbosity::Iteration)
           report();
         nwork = this->end_iteration(parameters, actions);
@@ -160,8 +160,8 @@ public:
       throw std::runtime_error(
           "Solver contains P space but no valid apply_p function. Make sure add_p was called correctly.");
     auto nW = std::min(m_working_set.size(), parameters.size());
-    auto cwparams = cwrap<R>(begin(parameters), begin(parameters) + nW);
-    auto cwactions = cwrap<R>(begin(actions), begin(actions) + nW);
+    auto cwparams = cwrap(begin(parameters), begin(parameters) + nW);
+    auto cwactions = cwrap(begin(actions), begin(actions) + nW);
     m_stats->r_creations += nW;
     m_xspace->update_qspace(cwparams, cwactions);
     return solve_and_generate_working_set(parameters, actions);
