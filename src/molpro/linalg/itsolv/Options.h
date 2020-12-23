@@ -27,7 +27,8 @@ struct Options {
   Options(const options_map& opt);
   std::optional<double> convergence_threshold; //!< convergence threshold
   std::optional<int> n_roots;                  //!< number of roots to solve for
-  std::optional<Verbosity> verbosity;          //!< verbosity level for solve
+  std::optional<Verbosity> verbosity;          //!< verbosity level during IterativeSolver::solve()
+  std::optional<int> max_iter;                 //!< maximum number of iterations during IterativeSolver::solve()
 
   /*!
    * @brief copies options from source object

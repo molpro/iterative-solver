@@ -297,6 +297,8 @@ public:
   double convergence_threshold_value() const override { return m_convergence_threshold_value; }
   void set_verbosity(Verbosity v) override { m_verbosity = v; }
   Verbosity get_verbosity() const override { return m_verbosity; }
+  void set_max_iter(int n) override { m_max_iter = n; }
+  int get_max_iter() const override { return m_max_iter; }
   //! Access dimensions of the subspace
   const subspace::Dimensions& dimensions() const override { return m_xspace->dimensions(); }
 
@@ -373,6 +375,7 @@ protected:
   bool m_normalise_solution = false;            //!< whether to normalise the solutions
   fapply_on_p_type m_apply_p = {};              //!< function that evaluates effect of action on the P space projection
   Verbosity m_verbosity = Verbosity::Iteration; //!< how much output to print in solve()
+  int m_max_iter = 100;                         //!< maximum number of iterations in solve()
 };
 
 } // namespace molpro::linalg::itsolv
