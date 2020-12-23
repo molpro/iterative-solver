@@ -125,34 +125,26 @@ public:
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(const IterativeSolverTemplate<Solver, R, Q, P>&) = delete;
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
 
+  // TODO improve print out
   bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
              const fprecondition_type& precondition = fprecondition_type{}) override {
-    // TODO implement diagonal-element preconditioner
-    auto maxit = 100;  // TODO parameterise
-    int verbosity = 1; // TODO parameterise
-    size_t nwork = parameters.size();
-    for (auto iter = 0; iter < maxit; iter++) {
-      //      if (iter == 0 && np > 0) {
-      // TODO implement P space
-      //        nwork = this->add_p(cwrap(pspace), Span<double>(PP.data(), PP.size()), wrap(x),
-      //                              molpro::linalg::itsolv::wrap(g), apply_p_wrapper);
-      //    } else
-      {
-        apply_r(cwrap(parameters), actions);
-        nwork = this->add_vector(parameters, actions);
-        if (verbosity > 0)
-          std::cout << "solver.add_vector returns nwork=" << nwork << std::endl;
+    // TODO assert that a reasonable subspace has been constructed
+    auto nwork = parameters.size();
+    for (auto iter = 0; iter < m_max_iter && nwork > 0; iter++) {
+      apply_r(cwrap<R>(parameters.begin(), parameters.begin() + nwork),
+              wrap<R>(actions.begin(), actions.begin() + nwork));
+      nwork = this->add_vector(parameters, actions);
+      if (nwork > 0) {
+        precondition(wrap<R>(actions.begin(), actions.begin() + nwork),
+                     wrap<R>(parameters.begin(), parameters.begin() + nwork));
+        if (m_verbosity >= Verbosity::Iteration)
+          report();
+        nwork = this->end_iteration(parameters, actions);
+        // TODO if nwork == 0, but solver is not converged than the subspace is stuck. print a warning.
       }
-      if (nwork == 0)
-        break;
-      precondition(actions, parameters);
-      if (verbosity > 0)
-        report();
-      nwork = this->end_iteration(parameters, actions);
-      if (verbosity > 0)
-        std::cout << "solver.end_iteration returns nwork=" << nwork << std::endl;
-      if (nwork == 0)
-        break;
+    }
+    if (m_verbosity >= Verbosity::Summary) {
+      report();
     }
     return nwork == 0;
   };

@@ -187,6 +187,7 @@ struct LinearEigensystemF : ::testing::Test {
     options->max_size_qspace = std::max(6 * nroot, std::min(int(n), std::min(1000, 6 * nroot)) - np);
     options->reset_D = 8;
     options->hermiticity = hermitian;
+    options->verbosity = molpro::linalg::itsolv::Verbosity::Summary;
     solver->set_options(*options);
     options = CastOptions::LinearEigensystem(solver->get_options());
     molpro::cout << "convergence threshold = " << options->convergence_threshold.value()
@@ -357,6 +358,7 @@ TEST_F(LinearEigensystemF, small_eigen) {
     load_matrix(n, "", param);
     test_eigen(std::to_string(n) + "/" + std::to_string(param));
     test_eigen(std::to_string(n) + "/" + std::to_string(param), 1);
+    test_eigen(std::to_string(n) + "/" + std::to_string(param), 0, true);
   }
 }
 
