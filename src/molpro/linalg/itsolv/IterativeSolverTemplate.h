@@ -125,7 +125,6 @@ public:
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(const IterativeSolverTemplate<Solver, R, Q, P>&) = delete;
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
 
-public:
   bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
              const fprecondition_type& precondition = fprecondition_type{}) override {
     // TODO implement diagonal-element preconditioner
@@ -176,7 +175,6 @@ public:
     return solve_and_generate_working_set(parameters, actions);
   }
 
-public:
   size_t add_vector(std::vector<R>& parameters, std::vector<R>& actions) override {
     return add_vector(wrap(parameters), wrap(actions));
   }
