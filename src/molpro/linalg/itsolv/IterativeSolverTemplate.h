@@ -218,10 +218,10 @@ public:
     return solution(roots, wrap(parameters), wrap(residual));
   }
   void solution(R& parameters, R& residual) override {
-    std::vector<int> roots(1,0);
+    std::vector<int> roots(1, 0);
     auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
     auto wresidual = std::vector<std::reference_wrapper<R>>{std::ref(residual)};
-    return solution(roots, wparams,wresidual);
+    return solution(roots, wparams, wresidual);
   }
 
   void solution_params(const std::vector<int>& roots, std::vector<R>& parameters) override {
@@ -236,11 +236,10 @@ public:
   };
 
   void solution_params(R& parameters) override {
-    std::vector<int> roots(1,0);
+    std::vector<int> roots(1, 0);
     auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
     return solution_params(roots, wparams);
   }
-
 
   // TODO Implement this
   std::vector<size_t> suggest_p(const CVecRef<R>& solution, const CVecRef<R>& residual, size_t max_number,
@@ -263,6 +262,8 @@ public:
       set_n_roots(options.n_roots.value());
     if (options.convergence_threshold)
       set_convergence_threshold(options.convergence_threshold.value());
+    if (options.verbosity)
+      set_verbosity(options.verbosity.value());
   }
 
   std::shared_ptr<Options> get_options() const override {
@@ -294,6 +295,8 @@ public:
   double convergence_threshold() const override { return m_convergence_threshold; }
   void set_convergence_threshold_value(double thresh) override { m_convergence_threshold_value = thresh; }
   double convergence_threshold_value() const override { return m_convergence_threshold_value; }
+  void set_verbosity(Verbosity v) override { m_verbosity = v; }
+  Verbosity get_verbosity() const override { return m_verbosity; }
   //! Access dimensions of the subspace
   const subspace::Dimensions& dimensions() const override { return m_xspace->dimensions(); }
 
@@ -355,8 +358,8 @@ protected:
       throw std::runtime_error("asking for more roots than there are solutions");
   }
 
-  std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;   //!< Array handlers
-  std::shared_ptr<subspace::IXSpace<R, Q, P>> m_xspace; //!< manages the subspace and associated data
+  std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;                    //!< Array handlers
+  std::shared_ptr<subspace::IXSpace<R, Q, P>> m_xspace;                  //!< manages the subspace and associated data
   std::shared_ptr<subspace::ISubspaceSolver<R, Q, P>> m_subspace_solver; //!< solves the subspace problem
   std::vector<double> m_errors;                                          //!< errors from the most recent solution
   std::vector<double> m_value_errors;                                    //!< value errors from the most recent solution
@@ -364,11 +367,12 @@ protected:
   size_t m_nroots{0};                      //!< number of roots the solver is searching for
   double m_convergence_threshold{1.0e-10}; //!< residual norms less than this mark a converged solution
   double m_convergence_threshold_value{
-      std::numeric_limits<double>::max()}; //!< value changes less than this mark a converged solution
-  std::shared_ptr<Statistics> m_stats;     //!< accumulates statistics of operations performed by the solver
-  std::shared_ptr<Logger> m_logger;        //!< logger
-  bool m_normalise_solution = false;       //!< whether to normalise the solutions
-  fapply_on_p_type m_apply_p = {};         //!< function that evaluates effect of action on the P space projection
+      std::numeric_limits<double>::max()};      //!< value changes less than this mark a converged solution
+  std::shared_ptr<Statistics> m_stats;          //!< accumulates statistics of operations performed by the solver
+  std::shared_ptr<Logger> m_logger;             //!< logger
+  bool m_normalise_solution = false;            //!< whether to normalise the solutions
+  fapply_on_p_type m_apply_p = {};              //!< function that evaluates effect of action on the P space projection
+  Verbosity m_verbosity = Verbosity::Iteration; //!< how much output to print in solve()
 };
 
 } // namespace molpro::linalg::itsolv

@@ -147,6 +147,8 @@ public:
   virtual void set_convergence_threshold_value(double thresh) = 0;
   //! Reports the value convergence threshold
   virtual double convergence_threshold_value() const = 0;
+  virtual void set_verbosity(Verbosity v) = 0;
+  virtual Verbosity get_verbosity() const = 0;
   virtual const subspace::Dimensions& dimensions() const = 0;
   // FIXME Missing parameters: SVD threshold
   //! Set all spcecified options. This is no different than using setters, but can be used with forward declaration.
