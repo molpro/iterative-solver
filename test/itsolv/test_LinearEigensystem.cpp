@@ -263,7 +263,7 @@ struct LinearEigensystemF : ::testing::Test {
             this->action(param, action);
             return 0.;
           };
-          auto precondition = [s = solver, this](const VecRef<Rvector>& residual, const VecRef<Rvector>& params) {
+          auto precondition = [&s = solver, this](const VecRef<Rvector>& residual, const VecRef<Rvector>& params) {
             update(residual, s->working_set_eigenvalues());
           };
           solver->solve(wrap(x), wrap(g), apply_r, precondition);
