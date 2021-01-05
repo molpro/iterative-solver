@@ -13,8 +13,8 @@ namespace fs = std::filesystem;
 /*!
  * @brief Distributed array storing the buffer on disk using temporary local files.
  *
- * On construction, file and corresponding stream object are being created and file is then closed (to be opened using
- * open_access()). On destruction, file is being deleted.
+ * On construction, file and corresponding stream object are being created and file is then kept open. On destruction,
+ * file is being deleted.
  *
  * @warning Only local operations will be currently supported, if RMA operations are requested, exception will be thrown.
  *
@@ -63,8 +63,7 @@ public:
   std::vector<value_type> get(index_type lo, index_type hi) const override;
   //! Writes requested values to file
   void put(index_type lo, index_type hi, const value_type *data) override;
-  //! @warning below functions have to be implemented being pure virtuals, but will return exceptions
-  //! taken we don't do collectives here
+  //! @warning below functions perform only local operations and throw exceptions if requested otherwise
   void acc(index_type lo, index_type hi, const value_type *data) override;
   std::vector<value_type> gather(const std::vector<index_type> &indices) const override;
   void scatter(const std::vector<index_type> &indices, const std::vector<value_type> &data) override;

@@ -52,6 +52,12 @@ if (MPI)
                 SOURCES DistrArrayHDF5.cpp
                 PUBLIC_HEADER DistrArrayHDF5.h)
     endif ()
+else ()
+    message(STATUS "Building ${PROJECT_NAME} with Serial disk array")
+    LibraryManager_Append(${PROJECT_NAME}
+            SOURCES SerialDiskArray.cpp
+            PUBLIC_HEADER SerialDiskArray.h
+            )
 endif ()
 
 add_subdirectory(util)
