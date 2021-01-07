@@ -9,6 +9,8 @@
 
 namespace molpro::linalg::array {
 
+class ArrayFile;
+
 namespace fs = std::filesystem;
 /*!
  * @brief Distributed array storing the buffer on disk using temporary local files.
@@ -22,10 +24,7 @@ namespace fs = std::filesystem;
  */
 class DistrArrayFile : public DistrArrayDisk {
 protected:
-  fs::path m_dir = fs::current_path();
-  mutable std::fstream m_file;
-  //! creates a file, opens it and @returns m_file fstream
-  std::fstream make_file();
+  std::unique_ptr<ArrayFile> m_local_array; //! File array storing the local section
 
 public:
   DistrArrayFile() = delete;
