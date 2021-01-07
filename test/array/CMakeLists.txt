@@ -20,7 +20,7 @@ target_link_libraries(test-${PROJECT_NAME}-ArrayHandler.exe PUBLIC molpro::${PRO
 gtest_discover_tests(test-${PROJECT_NAME}-ArrayHandler.exe)
 
 add_executable(test-${PROJECT_NAME}-array-util.exe testDistribution.cpp file_util.h
-        testUtil.cpp test_temp_file.cpp
+        testUtil.cpp test_temp_file.cpp testArrayFile.cpp
         )
 target_link_libraries(test-${PROJECT_NAME}-array-util.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)
 gtest_discover_tests(test-${PROJECT_NAME}-array-util.exe)
@@ -33,7 +33,7 @@ if (MPI)
             )
     if (LINEARALGEBRA_ARRAY_MPI3)
         target_sources(test-${PROJECT_NAME}-parallel PRIVATE testDistrArrayMPI3.cpp testDistrArrayFile.cpp
-                        testArrayHandlerDistr.cpp testArrayHandlerDistrSparse.cpp testArrayHandlers.cpp)
+                testArrayHandlerDistr.cpp testArrayHandlerDistrSparse.cpp testArrayHandlers.cpp)
     endif ()
     if (LINEARALGEBRA_ARRAY_GA)
         target_sources(test-${PROJECT_NAME}-parallel PRIVATE testDistrArrayGA.cpp)

@@ -9,11 +9,11 @@ if (MPI AND NOT HDF5_IS_PARALLEL)
 endif ()
 
 LibraryManager_Append(${PROJECT_NAME}
-        SOURCES HDF5Handle.cpp
+        SOURCES HDF5Handle.cpp ArrayFile.cpp
         PUBLIC_HEADER HDF5Handle.h ArrayHandler.h ArrayHandlerIterable.h ArrayHandlerSparse.h
         ArrayHandlerIterableSparse.h ArrayHandlerDefault.h ArrayHandlerDDisk.h ArrayHandlerDDiskDistr.h
         ArrayHandlerDistrDDisk.h ArrayHandlerDDiskSparse.h Span.h type_traits.h
-        default_handler.h
+        default_handler.h ArrayFile.h
         )
 if (MPI)
     LibraryManager_Append(${PROJECT_NAME} PUBLIC_HEADER ArrayHandlerDistr.h ArrayHandlerDistrSparse.h)
@@ -32,7 +32,7 @@ if (MPI)
         message(STATUS "Building ${PROJECT_NAME} with MPI3 Array")
         target_compile_definitions(${PROJECT_NAME} PUBLIC LINEARALGEBRA_ARRAY_MPI3 LINEARALGEBRA_ARRAY_FILE)
         LibraryManager_Append(${PROJECT_NAME} SOURCES DistrArrayMPI3.cpp DistrArrayFile.cpp
-                                              PUBLIC_HEADER DistrArrayMPI3.h DistrArrayFile.h)
+                PUBLIC_HEADER DistrArrayMPI3.h DistrArrayFile.h)
     endif ()
 
     if (LINEARALGEBRA_ARRAY_GA)
