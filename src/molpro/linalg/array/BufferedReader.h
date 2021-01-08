@@ -3,6 +3,7 @@
 #include <molpro/linalg/array/BlockReader.h>
 
 #include <list>
+#include <memory>
 
 namespace molpro::linalg::array {
 /*!
@@ -29,13 +30,11 @@ public:
     bool index_is_in_valid_range = next_index >= 0 && next_index < m_block_reader.n_blocks();
     if (index_is_in_valid_range) {
       if (!m_reader) {
-        m_reader = std::make_unique<molpro::linalg::array::util::Task<void>>(
-            m_block_reader.get(next_index, m_buffers.front()));
+        m_reader = std::make_unique<util::Task<void>>(m_block_reader.get(next_index, m_buffers.front()));
       } else {
         m_reader->wait();
         m_buffers.splice(m_buffers.end(), m_buffers, m_buffers.begin());
-        m_reader =
-            std::make_unique<molpro::linalg::array::util::Task<void>>(m_block_reader.get(next_index, m_buffers.back()));
+        m_reader = std::make_unique<util::Task<void>>(m_block_reader.get(next_index, m_buffers.back()));
       }
     } else {
       if (m_reader) {
@@ -68,10 +67,18 @@ double buffered_unary_operation(const BlockReader<A>& x, Func&& f) {
 //! Apply a binary operator to the full buffered range one block at a time
 template <class A, class B, class Func>
 double buffered_binary_operation(const BlockReader<A>& x, const BlockReader<B>& y, Func&& f) {
-  // Assume they are compatible
-  auto n = x.n_chunks();
-  auto buffer_x = std::vector<double>(n);
-  auto buffer_y = std::vector<double>(n);
+  if (x.n_blocks() != y.n_blocks() || x.max_block_size() != y.max_block_size())
+    throw std::runtime_error("attempting to operate on two arrays with different blocking structure");
+  auto reader_x = BufferedReader<A>(x);
+  auto reader_y = BufferedReader<A>(y);
+  reader_x.read(0);
+  reader_y.read(0);
+  for (size_t i = 0; i < x.n_blocks(); ++i) {
+    auto& buffer_x = reader_x.read(i + 1);
+    auto& buffer_y = reader_y.read(i + 1);
+    f(buffer_x, buffer_y);
+  }
 }
+
 } // namespace molpro::linalg::array
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_BUFFEREDREADER_H
