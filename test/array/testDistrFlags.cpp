@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 #include "parallel_util.h"
+
 #include <molpro/linalg/array/util.h>
 #include <molpro/linalg/array/util/DistrFlags.h>
 

@@ -10,6 +10,7 @@
 #include <molpro/linalg/array/PHDF5Handle.h>
 #include <molpro/linalg/array/util.h>
 #include <molpro/linalg/array/util/Distribution.h>
+#include <molpro/linalg/array/util/LockMPI3.h>
 
 #ifdef LINEARALGEBRA_ARRAY_MPI3
 #include <molpro/linalg/array/DistrArrayMPI3.h>

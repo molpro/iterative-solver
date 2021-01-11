@@ -6,7 +6,7 @@
 #include "parallel_util.h"
 #include <molpro/linalg/array/ArrayHandlerDistr.h>
 #include <molpro/linalg/array/DistrArrayMPI3.h>
-#include <molpro/linalg/array/util.h>
+#include <molpro/linalg/array/util/LockMPI3.h>
 
 using molpro::linalg::array::ArrayHandlerDistr;
 using molpro::linalg::array::DistrArrayMPI3;

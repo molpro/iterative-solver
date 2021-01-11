@@ -10,7 +10,7 @@
 #include <thread>
 
 #include "parallel_util.h"
-#include <molpro/linalg/array/util.h>
+#include <molpro/linalg/array/util/LockMPI3.h>
 
 using ::testing::ContainerEq;
 using ::testing::DoubleEq;

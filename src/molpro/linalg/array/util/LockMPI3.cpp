@@ -1,4 +1,4 @@
-#include "util.h"
+#include "molpro/linalg/array/util/LockMPI3.h"
 
 namespace molpro::linalg::array::util {
 

@@ -6,7 +6,7 @@
 #include "parallel_util.h"
 
 #include <molpro/linalg/array/PHDF5Handle.h>
-#include <molpro/linalg/array/util.h>
+#include <molpro/linalg/array/util/LockMPI3.h>
 #include <molpro/linalg/array/util/temp_phdf5_handle.h>
 
 using molpro::linalg::array::util::file_exists;
