@@ -1,9 +1,9 @@
 #include "DistrArrayDisk.h"
-#include "util.h"
 #include "util/Distribution.h"
 
+#include <string>
+
 namespace molpro::linalg::array {
-using util::Task;
 namespace {
 
 int mpi_rank(MPI_Comm comm) {

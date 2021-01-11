@@ -2,11 +2,6 @@
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_UTIL_H
 #include <atomic>
 #include <future>
-#include <memory>
-#include <string>
-#include <vector>
-
-#include <molpro/linalg/array/util/LockMPI3.h>
 
 namespace molpro::linalg::array::util {
 

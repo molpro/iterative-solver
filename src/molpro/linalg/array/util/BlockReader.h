@@ -3,8 +3,8 @@
 #include <vector>
 
 #include <molpro/linalg/array/Span.h>
-#include <molpro/linalg/array/util.h>
 #include <molpro/linalg/array/util/Distribution.h>
+#include <molpro/linalg/array/util/Task.h>
 
 namespace molpro::linalg::array::util {
 /*!

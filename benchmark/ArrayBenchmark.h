@@ -20,7 +20,6 @@
 #ifdef LINEARALGEBRA_ARRAY_HDF5
 #include <molpro/linalg/array/DistrArrayHDF5.h>
 #include <molpro/linalg/array/PHDF5Handle.h>
-#include <molpro/linalg/array/util.h>
 #include <molpro/linalg/array/util/temp_phdf5_handle.h>
 #endif
 #include <ostream>
