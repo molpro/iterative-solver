@@ -4,51 +4,78 @@
 
 #include <molpro/linalg/array/Span.h>
 #include <molpro/linalg/array/util.h>
+#include <molpro/linalg/array/util/Distribution.h>
 
 namespace molpro::linalg::array {
 
 /*!
- * @brief Reads a container in blocks
+ * @brief Reads a section of array in regular sized blocks using a separate thread.
+ *
+ * Responsibilities
+ * - split section of array into blocks
+ * - implement get/put in terms of block index and using a separate thread
  */
 template <class Array>
 class BlockReader {
 public:
+  /*!
+   * @param a array to read which implements get and put methods
+   * @param start start index of the section
+   * @param end past-the-end index of the section
+   * @param block_size nominal size of the block (the remainder may be spread over blocks, so actual size could be +1)
+   */
+  BlockReader(Array& a, size_t start, size_t end, size_t block_size)
+      : m_array(a), m_block_size(block_size), m_start(start), m_end(end) {
+    if (start > end)
+      throw std::runtime_error("invalid array range");
+    if (m_block_size < 1)
+      throw std::runtime_error("block size must be >= 1");
+    auto section_length = end - start;
+    auto nblocks = section_length / m_block_size;
+    m_distribution = util::make_distribution_spread_remainder<size_t>(section_length, nblocks);
+  }
+
+  //! Get a block
   util::Task<void> get(size_t block_index, std::vector<double>& buffer) {
-    size_t beg, end;
-    std::tie(beg, end) = range(block_index);
+    check_block_index(block_index);
+    auto [beg, end] = m_distribution.range(block_index);
     auto size = end - beg;
     buffer.resize(size);
-    auto getter = [&]() { m_array.get(beg, end, Span<double>(buffer.data(), size)); };
+    auto getter = [&, beg = beg, end = end]() {
+      auto data = Span<double>(&buffer[0], size);
+      m_array.get(m_start + beg, m_start + end, data);
+    };
     return util::Task<void>::create(getter);
   }
 
+  //! Get a block into the array
   util::Task<void> put(size_t block_index, const std::vector<double>& buffer) {
-    size_t beg, end;
-    std::tie(beg, end) = range(block_index);
+    check_block_index(block_index);
+    auto [beg, end] = m_distribution.range(block_index);
     auto size = end - beg;
     if (size > buffer.size())
       throw std::runtime_error("buffer is too small");
-    auto getter = [&]() { m_array.get(beg, end, Span<double>(const_cast<double*>(buffer.data()), size)); };
-    return util::Task<void>::create(getter);
+    auto putter = [&, beg = beg, end = end]() {
+      auto data = Span<double>(const_cast<double*>(&buffer[0]), size);
+      m_array.put(m_start + beg, m_start + end, data);
+    };
+    return util::Task<void>::create(putter);
   }
 
-  std::pair<size_t, size_t> range(size_t block_index) const {
-    if (block_index >= m_nblocks)
-      throw std::runtime_error("block_index out of range");
-    auto beg = m_start + block_index * m_block_size;
-    auto end = beg + m_block_size;
-    end = end > m_end ? m_end : end;
-    return {beg, end};
-  }
+  const util::Distribution<size_t>& distribution() const { return m_distribution; }
 
-  size_t n_blocks() const { return m_nblocks; }
-  size_t max_block_size() const { return m_block_size; }
+  size_t n_blocks() const { return m_distribution.size(); }
 
 private:
-  size_t m_start;
-  size_t m_end;
-  size_t m_nblocks;
-  size_t m_block_size;
+  void check_block_index(size_t block_index) {
+    if (block_index >= n_blocks())
+      throw std::runtime_error("block index >= number of blocks");
+  }
+
+  size_t m_start = 0;
+  size_t m_end = 0;
+  size_t m_block_size = 1;
+  util::Distribution<size_t> m_distribution; //!< distribution of blocks
   Array& m_array;
 };
 
