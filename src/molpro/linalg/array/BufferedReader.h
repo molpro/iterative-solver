@@ -1,6 +1,6 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_BUFFEREDREADER_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_BUFFEREDREADER_H
-#include <molpro/linalg/array/BlockReader.h>
+#include <molpro/linalg/array/util/BlockReader.h>
 
 #include <list>
 #include <memory>

@@ -1,6 +1,6 @@
 LibraryManager_Append(${PROJECT_NAME}
         SOURCES temp_file.cpp temp_hdf5_handle.cpp
-        PUBLIC_HEADER Distribution.h select_max_dot.h temp_file.h temp_hdf5_handle.h TempHandle.h)
+        PUBLIC_HEADER Distribution.h select_max_dot.h temp_file.h temp_hdf5_handle.h TempHandle.h BlockReader.h)
 if (MPI)
     LibraryManager_Append(${PROJECT_NAME}
             SOURCES DistrFlags.cpp

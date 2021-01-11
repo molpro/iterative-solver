@@ -9,11 +9,11 @@ if (MPI AND NOT HDF5_IS_PARALLEL)
 endif ()
 
 LibraryManager_Append(${PROJECT_NAME}
-        SOURCES HDF5Handle.cpp ArrayFile.cpp BlockReader.cpp
+        SOURCES HDF5Handle.cpp ArrayFile.cpp
         PUBLIC_HEADER HDF5Handle.h ArrayHandler.h ArrayHandlerIterable.h ArrayHandlerSparse.h
         ArrayHandlerIterableSparse.h ArrayHandlerDefault.h ArrayHandlerDDisk.h ArrayHandlerDDiskDistr.h
         ArrayHandlerDistrDDisk.h ArrayHandlerDDiskSparse.h Span.h type_traits.h
-        default_handler.h ArrayFile.h BlockReader.h
+        default_handler.h ArrayFile.h
         )
 if (MPI)
     LibraryManager_Append(${PROJECT_NAME} PUBLIC_HEADER ArrayHandlerDistr.h ArrayHandlerDistrSparse.h)

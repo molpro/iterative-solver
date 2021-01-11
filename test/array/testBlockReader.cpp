@@ -1,10 +1,10 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include <molpro/linalg/array/BlockReader.h>
+#include <molpro/linalg/array/util/BlockReader.h>
 
-using molpro::linalg::array::BlockReader;
 using molpro::linalg::array::Span;
+using molpro::linalg::array::util::BlockReader;
 
 struct DummyArray {
   void get(size_t beg, size_t end, Span<double>& buffer) { get_called_with_arguments = std::make_pair(beg, end); }

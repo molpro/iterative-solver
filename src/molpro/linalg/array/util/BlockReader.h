@@ -6,8 +6,7 @@
 #include <molpro/linalg/array/util.h>
 #include <molpro/linalg/array/util/Distribution.h>
 
-namespace molpro::linalg::array {
-
+namespace molpro::linalg::array::util {
 /*!
  * @brief Reads a section of array in regular sized blocks using a separate thread.
  *
@@ -32,11 +31,11 @@ public:
       throw std::runtime_error("block size must be >= 1");
     auto section_length = end - start;
     auto nblocks = section_length / m_block_size;
-    m_distribution = util::make_distribution_spread_remainder<size_t>(section_length, nblocks);
+    m_distribution = make_distribution_spread_remainder<size_t>(section_length, nblocks);
   }
 
   //! Get a block
-  util::Task<void> get(size_t block_index, std::vector<double>& buffer) {
+  Task<void> get(size_t block_index, std::vector<double>& buffer) {
     check_block_index(block_index);
     auto [beg, end] = m_distribution.range(block_index);
     auto size = end - beg;
@@ -45,11 +44,11 @@ public:
       auto data = Span<double>(&buffer[0], size);
       m_array.get(m_start + beg, m_start + end, data);
     };
-    return util::Task<void>::create(getter);
+    return Task<void>::create(getter);
   }
 
   //! Get a block into the array
-  util::Task<void> put(size_t block_index, const std::vector<double>& buffer) {
+  Task<void> put(size_t block_index, const std::vector<double>& buffer) {
     check_block_index(block_index);
     auto [beg, end] = m_distribution.range(block_index);
     auto size = end - beg;
@@ -59,10 +58,10 @@ public:
       auto data = Span<double>(const_cast<double*>(&buffer[0]), size);
       m_array.put(m_start + beg, m_start + end, data);
     };
-    return util::Task<void>::create(putter);
+    return Task<void>::create(putter);
   }
 
-  const util::Distribution<size_t>& distribution() const { return m_distribution; }
+  const Distribution<size_t>& distribution() const { return m_distribution; }
 
   size_t n_blocks() const { return m_distribution.size(); }
 
@@ -75,10 +74,10 @@ private:
   size_t m_start = 0;
   size_t m_end = 0;
   size_t m_block_size = 1;
-  util::Distribution<size_t> m_distribution; //!< distribution of blocks
+  Distribution<size_t> m_distribution; //!< distribution of blocks
   Array& m_array;
 };
 
-} // namespace molpro::linalg::array
+} // namespace molpro::linalg::array::util
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_BLOCKREADER_H
