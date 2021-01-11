@@ -5,6 +5,7 @@
 
 #include <molpro/linalg/array/util.h>
 #include <molpro/linalg/array/util/DistrFlags.h>
+#include <molpro/linalg/array/util/ScopeLock.h>
 
 using molpro::linalg::array::util::DistrFlags;
 using molpro::linalg::array::util::ScopeLock;

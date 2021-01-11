@@ -5,7 +5,7 @@ LibraryManager_Append(${PROJECT_NAME}
 if (MPI)
     LibraryManager_Append(${PROJECT_NAME}
             SOURCES DistrFlags.cpp LockMPI3.cpp
-            PUBLIC_HEADER DistrFlags.h gather_all.h LockMPI3.h)
+            PUBLIC_HEADER DistrFlags.h gather_all.h LockMPI3.h ScopeLock.h)
     if (LINEARALGEBRA_ARRAY_HDF5)
         LibraryManager_Append(${PROJECT_NAME}
                 SOURCES temp_phdf5_handle.cpp

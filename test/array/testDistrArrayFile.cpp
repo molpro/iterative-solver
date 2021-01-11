@@ -7,9 +7,8 @@
 #include "parallel_util.h"
 
 #include <molpro/linalg/array/DistrArrayFile.h>
-#include <molpro/linalg/array/util.h>
 #include <molpro/linalg/array/util/Distribution.h>
-#include <molpro/linalg/array/util/LockMPI3.h>
+#include <molpro/linalg/array/util/ScopeLock.h>
 
 #ifdef LINEARALGEBRA_ARRAY_MPI3
 #include <molpro/linalg/array/DistrArrayMPI3.h>
