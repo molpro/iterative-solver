@@ -5,7 +5,7 @@
 #include <list>
 #include <memory>
 
-namespace molpro::linalg::array {
+namespace molpro::linalg::array::util {
 /*!
  * @brief Reads array one block at a time using two buffers. When one block is read, the next one starts loading in a
  * separate thread.
@@ -80,5 +80,5 @@ double buffered_binary_operation(const BlockReader<A>& x, const BlockReader<B>& 
   }
 }
 
-} // namespace molpro::linalg::array
+} // namespace molpro::linalg::array::util
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_BUFFEREDREADER_H
