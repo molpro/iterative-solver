@@ -16,7 +16,10 @@ public:
     return {std::async(std::launch::async, std::forward<Func>(f), std::forward<Args>(args)...)};
   }
 
-  ~Task() { wait(); }
+  ~Task() {
+    if (m_task.valid())
+      wait();
+  }
 
   //! Returns true if the task has completed
   bool test() { return m_task.wait_for(std::chrono::microseconds{1}) == std::future_status::ready; }
