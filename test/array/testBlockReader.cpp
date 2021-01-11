@@ -6,12 +6,14 @@
 using molpro::linalg::array::Span;
 using molpro::linalg::array::util::BlockReader;
 
+namespace {
 struct DummyArray {
   void get(size_t beg, size_t end, Span<double>& buffer) { get_called_with_arguments = std::make_pair(beg, end); }
   void put(size_t beg, size_t end, const Span<double>& buffer) { put_called_with_arguments = std::make_pair(beg, end); }
   std::optional<std::pair<size_t, size_t>> get_called_with_arguments;
   std::optional<std::pair<size_t, size_t>> put_called_with_arguments;
 };
+} // namespace
 
 struct BlockReaderF : ::testing::Test {
   DummyArray a;
