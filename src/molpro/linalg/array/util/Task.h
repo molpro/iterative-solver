@@ -10,11 +10,13 @@ class Task {
 public:
   Task(std::future<Result> &&task) : m_task{std::move(task)} {};
   Task(Task &&other) = default;
+  Task &operator=(Task &&) = default;
 
   template <class Func, typename... Args>
   static Task create(Func &&f, Args &&...args) {
     return {std::async(std::launch::async, std::forward<Func>(f), std::forward<Args>(args)...)};
   }
+  explicit operator bool() const { return m_task.valid(); }
 
   ~Task() {
     if (m_task.valid())
