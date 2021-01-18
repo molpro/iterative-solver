@@ -23,6 +23,7 @@ struct DummyGetPutArray {
 
 struct Array {
   Array(size_t size) : m_buffer(size, 0){};
+  Array(size_t size, double value) : m_buffer(size, value){};
 
   void get(size_t beg, size_t end, Span<double>& buffer) {
     m_mutex.lock();
@@ -44,6 +45,7 @@ struct Array {
 
 struct ArrayNoPut {
   ArrayNoPut(size_t size) : m_array(size){};
+  ArrayNoPut(size_t size, double value) : m_array(size, value){};
 
   void get(size_t beg, size_t end, Span<double>& buffer) { m_array.get(beg, end, buffer); }
 
@@ -111,4 +113,78 @@ TEST(buffered_unary_operation, equal) {
   };
   buffered_unary_operation(block_reader, eq, false);
   ASSERT_FALSE(equal_to_one);
+}
+
+TEST(buffered_binary_operation, no_put) {
+  const size_t size = 20;
+  const size_t block_size = 3;
+  auto array_x = ArrayNoPut(size);
+  auto array_y = ArrayNoPut(size);
+  auto block_reader_x = BlockReader(array_x, 0, size, block_size);
+  auto block_reader_y = BlockReader(array_y, 0, size, block_size);
+  bool not_equal = true;
+  auto eq = [&not_equal](const std::vector<double>& x, const std::vector<double>& y) {
+    for (size_t i = 0; i < x.size(); ++i) {
+      not_equal &= x[i] != y[i];
+    }
+  };
+  buffered_binary_operation(block_reader_x, block_reader_y, eq, false, false);
+  ASSERT_FALSE(not_equal);
+}
+
+TEST(buffered_binary_operation, put_x) {
+  const double alpha = 2.0;
+  const double x_value = 1.0;
+  const double y_value = 3.0;
+  const size_t size = 20;
+  const size_t block_size = 3;
+  auto array_x = Array(size, x_value);
+  auto array_y = ArrayNoPut(size, y_value);
+  auto block_reader_x = BlockReader(array_x, 0, size, block_size);
+  auto block_reader_y = BlockReader(array_y, 0, size, block_size);
+  auto aypx = [&alpha](std::vector<double>& x, const std::vector<double>& y) {
+    for (size_t i = 0; i < x.size(); ++i)
+      x[i] += alpha * y[i];
+  };
+  buffered_binary_operation(block_reader_x, block_reader_y, aypx, true, false);
+  ASSERT_THAT(array_x.m_buffer, Each(DoubleEq(x_value + alpha * y_value)));
+}
+
+TEST(buffered_binary_operation, put_y) {
+  const double alpha = 2.0;
+  const double x_value = 1.0;
+  const double y_value = 3.0;
+  const size_t size = 20;
+  const size_t block_size = 3;
+  auto array_x = ArrayNoPut(size, x_value);
+  auto array_y = Array(size, y_value);
+  auto block_reader_x = BlockReader(array_x, 0, size, block_size);
+  auto block_reader_y = BlockReader(array_y, 0, size, block_size);
+  auto axpy = [&alpha](const std::vector<double>& x, std::vector<double>& y) {
+    for (size_t i = 0; i < x.size(); ++i)
+      y[i] += alpha * x[i];
+  };
+  buffered_binary_operation(block_reader_x, block_reader_y, axpy, false, true);
+  ASSERT_THAT(array_y.m_buffer, Each(DoubleEq(y_value + alpha * x_value)));
+}
+
+TEST(buffered_binary_operation, put_x_and_y) {
+  const double x_value = 1.0;
+  const double y_value = 3.0;
+  const size_t size = 20;
+  const size_t block_size = 3;
+  auto array_x = Array(size, x_value);
+  auto array_y = Array(size, y_value);
+  auto block_reader_x = BlockReader(array_x, 0, size, block_size);
+  auto block_reader_y = BlockReader(array_y, 0, size, block_size);
+  auto mean = [](std::vector<double>& x, std::vector<double>& y) {
+    for (size_t i = 0; i < x.size(); ++i) {
+      auto a = (y[i] + x[i]) / 2.;
+      y[i] = x[i] = a;
+    }
+  };
+  buffered_binary_operation(block_reader_x, block_reader_y, mean, true, true);
+  auto average = (x_value + y_value) / 2.0;
+  ASSERT_THAT(array_x.m_buffer, Each(DoubleEq(average)));
+  ASSERT_THAT(array_y.m_buffer, Each(DoubleEq(average)));
 }

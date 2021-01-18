@@ -85,9 +85,14 @@ private:
   util::Task<void> m_reader;
 };
 
-//! Apply a unary operator to the full buffered range one block at a time
+/*!
+ * @brief Apply a unary operation to the full buffered range one block at a time using separate thread for I/O
+ * @param x block reader
+ * @param f unary operation
+ * @param put_x whether to call x.put() after the operation.
+ */
 template <class A, class Func>
-void buffered_unary_operation(BlockReader<A>& x, Func&& f, bool put_x) {
+void buffered_unary_operation(BlockReader<A>& x, Func&& f, bool put_x = true) {
   auto reader = BufferedReader<A>(x);
   reader.read(0);
   for (size_t i = 0; i < x.n_blocks(); ++i) {
@@ -98,25 +103,58 @@ void buffered_unary_operation(BlockReader<A>& x, Func&& f, bool put_x) {
   }
 }
 
-//! Apply a binary operator to the full buffered range one block at a time
+//! Apply a unary operator without modifying the array
+template <class A, class Func>
+void buffered_unary_operation(const BlockReader<A>& x, Func&& f) {
+  buffered_unary_operation(const_cast<BlockReader<A>&>(x), std::forward<Func&&>(f), false);
+}
+
+/*!
+ * @brief Apply a binary operation to the full buffered range one block at a time using separate thread for I/O
+ * @param x block reader providing access to array x
+ * @param y block reader providing access to array y
+ * @param f binary operation
+ * @param put_x whether to call put on array x
+ * @param put_y whether to call put on array y
+ */
 template <class A, class B, class Func>
-void buffered_binary_operation(BlockReader<A>& x, BlockReader<B>& y, Func&& f, bool put_x, bool put_y) {
+void buffered_binary_operation(BlockReader<A>& x, BlockReader<B>& y, Func&& f, bool put_x = true, bool put_y = true) {
   if (!x.distribution().compatible(y.distribution()))
     throw std::runtime_error("attempting to operate on two arrays with different blocking structure");
   auto reader_x = BufferedReader<A>(x);
-  auto reader_y = BufferedReader<A>(y);
+  auto reader_y = BufferedReader<B>(y);
   reader_x.read(0);
   reader_y.read(0);
   for (size_t i = 0; i < x.n_blocks(); ++i) {
     auto& buffer_x = reader_x.read(i + 1);
     auto& buffer_y = reader_y.read(i + 1);
     f(buffer_x, buffer_y);
+    auto t_put_x = Task<void>(std::future<void>());
+    auto t_put_y = Task<void>(std::future<void>());
     if (put_x)
-      x.put(i, buffer_x);
+      t_put_x = x.put(i, buffer_x);
     if (put_y)
-      y.put(i, buffer_y);
+      t_put_y = y.put(i, buffer_y);
   }
 }
 
+//! Apply a binary operation that modifies y
+template <class A, class B, class Func>
+void buffered_binary_operation(const BlockReader<A>& x, BlockReader<B>& y, Func&& f) {
+  buffered_binary_operation(const_cast<BlockReader<A>&>(x), y, std::forward<Func&&>(f), false, true);
+}
+
+//! Apply a binary operation that modifies x
+template <class A, class B, class Func>
+void buffered_binary_operation(BlockReader<A>& x, const BlockReader<B>& y, Func&& f) {
+  buffered_binary_operation(x, const_cast<BlockReader<A>&>(y), std::forward<Func&&>(f), true, false);
+}
+
+//! Apply a binary operation that does not modify the arrays
+template <class A, class B, class Func>
+void buffered_binary_operation(const BlockReader<A>& x, const BlockReader<B>& y, Func&& f) {
+  buffered_binary_operation(const_cast<BlockReader<A>&>(x), const_cast<BlockReader<A>&>(y), std::forward<Func&&>(f),
+                            false, false);
+}
 } // namespace molpro::linalg::array::util
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_BUFFEREDREADER_H
