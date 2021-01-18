@@ -59,5 +59,11 @@ void ArrayFile::put(ArrayFile::index_type lo, ArrayFile::index_type hi, const Sp
   m_file.seekp(lo * sizeof(value_type));
   m_file.write((const char*)&data[0], length * sizeof(value_type));
 }
+void ArrayFile::fill(ArrayFile::value_type value) {
+  m_file.seekp(0);
+  for (size_t i = 0; i < size(); ++i) {
+    m_file.write((const char*)&value, sizeof(value_type));
+  }
+}
 
 } // namespace molpro::linalg::array

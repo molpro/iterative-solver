@@ -49,6 +49,8 @@ public:
   //! Writes requested values to file
   void put(index_type lo, index_type hi, const Span<value_type>& data);
 
+  void fill(value_type value);
+
 protected:
   size_t m_dim = 0; //!< number of elements in the array
   std::filesystem::path m_dir;
