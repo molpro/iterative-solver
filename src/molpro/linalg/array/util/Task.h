@@ -1,7 +1,7 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_UTIL_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_UTIL_H
-#include <atomic>
 #include <future>
+#include <utility>
 
 namespace molpro::linalg::array::util {
 
