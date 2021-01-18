@@ -14,7 +14,8 @@ namespace molpro::linalg::array::util {
 template <class Array>
 class BufferedReader {
 public:
-  explicit BufferedReader(BlockReader<Array> block_reader) : m_block_reader(std::move(block_reader)) {
+  explicit BufferedReader(BlockReader<Array> block_reader)
+      : m_block_reader(std::move(block_reader)), m_reader(std::future<void>()) {
     for (auto i : {0, 1})
       m_buffers.emplace_back();
   }
@@ -60,45 +61,47 @@ public:
     bool index_is_in_valid_range = next_index >= 0 && next_index < m_block_reader.n_blocks();
     if (index_is_in_valid_range) {
       if (!m_reader) {
-        m_reader = std::make_unique<util::Task<void>>(m_block_reader.get(next_index, m_buffers.back()));
+        m_reader = m_block_reader.get(next_index, m_buffers.back());
       } else {
-        m_reader->wait();
+        m_reader.wait();
         m_buffers.splice(m_buffers.end(), m_buffers, m_buffers.begin());
-        m_reader = std::make_unique<util::Task<void>>(m_block_reader.get(next_index, m_buffers.back()));
+        m_reader = m_block_reader.get(next_index, m_buffers.back());
       }
     } else {
       if (m_reader) {
-        m_reader->wait();
+        m_reader.wait();
         m_buffers.splice(m_buffers.end(), m_buffers, m_buffers.begin());
-        m_reader.reset();
       }
     }
     return m_buffers.front();
   }
 
   const BlockReader<Array>& block_reader() const { return m_block_reader; }
+  BlockReader<Array>& block_reader() { return m_block_reader; }
 
 private:
   BlockReader<Array> m_block_reader;
   std::list<std::vector<double>> m_buffers;
-  std::unique_ptr<util::Task<void>> m_reader;
+  util::Task<void> m_reader;
 };
 
 //! Apply a unary operator to the full buffered range one block at a time
 template <class A, class Func>
-double buffered_unary_operation(const BlockReader<A>& x, Func&& f) {
+void buffered_unary_operation(BlockReader<A>& x, Func&& f, bool put_x) {
   auto reader = BufferedReader<A>(x);
   reader.read(0);
   for (size_t i = 0; i < x.n_blocks(); ++i) {
     auto& buffer = reader.read(i + 1);
     f(buffer);
+    if (put_x)
+      x.put(i, buffer);
   }
 }
 
 //! Apply a binary operator to the full buffered range one block at a time
 template <class A, class B, class Func>
-double buffered_binary_operation(const BlockReader<A>& x, const BlockReader<B>& y, Func&& f) {
-  if (x.n_blocks() != y.n_blocks() || x.max_block_size() != y.max_block_size())
+void buffered_binary_operation(BlockReader<A>& x, BlockReader<B>& y, Func&& f, bool put_x, bool put_y) {
+  if (!x.distribution().compatible(y.distribution()))
     throw std::runtime_error("attempting to operate on two arrays with different blocking structure");
   auto reader_x = BufferedReader<A>(x);
   auto reader_y = BufferedReader<A>(y);
@@ -108,6 +111,10 @@ double buffered_binary_operation(const BlockReader<A>& x, const BlockReader<B>& 
     auto& buffer_x = reader_x.read(i + 1);
     auto& buffer_y = reader_y.read(i + 1);
     f(buffer_x, buffer_y);
+    if (put_x)
+      x.put(i, buffer_x);
+    if (put_y)
+      y.put(i, buffer_y);
   }
 }
 
