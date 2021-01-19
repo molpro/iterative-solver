@@ -7,6 +7,7 @@
 #include <vector>
 
 using molpro::linalg::array::Span;
+using molpro::linalg::array::util::vector_to_span;
 using ::testing::Eq;
 using ::testing::Pointwise;
 
@@ -101,8 +102,23 @@ TYPED_TEST_P(SpanF, begin_end) {
   EXPECT_THAT(s, Pointwise(Eq(), data));
 }
 
+TYPED_TEST_P(SpanF, test_vector_to_span) {
+  auto& data = this->data;
+  auto s = vector_to_span(data);
+  ASSERT_EQ(s.size(), data.size());
+  ASSERT_EQ(&s[0], &data[0]);
+}
+
+TYPED_TEST_P(SpanF, const_vector_to_span) {
+  const auto& data = this->data;
+  auto s = vector_to_span(data);
+  ASSERT_EQ(s.size(), data.size());
+  ASSERT_EQ(&s[0], &data[0]);
+}
+
 REGISTER_TYPED_TEST_SUITE_P(SpanF, default_constructor, constructor, empty, copy_constructor, move_constructor,
-                            copy_operator, move_operator, iterate, begin_end);
+                            copy_operator, move_operator, iterate, begin_end, test_vector_to_span,
+                            const_vector_to_span);
 
 using ArrayTypes = ::testing::Types<int, double, float, std::complex<double>>;
 INSTANTIATE_TYPED_TEST_SUITE_P(Numeric, SpanF, ArrayTypes);

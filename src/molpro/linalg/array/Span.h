@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 namespace molpro::linalg::array {
 
@@ -100,6 +101,21 @@ auto end(const Span<T>& x) {
   return x.end();
 }
 } // namespace span
+
+namespace util {
+//! Wrap vector in a span
+template <typename T>
+Span<T> vector_to_span(std::vector<T>& x) {
+  return {&x[0], x.size()};
+}
+
+//! Wrap const vector in a span
+template <typename T>
+Span<T> vector_to_span(const std::vector<T>& x) {
+  return {const_cast<T*>(&x[0]), x.size()};
+}
+} // namespace util
+
 } // namespace molpro::linalg::array
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_SPAN_H
