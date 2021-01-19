@@ -2,8 +2,10 @@
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_UTIL_SELECT_MAX_DOT_H
 #include <cmath>
 #include <cstdlib>
+#include <map>
 #include <queue>
 
+#include <molpro/linalg/array/Span.h>
 namespace molpro::linalg::array::util {
 
 /*!
@@ -19,7 +21,7 @@ namespace molpro::linalg::array::util {
  * @return map of indices and corresponding x,y product
  */
 template <class X, class Y, typename value_type, typename value_type_abs>
-auto select_max_dot(size_t n, const X& x, const Y& y) {
+std::map<size_t, value_type_abs> select_max_dot(size_t n, const X& x, const Y& y) {
   using std::abs;
   using std::begin;
   using std::end;
@@ -57,7 +59,7 @@ auto select_max_dot(size_t n, const X& x, const Y& y) {
  * @return map of indices and corresponding x,y product
  */
 template <class X, class Y, typename value_type, typename value_type_abs>
-auto select_max_dot_iter_sparse(size_t n, const X& x, const Y& y) {
+std::map<size_t, value_type_abs> select_max_dot_iter_sparse(size_t n, const X& x, const Y& y) {
   using std::abs;
   using std::begin;
   using std::end;
@@ -97,7 +99,7 @@ auto select_max_dot_iter_sparse(size_t n, const X& x, const Y& y) {
  * @return map of indices and corresponding x,y product
  */
 template <class X, class Y, typename value_type, typename value_type_abs>
-auto select_max_dot_sparse(size_t n, const X& x, const Y& y) {
+std::map<size_t, value_type_abs> select_max_dot_sparse(size_t n, const X& x, const Y& y) {
   using std::abs;
   using std::begin;
   using std::end;
@@ -128,6 +130,18 @@ auto select_max_dot_sparse(size_t n, const X& x, const Y& y) {
   }
   return selection_map;
 }
+
+extern template std::map<size_t, double>
+select_max_dot<Span<double>, Span<double>, double, double>(size_t n, const Span<double>& x, const Span<double>& y);
+
+extern template std::map<size_t, double>
+select_max_dot_iter_sparse<Span<double>, std::map<size_t, double>, double, double>(size_t n, const Span<double>& x,
+                                                                                   const std::map<size_t, double>& y);
+
+extern template std::map<size_t, double>
+select_max_dot_sparse<std::map<size_t, double>, std::map<size_t, double>, double, double>(
+    size_t n, const std::map<size_t, double>& x, const std::map<size_t, double>& y);
+
 } // namespace molpro::linalg::array::util
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_UTIL_SELECT_MAX_DOT_H
