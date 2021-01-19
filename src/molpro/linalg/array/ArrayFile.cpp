@@ -4,11 +4,13 @@
 #include "util/temp_file.h"
 
 namespace molpro::linalg::array {
-ArrayFile::ArrayFile(size_t dimension, std::string_view directory)
-    : m_dim(dimension), m_dir(std::filesystem::absolute(std::filesystem::path(directory))), m_file(make_file()) {}
+ArrayFile::ArrayFile(std::string_view directory, size_t dimension, size_t block_size)
+    : m_dim(dimension), m_dir(std::filesystem::absolute(std::filesystem::path(directory))), m_file(make_file()),
+      m_block_reader(*this, 0, dimension, block_size) {}
 
-ArrayFile::ArrayFile(size_t dimension)
-    : m_dim(dimension), m_dir(std::filesystem::current_path()), m_file(make_file()) {}
+ArrayFile::ArrayFile(size_t dimension, size_t block_size)
+    : m_dim(dimension), m_dir(std::filesystem::current_path()), m_file(make_file()),
+      m_block_reader(*this, 0, dimension, block_size) {}
 
 ArrayFile::~ArrayFile() {
   // FIXME issue #67 explicitly remove the file, so that temporary is deleted on Windows
@@ -64,6 +66,9 @@ void ArrayFile::fill(ArrayFile::value_type value) {
   for (size_t i = 0; i < size(); ++i) {
     m_file.write((const char*)&value, sizeof(value_type));
   }
+}
+bool ArrayFile::compatible(const ArrayFile& other) {
+  return size() == other.size() && m_block_reader.distribution().compatible(other.m_block_reader.distribution());
 }
 
 } // namespace molpro::linalg::array
