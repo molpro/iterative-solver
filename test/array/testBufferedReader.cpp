@@ -6,12 +6,14 @@
 #include <molpro/linalg/array/util/BufferedReader.h>
 
 using molpro::linalg::array::Span;
+using molpro::linalg::array::util::Block;
 using molpro::linalg::array::util::BlockReader;
 using molpro::linalg::array::util::buffered_unary_operation;
 using molpro::linalg::array::util::BufferedReader;
 using molpro::linalg::array::util::Task;
 using ::testing::DoubleEq;
 using ::testing::Each;
+using ::testing::Pointwise;
 
 namespace {
 
@@ -81,7 +83,7 @@ TEST_F(BufferedReaderF, read_loop) {
   for (int i = 0; i < distribution.size(); ++i) {
     auto& block = buf_reader.read(i + 1);
     auto [beg, end] = distribution.range(i);
-    ASSERT_EQ(block.size(), end - beg) << " iter = " << i;
+    ASSERT_EQ(block.buffer.size(), end - beg) << " iter = " << i;
     ref_get_arguments.emplace_back(beg, end);
   }
   ASSERT_EQ(a.get_called_with_arguments, ref_get_arguments);
@@ -93,8 +95,8 @@ TEST(buffered_unary_operation, fill) {
   const size_t block_size = 3;
   auto array = Array(size);
   auto block_reader = BlockReader(array, 0, size, block_size);
-  auto fill = [alpha](std::vector<double>& x) {
-    for (auto& el : x)
+  auto fill = [alpha](Block& x) {
+    for (auto& el : x.buffer)
       el = alpha;
   };
   buffered_unary_operation(block_reader, fill, true);
@@ -107,12 +109,28 @@ TEST(buffered_unary_operation, equal) {
   auto array = ArrayNoPut(size);
   auto block_reader = BlockReader(array, 0, size, block_size);
   bool equal_to_one = true;
-  auto eq = [&equal_to_one](std::vector<double>& x) {
-    for (auto& el : x)
+  auto eq = [&equal_to_one](Block& x) {
+    for (auto& el : x.buffer)
       equal_to_one &= el == 1.;
   };
   buffered_unary_operation(block_reader, eq, false);
   ASSERT_FALSE(equal_to_one);
+}
+
+TEST(buffered_unary_operation, iota) {
+  const size_t size = 20;
+  const size_t block_size = 3;
+  auto array = Array(size);
+  auto block_reader = BlockReader(array, 0, size, block_size);
+  const double init = 1.0;
+  auto iota = [init](Block& x) {
+    for (size_t i = 0; i < x.buffer.size(); ++i)
+      x.buffer[i] = init + x.start + i;
+  };
+  buffered_unary_operation(block_reader, iota, true);
+  auto ref_buffer = std::vector<double>(size, 0);
+  std::iota(ref_buffer.begin(), ref_buffer.end(), init);
+  ASSERT_THAT(array.m_buffer, Pointwise(DoubleEq(), ref_buffer));
 }
 
 TEST(buffered_binary_operation, no_put) {
@@ -123,9 +141,9 @@ TEST(buffered_binary_operation, no_put) {
   auto block_reader_x = BlockReader(array_x, 0, size, block_size);
   auto block_reader_y = BlockReader(array_y, 0, size, block_size);
   bool not_equal = true;
-  auto eq = [&not_equal](const std::vector<double>& x, const std::vector<double>& y) {
-    for (size_t i = 0; i < x.size(); ++i) {
-      not_equal &= x[i] != y[i];
+  auto eq = [&not_equal](const Block& x, const Block& y) {
+    for (size_t i = 0; i < x.buffer.size(); ++i) {
+      not_equal &= x.buffer[i] != y.buffer[i];
     }
   };
   buffered_binary_operation(block_reader_x, block_reader_y, eq, false, false);
@@ -142,9 +160,9 @@ TEST(buffered_binary_operation, put_x) {
   auto array_y = ArrayNoPut(size, y_value);
   auto block_reader_x = BlockReader(array_x, 0, size, block_size);
   auto block_reader_y = BlockReader(array_y, 0, size, block_size);
-  auto aypx = [&alpha](std::vector<double>& x, const std::vector<double>& y) {
-    for (size_t i = 0; i < x.size(); ++i)
-      x[i] += alpha * y[i];
+  auto aypx = [&alpha](Block& x, const Block& y) {
+    for (size_t i = 0; i < x.buffer.size(); ++i)
+      x.buffer[i] += alpha * y.buffer[i];
   };
   buffered_binary_operation(block_reader_x, block_reader_y, aypx, true, false);
   ASSERT_THAT(array_x.m_buffer, Each(DoubleEq(x_value + alpha * y_value)));
@@ -160,9 +178,9 @@ TEST(buffered_binary_operation, put_y) {
   auto array_y = Array(size, y_value);
   auto block_reader_x = BlockReader(array_x, 0, size, block_size);
   auto block_reader_y = BlockReader(array_y, 0, size, block_size);
-  auto axpy = [&alpha](const std::vector<double>& x, std::vector<double>& y) {
-    for (size_t i = 0; i < x.size(); ++i)
-      y[i] += alpha * x[i];
+  auto axpy = [&alpha](const Block& x, Block& y) {
+    for (size_t i = 0; i < x.buffer.size(); ++i)
+      y.buffer[i] += alpha * x.buffer[i];
   };
   buffered_binary_operation(block_reader_x, block_reader_y, axpy, false, true);
   ASSERT_THAT(array_y.m_buffer, Each(DoubleEq(y_value + alpha * x_value)));
@@ -177,10 +195,10 @@ TEST(buffered_binary_operation, put_x_and_y) {
   auto array_y = Array(size, y_value);
   auto block_reader_x = BlockReader(array_x, 0, size, block_size);
   auto block_reader_y = BlockReader(array_y, 0, size, block_size);
-  auto mean = [](std::vector<double>& x, std::vector<double>& y) {
-    for (size_t i = 0; i < x.size(); ++i) {
-      auto a = (y[i] + x[i]) / 2.;
-      y[i] = x[i] = a;
+  auto mean = [](Block& x, Block& y) {
+    for (size_t i = 0; i < x.buffer.size(); ++i) {
+      auto a = (y.buffer[i] + x.buffer[i]) / 2.;
+      y.buffer[i] = x.buffer[i] = a;
     }
   };
   buffered_binary_operation(block_reader_x, block_reader_y, mean, true, true);

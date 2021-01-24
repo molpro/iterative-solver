@@ -57,7 +57,7 @@ public:
    * @param next_index index of the next block to start reading
    * @return
    */
-  std::vector<double>& read(int next_index) {
+  Block& read(int next_index) {
     bool index_is_in_valid_range = next_index >= 0 && next_index < m_block_reader.n_blocks();
     if (index_is_in_valid_range) {
       if (!m_reader) {
@@ -81,7 +81,7 @@ public:
 
 private:
   BlockReader<Array> m_block_reader;
-  std::list<std::vector<double>> m_buffers;
+  std::list<Block> m_buffers;
   util::Task<void> m_reader;
 };
 
@@ -96,10 +96,10 @@ void buffered_unary_operation(BlockReader<A>& x, Func&& f, bool put_x = true) {
   auto reader = BufferedReader<A>(x);
   reader.read(0);
   for (size_t i = 0; i < x.n_blocks(); ++i) {
-    auto& buffer = reader.read(i + 1);
-    f(buffer);
+    auto& block = reader.read(i + 1);
+    f(block);
     if (put_x)
-      x.put(i, buffer);
+      x.put(i, block.buffer);
   }
 }
 
@@ -126,15 +126,15 @@ void buffered_binary_operation(BlockReader<A>& x, BlockReader<B>& y, Func&& f, b
   reader_x.read(0);
   reader_y.read(0);
   for (size_t i = 0; i < x.n_blocks(); ++i) {
-    auto& buffer_x = reader_x.read(i + 1);
-    auto& buffer_y = reader_y.read(i + 1);
-    f(buffer_x, buffer_y);
+    auto& block_x = reader_x.read(i + 1);
+    auto& block_y = reader_y.read(i + 1);
+    f(block_x, block_y);
     auto t_put_x = Task<void>(std::future<void>());
     auto t_put_y = Task<void>(std::future<void>());
     if (put_x)
-      t_put_x = x.put(i, buffer_x);
+      t_put_x = x.put(i, block_x.buffer);
     if (put_y)
-      t_put_y = y.put(i, buffer_y);
+      t_put_y = y.put(i, block_y.buffer);
   }
 }
 
