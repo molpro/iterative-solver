@@ -4,6 +4,7 @@
 #include <molpro/linalg/array/util/BlockReader.h>
 
 using molpro::linalg::array::Span;
+using molpro::linalg::array::util::Block;
 using molpro::linalg::array::util::BlockReader;
 
 namespace {
@@ -38,6 +39,21 @@ TEST_F(BlockReaderF, get) {
     ASSERT_EQ(a.get_called_with_arguments->first, start + beg) << " iter = " << std::to_string(i);
     ASSERT_EQ(a.get_called_with_arguments->second, start + end) << " iter = " << std::to_string(i);
     ASSERT_EQ(buffer.size(), end - beg);
+  }
+}
+
+TEST_F(BlockReaderF, get_block) {
+  auto b = BlockReader<DummyArray>(a, start, end, block_size);
+  auto block = Block{};
+  for (size_t i = 0; i < b.n_blocks(); ++i) {
+    b.get(i, block);
+    ASSERT_TRUE(a.get_called_with_arguments);
+    auto [beg, end] = b.distribution().range(i);
+    ASSERT_EQ(a.get_called_with_arguments->first, start + beg) << " iter = " << std::to_string(i);
+    ASSERT_EQ(a.get_called_with_arguments->second, start + end) << " iter = " << std::to_string(i);
+    ASSERT_EQ(block.start, start + beg);
+    ASSERT_EQ(block.end, start + end);
+    ASSERT_EQ(block.buffer.size(), end - beg);
   }
 }
 

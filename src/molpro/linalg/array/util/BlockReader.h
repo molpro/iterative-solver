@@ -7,6 +7,14 @@
 #include <molpro/linalg/array/util/Task.h>
 
 namespace molpro::linalg::array::util {
+struct Block {
+  Block() = default;
+  ~Block() = default;
+  size_t start{0};
+  size_t end{0};
+  std::vector<double> buffer{};
+};
+
 /*!
  * @brief Reads a section of array in regular sized blocks using a separate thread.
  *
@@ -47,7 +55,14 @@ public:
     return Task<void>::create(getter);
   }
 
-  //! Get a block into the array
+  Task<void> get(size_t block_index, Block& block) {
+    auto [beg, end] = m_distribution.range(block_index);
+    block.start = m_start + beg;
+    block.end = m_start + end;
+    return get(block_index, block.buffer);
+  }
+
+  //! Put a block into the array
   Task<void> put(size_t block_index, const std::vector<double>& buffer) {
     check_block_index(block_index);
     auto [beg, end] = m_distribution.range(block_index);
