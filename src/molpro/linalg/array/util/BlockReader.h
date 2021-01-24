@@ -41,6 +41,13 @@ public:
     auto nblocks = section_length / m_block_size;
     m_distribution = make_distribution_spread_remainder<size_t>(section_length, nblocks);
   }
+  ~BlockReader() = default;
+  BlockReader(BlockReader<Array>&&) = default;
+  BlockReader& operator=(BlockReader&&) = default;
+  BlockReader(const BlockReader<Array>&) = default;
+
+  BlockReader() = delete;
+  BlockReader& operator=(const BlockReader&) = delete;
 
   //! Get a block
   Task<void> get(size_t block_index, std::vector<double>& buffer) {
