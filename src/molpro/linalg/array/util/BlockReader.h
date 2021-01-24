@@ -29,7 +29,7 @@ public:
    * @param a array to read which implements get and put methods
    * @param start start index of the section
    * @param end past-the-end index of the section
-   * @param block_size nominal size of the block (the remainder may be spread over blocks, so actual size could be +1)
+   * @param block_size maximum size of the block
    */
   BlockReader(Array& a, size_t start, size_t end, size_t block_size)
       : m_array(a), m_block_size(block_size), m_start(start), m_end(end) {
@@ -39,6 +39,8 @@ public:
       throw std::runtime_error("block size must be >= 1");
     auto section_length = end - start;
     auto nblocks = section_length / m_block_size;
+    if (section_length % m_block_size)
+      ++nblocks;
     m_distribution = make_distribution_spread_remainder<size_t>(section_length, nblocks);
   }
   ~BlockReader() = default;

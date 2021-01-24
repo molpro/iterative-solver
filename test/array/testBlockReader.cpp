@@ -20,12 +20,13 @@ struct BlockReaderF : ::testing::Test {
   DummyArray a;
   size_t start = 3;
   size_t end = 37;
+  size_t n_blocks = 7;
   size_t block_size = 5;
 };
 
 TEST_F(BlockReaderF, constructor) {
   auto b = BlockReader<DummyArray>(a, start, end, block_size);
-  ASSERT_EQ(b.n_blocks(), (end - start) / block_size);
+  ASSERT_EQ(b.n_blocks(), n_blocks);
   ASSERT_EQ(b.n_blocks(), b.distribution().size());
 }
 
