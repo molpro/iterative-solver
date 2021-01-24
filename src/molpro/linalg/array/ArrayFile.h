@@ -60,7 +60,23 @@ public:
   //! Writes requested values to file
   void put(index_type lo, index_type hi, const Span<value_type>& data);
 
+  //! Scale each element by a value
+  void scal(value_type value);
+
+  //! Replace each element by a value
   void fill(value_type value);
+
+  //! Apply y += a*x elementwise
+  void axpy(value_type value, const ArrayFile& x);
+  void axpy(value_type value, const std::vector<double>& x);
+  void axpy(value_type value, const Span<double>& x);
+  void axpy(value_type value, const std::map<size_t, double>& x);
+
+  //! Calculate scalar product with another array
+  double dot(const ArrayFile& x) const;
+  double dot(const std::vector<double>& x) const;
+  double dot(const Span<double>& x) const;
+  double dot(const std::map<size_t, double>& x) const;
 
 protected:
   size_t m_dim = 0; //!< number of elements in the array

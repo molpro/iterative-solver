@@ -3,6 +3,7 @@
 #include "ArrayFile.h"
 #include "util/BufferedReader.h"
 #include "util/iterable_lingalg.h"
+#include "util/select_max_dot.h"
 #include "util/temp_file.h"
 
 namespace molpro::linalg::array {
@@ -75,6 +76,67 @@ void ArrayFile::fill(ArrayFile::value_type value) {
 
 bool ArrayFile::compatible(const ArrayFile& other) {
   return size() == other.size() && m_block_reader->distribution().compatible(other.m_block_reader->distribution());
+}
+
+void ArrayFile::scal(ArrayFile::value_type value) {
+  auto f_scal = [value](auto& x) { util::scal(value, x.buffer); };
+  util::buffered_unary_operation(*m_block_reader, f_scal, true);
+}
+
+void ArrayFile::axpy(ArrayFile::value_type value, const ArrayFile& x) {
+  auto f_axpy = [value](const util::Block& xx, util::Block& yy) { util::axpy(value, xx.buffer, yy.buffer); };
+  util::buffered_binary_operation(*x.m_block_reader, *m_block_reader, f_axpy, false, true);
+}
+
+void ArrayFile::axpy(ArrayFile::value_type value, const Span<double>& x) {
+  auto f_axpy = [value, &x](util::Block& y) {
+    auto x_block = Span<double>(const_cast<double*>(x.data()) + y.start, y.buffer.size());
+    util::axpy(value, x_block, y.buffer);
+  };
+  util::buffered_unary_operation(*m_block_reader, f_axpy, true);
+}
+
+void ArrayFile::axpy(ArrayFile::value_type value, const std::vector<double>& x) {
+  axpy(value, util::vector_to_span(x));
+}
+
+void ArrayFile::axpy(ArrayFile::value_type value, const std::map<size_t, double>& x) {
+  auto f_axpy = [value, &x](util::Block& y) {
+    for (const auto [i, v] : x)
+      if (i >= y.start && i < y.end)
+        y.buffer[i - y.start] += value * v;
+  };
+  util::buffered_unary_operation(*m_block_reader, f_axpy, true);
+}
+
+double ArrayFile::dot(const ArrayFile& x) const {
+  double tot = 0.;
+  auto f_dot = [&tot](const util::Block& x, const util::Block& y) { tot += util::dot(x.buffer, y.buffer); };
+  util::buffered_binary_operation(*x.m_block_reader, *m_block_reader, f_dot, false, false);
+  return tot;
+}
+
+double ArrayFile::dot(const Span<double>& x) const {
+  double tot = 0.;
+  auto f_dot = [&tot, &x](const util::Block& y) {
+    auto x_block = Span<double>(const_cast<double*>(x.data()) + y.start, y.buffer.size());
+    tot += util::dot(x_block, y.buffer);
+  };
+  util::buffered_unary_operation(*m_block_reader, f_dot, false);
+  return tot;
+}
+
+double ArrayFile::dot(const std::vector<double>& x) const { return dot(util::vector_to_span(x)); }
+
+double ArrayFile::dot(const std::map<size_t, double>& x) const {
+  double tot = 0.;
+  auto f_dot = [&tot, &x](const util::Block& y) {
+    for (const auto [i, v] : x)
+      if (i >= y.start && i < y.end)
+        tot += y.buffer[i - y.start] * v;
+  };
+  util::buffered_unary_operation(*m_block_reader, f_dot, false);
+  return tot;
 }
 
 } // namespace molpro::linalg::array

@@ -29,7 +29,7 @@ DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_C
         int rank;
         MPI_Comm_rank(comm, &rank);
         auto [beg, end] = m_distribution->range(rank);
-        return std::make_unique<ArrayFile>(end - beg, directory);
+        return std::make_unique<ArrayFile>(directory, end - beg);
       })) {
   if (m_distribution->border().first != 0)
     DistrArray::error("Distribution of array must start from 0");
