@@ -109,6 +109,13 @@ inline void axpy(double alpha, const std::vector<double> &x, std::vector<double>
   axpy(alpha, vector_to_span(x), sy);
 }
 
+inline void axpy(double alpha, const Span<double> &x, std::vector<double> &y) {
+  auto sy = vector_to_span(y);
+  axpy(alpha, x, sy);
+}
+
+inline void axpy(double alpha, const std::vector<double> &x, Span<double> &y) { axpy(alpha, vector_to_span(x), y); }
+
 inline void axpy_sparse(double alpha, const std::map<size_t, double> &x, std::vector<double> &y) {
   auto sy = vector_to_span(y);
   axpy_sparse(alpha, x, sy);
@@ -118,8 +125,16 @@ inline double dot(const std::vector<double> &x, const std::vector<double> &y) {
   return dot<double>(vector_to_span(x), vector_to_span(y));
 }
 
+inline double dot(const Span<double> &x, const std::vector<double> &y) { return dot<double>(x, vector_to_span(y)); }
+
+inline double dot(const std::vector<double> &x, const Span<double> &y) { return dot<double>(vector_to_span(x), y); }
+
 inline double dot_sparse(const std::vector<double> &x, const std::map<size_t, double> &y) {
   return dot_sparse<double>(vector_to_span(x), y);
+}
+
+inline double dot_sparse(const std::map<size_t, double> &x, const std::vector<double> &y) {
+  return dot_sparse<double>(vector_to_span(y), x);
 }
 
 } // namespace molpro::linalg::array::util
