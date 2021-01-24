@@ -3,13 +3,18 @@
 #include <filesystem>
 #include <fstream>
 #include <map>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
 
 #include <molpro/linalg/array/Span.h>
-#include <molpro/linalg/array/util/BlockReader.h>
 namespace molpro::linalg::array {
+
+namespace util {
+template <class A>
+class BlockReader;
+}
 
 /*!
  * @brief Array stored in a temporary file using a binary format.
@@ -36,8 +41,8 @@ public:
   // FIXME Delete until we decide whether resizing is permissible
   ArrayFile& operator=(const ArrayFile& other) = delete;
 
-  ArrayFile(ArrayFile&& other) noexcept = default;
-  ArrayFile& operator=(ArrayFile&& other) noexcept = default;
+  ArrayFile(ArrayFile&& other);
+  ArrayFile& operator=(ArrayFile&& other);
 
   //! number of elements in the array
   size_t size() const;
@@ -61,7 +66,7 @@ protected:
   size_t m_dim = 0; //!< number of elements in the array
   std::filesystem::path m_dir;
   mutable std::fstream m_file;
-  util::BlockReader<ArrayFile> m_block_reader;
+  std::unique_ptr<util::BlockReader<ArrayFile>> m_block_reader;
   //! creates a file and opens it. @returns file stream
   std::fstream make_file();
 };
