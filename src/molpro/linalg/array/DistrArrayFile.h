@@ -11,7 +11,6 @@ namespace molpro::linalg::array {
 
 class ArrayFile;
 
-namespace fs = std::filesystem;
 /*!
  * @brief Distributed array storing the buffer on disk using temporary local files.
  *
