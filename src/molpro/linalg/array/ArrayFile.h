@@ -78,6 +78,12 @@ public:
   double dot(const Span<double>& x) const;
   double dot(const std::map<size_t, double>& x) const;
 
+  //! Select n indices with largest by absolute value contributions to the dot product
+  std::map<size_t, value_type> select_max_dot(size_t n, const ArrayFile& x);
+  std::map<size_t, value_type> select_max_dot(size_t n, const Span<double>& x);
+  std::map<size_t, value_type> select_max_dot(size_t n, const std::vector<double>& x);
+  std::map<size_t, value_type> select_max_dot(size_t n, const std::map<size_t, double>& x);
+
 protected:
   size_t m_dim = 0; //!< number of elements in the array
   std::filesystem::path m_dir;

@@ -7,6 +7,7 @@
 
 using molpro::linalg::array::ArrayFile;
 using molpro::linalg::array::Span;
+using molpro::linalg::array::util::vector_to_span;
 using ::testing::DoubleEq;
 using ::testing::Each;
 using ::testing::Pointwise;
@@ -150,4 +151,62 @@ TEST(ArrayFile, dot_map) {
   auto const& yref = y;
   auto result = yref.dot(x);
   ASSERT_EQ(result, value_x * value_y * indices.size());
+}
+
+class ArrayFileSelectMaxDotF : public ::testing::Test {
+public:
+  ArrayFileSelectMaxDotF() : x(size, block_size) { x.put(0, size, vector_to_span(x_values)); }
+
+  std::map<size_t, double> max_dot(size_t n) {
+    auto selection = std::map<size_t, double>{};
+    for (size_t i = 0; i < n; ++i)
+      selection.emplace(dot[i]);
+    return selection;
+  }
+
+  std::vector<double> x_values{0, -1, 2, 1, -3, 3, -2};
+  std::vector<double> y_values{9, 1, 2, 1, 3, 3, 2};
+  std::vector<std::pair<size_t, double>> dot{{4, 9}, {5, 9}, {2, 4}, {6, 4}, {1, 1}, {3, 1}, {0, 0}};
+  size_t size{x_values.size()};
+  size_t block_size{3};
+  ArrayFile x;
+};
+
+TEST_F(ArrayFileSelectMaxDotF, ArrayFile) {
+  auto y = ArrayFile(size, block_size);
+  y.put(0, size, vector_to_span(y_values));
+  for (size_t n = 0; n < size; n += 2) {
+    auto ref_selection = max_dot(n);
+    auto selection = x.select_max_dot(n, y);
+    ASSERT_THAT(selection, Pointwise(::testing::Eq(), ref_selection));
+  }
+}
+
+TEST_F(ArrayFileSelectMaxDotF, Span) {
+  const auto y = vector_to_span(y_values);
+  for (size_t n = 0; n < size; n += 2) {
+    auto ref_selection = max_dot(n);
+    auto selection = x.select_max_dot(n, y);
+    ASSERT_THAT(selection, Pointwise(::testing::Eq(), ref_selection));
+  }
+}
+
+TEST_F(ArrayFileSelectMaxDotF, vector) {
+  const auto y = y_values;
+  for (size_t n = 0; n < size; n += 2) {
+    auto ref_selection = max_dot(n);
+    auto selection = x.select_max_dot(n, y);
+    ASSERT_THAT(selection, Pointwise(::testing::Eq(), ref_selection));
+  }
+}
+
+TEST_F(ArrayFileSelectMaxDotF, map) {
+  auto y = std::map<size_t, double>{};
+  for (size_t i = 0; i < size; ++i)
+    y.emplace(i, y_values[i]);
+  for (size_t n = 0; n < size; n += 2) {
+    auto ref_selection = max_dot(n);
+    auto selection = x.select_max_dot(n, y);
+    ASSERT_THAT(selection, Pointwise(::testing::Eq(), ref_selection));
+  }
 }

@@ -139,4 +139,75 @@ double ArrayFile::dot(const std::map<size_t, double>& x) const {
   return tot;
 }
 
+namespace {
+using select_pair = std::pair<ArrayFile::value_type, size_t>; // value and index
+using selection_priority_queue = std::priority_queue<select_pair, std::vector<select_pair>, std::greater<>>;
+using selection_map = std::map<size_t, double>;
+
+void extend_selection(selection_priority_queue& selection, const selection_map& block_selection, size_t n,
+                      size_t offset) {
+  for (auto [i, v] : block_selection)
+    selection.emplace(v, offset + i);
+  while (selection.size() > n)
+    selection.pop();
+}
+auto pq_to_map(selection_priority_queue& selection) {
+  auto selection_map = std::map<size_t, ArrayFile::value_type>{};
+  while (!selection.empty()) {
+    auto [v, i] = selection.top();
+    selection_map.emplace(i, v);
+    selection.pop();
+  }
+  return selection_map;
+}
+} // namespace
+
+std::map<size_t, ArrayFile::value_type> ArrayFile::select_max_dot(size_t n, const ArrayFile& x) {
+  auto selection = selection_priority_queue{};
+  auto f_select_max_dot = [&selection, n](const util::Block& x, const util::Block& y) {
+    const auto local_n = std::min(n, x.buffer.size());
+    auto block_selection =
+        util::select_max_dot<std::vector<double>, std::vector<double>, double, double>(local_n, x.buffer, y.buffer);
+    extend_selection(selection, block_selection, n, x.start);
+  };
+  util::buffered_binary_operation(*x.m_block_reader, *m_block_reader, f_select_max_dot, false, false);
+  return pq_to_map(selection);
+}
+
+std::map<size_t, ArrayFile::value_type> ArrayFile::select_max_dot(size_t n, const Span<double>& x) {
+  auto selection = selection_priority_queue{};
+  auto f_select_max_dot = [&x, &selection, n](const util::Block& y) {
+    auto const block_size = y.buffer.size();
+    auto const offset = y.start;
+    auto const local_n = std::min(n, block_size);
+    auto const x_block = Span<double>(const_cast<double*>(x.data() + offset), block_size);
+    auto block_selection =
+        util::select_max_dot<Span<double>, std::vector<double>, double, double>(local_n, x_block, y.buffer);
+    extend_selection(selection, block_selection, n, offset);
+  };
+  util::buffered_unary_operation(*m_block_reader, f_select_max_dot, false);
+  return pq_to_map(selection);
+}
+
+std::map<size_t, ArrayFile::value_type> ArrayFile::select_max_dot(size_t n, const std::vector<double>& x) {
+  return select_max_dot(n, util::vector_to_span(x));
+}
+
+std::map<size_t, ArrayFile::value_type> ArrayFile::select_max_dot(size_t n, const std::map<size_t, double>& x) {
+  auto selection = selection_priority_queue{};
+  auto f_select_max_dot = [&x, &selection, n](const util::Block& y) {
+    auto const block_size = y.buffer.size();
+    auto local_map = selection_map{};
+    for (auto it = x.lower_bound(y.start); it != x.upper_bound(y.end); ++it)
+      local_map.emplace(it->first - y.start, it->second);
+    auto const local_n = std::min(n, block_size);
+    auto block_selection =
+        util::select_max_dot_iter_sparse<std::vector<double>, std::map<size_t, double>, double, double>(
+            local_n, y.buffer, local_map);
+    extend_selection(selection, block_selection, n, y.start);
+  };
+  util::buffered_unary_operation(*m_block_reader, f_select_max_dot, false);
+  return pq_to_map(selection);
+}
+
 } // namespace molpro::linalg::array
