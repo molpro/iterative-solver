@@ -64,6 +64,14 @@ public:
   void scal(value_type value);
   //! Add a constant to each element
   void add(value_type value);
+  //! this[i] *= x[i]
+  void times(const ArrayFile& x);
+  void times(const Span<double>& x);
+  void times(const std::vector<double>& x);
+  //! this[i] = x[i] * y[i]
+  void times(const ArrayFile& x, const ArrayFile& y);
+  void times(const Span<double>& x, const Span<double>& y);
+  void times(const std::vector<double>& x, const std::vector<double>& y);
 
   //! Replace each element by a value
   void fill(value_type value);

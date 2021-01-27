@@ -88,6 +88,54 @@ void ArrayFile::add(ArrayFile::value_type value) {
   util::buffered_unary_operation(*m_block_reader, f_add, true);
 }
 
+void ArrayFile::times(const ArrayFile& x) {
+  auto f_times = [](util::Block& source, const util::Block& xx) { util::times(source.buffer, xx.buffer); };
+  util::buffered_binary_operation(*m_block_reader, *x.m_block_reader, f_times, true);
+}
+
+void ArrayFile::times(const Span<double>& x) {
+  auto f_times = [&x](util::Block& source) {
+    const auto sx = Span<double>(const_cast<double*>(x.data()) + source.start, source.buffer.size());
+    util::times(source.buffer, sx);
+  };
+  util::buffered_unary_operation(*m_block_reader, f_times, true);
+}
+
+void ArrayFile::times(const std::vector<double>& x) { times(util::vector_to_span(x)); }
+
+void ArrayFile::times(const ArrayFile& x, const ArrayFile& y) {
+  if (!x.m_block_reader->distribution().compatible(y.m_block_reader->distribution()))
+    throw std::runtime_error("attempting to operate on two arrays with different blocking structure");
+  auto reader_x = util::BufferedReader<ArrayFile>(*x.m_block_reader);
+  auto reader_y = util::BufferedReader<ArrayFile>(*y.m_block_reader);
+  reader_x.read(0);
+  reader_y.read(0);
+  auto buffer = std::vector<double>{};
+  for (size_t i = 0; i < x.m_block_reader->n_blocks(); ++i) {
+    auto& block_x = reader_x.read(i + 1);
+    auto& block_y = reader_y.read(i + 1);
+    buffer.resize(block_x.buffer.size());
+    util::times(buffer, block_x.buffer, block_y.buffer);
+    m_block_reader->put(i, buffer);
+  }
+}
+
+void ArrayFile::times(const Span<double>& x, const Span<double>& y) {
+  auto buffer = std::vector<double>{};
+  for (size_t i = 0; i < m_block_reader->n_blocks(); ++i) {
+    auto [start, end] = m_block_reader->distribution().range(i);
+    buffer.resize(end - start);
+    const auto sx = Span<double>(const_cast<double*>(x.data()) + start, buffer.size());
+    const auto sy = Span<double>(const_cast<double*>(y.data()) + start, buffer.size());
+    util::times(buffer, sx, sy);
+    m_block_reader->put(i, buffer);
+  }
+}
+
+void ArrayFile::times(const std::vector<double>& x, const std::vector<double>& y) {
+  times(util::vector_to_span(x), util::vector_to_span(y));
+}
+
 void ArrayFile::axpy(ArrayFile::value_type value, const ArrayFile& x) {
   auto f_axpy = [value](const util::Block& xx, util::Block& yy) { util::axpy(value, xx.buffer, yy.buffer); };
   util::buffered_binary_operation(*x.m_block_reader, *m_block_reader, f_axpy, false, true);

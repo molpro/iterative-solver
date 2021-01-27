@@ -4,6 +4,7 @@
 #include <numeric>
 
 #include <molpro/linalg/array/ArrayFile.h>
+#include <molpro/linalg/array/util/iterable_lingalg.h>
 
 using molpro::linalg::array::ArrayFile;
 using molpro::linalg::array::Span;
@@ -58,6 +59,58 @@ TEST(ArrayFile, add) {
   a.add(scal);
   auto buffer = a.get(0, a.size());
   ASSERT_THAT(buffer, Each(DoubleEq(value + scal)));
+}
+
+TEST(ArrayFile, times) {
+  auto a = ArrayFile(10, 3);
+  auto b = ArrayFile(a.size(), 3);
+  const double value_x = 1.;
+  const double value_y = 2.;
+  a.fill(value_x);
+  b.fill(value_y);
+  a.times(b);
+  auto buffer = a.get(0, a.size());
+  ASSERT_THAT(buffer, Each(DoubleEq(value_x * value_y)));
+}
+
+TEST(ArrayFile, times_vector) {
+  auto a = ArrayFile(10, 3);
+  auto b = std::vector<double>(a.size());
+  const double value_x = 1.;
+  const double value_y = 2.;
+  a.fill(value_x);
+  molpro::linalg::array::util::fill(value_y, b);
+  a.times(b);
+  auto buffer = a.get(0, a.size());
+  ASSERT_THAT(buffer, Each(DoubleEq(value_x * value_y)));
+}
+
+TEST(ArrayFile, times_xyz_vector) {
+  auto a = ArrayFile(10, 3);
+  auto b = std::vector<double>(a.size());
+  auto c = std::vector<double>(a.size());
+  const double value_x = 1.;
+  const double value_y = 2.;
+  a.fill(0.);
+  molpro::linalg::array::util::fill(value_x, b);
+  molpro::linalg::array::util::fill(value_y, c);
+  a.times(b, c);
+  auto buffer = a.get(0, a.size());
+  ASSERT_THAT(buffer, Each(DoubleEq(value_x * value_y)));
+}
+
+TEST(ArrayFile, times_xyz) {
+  auto a = ArrayFile(10, 3);
+  auto b = ArrayFile(10, 3);
+  auto c = ArrayFile(10, 3);
+  const double value_x = 1.;
+  const double value_y = 2.;
+  a.fill(0.);
+  b.fill(value_x);
+  c.fill(value_y);
+  a.times(b, c);
+  auto buffer = a.get(0, a.size());
+  ASSERT_THAT(buffer, Each(DoubleEq(value_x * value_y)));
 }
 
 TEST(ArrayFile, axpy) {
