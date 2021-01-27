@@ -5,10 +5,12 @@
  * containers that are used in our implemented arrays.
  */
 #include <algorithm>
+#include <functional>
 #include <map>
-#include <molpro/linalg/array/Span.h>
 #include <numeric>
 #include <vector>
+
+#include <molpro/linalg/array/Span.h>
 
 namespace molpro::linalg::array::util {
 
@@ -21,6 +23,29 @@ template <typename T, class A>
 void scal(T alpha, A &x) {
   for (auto &el : x)
     el *= alpha;
+}
+
+//! x[i] += alpha
+template <typename T, class A>
+void add(T alpha, A &x) {
+  for (auto &el : x)
+    el += alpha;
+}
+
+//! x[i] *= y[i]
+template <class A, class B>
+void times(A &x, const B &y) {
+  using std::begin;
+  using std::end;
+  std::transform(begin(x), end(x), begin(y), begin(x), std::multiplies<>());
+}
+
+//! x[i] = y[i] * z[i]
+template <class A, class B, class C>
+void times(A &x, const B &y, const C &z) {
+  using std::begin;
+  using std::end;
+  std::transform(begin(y), end(y), begin(z), begin(x), std::multiplies<>());
 }
 
 /*!
@@ -88,6 +113,9 @@ T dot_sparse(const AL &x, const AR &y) {
 }
 
 extern template void scal(double alpha, Span<double> &x);
+extern template void add(double alpha, Span<double> &x);
+extern template void times(Span<double> &x, const Span<double> &y);
+extern template void times(Span<double> &x, const Span<double> &y, const Span<double> &z);
 extern template void fill(double alpha, Span<double> &x);
 extern template void axpy(double alpha, const Span<double> &x, Span<double> &y);
 extern template void axpy_sparse(double alpha, const std::map<size_t, double> &x, Span<double> &y);
@@ -97,6 +125,21 @@ extern template double dot_sparse(const Span<double> &x, const std::map<size_t, 
 inline void scal(double alpha, std::vector<double> &x) {
   auto s = vector_to_span(x);
   scal(alpha, s);
+}
+
+inline void add(double alpha, std::vector<double> &x) {
+  auto s = vector_to_span(x);
+  add(alpha, s);
+}
+
+inline void times(std::vector<double> &x, const std::vector<double> &y) {
+  auto s = vector_to_span(x);
+  times(s, vector_to_span(y));
+}
+
+inline void times(std::vector<double> &x, const std::vector<double> &y, const std::vector<double> &z) {
+  auto s = vector_to_span(x);
+  times(s, vector_to_span(y), vector_to_span(z));
 }
 
 inline void fill(double alpha, std::vector<double> &x) {

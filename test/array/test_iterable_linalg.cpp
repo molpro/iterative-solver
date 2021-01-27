@@ -3,12 +3,14 @@
 
 #include <molpro/linalg/array/util/iterable_lingalg.h>
 
+using molpro::linalg::array::util::add;
 using molpro::linalg::array::util::axpy;
 using molpro::linalg::array::util::axpy_sparse;
 using molpro::linalg::array::util::dot;
 using molpro::linalg::array::util::dot_sparse;
 using molpro::linalg::array::util::fill;
 using molpro::linalg::array::util::scal;
+using molpro::linalg::array::util::times;
 using ::testing::DoubleEq;
 using ::testing::Each;
 using ::testing::Pointwise;
@@ -21,6 +23,39 @@ TEST(iterable_linalg, scal) {
   scal(alpha, x);
   ASSERT_EQ(x.size(), size);
   ASSERT_THAT(x, Each(DoubleEq(alpha * value)));
+}
+
+TEST(iterable_linalg, add) {
+  const size_t size = 5;
+  const double value = 0.1;
+  const double alpha = 2.0;
+  auto x = std::vector<double>(size, value);
+  add(alpha, x);
+  ASSERT_EQ(x.size(), size);
+  ASSERT_THAT(x, Each(DoubleEq(alpha + value)));
+}
+
+TEST(iterable_linalg, times) {
+  const size_t size = 5;
+  const double value_x = 1.;
+  const double value_y = 2.;
+  auto x = std::vector<double>(size, value_x);
+  auto const y = std::vector<double>(size, value_y);
+  times(x, y);
+  ASSERT_EQ(x.size(), size);
+  ASSERT_THAT(x, Each(DoubleEq(value_x * value_y)));
+}
+
+TEST(iterable_linalg, times_xyz) {
+  const size_t size = 5;
+  const double value_y = 1.;
+  const double value_z = 2.;
+  auto x = std::vector<double>(size);
+  auto const y = std::vector<double>(size, value_y);
+  auto const z = std::vector<double>(size, value_z);
+  times(x, y, z);
+  ASSERT_EQ(x.size(), size);
+  ASSERT_THAT(x, Each(DoubleEq(value_y * value_z)));
 }
 
 TEST(iterable_linalg, fill) {
