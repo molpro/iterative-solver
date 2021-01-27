@@ -65,6 +65,27 @@ public:
   void scatter(const std::vector<index_type> &indices, const std::vector<value_type> &data) override;
   void scatter_acc(std::vector<index_type> &indices, const std::vector<value_type> &data) override;
   std::vector<value_type> vec() const override;
+
+  virtual void fill(value_type a);
+
+//  virtual void zero();
+//  virtual void scal(value_type a);
+//  virtual void add(const DistrArray &y);
+//  virtual void add(value_type a);
+//  virtual void sub(const DistrArray &y);
+//  virtual void sub(value_type a);
+//  virtual void recip();
+//  virtual void times(const DistrArray &y);
+//  virtual void times(const DistrArray &y, const DistrArray &z);
+//
+//  virtual void axpy(value_type a, const DistrArrayFile &y);
+//  virtual void axpy(value_type a, const DistrArray &y);
+//  virtual void axpy(value_type a, const SparseArray &y);
+//  [[nodiscard]] virtual value_type dot(const DistrArray &y) const;
+//  [[nodiscard]] virtual value_type dot(const SparseArray &y) const;
+//
+//  [[nodiscard]] std::map<size_t, value_type> select_max_dot(size_t n, const DistrArray &y) const;
+//  [[nodiscard]] std::map<size_t, value_type> select_max_dot(size_t n, const SparseArray &y) const;
 };
 
 } // namespace molpro::linalg::array

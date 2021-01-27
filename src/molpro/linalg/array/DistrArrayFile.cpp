@@ -172,5 +172,6 @@ std::vector<DistrArrayFile::value_type> DistrArrayFile::vec() const {
   std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
   return get(lo_loc, hi_loc);
 }
+void DistrArrayFile::fill(value_type a) { m_local_array->fill(a); }
 
 } // namespace molpro::linalg::array

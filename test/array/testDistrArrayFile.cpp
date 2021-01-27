@@ -26,7 +26,7 @@ using ::testing::Pointwise;
 
 class DistrArrayFile_Fixture : public ::testing::Test {
 public:
-  DistrArrayFile_Fixture() : a(DistrArrayFile(size, mpi_comm)) {}
+  DistrArrayFile_Fixture() : a(size, mpi_comm) {}
   void SetUp() override {
     auto dist = a.distribution();
     MPI_Comm_rank(mpi_comm, &mpi_rank);
@@ -107,7 +107,7 @@ TEST_F(DistrArrayFile_Fixture, assignment_move) {
   std::vector<double> v(size);
   std::iota(v.begin(), v.end(), 0.5);
   a.put(left, right, &(*(v.cbegin() + left)));
-  auto b = DistrArrayFile(1);
+  auto b = DistrArrayFile(mpi_size, a.communicator());
   b = std::move(a);
   std::vector<double> w(size, 0);
   b.get(left, right, &(*(w.begin() + left)));
@@ -202,4 +202,15 @@ TEST_F(DistrArrayFile_Fixture, scatter_acc) {
   MPI_Allgatherv(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, y.data(), chunks.data(), displs.data(), MPI_DOUBLE, mpi_comm);
   ScopeLock l{mpi_comm};
   EXPECT_THAT(y, Pointwise(DoubleEq(), w));
+}
+
+TEST(DistrArrayFile, fill) {
+  auto const size = 17;
+  auto const block_size = 3;
+  auto a = DistrArrayFile(size, mpi_comm, block_size);
+  double const value = 2.;
+  a.fill(value);
+  ScopeLock l{mpi_comm};
+  auto buffer = a.vec();
+  ASSERT_THAT(buffer, Each(DoubleEq(value)));
 }
