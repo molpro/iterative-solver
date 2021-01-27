@@ -19,17 +19,18 @@ int mpi_size(MPI_Comm comm) {
 DistrArrayFile::DistrArrayFile(DistrArrayFile&& source) noexcept
     : DistrArrayDisk(std::move(source)), m_local_array(std::move(source.m_local_array)) {}
 
-DistrArrayFile::DistrArrayFile(size_t dimension, MPI_Comm comm, const std::string& directory)
+DistrArrayFile::DistrArrayFile(size_t dimension, MPI_Comm comm, size_t block_size, const std::string& directory)
     : DistrArrayFile(std::make_unique<Distribution>(
                          util::make_distribution_spread_remainder<index_type>(dimension, mpi_size(comm))),
-                     comm, directory) {}
+                     comm, block_size, directory) {}
 
-DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm, const std::string& directory)
+DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm, size_t block_size,
+                               const std::string& directory)
     : DistrArrayDisk(std::move(distribution), comm), m_local_array(std::invoke([&]() {
         int rank;
         MPI_Comm_rank(comm, &rank);
         auto [beg, end] = m_distribution->range(rank);
-        return std::make_unique<ArrayFile>(directory, end - beg);
+        return std::make_unique<ArrayFile>(directory, end - beg, block_size);
       })) {
   if (m_distribution->border().first != 0)
     DistrArray::error("Distribution of array must start from 0");
@@ -37,7 +38,7 @@ DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_C
 
 DistrArrayFile::DistrArrayFile(const DistrArrayFile& source)
     : DistrArrayFile(std::make_unique<Distribution>(source.distribution()), source.communicator(),
-                     source.m_local_array->directory()) {
+                     source.m_local_array->block_size(), source.m_local_array->directory()) {
   DistrArrayFile::copy(source);
 }
 

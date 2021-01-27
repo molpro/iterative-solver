@@ -23,15 +23,17 @@ class ArrayFile;
  */
 class DistrArrayFile : public DistrArrayDisk {
 protected:
-  std::unique_ptr<ArrayFile> m_local_array; //! File array storing the local section
+  std::unique_ptr<ArrayFile> m_local_array;           //! File array storing the local section
+  static constexpr size_t m_default_block_size = 1e6; //! Default block size when buffering local section from disk
 
 public:
   DistrArrayFile() = delete;
   DistrArrayFile(const DistrArrayFile &source);
   DistrArrayFile(DistrArrayFile &&source) noexcept;
-  explicit DistrArrayFile(size_t dimension, MPI_Comm comm = MPI_COMM_WORLD, const std::string &directory = ".");
-  explicit DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm = MPI_COMM_WORLD,
+  explicit DistrArrayFile(size_t dimension, MPI_Comm comm, size_t block_size = m_default_block_size,
                           const std::string &directory = ".");
+  explicit DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm,
+                          size_t block_size = m_default_block_size, const std::string &directory = ".");
   explicit DistrArrayFile(const DistrArray &source);
 
   DistrArrayFile &operator=(const DistrArrayFile &source) = delete;
