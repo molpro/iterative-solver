@@ -193,6 +193,7 @@ std::map<size_t, ArrayFile::value_type> ArrayFile::select_max_dot(size_t n, cons
   return select_max_dot(n, util::vector_to_span(x));
 }
 
+// FIXME Should gather elements in batches instead of loading the whole array
 std::map<size_t, ArrayFile::value_type> ArrayFile::select_max_dot(size_t n, const std::map<size_t, double>& x) {
   auto selection = selection_priority_queue{};
   auto f_select_max_dot = [&x, &selection, n](const util::Block& y) {
