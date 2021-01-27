@@ -61,6 +61,12 @@ TEST(ArrayFile, add) {
   ASSERT_THAT(buffer, Each(DoubleEq(value + scal)));
 }
 
+TEST(ArrayFile, block_size) {
+  const size_t block_size = 3;
+  auto a = ArrayFile(10, block_size);
+  ASSERT_EQ(a.block_size(), block_size);
+}
+
 TEST(ArrayFile, times) {
   auto a = ArrayFile(10, 3);
   auto b = ArrayFile(a.size(), 3);

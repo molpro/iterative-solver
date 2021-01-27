@@ -46,6 +46,8 @@ public:
 
   //! number of elements in the array
   size_t size() const;
+  //! size of buffering blocks
+  size_t block_size() const;
   std::string directory() const { return m_dir.string(); }
 
   //! @returns true if other array's size and blocking distribution are the same as this

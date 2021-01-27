@@ -88,6 +88,7 @@ public:
   const Distribution<size_t>& distribution() const { return m_distribution; }
 
   size_t n_blocks() const { return m_distribution.size(); }
+  size_t block_size() const { return m_block_size; }
 
 private:
   void check_block_index(size_t block_index) {

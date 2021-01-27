@@ -264,4 +264,6 @@ std::map<size_t, ArrayFile::value_type> ArrayFile::select_max_dot(size_t n, cons
   return pq_to_map(selection);
 }
 
+size_t ArrayFile::block_size() const { return m_block_reader->block_size(); }
+
 } // namespace molpro::linalg::array
