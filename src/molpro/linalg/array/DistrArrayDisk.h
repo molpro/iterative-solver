@@ -13,15 +13,12 @@ namespace molpro::linalg::array {
  * RMA operations read/write directly to disk. Care must be taken that they do not overlap with local buffer
  * modifications.
  *
- * LocalBuffer reads the whole local section into memory. This might be prohivitively expensive for large arrays, so
+ * LocalBuffer reads the whole local section into memory. This might be prohibitively expensive for large arrays, so
  * care must be taken.
  *
- * LocalBufferChunked reads the local section in chunks using a separate thread for I/O. This is more memory efficient
- * and allows overlap of communication and computation.
+ * More efficient linear algebra operations are implemented buffering.
  *
- * More efficient linear algebra operations are implemented using ChunkedLocalBuffer.
- *
- * IO can be done in a separate thread using util::Task.
+ * IO can be done in a separate thread using util::Task, or util::BufferedReader.
  *
  * @code{.cpp}
  * #include <molpro/linalg/array/util.h>
@@ -68,10 +65,6 @@ protected:
     DistrArrayDisk &m_source;                  //!< keep a handle on source to dump data to disk
   };
 
-  // TODO The mechanism for loading the file in chunks should be shared with serial disk array
-  //! Loads local buffer in small chunks
-  class LocalBufferChunked {};
-
 public:
   [[nodiscard]] std::unique_ptr<LocalBuffer> local_buffer() override;
   [[nodiscard]] std::unique_ptr<const LocalBuffer> local_buffer() const override;
@@ -79,8 +72,6 @@ public:
   [[nodiscard]] std::unique_ptr<LocalBuffer> local_buffer(const span::Span<value_type> &buffer);
   //! Read-only access to the local section, reading it into the provided buffer
   [[nodiscard]] std::unique_ptr<const LocalBuffer> local_buffer(const span::Span<value_type> &buffer) const;
-  [[nodiscard]] std::unique_ptr<LocalBufferChunked> local_buffer_chunked();
-  [[nodiscard]] std::unique_ptr<const LocalBufferChunked> local_buffer_chunked() const;
 };
 
 double dot(const DistrArrayDisk &x, const DistrArrayDisk &y);
