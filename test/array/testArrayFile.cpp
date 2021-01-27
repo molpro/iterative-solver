@@ -50,6 +50,16 @@ TEST(ArrayFile, scal) {
   ASSERT_THAT(buffer, Each(DoubleEq(value * scal)));
 }
 
+TEST(ArrayFile, add) {
+  auto a = ArrayFile(10, 3);
+  const auto value = 2.;
+  const auto scal = 3.;
+  a.fill(value);
+  a.add(scal);
+  auto buffer = a.get(0, a.size());
+  ASSERT_THAT(buffer, Each(DoubleEq(value + scal)));
+}
+
 TEST(ArrayFile, axpy) {
   size_t const size = 11;
   size_t const block_size = 3;

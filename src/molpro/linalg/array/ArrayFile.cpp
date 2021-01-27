@@ -83,6 +83,11 @@ void ArrayFile::scal(ArrayFile::value_type value) {
   util::buffered_unary_operation(*m_block_reader, f_scal, true);
 }
 
+void ArrayFile::add(ArrayFile::value_type value) {
+  auto f_add = [value](util::Block& x) { util::add(value, x.buffer); };
+  util::buffered_unary_operation(*m_block_reader, f_add, true);
+}
+
 void ArrayFile::axpy(ArrayFile::value_type value, const ArrayFile& x) {
   auto f_axpy = [value](const util::Block& xx, util::Block& yy) { util::axpy(value, xx.buffer, yy.buffer); };
   util::buffered_binary_operation(*x.m_block_reader, *m_block_reader, f_axpy, false, true);

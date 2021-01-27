@@ -62,6 +62,8 @@ public:
 
   //! Scale each element by a value
   void scal(value_type value);
+  //! Add a constant to each element
+  void add(value_type value);
 
   //! Replace each element by a value
   void fill(value_type value);
