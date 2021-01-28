@@ -97,15 +97,19 @@ protected:
  */
 template <typename Ind>
 Distribution<Ind> make_distribution_spread_remainder(size_t dimension, int n_chunks) {
-  assert(n_chunks > 0);
-  auto chunk_borders = std::vector<Ind>{0};
-  chunk_borders.reserve(n_chunks + 1);
-  auto block = dimension / n_chunks;
-  auto n_extra = dimension % n_chunks;
-  std::fill_n(std::back_inserter(chunk_borders), n_extra, block + 1);
-  std::fill_n(std::back_inserter(chunk_borders), n_chunks - n_extra, block);
-  std::partial_sum(begin(chunk_borders), end(chunk_borders), begin(chunk_borders));
-  return {chunk_borders};
+  assert(n_chunks > 0 || dimension == 0);
+  if (n_chunks == 0 && dimension == 0) {
+    return {};
+  } else {
+    auto chunk_borders = std::vector<Ind>{0};
+    chunk_borders.reserve(n_chunks + 1);
+    auto block = dimension / n_chunks;
+    auto n_extra = dimension % n_chunks;
+    std::fill_n(std::back_inserter(chunk_borders), n_extra, block + 1);
+    std::fill_n(std::back_inserter(chunk_borders), n_chunks - n_extra, block);
+    std::partial_sum(begin(chunk_borders), end(chunk_borders), begin(chunk_borders));
+    return {chunk_borders};
+  }
 }
 
 } // namespace molpro::linalg::array::util
