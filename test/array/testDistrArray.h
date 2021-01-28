@@ -10,6 +10,7 @@
 #include <thread>
 
 #include "parallel_util.h"
+#include <molpro/linalg/array/util/Distribution.h>
 #include <molpro/linalg/array/util/LockMPI3.h>
 
 using ::testing::ContainerEq;
@@ -216,20 +217,18 @@ TYPED_TEST_P(DistArrayBasicRMAF, put) {
 TYPED_TEST_P(DistArrayBasicF, fill) {
   TypeParam::zero();
   TypeParam::sync();
-  auto ref_values = std::vector<double>(this->dim, 0.);
-  auto from_ga_buffer = TypeParam::vec();
+  auto buffer = TypeParam::local_buffer();
   {
     auto l = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), ref_values));
+    ASSERT_THAT(*buffer, Each(DoubleEq(0.)));
   }
   TypeParam::sync();
   TypeParam::fill(42.0);
   TypeParam::sync();
-  from_ga_buffer = TypeParam::vec();
+  buffer = TypeParam::local_buffer();
   {
     auto l = this->lock.scope();
-    std::fill(ref_values.begin(), ref_values.end(), 42.0);
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), ref_values));
+    ASSERT_THAT(*buffer, Each(DoubleEq(42.0)));
   }
   TypeParam::sync();
 }
@@ -249,6 +248,12 @@ public:
     for (auto el : sub_indices)
       sub_values.push_back(values[el]);
     Array::sync();
+  }
+
+  auto ref_local_values(size_t start, size_t end) const {
+    auto loc_val = std::vector<double>(end - start);
+    std::copy_n(values.begin() + start, loc_val.size(), loc_val.begin());
+    return loc_val;
   }
 
   LockMPI3 lock;
@@ -338,8 +343,8 @@ TYPED_TEST_P(DistrArrayRangeMinMaxF, min_loc_n) {
 TYPED_TEST_P(DistrArrayRangeMinMaxF, min_loc_n_reverse) {
   int n = 10;
   std::reverse(this->values.begin(), this->values.end());
-  if (this->p_rank == 0)
-    TypeParam::put(0, this->dim, this->values.data());
+  auto [start, end] = TypeParam::distribution().range(this->p_rank);
+  TypeParam::put(start, end, this->values.data() + start);
   TypeParam::sync();
   auto ref_minloc_ind = std::vector<typename TypeParam::index_type>(n);
   std::iota(ref_minloc_ind.rbegin(), ref_minloc_ind.rend(), this->dim - n);
@@ -414,10 +419,12 @@ TYPED_TEST_P(DistrArrayRangeLinAlgF, scal_double) {
   TypeParam::sync();
   for (auto &el : this->values)
     el *= alpha;
-  auto from_ga_buffer = TypeParam::vec();
+  auto buffer = TypeParam::local_buffer();
+  auto [start, end] = TypeParam::distribution().range(this->p_rank);
+  auto ref_values = this->ref_local_values(start, end);
   {
     auto proxy = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->values));
+    ASSERT_THAT(*buffer, Pointwise(DoubleEq(), ref_values));
   }
   TypeParam::sync();
 }
@@ -428,10 +435,12 @@ TYPED_TEST_P(DistrArrayRangeLinAlgF, add_double) {
   TypeParam::sync();
   for (auto &el : this->values)
     el += alpha;
+  auto buffer = TypeParam::local_buffer();
+  auto [start, end] = TypeParam::distribution().range(this->p_rank);
+  auto ref_values = this->ref_local_values(start, end);
   {
     auto proxy = this->lock.scope();
-    auto from_ga_buffer = TypeParam::vec();
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->values));
+    ASSERT_THAT(*buffer, Pointwise(DoubleEq(), ref_values));
   }
   TypeParam::sync();
 }
@@ -442,10 +451,12 @@ TYPED_TEST_P(DistrArrayRangeLinAlgF, sub_double) {
   sync();
   for (auto &el : this->values)
     el -= alpha;
+  auto buffer = TypeParam::local_buffer();
+  auto [start, end] = TypeParam::distribution().range(this->p_rank);
+  auto ref_values = this->ref_local_values(start, end);
   {
     auto proxy = this->lock.scope();
-    auto from_ga_buffer = TypeParam::vec();
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->values));
+    ASSERT_THAT(*buffer, Pointwise(DoubleEq(), ref_values));
   }
   TypeParam::sync();
 }
@@ -455,10 +466,12 @@ TYPED_TEST_P(DistrArrayRangeLinAlgF, recip) {
   TypeParam::sync();
   for (auto &el : this->values)
     el = 1. / el;
+  auto buffer = TypeParam::local_buffer();
+  auto [start, end] = TypeParam::distribution().range(this->p_rank);
+  auto ref_values = this->ref_local_values(start, end);
   {
     auto proxy = this->lock.scope();
-    auto from_ga_buffer = TypeParam::vec();
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->values));
+    ASSERT_THAT(*buffer, Pointwise(DoubleEq(), ref_values));
   }
   TypeParam::sync();
 }
@@ -551,23 +564,24 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, axpy_map) {
   double scale = 5.0;
   this->a.axpy(scale, this->sparse_array);
   this->a.sync();
-  auto from_ga_buffer_a = this->a.vec();
-  auto ref_vals = std::vector<double>(this->dim, this->alpha);
-  for (const auto &item : this->sparse_array) {
-    ref_vals[item.first] += scale * item.second;
+  const auto [start, end] = this->a.distribution().range(this->p_rank);
+  auto buffer_a = this->a.local_buffer();
+  auto ref_vals = std::vector<double>(end - start, this->alpha);
+  for (const auto [i, v] : this->sparse_array) {
+    if (i >= start && i < end)
+      ref_vals[i - start] += scale * v;
   }
   {
     auto proxy = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer_a, Pointwise(DoubleEq(), ref_vals));
+    ASSERT_THAT(*buffer_a, Pointwise(DoubleEq(), ref_vals));
   }
   this->a.sync();
 }
 
 TYPED_TEST_P(DistrArrayCollectiveLinAlgF, dot_array) {
-  if (this->p_rank == 0) {
-    this->a.put(0, this->dim, this->range_alpha.data());
-    this->b.put(0, this->dim, this->range_beta.data());
-  }
+  const auto [start, end] = this->a.distribution().range(this->p_rank);
+  this->a.put(start, end, this->range_alpha.data() + start);
+  this->b.put(start, end, this->range_beta.data() + start);
   this->a.sync();
   auto ga_dot = this->a.dot(this->b);
   double ref_dot = std::inner_product(this->range_alpha.begin(), this->range_alpha.end(), this->range_beta.begin(), 0.);
@@ -579,8 +593,8 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, dot_array) {
 }
 
 TYPED_TEST_P(DistrArrayCollectiveLinAlgF, dot_map) {
-  if (this->p_rank == 0)
-    this->a.put(0, this->dim, this->range_alpha.data());
+  const auto [start, end] = this->a.distribution().range(this->p_rank);
+  this->a.put(start, end, this->range_alpha.data() + start);
   this->a.sync();
   auto ga_dot = this->a.dot(this->sparse_array);
   double ref_dot = 0.;
@@ -600,17 +614,10 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, times) {
   TypeParam c{this->a};
   c.times(this->a, this->b);
   this->a.sync();
-  auto from_ga_buffer_a = this->a.vec();
-  auto from_ga_buffer_b = this->b.vec();
-  auto from_ga_buffer_c = c.vec();
-  auto ref_a = std::vector<double>(this->dim, this->alpha);
-  auto ref_b = std::vector<double>(this->dim, this->beta);
-  auto ref_c = std::vector<double>(this->dim, this->alpha * this->beta);
+  auto buffer_c = c.local_buffer();
   {
     auto proxy = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer_a, Pointwise(DoubleEq(), ref_a));
-    ASSERT_THAT(from_ga_buffer_b, Pointwise(DoubleEq(), ref_b));
-    ASSERT_THAT(from_ga_buffer_c, Pointwise(DoubleEq(), ref_c));
+    ASSERT_THAT(*buffer_c, Each(DoubleEq(this->alpha * this->beta)));
   }
   this->a.sync();
 }
@@ -623,17 +630,10 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, divide_append_negative) {
   TypeParam c{this->a};
   c.divide(this->a, this->b, shift, true, true);
   this->a.sync();
-  auto from_ga_buffer_a = this->a.vec();
-  auto from_ga_buffer_b = this->b.vec();
-  auto from_ga_buffer_c = c.vec();
-  auto ref_a = std::vector<double>(this->dim, this->alpha);
-  auto ref_b = std::vector<double>(this->dim, this->beta);
-  auto ref_c = std::vector<double>(this->dim, this->alpha - this->alpha / (this->beta + shift));
+  auto buffer_c = c.local_buffer();
   {
     auto proxy = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer_a, Pointwise(DoubleEq(), ref_a));
-    ASSERT_THAT(from_ga_buffer_b, Pointwise(DoubleEq(), ref_b));
-    ASSERT_THAT(from_ga_buffer_c, Pointwise(DoubleEq(), ref_c));
+    ASSERT_THAT(*buffer_c, Each(DoubleEq(this->alpha - this->alpha / (this->beta + shift))));
   }
   this->a.sync();
 }
@@ -646,17 +646,10 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, divide_append_positive) {
   TypeParam c{this->a};
   c.divide(this->a, this->b, shift, true, false);
   this->a.sync();
-  auto from_ga_buffer_a = this->a.vec();
-  auto from_ga_buffer_b = this->b.vec();
-  auto from_ga_buffer_c = c.vec();
-  auto ref_a = std::vector<double>(this->dim, this->alpha);
-  auto ref_b = std::vector<double>(this->dim, this->beta);
-  auto ref_c = std::vector<double>(this->dim, this->alpha + this->alpha / (this->beta + shift));
+  auto buffer_c = c.local_buffer();
   {
     auto proxy = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer_a, Pointwise(DoubleEq(), ref_a));
-    ASSERT_THAT(from_ga_buffer_b, Pointwise(DoubleEq(), ref_b));
-    ASSERT_THAT(from_ga_buffer_c, Pointwise(DoubleEq(), ref_c));
+    ASSERT_THAT(*buffer_c, Each(DoubleEq(this->alpha + this->alpha / (this->beta + shift))));
   }
   this->a.sync();
 }
@@ -669,17 +662,10 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, divide_overwrite_positive) {
   TypeParam c{this->a};
   c.divide(this->a, this->b, shift, false, false);
   this->a.sync();
-  auto from_ga_buffer_a = this->a.vec();
-  auto from_ga_buffer_b = this->b.vec();
-  auto from_ga_buffer_c = c.vec();
-  auto ref_a = std::vector<double>(this->dim, this->alpha);
-  auto ref_b = std::vector<double>(this->dim, this->beta);
-  auto ref_c = std::vector<double>(this->dim, this->alpha / (this->beta + shift));
+  auto buffer_c = c.local_buffer();
   {
     auto proxy = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer_a, Pointwise(DoubleEq(), ref_a));
-    ASSERT_THAT(from_ga_buffer_b, Pointwise(DoubleEq(), ref_b));
-    ASSERT_THAT(from_ga_buffer_c, Pointwise(DoubleEq(), ref_c));
+    ASSERT_THAT(*buffer_c, Each(DoubleEq(this->alpha / (this->beta + shift))));
   }
   this->a.sync();
 }
