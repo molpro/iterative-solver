@@ -1,16 +1,25 @@
 if (MPI)
     set(HDF5_PREFER_PARALLEL ON)
 endif ()
-find_package(HDF5 REQUIRED COMPONENTS C)
+if (LINEARALGEBRA_ARRAY_HDF5)
+    find_package(HDF5 REQUIRED COMPONENTS C)
+endif ()
 find_package(Threads)
 
-if (MPI AND NOT HDF5_IS_PARALLEL)
-    message(FATAL_ERROR "Parallel HDF5 is required when building LinearAlgebra with MPI on")
+if (MPI AND LINEARALGEBRA_ARRAY_HDF5 AND NOT HDF5_IS_PARALLEL)
+    message(FATAL_ERROR "Parallel HDF5 is required when building LinearAlgebra with MPI and HDF5 on")
+endif ()
+
+if (LINEARALGEBRA_ARRAY_HDF5)
+    LibraryManager_Append(${PROJECT_NAME}
+            SOURCES HDF5Handle.cpp
+            PUBLIC_HEADER HDF5Handle.h
+            )
 endif ()
 
 LibraryManager_Append(${PROJECT_NAME}
-        SOURCES HDF5Handle.cpp ArrayFile.cpp
-        PUBLIC_HEADER HDF5Handle.h ArrayHandler.h ArrayHandlerIterable.h ArrayHandlerSparse.h
+        SOURCES ArrayFile.cpp
+        PUBLIC_HEADER ArrayHandler.h ArrayHandlerIterable.h ArrayHandlerSparse.h
         ArrayHandlerIterableSparse.h ArrayHandlerDefault.h ArrayHandlerDDisk.h ArrayHandlerDDiskDistr.h
         ArrayHandlerDistrDDisk.h ArrayHandlerDDiskSparse.h Span.h type_traits.h
         default_handler.h ArrayFile.h
@@ -18,21 +27,35 @@ LibraryManager_Append(${PROJECT_NAME}
 if (MPI)
     LibraryManager_Append(${PROJECT_NAME} PUBLIC_HEADER ArrayHandlerDistr.h ArrayHandlerDistrSparse.h)
 endif ()
-target_link_libraries(${PROJECT_NAME} PUBLIC ${HDF5_LIBRARIES})
-target_include_directories(${PROJECT_NAME} PUBLIC ${HDF5_INCLUDE_DIRS})
-target_compile_definitions(${PROJECT_NAME} PUBLIC ${HDF5_DEFINITIONS})
+
+if (LINEARALGEBRA_ARRAY_HDF5)
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${HDF5_LIBRARIES})
+    target_include_directories(${PROJECT_NAME} PUBLIC ${HDF5_INCLUDE_DIRS})
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ${HDF5_DEFINITIONS})
+endif ()
 
 if (MPI)
     LibraryManager_Append(${PROJECT_NAME}
-            SOURCES DistrArray.cpp DistrArrayDisk.cpp PHDF5Handle.cpp
-            PUBLIC_HEADER DistrArray.h DistrArrayDisk.h PHDF5Handle.h
+            SOURCES DistrArray.cpp DistrArrayDisk.cpp DistrArrayFile.cpp DistrArraySpan.cpp
+            PUBLIC_HEADER DistrArray.h DistrArrayDisk.h DistrArrayFile.h DistrArraySpan.h
             )
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(${PROJECT_NAME} PUBLIC "-pthread") # needed for DistrArrayDisk
+        target_link_options(${PROJECT_NAME} PUBLIC "-pthread") # needed for DistrArrayDisk
+    endif ()
+
+    if (LINEARALGEBRA_ARRAY_HDF5)
+        LibraryManager_Append(${PROJECT_NAME}
+                SOURCES PHDF5Handle.cpp
+                PUBLIC_HEADER PHDF5Handle.h
+                )
+    endif ()
 
     if (LINEARALGEBRA_ARRAY_MPI3)
         message(STATUS "Building ${PROJECT_NAME} with MPI3 Array")
         target_compile_definitions(${PROJECT_NAME} PUBLIC LINEARALGEBRA_ARRAY_MPI3 LINEARALGEBRA_ARRAY_FILE)
-        LibraryManager_Append(${PROJECT_NAME} SOURCES DistrArrayMPI3.cpp DistrArrayFile.cpp
-                PUBLIC_HEADER DistrArrayMPI3.h DistrArrayFile.h)
+        LibraryManager_Append(${PROJECT_NAME} SOURCES DistrArrayMPI3.cpp
+                PUBLIC_HEADER DistrArrayMPI3.h ghc/filesystem.h)
     endif ()
 
     if (LINEARALGEBRA_ARRAY_GA)

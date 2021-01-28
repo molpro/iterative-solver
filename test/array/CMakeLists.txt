@@ -2,10 +2,12 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/data)
 foreach (fil empty_file inner_group_dataset.hdf5 single_dataset.hdf5)
     configure_file("data/${fil}" "${CMAKE_CURRENT_BINARY_DIR}/data/${file}" COPYONLY)
 endforeach ()
-add_executable(test-${PROJECT_NAME}-HDF5Handle.exe testHDF5Handle.cpp)
-target_link_libraries(test-${PROJECT_NAME}-HDF5Handle.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)
-target_compile_definitions(test-${PROJECT_NAME}-HDF5Handle.exe PUBLIC "ARRAY_DATA=\"${CMAKE_CURRENT_BINARY_DIR}/data\"")
-gtest_discover_tests(test-${PROJECT_NAME}-HDF5Handle.exe)
+if (LINEARALGEBRA_ARRAY_HDF5)
+    add_executable(test-${PROJECT_NAME}-HDF5Handle.exe testHDF5Handle.cpp)
+    target_link_libraries(test-${PROJECT_NAME}-HDF5Handle.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)
+    target_compile_definitions(test-${PROJECT_NAME}-HDF5Handle.exe PUBLIC "ARRAY_DATA=\"${CMAKE_CURRENT_BINARY_DIR}/data\"")
+    gtest_discover_tests(test-${PROJECT_NAME}-HDF5Handle.exe)
+endif ()
 
 add_executable(test-${PROJECT_NAME}-Span.exe testSpan.cpp)
 target_link_libraries(test-${PROJECT_NAME}-Span.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)
@@ -19,10 +21,12 @@ add_executable(test-${PROJECT_NAME}-ArrayHandler.exe testArrayHandler.cpp testAr
 target_link_libraries(test-${PROJECT_NAME}-ArrayHandler.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)
 gtest_discover_tests(test-${PROJECT_NAME}-ArrayHandler.exe)
 
-add_executable(test-${PROJECT_NAME}-array-util.exe testDistribution.cpp file_util.h
-        testUtil.cpp test_temp_file.cpp testArrayFile.cpp testBlockReader.cpp testBufferedReader.cpp
-        test_iterable_linalg.cpp
-        )
+add_executable(test-${PROJECT_NAME}-array-util.exe testDistribution.cpp file_util.h testUtil.cpp testArrayFile.cpp testBlockReader.cpp testBufferedReader.cpp
+        test_iterable_linalg.cpp)
+if (LINEARALGEBRA_ARRAY_HDF5)
+    target_sources(test-${PROJECT_NAME}-array-util.exe PRIVATE test_temp_file.cpp)
+endif ()
+
 target_link_libraries(test-${PROJECT_NAME}-array-util.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)
 gtest_discover_tests(test-${PROJECT_NAME}-array-util.exe)
 
@@ -34,7 +38,7 @@ if (MPI)
             )
     if (LINEARALGEBRA_ARRAY_MPI3)
         target_sources(test-${PROJECT_NAME}-parallel PRIVATE testDistrArrayMPI3.cpp testDistrArrayFile.cpp
-                testArrayHandlerDistr.cpp testArrayHandlerDistrSparse.cpp testArrayHandlers.cpp)
+                testDistrArraySpan.cpp testArrayHandlerDistr.cpp testArrayHandlerDistrSparse.cpp testArrayHandlers.cpp)
     endif ()
     if (LINEARALGEBRA_ARRAY_GA)
         target_sources(test-${PROJECT_NAME}-parallel PRIVATE testDistrArrayGA.cpp)
