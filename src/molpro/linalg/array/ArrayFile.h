@@ -52,13 +52,13 @@ public:
   //! @returns true if other array's size and blocking distribution are the same as this
   bool compatible(const ArrayFile& other);
 
-  //! Reads requested values
+  //! Reads requested values. Thread safe.
   void get(index_type lo, index_type hi, Span<value_type> buf) const;
 
-  //! @returns a vector of values read from file
+  //! @returns a vector of values read from file. Thread safe.
   std::vector<value_type> get(index_type lo, index_type hi) const;
 
-  //! Writes requested values to file
+  //! Writes requested values to file. Thread safe.
   void put(index_type lo, index_type hi, const Span<value_type>& data);
 
   //! Scale each element by a value

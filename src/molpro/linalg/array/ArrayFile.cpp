@@ -10,6 +10,7 @@ namespace fs = std::filesystem;
 #include "ghc/filesystem.h"
 namespace fs = ghc::filesystem;
 #endif
+#include <mutex>
 #include <unistd.h>
 
 #include "ArrayFile.h"
@@ -23,6 +24,7 @@ namespace molpro::linalg::array {
 struct ArrayFile::Pimpl {
   Pimpl(std::string_view directory) : dir(fs::absolute(fs::path(directory))) {}
   fs::path dir;
+  std::mutex mutex;
 };
 
 ArrayFile::ArrayFile(std::string_view directory, size_t dimension, size_t block_size)
@@ -63,8 +65,10 @@ void ArrayFile::get(index_type lo, index_type hi, Span<value_type> buf) const {
   if (lo < 0 || hi > m_dim) {
     throw std::runtime_error("get() range is outside of array bounds");
   }
+  m_pimpl->mutex.lock();
   m_file.seekg(lo * sizeof(value_type));
   m_file.read((char*)&buf[0], length * sizeof(value_type));
+  m_pimpl->mutex.unlock();
 }
 
 std::vector<ArrayFile::value_type> ArrayFile::get(index_type lo, index_type hi) const {
@@ -82,15 +86,19 @@ void ArrayFile::put(ArrayFile::index_type lo, ArrayFile::index_type hi, const Sp
     throw std::runtime_error("put() range is outside of array bounds");
   }
   auto length = hi - lo;
+  m_pimpl->mutex.lock();
   m_file.seekp(lo * sizeof(value_type));
   m_file.write((const char*)&data[0], length * sizeof(value_type));
+  m_pimpl->mutex.unlock();
 }
 
 void ArrayFile::fill(ArrayFile::value_type value) {
+  m_pimpl->mutex.lock();
   m_file.seekp(0);
   for (size_t i = 0; i < size(); ++i) {
     m_file.write((const char*)&value, sizeof(value_type));
   }
+  m_pimpl->mutex.unlock();
 }
 
 bool ArrayFile::compatible(const ArrayFile& other) {
