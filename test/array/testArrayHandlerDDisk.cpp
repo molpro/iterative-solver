@@ -1,12 +1,12 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <molpro/linalg/array/DistrArrayFile.h>
 #include <molpro/linalg/array/DistrArrayHDF5.h>
 #include <molpro/linalg/array/DistrArrayMPI3.h>
-#include <molpro/linalg/array/DistrArrayFile.h>
-#include <molpro/linalg/array/util/Distribution.h>
 #include <molpro/linalg/array/PHDF5Handle.h>
 #include <molpro/linalg/array/default_handler.h>
+#include <molpro/linalg/array/util/Distribution.h>
 #include <molpro/linalg/array/util/LockMPI3.h>
 
 #include "data_util.h"
@@ -16,8 +16,8 @@ using molpro::linalg::array::ArrayHandlerDDisk;
 using molpro::linalg::array::ArrayHandlerDDiskDistr;
 using molpro::linalg::array::ArrayHandlerDistrDDisk;
 using molpro::linalg::array::default_handler;
-using molpro::linalg::array::DistrArrayHDF5;
 using molpro::linalg::array::DistrArrayFile;
+using molpro::linalg::array::DistrArrayHDF5;
 using molpro::linalg::array::DistrArrayMPI3;
 using molpro::linalg::array::util::file_exists;
 using molpro::linalg::array::util::LockMPI3;
@@ -27,8 +27,8 @@ using molpro::linalg::test::test_file_hdf5_n1;
 using molpro::linalg::test::test_file_hdf5_n2;
 
 using ::testing::ContainerEq;
-using ::testing::Each;
 using ::testing::DoubleEq;
+using ::testing::Each;
 
 class ArrayHandlerDDiskF : public ::testing::Test {
 public:
@@ -114,9 +114,7 @@ TEST(ArrayHandlerDistrDDisk_file, default_handler) {
 TEST(ArrayHandlerDDiskDistr_File, constructor_copy_from_distr_array) {
   const double val = 0.5;
   auto a_mem = DistrArrayMPI3(100, mpi_comm);
-  a_mem.allocate_buffer();
   a_mem.fill(val);
-  //auto a_disk = DistrArrayFile(100, mpi_comm);
   auto h = default_handler<DistrArrayFile, DistrArrayMPI3>::value{};
   auto a_disk = h.copy(a_mem);
   LockMPI3 lock{mpi_comm};
@@ -126,7 +124,6 @@ TEST(ArrayHandlerDDiskDistr_File, constructor_copy_from_distr_array) {
     auto l = lock.scope();
     EXPECT_EQ(a_disk.communicator(), a_mem.communicator());
     EXPECT_EQ(a_disk.size(), a_mem.size());
-    EXPECT_FALSE(a_disk.empty());
     EXPECT_TRUE(a_disk.distribution().compatible(a_mem.distribution()));
   }
 }

@@ -8,7 +8,7 @@
 
 #include <molpro/linalg/array/Span.h>
 #include <molpro/linalg/array/DistrArraySpan.h>
-#include <molpro/linalg/array/util.h>
+#include <molpro/linalg/array/util/ScopeLock.h>
 #include <molpro/linalg/array/util/Distribution.h>
 
 #ifdef LINEARALGEBRA_ARRAY_MPI3
@@ -122,7 +122,6 @@ TEST_F(DistrArraySpan_Fixture, span) {
 TEST(DistrArraySpan, constructor_copy_from_distr_array) {
   const double val = 0.5;
   auto a_mem = molpro::linalg::array::DistrArrayMPI3(100, mpi_comm);
-  a_mem.allocate_buffer();
   a_mem.fill(val);
   auto a_disk = DistrArraySpan{a_mem};
   LockMPI3 lock{mpi_comm};
