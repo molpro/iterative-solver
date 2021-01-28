@@ -12,6 +12,7 @@ INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistrArrayRangeRMAF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistrArrayRangeLinAlgF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistrArrayRangeMinMaxF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, TestDistrArray, ArrayTypes);
+INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, TestDistrArrayMaxDot, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistrArrayCollectiveLinAlgF, ArrayTypes);
 
 TEST(DistrArrayMPI3, allocate_buffer_external) {

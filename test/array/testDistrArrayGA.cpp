@@ -11,4 +11,5 @@ INSTANTIATE_TYPED_TEST_SUITE_P(GA, DistrArrayRangeRMAF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(GA, DistrArrayRangeLinAlgF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(GA, DistrArrayRangeMinMaxF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(GA, TestDistrArray, ArrayTypes);
+INSTANTIATE_TYPED_TEST_SUITE_P(GA, TestDistrArrayMaxDot, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(GA, DistrArrayCollectiveLinAlgF, ArrayTypes);

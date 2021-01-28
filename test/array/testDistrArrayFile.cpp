@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "parallel_util.h"
+#include "testDistrArray.h"
 
 #include <molpro/linalg/array/DistrArrayFile.h>
 #include <molpro/linalg/array/util/Distribution.h>
@@ -214,3 +215,10 @@ TEST(DistrArrayFile, fill) {
   auto buffer = a.vec();
   ASSERT_THAT(buffer, Each(DoubleEq(value)));
 }
+
+using ArrayTypes = ::testing::Types<DistrArrayFile>;
+INSTANTIATE_TYPED_TEST_SUITE_P(File, DistArrayBasicF, ArrayTypes);
+INSTANTIATE_TYPED_TEST_SUITE_P(File, DistrArrayRangeLinAlgF, ArrayTypes);
+INSTANTIATE_TYPED_TEST_SUITE_P(File, DistrArrayRangeMinMaxF, ArrayTypes);
+INSTANTIATE_TYPED_TEST_SUITE_P(File, DistrArrayCollectiveLinAlgF, ArrayTypes);
+INSTANTIATE_TYPED_TEST_SUITE_P(File, TestDistrArrayMaxDot, ArrayTypes);
