@@ -18,6 +18,11 @@ TEST(ArrayFile, constructor_size) {
   EXPECT_EQ(a.size(), 100);
 }
 
+TEST(ArrayFile, constructor_0) {
+  auto a = ArrayFile(0);
+  EXPECT_EQ(a.size(), 0);
+}
+
 TEST(ArrayFile, fill_get) {
   const size_t size = 10;
   const double value = 3.;
