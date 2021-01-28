@@ -175,5 +175,73 @@ std::vector<DistrArrayFile::value_type> DistrArrayFile::vec() const {
 void DistrArrayFile::fill(value_type a) { m_local_array->fill(a); }
 void DistrArrayFile::zero() { DistrArrayFile::fill(0); }
 void DistrArrayFile::scal(value_type a) { m_local_array->scal(a); }
+void DistrArrayFile::add(const DistrArrayFile& y) { axpy(1., y); }
+void DistrArrayFile::add(const DistrArray& y) { axpy(1, y); }
+void DistrArrayFile::add(DistrArray::value_type a) { m_local_array->add(a); }
+void DistrArrayFile::sub(DistrArray::value_type a) { m_local_array->add(-a); }
+void DistrArrayFile::sub(const DistrArrayFile& y) { axpy(-1, y); }
+void DistrArrayFile::sub(const DistrArray& y) { axpy(-1, y); }
+
+void DistrArrayFile::axpy(DistrArray::value_type a, const DistrArrayFile& y) {
+  m_local_array->axpy(a, *y.m_local_array);
+}
+
+void DistrArrayFile::axpy(DistrArray::value_type a, const DistrArray& y) {
+  if (auto* yy = dynamic_cast<const DistrArrayFile*>(&y))
+    add(*yy);
+  else {
+    auto y_buffer = y.local_buffer();
+    m_local_array->axpy(a, *y_buffer);
+  }
+}
+
+void DistrArrayFile::axpy(DistrArray::value_type a, const DistrArray::SparseArray& y) { m_local_array->axpy(a, y); }
+void DistrArrayFile::times(const DistrArrayFile& y) { m_local_array->times(*y.m_local_array); }
+
+void DistrArrayFile::times(const DistrArray& y) {
+  if (auto* yy = dynamic_cast<const DistrArrayFile*>(&y))
+    times(*yy);
+  else {
+    auto y_buffer = y.local_buffer();
+    m_local_array->times(*y_buffer);
+  }
+}
+
+void DistrArrayFile::times(const DistrArrayFile& y, const DistrArrayFile& z) {
+  m_local_array->times(*y.m_local_array, *z.m_local_array);
+}
+
+void DistrArrayFile::times(const DistrArray& y, const DistrArray& z) {
+  if (auto* yy = dynamic_cast<const DistrArrayFile*>(&y), *zz = dynamic_cast<const DistrArrayFile*>(&z); yy && zz)
+    times(*yy, *zz);
+  else {
+    auto y_buffer = y.local_buffer();
+    auto z_buffer = z.local_buffer();
+    m_local_array->times(*y_buffer, *z_buffer);
+  }
+}
+
+DistrArray::value_type DistrArrayFile::dot(const DistrArrayFile& y) const {
+  auto loc_dot = m_local_array->dot(*y.m_local_array);
+  MPI_Allreduce(MPI_IN_PLACE, &loc_dot, 1, MPI_DOUBLE, MPI_SUM, communicator());
+  return loc_dot;
+}
+
+DistrArray::value_type DistrArrayFile::dot(const DistrArray& y) const {
+  if (auto* yy = dynamic_cast<const DistrArrayFile*>(&y))
+    return dot(*yy);
+  else {
+    auto y_buffer = y.local_buffer();
+    auto loc_dot = m_local_array->dot(*y_buffer);
+    MPI_Allreduce(MPI_IN_PLACE, &loc_dot, 1, MPI_DOUBLE, MPI_SUM, communicator());
+    return loc_dot;
+  }
+}
+
+DistrArray::value_type DistrArrayFile::dot(const DistrArray::SparseArray& y) const {
+  auto loc_dot = m_local_array->dot(y);
+  MPI_Allreduce(MPI_IN_PLACE, &loc_dot, 1, MPI_DOUBLE, MPI_SUM, communicator());
+  return loc_dot;
+}
 
 } // namespace molpro::linalg::array

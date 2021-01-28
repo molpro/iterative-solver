@@ -70,23 +70,27 @@ public:
 
   virtual void zero();
   virtual void scal(value_type a);
-//  virtual void add(const DistrArrayFile &y);
-//  virtual void add(const DistrArray &y);
-//  virtual void add(value_type a);
-//  virtual void sub(const DistrArray &y);
-//  virtual void sub(value_type a);
-//  virtual void recip();
-//  virtual void times(const DistrArray &y);
-//  virtual void times(const DistrArray &y, const DistrArray &z);
-//
-//  virtual void axpy(value_type a, const DistrArrayFile &y);
-//  virtual void axpy(value_type a, const DistrArray &y);
-//  virtual void axpy(value_type a, const SparseArray &y);
-//  [[nodiscard]] virtual value_type dot(const DistrArray &y) const;
-//  [[nodiscard]] virtual value_type dot(const SparseArray &y) const;
-//
-//  [[nodiscard]] std::map<size_t, value_type> select_max_dot(size_t n, const DistrArray &y) const;
-//  [[nodiscard]] std::map<size_t, value_type> select_max_dot(size_t n, const SparseArray &y) const;
+  virtual void add(const DistrArrayFile &y);
+  virtual void add(const DistrArray &y);
+  virtual void add(value_type a);
+  virtual void sub(const DistrArrayFile &y);
+  virtual void sub(const DistrArray &y);
+  virtual void sub(value_type a);
+  virtual void times(const DistrArrayFile &y);
+  virtual void times(const DistrArray &y);
+  virtual void times(const DistrArrayFile &y, const DistrArrayFile &z);
+  virtual void times(const DistrArray &y, const DistrArray &z);
+  virtual void axpy(value_type a, const DistrArrayFile &y);
+  virtual void axpy(value_type a, const DistrArray &y);
+  virtual void axpy(value_type a, const SparseArray &y);
+  [[nodiscard]] virtual value_type dot(const DistrArrayFile &y) const;
+  [[nodiscard]] virtual value_type dot(const DistrArray &y) const;
+  [[nodiscard]] virtual value_type dot(const SparseArray &y) const;
+
+  // TODO implement this. The logic is already in ArrayFile, it just needs to be moved out.
+  //  [[nodiscard]] std::map<size_t, value_type> select_max_dot(size_t n, const DistrArrayFile &y) const;
+  //  [[nodiscard]] std::map<size_t, value_type> select_max_dot(size_t n, const DistrArray &y) const;
+  //  [[nodiscard]] std::map<size_t, value_type> select_max_dot(size_t n, const SparseArray &y) const;
 };
 
 } // namespace molpro::linalg::array
