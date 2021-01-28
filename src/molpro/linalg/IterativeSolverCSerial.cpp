@@ -42,7 +42,3 @@ extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* 
                                           double threshold, size_t* indices) {}
 
 extern "C" void IterativeSolverPrintStatistics() {}
-
-extern "C" int64_t mpicomm_self() {}
-
-extern "C" int64_t mpicomm_global() {}
