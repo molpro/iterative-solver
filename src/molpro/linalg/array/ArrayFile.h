@@ -1,18 +1,5 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_ARRAYFILE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_ARRAYFILE_H
-// FIXME Use pimpl to move filesystem into cpp
-#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || (defined(__cplusplus) && __cplusplus >= 201703L)) &&            \
-    defined(__has_include)
-#if __has_include(<filesystem>) && (!defined(__MAC_OS_X_VERSION_MIN_REQUIRED) || __MAC_OS_X_VERSION_MIN_REQUIRED >= 101500)
-#define GHC_USE_STD_FS
-#include <filesystem>
-namespace fs = std::filesystem;
-#endif
-#endif
-#ifndef GHC_USE_STD_FS
-#include "ghc/filesystem.h"
-namespace fs = ghc::filesystem;
-#endif
 #include <fstream>
 #include <map>
 #include <memory>
@@ -60,7 +47,7 @@ public:
   size_t size() const;
   //! size of buffering blocks
   size_t block_size() const;
-  std::string directory() const { return m_dir.string(); }
+  std::string directory() const;
 
   //! @returns true if other array's size and blocking distribution are the same as this
   bool compatible(const ArrayFile& other);
@@ -109,8 +96,9 @@ public:
   std::map<size_t, value_type> select_max_dot(size_t n, const std::map<size_t, double>& x);
 
 protected:
+  class Pimpl;
   size_t m_dim = 0; //!< number of elements in the array
-  fs::path m_dir;
+  std::unique_ptr<Pimpl> m_pimpl;
   mutable std::fstream m_file;
   std::unique_ptr<util::BlockReader<ArrayFile>> m_block_reader;
   //! creates a file and opens it. @returns file stream

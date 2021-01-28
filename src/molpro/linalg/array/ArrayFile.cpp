@@ -1,3 +1,15 @@
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || (defined(__cplusplus) && __cplusplus >= 201703L)) &&            \
+    defined(__has_include)
+#if __has_include(<filesystem>) && (!defined(__MAC_OS_X_VERSION_MIN_REQUIRED) || __MAC_OS_X_VERSION_MIN_REQUIRED >= 101500)
+#define GHC_USE_STD_FS
+#include <filesystem>
+namespace fs = std::filesystem;
+#endif
+#endif
+#ifndef GHC_USE_STD_FS
+#include "ghc/filesystem.h"
+namespace fs = ghc::filesystem;
+#endif
 #include <unistd.h>
 
 #include "ArrayFile.h"
@@ -7,8 +19,14 @@
 #include "util/temp_file.h"
 
 namespace molpro::linalg::array {
+
+struct ArrayFile::Pimpl {
+  Pimpl(std::string_view directory) : dir(fs::absolute(fs::path(directory))) {}
+  fs::path dir;
+};
+
 ArrayFile::ArrayFile(std::string_view directory, size_t dimension, size_t block_size)
-    : m_dim(dimension), m_dir(fs::absolute(fs::path(directory))), m_file(make_file()),
+    : m_dim(dimension), m_pimpl(std::make_unique<ArrayFile::Pimpl>(directory)), m_file(make_file()),
       m_block_reader(std::make_unique<util::BlockReader<ArrayFile>>(*this, 0, dimension, block_size)) {}
 
 ArrayFile::ArrayFile(size_t dimension, size_t block_size)
@@ -22,10 +40,11 @@ ArrayFile::ArrayFile(ArrayFile&& other) = default;
 ArrayFile& ArrayFile::operator=(ArrayFile&& other) = default;
 
 size_t ArrayFile::size() const { return m_dim; }
+std::string ArrayFile::directory() const { return m_pimpl->dir.string(); }
 
 std::fstream ArrayFile::make_file() {
   std::fstream file;
-  std::string file_name = util::temp_file_name(m_dir.string() + "/", "");
+  std::string file_name = util::temp_file_name(m_pimpl->dir.string() + "/", "");
   file.open(file_name.c_str(), std::ios::out | std::ios::binary);
   file.close();
   file.open(file_name.c_str(), std::ios::out | std::ios::in | std::ios::binary);
