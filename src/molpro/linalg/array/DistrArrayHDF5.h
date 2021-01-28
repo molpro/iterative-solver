@@ -3,7 +3,7 @@
 #include <hdf5.h>
 #include <string>
 
-#include "molpro/linalg/array/DistrArrayDisk.h"
+#include <molpro/linalg/array/DistrArrayDisk.h>
 
 namespace molpro::linalg::array {
 namespace util {

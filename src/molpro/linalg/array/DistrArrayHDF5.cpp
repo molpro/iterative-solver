@@ -107,7 +107,6 @@ void DistrArrayHDF5::close_access() {
   if (m_dataset != dataset_default)
     H5Dclose(m_dataset);
   m_dataset = dataset_default;
-  m_file_handle->close_file();
 }
 
 void DistrArrayHDF5::erase() {
