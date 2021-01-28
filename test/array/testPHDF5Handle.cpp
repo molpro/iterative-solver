@@ -120,7 +120,6 @@ TEST_F(PHDF5HandleTestFile, erase_group_on_destroy) {
     EXPECT_TRUE(h2.set_erase_group_on_destroy(true));
   }
   auto l = lock.scope();
-  std::cout << file_exists(file_name) << std::endl;
   auto h = HDF5Handle(file_name);
   h.open_file(HDF5Handle::Access::read_only);
   ASSERT_TRUE(h.file_is_open());
