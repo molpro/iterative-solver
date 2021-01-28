@@ -54,7 +54,8 @@ DistrArrayFile& DistrArrayFile::operator=(DistrArrayFile&& source) noexcept {
 }
 
 DistrArrayFile DistrArrayFile::CreateTempCopy(const DistrArray& source, const std::string& directory) {
-  DistrArrayFile t(std::make_unique<Distribution>(source.distribution()), source.communicator(), directory);
+  DistrArrayFile t(std::make_unique<Distribution>(source.distribution()), source.communicator(), m_default_block_size,
+                   directory);
   t.copy(source);
   return t;
 }
