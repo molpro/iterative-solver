@@ -8,11 +8,11 @@
 
 namespace molpro::linalg::array {
 ArrayFile::ArrayFile(std::string_view directory, size_t dimension, size_t block_size)
-    : m_dim(dimension), m_dir(std::filesystem::absolute(std::filesystem::path(directory))), m_file(make_file()),
+    : m_dim(dimension), m_dir(fs::absolute(fs::path(directory))), m_file(make_file()),
       m_block_reader(std::make_unique<util::BlockReader<ArrayFile>>(*this, 0, dimension, block_size)) {}
 
 ArrayFile::ArrayFile(size_t dimension, size_t block_size)
-    : ArrayFile(std::filesystem::current_path().string(), dimension, block_size) {}
+    : ArrayFile(fs::current_path().string(), dimension, block_size) {}
 
 ArrayFile::~ArrayFile() {
   // FIXME issue #67 explicitly remove the file, so that temporary is deleted on Windows

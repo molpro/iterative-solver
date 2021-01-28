@@ -1,6 +1,18 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_ARRAYFILE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_ARRAYFILE_H
+// FIXME Use pimpl to move filesystem into cpp
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || (defined(__cplusplus) && __cplusplus >= 201703L)) &&            \
+    defined(__has_include)
+#if __has_include(<filesystem>) && (!defined(__MAC_OS_X_VERSION_MIN_REQUIRED) || __MAC_OS_X_VERSION_MIN_REQUIRED >= 101500)
+#define GHC_USE_STD_FS
 #include <filesystem>
+namespace fs = std::filesystem;
+#endif
+#endif
+#ifndef GHC_USE_STD_FS
+#include "ghc/filesystem.h"
+namespace fs = ghc::filesystem;
+#endif
 #include <fstream>
 #include <map>
 #include <memory>
@@ -98,7 +110,7 @@ public:
 
 protected:
   size_t m_dim = 0; //!< number of elements in the array
-  std::filesystem::path m_dir;
+  fs::path m_dir;
   mutable std::fstream m_file;
   std::unique_ptr<util::BlockReader<ArrayFile>> m_block_reader;
   //! creates a file and opens it. @returns file stream
