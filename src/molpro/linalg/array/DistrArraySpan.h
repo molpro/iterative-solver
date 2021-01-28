@@ -7,10 +7,10 @@ using molpro::mpi::comm_global;
 namespace molpro::linalg::array {
 class DistrArraySpan : public DistrArray {
 private:
-  std::unique_ptr<Distribution> m_distribution;     //!< describes distribution of array among processes
-  bool m_allocated = false;                         //!< whether the window has been created
-  Span<value_type> m_span;                          //!< Span over provided buffer
-  
+  std::unique_ptr<Distribution> m_distribution; //!< describes distribution of array among processes
+  bool m_allocated = false;                     //!< whether the window has been created
+  Span<value_type> m_span;                      //!< Span over provided buffer
+
 public:
   DistrArraySpan() = default;
   DistrArraySpan(size_t dimension, MPI_Comm commun = comm_global());
@@ -20,14 +20,14 @@ public:
   DistrArraySpan(DistrArraySpan &&source) noexcept;
   DistrArraySpan &operator=(const DistrArraySpan &source);
   DistrArraySpan &operator=(DistrArraySpan &&source) noexcept;
-  
+
   friend void swap(DistrArraySpan &a1, DistrArraySpan &a2) noexcept;
-  //void sync() const override;
-  void allocate_buffer() override;
+  // void sync() const override;
+  void allocate_buffer();
   void allocate_buffer(Span<value_type> buffer);
-  void free_buffer() override;
-  [[nodiscard]] bool empty() const override;
-  
+  void free_buffer();
+  [[nodiscard]] bool empty() const;
+
 protected:
   struct LocalBufferSpan : public DistrArray::LocalBuffer {
     explicit LocalBufferSpan(DistrArraySpan &source);
@@ -50,5 +50,5 @@ public:
   [[nodiscard]] std::vector<value_type> vec() const override;
 };
 
-} // molpro::linalg::array
+} // namespace molpro::linalg::array
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYSPAN_H

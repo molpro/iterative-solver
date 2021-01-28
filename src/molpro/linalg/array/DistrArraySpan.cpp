@@ -1,7 +1,7 @@
 #include "DistrArraySpan.h"
 #include "util/Distribution.h"
-#include <string>
 #include <memory>
+#include <string>
 
 namespace molpro::linalg::array {
 
@@ -11,12 +11,13 @@ int mpi_size(MPI_Comm comm) {
   MPI_Comm_size(comm, &rank);
   return rank;
 }
-}
+} // namespace
 
 DistrArraySpan::DistrArraySpan(size_t dimension, MPI_Comm commun)
     : DistrArraySpan(std::make_unique<Distribution>(
-      util::make_distribution_spread_remainder<index_type>(dimension, mpi_size(commun))), commun) {}
-      
+                         util::make_distribution_spread_remainder<index_type>(dimension, mpi_size(commun))),
+                     commun) {}
+
 DistrArraySpan::DistrArraySpan(std::unique_ptr<Distribution> distribution, MPI_Comm commun)
     : DistrArray(distribution->border().second, commun), m_distribution(std::move(distribution)) {
   if (m_distribution->border().first != 0)
@@ -25,7 +26,7 @@ DistrArraySpan::DistrArraySpan(std::unique_ptr<Distribution> distribution, MPI_C
 
 DistrArraySpan::DistrArraySpan(const DistrArraySpan& source)
     : DistrArray(source.size(), source.communicator()),
-       m_distribution(source.m_distribution ? std::make_unique<Distribution>(*source.m_distribution) : nullptr) {
+      m_distribution(source.m_distribution ? std::make_unique<Distribution>(*source.m_distribution) : nullptr) {
   if (!source.empty()) {
     DistrArraySpan::allocate_buffer(source.m_span);
   }
@@ -33,9 +34,9 @@ DistrArraySpan::DistrArraySpan(const DistrArraySpan& source)
 
 DistrArraySpan::DistrArraySpan(const DistrArray& source)
     : DistrArray(source), m_distribution(std::make_unique<Distribution>(source.distribution())) {
-  if (!source.empty()) {
-    DistrArraySpan::allocate_buffer(Span<value_type>(&(*source.local_buffer())[0], source.size()));
-  }
+  //  if (!source.empty()) {
+  DistrArraySpan::allocate_buffer(Span<value_type>(&(*source.local_buffer())[0], source.size()));
+  //  }
 }
 
 DistrArraySpan::DistrArraySpan(DistrArraySpan&& source) noexcept
@@ -79,14 +80,14 @@ void DistrArraySpan::free_buffer() {
   }
 }
 
-void DistrArraySpan::allocate_buffer() {} //TODO: Doesn't make sense to have it... Or should we allocate empty space?
+void DistrArraySpan::allocate_buffer() {} // TODO: Doesn't make sense to have it... Or should we allocate empty space?
 
 void DistrArraySpan::allocate_buffer(Span<value_type> buffer) {
-  //if (!empty())  // TODO: OK to be "re-writable"?
+  // if (!empty())  // TODO: OK to be "re-writable"?
   //  return;
   if (!m_distribution)
     error("Cannot allocate an array without distribution");
-  //m_buffer = std::make_unique<LocalBufferSpan>(buffer);
+  // m_buffer = std::make_unique<LocalBufferSpan>(buffer);
   m_span = buffer;
   int rank;
   MPI_Comm_rank(m_communicator, &rank);
@@ -160,8 +161,8 @@ void DistrArraySpan::get(DistrArray::index_type lo, DistrArray::index_type hi, D
   }
   DistrArray::index_type offset = lo - lo_loc;
   DistrArray::index_type length = hi - lo;
-  for (int i = offset; i < offset+length; i++) {
-    buf[i-offset] = m_span[i];
+  for (int i = offset; i < offset + length; i++) {
+    buf[i - offset] = m_span[i];
   }
 }
 
@@ -186,8 +187,8 @@ void DistrArraySpan::put(DistrArray::index_type lo, DistrArray::index_type hi, c
   }
   DistrArray::index_type offset = lo - lo_loc;
   DistrArray::index_type length = hi - lo;
-  for (int i = offset; i < offset+length; i++) {
-    m_span[i] = data[i-offset];
+  for (int i = offset; i < offset + length; i++) {
+    m_span[i] = data[i - offset];
   }
 }
 
@@ -229,7 +230,7 @@ void DistrArraySpan::scatter(const std::vector<index_type>& indices, const std::
     error("Only local array indices can be accessed via DistrArraySpan.gather() function");
   }
   for (auto i : indices) {
-    set(i, data[i-*minmax.first]);
+    set(i, data[i - *minmax.first]);
   }
 }
 
@@ -248,4 +249,4 @@ std::vector<DistrArraySpan::value_type> DistrArraySpan::vec() const {
   return get(lo_loc, hi_loc);
 }
 
-} // molpro::linalg::array
+} // namespace molpro::linalg::array
