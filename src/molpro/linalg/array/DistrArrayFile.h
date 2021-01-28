@@ -68,8 +68,9 @@ public:
 
   virtual void fill(value_type a);
 
-//  virtual void zero();
-//  virtual void scal(value_type a);
+  virtual void zero();
+  virtual void scal(value_type a);
+//  virtual void add(const DistrArrayFile &y);
 //  virtual void add(const DistrArray &y);
 //  virtual void add(value_type a);
 //  virtual void sub(const DistrArray &y);

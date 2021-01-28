@@ -173,5 +173,7 @@ std::vector<DistrArrayFile::value_type> DistrArrayFile::vec() const {
   return get(lo_loc, hi_loc);
 }
 void DistrArrayFile::fill(value_type a) { m_local_array->fill(a); }
+void DistrArrayFile::zero() { DistrArrayFile::fill(0); }
+void DistrArrayFile::scal(value_type a) { m_local_array->scal(a); }
 
 } // namespace molpro::linalg::array
