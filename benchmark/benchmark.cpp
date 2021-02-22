@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     }
 #ifdef LINEARALGEBRA_ARRAY_MPI3
     {
-      auto bm = molpro::linalg::ArrayBenchmarkDistributed<molpro::linalg::array::DistrArrayMPI3>(
+      auto bm = molpro::linalg::ArrayBenchmarkDistributed<molpro::linalg::array::DistrArrayMPI3<double>>(
           "molpro::linalg::array::DistrArrayMPI3", length, false, 0.1);
       bm.all();
       std::cout << bm;
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef LINEARALGEBRA_ARRAY_GA
     {
-      auto bm = molpro::linalg::ArrayBenchmarkDistributed<molpro::linalg::array::DistrArrayGA>(
+      auto bm = molpro::linalg::ArrayBenchmarkDistributed<molpro::linalg::array::DistrArrayGA<double>>(
           "molpro::linalg::array::DistrArrayGA", length, false, 0.1);
       bm.all();
       std::cout << bm;
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef LINEARALGEBRA_ARRAY_HDF5
     {
-      auto bm = molpro::linalg::ArrayBenchmarkDDisk<molpro::linalg::array::DistrArrayHDF5>(
+      auto bm = molpro::linalg::ArrayBenchmarkDDisk<molpro::linalg::array::DistrArrayHDF5<double>>(
           "molpro::linalg::array::DistrArrayHDF5", length, false, 0.01);
       bm.all();
       std::cout << bm;

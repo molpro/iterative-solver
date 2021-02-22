@@ -35,10 +35,10 @@ using molpro::linalg::array::ArrayHandlerDDiskDistr;
 using molpro::linalg::array::ArrayHandlerDistrSparse;
 using molpro::linalg::array::ArrayHandlerDDiskSparse;
 using molpro::linalg::array::ArrayHandlerIterableSparse;
-using molpro::linalg::array::DistrArraySpan;
-using molpro::linalg::array::DistrArrayFile;
+using DistrArraySpan = molpro::linalg::array::DistrArraySpan<double>;
+using DistrArrayFile =molpro::linalg::array::DistrArrayFile<double>;
 #ifdef LINEARALGEBRA_ARRAY_MPI3
-using molpro::linalg::array::DistrArrayMPI3;
+using DistrArrayMPI3 = molpro::linalg::array::DistrArrayMPI3<double>;
 #endif
 using molpro::linalg::array::Span;
 using molpro::linalg::array::util::LockMPI3;

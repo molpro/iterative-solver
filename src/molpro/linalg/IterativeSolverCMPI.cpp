@@ -43,11 +43,11 @@ using molpro::linalg::itsolv::wrap;
 using molpro::linalg::itsolv::cwrap;
 
 //using Rvector = molpro::linalg::array::DistrArrayMPI3;
-using Rvector = molpro::linalg::array::DistrArraySpan;
+using Rvector = molpro::linalg::array::DistrArraySpan<double>;
 #ifdef LINEARALGEBRA_ARRAY_HDF5
-using Qvector = molpro::linalg::array::DistrArrayHDF5;
+using Qvector = molpro::linalg::array::DistrArrayHDF5<double>;
 #else
-using Qvector = molpro::linalg::array::DistrArrayFile;
+using Qvector = molpro::linalg::array::DistrArrayFile<double>;
 #endif
 using Pvector = std::map<size_t, double>;
 // instantiate the factory

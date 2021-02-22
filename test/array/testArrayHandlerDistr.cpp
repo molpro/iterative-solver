@@ -18,12 +18,12 @@ using ::testing::Each;
 
 TEST(TestArrayHandlerDistr, lazy_dot) {
   LockMPI3 lock{mpi_comm};
-  ArrayHandlerDistr<DistrArrayMPI3> handler{};
+  ArrayHandlerDistr<DistrArrayMPI3<double>> handler{};
   using value_type = double;
   static const int N = 3;
   static const int dim = 11;
-  std::vector<DistrArrayMPI3> xx{N, DistrArrayMPI3(dim, mpi_comm)};
-  std::vector<DistrArrayMPI3> yy{N, DistrArrayMPI3(dim, mpi_comm)};
+  std::vector<DistrArrayMPI3<double>> xx{N, DistrArrayMPI3<double>(dim, mpi_comm)};
+  std::vector<DistrArrayMPI3<double>> yy{N, DistrArrayMPI3<double>(dim, mpi_comm)};
   std::for_each(xx.begin(), xx.end(), [](auto& x) { x.allocate_buffer(); });
   std::for_each(yy.begin(), yy.end(), [](auto& y) { y.allocate_buffer(); });
   auto result = std::vector<value_type>(N * N);

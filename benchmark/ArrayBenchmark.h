@@ -34,28 +34,28 @@ auto allocate(size_t n) {
 }
 #ifdef LINEARALGEBRA_ARRAY_MPI3
 template <>
-auto allocate<array::DistrArrayMPI3>(size_t n) {
-  auto result = std::make_unique<array::DistrArrayMPI3>(n, MPI_COMM_WORLD);
+auto allocate<array::DistrArrayMPI3<double>>(size_t n) {
+  auto result = std::make_unique<array::DistrArrayMPI3<double>>(n, MPI_COMM_WORLD);
   result->allocate_buffer();
   return result;
 }
 #endif
 #ifdef LINEARALGEBRA_ARRAY_GA
 template <>
-auto allocate<array::DistrArrayGA>(size_t n) {
-  auto result = std::make_unique<array::DistrArrayGA>(n, GA_MPI_Comm());
+auto allocate<array::DistrArrayGA<double>>(size_t n) {
+  auto result = std::make_unique<array::DistrArrayGA<double>>(n, GA_MPI_Comm());
   result->allocate_buffer();
   return result;
 }
 #endif
 #ifdef LINEARALGEBRA_ARRAY_HDF5
 template <>
-auto allocate<array::DistrArrayHDF5>(size_t n) {
+auto allocate<array::DistrArrayHDF5<double>>(size_t n) {
   auto handle = std::make_shared<array::util::PHDF5Handle>(array::util::temp_phdf5_handle("benchmark", MPI_COMM_WORLD));
   handle->open_file(array::util::HDF5Handle::Access::read_write);
   handle->open_group("/");
   handle->close_file();
-  auto result = std::make_unique<array::DistrArrayHDF5>(handle, n);
+  auto result = std::make_unique<array::DistrArrayHDF5<double>>(handle, n);
   result->open_access();
   return result;
 }
@@ -155,7 +155,7 @@ ArrayBenchmark<L, R> ArrayBenchmarkIterable(std::string title, size_t n = 100000
 }
 
 #ifdef LINEARALGEBRA_ARRAY_MPI3
-template <class L = array::DistrArrayMPI3, class R = L>
+template <class L = array::DistrArrayMPI3<double>, class R = L>
 ArrayBenchmark<L, R> ArrayBenchmarkDistributed(std::string title, size_t n = 10000000, bool profile_individual = false,
                                                double target_seconds = 1) {
   return ArrayBenchmark<L, R>(title, std::make_unique<array::ArrayHandlerDistr<L, R>>(), n, profile_individual,
@@ -164,7 +164,7 @@ ArrayBenchmark<L, R> ArrayBenchmarkDistributed(std::string title, size_t n = 100
 #endif
 
 #ifdef LINEARALGEBRA_ARRAY_HDF5
-template <class L = array::DistrArrayHDF5, class R = L>
+template <class L = array::DistrArrayHDF5<double>, class R = L>
 ArrayBenchmark<L, R> ArrayBenchmarkDDisk(std::string title, size_t n = 10000000, bool profile_individual = false,
                                          double target_seconds = 1) {
   return ArrayBenchmark<L, R>(title, std::make_unique<array::ArrayHandlerDDisk<L, R>>(), n, profile_individual,

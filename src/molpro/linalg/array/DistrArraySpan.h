@@ -5,10 +5,19 @@
 using molpro::mpi::comm_global;
 
 namespace molpro::linalg::array {
-class DistrArraySpan : public DistrArray {
+template <typename T = double>
+class DistrArraySpan : public DistrArray<T> {
 protected:
-  std::unique_ptr<Distribution> m_distribution;     //!< describes distribution of array among processes
+  std::unique_ptr<util::Distribution<size_t>> m_distribution;     //!< describes distribution of array among processes
   bool m_allocated = false;                         //!< whether the window has been created
+public:
+  using value_type = T;
+  using size_type = typename DistrArray<T>::size_type;
+  using index_type = typename DistrArray<T>::index_type;
+protected:
+  using LocalBuffer = typename DistrArray<T>::LocalBuffer;
+  using Distribution = util::Distribution<size_type>;
+  using DistrArray<T>::error;
   Span<value_type> m_span;                          //!< Span over provided buffer
   
 public:
@@ -16,13 +25,14 @@ public:
   DistrArraySpan(size_t dimension, MPI_Comm commun = comm_global());
   DistrArraySpan(std::unique_ptr<Distribution> distribution, MPI_Comm commun = comm_global());
   DistrArraySpan(const DistrArraySpan &source);
-  explicit DistrArraySpan(const DistrArray &source);
+  explicit DistrArraySpan(const DistrArray<T> &source);
   DistrArraySpan(DistrArraySpan &&source) noexcept;
   DistrArraySpan &operator=(const DistrArraySpan &source);
   DistrArraySpan &operator=(DistrArraySpan &&source) noexcept;
   ~DistrArraySpan() override;
-  
-  friend void swap(DistrArraySpan &a1, DistrArraySpan &a2) noexcept;
+
+  template <class U>
+  friend void swap(DistrArraySpan<U> &a1, DistrArraySpan<U> &a2) noexcept;
   //void sync() const override;
   void allocate_buffer() override;
   void allocate_buffer(Span<value_type> buffer);
@@ -30,7 +40,7 @@ public:
   [[nodiscard]] bool empty() const override;
   
 protected:
-  struct LocalBufferSpan : public DistrArray::LocalBuffer {
+  struct LocalBufferSpan : public DistrArray<T>::LocalBuffer {
     explicit LocalBufferSpan(DistrArraySpan &source);
     explicit LocalBufferSpan(const DistrArraySpan &source);
   };

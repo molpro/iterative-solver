@@ -9,7 +9,8 @@ namespace molpro::linalg::array {
 /*!
  * @brief Distributed array which uses Global Arrays for managing the array buffer and RMA calls
  */
-class DistrArrayGA : public DistrArray {
+template <typename T = double>
+class DistrArrayGA : public DistrArray<T> {
 protected:
   int m_comm_rank = 0;         //!< rank in process group
   int m_comm_size = 0;         //!< size of process group
@@ -19,7 +20,7 @@ protected:
   bool m_ga_allocated = false; //!< Flags that GA has been allocated
   //! Record every process group created, because GA can only allocate a fixed number of them
   static std::map<MPI_Comm, int> _ga_pgroups;
-  std::unique_ptr<Distribution> m_distribution;
+  std::unique_ptr<util::Distribution<size_t>> m_distribution;
 
 public:
   DistrArrayGA();
@@ -35,18 +36,25 @@ public:
   ~DistrArrayGA() override;
 
   //! swap content of two arrays. Not collective.
-  friend void swap(DistrArrayGA &a1, DistrArrayGA &a2) noexcept;
+  template <class U>
+  friend void swap(DistrArrayGA<U> &a1, DistrArrayGA<U> &a2) noexcept;
   void sync() const override;
   void allocate_buffer() override;
   void free_buffer() override;
   bool empty() const override;
 
 protected:
-  struct LocalBufferGA : public DistrArray::LocalBuffer {
+  struct LocalBufferGA : public DistrArray<T>::LocalBuffer {
     explicit LocalBufferGA(DistrArrayGA &source);
   };
 
 public:
+  using size_type = typename DistrArray<T>::size_type;
+  using index_type = typename DistrArray<T>::index_type;
+  using value_type = typename DistrArray<T>::value_type;
+  using LocalBuffer = typename DistrArray<T>::LocalBuffer;
+  using Distribution = util::Distribution<size_type>;
+  using DistrArray<T>::error;
   [[nodiscard]] const Distribution &distribution() const override;
   [[nodiscard]] std::unique_ptr<LocalBuffer> local_buffer() override;
   [[nodiscard]] std::unique_ptr<const LocalBuffer> local_buffer() const override;

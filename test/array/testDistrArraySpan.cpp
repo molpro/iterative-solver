@@ -46,7 +46,7 @@ public:
   int mpi_size, mpi_rank;
   int left, right;
   std::vector<int> chunks, displs;
-  DistrArraySpan a;
+  DistrArraySpan<double> a;
 };
 
 TEST(DistrArraySpan, constructor_default) {
@@ -210,7 +210,7 @@ TEST_F(DistrArraySpan_Fixture, gather) {
   int n = -2;
   std::generate(v.begin(), v.end(), [&n]{ return n+=2; });
   a.allocate_buffer(Span<double>(&(*(v.begin() + left)), chunks[mpi_rank]));
-  std::vector<DistrArraySpan::index_type> x(size/mpi_size);
+  std::vector<DistrArraySpan<double>::index_type> x(size/mpi_size);
   std::iota(x.begin(), x.end(), left);
   auto tmp = a.gather(x);
   for (int i = 0; i < x.size(); i++) {
@@ -226,7 +226,7 @@ TEST_F(DistrArraySpan_Fixture, scatter) {
   int n = -2;
   std::generate(w.begin(), w.end(), [&n]{ return n+=2; });
   a.allocate_buffer(Span<double>(&(*(v.begin() + left)), chunks[mpi_rank]));
-  std::vector<DistrArraySpan::index_type> x(size/mpi_size);
+  std::vector<DistrArraySpan<double>::index_type> x(size/mpi_size);
   std::iota(x.begin(), x.end(), left);
   std::vector<double> tmp(size/mpi_size);
   for (int i = 0; i < x.size(); i++) {
@@ -245,7 +245,7 @@ TEST_F(DistrArraySpan_Fixture, scatter_acc) {
   int n = -2;
   std::generate(w.begin(), w.end(), [&n]{ return n+=2; });
   a.allocate_buffer(Span<double>(&(*(v.begin() + left)), chunks[mpi_rank]));
-  std::vector<DistrArraySpan::index_type> x(size/mpi_size);
+  std::vector<DistrArraySpan<double>::index_type> x(size/mpi_size);
   std::iota(x.begin(), x.end(), left);
   std::vector<double> tmp(size/mpi_size);
   for (int i = 0; i < x.size(); i++) {

@@ -14,7 +14,7 @@
 #include <molpro/linalg/array/DistrArrayMPI3.h>
 #endif
 
-using molpro::linalg::array::DistrArrayFile;
+using DistrArrayFile = molpro::linalg::array::DistrArrayFile<double>;
 using molpro::linalg::array::util::LockMPI3;
 using molpro::linalg::array::util::ScopeLock;
 using molpro::linalg::test::mpi_comm;

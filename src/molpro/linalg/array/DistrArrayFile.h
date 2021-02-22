@@ -31,13 +31,20 @@ namespace molpro::linalg::array {
  * @warning Only local operations will be currently supported, if RMA operations are requested, exception will be thrown.
  *
  */
-class DistrArrayFile : public DistrArrayDisk {
+template <typename T>
+class DistrArrayFile : public DistrArrayDisk<T> {
 protected:
   fs::path m_dir = fs::current_path();
   mutable std::fstream m_file;
   //! creates a file, opens it and @returns m_file fstream
   std::fstream make_file();
 public:
+  using value_type = T;
+  using size_type = typename DistrArray<T>::size_type;
+  using index_type = typename DistrArray<T>::index_type;
+  using LocalBuffer = typename DistrArray<T>::LocalBuffer;
+  using Distribution = util::Distribution<size_type>;
+  using DistrArray<T>::error;
   //! Constructor for a blank object. The blank is only useful as a temporary. Move a valid object inside the blank to
   //! make it usable.
   DistrArrayFile();
@@ -45,14 +52,15 @@ public:
   DistrArrayFile(DistrArrayFile &&source) noexcept;
   explicit DistrArrayFile(size_t dimension, MPI_Comm comm = comm_global(), const std::string &directory = ".");
   explicit DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm = comm_global(), const std::string &directory = ".");
-  explicit DistrArrayFile(const DistrArray &source);
+  explicit DistrArrayFile(const DistrArray<T> &source);
   
   DistrArrayFile &operator=(const DistrArrayFile &source) = delete;
   DistrArrayFile &operator=(DistrArrayFile &&source) noexcept;
   
-  static DistrArrayFile CreateTempCopy(const DistrArray &source, const std::string &directory = ".");
-  
-  friend void swap(DistrArrayFile &x, DistrArrayFile &y) noexcept;
+  static DistrArrayFile CreateTempCopy(const DistrArray<T> &source, const std::string &directory = ".");
+
+  template <class U>
+  friend void swap(DistrArrayFile<U> &x, DistrArrayFile<U> &y) noexcept;
   
   //! Flushes the buffer if file access is open
   ~DistrArrayFile() override;

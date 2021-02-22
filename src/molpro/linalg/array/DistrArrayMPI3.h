@@ -18,7 +18,15 @@ namespace molpro::linalg::array {
  * equivalent to fencing.
  *
  */
-class DistrArrayMPI3 : public DistrArray {
+template <typename T = double>
+class DistrArrayMPI3 : public DistrArray<T> {
+public:
+  using size_type = typename DistrArray<T>::size_type;
+  using index_type = typename DistrArray<T>::index_type;
+  using value_type = typename DistrArray<T>::value_type;
+protected:
+  using LocalBuffer = typename DistrArray<T>::LocalBuffer;
+  using Distribution = util::Distribution<size_type>;
 protected:
   MPI_Win m_win = MPI_WIN_NULL;                 //!< window object
   std::unique_ptr<Distribution> m_distribution; //!< describes distribution of array among processes
@@ -48,13 +56,14 @@ public:
 
   //! Copy constructor allocates the buffer if source is not empty
   DistrArrayMPI3(const DistrArrayMPI3 &source);
-  DistrArrayMPI3(const DistrArray &source);
+  DistrArrayMPI3(const DistrArray<T> &source);
   DistrArrayMPI3(DistrArrayMPI3 &&source) noexcept;
   DistrArrayMPI3 &operator=(const DistrArrayMPI3 &source);
   DistrArrayMPI3 &operator=(DistrArrayMPI3 &&source) noexcept;
   ~DistrArrayMPI3() override;
 
-  friend void swap(DistrArrayMPI3 &a1, DistrArrayMPI3 &a2) noexcept;
+  template <class U>
+  friend void swap(DistrArrayMPI3<U> &a1, DistrArrayMPI3<U> &a2) noexcept;
   void sync() const override;
   void allocate_buffer() override;
   /*!
@@ -69,12 +78,12 @@ public:
   bool empty() const override;
 
 protected:
-  struct LocalBufferMPI3 : public DistrArray::LocalBuffer {
+  struct LocalBufferMPI3 : public DistrArray<T>::LocalBuffer {
     explicit LocalBufferMPI3(DistrArrayMPI3 &source);
   };
 
 public:
-  [[nodiscard]] const Distribution &distribution() const override;
+  [[nodiscard]] const typename DistrArray<T>::Distribution &distribution() const override;
   [[nodiscard]] std::unique_ptr<LocalBuffer> local_buffer() override;
   [[nodiscard]] std::unique_ptr<const LocalBuffer> local_buffer() const override;
   [[nodiscard]] value_type at(index_type ind) const override;

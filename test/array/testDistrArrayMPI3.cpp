@@ -5,7 +5,7 @@
 using molpro::linalg::array::DistrArrayMPI3;
 using molpro::linalg::array::util::LockMPI3;
 
-using ArrayTypes = ::testing::Types<DistrArrayMPI3>;
+using ArrayTypes = ::testing::Types<DistrArrayMPI3<double>>;
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, TestDistrArray, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistArrayInitializationF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistrArrayRangeF, ArrayTypes);
@@ -15,7 +15,7 @@ TEST(DistrArrayMPI3, allocate_buffer_external) {
   const size_t dim = 30;
   auto buffer = std::vector<double>(dim);
   LockMPI3 lock(mpi_comm);
-  auto a = DistrArrayMPI3(dim, mpi_comm);
+  auto a = DistrArrayMPI3<double>(dim, mpi_comm);
   a.allocate_buffer({&buffer[0], buffer.size()});
   {
     auto l = lock.scope();

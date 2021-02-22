@@ -1,11 +1,4 @@
-#include <unistd.h>
-
 #include <molpro/linalg/array/DistrArrayFile.h>
-#include <molpro/linalg/array/util/Distribution.h>
-#include <molpro/linalg/array/util/temp_file.h>
-#include <utility>
-
-
 namespace molpro::linalg::array {
 namespace {
 int mpi_size(MPI_Comm comm) {
@@ -14,50 +7,68 @@ int mpi_size(MPI_Comm comm) {
   return rank;
 }
 } // namespace
+} // namespace molpro::linalg::array
 
-DistrArrayFile::DistrArrayFile() = default;
+#include <unistd.h>
 
-DistrArrayFile::DistrArrayFile(DistrArrayFile&& source) noexcept
-    : DistrArrayDisk(std::move(source)), m_dir(std::move(source.m_dir)), m_file(std::move(source.m_file)) {}
+#include <molpro/linalg/array/DistrArrayFile.h>
+#include <molpro/linalg/array/util/Distribution.h>
+#include <molpro/linalg/array/util/temp_file.h>
+#include <utility>
 
-DistrArrayFile::DistrArrayFile(size_t dimension, MPI_Comm comm, const std::string& directory)
+namespace molpro::linalg::array {
+template <typename T>
+DistrArrayFile<T>::DistrArrayFile() = default;
+
+template <typename T>
+DistrArrayFile<T>::DistrArrayFile(DistrArrayFile&& source) noexcept
+    : DistrArrayDisk<T>(std::move(source)), m_dir(std::move(source.m_dir)), m_file(std::move(source.m_file)) {}
+
+template <typename T>
+DistrArrayFile<T>::DistrArrayFile(size_t dimension, MPI_Comm comm, const std::string& directory)
     : DistrArrayFile(std::make_unique<Distribution>(
                          util::make_distribution_spread_remainder<index_type>(dimension, mpi_size(comm))),
                      comm, directory) {}
 
-DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm, const std::string& directory)
-    : DistrArrayDisk(std::move(distribution), comm), m_dir(fs::absolute(fs::path(directory))), m_file(make_file()) {
-    if (m_distribution->border().first != 0)
-      DistrArray::error("Distribution of array must start from 0");
+template <typename T>
+DistrArrayFile<T>::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm, const std::string& directory)
+    : DistrArrayDisk<T>(std::move(distribution), comm), m_dir(fs::absolute(fs::path(directory))), m_file(make_file()) {
+  if (this->m_distribution->border().first != 0)
+    error("Distribution of array must start from 0");
 }
 
-DistrArrayFile::DistrArrayFile(const DistrArrayFile& source)
-    : DistrArrayDisk(source), m_dir(source.m_dir), m_file(make_file()) {
-    if (!source.empty()){
-    DistrArrayFile::copy(source);
-    }
+template <typename T>
+DistrArrayFile<T>::DistrArrayFile(const DistrArrayFile& source)
+    : DistrArrayDisk<T>(source), m_dir(source.m_dir), m_file(make_file()) {
+  if (!source.empty()) {
+    DistrArrayFile<T>::copy(source);
   }
+}
 
-DistrArrayFile::DistrArrayFile(const DistrArray& source)
+template <typename T>
+DistrArrayFile<T>::DistrArrayFile(const DistrArray<T>& source)
     : DistrArrayFile(std::make_unique<Distribution>(source.distribution()), source.communicator()) {
   if (!source.empty()) {
-    DistrArrayFile::copy(source);
+    DistrArrayFile<T>::copy(source);
   }
 }
 
-DistrArrayFile& DistrArrayFile::operator=(DistrArrayFile&& source) noexcept {
+template <typename T>
+DistrArrayFile<T>& DistrArrayFile<T>::operator=(DistrArrayFile&& source) noexcept {
   DistrArrayFile t{std::move(source)};
   swap(*this, t);
   return *this;
 }
 
-DistrArrayFile DistrArrayFile::CreateTempCopy(const DistrArray& source, const std::string& directory) {
+template <typename T>
+DistrArrayFile<T> DistrArrayFile<T>::CreateTempCopy(const DistrArray<T>& source, const std::string& directory) {
   DistrArrayFile t(std::make_unique<Distribution>(source.distribution()), source.communicator(), directory);
   t.copy(source);
   return t;
 }
 
-void swap(DistrArrayFile& x, DistrArrayFile& y) noexcept {
+template <typename T>
+void swap(DistrArrayFile<T>& x, DistrArrayFile<T>& y) noexcept {
   using std::swap;
   swap(x.m_dimension, y.m_dimension);
   swap(x.m_communicator, y.m_communicator);
@@ -69,21 +80,23 @@ void swap(DistrArrayFile& x, DistrArrayFile& y) noexcept {
   swap(x.m_dir, y.m_dir);
 }
 
-DistrArrayFile::~DistrArrayFile() = default;
+template <typename T>
+DistrArrayFile<T>::~DistrArrayFile() = default;
 
-bool DistrArrayFile::compatible(const DistrArrayFile& source) const {
-  auto res = DistrArray::compatible(source);
-  if (m_distribution && source.m_distribution)
-    res &= m_distribution->compatible(*source.m_distribution);
+template <typename T>
+bool DistrArrayFile<T>::compatible(const DistrArrayFile& source) const {
+  auto res = compatible(source);
+  if (this->m_distribution && source.m_distribution)
+    res &= this->m_distribution->compatible(*source.m_distribution);
   else
-    res &= !m_distribution && !source.m_distribution;
+    res &= !this->m_distribution && !source.m_distribution;
   return res;
 }
 
-std::fstream DistrArrayFile::make_file() {
+template <typename T>
+std::fstream DistrArrayFile<T>::make_file() {
   std::fstream file;
-  std::string file_name =
-      util::temp_file_name(m_dir.string() + "/", "");
+  std::string file_name = util::temp_file_name(m_dir.string() + "/", "");
   file.open(file_name.c_str(), std::ios::out | std::ios::binary);
   file.close();
   file.open(file_name.c_str(), std::ios::out | std::ios::in | std::ios::binary);
@@ -91,68 +104,76 @@ std::fstream DistrArrayFile::make_file() {
   return file;
 }
 
-void DistrArrayFile::open_access() {}
-void DistrArrayFile::close_access() {}
+template <typename T>
+void DistrArrayFile<T>::open_access() {}
+template <typename T>
+void DistrArrayFile<T>::close_access() {}
 
-bool DistrArrayFile::empty() const {
-  return !m_file.is_open();
-}
+template <typename T>
+bool DistrArrayFile<T>::empty() const { return !m_file.is_open(); }
 
-void DistrArrayFile::erase() {}
+template <typename T>
+void DistrArrayFile<T>::erase() {}
 
-DistrArray::value_type DistrArrayFile::at(DistrArray::index_type ind) const {
+template <typename T>
+typename DistrArrayFile<T>::value_type DistrArrayFile<T>::at(index_type ind) const {
   value_type val;
   get(ind, ind + 1, &val);
   return val;
 }
 
-void DistrArrayFile::set(DistrArray::index_type ind, DistrArray::value_type val) { put(ind, ind + 1, &val); }
+template <typename T>
+void DistrArrayFile<T>::set(index_type ind, value_type val) { put(ind, ind + 1, &val); }
 
-void DistrArrayFile::get(DistrArray::index_type lo, DistrArray::index_type hi, DistrArray::value_type* buf) const {
+template <typename T>
+void DistrArrayFile<T>::get(index_type lo, index_type hi, value_type* buf) const {
   if (lo >= hi)
     return;
-  DistrArray::index_type length = hi - lo;
+  index_type length = hi - lo;
   int current = m_file.tellg();
-  if (current < length )
+  if (current < length)
     return;
   int rank;
-  MPI_Comm_rank(m_communicator, &rank);
-  DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  MPI_Comm_rank(this->m_communicator, &rank);
+  index_type lo_loc, hi_loc;
+  std::tie(lo_loc, hi_loc) = this->m_distribution->range(rank);
   if (lo < lo_loc || hi > hi_loc) {
     error("Only local array indices can be accessed via DistrArrayFile.get() function");
   }
-  DistrArray::index_type offset = lo - lo_loc;
-  m_file.seekg(offset * sizeof(DistrArray::value_type));
-  m_file.read((char*)buf, length * sizeof(DistrArray::value_type));
+  index_type offset = lo - lo_loc;
+  m_file.seekg(offset * sizeof(value_type));
+  m_file.read((char*)buf, length * sizeof(value_type));
 }
 
-std::vector<DistrArrayFile::value_type> DistrArrayFile::get(DistrArray::index_type lo,
-                                                            DistrArray::index_type hi) const {
+template <typename T>
+std::vector<typename DistrArrayFile<T>::value_type> DistrArrayFile<T>::get(index_type lo,
+                                                            index_type hi) const {
   if (lo >= hi)
     return {};
-  auto buf = std::vector<DistrArray::value_type>(hi - lo);
+  auto buf = std::vector<typename DistrArrayFile<T>::value_type>(hi - lo);
   get(lo, hi, &buf[0]);
   return buf;
 }
 
-void DistrArrayFile::put(DistrArray::index_type lo, DistrArray::index_type hi, const DistrArray::value_type* data) {
+template <typename T>
+void DistrArrayFile<T>::put(index_type lo, index_type hi, const value_type* data) {
   if (lo >= hi)
     return;
   int rank;
-  MPI_Comm_rank(m_communicator, &rank);
-  DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  MPI_Comm_rank(this->m_communicator, &rank);
+  index_type lo_loc, hi_loc;
+  std::tie(lo_loc, hi_loc) = this->m_distribution->range(rank);
   if (lo < lo_loc || hi > hi_loc) {
     error("Only values at local array indices can be written via DistrArrayFile.put() function");
   }
-  DistrArray::index_type offset = lo - lo_loc;
-  DistrArray::index_type length = hi - lo;
-  m_file.seekp(offset * sizeof(DistrArray::value_type));
-  m_file.write((const char*)data, length * sizeof(DistrArray::value_type));
+  index_type offset = lo - lo_loc;
+  index_type length = hi - lo;
+  m_file.seekp(offset * sizeof(value_type));
+  m_file.write((const char*)data, length * sizeof(value_type));
 }
 
-void DistrArrayFile::acc(DistrArray::index_type lo, DistrArray::index_type hi, const DistrArray::value_type* data) {
+template <typename T>
+void DistrArrayFile<T>::acc(index_type lo, index_type hi, const value_type* data) {
   if (lo >= hi)
     return;
   auto disk_copy = get(lo, hi);
@@ -160,14 +181,15 @@ void DistrArrayFile::acc(DistrArray::index_type lo, DistrArray::index_type hi, c
   put(lo, hi, &disk_copy[0]);
 }
 
-std::vector<DistrArrayFile::value_type> DistrArrayFile::gather(const std::vector<index_type>& indices) const {
+template <typename T>
+std::vector<typename DistrArrayFile<T>::value_type> DistrArrayFile<T>::gather(const std::vector<index_type>& indices) const {
   std::vector<value_type> data;
   data.reserve(indices.size());
   int rank;
-  MPI_Comm_rank(m_communicator, &rank);
+  MPI_Comm_rank(this->m_communicator, &rank);
   auto minmax = std::minmax_element(indices.begin(), indices.end());
-  DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  index_type lo_loc, hi_loc;
+  std::tie(lo_loc, hi_loc) = this->m_distribution->range(rank);
   if (*minmax.first < lo_loc || *minmax.second > hi_loc) {
     error("Only local array indices can be accessed via DistrArrayFile.gather() function");
   }
@@ -177,36 +199,42 @@ std::vector<DistrArrayFile::value_type> DistrArrayFile::gather(const std::vector
   return data;
 }
 
-void DistrArrayFile::scatter(const std::vector<index_type>& indices, const std::vector<value_type>& data) {
+template <typename T>
+void DistrArrayFile<T>::scatter(const std::vector<index_type>& indices, const std::vector<value_type>& data) {
   if (indices.size() != data.size()) {
-    error("Length of the indices and data vectors should be the same: DistrArray::scatter()");
+    error("Length of the indices and data vectors should be the same: scatter()");
   }
   int rank;
-  MPI_Comm_rank(m_communicator, &rank);
+  MPI_Comm_rank(this->m_communicator, &rank);
   auto minmax = std::minmax_element(indices.begin(), indices.end());
-  DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  index_type lo_loc, hi_loc;
+  std::tie(lo_loc, hi_loc) = this->m_distribution->range(rank);
   if (*minmax.first < lo_loc || *minmax.second > hi_loc) {
     error("Only local array indices can be accessed via DistrArrayFile.gather() function");
   }
   for (auto i : indices) {
-    set(i, data[i-*minmax.first]);
+    set(i, data[i - *minmax.first]);
   }
 }
 
-void DistrArrayFile::scatter_acc(std::vector<index_type>& indices, const std::vector<value_type>& data) {
+template <typename T>
+void DistrArrayFile<T>::scatter_acc(std::vector<index_type>& indices, const std::vector<value_type>& data) {
   auto disk_copy = gather(indices);
   std::transform(data.begin(), data.end(), disk_copy.begin(), disk_copy.begin(),
                  [](auto& l, auto& r) { return l + r; });
   scatter(indices, disk_copy);
 }
 
-std::vector<DistrArrayFile::value_type> DistrArrayFile::vec() const {
+template <typename T>
+std::vector<typename DistrArrayFile<T>::value_type> DistrArrayFile<T>::vec() const {
   int rank;
-  MPI_Comm_rank(m_communicator, &rank);
-  DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  MPI_Comm_rank(this->m_communicator, &rank);
+  index_type lo_loc, hi_loc;
+  std::tie(lo_loc, hi_loc) = this->m_distribution->range(rank);
   return get(lo_loc, hi_loc);
 }
 
 } // namespace molpro::linalg::array
+
+template class molpro::linalg::array::DistrArrayFile<double>;
+template void molpro::linalg::array::swap(molpro::linalg::array::DistrArrayFile<double> &a1, molpro::linalg::array::DistrArrayFile<double> &a2);

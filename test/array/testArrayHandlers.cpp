@@ -6,7 +6,7 @@
 #include <molpro/linalg/array/util.h>
 #include <molpro/linalg/itsolv/ArrayHandlers.h>
 
-using molpro::linalg::array::DistrArrayMPI3;
+using DistrArrayMPI3 = molpro::linalg::array::DistrArrayMPI3<double>;
 using molpro::linalg::array::util::LockMPI3;
 using molpro::linalg::itsolv::ArrayHandlers;
 using molpro::linalg::test::mpi_comm;

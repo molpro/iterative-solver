@@ -25,13 +25,20 @@ class PHDF5Handle;
  * }
  * @endcode
  */
-class DistrArrayHDF5 : public DistrArrayDisk {
+template <typename T = double>
+class DistrArrayHDF5 : public DistrArrayDisk<T> {
 protected:
   std::shared_ptr<util::PHDF5Handle> m_file_handle; //!< hdf5 file handle
   hid_t m_dataset = dataset_default;                //!< HDF5 dataset object
 public:
   static constexpr int dataset_default = -1; //!< default value for dataset id
   const std::string dataset_name = "array";  //!< name of HDF5 dataset where array is stored
+  using value_type = T;
+  using size_type = typename DistrArray<T>::size_type;
+  using index_type = typename DistrArray<T>::index_type;
+  using LocalBuffer = typename DistrArray<T>::LocalBuffer;
+  using Distribution = util::Distribution<size_type>;
+  using DistrArray<T>::error;
 
   //! Constructor for a blank object. The blank is only useful as a temporary. Move a valid object inside the blank to
   //! make it usable.
@@ -75,7 +82,7 @@ public:
    * @param source a distributed array
    * @param file_handle handle for opening the HDF5 group where array is/will be stored.
    */
-  DistrArrayHDF5(const DistrArray &source, std::shared_ptr<util::PHDF5Handle> file_handle);
+  DistrArrayHDF5(const DistrArray<T> &source, std::shared_ptr<util::PHDF5Handle> file_handle);
 
   /*!
    * @brief Create a copy of source array using a temporary file which will be erased on destruction
@@ -83,7 +90,7 @@ public:
    * @param base_name base name for the temporary file. It will form the first part of the temporary array name. The
    * middle will be chosen to be unique and the suffix will be ".hdf5"
    */
-  static DistrArrayHDF5 CreateTempCopy(const DistrArray &source, const std::string &base_name = ".temp_array");
+  static DistrArrayHDF5 CreateTempCopy(const DistrArray<T> &source, const std::string &base_name = ".temp_array");
 
   /*!
    * @brief Copies the array from source.
@@ -104,7 +111,8 @@ public:
   DistrArrayHDF5 &operator=(const DistrArrayHDF5 &source) = delete;
   DistrArrayHDF5 &operator=(DistrArrayHDF5 &&source) noexcept;
 
-  friend void swap(DistrArrayHDF5 &x, DistrArrayHDF5 &y) noexcept;
+  template <class U>
+  friend void swap(DistrArrayHDF5<U> &x, DistrArrayHDF5<U> &y) noexcept;
 
   //! Flushes the buffer if file access is open
   ~DistrArrayHDF5() override;

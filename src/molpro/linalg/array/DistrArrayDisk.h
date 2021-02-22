@@ -97,15 +97,20 @@ class Task;
  *
  *
  */
-class DistrArrayDisk : public DistrArray {
+template <typename T = double>
+class DistrArrayDisk : public DistrArray<T> {
 public:
   using disk_array = void; //!< a compile time tag that this is a distributed disk array
 protected:
   bool m_allocated = false;       //!< Flags that the memory view buffer has been allocated
+  using value_type = typename DistrArray<T>::value_type;
+  using size_type = typename DistrArray<T>::size_type;
+  using Distribution = util::Distribution<size_type>;
+  using DistrArray<T>::error;
   Span<value_type> m_view_buffer; //!< memory view buffer either wraps allocated buffer or stores user supplied buffer
   std::vector<value_type> m_owned_buffer;       //!< buffer allocated by the class
   std::unique_ptr<Distribution> m_distribution; //!< describes distribution of array among processes
-  using DistrArray::DistrArray;
+  using DistrArray<T>::DistrArray;
 
   DistrArrayDisk(std::unique_ptr<Distribution> distr, MPI_Comm commun);
   DistrArrayDisk();
@@ -140,7 +145,7 @@ public:
   [[nodiscard]] const Distribution &distribution() const override;
 
 protected:
-  class LocalBufferDisk : public DistrArray::LocalBuffer {
+  class LocalBufferDisk : public DistrArray<T>::LocalBuffer {
   public:
     explicit LocalBufferDisk(DistrArrayDisk &source);
     ~LocalBufferDisk() override;
@@ -157,6 +162,8 @@ protected:
   };
 
 public:
+  using LocalBuffer = typename DistrArray<T>::LocalBuffer;
+  using index_type = typename DistrArray<T>::index_type;
   [[nodiscard]] std::unique_ptr<LocalBuffer> local_buffer() override;
   [[nodiscard]] std::unique_ptr<const LocalBuffer> local_buffer() const override;
 

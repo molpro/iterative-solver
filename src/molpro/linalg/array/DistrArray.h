@@ -87,12 +87,14 @@ class Distribution;
  * \endcode
  *
  */
+template <typename T = double>
 class DistrArray {
 public:
   using distributed_array = void; //!< a compile time tag that this is a distributed array
-  using value_type = double;
+  using value_type = T;
   using index_type = size_t;
-  using SparseArray = std::map<index_type, double>;
+  using size_type = size_t;
+  using SparseArray = std::map<index_type, value_type>;
   using Distribution = util::Distribution<index_type>;
 
 protected:
@@ -130,14 +132,15 @@ protected:
   public:
     virtual ~LocalBuffer() = default;
     using span::Span<value_type>::Span;
+    using span::Span<value_type>::size;
     friend void swap(LocalBuffer &, LocalBuffer &) = delete;
     //! Checks that the current and the other buffers correspond to the same section of their respective arrays
     bool compatible(const LocalBuffer &other) const { return start() == other.start() && size() == other.size(); };
     //! Return index to the start of the local buffer section in the distributed array
-    size_type start() const { return m_start; }
+    typename span::Span<value_type>::Span::size_type start() const { return m_start; }
 
   protected:
-    size_type m_start = 0; //!< index of first element of local buffer in the array
+    typename span::Span<value_type>::Span::size_type m_start = 0; //!< index of first element of local buffer in the array
   };
 
 public:
@@ -311,8 +314,8 @@ template <typename T, class Compare>
 struct CompareAbs {
   constexpr bool operator()(const T &lhs, const T &rhs) const { return Compare()(std::abs(lhs), std::abs(rhs)); }
 };
-template <class Compare>
-[[nodiscard]] std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(const DistrArray &x, int n);
+template <class Compare, class T>
+[[nodiscard]] std::list<std::pair<typename DistrArray<T>::index_type, typename DistrArray<T>::value_type>> extrema(const DistrArray<T> &x, int n);
 std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, double> &local_selection,
                                                   MPI_Comm communicator);
 } // namespace util

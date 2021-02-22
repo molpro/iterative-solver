@@ -8,8 +8,8 @@
 #include <molpro/linalg/array/util.h>
 
 using molpro::linalg::array::ArrayHandlerDistrSparse;
-using molpro::linalg::array::DistrArrayMPI3;
-using molpro::linalg::array::DistrArraySpan;
+using DistrArrayMPI3 = molpro::linalg::array::DistrArrayMPI3<double>;
+using DistrArraySpan = molpro::linalg::array::DistrArraySpan<double>;
 using molpro::linalg::array::util::LockMPI3;
 using molpro::linalg::test::mpi_comm;
 

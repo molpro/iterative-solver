@@ -15,7 +15,7 @@
 #include <molpro/linalg/array/DistrArrayMPI3.h>
 #endif
 
-using molpro::linalg::array::DistrArrayHDF5;
+using DistrArrayHDF5 = molpro::linalg::array::DistrArrayHDF5<double>;
 using molpro::linalg::array::util::file_exists;
 using molpro::linalg::array::util::LockMPI3;
 using molpro::linalg::array::util::PHDF5Handle;
