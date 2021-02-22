@@ -85,7 +85,7 @@ DistrArrayFile<T>::~DistrArrayFile() = default;
 
 template <typename T>
 bool DistrArrayFile<T>::compatible(const DistrArrayFile& source) const {
-  auto res = compatible(source);
+  auto res = DistrArray<T>::compatible(source);
   if (this->m_distribution && source.m_distribution)
     res &= this->m_distribution->compatible(*source.m_distribution);
   else
