@@ -61,109 +61,19 @@ std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, dou
     local_selection.emplace(indices[i], values[i]);
   return local_selection;
 }
-
-template <class Compare>
-std::list<std::pair<typename DistrArray<double>::index_type, double>> extrema(const DistrArray<double>& x, int n) {
-  if (x.empty())
-    return {};
-  auto buffer = x.local_buffer();
-  auto length = buffer->size();
-  auto nmin = length > n ? n : length;
-  auto loc_extrema = std::list<std::pair<typename DistrArray<double>::index_type, double>>();
-  for (size_t i = 0; i < nmin; ++i)
-    loc_extrema.emplace_back(buffer->start() + i, (*buffer)[i]);
-  auto compare = Compare();
-  auto compare_pair = [&compare](const auto& p1, const auto& p2) { return compare(p1.second, p2.second); };
-  for (size_t i = nmin; i < length; ++i) {
-    loc_extrema.emplace_back(buffer->start() + i, (*buffer)[i]);
-    loc_extrema.sort(compare_pair);
-    loc_extrema.pop_back();
-  }
-  auto indices_loc = std::vector<typename DistrArray<double>::index_type>(n, x.size() + 1);
-  auto indices_glob = std::vector<typename DistrArray<double>::index_type>(n);
-  auto values_loc = std::vector<double>(n);
-  auto values_glob = std::vector<double>(n);
-  size_t ind = 0;
-  for (auto& it : loc_extrema) {
-    indices_loc[ind] = it.first;
-    values_loc[ind] = it.second;
-    ++ind;
-  }
-  MPI_Request requests[3];
-  int comm_rank, comm_size;
-  MPI_Comm_rank(x.communicator(), &comm_rank);
-  MPI_Comm_size(x.communicator(), &comm_size);
-  // root collects values, does the final sort and sends the result back
-  if (comm_rank == 0) {
-    auto ntot = n * comm_size;
-    indices_loc.resize(ntot);
-    values_loc.resize(ntot);
-    auto ndummy = std::vector<int>(comm_size);
-    auto d = int(n - nmin);
-    MPI_Igather(&d, 1, MPI_INT, ndummy.data(), 1, MPI_INT, 0, x.communicator(), &requests[0]);
-    MPI_Igather(MPI_IN_PLACE, n, MPI_UNSIGNED_LONG, indices_loc.data(), n, MPI_UNSIGNED_LONG, 0, x.communicator(),
-                &requests[1]);
-    MPI_Igather(MPI_IN_PLACE, n, MPI_DOUBLE, values_loc.data(), n, MPI_UNSIGNED_LONG, 0, x.communicator(),
-                &requests[2]);
-    MPI_Waitall(3, requests, MPI_STATUSES_IGNORE);
-    auto tot_dummy = std::accumulate(begin(ndummy), end(ndummy), 0);
-    if (tot_dummy != 0) {
-      size_t shift = 0;
-      for (size_t i = 0, ind = 0; i < comm_size; ++i) {
-        for (size_t j = 0; j < n - ndummy[i]; ++j, ++ind) {
-          indices_loc[ind] = indices_loc[ind + shift];
-          values_loc[ind] = values_loc[ind + shift];
-        }
-        shift += ndummy[i];
-      }
-      indices_loc.resize(ntot - tot_dummy);
-      values_loc.resize(ntot - tot_dummy);
-    }
-    std::vector<unsigned int> sort_permutation(indices_loc.size());
-    std::iota(begin(sort_permutation), end(sort_permutation), (unsigned int)0);
-    std::sort(begin(sort_permutation), end(sort_permutation), [&values_loc, &compare](const auto& i1, const auto& i2) {
-      return compare(values_loc[i1], values_loc[i2]);
-    });
-    for (size_t i = 0; i < n; ++i) {
-      auto j = sort_permutation[i];
-      indices_glob[i] = indices_loc[j];
-      values_glob[i] = values_loc[j];
-    }
-  } else {
-    auto d = int(n - nmin);
-    MPI_Igather(&d, 1, MPI_INT, nullptr, 1, MPI_INT, 0, x.communicator(), &requests[0]);
-    MPI_Igather(indices_loc.data(), n, MPI_UNSIGNED_LONG, nullptr, n, MPI_UNSIGNED_LONG, 0, x.communicator(),
-                &requests[1]);
-    MPI_Igather(values_loc.data(), n, MPI_DOUBLE, nullptr, n, MPI_DOUBLE, 0, x.communicator(), &requests[2]);
-    MPI_Waitall(3, requests, MPI_STATUSES_IGNORE);
-  }
-  MPI_Ibcast(indices_glob.data(), n, MPI_UNSIGNED_LONG, 0, x.communicator(), &requests[0]);
-  MPI_Ibcast(values_glob.data(), n, MPI_DOUBLE, 0, x.communicator(), &requests[1]);
-  MPI_Waitall(2, requests, MPI_STATUSES_IGNORE);
-  auto map_extrema = std::list<std::pair<typename DistrArray<double>::index_type, double>>();
-  for (size_t i = 0; i < n; ++i)
-    map_extrema.emplace_back(indices_glob[i], values_glob[i]);
-  return map_extrema;
-}
 } // namespace molpro::linalg::array::util
+
 using molpro::linalg::array::DistrArray;
-using molpro::linalg::array::util::extrema;
-template std::list<std::pair<typename DistrArray<double>::index_type, double>> molpro::linalg::array::util::extrema<std::less< double>>(const DistrArray<double>& x, int n);
-template std::list<std::pair<typename DistrArray<double>::index_type, double>> molpro::linalg::array::util::extrema<molpro::linalg::array::util::CompareAbs<double,std::less<>>>(const DistrArray<double>& x, int n);
-
-template std::list<std::pair<typename DistrArray<double>::index_type, double>> molpro::linalg::array::util::extrema<std::greater< double>>(const DistrArray<double>& x, int n);
-template std::list<std::pair<typename DistrArray<double>::index_type, double>> molpro::linalg::array::util::extrema<molpro::linalg::array::util::CompareAbs<double,std::greater<>>>(const DistrArray<double>& x, int n);
-
-
-// TODO sort out template problems so that the following place-holders aren't needed
-template <>
-std::list<std::pair<DistrArray<double>::index_type, double> > molpro::linalg::array::util::extrema<molpro::linalg::array::util::CompareAbs<double, std::less<void> >, double>(molpro::linalg::array::DistrArray<double> const&, int) {throw std::logic_error("unimplemented");}
-template <>
-std::list<std::pair<molpro::linalg::array::DistrArray<double>::index_type, molpro::linalg::array::DistrArray<double>::value_type>, std::allocator<std::pair<molpro::linalg::array::DistrArray<double>::index_type, molpro::linalg::array::DistrArray<double>::value_type> > > molpro::linalg::array::util::extrema<std::less<double>, double>(molpro::linalg::array::DistrArray<double> const&, int) {throw std::logic_error("unimplemented");}
-
-template <>
-std::list<std::pair<molpro::linalg::array::DistrArray<double>::index_type, molpro::linalg::array::DistrArray<double>::value_type>, std::allocator<std::pair<molpro::linalg::array::DistrArray<double>::index_type, molpro::linalg::array::DistrArray<double>::value_type> > > molpro::linalg::array::util::extrema<molpro::linalg::array::util::CompareAbs<double, std::greater<void> >, double>(molpro::linalg::array::DistrArray<double> const&, int) {throw std::logic_error("unimplemented");}
-template <>
-std::list<std::pair<molpro::linalg::array::DistrArray<double>::index_type, molpro::linalg::array::DistrArray<double>::value_type>, std::allocator<std::pair<molpro::linalg::array::DistrArray<double>::index_type, molpro::linalg::array::DistrArray<double>::value_type> > > molpro::linalg::array::util::extrema<std::greater<double>, double>(molpro::linalg::array::DistrArray<double> const&, int) {throw std::logic_error("unimplemented");}
+// using molpro::linalg::array::util::extrema;
+template std::list<std::pair<typename DistrArray<double>::index_type, double>>
+molpro::linalg::array::util::extrema<std::less<double>, double>(const DistrArray<double>& x, int n);
+template std::list<std::pair<typename DistrArray<double>::index_type, double>>
+molpro::linalg::array::util::extrema<molpro::linalg::array::util::CompareAbs<double, std::less<>>, double>(
+    const DistrArray<double>& x, int n);
+template std::list<std::pair<typename DistrArray<double>::index_type, double>>
+molpro::linalg::array::util::extrema<std::greater<double>, double>(const DistrArray<double>& x, int n);
+template std::list<std::pair<typename DistrArray<double>::index_type, double>>
+molpro::linalg::array::util::extrema<molpro::linalg::array::util::CompareAbs<double, std::greater<>>, double>(
+    const DistrArray<double>& x, int n);
 
 template class molpro::linalg::array::DistrArray<double>;

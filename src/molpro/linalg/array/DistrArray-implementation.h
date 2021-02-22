@@ -238,6 +238,95 @@ DistrArray<T>::select_max_dot(size_t n, const DistrArray<T>::SparseArray& y) con
   return util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
 }
 
+namespace util {
+template <class Compare, class T>
+std::list<std::pair<typename DistrArray<T>::index_type, typename DistrArray<T>::value_type>>
+extrema(const DistrArray<T>& x, int n) {
+  if (x.empty())
+    return {};
+  auto buffer = x.local_buffer();
+  auto length = buffer->size();
+  auto nmin = length > n ? n : length;
+  auto loc_extrema = std::list<std::pair<typename DistrArray<T>::index_type, T>>();
+  for (size_t i = 0; i < nmin; ++i)
+    loc_extrema.emplace_back(buffer->start() + i, (*buffer)[i]);
+  auto compare = Compare();
+  auto compare_pair = [&compare](const auto& p1, const auto& p2) { return compare(p1.second, p2.second); };
+  for (size_t i = nmin; i < length; ++i) {
+    loc_extrema.emplace_back(buffer->start() + i, (*buffer)[i]);
+    loc_extrema.sort(compare_pair);
+    loc_extrema.pop_back();
+  }
+  auto indices_loc = std::vector<typename DistrArray<T>::index_type>(n, x.size() + 1);
+  auto indices_glob = std::vector<typename DistrArray<T>::index_type>(n);
+  auto values_loc = std::vector<T>(n);
+  auto values_glob = std::vector<T>(n);
+  size_t ind = 0;
+  for (auto& it : loc_extrema) {
+    indices_loc[ind] = it.first;
+    values_loc[ind] = it.second;
+    ++ind;
+  }
+  MPI_Request requests[3];
+  int comm_rank, comm_size;
+  MPI_Comm_rank(x.communicator(), &comm_rank);
+  MPI_Comm_size(x.communicator(), &comm_size);
+  // root collects values, does the final sort and sends the result back
+  if (sizeof(T) != sizeof(double))
+    throw std::logic_error("Incomplete implementation");
+  if (comm_rank == 0) {
+    auto ntot = n * comm_size;
+    indices_loc.resize(ntot);
+    values_loc.resize(ntot);
+    auto ndummy = std::vector<int>(comm_size);
+    auto d = int(n - nmin);
+    MPI_Igather(&d, 1, MPI_INT, ndummy.data(), 1, MPI_INT, 0, x.communicator(), &requests[0]);
+    MPI_Igather(MPI_IN_PLACE, n, MPI_UNSIGNED_LONG, indices_loc.data(), n, MPI_UNSIGNED_LONG, 0, x.communicator(),
+                &requests[1]);
+    MPI_Igather(MPI_IN_PLACE, n, MPI_DOUBLE, values_loc.data(), n, MPI_UNSIGNED_LONG, 0, x.communicator(),
+                &requests[2]);
+    MPI_Waitall(3, requests, MPI_STATUSES_IGNORE);
+    auto tot_dummy = std::accumulate(begin(ndummy), end(ndummy), 0);
+    if (tot_dummy != 0) {
+      size_t shift = 0;
+      for (size_t i = 0, ind = 0; i < comm_size; ++i) {
+        for (size_t j = 0; j < n - ndummy[i]; ++j, ++ind) {
+          indices_loc[ind] = indices_loc[ind + shift];
+          values_loc[ind] = values_loc[ind + shift];
+        }
+        shift += ndummy[i];
+      }
+      indices_loc.resize(ntot - tot_dummy);
+      values_loc.resize(ntot - tot_dummy);
+    }
+    std::vector<unsigned int> sort_permutation(indices_loc.size());
+    std::iota(begin(sort_permutation), end(sort_permutation), (unsigned int)0);
+    std::sort(begin(sort_permutation), end(sort_permutation), [&values_loc, &compare](const auto& i1, const auto& i2) {
+      return compare(values_loc[i1], values_loc[i2]);
+    });
+    for (size_t i = 0; i < n; ++i) {
+      auto j = sort_permutation[i];
+      indices_glob[i] = indices_loc[j];
+      values_glob[i] = values_loc[j];
+    }
+  } else {
+    auto d = int(n - nmin);
+    MPI_Igather(&d, 1, MPI_INT, nullptr, 1, MPI_INT, 0, x.communicator(), &requests[0]);
+    MPI_Igather(indices_loc.data(), n, MPI_UNSIGNED_LONG, nullptr, n, MPI_UNSIGNED_LONG, 0, x.communicator(),
+                &requests[1]);
+    MPI_Igather(values_loc.data(), n, MPI_DOUBLE, nullptr, n, MPI_DOUBLE, 0, x.communicator(), &requests[2]);
+    MPI_Waitall(3, requests, MPI_STATUSES_IGNORE);
+  }
+  MPI_Ibcast(indices_glob.data(), n, MPI_UNSIGNED_LONG, 0, x.communicator(), &requests[0]);
+  MPI_Ibcast(values_glob.data(), n, MPI_DOUBLE, 0, x.communicator(), &requests[1]);
+  MPI_Waitall(2, requests, MPI_STATUSES_IGNORE);
+  auto map_extrema = std::list<std::pair<typename DistrArray<T>::index_type, T>>();
+  for (size_t i = 0; i < n; ++i)
+    map_extrema.emplace_back(indices_glob[i], values_glob[i]);
+  return map_extrema;
+}
+} // namespace util
+
 template <typename T>
 std::list<std::pair<typename DistrArray<T>::index_type, typename DistrArray<T>::value_type>>
 DistrArray<T>::min_n(int n) const {

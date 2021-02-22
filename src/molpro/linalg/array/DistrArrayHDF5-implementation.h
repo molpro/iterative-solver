@@ -3,6 +3,7 @@
 
 #include "util/Distribution.h"
 #include <algorithm>
+#include <stdexcept>
 
 #include "PHDF5Handle.h"
 #include "util/TempHandle.h"
