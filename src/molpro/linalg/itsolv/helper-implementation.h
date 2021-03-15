@@ -260,7 +260,7 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
 
   //   molpro::cout << "sorted eigenvalues\n"<<subspaceEigenvalues<<std::endl;
   //   molpro::cout << "sorted eigenvectors\n"<<subspaceEigenvectors<<std::endl;
-  molpro::cout << "hermitian="<<hermitian<<std::endl;
+//  molpro::cout << "hermitian="<<hermitian<<std::endl;
   if (!hermitian) {
     Eigen::MatrixXcd ovlTimesVec(subspaceEigenvectors.cols(), subspaceEigenvectors.rows()); // FIXME templating
     for (auto repeat = 0; repeat < 3; ++repeat)
@@ -317,8 +317,8 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
         //                       subspaceEigenvectors.col(k))( 0, 0)<<std::endl;
       }
   } // if (!hermitian)
-       molpro::cout << "eigenvalues"<<std::endl<<subspaceEigenvalues<<std::endl;
-       molpro::cout << "eigenvectors"<<std::endl<<subspaceEigenvectors<<std::endl;
+//       molpro::cout << "eigenvalues"<<std::endl<<subspaceEigenvalues<<std::endl;
+//       molpro::cout << "eigenvectors"<<std::endl<<subspaceEigenvectors<<std::endl;
   // TODO complex should be implemented with a specialised function
   // TODO real should be implemented with always-executed runtime assertion that eigensolution turns out to be real
   auto complex_error_vecs = (subspaceEigenvectors - subspaceEigenvectors.real()).norm();
