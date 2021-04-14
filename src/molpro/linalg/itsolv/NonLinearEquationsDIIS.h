@@ -32,6 +32,29 @@ public:
                            std::make_shared<subspace::SubspaceSolverDIIS<R, Q, P>>(logger_)),
                        handlers, std::make_shared<Statistics>(), logger_),
         logger(logger_) {}
+  // TODO improve print out
+  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem) override {
+    // TODO assert that a reasonable subspace has been constructed
+    auto nwork = parameters.size();
+    for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
+       problem.residual(*parameters.begin(), *actions.begin());
+//      problem.action(cwrap(parameters.begin(), parameters.begin() + nwork), wrap(actions.begin(), actions.begin() + nwork));
+//      nwork = this->add_vector(parameters, actions);
+      nwork = this->add_vector(*parameters.begin(), *actions.begin());
+      if (nwork > 0) {
+        problem.precondition(wrap(actions.begin(), actions.begin() + nwork),
+                             std::vector<double>(nwork,0));
+        if (this->m_verbosity >= Verbosity::Iteration)
+          report();
+        nwork = this->end_iteration(parameters, actions);
+        // TODO if nwork == 0, but solver is not converged than the subspace is stuck. print a warning.
+      }
+    }
+    if (this->m_verbosity >= Verbosity::Summary) {
+      report();
+    }
+    return nwork == 0;
+  };
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
     this->solution_params(this->m_working_set, parameters);

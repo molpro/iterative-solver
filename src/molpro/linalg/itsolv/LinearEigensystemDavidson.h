@@ -38,6 +38,28 @@ public:
     set_hermiticity(m_hermiticity);
     this->m_normalise_solution = false;
   }
+  // TODO improve print out
+  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem) override {
+    // TODO assert that a reasonable subspace has been constructed
+    auto nwork = parameters.size();
+    for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
+      problem.action(cwrap(parameters.begin(), parameters.begin() + nwork), wrap(actions.begin(), actions.begin() + nwork));
+      nwork = this->add_vector(parameters, actions);
+      if (nwork > 0) {
+        problem.precondition(wrap(actions.begin(), actions.begin() + nwork),
+//                             std::vector<double>(nwork,0));
+                             working_set_eigenvalues());
+        if (this->m_verbosity >= Verbosity::Iteration)
+          report();
+        nwork = this->end_iteration(parameters, actions);
+        // TODO if nwork == 0, but solver is not converged than the subspace is stuck. print a warning.
+      }
+    }
+    if (this->m_verbosity >= Verbosity::Summary) {
+      report();
+    }
+    return nwork == 0;
+  };
 
   /*!
    * \brief Proposes new parameters for the subspace from the preconditioned residuals.

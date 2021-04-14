@@ -8,8 +8,8 @@
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/subspace/util.h>
-#include <molpro/linalg/itsolv/wrap.h>
 #include <molpro/linalg/itsolv/util.h>
+#include <molpro/linalg/itsolv/wrap.h>
 #include <stack>
 
 namespace molpro::linalg::itsolv {
@@ -39,17 +39,16 @@ void construct_solution(const VecRef<R>& params, const std::vector<int>& roots,
     handlers.rr().fill(0, params.at(i));
   }
   subspace::Matrix<double> rp_mat(std::make_pair(pparams.size(), roots.size())),
-                           rq_mat(std::make_pair(qparams.size(), roots.size())),
-                           rd_mat(std::make_pair(dparams.size(), roots.size()));
+      rq_mat(std::make_pair(qparams.size(), roots.size())), rd_mat(std::make_pair(dparams.size(), roots.size()));
   for (size_t i = 0; i < roots.size(); ++i) {
     for (size_t j = 0; j < pparams.size(); ++j) {
-      rp_mat(j, i) = solutions(roots[i], oP+j);
+      rp_mat(j, i) = solutions(roots[i], oP + j);
     }
     for (size_t j = 0; j < qparams.size(); ++j) {
-      rq_mat(j, i) = solutions(roots[i], oQ+j);
+      rq_mat(j, i) = solutions(roots[i], oQ + j);
     }
     for (size_t j = 0; j < dparams.size(); ++j) {
-      rd_mat(j, i) = solutions(roots[i], oD+j);
+      rd_mat(j, i) = solutions(roots[i], oD + j);
     }
   }
   handlers.rp().gemm_outer(rp_mat, cwrap(pparams), params);
@@ -133,13 +132,12 @@ public:
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
 
   // TODO improve print out
-  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
-             const fprecondition_type& precondition = fprecondition_type{}) override {
+  bool solve_obsolete(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
+                      const fprecondition_type& precondition = fprecondition_type{}) override {
     // TODO assert that a reasonable subspace has been constructed
     auto nwork = parameters.size();
     for (auto iter = 0; iter < m_max_iter && nwork > 0; iter++) {
-      apply_r(cwrap(parameters.begin(), parameters.begin() + nwork),
-              wrap(actions.begin(), actions.begin() + nwork));
+      apply_r(cwrap(parameters.begin(), parameters.begin() + nwork), wrap(actions.begin(), actions.begin() + nwork));
       nwork = this->add_vector(parameters, actions);
       if (nwork > 0) {
         precondition(wrap(actions.begin(), actions.begin() + nwork),
@@ -171,7 +169,7 @@ public:
     auto cwactions = cwrap(begin(actions), begin(actions) + nW);
     m_stats->r_creations += nW;
     m_xspace->update_qspace(cwparams, cwactions);
-    m_stats->q_creations += 2*nW;
+    m_stats->q_creations += 2 * nW;
     auto working_set = solve_and_generate_working_set(parameters, actions);
     read_handler_counts(m_stats, m_handlers);
     return working_set;
@@ -313,7 +311,9 @@ protected:
                           std::shared_ptr<ArrayHandlers<R, Q, P>> handlers, std::shared_ptr<Statistics> stats,
                           std::shared_ptr<Logger> logger)
       : m_handlers(std::move(handlers)), m_xspace(std::move(xspace)), m_subspace_solver(std::move(solver)),
-        m_stats(std::move(stats)), m_logger(std::move(logger)) {set_n_roots(1);}
+        m_stats(std::move(stats)), m_logger(std::move(logger)) {
+    set_n_roots(1);
+  }
 
   //! Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)
   virtual void set_value_errors() {}
@@ -377,6 +377,8 @@ protected:
     if (!roots.empty() && *std::max_element(roots.begin(), roots.end()) >= m_subspace_solver->solutions().size())
       throw std::runtime_error("asking for more roots than there are solutions");
   }
+
+
 
   std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;                    //!< Array handlers
   std::shared_ptr<subspace::IXSpace<R, Q, P>> m_xspace;                  //!< manages the subspace and associated data

@@ -14,6 +14,44 @@
 namespace molpro::linalg::itsolv {
 
 /*!
+ * @brief Abstract class defining the problem-specific interface for the simplified solver interface to IterativeSolver
+ * @tparam R the type of container for solutions and residuals
+ */
+template <typename R>
+class Problem {
+public:
+  Problem() = default;
+  virtual ~Problem() = default;
+
+  /*!
+   * @brief Calculate the residual vector. Used by non-linear solvers (NonLinearEquations, Optimize) only.
+   * @param parameters The trial solution for which the residual is to be calculated
+   * @param residual The residual vector
+   * @return In the case where the residual is an exact differential, the corresponding function value. Used by Optimize
+   * but not NonLinearEquations.
+   */
+  virtual double residual(const R& parameters, R& residual) const { return 0; }
+
+  /*!
+   * @brief Calculate the action of the kernel matrix on a set of parameters. Used by linear solvers, but not by the
+   * non-linear solvers (NonLinearEquations, Optimize).
+   * @param parameters The trial solutions for which the action is to be calculated
+   * @param action The action vectors
+   */
+  virtual void action(const CVecRef<R>& parameters, const VecRef<R>& action) const { return; }
+
+  /*!
+   * @brief Apply preconditioning to a residual vector in order to predict a step towards the solution
+   * @param residual On entry, assumed to be the residual. On exit, the negative of the predicted step.
+   * @param shift When called from LinearEigensystem, contains the corresponding current eigenvalue estimates for each
+   * of the parameter vectors in the set. All other solvers pass a vector of zeroes.
+   */
+  virtual void precondition(const VecRef<R>& residual, const std::vector<typename R::value_type>& shift) const {
+    return;
+  }
+};
+
+/*!
  * @brief Base class defining the interface common to all iterative solvers
  *
  * @tparam R container for "working-set" vectors. These are typically implemented in memory, and are created by the
@@ -61,8 +99,26 @@ public:
    * matrix, and an appropriate preconditioner function will be generated.
    * @return true if the solution was found
    */
-  virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
-                     const fprecondition_type& precondition = fprecondition_type{}) = 0;
+  virtual bool solve_obsolete(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
+                              const fprecondition_type& precondition = fprecondition_type{}) = 0;
+
+  /*!
+   * @brief Simplified one-call solver
+   * @param parameters A set of scratch vectors. On entry, these vectors should be filled with starting guesses.
+   * Where possible, the number of vectors should be equal to the number of solutions sought, but a smaller array is
+   * permitted.
+   * @param actions A set of scratch vectors. It should have the same size as parameters.
+   * @param problem A Problem object defining the problem to be solved
+   * @return true if the solution was found
+   */
+  //  virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem) = 0; // TODO
+  //  make abstract when all concretizations are done
+  virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem) { return false; }
+  bool solve(R& parameters, R& actions, const Problem<R>& problem) {
+    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
+    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
+    return solve(wparams, wactions, problem);
+  }
 
   /*!
    * \brief Take, typically, a current solution and residual, and add it to the solution space.
