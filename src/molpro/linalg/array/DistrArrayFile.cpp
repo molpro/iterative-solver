@@ -5,7 +5,6 @@
 #include <molpro/linalg/array/util/temp_file.h>
 #include <utility>
 
-
 namespace molpro::linalg::array {
 namespace {
 int mpi_size(MPI_Comm comm) {
@@ -15,10 +14,49 @@ int mpi_size(MPI_Comm comm) {
 }
 } // namespace
 
-DistrArrayFile::DistrArrayFile() = default;
+std::unique_ptr<util::FileAttributes> DistrArrayFile::file = nullptr;
+
+std::tuple<DistrArrayFile::index_type, DistrArrayFile::index_type, DistrArrayFile::index_type>
+    DistrArrayFile::local_bounds() const {
+  int rank;
+  MPI_Comm_rank(m_communicator, &rank);
+  index_type lo_loc, hi_loc, size_loc;
+  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  size_loc = hi_loc - lo_loc;
+  return {lo_loc, hi_loc, size_loc};
+}
+
+void DistrArrayFile::update_records() {
+  if (std::get<2>(local_bounds()) == 0) return;
+  if (file->registry.empty()) {
+    m_frecs = {0, std::get<2>(local_bounds()) - 1};
+    file->registry.emplace(m_frecs);
+  } else {
+    std::set<std::pair<size_t, size_t>>::reverse_iterator rec;
+    for (rec = file->registry.rbegin(); rec != file->registry.rend(); ++rec) {
+      if ((*rec).first != 0 && (*rec).first - (*std::next(rec)).second > 1) {
+        rec = std::next(rec);
+        break;
+      };
+      if ((*rec).first == 0) {
+        rec = file->registry.rbegin();
+        break;
+      }
+    }
+    size_t first_rec = (*rec).second + 1;
+    m_frecs = {first_rec, first_rec + std::get<2>(local_bounds()) - 1};
+    file->registry.emplace(m_frecs);
+  }
+  m_lrec = true;
+}
 
 DistrArrayFile::DistrArrayFile(DistrArrayFile&& source) noexcept
-    : DistrArrayDisk(std::move(source)), m_dir(std::move(source.m_dir)), m_file(std::move(source.m_file)) {}
+    : DistrArrayDisk(std::move(source)), m_frecs(std::move(source.m_frecs)) {
+  if (source.m_lrec) {
+    source.m_lrec = false;
+    m_lrec = true;
+  }
+}
 
 DistrArrayFile::DistrArrayFile(size_t dimension, MPI_Comm comm, const std::string& directory)
     : DistrArrayFile(std::make_unique<Distribution>(
@@ -26,23 +64,23 @@ DistrArrayFile::DistrArrayFile(size_t dimension, MPI_Comm comm, const std::strin
                      comm, directory) {}
 
 DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm, const std::string& directory)
-    : DistrArrayDisk(std::move(distribution), comm), m_dir(fs::absolute(fs::path(directory))), m_file(make_file()) {
-    if (m_distribution->border().first != 0)
-      DistrArray::error("Distribution of array must start from 0");
+    : DistrArrayDisk(std::move(distribution), comm) {
+  if (m_distribution->border().first != 0)
+    DistrArray::error("Distribution of array must start from 0");
+  if (!file) {
+    file = std::make_unique<util::FileAttributes>(make_file(fs::absolute(fs::path(directory))));
+  }
+  update_records();
 }
 
 DistrArrayFile::DistrArrayFile(const DistrArrayFile& source)
-    : DistrArrayDisk(source), m_dir(source.m_dir), m_file(make_file()) {
-    if (!source.empty()){
-    DistrArrayFile::copy(source);
-    }
-  }
+    : DistrArrayFile(std::make_unique<Distribution>(source.distribution()), source.communicator()) {
+  DistrArrayFile::copy(source);
+}
 
 DistrArrayFile::DistrArrayFile(const DistrArray& source)
     : DistrArrayFile(std::make_unique<Distribution>(source.distribution()), source.communicator()) {
-  if (!source.empty()) {
-    DistrArrayFile::copy(source);
-  }
+  DistrArrayFile::copy(source);
 }
 
 DistrArrayFile& DistrArrayFile::operator=(DistrArrayFile&& source) noexcept {
@@ -51,19 +89,30 @@ DistrArrayFile& DistrArrayFile::operator=(DistrArrayFile&& source) noexcept {
   return *this;
 }
 
+DistrArrayFile DistrArrayFile::CreateTempCopy(const DistrArray& source, const std::string& directory) {
+  DistrArrayFile t(std::make_unique<Distribution>(source.distribution()), source.communicator(), directory);
+  t.copy(source);
+  return t;
+}
+
 void swap(DistrArrayFile& x, DistrArrayFile& y) noexcept {
   using std::swap;
   swap(x.m_dimension, y.m_dimension);
   swap(x.m_communicator, y.m_communicator);
   swap(x.m_allocated, y.m_allocated);
-  swap(x.m_view_buffer, y.m_view_buffer);
-  swap(x.m_owned_buffer, y.m_owned_buffer);
   swap(x.m_distribution, y.m_distribution);
-  swap(x.m_file, y.m_file);
-  swap(x.m_dir, y.m_dir);
+  swap(x.m_frecs, y.m_frecs);
+  swap(x.m_lrec, y.m_lrec);
 }
 
-DistrArrayFile::~DistrArrayFile() = default;
+DistrArrayFile::~DistrArrayFile() {
+  if (file) {
+    if (m_lrec) {
+      file->registry.erase(m_frecs);
+      if (file->registry.empty()) file.reset();
+    }
+  }
+}
 
 bool DistrArrayFile::compatible(const DistrArrayFile& source) const {
   auto res = DistrArray::compatible(source);
@@ -74,25 +123,16 @@ bool DistrArrayFile::compatible(const DistrArrayFile& source) const {
   return res;
 }
 
-std::fstream DistrArrayFile::make_file() {
-  std::fstream file;
+std::fstream DistrArrayFile::make_file(const fs::path &dir) {
+  std::fstream tfile;
   std::string file_name =
-      util::temp_file_name(m_dir.string() + "/", "");
-  file.open(file_name.c_str(), std::ios::out | std::ios::binary);
-  file.close();
-  file.open(file_name.c_str(), std::ios::out | std::ios::in | std::ios::binary);
+      util::temp_file_name(dir.string() + "/", "");
+  tfile.open(file_name.c_str(), std::ios::out | std::ios::binary);
+  tfile.close();
+  tfile.open(file_name.c_str(), std::ios::out | std::ios::in | std::ios::binary);
   unlink(file_name.c_str());
-  return file;
+  return tfile;
 }
-
-void DistrArrayFile::open_access() {}
-void DistrArrayFile::close_access() {}
-
-bool DistrArrayFile::empty() const {
-  return !m_file.is_open();
-}
-
-void DistrArrayFile::erase() {}
 
 DistrArray::value_type DistrArrayFile::at(DistrArray::index_type ind) const {
   value_type val;
@@ -106,19 +146,20 @@ void DistrArrayFile::get(DistrArray::index_type lo, DistrArray::index_type hi, D
   if (lo >= hi)
     return;
   DistrArray::index_type length = hi - lo;
-  int current = m_file.tellg();
-  if (current < length )
-    return;
-  int rank;
-  MPI_Comm_rank(m_communicator, &rank);
   DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  auto bounds_loc = local_bounds();
+  std::tie(lo_loc, hi_loc) = {std::get<0>(bounds_loc), std::get<1>(bounds_loc)};
   if (lo < lo_loc || hi > hi_loc) {
     error("Only local array indices can be accessed via DistrArrayFile.get() function");
   }
-  DistrArray::index_type offset = lo - lo_loc;
-  m_file.seekg(offset * sizeof(DistrArray::value_type));
-  m_file.read((char*)buf, length * sizeof(DistrArray::value_type));
+  DistrArray::index_type offset = m_frecs.first + lo - lo_loc;
+  file->object.seekg(0, std::ios::end);
+  int current = file->object.tellg();
+  if (current < (offset + length)*sizeof(DistrArray::value_type)) {
+    return;
+  }
+  file->object.seekg(offset * sizeof(DistrArray::value_type));
+  file->object.read((char*)buf, length * sizeof(DistrArray::value_type));
 }
 
 std::vector<DistrArrayFile::value_type> DistrArrayFile::get(DistrArray::index_type lo,
@@ -133,17 +174,16 @@ std::vector<DistrArrayFile::value_type> DistrArrayFile::get(DistrArray::index_ty
 void DistrArrayFile::put(DistrArray::index_type lo, DistrArray::index_type hi, const DistrArray::value_type* data) {
   if (lo >= hi)
     return;
-  int rank;
-  MPI_Comm_rank(m_communicator, &rank);
   DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  auto bounds_loc = local_bounds();
+  std::tie(lo_loc, hi_loc) = {std::get<0>(bounds_loc), std::get<1>(bounds_loc)};
   if (lo < lo_loc || hi > hi_loc) {
     error("Only values at local array indices can be written via DistrArrayFile.put() function");
   }
-  DistrArray::index_type offset = lo - lo_loc;
+  DistrArray::index_type offset = m_frecs.first + lo - lo_loc;
   DistrArray::index_type length = hi - lo;
-  m_file.seekp(offset * sizeof(DistrArray::value_type));
-  m_file.write((const char*)data, length * sizeof(DistrArray::value_type));
+  file->object.seekp(offset * sizeof(DistrArray::value_type));
+  file->object.write((const char*)data, length * sizeof(DistrArray::value_type));
 }
 
 void DistrArrayFile::acc(DistrArray::index_type lo, DistrArray::index_type hi, const DistrArray::value_type* data) {
@@ -157,11 +197,10 @@ void DistrArrayFile::acc(DistrArray::index_type lo, DistrArray::index_type hi, c
 std::vector<DistrArrayFile::value_type> DistrArrayFile::gather(const std::vector<index_type>& indices) const {
   std::vector<value_type> data;
   data.reserve(indices.size());
-  int rank;
-  MPI_Comm_rank(m_communicator, &rank);
   auto minmax = std::minmax_element(indices.begin(), indices.end());
   DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  auto bounds_loc = local_bounds();
+  std::tie(lo_loc, hi_loc) = {std::get<0>(bounds_loc), std::get<1>(bounds_loc)};
   if (*minmax.first < lo_loc || *minmax.second > hi_loc) {
     error("Only local array indices can be accessed via DistrArrayFile.gather() function");
   }
@@ -175,16 +214,15 @@ void DistrArrayFile::scatter(const std::vector<index_type>& indices, const std::
   if (indices.size() != data.size()) {
     error("Length of the indices and data vectors should be the same: DistrArray::scatter()");
   }
-  int rank;
-  MPI_Comm_rank(m_communicator, &rank);
   auto minmax = std::minmax_element(indices.begin(), indices.end());
   DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  auto bounds_loc = local_bounds();
+  std::tie(lo_loc, hi_loc) = {std::get<0>(bounds_loc), std::get<1>(bounds_loc)};
   if (*minmax.first < lo_loc || *minmax.second > hi_loc) {
     error("Only local array indices can be accessed via DistrArrayFile.gather() function");
   }
   for (auto i : indices) {
-    set(i, data[i-*minmax.first]);
+    set(i, data[i - *minmax.first]); //TODO: check it shouldn't be data[*minmax.first++]??
   }
 }
 
@@ -196,10 +234,9 @@ void DistrArrayFile::scatter_acc(std::vector<index_type>& indices, const std::ve
 }
 
 std::vector<DistrArrayFile::value_type> DistrArrayFile::vec() const {
-  int rank;
-  MPI_Comm_rank(m_communicator, &rank);
   DistrArray::index_type lo_loc, hi_loc;
-  std::tie(lo_loc, hi_loc) = m_distribution->range(rank);
+  auto bounds_loc = local_bounds();
+  std::tie(lo_loc, hi_loc) = {std::get<0>(bounds_loc), std::get<1>(bounds_loc)};
   return get(lo_loc, hi_loc);
 }
 

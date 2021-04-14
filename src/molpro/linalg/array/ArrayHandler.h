@@ -9,8 +9,18 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <numeric>
+#ifdef HAVE_MPI_H
+#include <mpi.h>
+#endif
 
 #include <molpro/linalg/array/type_traits.h>
+#include <molpro/linalg/itsolv/wrap_util.h>
+#include <molpro/linalg/itsolv/subspace/Matrix.h>
+
+using molpro::linalg::itsolv::VecRef;
+using molpro::linalg::itsolv::CVecRef;
+using molpro::linalg::itsolv::subspace::Matrix;
 
 namespace molpro::linalg::array {
 namespace util {
@@ -154,9 +164,19 @@ struct RefEqual {
 template <class AL, class AR = AL>
 class ArrayHandler {
 protected:
-  ArrayHandler() = default;
+  ArrayHandler() : m_counter(std::make_unique<Counter>()) {};
   ArrayHandler(const ArrayHandler &) = default;
-
+  
+  struct Counter {
+    int scal = 0;
+    int dot = 0;
+    int axpy = 0;
+    int copy = 0;
+    int gemm_inner = 0;
+    int gemm_outer = 0;
+  };
+  
+  std::unique_ptr<Counter> m_counter;
 public:
   using value_type_L = typename array::mapped_or_value_type_t<AL>;
   using value_type_R = typename array::mapped_or_value_type_t<AR>;
@@ -170,6 +190,17 @@ public:
   virtual void fill(value_type alpha, AL &x) = 0;
   virtual void axpy(value_type alpha, const AR &x, AL &y) = 0;
   virtual value_type dot(const AL &x, const AR &y) = 0;
+  
+  /*!
+   * Perform axpy() on multiple pairs of containers in an efficient manner
+   */
+  virtual void gemm_outer(const Matrix<value_type> alphas, const CVecRef<AR> &xx, const VecRef<AL> &yy) = 0;
+  
+  /*!
+   * Perform dot() on multiple pairs of containers in an efficient manner
+   */
+  virtual Matrix<value_type> gemm_inner(const CVecRef<AL> &xx, const CVecRef<AR> &yy) = 0;
+  
   /*!
    * @brief Select n indices with largest by absolute value contributions to the dot product
    *
@@ -181,7 +212,34 @@ public:
    * @return map of indices and corresponding x,y product
    */
   virtual std::map<size_t, value_type_abs> select_max_dot(size_t n, const AL &x, const AR &y) = 0;
-
+  
+  const Counter& counter() const {return *m_counter;}
+  
+  std::string counter_to_string(std::string L, std::string R){
+    std::string output = "";
+    if (m_counter->scal > 0) output.append(std::to_string(m_counter->scal) + " scaling operations of the " + L +
+                                            " vectors, ");
+    if (m_counter->copy > 0) output.append(std::to_string(m_counter->copy) + " " + L + "<-" + R + " copy operations, ");
+    if (m_counter->dot > 0) output.append(std::to_string(m_counter->dot) + " dot product operations between the " + L +
+                                           " and " + R + " vectors, ");
+    if (m_counter->axpy > 0) output.append(std::to_string(m_counter->axpy) + " axpy (" + R + " = a*" + L + " + " + R +
+                                           ") operations, ");
+    if (m_counter->gemm_inner > 0) output.append(std::to_string(m_counter->gemm_inner) +
+                                              " gemm_inner operations between the " + L + " and " + R + " vectors, ");
+    if (m_counter->gemm_outer > 0) output.append(std::to_string(m_counter->gemm_outer) +
+                                              " gemm_outer operations between the " + L + " and " + R + " vectors, ");
+    return output;
+  };
+  
+  void clear_counter() {
+    m_counter->scal = 0;
+    m_counter->copy = 0;
+    m_counter->dot = 0;
+    m_counter->axpy = 0;
+    m_counter->gemm_inner = 0;
+    m_counter->gemm_outer = 0;
+  }
+  
   //! Destroys ArrayHandler instance and invalidates any LazyHandler it created. Invalidated handler will not evaluate.
   virtual ~ArrayHandler() {
     std::for_each(m_lazy_handles.begin(), m_lazy_handles.end(), [](auto &el) {
@@ -220,6 +278,7 @@ protected:
       out[zi].get() = dot(xx[xi].get(), yy[yi].get());
     }
   }
+  
 
   /*!
    * @brief Registers operations for lazy evaluation. Evaluation is triggered by calling eval() or on destruction.

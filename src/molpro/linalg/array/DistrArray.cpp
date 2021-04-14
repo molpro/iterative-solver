@@ -30,13 +30,9 @@ bool DistrArray::compatible(const DistrArray& other) const {
   return result;
 }
 
-bool DistrArray::empty() const { return true; }
-
 void DistrArray::zero() { fill(0); }
 
 void DistrArray::fill(DistrArray::value_type val) {
-  if (empty())
-    error("DistrArray::fill cannot fill empty array");
   auto lb = local_buffer();
   for (auto& el : *lb)
     el = val;
@@ -46,8 +42,6 @@ void DistrArray::axpy(value_type a, const DistrArray& y) {
   auto name = std::string{"Array::axpy"};
   if (!compatible(y))
     error(name + " incompatible arrays");
-  if (empty() || y.empty())
-    error(name + " cannot use empty arrays");
   if (a == 0)
     return;
   auto loc_x = local_buffer();
@@ -93,8 +87,6 @@ void DistrArray::times(const DistrArray& y) {
   auto name = std::string{"Array::times"};
   if (!compatible(y))
     error(name + " incompatible arrays");
-  if (empty() || y.empty())
-    error(name + " cannot use empty arrays");
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
@@ -109,8 +101,6 @@ void DistrArray::times(const DistrArray& y, const DistrArray& z) {
     error(name + " array y is incompatible");
   if (!compatible(z))
     error(name + " array z is incompatible");
-  if (empty() || y.empty() || z.empty())
-    error(name + " cannot use empty arrays");
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   auto loc_z = z.local_buffer();
@@ -124,8 +114,6 @@ DistrArray::value_type DistrArray::dot(const DistrArray& y) const {
   auto name = std::string{"Array::dot"};
   if (!compatible(y))
     error(name + " array x is incompatible");
-  if (empty() || y.empty())
-    error(name + " calling dot on empty arrays");
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
@@ -142,8 +130,6 @@ void DistrArray::_divide(const DistrArray& y, const DistrArray& z, DistrArray::v
     error(name + " array y is incompatible");
   if (!compatible(z))
     error(name + " array z is incompatible");
-  if (empty() || y.empty() || z.empty())
-    error(name + " calling divide with an empty array");
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   auto loc_z = z.local_buffer();
@@ -169,7 +155,7 @@ void DistrArray::_divide(const DistrArray& y, const DistrArray& z, DistrArray::v
 namespace util {
 std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, double>& local_selection,
                                                   MPI_Comm communicator) {
-  auto indices = std::vector<unsigned long>();
+  auto indices = std::vector<DistrArray::index_type>();
   auto values = std::vector<double>();
   indices.reserve(n);
   values.reserve(n);
@@ -197,7 +183,7 @@ std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, dou
     using pair_t = std::pair<double, size_t>;
     auto pq = std::priority_queue<pair_t, std::vector<pair_t>, std::greater<>>();
     for (size_t i = 0; i < n; ++i)
-      pq.emplace(std::numeric_limits<double>::min(), std::numeric_limits<unsigned long>::max());
+      pq.emplace(std::numeric_limits<double>::min(), std::numeric_limits<DistrArray::index_type>::max());
     for (size_t i = 0, ii = 0; i < comm_size; ++i) {
       for (size_t j = 0; j < n - n_dummy_elements[i]; ++j, ++ii) {
         pq.emplace(values[ii], indices[ii]);
@@ -231,8 +217,6 @@ std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, dou
 std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, const DistrArray& y) const {
   if (!compatible(y))
     error("DistrArray::select_max_dot: incompatible arrays");
-  if (empty() || y.empty())
-    error("DistrArray::select_max_dot: arrays are empty");
   if (n > size() || n > y.size())
     error("DistrArray::select_max_dot: n is too large");
   auto xbuf = local_buffer();
@@ -247,12 +231,8 @@ std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, co
 
 std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, const DistrArray::SparseArray& y) const {
   auto name = std::string("DistrArray::select_max_dot:");
-  if (empty())
-    error(name + " array is empty");
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is too large");
-  if (empty() || y.empty())
-    error(name + " arrays are empty");
   if (n > size() || n > y.size())
     error(" n is too large");
   auto xbuf = local_buffer();
@@ -266,13 +246,13 @@ std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, co
 
 namespace util {
 template <class Compare>
-std::list<std::pair<unsigned long, double>> extrema(const DistrArray& x, int n) {
-  if (x.empty())
+std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(const DistrArray& x, int n) {
+  if (x.size() == 0)
     return {};
   auto buffer = x.local_buffer();
   auto length = buffer->size();
   auto nmin = length > n ? n : length;
-  auto loc_extrema = std::list<std::pair<unsigned long, double>>();
+  auto loc_extrema = std::list<std::pair<DistrArray::index_type, double>>();
   for (size_t i = 0; i < nmin; ++i)
     loc_extrema.emplace_back(buffer->start() + i, (*buffer)[i]);
   auto compare = Compare();
@@ -282,8 +262,8 @@ std::list<std::pair<unsigned long, double>> extrema(const DistrArray& x, int n) 
     loc_extrema.sort(compare_pair);
     loc_extrema.pop_back();
   }
-  auto indices_loc = std::vector<unsigned long>(n, x.size() + 1);
-  auto indices_glob = std::vector<unsigned long>(n);
+  auto indices_loc = std::vector<DistrArray::index_type>(n, x.size() + 1);
+  auto indices_glob = std::vector<DistrArray::index_type>(n);
   auto values_loc = std::vector<double>(n);
   auto values_glob = std::vector<double>(n);
   size_t ind = 0;
@@ -343,7 +323,7 @@ std::list<std::pair<unsigned long, double>> extrema(const DistrArray& x, int n) 
   MPI_Ibcast(indices_glob.data(), n, MPI_UNSIGNED_LONG, 0, x.communicator(), &requests[0]);
   MPI_Ibcast(values_glob.data(), n, MPI_DOUBLE, 0, x.communicator(), &requests[1]);
   MPI_Waitall(2, requests, MPI_STATUSES_IGNORE);
-  auto map_extrema = std::list<std::pair<unsigned long, double>>();
+  auto map_extrema = std::list<std::pair<DistrArray::index_type, double>>();
   for (size_t i = 0; i < n; ++i)
     map_extrema.emplace_back(indices_glob[i], values_glob[i]);
   return map_extrema;
@@ -351,32 +331,22 @@ std::list<std::pair<unsigned long, double>> extrema(const DistrArray& x, int n) 
 } // namespace util
 
 std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> DistrArray::min_n(int n) const {
-  if (empty())
-    return {};
   return util::extrema<std::less<DistrArray::value_type>>(*this, n);
 }
 
 std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> DistrArray::max_n(int n) const {
-  if (empty())
-    return {};
   return util::extrema<std::greater<DistrArray::value_type>>(*this, n);
 }
 
 std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> DistrArray::min_abs_n(int n) const {
-  if (empty())
-    return {};
   return util::extrema<util::CompareAbs<DistrArray::value_type, std::less<>>>(*this, n);
 }
 
 std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> DistrArray::max_abs_n(int n) const {
-  if (empty())
-    return {};
   return util::extrema<util::CompareAbs<DistrArray::value_type, std::greater<>>>(*this, n);
 }
 
 std::vector<DistrArray::index_type> DistrArray::min_loc_n(int n) const {
-  if (empty())
-    return {};
   auto min_list = min_abs_n(n);
   auto min_vec = std::vector<index_type>(n);
   std::transform(begin(min_list), end(min_list), begin(min_vec), [](const auto& p) { return p.first; });
@@ -387,8 +357,6 @@ void DistrArray::copy(const DistrArray& y) {
   auto name = std::string{"Array::copy"};
   if (!compatible(y))
     error(name + " incompatible arrays");
-  if (empty() != y.empty())
-    error(name + " one of the arrays is empty");
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
@@ -401,8 +369,6 @@ void DistrArray::copy_patch(const DistrArray& y, DistrArray::index_type start, D
   auto name = std::string{"Array::copy_patch"};
   if (!compatible(y))
     error(name + " incompatible arrays");
-  if (empty() != y.empty())
-    error(name + " one of the arrays is empty");
   auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
@@ -417,10 +383,6 @@ void DistrArray::copy_patch(const DistrArray& y, DistrArray::index_type start, D
 
 DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
   auto name = std::string{"Array::dot SparseArray "};
-  if (y.empty())
-    return 0;
-  if (empty())
-    error(name + " calling dot on empty arrays");
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is incompatible");
   auto loc_x = local_buffer();
@@ -439,10 +401,8 @@ DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
 
 void DistrArray::axpy(value_type a, const SparseArray& y) {
   auto name = std::string{"Array::axpy SparseArray"};
-  if (a == 0 || y.empty())
+  if (a == 0)
     return;
-  if (empty())
-    error(name + " calling dot on empty arrays");
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is incompatible");
   auto loc_x = local_buffer();

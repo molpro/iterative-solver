@@ -30,29 +30,28 @@ PROGRAM Linear_Eigensystem_Example
   DO i = 1, n
     m(i, i) = 3 * i
   END DO
-  p=Profiler('Eigensystem_Example', MPI_COMM_WORLD)
-  CALL Iterative_Solver_Linear_Eigensystem_Initialize(n, nroot, pname = 'Eigensystem_Example', pcomm = MPI_COMM_WORLD, &
-                                                                                  thresh = 1d-7, thresh_value = 1d-14, &
-                                                                                  verbosity = 1)
+  p=Profiler('Eigensystem_Example', 1, 0)
+  CALL Iterative_Solver_Linear_Eigensystem_Initialize(n, nroot, thresh = 1d-7, thresh_value = 1d-14, verbosity = 1, &
+                                                      pname = 'Eigensystem_Example', mpicomm = MPI_COMM_WORLD)
   c = 0
   DO i = 1, nroot
     c(i, i) = 1;
   END DO
   DO i = 1, n
-    IF (rank == 0) THEN
-      PRINT *, 'ITERATION #', i
-    END IF
+!    IF (rank == 0) THEN
+!      PRINT *, 'ITERATION #', i
+!    END IF
     g = MATMUL(m, c)
     nwork = Iterative_Solver_Add_Vector(c, g)
-    IF (rank == 0) THEN
-      PRINT *, 'nwork after Add_Vector():', nwork
-    END IF
+!    IF (rank == 0) THEN
+!      PRINT *, 'nwork after Add_Vector():', nwork
+!    END IF
     if (nwork == 0) exit
     allocate(we(nwork), stat=alloc_stat)
     we = Iterative_Solver_Working_Set_Eigenvalues(nwork)
-    IF (rank == 0) THEN
-      PRINT *, 'Working set roots after Add_Vector:', we
-    END IF
+!    IF (rank == 0) THEN
+!      PRINT *, 'Working set roots after Add_Vector:', we
+!    END IF
     DO root = 1, nwork
       DO j = 1, n
         g(j, root) = g(j, root) * 1.0d0 / (m(j, j) - we(root) + 1e-15)
@@ -60,15 +59,15 @@ PROGRAM Linear_Eigensystem_Example
     END DO
     deallocate(we)
     nwork = Iterative_Solver_End_Iteration(c, g)
-    IF (rank == 0) THEN
-      PRINT *, 'nwork after End_Iteration():', nwork
-    END IF
+!    IF (rank == 0) THEN
+!      PRINT *, 'nwork after End_Iteration():', nwork
+!    END IF
     if (nwork == 0) exit
     allocate(we(nwork), stat=alloc_stat)
     we = Iterative_Solver_Working_Set_Eigenvalues(nwork)
-    IF (rank == 0) THEN
-      PRINT *, 'Working set roots after End_Iteration:', we
-    END IF
+!    IF (rank == 0) THEN
+!      PRINT *, 'Working set roots after End_Iteration:', we
+!    END IF
     deallocate(we)
   END DO
   allocate(we(nroot), stat=alloc_stat)
@@ -78,5 +77,8 @@ PROGRAM Linear_Eigensystem_Example
   END IF
   deallocate(we)
   CALL Iterative_Solver_Finalize
+  call p%print(6)
+  call p%print(6, cumulative = .false.)
+  call p%destroy()
   call MPI_FINALIZE(ierr)
 END PROGRAM Linear_Eigensystem_Example

@@ -9,6 +9,7 @@
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/subspace/util.h>
 #include <molpro/linalg/itsolv/wrap.h>
+#include <molpro/linalg/itsolv/util.h>
 #include <stack>
 
 namespace molpro::linalg::itsolv {
@@ -37,18 +38,23 @@ void construct_solution(const VecRef<R>& params, const std::vector<int>& roots,
   for (size_t i = 0; i < roots.size(); ++i) {
     handlers.rr().fill(0, params.at(i));
   }
+  subspace::Matrix<double> rp_mat(std::make_pair(pparams.size(), roots.size())),
+                           rq_mat(std::make_pair(qparams.size(), roots.size())),
+                           rd_mat(std::make_pair(dparams.size(), roots.size()));
   for (size_t i = 0; i < roots.size(); ++i) {
-    auto root = roots[i];
     for (size_t j = 0; j < pparams.size(); ++j) {
-      handlers.rp().axpy(solutions(root, oP + j), pparams.at(j), params.at(i));
+      rp_mat(j, i) = solutions(roots[i], oP+j);
     }
     for (size_t j = 0; j < qparams.size(); ++j) {
-      handlers.rq().axpy(solutions(root, oQ + j), qparams.at(j), params.at(i));
+      rq_mat(j, i) = solutions(roots[i], oQ+j);
     }
     for (size_t j = 0; j < dparams.size(); ++j) {
-      handlers.rq().axpy(solutions(root, oD + j), dparams.at(j), params.at(i));
+      rd_mat(j, i) = solutions(roots[i], oD+j);
     }
   }
+  handlers.rp().gemm_outer(rp_mat, cwrap(pparams), params);
+  handlers.rq().gemm_outer(rq_mat, cwrap(qparams), params);
+  handlers.rq().gemm_outer(rd_mat, cwrap(dparams), params);
 }
 
 template <typename T>
@@ -99,6 +105,7 @@ std::vector<int> select_working_set(const size_t nw, const std::vector<T>& error
   auto working_set = std::vector<int>{};
   auto end = (ordered_errors.size() < nw ? ordered_errors.end() : next(begin(ordered_errors), nw));
   std::transform(begin(ordered_errors), end, std::back_inserter(working_set), [](const auto& el) { return el.second; });
+  std::sort(working_set.begin(), working_set.end());
   return working_set;
 }
 
@@ -164,7 +171,10 @@ public:
     auto cwactions = cwrap(begin(actions), begin(actions) + nW);
     m_stats->r_creations += nW;
     m_xspace->update_qspace(cwparams, cwactions);
-    return solve_and_generate_working_set(parameters, actions);
+    m_stats->q_creations += 2*nW;
+    auto working_set = solve_and_generate_working_set(parameters, actions);
+    read_handler_counts(m_stats, m_handlers);
+    return working_set;
   }
 
   size_t add_vector(std::vector<R>& parameters, std::vector<R>& actions) override {
@@ -184,7 +194,9 @@ public:
     if (apply_p)
       m_apply_p = std::move(apply_p);
     m_xspace->update_pspace(pparams, pp_action_matrix);
-    return solve_and_generate_working_set(parameters, actions);
+    auto working_set = solve_and_generate_working_set(parameters, actions);
+    read_handler_counts(m_stats, m_handlers);
+    return working_set;
   };
 
   void clearP() override {}
@@ -204,6 +216,7 @@ public:
     if (m_apply_p)
       m_apply_p(pvectors, m_xspace->cparamsp(), residual);
     construct_residual(roots, cwrap(parameters), residual);
+    read_handler_counts(m_stats, m_handlers);
   };
 
   void solution(const std::vector<int>& roots, std::vector<R>& parameters, std::vector<R>& residual) override {
@@ -300,7 +313,7 @@ protected:
                           std::shared_ptr<ArrayHandlers<R, Q, P>> handlers, std::shared_ptr<Statistics> stats,
                           std::shared_ptr<Logger> logger)
       : m_handlers(std::move(handlers)), m_xspace(std::move(xspace)), m_subspace_solver(std::move(solver)),
-        m_stats(std::move(stats)), m_logger(std::move(logger)) {}
+        m_stats(std::move(stats)), m_logger(std::move(logger)) {set_n_roots(1);}
 
   //! Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)
   virtual void set_value_errors() {}
@@ -320,15 +333,19 @@ protected:
     m_subspace_solver->solve(*m_xspace, n_roots());
     auto nsol = m_subspace_solver->size();
     std::vector<std::pair<Q, Q>> temp_solutions{};
-    for (const auto& batch : detail::parameter_batches(nsol, parameters.size())) {
+    const auto batches = detail::parameter_batches(nsol, parameters.size());
+    for (const auto& batch : batches) {
       auto [start_sol, end_sol] = batch;
       auto roots = std::vector<int>(end_sol - start_sol);
       std::iota(begin(roots), end(roots), start_sol);
       solution(roots, parameters, action);
       auto errors = std::vector<scalar_type>(roots.size(), 0);
       detail::update_errors(errors, cwrap(action), m_handlers->rr());
-      for (size_t i = 0; i < roots.size(); ++i)
-        temp_solutions.emplace_back(m_handlers->qr().copy(parameters[i]), m_handlers->qr().copy(action[i]));
+      if (batches.size() > 1) {
+        for (size_t i = 0; i < roots.size(); ++i)
+          temp_solutions.emplace_back(m_handlers->qr().copy(parameters[i]), m_handlers->qr().copy(action[i]));
+        m_stats->q_creations += 2 * roots.size();
+      }
       m_subspace_solver->set_error(roots, errors);
     }
     set_value_errors();
@@ -337,8 +354,17 @@ protected:
                                                m_convergence_threshold_value);
     for (size_t i = 0; i < m_working_set.size(); ++i) {
       auto root = m_working_set[i];
-      m_handlers->rq().copy(parameters[i], temp_solutions.at(root).first);
-      m_handlers->rq().copy(action[i], temp_solutions.at(root).second);
+      if (batches.size() > 1) {
+        m_handlers->rq().copy(parameters[i], temp_solutions.at(root).first);
+        m_handlers->rq().copy(action[i], temp_solutions.at(root).second);
+      } else {
+        if (root < i)
+          throw std::logic_error("incorrect ordering of roots");
+        if (root > i) {
+          m_handlers->rr().copy(parameters[i], parameters[root]);
+          m_handlers->rr().copy(action[i], action[root]);
+        }
+      }
     }
     m_logger->msg("add_vector::errors = ", begin(m_errors), end(m_errors), Logger::Trace, 6);
     return m_working_set.size();

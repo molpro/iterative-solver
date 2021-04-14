@@ -91,8 +91,8 @@ class DistrArray {
 public:
   using distributed_array = void; //!< a compile time tag that this is a distributed array
   using value_type = double;
-  using index_type = unsigned long int;
-  using SparseArray = std::map<unsigned long int, double>;
+  using index_type = size_t;
+  using SparseArray = std::map<index_type, double>;
   using Distribution = util::Distribution<index_type>;
 
 protected:
@@ -113,12 +113,6 @@ public:
   size_t size() const { return m_dimension; };
   //! Checks that arrays are of the same dimensionality
   bool compatible(const DistrArray &other) const;
-  //! allocates memory to the array without initializing it with any value. Blocking, collective operation.
-  virtual void allocate_buffer() = 0;
-  //! frees the buffer
-  virtual void free_buffer() = 0;
-  //! checks if array has been allocated
-  virtual bool empty() const;
 
   /*! @name Local buffer
    * Access the section of the array local to this process
@@ -297,6 +291,10 @@ public:
 
   //! stops application with an error
   virtual void error(const std::string &message) const;
+  
+  value_type operator [] (size_t index) {
+    return (*this->local_buffer())[index];
+  };
 
 protected:
   virtual void _divide(const DistrArray &y, const DistrArray &z, value_type shift, bool append, bool negative);

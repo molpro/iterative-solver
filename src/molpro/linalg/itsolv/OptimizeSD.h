@@ -24,10 +24,10 @@ public:
   using typename SolverTemplate::scalar_type;
   using typename SolverTemplate::value_type;
   using typename SolverTemplate::value_type_abs;
-  using SubspaceSolver = subspace::SubspaceSolverOptSD<R,Q,P>;
+  using SubspaceSolver = subspace::SubspaceSolverOptSD<R, Q, P>;
 
   explicit OptimizeSD(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers,
-                    const std::shared_ptr<Logger>& logger_ = std::make_shared<Logger>())
+                      const std::shared_ptr<Logger>& logger_ = std::make_shared<Logger>())
       : SolverTemplate(std::make_shared<subspace::XSpace<R, Q, P>>(handlers, logger_),
                        std::static_pointer_cast<subspace::ISubspaceSolver<R, Q, P>>(
                            std::make_shared<subspace::SubspaceSolverOptSD<R, Q, P>>(logger_)),
@@ -41,14 +41,7 @@ public:
       return 0;
     }
     this->m_working_set.assign(1, 0);
-    auto signal = solver_signal();
-    if (signal ==
-        0) { // action is expected to hold the preconditioned residual, and here we should add it to parameters
-      this->m_handlers->rr().axpy(1, action.front(), parameters.front());
-    } else if (signal == 1) { // residual not used, simply leave parameters alone
-    } else {                  // L-BFGS
-      throw std::logic_error("L-BFGS not yet implemented");
-    }
+    this->m_handlers->rr().axpy(-1, action.front(), parameters.front());
     this->m_stats->iterations++;
     return 1;
   }
@@ -58,30 +51,23 @@ public:
     return result;
   }
 
-  //! Set threshold on the norm of parameters that should be considered null
-  void set_norm_thresh(double thresh) { m_norm_thresh = thresh; }
-  double get_norm_thresh() const { return m_norm_thresh; }
-  //! Set the smallest singular value in the subspace that can be allowed when
-  //! constructing the working set. Smaller singular values will lead to deletion of parameters
-  void set_svd_thresh(double thresh) { m_svd_thresh = thresh; }
-  double get_svd_thresh() const { return m_svd_thresh; }
+  void set_value_errors() override {
+    auto& Value = this->m_xspace->data[subspace::EqnData::value];
+    this->m_value_errors.assign(1, std::numeric_limits<double>::max());
+    if (this->m_xspace->size() > 1 and Value(0, 0) < Value(1, 0))
+      this->m_value_errors.front() = Value(1, 0) - Value(0, 0);
+  }
 
   void set_options(const Options& options) override {
     SolverTemplate::set_options(options);
     if (auto opt2 = dynamic_cast<const molpro::linalg::itsolv::OptimizeSDOptions*>(&options)) {
       auto opt = CastOptions::OptimizeSD(options);
-//      if (opt.norm_thresh)
-//        set_norm_thresh(opt.norm_thresh.value());
-    }
-    if (auto opt2 = dynamic_cast<const molpro::linalg::itsolv::OptimizeSDOptions*>(&options)) {
-    auto opt = CastOptions::OptimizeSD(options);
     }
   }
 
   std::shared_ptr<Options> get_options() const override {
     auto opt = std::make_shared<OptimizeSDOptions>();
     opt->copy(*SolverTemplate::get_options());
-//    opt->norm_thresh = get_norm_thresh();
     return opt;
   }
 
@@ -102,7 +88,7 @@ public:
     xdata[EqnData::value].resize({n + 1, 1});
     xdata[EqnData::value](0, 0) = value;
     auto nwork = this->add_vector(parameters, residual);
-    return nwork > 0 && solver_signal() != 1;
+    return nwork > 0;
   }
 
   size_t end_iteration(R& parameters, R& actions) override {
@@ -114,21 +100,8 @@ public:
   scalar_type value() const override { return this->m_xspace->data[subspace::EqnData::value](0, 0); }
 
 protected:
-  int solver_signal() const {
-    int signal = 0;
-    using namespace subspace;
-    auto& xspace = this->m_xspace;
-    auto& xdata = xspace->data;
-    if (xdata.find(EqnData::signals) != xdata.end() && xdata[EqnData::signals].empty())
-      signal = xdata[EqnData::signals](0, 0);
-//    molpro::cout << "signal " << signal << std::endl;
-    return signal;
-  }
   // for non-linear problems, actions already contains the residual
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {}
-
-  double m_norm_thresh = 1e-10; //!< vectors with norm less than threshold can be considered null.
-  double m_svd_thresh = 1e-12;  //!< svd values smaller than this mark the null space
 };
 
 } // namespace molpro::linalg::itsolv
