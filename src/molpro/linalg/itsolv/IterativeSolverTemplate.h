@@ -119,8 +119,6 @@ template <template <class, class, class> class Solver, class R, class Q, class P
 class IterativeSolverTemplate : public Solver<R, Q, P> {
 public:
   using typename Solver<R, Q, P>::fapply_on_p_type;
-  using typename Solver<R, Q, P>::fapply_on_r_type;
-  using typename Solver<R, Q, P>::fprecondition_type;
   using typename Solver<R, Q, P>::scalar_type;
   using typename Solver<R, Q, P>::value_type;
   using typename Solver<R, Q, P>::VectorP;
@@ -131,28 +129,6 @@ public:
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(const IterativeSolverTemplate<Solver, R, Q, P>&) = delete;
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
 
-  // TODO improve print out
-  bool solve_obsolete(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
-                      const fprecondition_type& precondition = fprecondition_type{}) override {
-    // TODO assert that a reasonable subspace has been constructed
-    auto nwork = parameters.size();
-    for (auto iter = 0; iter < m_max_iter && nwork > 0; iter++) {
-      apply_r(cwrap(parameters.begin(), parameters.begin() + nwork), wrap(actions.begin(), actions.begin() + nwork));
-      nwork = this->add_vector(parameters, actions);
-      if (nwork > 0) {
-        precondition(wrap(actions.begin(), actions.begin() + nwork),
-                     wrap(parameters.begin(), parameters.begin() + nwork));
-        if (m_verbosity >= Verbosity::Iteration)
-          report();
-        nwork = this->end_iteration(parameters, actions);
-        // TODO if nwork == 0, but solver is not converged than the subspace is stuck. print a warning.
-      }
-    }
-    if (m_verbosity >= Verbosity::Summary) {
-      report();
-    }
-    return nwork == 0;
-  };
 
   size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     m_logger->msg("IterativeSolverTemplate::add_vector  iteration = " + std::to_string(m_stats->iterations),

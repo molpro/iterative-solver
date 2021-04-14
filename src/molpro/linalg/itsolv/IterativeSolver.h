@@ -71,13 +71,6 @@ public:
                                            //!< for the corresponding P space parameter
   //! Function type for applying matrix to the P space vectors and accumulating result in a residual
   using fapply_on_p_type = std::function<void(const std::vector<VectorP>&, const CVecRef<P>&, const VecRef<R>&)>;
-  //! Function type for applying matrix to, or evaluating residual of, some R space vectors and accumulating result in a
-  //! residual, possibly with return of a function value
-  using fapply_on_r_type = std::function<scalar_type(const CVecRef<R>&, const VecRef<R>&)>;
-  //! Function type for applying preconditioner to some R space vectors
-  //! The second parameter on entry contains the parameter values, and may be used as a scratch vector
-  //! The third parameter is the calling solver instance.
-  using fprecondition_type = std::function<void(const VecRef<R>& residuals, const VecRef<R>& parameters)>;
 
   virtual ~IterativeSolver() = default;
   IterativeSolver() = default;
@@ -85,22 +78,6 @@ public:
   IterativeSolver<R, Q, P>& operator=(const IterativeSolver<R, Q, P>&) = delete;
   IterativeSolver(IterativeSolver<R, Q, P>&&) noexcept = default;
   IterativeSolver<R, Q, P>& operator=(IterativeSolver<R, Q, P>&&) noexcept = default;
-
-  /*!
-   * @brief Simplified one-call solver
-   * @param parameters A set of scratch vectors. On entry, these vectors should be filled with starting guesses.
-   * Where possible, the number of vectors should be equal to the number of solutions sought, but a smaller array is
-   * permitted.
-   * @param actions A set of scratch vectors. It should have the same size as parameters.
-   * @param apply_r Function that (linear) applies the kernel matrix to a vector, or (non-linear) evaluates the residual
-   * and, where appropriate, function value.
-   * @param precondition Function that applies a preconditioner to a residual, resulting in a predicted step towards
-   * solution. If omitted, the first element of actions will be taken to be the diagonal elements of the kernel
-   * matrix, and an appropriate preconditioner function will be generated.
-   * @return true if the solution was found
-   */
-  virtual bool solve_obsolete(const VecRef<R>& parameters, const VecRef<R>& actions, const fapply_on_r_type& apply_r,
-                              const fprecondition_type& precondition = fprecondition_type{}) = 0;
 
   /*!
    * @brief Simplified one-call solver

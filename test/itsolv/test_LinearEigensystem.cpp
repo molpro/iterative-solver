@@ -264,17 +264,17 @@ struct LinearEigensystemF : ::testing::Test {
                 int nwork = nroot;
                 auto[x, g] = initialize_subspace(np, nroot, n_working_vectors_max, solver);
                 size_t n_iter = 2;
-                if (simple) {
-                    auto apply_r = [this](const CVecRef<Rvector> &param, const VecRef<Rvector> &action) -> double {
-                        this->action(param, action);
-                        return 0.;
-                    };
-                    auto precondition = [&s = solver, this](const VecRef<Rvector> &residual,
-                                                            const VecRef<Rvector> &params) {
-                        update(residual, s->working_set_eigenvalues());
-                    };
-                    solver->solve_obsolete(wrap(x), wrap(g), apply_r, precondition);
-                } else {
+//                if (simple) {
+//                    auto apply_r = [this](const CVecRef<Rvector> &param, const VecRef<Rvector> &action) -> double {
+//                        this->action(param, action);
+//                        return 0.;
+//                    };
+//                    auto precondition = [&s = solver, this](const VecRef<Rvector> &residual,
+//                                                            const VecRef<Rvector> &params) {
+//                        update(residual, s->working_set_eigenvalues());
+//                    };
+//                    solver->solve_obsolete(wrap(x), wrap(g), apply_r, precondition);
+//                } else {
                     for (auto iter = 1; iter < 100; iter++, ++n_iter) {
                         action(x, g);
                         nwork = solver->add_vector(x, g);
@@ -291,7 +291,7 @@ struct LinearEigensystemF : ::testing::Test {
                         if (nwork == 0)
                             break;
                     }
-                }
+//                }
                 if (verbosity > 0)
                     solver->report();
                 std::cout << "Error={ ";
