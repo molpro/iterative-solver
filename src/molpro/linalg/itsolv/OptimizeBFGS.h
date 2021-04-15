@@ -43,8 +43,9 @@ public:
       auto value = problem.residual(*parameters.begin(), *actions.begin());
 //      problem.action(cwrap(parameters.begin(), parameters.begin() + nwork), wrap(actions.begin(), actions.begin() + nwork));
 //      nwork = this->add_vector(parameters, actions);
-      nwork = this->add_value(*parameters.begin(), value, *actions.begin());
-      if (nwork > 0) {
+      nwork = this->add_vector(*parameters.begin(), *actions.begin(), value);
+      if (nwork != 0) {
+        if (nwork > 0)
         problem.precondition(wrap(actions.begin(), actions.begin() + nwork),
                              std::vector<double>(nwork,0));
         if (this->m_verbosity >= Verbosity::Iteration)
@@ -59,7 +60,7 @@ public:
     return nwork == 0;
   };
 
-  bool add_value(R& parameters, value_type value, R& residual) override {
+  int add_vector(R& parameters, R& residual, value_type value) override {
     using namespace subspace;
     auto& xspace = this->m_xspace;
     auto& xdata = xspace->data;
@@ -83,7 +84,7 @@ public:
     if (xspace->size() > 0)
       Value.slice({1, 0}, {xspace->size() + 1, 1}) = oldValue.slice();
     Value(0, 0) = value;
-    auto nwork = this->add_vector(parameters, residual);
+    auto nwork = IterativeSolverTemplate<Optimize, R, Q, P>::add_vector(parameters, residual);
     //    std::cout << "H after add_vector "<<as_string(H)<<std::endl;
     //    std::cout << "Value after add_vector "<<as_string(Value)<<std::endl;
 
@@ -125,7 +126,7 @@ public:
         xspace->eraseq(erased);
         //        std::cout << "Value after erasure: "<<as_string(Value)<<std::endl;
         m_linesearch = true;
-        return false;
+        return -1;
       }
     }
 
@@ -143,7 +144,7 @@ public:
       this->m_handlers->rq().axpy(-m_alpha[a], u[a], residual);
       this->m_handlers->rq().axpy(m_alpha[a], u[a + 1], residual);
     }
-    return nwork > 0;
+    return nwork;
   }
 
   scalar_type value() const override { return this->m_xspace->data[subspace::EqnData::value](0, 0); }

@@ -154,7 +154,7 @@ struct RSPT : ::testing::Test {
 //                std::cout << "g " << g << std::endl;
 //                std::cout << "e2 " << e2 << std::endl;
             if constexpr(method == BFGS)
-                nwork = optimizer->add_value(x, e2 / 2, g);
+                nwork = optimizer->add_vector(x, g, e2 / 2);
             else
                 nwork = nonlinear_solver->add_vector(x, g);
 //        std::cout << "g after add_vector " << g << std::endl;

@@ -130,7 +130,7 @@ public:
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
 
 
-  size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
+  int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     m_logger->msg("IterativeSolverTemplate::add_vector  iteration = " + std::to_string(m_stats->iterations),
                   Logger::Trace);
     m_logger->msg("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = " +
@@ -151,10 +151,10 @@ public:
     return working_set;
   }
 
-  size_t add_vector(std::vector<R>& parameters, std::vector<R>& actions) override {
+  int add_vector(std::vector<R>& parameters, std::vector<R>& actions) override {
     return add_vector(wrap(parameters), wrap(actions));
   }
-  size_t add_vector(R& parameters, R& actions) override {
+  int add_vector(R& parameters, R& actions, value_type value = 0) override {
     auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
     auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
     return add_vector(wparams, wactions);

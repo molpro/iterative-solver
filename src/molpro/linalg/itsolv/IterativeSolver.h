@@ -102,14 +102,14 @@ public:
    * \param parameters On input, the current solution or expansion vector. On exit, undefined.
    * \param actions On input, the residual for parameters (non-linear), or action of matrix
    * on parameters (linear). On exit, a vector set that should be preconditioned before returning to end_iteration().
-   * \param apply_p A function that evaluates the action of the matrix on vectors in the P space
-   * \return The size of the new working set.
+   * \param value The value of the objective function for parameters. Used only in Optimize classes.
+   * \return The size of the new working set. In non-linear optimisation, the special value -1 can also be returned, indicating that preconditioning should not be carried out on action.
    */
-  virtual size_t add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) = 0;
+  virtual int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) = 0;
 
   // FIXME this should be removed in favour of VecRef interface
-  virtual size_t add_vector(std::vector<R>& parameters, std::vector<R>& action) = 0;
-  virtual size_t add_vector(R& parameters, R& action) = 0;
+  virtual int add_vector(std::vector<R>& parameters, std::vector<R>& action) = 0;
+  virtual int add_vector(R& parameters, R& action, value_type value = 0) = 0;
 
   /*!
    * \brief Add P-space vectors to the expansion set for linear methods.
@@ -229,18 +229,7 @@ class Optimize : public IterativeSolver<R, Q, P> {
 public:
   using typename IterativeSolver<R, Q, P>::value_type;
   using typename IterativeSolver<R, Q, P>::scalar_type;
-  /*!
-   * \brief Take a current solution, objective function value and residual, and return new solution.
-   * \param parameters On input, the current solution. On exit, the interpolated solution vector.
-   * \param value The value of the objective function for parameters.
-   * \param residual On input, the residual for parameters. On exit, the expected (non-linear) residual of the
-   * interpolated parameters.
-   * \return whether it is expected that the client should precondition the returned residual
-   * before the subsequent call to endIteration(). If false, there is no need to do so, as the preconditioned
-   * residual will not be used in making the next iterate. This does not indicate convergence, which is indicated
-   * rather by the return of an empty working set by endIteration().
-   */
-  virtual bool add_value(R& parameters, value_type value, R& residual) = 0;
+
   /*!
    * @brief Report the function value for the current optimum solution
    * @return
