@@ -309,9 +309,10 @@ public:
     }
     if (this->m_verbosity == Verbosity::Summary)
       report();
-    if (this->m_verbosity >= Verbosity::Summary and *std::max_element(m_errors.begin(),m_errors.end()) > m_convergence_threshold)
-      std::cerr << "Solver has not converged to threshold "<<m_convergence_threshold << std::endl;
-    return nwork == 0 and *std::max_element(m_errors.begin(),m_errors.end()) <= m_convergence_threshold;
+    if (this->m_verbosity >= Verbosity::Summary and
+        *std::max_element(m_errors.begin(), m_errors.end()) > m_convergence_threshold)
+      std::cerr << "Solver has not converged to threshold " << m_convergence_threshold << std::endl;
+    return nwork == 0 and *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
   }
 
 protected:
@@ -329,7 +330,7 @@ protected:
   //! Constructs residual for given roots provided their parameters and actions
   virtual void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params,
                                   const VecRef<R>& actions) = 0;
-  virtual bool linearEigensystem() const { return false;}
+  virtual bool linearEigensystem() const { return false; }
   /*!
    * @brief Solves the subspace problems and selects the working set of roots, returning their parameters and residual
    * in parameters and action
@@ -393,7 +394,7 @@ protected:
   std::vector<double> m_errors;                                          //!< errors from the most recent solution
   std::vector<double> m_value_errors;                                    //!< value errors from the most recent solution
   std::vector<int> m_working_set;                                        //!< indices of roots in the working set
-  size_t m_nroots{0};                      //!< number of roots the solver is searching for
+  size_t m_nroots{0};                     //!< number of roots the solver is searching for
   double m_convergence_threshold{1.0e-9}; //!< residual norms less than this mark a converged solution
   double m_convergence_threshold_value{
       std::numeric_limits<double>::max()};      //!< value changes less than this mark a converged solution

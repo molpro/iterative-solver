@@ -123,7 +123,8 @@ public:
    * \param actions On input, the residual for parameters (non-linear), or action of matrix
    * on parameters (linear). On exit, a vector set that should be preconditioned before returning to end_iteration().
    * \param value The value of the objective function for parameters. Used only in Optimize classes.
-   * \return The size of the new working set. In non-linear optimisation, the special value -1 can also be returned, indicating that preconditioning should not be carried out on action.
+   * \return The size of the new working set. In non-linear optimisation, the special value -1 can also be returned,
+   * indicating that preconditioning should not be carried out on action.
    */
   virtual int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) = 0;
 
@@ -183,7 +184,9 @@ public:
    */
   virtual const std::vector<int>& working_set() const = 0;
   //! The calculated eigenvalues for roots in the working set (eigenvalue problems) or zero (otherwise)
-  virtual std::vector<scalar_type> working_set_eigenvalues() const {return std::vector<scalar_type>(working_set().size(),0);}
+  virtual std::vector<scalar_type> working_set_eigenvalues() const {
+    return std::vector<scalar_type>(working_set().size(), 0);
+  }
   //! Total number of roots we are solving for, including the ones that are already converged
   virtual size_t n_roots() const = 0;
   virtual void set_n_roots(size_t nroots) = 0;
@@ -255,8 +258,7 @@ public:
 
 //! Optimises to a stationary point using methods such as L-BFGS
 template <class R, class Q, class P>
-class Optimize : public IterativeSolver<R, Q, P> {
-};
+class Optimize : public IterativeSolver<R, Q, P> {};
 
 //! Solves non-linear system of equations using methods such as DIIS
 template <class R, class Q, class P>

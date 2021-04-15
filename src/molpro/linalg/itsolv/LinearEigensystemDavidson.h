@@ -13,7 +13,8 @@ namespace molpro::linalg::itsolv {
 
 /*!
  * @brief One specific implementation of LinearEigensystem using Davidson's algorithm
- * with modifications to manage near linear dependencies, and consequent numerical noise, in candidate expansion vectors.
+ * with modifications to manage near linear dependencies, and consequent numerical noise, in candidate expansion
+ * vectors.
  *
  * TODO add more documentation and examples
  *
@@ -29,7 +30,7 @@ public:
   using IterativeSolverTemplate<LinearEigensystem, R, Q, P>::report;
 
   explicit LinearEigensystemDavidson(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers,
-                             const std::shared_ptr<Logger>& logger_ = std::make_shared<Logger>())
+                                     const std::shared_ptr<Logger>& logger_ = std::make_shared<Logger>())
       : SolverTemplate(std::make_shared<subspace::XSpace<R, Q, P>>(handlers, logger_),
                        std::static_pointer_cast<subspace::ISubspaceSolver<R, Q, P>>(
                            std::make_shared<subspace::SubspaceSolverLinEig<R, Q, P>>(logger_)),
@@ -39,7 +40,7 @@ public:
     this->m_normalise_solution = false;
   }
 
-  bool nonlinear() const override { return false;}
+  bool nonlinear() const override { return false; }
 
   /*!
    * \brief Proposes new parameters for the subspace from the preconditioned residuals.
@@ -81,7 +82,6 @@ public:
     auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
     return end_iteration(wparams, wactions);
   }
-
 
   //! Applies the Davidson preconditioner
   void precondition(std::vector<R>& parameters, std::vector<R>& action) const {}

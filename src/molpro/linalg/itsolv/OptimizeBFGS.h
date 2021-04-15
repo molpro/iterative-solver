@@ -35,7 +35,7 @@ public:
                        handlers, std::make_shared<Statistics>(), logger_),
         logger(logger_) {}
 
-  bool nonlinear() const override { return true;}
+  bool nonlinear() const override { return true; }
 
   int add_vector(R& parameters, R& residual, value_type value) override {
     using namespace subspace;

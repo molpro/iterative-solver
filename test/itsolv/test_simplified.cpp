@@ -23,7 +23,7 @@ struct simplified : ::testing::Test {
 
   class MyProblem : public molpro::linalg::itsolv::Problem<Rvector> {
   protected:
-//    std::unique_ptr<Qvector> m_diagonals;
+    //    std::unique_ptr<Qvector> m_diagonals;
     double matrix(int i, int j) const { return i == j ? i + 1 : 0.001 * (i + j); }
 
   public:
@@ -38,7 +38,7 @@ struct simplified : ::testing::Test {
       for (int k = 0; k < action.size(); k++) {
         auto &a = action[k].get();
         for (int i = 0; i < a.size(); i++)
-          a[i] /= (matrix(i,i) + shift[k]);
+          a[i] /= (matrix(i, i) + shift[k]);
       }
     }
 
@@ -54,9 +54,9 @@ struct simplified : ::testing::Test {
     }
 
     void action(const CVecRef<Rvector> &parameters, const VecRef<Rvector> &actions) const override {
-      for (size_t k=0; k<parameters.size(); k++) {
-        const auto& v = parameters[k].get();
-        auto& a = actions[k].get();
+      for (size_t k = 0; k < parameters.size(); k++) {
+        const auto &v = parameters[k].get();
+        auto &a = actions[k].get();
         for (int i = 0; i < a.size(); i++) {
           a[i] = 0;
           for (int j = 0; j < a.size(); j++)
@@ -73,10 +73,10 @@ TEST_F(simplified, BFGS) {
   auto problem = simplified::MyProblem(10);
   Rvector c(problem.n), g(problem.n);
   EXPECT_TRUE(solver->solve(c, g, problem));
-  solver->solution(c,g);
-  EXPECT_NEAR(solver->value(),0,1e-20);
-  EXPECT_THAT(c, ::testing::Pointwise(::testing::DoubleNear(1e-10),Rvector(problem.n,1)));
-  EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10),Rvector(problem.n,0)));
+  solver->solution(c, g);
+  EXPECT_NEAR(solver->value(), 0, 1e-20);
+  EXPECT_THAT(c, ::testing::Pointwise(::testing::DoubleNear(1e-10), Rvector(problem.n, 1)));
+  EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10), Rvector(problem.n, 0)));
 }
 
 TEST_F(simplified, DIIS) {
@@ -85,38 +85,39 @@ TEST_F(simplified, DIIS) {
   auto problem = simplified::MyProblem(10);
   Rvector c(problem.n), g(problem.n);
   EXPECT_TRUE(solver->solve(c, g, problem));
-  solver->solution(c,g);
-  EXPECT_THAT(c, ::testing::Pointwise(::testing::DoubleNear(1e-10),Rvector(problem.n,1)));
-  EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10),Rvector(problem.n,0)));
+  solver->solution(c, g);
+  EXPECT_THAT(c, ::testing::Pointwise(::testing::DoubleNear(1e-10), Rvector(problem.n, 1)));
+  EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10), Rvector(problem.n, 0)));
 }
 
 TEST_F(simplified, LinearEigensystem) {
   auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector>("Davidson");
   solver->set_convergence_threshold(1e-10);
   auto problem = simplified::MyProblem(10);
-  Rvector c(problem.n,0), g(problem.n);
-  c[0]=1;
+  Rvector c(problem.n, 0), g(problem.n);
+  c[0] = 1;
   EXPECT_TRUE(solver->solve(c, g, problem));
-  solver->solution(c,g);
-  EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10),Rvector(problem.n,0)));
+  solver->solution(c, g);
+  EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10), Rvector(problem.n, 0)));
 }
 
 template <typename s>
-std::ostream& operator<<(std::ostream& o, const std::vector<s>& v) {
-  for (const auto& e : v) o<<" "<<e;
+std::ostream &operator<<(std::ostream &o, const std::vector<s> &v) {
+  for (const auto &e : v)
+    o << " " << e;
   return o;
 }
 TEST_F(simplified, LinearEquations) {
   auto solver = molpro::linalg::itsolv::create_LinearEquations<Rvector, Qvector>("Davidson");
   solver->set_convergence_threshold(1e-10);
   auto problem = simplified::MyProblem(10);
-  Rvector c(problem.n,1), g(problem.n), rhs(problem.n);
-  problem.action(molpro::linalg::itsolv::cwrap_arg(c),molpro::linalg::itsolv::wrap_arg(rhs));
+  Rvector c(problem.n, 1), g(problem.n), rhs(problem.n);
+  problem.action(molpro::linalg::itsolv::cwrap_arg(c), molpro::linalg::itsolv::wrap_arg(rhs));
   solver->add_equations(molpro::linalg::itsolv::cwrap_arg(rhs));
-  c=rhs;
+  c = rhs;
   EXPECT_TRUE(solver->solve(c, g, problem));
-  solver->solution(c,g);
-  EXPECT_THAT(c, ::testing::Pointwise(::testing::DoubleNear(1e-10),Rvector(problem.n,1)));
-  EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10),Rvector(problem.n,0)));
-  problem.action(molpro::linalg::itsolv::cwrap_arg(c),molpro::linalg::itsolv::wrap_arg(g));
+  solver->solution(c, g);
+  EXPECT_THAT(c, ::testing::Pointwise(::testing::DoubleNear(1e-10), Rvector(problem.n, 1)));
+  EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10), Rvector(problem.n, 0)));
+  problem.action(molpro::linalg::itsolv::cwrap_arg(c), molpro::linalg::itsolv::wrap_arg(g));
 }
