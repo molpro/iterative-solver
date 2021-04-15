@@ -14,6 +14,10 @@
 namespace molpro::linalg::itsolv {
 
 /*!
+ * @example ExampleProblem.h
+ * Example of a problem-defining class
+ */
+/*!
  * @brief Abstract class defining the problem-specific interface for the simplified solver interface to IterativeSolver
  * @tparam R the type of container for solutions and residuals
  */
@@ -22,6 +26,7 @@ class Problem {
 public:
   Problem() = default;
   virtual ~Problem() = default;
+  using container_t = R;
 
   /*!
    * @brief Calculate the residual vector. Used by non-linear solvers (NonLinearEquations, Optimize) only.
@@ -80,6 +85,18 @@ public:
   IterativeSolver<R, Q, P>& operator=(IterativeSolver<R, Q, P>&&) noexcept = default;
 
   /*!
+   * @example LinearEigensystemExample.cpp
+   * Example for solving linear eigensystem
+   * @example LinearEigensystemMultirootExample.cpp
+   * Example for solving linear eigensystem, simultaneously tracking multiple roots
+   * @example LinearEquationsExample.cpp
+   * Example for solving inhomogeneous linear equations
+   * @example NonLinearEquationsExample.cpp
+   * Example for solving non-linear equations
+   * @example OptimizeExample.cpp
+   * Example for minimising a function
+   */
+  /*!
    * @brief Simplified one-call solver
    * @param parameters A set of scratch vectors. On entry, these vectors should be filled with starting guesses.
    * Where possible, the number of vectors should be equal to the number of solutions sought, but a smaller array is
@@ -91,10 +108,13 @@ public:
   //  virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem) = 0; // TODO
   //  make abstract when all concretizations are done
   virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem) { return false; }
-  bool solve(R& parameters, R& actions, const Problem<R>& problem) {
+  virtual bool solve(R& parameters, R& actions, const Problem<R>& problem) {
     auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
     auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
     return solve(wparams, wactions, problem);
+  }
+  virtual bool solve(std::vector<R>& parameters, std::vector<R>& actions, const Problem<R>& problem) {
+    return solve(wrap(parameters), wrap(actions), problem);
   }
 
   /*!
@@ -162,6 +182,8 @@ public:
    * @brief Working set of roots that are not yet converged
    */
   virtual const std::vector<int>& working_set() const = 0;
+  //! The calculated eigenvalues for roots in the working set (eigenvalue problems) or zero (otherwise)
+  virtual std::vector<scalar_type> working_set_eigenvalues() const {return std::vector<scalar_type>(working_set().size(),0);}
   //! Total number of roots we are solving for, including the ones that are already converged
   virtual size_t n_roots() const = 0;
   virtual void set_n_roots(size_t nroots) = 0;
@@ -211,8 +233,6 @@ public:
   using typename IterativeSolver<R, Q, P>::scalar_type;
   //! The calculated eigenvalues of the subspace matrix
   virtual std::vector<scalar_type> eigenvalues() const = 0;
-  //! The calculated eigenvalues for roots in the working set
-  virtual std::vector<scalar_type> working_set_eigenvalues() const = 0;
   //! Sets hermiticity of kernel
   virtual void set_hermiticity(bool hermitian) = 0;
   //! Gets hermiticity of kernel, if true than it is hermitian, otherwise it is not

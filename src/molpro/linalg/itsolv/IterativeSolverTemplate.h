@@ -301,19 +301,16 @@ public:
                        wrap(actions.begin(), actions.begin() + nwork));
         nwork = this->add_vector(parameters, actions);
       }
-      if (nwork != 0) {
-        if (nwork > 0)
-          problem.precondition(wrap(actions.begin(), actions.begin() + nwork), std::vector<double>(nwork, 0));
-        if (this->m_verbosity >= Verbosity::Iteration)
-          report();
-        nwork = this->end_iteration(parameters, actions);
-      }
+      if (nwork > 0)
+        problem.precondition(wrap(actions.begin(), actions.begin() + nwork), this->working_set_eigenvalues());
+      nwork = this->end_iteration(parameters, actions);
+      if (this->m_verbosity >= Verbosity::Iteration)
+        report();
     }
-    if (this->m_verbosity >= Verbosity::Summary) {
+    if (this->m_verbosity == Verbosity::Summary)
       report();
-    }
     if (this->m_verbosity >= Verbosity::Summary and *std::max_element(m_errors.begin(),m_errors.end()) > m_convergence_threshold)
-      std::cerr << "Solver has not converged" << std::endl;
+      std::cerr << "Solver has not converged to threshold "<<m_convergence_threshold << std::endl;
     return nwork == 0 and *std::max_element(m_errors.begin(),m_errors.end()) <= m_convergence_threshold;
   }
 
@@ -332,7 +329,7 @@ protected:
   //! Constructs residual for given roots provided their parameters and actions
   virtual void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params,
                                   const VecRef<R>& actions) = 0;
-
+  virtual bool linearEigensystem() const { return false;}
   /*!
    * @brief Solves the subspace problems and selects the working set of roots, returning their parameters and residual
    * in parameters and action
@@ -397,7 +394,7 @@ protected:
   std::vector<double> m_value_errors;                                    //!< value errors from the most recent solution
   std::vector<int> m_working_set;                                        //!< indices of roots in the working set
   size_t m_nroots{0};                      //!< number of roots the solver is searching for
-  double m_convergence_threshold{1.0e-10}; //!< residual norms less than this mark a converged solution
+  double m_convergence_threshold{1.0e-9}; //!< residual norms less than this mark a converged solution
   double m_convergence_threshold_value{
       std::numeric_limits<double>::max()};      //!< value changes less than this mark a converged solution
   std::shared_ptr<Statistics> m_stats;          //!< accumulates statistics of operations performed by the solver

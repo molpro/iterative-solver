@@ -54,6 +54,8 @@ public:
 
   bool nonlinear() const override { return false;}
 
+  bool linearEigensystem() const override { return true;}
+
   /*!
    * \brief constructs next perturbed wavefunction
    *
@@ -81,7 +83,7 @@ public:
 
   std::vector<scalar_type> eigenvalues() const override { return this->m_subspace_solver->eigenvalues(); }
 
-  std::vector<scalar_type> working_set_eigenvalues() const override {
+  virtual std::vector<scalar_type> working_set_eigenvalues() const override {
     auto eval = std::vector<scalar_type>{};
     for (auto i : this->working_set()) {
       eval.emplace_back(this->m_subspace_solver->eigenvalues().at(i));

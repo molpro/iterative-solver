@@ -69,6 +69,7 @@ struct simplified : ::testing::Test {
 
 TEST_F(simplified, BFGS) {
   auto solver = molpro::linalg::itsolv::create_Optimize<Rvector, Qvector>("BFGS");
+  solver->set_convergence_threshold(1e-10);
   auto problem = simplified::MyProblem(10);
   Rvector c(problem.n), g(problem.n);
   EXPECT_TRUE(solver->solve(c, g, problem));
@@ -80,6 +81,7 @@ TEST_F(simplified, BFGS) {
 
 TEST_F(simplified, DIIS) {
   auto solver = molpro::linalg::itsolv::create_NonLinearEquations<Rvector, Qvector>("DIIS");
+  solver->set_convergence_threshold(1e-10);
   auto problem = simplified::MyProblem(10);
   Rvector c(problem.n), g(problem.n);
   EXPECT_TRUE(solver->solve(c, g, problem));
@@ -90,6 +92,7 @@ TEST_F(simplified, DIIS) {
 
 TEST_F(simplified, LinearEigensystem) {
   auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector>("Davidson");
+  solver->set_convergence_threshold(1e-10);
   auto problem = simplified::MyProblem(10);
   Rvector c(problem.n,0), g(problem.n);
   c[0]=1;
@@ -105,6 +108,7 @@ std::ostream& operator<<(std::ostream& o, const std::vector<s>& v) {
 }
 TEST_F(simplified, LinearEquations) {
   auto solver = molpro::linalg::itsolv::create_LinearEquations<Rvector, Qvector>("Davidson");
+  solver->set_convergence_threshold(1e-10);
   auto problem = simplified::MyProblem(10);
   Rvector c(problem.n,1), g(problem.n), rhs(problem.n);
   problem.action(molpro::linalg::itsolv::cwrap_arg(c),molpro::linalg::itsolv::wrap_arg(rhs));
