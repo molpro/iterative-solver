@@ -195,6 +195,11 @@ public:
    * @return
    */
   virtual scalar_type value() const = 0;
+  /*!
+   * @brief Report whether the class is a non-linear solver
+   * @return
+   */
+  virtual bool nonlinear() const = 0;
 };
 
 /*!

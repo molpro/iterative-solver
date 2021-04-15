@@ -1,5 +1,6 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_ITERATIVESOLVERTEMPLATE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_ITERATIVESOLVERTEMPLATE_H
+#include <cmath>
 #include <iostream>
 #include <molpro/iostream.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
@@ -128,7 +129,6 @@ public:
   IterativeSolverTemplate(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(const IterativeSolverTemplate<Solver, R, Q, P>&) = delete;
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
-
 
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     m_logger->msg("IterativeSolverTemplate::add_vector  iteration = " + std::to_string(m_stats->iterations),
@@ -280,7 +280,42 @@ public:
   int get_max_iter() const override { return m_max_iter; }
   //! Access dimensions of the subspace
   const subspace::Dimensions& dimensions() const override { return m_xspace->dimensions(); }
-  scalar_type value() const override { return this->m_xspace->data[subspace::EqnData::value](0, 0); }
+  scalar_type value() const override {
+    return m_xspace->data.count(subspace::EqnData::value) > 0 ? m_xspace->data[subspace::EqnData::value](0, 0)
+                                                              : nan("molpro::linalg::itsolv::IterativeSolver::value");
+  }
+
+  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem) override {
+    if (parameters.empty())
+      throw std::runtime_error("Empty container passed to IterativeSolver::solve()");
+    if (parameters.size() != actions.size())
+      throw std::runtime_error("Inconsistent container sizes in IterativeSolver::solve()");
+    auto nwork = parameters.size();
+    for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
+      value_type value;
+      if (this->nonlinear()) {
+        value = problem.residual(*parameters.begin(), *actions.begin());
+        nwork = this->add_vector(*parameters.begin(), *actions.begin(), value);
+      } else {
+        problem.action(cwrap(parameters.begin(), parameters.begin() + nwork),
+                       wrap(actions.begin(), actions.begin() + nwork));
+        nwork = this->add_vector(parameters, actions);
+      }
+      if (nwork != 0) {
+        if (nwork > 0)
+          problem.precondition(wrap(actions.begin(), actions.begin() + nwork), std::vector<double>(nwork, 0));
+        if (this->m_verbosity >= Verbosity::Iteration)
+          report();
+        nwork = this->end_iteration(parameters, actions);
+      }
+    }
+    if (this->m_verbosity >= Verbosity::Summary) {
+      report();
+    }
+    if (this->m_verbosity >= Verbosity::Summary and *std::max_element(m_errors.begin(),m_errors.end()) > m_convergence_threshold)
+      std::cerr << "Solver has not converged" << std::endl;
+    return nwork == 0 and *std::max_element(m_errors.begin(),m_errors.end()) <= m_convergence_threshold;
+  }
 
 protected:
   IterativeSolverTemplate(std::shared_ptr<subspace::IXSpace<R, Q, P>> xspace,
@@ -354,8 +389,6 @@ protected:
     if (!roots.empty() && *std::max_element(roots.begin(), roots.end()) >= m_subspace_solver->solutions().size())
       throw std::runtime_error("asking for more roots than there are solutions");
   }
-
-
 
   std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;                    //!< Array handlers
   std::shared_ptr<subspace::IXSpace<R, Q, P>> m_xspace;                  //!< manages the subspace and associated data
