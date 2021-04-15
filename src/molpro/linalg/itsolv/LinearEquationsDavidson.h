@@ -33,7 +33,7 @@ public:
   using typename SolverTemplate::value_type_abs;
 
   explicit LinearEquationsDavidson(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers,
-                           const std::shared_ptr<Logger>& logger_ = std::make_shared<Logger>())
+                                   const std::shared_ptr<Logger>& logger_ = std::make_shared<Logger>())
       : SolverTemplate(std::make_shared<subspace::XSpace<R, Q, P>>(handlers, logger_),
                        std::static_pointer_cast<subspace::ISubspaceSolver<R, Q, P>>(
                            std::make_shared<subspace::SubspaceSolverLinEig<R, Q, P>>(logger_)),
@@ -42,6 +42,8 @@ public:
     set_hermiticity(m_hermiticity);
     this->m_normalise_solution = false;
   }
+
+  bool nonlinear() const override { return false; }
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
     if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
@@ -66,7 +68,6 @@ public:
     return end_iteration(wparams, wactions);
   }
 
-
   void add_equations(const CVecRef<R>& rhs) override {
     auto xspace = std::static_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace);
     xspace->add_rhs_equations(rhs);
@@ -74,8 +75,7 @@ public:
   }
 
   void add_equations(const R& rhs) override { add_equations(cwrap_arg(rhs)); }
-  void add_equations(const std::vector<R>& rhs) override { add_equations(cwrap(rhs));
-  }
+  void add_equations(const std::vector<R>& rhs) override { add_equations(cwrap(rhs)); }
 
   CVecRef<Q> rhs() const override {
     auto xspace = std::static_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace);
@@ -111,12 +111,12 @@ public:
     subspace_solver->set_hermiticity(hermitian);
   }
   bool get_hermiticity() const override { return m_hermiticity; }
-  //!@copydoc SubspaceSolverLinEig::set_augmented_hessian()
+  //!@copydoc subspace::SubspaceSolverLinEig::set_augmented_hessian()
   void set_augmented_hessian(const double parameter) {
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
     subspace_solver->set_augmented_hessian(parameter);
   }
-  //!@copydoc SubspaceSolverLinEig::get_augmented_hessian()
+  //!@copydoc subspace::SubspaceSolverLinEig::get_augmented_hessian()
   double get_augmented_hessian() const {
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
     return subspace_solver->get_augmented_hessian();

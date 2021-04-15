@@ -35,7 +35,9 @@ public:
                        handlers, std::make_shared<Statistics>(), logger_),
         logger(logger_) {}
 
-  bool add_value(R& parameters, value_type value, R& residual) override {
+  bool nonlinear() const override { return true; }
+
+  int add_vector(R& parameters, R& residual, value_type value) override {
     using namespace subspace;
     auto& xspace = this->m_xspace;
     auto& xdata = xspace->data;
@@ -59,7 +61,7 @@ public:
     if (xspace->size() > 0)
       Value.slice({1, 0}, {xspace->size() + 1, 1}) = oldValue.slice();
     Value(0, 0) = value;
-    auto nwork = this->add_vector(parameters, residual);
+    auto nwork = IterativeSolverTemplate<Optimize, R, Q, P>::add_vector(parameters, residual);
     //    std::cout << "H after add_vector "<<as_string(H)<<std::endl;
     //    std::cout << "Value after add_vector "<<as_string(Value)<<std::endl;
 
@@ -101,7 +103,7 @@ public:
         xspace->eraseq(erased);
         //        std::cout << "Value after erasure: "<<as_string(Value)<<std::endl;
         m_linesearch = true;
-        return false;
+        return -1;
       }
     }
 
@@ -113,16 +115,14 @@ public:
     const auto& u = xspace->actionsq();
     //    this->m_errors.front() = std::sqrt(this->m_handlers->rr().dot(residual,residual));
     for (int a = 0; a < m_alpha.size(); a++) {
-      m_alpha[a] = (this->m_handlers->qr().dot(residual, q[a]) - this->m_handlers->qr().dot(residual, q[a + 1])) /
+      m_alpha[a] = (this->m_handlers->rq().dot(residual, q[a]) - this->m_handlers->rq().dot(residual, q[a + 1])) /
                    (H(a, a) - H(a, a + 1) - H(a + 1, a) + H(a + 1, a + 1));
       //      std::cout << "alpha[" << a << "] = " << m_alpha[a] << std::endl;
-      this->m_handlers->qr().axpy(-m_alpha[a], u[a], residual);
-      this->m_handlers->qr().axpy(m_alpha[a], u[a + 1], residual);
+      this->m_handlers->rq().axpy(-m_alpha[a], u[a], residual);
+      this->m_handlers->rq().axpy(m_alpha[a], u[a + 1], residual);
     }
-    return nwork > 0;
+    return nwork;
   }
-
-  scalar_type value() const override { return this->m_xspace->data[subspace::EqnData::value](0, 0); }
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
     if (not m_linesearch) { // action is expected to hold the preconditioned residual
@@ -142,14 +142,14 @@ public:
       const auto& u = xspace->actionsq();
 
       for (int a = m_alpha.size() - 1; a >= 0; a--) {
-        auto beta = -(this->m_handlers->qr().dot(z, u[a]) - this->m_handlers->qr().dot(z, u[a + 1])) /
+        auto beta = (this->m_handlers->rq().dot(z, u[a]) - this->m_handlers->rq().dot(z, u[a + 1])) /
                     (H(a, a) - H(a, a + 1) - H(a + 1, a) + H(a + 1, a + 1));
         //        std::cout << "alpha[" << a << "] = " << m_alpha[a] << std::endl;
         //        std::cout << "beta[" << a << "] = " << beta << std::endl;
-        this->m_handlers->qr().axpy(-m_alpha[a] + beta, q[a], z);
-        this->m_handlers->qr().axpy(+m_alpha[a] - beta, q[a + 1], z);
+        this->m_handlers->rq().axpy(+m_alpha[a] - beta, q[a], z);
+        this->m_handlers->rq().axpy(-m_alpha[a] + beta, q[a + 1], z);
       }
-      this->m_handlers->rr().axpy(1, z, parameters.front());
+      this->m_handlers->rr().axpy(-1, z, parameters.front());
     } else {
       this->m_stats->line_search_steps++;
       if (not m_last_iteration_linesearching)
@@ -216,7 +216,7 @@ public:
 
   void report(std::ostream& cout) const override {
     SolverTemplate::report(cout);
-    cout << "value " << value() << ", errors " << std::scientific;
+    cout << "value " << this->value() << ", errors " << std::scientific;
     auto& err = this->m_errors;
     std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(molpro::cout, ", "));
     cout << std::defaultfloat << std::endl;

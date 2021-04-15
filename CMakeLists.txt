@@ -5,7 +5,7 @@ include(FetchContent)
 FetchContent_Declare(
         LibraryManager
         GIT_REPOSITORY https://gitlab+deploy-token-178345:RQZa2rmdwnV7Hdwg8XEq@gitlab.com/molpro/LibraryManager.git
-        GIT_TAG 0e80fc8
+        GIT_TAG ef2238a26621ffaad3b5113c383bbe8b34ef8160
 )
 FetchContent_MakeAvailable(LibraryManager)
 
@@ -14,13 +14,22 @@ LibraryManager_Project(FORTRAN_OPTION MPI_OPTION)
 ##############################
 ### Options
 
+if (NOT MPI AND FORTRAN)
+    message(FATAL_ERROR "Fortran serial implementation for LinearAlgebra is not yet ready") # TODO complete Fortran Serial implementation
+endif ()
 option(PPIDD "Whether to build on PPIDD" OFF)
-option(LINEARALGEBRA_ARRAY_MPI3 "Build with MPI3 implementation of distributed array" ON)
-option(LINEARALGEBRA_ARRAY_GA "Build with GA implementation of distributed array" ON)
-option(LINEARALGEBRA_ARRAY_HDF5 "Build with HDF5 implementation of distributed array" ON)
-if (PPIDD)
+option(LINEARALGEBRA_ARRAY_MPI3 "Build with MPI3 implementation of distributed array" ${MPI})
+option(LINEARALGEBRA_ARRAY_GA "Build with GA implementation of distributed array" ${MPI})
+option(LINEARALGEBRA_ARRAY_HDF5 "Build with HDF5 implementation of distributed array" ${MPI})
+option(MPIFORTRAN "Build MPI fortran examples, using fortran MPI library" OFF)
+if (PPIDD AND NOT PPIDD-GA)
     set(LINEARALGEBRA_ARRAY_GA OFF)
 endif ()
+message(STATUS "LinearAlgebra: MPI=${MPI}")
+message(STATUS "LinearAlgebra: FORTRAN=${FORTRAN}")
+message(STATUS "LinearAlgebra: LINEARALGEBRA_ARRAY_MPI3=${LINEARALGEBRA_ARRAY_MPI3}")
+message(STATUS "LinearAlgebra: LINEARALGEBRA_ARRAY_GA=${LINEARALGEBRA_ARRAY_GA}")
+message(STATUS "LinearAlgebra: LINEARALGEBRA_ARRAY_HDF5=${LINEARALGEBRA_ARRAY_HDF5}")
 ##############################
 
 

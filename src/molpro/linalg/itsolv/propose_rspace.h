@@ -428,9 +428,14 @@ auto modified_gram_schmidt(const VecRef<R>& rparams, const subspace::Matrix<valu
   auto orthogonalise = [&overlap, &rparams, nR](const auto& xparams, auto& handler, const size_t oX, const size_t nX) {
     for (size_t i = 0; i < nX; ++i) {
       auto norm = std::abs(overlap(oX + i, oX + i));
-      for (size_t j = 0; j < nR; ++j) {
-        auto ov = handler.dot(rparams[j], xparams.at(i));
-        handler.axpy(-ov / norm, xparams.at(i), rparams[j]);
+      if (nR > 0) {
+        auto dot_mat = handler.gemm_inner(cwrap(rparams), cwrap_arg(xparams.at(i).get()));
+        std::pair<size_t, size_t> mcoeff_dim = std::make_pair(1, nR);
+        Matrix<double> mcoeff(dot_mat.data(), mcoeff_dim);
+        for (size_t j = 0; j < nR; ++j) {
+          mcoeff(0, j) = -mcoeff(0, j) / norm;
+        }
+        handler.gemm_outer(mcoeff, cwrap_arg(xparams.at(i).get()), rparams);
       }
     }
   };
@@ -549,7 +554,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   if (!q_delete.empty()) {
     auto [dparams, dactions] =
         construct_dspace(solutions, xspace, q_delete, res_norm_thresh, svd_thresh, handlers.qq(), logger);
-    std::sort(begin(q_delete), end(q_delete), std::greater());
+    std::sort(begin(q_delete), end(q_delete), std::greater<int>());
     for (auto iq : q_delete)
       xspace.eraseq(iq);
     auto wdparams = wrap(dparams);
@@ -565,7 +570,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
     // FIXME Optionally, solve the subspace problem again and get an estimate of the error due to new D
   }
   // Use modified GS to orthonormalise z against P+Q+D, removing any null parameters.
-  auto wresidual = wrap<R>(residuals.begin(), residuals.begin() + solver.working_set().size());
+  auto wresidual = wrap(residuals.begin(), residuals.begin() + solver.working_set().size());
   normalise(wresidual, handlers.rr(), logger);
   const auto full_overlap =
       append_overlap_with_r(xspace.data.at(subspace::EqnData::S), cwrap(wresidual), xspace.cparamsp(),

@@ -6,8 +6,8 @@ cache:
 build100:
   tags:
     - linux-farm
-  only:
-    - schedules
+  rules:
+    - when: never # TODO complete Fortran Serial implementation
   timeout: 60m
   script:
     - BUILDTYPE=Release
@@ -17,16 +17,32 @@ build111:
     - linux-farm
 #  only:
 #    - schedules
+  except:
+    - tags
   timeout: 60m
   script:
     - export MPIPROCS=2
     - BUILDTYPE=Release
     - BUILD=build/FORTRAN=1/MPI=1/PPIDD=1 ; mkdir -p $BUILD && cd $BUILD && pwd && time cmake -DCMAKE_BUILD_TYPE=${BUILDTYPE} -DFORTRAN=1 -DMPI=1 -DPPIDD=1 $OLDPWD && time cmake --build . -- -j2 && (time ctest || ctest -V)
+build1110:
+  tags:
+    - linux-farm
+  #  only:
+  #    - schedules
+  except:
+    - tags
+  timeout: 60m
+  script:
+    - export MPIPROCS=2
+    - BUILDTYPE=Release
+    - BUILD=build/FORTRAN=1/MPI=1/PPIDD=1/HDF5=0 ; mkdir -p $BUILD && cd $BUILD && pwd && time cmake -DCMAKE_BUILD_TYPE=${BUILDTYPE} -DFORTRAN=1 -DMPI=1 -DPPIDD=1 -DLINEARALGEBRA_ARRAY_HDF5=OFF $OLDPWD && time cmake --build . -- -j2 && (time ctest || ctest -V)
 build000:
   tags:
     - linux-farm
 #  only:
 #    - merge_requests
+  except:
+    - tags
   timeout: 60m
   script:
     - BUILDTYPE=Release
@@ -36,6 +52,8 @@ build010:
     - linux-farm
   only:
     - schedules
+  except:
+    - tags
   timeout: 60m
   script:
     - export MPIPROCS=2
@@ -51,11 +69,13 @@ build011:
     - export MPIPROCS=2
     - BUILDTYPE=Release
     - BUILD=build/FORTRAN=0/MPI=1/PPIDD=1 ; mkdir -p $BUILD && cd $BUILD && pwd && time cmake -DCMAKE_BUILD_TYPE=${BUILDTYPE} -DFORTRAN=0 -DMPI=1 -DPPIDD=1 $OLDPWD && time cmake --build . -j2 && (time ctest || ctest -V)
-clang011:
+clang110:
   tags:
     - linux-farm
 #  only:
 #    - merge_requests
+  except:
+    - tags
   timeout: 60m
   script:
     - export MPIPROCS=2
@@ -64,17 +84,17 @@ clang011:
 pages:
   stage: deploy
   only:
-    - master
+    - tags
   script:
     - PUBLIC=$PWD/public
     - mkdir -p $PUBLIC
     - BUILD=$PWD/cmake-build
     - PROJECT_NAME=LinearAlgebra
-    - mkdir -p $BUILD && cd $BUILD && time cmake -DFORTRAN=1 -DMPI=0 -DPPIDD=0 $OLDPWD && time cmake --build . --target ${PROJECT_NAME}-doc -j
+    - mkdir -p $BUILD && cd $BUILD && time cmake -DFORTRAN=1 -DMPI=1 -DPPIDD=0 $OLDPWD && time cmake --build . --target ${PROJECT_NAME}-doc -j
     - mkdir -p $BUILD/docs/$PROJECT_NAME/html/DoxygenTagFiles && cp $BUILD/docs/$PROJECT_NAME/$PROJECT_NAME.tag $BUILD/docs/$PROJECT_NAME/html/DoxygenTagFiles
     - . $BUILD/project_version.sh ; rsync -a --delete $BUILD/docs/*/html/ $PUBLIC/${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     - rm -f  $PUBLIC/${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}/${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    - if [ $(git describe --tags --abbrev=0 --always HEAD) = $(git describe --tags --abbrev=0 --always origin/master) ]; then cd $PUBLIC; rm -f latest; ln -s ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR} latest ; rm -f ./index.html; cd ..; fi
+    - if [ $(git describe --tags --abbrev=0 --always HEAD) = $(git describe --tags --abbrev=0 --always master) ]; then cd $PUBLIC; rm -f latest; ln -s ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR} latest ; rm -f ./index.html; cd ..; fi
     - echo '<head><meta http-equiv="refresh" content="0; URL=latest"></head>' > $PUBLIC/index.html
   artifacts:
     paths:

@@ -6,6 +6,16 @@
 PROGRAM QuasiNewton_Example
   USE Iterative_Solver
   IMPLICIT NONE
+  interface
+    subroutine mpi_init() BIND (C, name = 'mpi_init')
+    end subroutine mpi_init
+    subroutine mpi_finalize() BIND (C, name = 'mpi_finalize')
+    end subroutine mpi_finalize
+    !    function mpi_comm_global() BIND (C, name = 'mpi_comm_global')
+    !      use iso_c_binding, only: c_int64_t
+    !      integer(c_int64_t) mpi_comm_global
+    !    end function mpi_comm_global
+  end interface
   INTEGER, PARAMETER :: n = 2
   DOUBLE PRECISION, DIMENSION (n, n) :: m
   DOUBLE PRECISION, DIMENSION (n) :: c, g
@@ -14,6 +24,7 @@ PROGRAM QuasiNewton_Example
   INTEGER :: i, j
   LOGICAL :: converged
   LOGICAL, PARAMETER :: forced = .FALSE.
+  call mpi_init
   PRINT *, 'Fortran binding of IterativeSolver::IOptimize'
   m = 1; DO i = 1, n; m(i, i) = 3*i;
   END DO
@@ -35,9 +46,9 @@ PROGRAM QuasiNewton_Example
         write (6,*) 'g ',g
     IF (Iterative_Solver_Add_Value(e, c, g)) THEN
       if (forced) then
-        c = c - g / [(m(j, j), j = 1, n)]
+        g = g / [(m(j, j), j = 1, n)]
       else
-        c = c - g / ([(m(j, j), j = 1, n)] - e + 1d-15) &
+        g = g / ([(m(j, j), j = 1, n)] - e + 1d-15) &
             + (sum([(c(j)*g(j),j=1,n)])/sum([(c(j)**2,j=1,n)])) * c &
                 / ([(m(j, j), j = 1, n)] - e + 1d-15)
       end if
@@ -48,4 +59,5 @@ PROGRAM QuasiNewton_Example
   if (.not. forced) c = c / sqrt(dot_product(c, c))
   PRINT *, 'solution ', c(1:MIN(n, 10))
   CALL Iterative_Solver_Finalize
+  call mpi_finalize
 END PROGRAM QuasiNewton_Example

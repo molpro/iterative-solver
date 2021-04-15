@@ -55,7 +55,7 @@ CONTAINS
     !> Example of simplest use: @include LinearEigensystemExampleF.F90
     !> Example including use of P space: @include LinearEigensystemExampleF-Pspace-mpi.F90
     SUBROUTINE Iterative_Solver_Linear_Eigensystem_Initialize(nq, nroot, thresh, thresh_value, hermitian, &
-        verbosity, pname, mpicomm, algorithm)
+        verbosity, pname, mpicomm, algorithm, range)
         INTEGER, INTENT(in) :: nq !< dimension of matrix
         INTEGER, INTENT(in) :: nroot !< number of eigensolutions desired
         DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh !< Convergence threshold
@@ -65,7 +65,8 @@ CONTAINS
         !< One gives a single progress-report line each iteration.
         CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
         INTEGER(KIND=mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
-        CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
+        CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm, eg Davidson
+        INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
         INTERFACE
             SUBROUTINE Iterative_Solver_Linear_Eigensystem_InitializeC(nq, nroot, range_begin, range_end, thresh, thresh_value, &
                     hermitian, verbosity, pname, mpicomm, algorithm &
@@ -82,7 +83,7 @@ CONTAINS
                 CHARACTER(kind = c_char), DIMENSION(*), INTENT(in) :: algorithm
             END SUBROUTINE Iterative_Solver_Linear_Eigensystem_InitializeC
         END INTERFACE
-        INTEGER(c_size_t) :: dummy_range_begin, dummy_range_end
+        INTEGER(c_size_t) :: m_range_begin, m_range_end
         INTEGER(c_int) :: hermitianC
         INTEGER(c_int) :: verbosityC
         REAL(c_double) :: threshC
@@ -94,6 +95,10 @@ CONTAINS
         threshC = 1d-10
         thresh_valueC = 1d50
         hermitianC = hermitian_default
+        IF (PRESENT(range)) THEN
+            m_range_begin = INT(range(1), kind = c_size_t)
+            m_range_end = INT(range(2), kind = c_size_t)
+        END IF
         IF (PRESENT(pname)) THEN
             ALLOCATE(pnameC(LEN(pname) + 1))
             CALL c_string_from_f(pname, pnameC)
@@ -128,83 +133,20 @@ CONTAINS
         ELSE
             mpicommC = mpicomm_compute()
         ENDIF
-        CALL Iterative_Solver_Linear_Eigensystem_InitializeC(m_nq, m_nroot, dummy_range_begin, dummy_range_end, &
+        CALL Iterative_Solver_Linear_Eigensystem_InitializeC(m_nq, m_nroot, m_range_begin, m_range_end, &
                 threshC, thresh_valueC, &
                 hermitianC, verbosityC, pnameC, mpicommC, algorithmC)
+        IF (PRESENT(range)) THEN
+            range(1) = int(m_range_begin)
+            range(2) = int(m_range_end)
+        END IF
     END SUBROUTINE Iterative_Solver_Linear_Eigensystem_Initialize
-    !
-    SUBROUTINE Iterative_Solver_Linear_Eigensystem_Initialize_Ranges(nq, nroot, range_begin, range_end, thresh, &
-            verbosity, pname, mpicomm, algorithm)
-        INTEGER, INTENT(in) :: nq !< dimension of matrix
-        INTEGER, INTENT(in) :: nroot !< number of eigensolutions desired
-        INTEGER, INTENT(out) :: range_begin, range_end !< Local range starting and ending indices
-        DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh !< Convergence threshold
-        INTEGER, INTENT(in), OPTIONAL :: verbosity !< Print level
-        !< One gives a single progress-report line each iteration.
-        CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
-        INTEGER, INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
-        CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
-        INTERFACE
-            SUBROUTINE Iterative_Solver_Linear_Eigensystem_InitializeC(nq, nroot, range_begin, range_end, thresh, &
-                    verbosity, pname, mpicomm, algorithm) BIND(C, name = 'IterativeSolverLinearEigensystemInitialize')
-                USE iso_c_binding
-                INTEGER(C_size_t), INTENT(in), VALUE :: nq
-                INTEGER(C_size_t), INTENT(in), VALUE :: nroot
-                INTEGER(C_size_t), INTENT(inout) :: range_begin, range_end
-                REAL(c_double), INTENT(in), VALUE :: thresh
-                INTEGER(C_int), INTENT(in), VALUE :: verbosity
-                CHARACTER(kind = c_char), DIMENSION(*), INTENT(in) :: pname
-                INTEGER(C_int64_t), INTENT(in), VALUE :: mpicomm
-                CHARACTER(kind = c_char), DIMENSION(*), INTENT(in) :: algorithm
-            END SUBROUTINE Iterative_Solver_Linear_Eigensystem_InitializeC
-        END INTERFACE
-        INTEGER(c_size_t) m_range_begin, m_range_end
-        INTEGER(c_int) :: verbosityC = 0
-        REAL(c_double) :: threshC
-        CHARACTER(kind = c_char), DIMENSION(:), ALLOCATABLE :: pnameC
-        INTEGER(c_int64_t) :: mpicommC
-        CHARACTER(kind = c_char), DIMENSION(:), ALLOCATABLE :: algorithmC
-        m_range_begin = INT(range_begin, kind = c_size_t)
-        m_range_end = INT(range_end, kind = c_size_t)
-        IF (PRESENT(pname)) THEN
-            ALLOCATE(pnameC(LEN(pname) + 1))
-            CALL c_string_from_f(pname, pnameC)
-        ELSE
-            ALLOCATE(pnameC(1))
-            pnameC(1) = c_null_char
-        ENDIF
-        IF (PRESENT(algorithm)) THEN
-            ALLOCATE(algorithmC(LEN(algorithm) + 1))
-            CALL c_string_from_f(algorithm, algorithmC)
-        ELSE
-            ALLOCATE(algorithmC(1))
-            algorithmC(1) = c_null_char
-        ENDIF
-        m_nq = INT(nq, kind = c_size_t)
-        m_nroot = INT(nroot, kind = c_size_t)
-        threshC = 1d-10
-        IF (PRESENT(thresh)) THEN
-            threshC = thresh
-        END IF
-        IF (PRESENT(verbosity)) THEN
-            verbosityC = INT(verbosity, kind = c_int)
-        END IF
-        IF (PRESENT(mpicomm)) THEN
-            mpicommC = INT(mpicomm, kind = c_int64_t)
-        ELSE
-            mpicommC = mpicomm_compute()
-        ENDIF
-        CALL Iterative_Solver_Linear_Eigensystem_InitializeC(m_nq, m_nroot, m_range_begin, m_range_end, threshC, &
-                verbosityC, pnameC, mpicommC, algorithmC)
-        range_begin = int(m_range_begin)
-        range_end = int(m_range_end)
-    END SUBROUTINE Iterative_Solver_Linear_Eigensystem_Initialize_Ranges
     !
     !> \brief Finds the solutions of linear equation systems using a generalisation of Davidson's method, i.e. preconditioned Lanczos
     !> Example of simplest use: @include LinearEquationsExampleF.F90
     !! Example including use of P space: include LinearEquationsExampleF-Pspace.F90
     SUBROUTINE Iterative_Solver_Linear_Equations_Initialize(nq, nroot, rhs, augmented_hessian, thresh, thresh_value, &
-        hermitian, verbosity, pname, mpicomm, algorithm)
+        hermitian, verbosity, pname, mpicomm, algorithm, range)
         INTEGER, INTENT(in) :: nq !< dimension of matrix
         INTEGER, INTENT(in) :: nroot !< number of eigensolutions desired
         DOUBLE PRECISION, INTENT(in), DIMENSION(nq, nroot) :: rhs !< the constant right-hand-side of each equation system
@@ -219,6 +161,7 @@ CONTAINS
         CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
         INTEGER, INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
         CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
+        INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
         INTERFACE
             SUBROUTINE Iterative_Solver_Linear_Equations_InitializeC(nq, nroot, range_begin, range_end, rhs, &
                     augmented_hessian, thresh, thresh_value, hermitian, verbosity, pname, mpicomm, algorithm) &
@@ -238,7 +181,7 @@ CONTAINS
                 CHARACTER(kind = c_char), DIMENSION(*), INTENT(in) :: algorithm
             END SUBROUTINE Iterative_Solver_Linear_Equations_InitializeC
         END INTERFACE
-        INTEGER(c_size_t) :: dummy_range_begin, dummy_range_end
+        INTEGER(c_size_t) :: m_range_begin, m_range_end
         INTEGER(c_int) :: hermitianC
         INTEGER(c_int) :: verbosityC = 0
         REAL(c_double) :: threshC, thresh_valueC, augmented_hessianC = 0d0
@@ -249,6 +192,10 @@ CONTAINS
         thresh_valueC = 1d50
         augmented_hessianC = 0d0
         hermitianC = hermitian_default
+        IF (PRESENT(range)) THEN
+            m_range_begin = INT(range(1), kind = c_size_t)
+            m_range_end = INT(range(2), kind = c_size_t)
+        END IF
         IF (PRESENT(pname)) THEN
             ALLOCATE(pnameC(LEN(pname) + 1))
             CALL c_string_from_f(pname, pnameC)
@@ -286,15 +233,19 @@ CONTAINS
         ELSE
             mpicommC = mpicomm_compute()
         ENDIF
-        CALL Iterative_Solver_Linear_Equations_InitializeC(m_nq, m_nroot, dummy_range_begin, dummy_range_end, &
+        CALL Iterative_Solver_Linear_Equations_InitializeC(m_nq, m_nroot, m_range_begin, m_range_end, &
                 rhs, augmented_hessianC, threshC, thresh_valueC, hermitianC, verbosityC, pnameC, mpicommC, &
             algorithmC)
+        IF (PRESENT(range)) THEN
+            range(1) = int(m_range_begin)
+            range(2) = int(m_range_end)
+        END IF
     END SUBROUTINE Iterative_Solver_Linear_Equations_Initialize
 
     !> \brief Optimization
     !> through the L-BFGS or related methods.
     !> Example of simplest use: @include OptimizeExampleF.F90
-    SUBROUTINE Iterative_Solver_Optimize_Initialize(nq, thresh, verbosity, minimize, pname, mpicomm, algorithm)
+    SUBROUTINE Iterative_Solver_Optimize_Initialize(nq, thresh, verbosity, minimize, pname, mpicomm, algorithm, range)
         INTEGER, INTENT(in) :: nq !< dimension of parameter space
         DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh !< convergence threshold
         INTEGER, INTENT(in), OPTIONAL :: verbosity !< how much to print. Default is zero, which prints nothing except errors.
@@ -303,6 +254,7 @@ CONTAINS
         CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
         INTEGER, INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
         CHARACTER(*), INTENT(in), OPTIONAL :: algorithm !< keyword specifying optimization algorithm
+        INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
         INTERFACE
             SUBROUTINE Iterative_Solver_Optimize_InitializeC(nq, range_begin, range_end, thresh, verbosity, &
                     minimize, pname, mpicomm, algorithm) BIND(C, name = 'IterativeSolverOptimizeInitialize')
@@ -317,12 +269,16 @@ CONTAINS
                 INTEGER(C_int64_t), INTENT(in), VALUE :: mpicomm
             END SUBROUTINE Iterative_Solver_Optimize_InitializeC
         END INTERFACE
-        INTEGER(c_size_t) :: dummy_range_begin, dummy_range_end
+        INTEGER(c_size_t) :: m_range_begin, m_range_end
         INTEGER(c_int) :: verbosityC, minimizeC
         REAL(c_double) :: threshC
         CHARACTER(kind = c_char), DIMENSION(:), ALLOCATABLE :: pnameC
         INTEGER(c_int64_t) :: mpicommC
         CHARACTER(kind = c_char), DIMENSION(:), ALLOCATABLE :: algorithmC
+        IF (PRESENT(range)) THEN
+            m_range_begin = INT(range(1), kind = c_size_t)
+            m_range_end = INT(range(2), kind = c_size_t)
+        END IF
         IF (PRESENT(pname)) THEN
             ALLOCATE(pnameC(LEN(pname) + 1))
             CALL c_string_from_f(pname, pnameC)
@@ -358,33 +314,26 @@ CONTAINS
         ELSE
             mpicommC = mpicomm_compute()
         ENDIF
-        CALL Iterative_Solver_Optimize_InitializeC(m_nq, dummy_range_begin, dummy_range_end, threshC, verbosityC, &
+        CALL Iterative_Solver_Optimize_InitializeC(m_nq, m_range_begin, m_range_end, threshC, verbosityC, &
                 minimizeC, pnameC, mpicommC, algorithmC)
-    CONTAINS
-        FUNCTION c_string_c(fstring)
-            CHARACTER(*), INTENT(in) :: fstring
-            CHARACTER(kind = c_char), DIMENSION(:), ALLOCATABLE :: c_string_c
-            INTEGER :: i
-            ALLOCATE(CHARACTER(kind = c_char) :: c_string_c(len_TRIM(fstring) + 1))
-            DO i = 1, len_TRIM(fstring)
-                c_string_c(i) = fstring(i:i)
-            END DO
-            c_string_c(len_TRIM(fstring) + 1) = c_null_char
-        END FUNCTION c_string_c
+        IF (PRESENT(range)) THEN
+            range(1) = int(m_range_begin)
+            range(2) = int(m_range_end)
+        END IF
     END SUBROUTINE Iterative_Solver_Optimize_Initialize
-
 
     !> \brief Accelerated convergence of non-linear equations
     !> through the DIIS or related methods.
     !> Example of simplest use: @include DIISExampleF.F90
-    SUBROUTINE Iterative_Solver_DIIS_Initialize(nq, thresh, verbosity, pname, mpicomm, algorithm)
+    SUBROUTINE Iterative_Solver_DIIS_Initialize(nq, thresh, verbosity, pname, mpicomm, algorithm, range)
         INTEGER, INTENT(in) :: nq !< dimension of parameter space
         DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh !< convergence threshold
         INTEGER, INTENT(in), OPTIONAL :: verbosity !< how much to print. Default is zero, which prints nothing except errors.
         !< One gives a single progress-report line each iteration.
         CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
         INTEGER, INTENT(in), OPTIONAL :: mpicomm !< Profiler communicator
-        CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
+        CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm, eg DIIS
+        INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
         INTERFACE
             SUBROUTINE Iterative_Solver_DIIS_InitializeC(nq, range_begin, range_end, thresh, verbosity, &
                     pname, mpicomm, algorithm) BIND(C, name = 'IterativeSolverNonLinearEquationsInitialize')
@@ -398,12 +347,16 @@ CONTAINS
                 CHARACTER(kind = c_char), DIMENSION(*), INTENT(in) :: algorithm
             END SUBROUTINE Iterative_Solver_DIIS_InitializeC
         END INTERFACE
-        INTEGER(c_size_t) :: dummy_range_begin, dummy_range_end
+        INTEGER(c_size_t) :: m_range_begin, m_range_end
         INTEGER(c_int) :: verbosityC
         REAL(c_double) :: threshC
         CHARACTER(kind = c_char), DIMENSION(:), ALLOCATABLE :: pnameC
         INTEGER(c_int64_t) :: mpicommC
         CHARACTER(kind = c_char), DIMENSION(:), ALLOCATABLE :: algorithmC
+        IF (PRESENT(range)) THEN
+            m_range_begin = INT(range(1), kind = c_size_t)
+            m_range_end = INT(range(2), kind = c_size_t)
+        END IF
         IF (PRESENT(pname)) THEN
             ALLOCATE(pnameC(LEN(pname) + 1))
             CALL c_string_from_f(pname, pnameC)
@@ -435,8 +388,12 @@ CONTAINS
         ELSE
             mpicommC = mpicomm_compute()
         ENDIF
-        CALL Iterative_Solver_DIIS_InitializeC(m_nq, dummy_range_begin, dummy_range_end, threshC, verbosityC, &
+        CALL Iterative_Solver_DIIS_InitializeC(m_nq, m_range_begin, m_range_end, threshC, verbosityC, &
                 pnameC, mpicommC, algorithm)
+        IF (PRESENT(range)) THEN
+            range(1) = int(m_range_begin)
+            range(2) = int(m_range_end)
+        END IF
     END SUBROUTINE Iterative_Solver_DIIS_Initialize
 
     !> \brief Terminate the iterative solver
@@ -559,13 +516,14 @@ CONTAINS
     !
     !>@brief For most methods, does nothing; for Optimize it is required.
     !> Also write progress to standard output
-    !> \param solution The current solution, after interpolation and updating with the preconditioned residual.
-    !> \param residual The residual after interpolation.
-    !> \param error Error indicator for each sought root.
-    !> \return .TRUE. if convergence reached for all roots
+    !> \param solution On exit, the new vectors targeting roots in the working set.
+    !> \param residual On entry, the preconditioned residual. On exit, undefined.
+    !> \param synchronize Whether to synchronize any distributed storage of parameters before return.
+    !>        The default is the safe .TRUE. but can be .FALSE. if appropriate.
+    !> \return The size of the working set
     FUNCTION Iterative_Solver_End_Iteration1(solution, residual, synchronize, buffer_size)
         USE iso_c_binding
-        INTEGER :: Iterative_Solver_End_Iteration
+        INTEGER :: Iterative_Solver_End_Iteration1
         DOUBLE PRECISION, DIMENSION(*), INTENT(inout) :: solution
         DOUBLE PRECISION, DIMENSION(*), INTENT(inout) :: residual
         LOGICAL, INTENT(in), OPTIONAL :: synchronize
@@ -574,7 +532,7 @@ CONTAINS
             FUNCTION Iterative_Solver_End_Iteration_C(buffer_size, solution, residual, lsync) &
                 BIND(C, name = 'IterativeSolverEndIteration')
                 USE iso_c_binding
-                INTEGER(c_int) Iterative_Solver_End_Iteration_C
+                INTEGER(c_size_t) Iterative_Solver_End_Iteration_C
                 INTEGER(c_size_t), INTENT(in), VALUE :: buffer_size
                 REAL(c_double), DIMENSION(*), INTENT(inout) :: solution
                 REAL(c_double), DIMENSION(*), INTENT(inout) :: residual
@@ -589,14 +547,14 @@ CONTAINS
         IF (PRESENT(synchronize)) THEN
             IF (.NOT. synchronize) lsyncC = 0
         END IF
-        Iterative_Solver_End_Iteration1 = Iterative_Solver_End_Iteration_C( &
+        Iterative_Solver_End_Iteration1 = int(Iterative_Solver_End_Iteration_C( &
             buffer_sizeC, &
-            solution, residual, lsyncC)
+            solution, residual, lsyncC))
     END FUNCTION Iterative_Solver_End_Iteration1
 
     FUNCTION Iterative_Solver_End_Iteration2(solution, residual, synchronize)
         USE iso_c_binding
-        INTEGER :: Iterative_Solver_End_Iteration
+        INTEGER :: Iterative_Solver_End_Iteration2
         DOUBLE PRECISION, DIMENSION(:,:), INTENT(inout) :: solution
         DOUBLE PRECISION, DIMENSION(:,:), INTENT(inout) :: residual
         LOGICAL, INTENT(in), OPTIONAL :: synchronize
@@ -615,8 +573,12 @@ CONTAINS
     !> \param pp The P-P block of the matrix, dimensioned (number of existing P + nP, nP)
     !> \param parameters On input, the current solution or expansion vector. On exit, the interpolated solution vector.
     !> \param action On input, the residual for parameters (non-linear), or action of matrix on parameters (linear).
+    !> \param fproc
+    !> \param synchronize Whether to synchronize any distributed storage of parameters and action before return.
+    !>        Unnecessary if the client preconditioner is diagonal, but otherwise should be done.
+    !>        The default is the safe .TRUE. but can be .FALSE. if appropriate.
     !> On exit, the expected (non-linear) or actual (linear) residual of the interpolated parameters.
-    FUNCTION Iterative_Solver_Add_P(nP, offsets, indices, coefficients, pp, parameters, action, fproc)
+    FUNCTION Iterative_Solver_Add_P(nP, offsets, indices, coefficients, pp, parameters, action, fproc, synchronize)
         USE iso_c_binding
         INTEGER :: Iterative_Solver_Add_P
         INTEGER, INTENT(in) :: nP
@@ -626,6 +588,7 @@ CONTAINS
         DOUBLE PRECISION, DIMENSION(*), INTENT(in) :: pp
         DOUBLE PRECISION, DIMENSION(:,:), INTENT(inout) :: parameters
         DOUBLE PRECISION, DIMENSION(:,:), INTENT(inout) :: action
+        LOGICAL, INTENT(in), OPTIONAL :: synchronize
         EXTERNAL fproc
         INTERFACE
             FUNCTION IterativeSolverAddPC(buffer_size, nP, offsets, indices, coefficients, pp, parameters, action, &
@@ -650,70 +613,19 @@ CONTAINS
         TYPE(C_FUNPTR) :: cproc
         cproc = C_FUNLOC(fproc)
         lsyncC = 1
+        IF (PRESENT(synchronize)) THEN
+            IF (.NOT. synchronize) lsyncC = 0
+        END IF
         offsetsC = INT(offsets, c_size_t)
-        !write (6,*) 'fortrann addp nP ',nP
-        !write (6,*) 'fortrann addp offsets ',offsets
-        !write (6,*) 'fortrann addp offsetsC ',offsetsC
-        !write (6,*) 'indices ',indices
         do i = 1, offsets(nP)
             indicesC(i) = INT(indices(i) - 1, c_size_t) ! 1-base to 0-base
-            !write (6,*) 'fortran addp',indicesC(i)
         end do
-        !write (6,*) 'indicesC ',indicesC
         Iterative_Solver_Add_P = int(IterativeSolverAddPC( &
             INT(ubound(parameters,2)-lbound(parameters,2)+1, c_size_t), &
             INT(nP, c_size_t), offsetsC, indicesC, coefficients, &
                 pp, parameters, action, lsyncC, cproc))
     END FUNCTION Iterative_Solver_Add_P
 
-    FUNCTION Iterative_Solver_Add_P_Nosync(nP, offsets, indices, coefficients, pp, parameters, action, &
-                                           fproc)
-        USE iso_c_binding
-        INTEGER :: Iterative_Solver_Add_P_Nosync
-        INTEGER, INTENT(in) :: nP
-        INTEGER, INTENT(in), DIMENSION(0:nP) :: offsets
-        INTEGER, INTENT(in), DIMENSION(offsets(nP)) :: indices
-        DOUBLE PRECISION, DIMENSION(offsets(nP)), INTENT(in) :: coefficients
-        DOUBLE PRECISION, DIMENSION(*), INTENT(in) :: pp
-        DOUBLE PRECISION, DIMENSION(*), INTENT(inout) :: parameters
-        DOUBLE PRECISION, DIMENSION(*), INTENT(inout) :: action
-        !PROCEDURE(func_tmpl_a), POINTER :: func
-        EXTERNAL fproc
-        INTERFACE
-            FUNCTION IterativeSolverAddPC(nP, offsets, indices, coefficients, pp, parameters, action, &
-                    lsync, func) BIND(C, name = 'IterativeSolverAddP')
-                USE, INTRINSIC :: iso_c_binding
-                INTEGER(c_size_t) IterativeSolverAddPC
-                INTEGER(c_size_t), INTENT(in), VALUE :: nP
-                INTEGER(c_size_t), INTENT(in), DIMENSION(0:nP) :: offsets
-                INTEGER(c_size_t), INTENT(in), DIMENSION(offsets(nP)) :: indices
-                REAL(c_double), DIMENSION(offsets(nP)), INTENT(in) :: coefficients
-                REAL(c_double), DIMENSION(*), INTENT(in) :: pp
-                REAL(c_double), DIMENSION(*), INTENT(inout) :: parameters
-                REAL(c_double), DIMENSION(*), INTENT(inout) :: action
-                INTEGER(c_int), INTENT(in), VALUE :: lsync
-                TYPE(C_FUNPTR), INTENT(IN), VALUE :: func
-            END FUNCTION IterativeSolverAddPC
-        END INTERFACE
-        INTEGER(c_size_t), DIMENSION(0:nP) :: offsetsC
-        INTEGER(c_size_t), DIMENSION(SIZE(indices)) :: indicesC
-        INTEGER(c_int) :: lsyncC
-        TYPE(C_FUNPTR) :: cproc
-        cproc = C_FUNLOC(fproc)
-        lsyncC = 0
-        offsetsC = INT(offsets, c_size_t)
-        !write (6,*) 'fortrann addp nP ',nP
-        !write (6,*) 'fortrann addp offsets ',offsets
-        !write (6,*) 'fortrann addp offsetsC ',offsetsC
-        !write (6,*) 'indices ',indices
-        do i = 1, offsets(nP)
-            indicesC(i) = INT(indices(i) - 1, c_size_t) ! 1-base to 0-base
-            !write (6,*) 'fortran addp',indicesC(i)
-        end do
-        !write (6,*) 'indicesC ',indicesC
-        Iterative_Solver_Add_P_Nosync = int(IterativeSolverAddPC(INT(nP, c_size_t), offsetsC, indicesC, coefficients, &
-                pp, parameters, action, lsyncC, cproc))
-    END FUNCTION Iterative_Solver_Add_P_Nosync
     !> \brief Take an existing solution and its residual, and suggest P vectors
     !> \param solution On input, the current solution.
     !> \param residual On input, the residual for solution.
@@ -770,28 +682,30 @@ CONTAINS
 
     !> \brief the lowest eigenvalues of the reduced problem, for the number of roots sought.
     FUNCTION Iterative_Solver_Eigenvalues()
-        DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: Iterative_Solver_Eigenvalues
+        !DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: Iterative_Solver_Eigenvalues
+        DOUBLE PRECISION, DIMENSION(m_nroot) :: Iterative_Solver_Eigenvalues
         INTERFACE
             SUBROUTINE IterativeSolverEigenvalues(eigenvalues) BIND(C, name = 'IterativeSolverEigenvalues')
                 USE iso_c_binding
                 REAL(C_double), DIMENSION(*), INTENT(inout) :: eigenvalues
             END SUBROUTINE IterativeSolverEigenvalues
         END INTERFACE
-        ALLOCATE (Iterative_Solver_Eigenvalues(m_nroot))
+        !ALLOCATE (Iterative_Solver_Eigenvalues(m_nroot))
         CALL IterativeSolverEigenvalues(Iterative_Solver_Eigenvalues)
     END FUNCTION Iterative_Solver_Eigenvalues
 
     !> \brief the eigenvalues of the reduced problem, for the number of roots in working set (not yet converged).
     FUNCTION Iterative_Solver_Working_Set_Eigenvalues(working_set_size)
-        DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: Iterative_Solver_Working_Set_Eigenvalues
+        !DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: Iterative_Solver_Working_Set_Eigenvalues
         INTEGER, INTENT(in) :: working_set_size
+        DOUBLE PRECISION, DIMENSION(working_set_size) :: Iterative_Solver_Working_Set_Eigenvalues
         INTERFACE
             SUBROUTINE IterativeSolverWorkingSetEigenvalues(eigenvalues) BIND(C, name = 'IterativeSolverWorkingSetEigenvalues')
                 USE iso_c_binding
                 REAL(C_double), DIMENSION(*), INTENT(inout) :: eigenvalues
             END SUBROUTINE IterativeSolverWorkingSetEigenvalues
         END INTERFACE
-        ALLOCATE (Iterative_Solver_Working_Set_Eigenvalues(int(working_set_size, c_size_t)))
+        !ALLOCATE (Iterative_Solver_Working_Set_Eigenvalues(int(working_set_size, c_size_t)))
         CALL IterativeSolverWorkingSetEigenvalues(Iterative_Solver_Working_Set_Eigenvalues)
     END FUNCTION Iterative_Solver_Working_Set_Eigenvalues
     !> @brief Convert from Fortran string to C string

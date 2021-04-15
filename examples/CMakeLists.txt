@@ -1,20 +1,26 @@
 if (FORTRAN
         AND NOT CMAKE_Fortran_COMPILER_ID STREQUAL "Intel"  # avoid the challenge of linking C++ and Fortran with Intel
-        AND OFF # TODO reinstate Fortran examples when Fortran support is reinstated
         )
     set(ITERATIVESOLVER_FORTRAN_EXAMPLES
-            LinearEigensystemExampleF-Pspace-adaptive.F90
+#            LinearEigensystemExampleF-Pspace-adaptive.F90
             LinearEquationsExampleF.F90
             )
 endif ()
 set(EXAMPLES
         LinearEigensystemExample-serial.cpp
+        LinearEigensystemExample.cpp
+        LinearEigensystemMultirootExample.cpp
+        LinearEquationsExample.cpp
+        NonLinearEquationsExample.cpp
+        OptimizeExample.cpp
         ${ITERATIVESOLVER_FORTRAN_EXAMPLES}
         )
 if (LINEARALGEBRA_ARRAY_MPI3 AND MPI)
     list(APPEND EXAMPLES
             )
-    if (FORTRAN)
+    if (FORTRAN
+            AND MPIFORTRAN
+            )
         list(APPEND EXAMPLES
                 LinearEigensystemExampleF-mpi.F90
                 LinearEigensystemExampleF-Pspace-mpi.F90
@@ -22,14 +28,14 @@ if (LINEARALGEBRA_ARRAY_MPI3 AND MPI)
     endif ()
 endif ()
 
-if (FORTRAN AND MPI)
+if (FORTRAN AND MPI AND MPIFORTRAN)
     find_package(MPI COMPONENTS Fortran)
     message("MPI_Fortran_LIBRARIES=${MPI_Fortran_LIBRARIES}")
 endif ()
 foreach (fil ${EXAMPLES})
     get_filename_component(nam ${fil} NAME_WE)
     set(test_name ${PROJECT_NAME}-${nam})
-    add_executable(${test_name} ${fil} dummy.cpp)
+    add_executable(${test_name} ${fil} dummy.cpp SolverFactory_implementation.cpp)
     set_target_properties(${test_name}
             PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}
@@ -67,3 +73,5 @@ endif ()
 
 file(COPY bh.hamiltonian DESTINATION .)
 file(COPY hf.hamiltonian DESTINATION .)
+
+add_subdirectory(foreign-container)

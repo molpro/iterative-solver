@@ -17,7 +17,7 @@ void resize_qspace(subspace::IXSpace<R, Q, P>& xspace, const subspace::Matrix<va
   logger.msg("resize_qspace()", Logger::Trace);
   auto q_delete = limit_qspace_size(xspace.dimensions(), m_max_Qsize_after_reset, solutions, logger);
   logger.msg("delete Q parameter indices = ", q_delete.begin(), q_delete.end(), Logger::Debug);
-  std::sort(begin(q_delete), end(q_delete), std::greater());
+  std::sort(begin(q_delete), end(q_delete), std::greater<int>());
   for (auto iq : q_delete)
     xspace.eraseq(iq);
 }
@@ -49,7 +49,7 @@ auto max_overlap_with_R(const CVecRef<R>& rparams, const CVecRef<Q>& qparams, ar
     q_max_overlap.push_back(q_indices[i_max]);
     q_indices.erase(q_indices.begin() + i_max);
   }
-  std::sort(std::begin(q_max_overlap), std::end(q_max_overlap), std::greater());
+  std::sort(std::begin(q_max_overlap), std::end(q_max_overlap), std::greater<int>());
   return q_max_overlap;
 }
 
@@ -122,7 +122,7 @@ public:
         solution_params.emplace_back(util::construct_zeroed_copy(rparams.front().get(), handlers.qr()));
       auto roots = std::vector<int>(nC);
       std::iota(begin(roots), end(roots), 0);
-      util::construct_solutions(wrap<Q>(begin(solution_params), end(solution_params)), roots, solutions_proj, {},
+      util::construct_solutions(wrap(begin(solution_params), end(solution_params)), roots, solutions_proj, {},
                                 xspace.cparamsq(), xspace.cparamsd(), 0, 0, dims.nQ, handlers.qq(), handlers.qp(),
                                 handlers.qq());
       VecRef<Q> null_params, null_actions;
@@ -133,7 +133,7 @@ public:
       handlers.rq().copy(rparams[i], solution_params.front());
       solution_params.pop_front();
     }
-    const auto wparams = cwrap<R>(begin(rparams), begin(rparams) + nR);
+    const auto wparams = cwrap(begin(rparams), begin(rparams) + nR);
     auto q_delete = max_overlap_with_R(wparams, xspace.cparamsq(), handlers.rq(), logger);
     for (auto i : q_delete)
       xspace.eraseq(i);

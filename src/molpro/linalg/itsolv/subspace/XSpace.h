@@ -148,7 +148,7 @@ public:
     data = null_data<EqnData::H, EqnData::S, EqnData::rhs>();
   };
 
-  //! Updata parameters in Q space and corresponding equation data
+  //! Update parameters in Q space and corresponding equation data
   void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions) override {
     m_logger->msg("QSpace::update_qspace", Logger::Trace);
     auto new_data = xspace::update_qspace_data(params, actions, cparamsp(), cparamsq(), cactionsq(), cparamsd(),
@@ -276,7 +276,7 @@ protected:
   //! Update projection of RHS data onto P space. @warning Subspace should contain only P space
   auto update_rhs_with_pspace() {
     data[EqnData::rhs].resize({m_dim.nP, m_dim.nRHS});
-    data[EqnData::rhs].slice() = util::overlap(cparamsp(), rhs(), m_handlers->rp());
+    data[EqnData::rhs].slice() = util::overlap(cparamsp(), rhs(), m_handlers->qp());
   };
 
   void remove_data(size_t i) {
