@@ -190,6 +190,11 @@ public:
   virtual void set_options(const Options& options) = 0;
   //! Return all options. This is no different than using getters, but can be used with forward declaration.
   virtual std::shared_ptr<Options> get_options() const = 0;
+  /*!
+   * @brief Report the function value for the current optimum solution
+   * @return
+   */
+  virtual scalar_type value() const = 0;
 };
 
 /*!
@@ -226,15 +231,6 @@ public:
 //! Optimises to a stationary point using methods such as L-BFGS
 template <class R, class Q, class P>
 class Optimize : public IterativeSolver<R, Q, P> {
-public:
-  using typename IterativeSolver<R, Q, P>::value_type;
-  using typename IterativeSolver<R, Q, P>::scalar_type;
-
-  /*!
-   * @brief Report the function value for the current optimum solution
-   * @return
-   */
-  virtual scalar_type value() const = 0;
 };
 
 //! Solves non-linear system of equations using methods such as DIIS

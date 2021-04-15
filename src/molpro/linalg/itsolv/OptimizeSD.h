@@ -73,7 +73,7 @@ public:
 
   void report(std::ostream& cout) const override {
     SolverTemplate::report(cout);
-    cout << "value " << value() << ", errors " << std::scientific;
+    cout << "value " << this->value() << ", errors " << std::scientific;
     auto& err = this->m_errors;
     std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(molpro::cout, ", "));
     cout << std::defaultfloat << std::endl;
@@ -96,8 +96,6 @@ public:
     auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
     return end_iteration(wparams, wactions);
   }
-
-  scalar_type value() const override { return this->m_xspace->data[subspace::EqnData::value](0, 0); }
 
 protected:
   // for non-linear problems, actions already contains the residual

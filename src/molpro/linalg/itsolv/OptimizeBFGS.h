@@ -147,8 +147,6 @@ public:
     return nwork;
   }
 
-  scalar_type value() const override { return this->m_xspace->data[subspace::EqnData::value](0, 0); }
-
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
     if (not m_linesearch) { // action is expected to hold the preconditioned residual
       m_last_iteration_linesearching = false;
@@ -241,7 +239,7 @@ public:
 
   void report(std::ostream& cout) const override {
     SolverTemplate::report(cout);
-    cout << "value " << value() << ", errors " << std::scientific;
+    cout << "value " << this->value() << ", errors " << std::scientific;
     auto& err = this->m_errors;
     std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(molpro::cout, ", "));
     cout << std::defaultfloat << std::endl;

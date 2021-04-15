@@ -73,7 +73,7 @@ TEST_F(simplified, BFGS) {
   Rvector c(problem.n), g(problem.n);
   EXPECT_TRUE(solver->solve(c, g, problem));
   solver->solution(c,g);
-  EXPECT_LE(solver->value(),1e-20);
+  EXPECT_NEAR(solver->value(),0,1e-20);
   EXPECT_THAT(c, ::testing::Pointwise(::testing::DoubleNear(1e-10),Rvector(problem.n,1)));
   EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10),Rvector(problem.n,0)));
 }

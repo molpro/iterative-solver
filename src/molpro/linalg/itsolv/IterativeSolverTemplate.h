@@ -280,6 +280,7 @@ public:
   int get_max_iter() const override { return m_max_iter; }
   //! Access dimensions of the subspace
   const subspace::Dimensions& dimensions() const override { return m_xspace->dimensions(); }
+  scalar_type value() const override { return this->m_xspace->data[subspace::EqnData::value](0, 0); }
 
 protected:
   IterativeSolverTemplate(std::shared_ptr<subspace::IXSpace<R, Q, P>> xspace,
