@@ -21,13 +21,18 @@ SerialDiskArray::SerialDiskArray(SerialDiskArray&& source) noexcept : m_dir(std:
 
 SerialDiskArray::SerialDiskArray(const Span<value_type>& source) {}
 
+SerialDiskArray::SerialDiskArray(const std::vector<value_type>& source) {}
+
 SerialDiskArray& SerialDiskArray::operator=(const SerialDiskArray& source) {
   if (!source.empty()){
     SerialDiskArray::copy(source);
   }
 }
+SerialDiskArray& SerialDiskArray::operator=(const SerialDiskArray& source) {
 
-SerialDiskArray& SerialDiskArray::operator=(const Span<value_type>& source) {}
+  SerialDiskArray& SerialDiskArray::operator=(const Span<value_type>& source) {}
+
+  SerialDiskArray& SerialDiskArray::operator=(const std::vector<value_type>& source) {}
 
 SerialDiskArray::~SerialDiskArray() = default;
 
@@ -51,6 +56,8 @@ void swap(SerialDiskArray& x, SerialDiskArray& y) noexcept {
   swap(x.m_file, y.m_file);
   swap(x.m_dir, y.m_dir);
 }
+
+void SerialDiskArray::scal(value_type alpha) {}
 
 bool SerialDiskArray::empty() const { return false; }
 

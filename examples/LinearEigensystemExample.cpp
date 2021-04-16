@@ -1,14 +1,16 @@
 #include "ExampleProblem.h"
 //#include <molpro/linalg/array/DistrArrayFile.h>
+#include <molpro/linalg/array/SerialDiskArray.h>
 #include <iostream>
 #include <molpro/linalg/itsolv/SolverFactory.h>
 
 int main(int argc, char* argv[]) {
   auto problem = ExampleProblem(argc > 1 ? std::stoi(argv[1]) : 20);
   using Rvector = ExampleProblem::container_t;
-  using Qvector = ExampleProblem::container_t;
+//  using Qvector = ExampleProblem::container_t;
   // using Qvector = molpro::linalg::array::DistrArrayFile;
-  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector>("Davidson");
+  using Qvector = molpro::linalg::array::SerialDiskArray;
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Rvector>("Davidson");
   solver->set_n_roots(argc > 2 ? std::stoi(argv[2]) : 2);
   solver->set_verbosity(molpro::linalg::itsolv::Verbosity::Summary);
   solver->set_max_iter(100);

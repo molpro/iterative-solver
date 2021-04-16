@@ -5,6 +5,7 @@
 #include <iostream>
 #include <filesystem>
 #include <molpro/linalg/array/Span.h>
+#include <vector>
 
 namespace molpro::linalg::array {
 
@@ -36,10 +37,12 @@ public:
   SerialDiskArray(const SerialDiskArray &source);
   SerialDiskArray(SerialDiskArray &&source) noexcept;
   explicit SerialDiskArray(const Span<value_type> &source);
-  
+  explicit SerialDiskArray(const std::vector<value_type> &source);
+
   SerialDiskArray &operator=(const SerialDiskArray &source);
   SerialDiskArray &operator=(const Span<value_type> &source);
-  
+  SerialDiskArray &operator=(const std::vector<value_type> &source);
+
   ~SerialDiskArray();
   
   friend void swap(SerialDiskArray &x, SerialDiskArray &y) noexcept; //!TODO: is it needed?
@@ -66,7 +69,12 @@ public:
   void scatter(const std::vector<index_type> &indices, const std::vector<value_type> &data);
   //! Performs gather() for provided indices, accumulates them with data from buffer and then performs scatter()
   void scatter_acc(std::vector<index_type> &indices, const std::vector<value_type> &data);
- 
+  void scal(value_type alpha);
+  void fill(value_type alpha);
+  void axpy(value_type alpha, const SerialDiskArray& x);
+  value_type dot(const SerialDiskArray& x) const;
+  std::map<size_t, value_type> select_max_dot(size_t n, const SerialDiskArray& y) const {throw std::logic_error("unimplemented");}
+
   //!TODO: Should it have it's own dot(), scal() and axpy() functions, or should we deal with them at the Handler level?
   //!TODO: How about buffer windows? Again at (lazy) handler level?
 };
