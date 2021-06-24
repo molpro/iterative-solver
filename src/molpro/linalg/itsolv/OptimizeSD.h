@@ -16,7 +16,7 @@ namespace molpro::linalg::itsolv {
  * @tparam R The class encapsulating solution and residual vectors
  * @tparam Q Used internally as a class for storing vectors on backing store
  */
-template <class R, class Q, class P = std::map<size_t, typename R::value_type>>
+template <class R, class Q = R, class P = std::map<size_t, typename R::value_type>>
 class OptimizeSD : public IterativeSolverTemplate<Optimize, R, Q, P> {
 public:
   using SolverTemplate = IterativeSolverTemplate<Optimize, R, Q, P>;
@@ -73,12 +73,10 @@ public:
     return opt;
   }
 
-  void report(std::ostream& cout) const override {
-    SolverTemplate::report(cout);
-    cout << "value " << this->value() << ", errors " << std::scientific;
-    auto& err = this->m_errors;
-    std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(molpro::cout, ", "));
-    cout << std::defaultfloat << std::endl;
+  void report(std::ostream& cout, bool endl=true) const override {
+    SolverTemplate::report(cout, false);
+    cout << ", value " << this->value();
+    if (endl) cout << std::endl;
   }
   std::shared_ptr<Logger> logger;
 

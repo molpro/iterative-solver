@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <molpro/iostream.h>
+#include <molpro/profiler/Profiler.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
 #include <molpro/linalg/itsolv/Logger.h>
 #include <molpro/linalg/itsolv/subspace/ISubspaceSolver.h>
@@ -131,6 +132,7 @@ public:
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
 
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
+    auto prof = this->m_profiler->push("itsolv::add_vector");
     m_logger->msg("IterativeSolverTemplate::add_vector  iteration = " + std::to_string(m_stats->iterations),
                   Logger::Trace);
     m_logger->msg("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = " +
@@ -163,6 +165,7 @@ public:
   // FIXME Currently only works if called on an empty subspace. Either enforce it or generalise.
   size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix, const VecRef<R>& parameters,
                const VecRef<R>& actions, fapply_on_p_type apply_p) override {
+    auto prof = this->m_profiler->push("itsolv::add_p");
     if (not pparams.empty() and pparams.size() < n_roots())
       throw std::runtime_error("P space must be empty or at least as large as number of roots sought");
     if (apply_p)
@@ -176,6 +179,7 @@ public:
   void clearP() override {}
 
   void solution(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual) override {
+    auto prof = this->m_profiler->push("itsolv::solution");
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
     detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
                                m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP,
@@ -256,16 +260,18 @@ public:
 
   const Statistics& statistics() const override { return *m_stats; }
 
-  void report(std::ostream& cout) const override {
+  void report(std::ostream& cout, bool endl = true) const override {
     cout << "iteration " << m_stats->iterations;
     if (not m_errors.empty()) {
       auto it_max_error = std::max_element(m_errors.cbegin(), m_errors.cend());
       if (n_roots() > 1)
-        cout << ", error[" << std::distance(m_errors.cbegin(), it_max_error) << "] = ";
+        cout << ", |residual[" << std::distance(m_errors.cbegin(), it_max_error) << "]| = ";
       else
-        cout << ", error = ";
-      cout << *it_max_error << std::endl;
+        cout << ", |residual| = ";
+      cout << std::scientific << *it_max_error << std::defaultfloat;
     }
+    if (endl)
+      cout << std::endl;
   }
 
   void report() const override { report(molpro::cout); }
@@ -278,31 +284,93 @@ public:
   Verbosity get_verbosity() const override { return m_verbosity; }
   void set_max_iter(int n) override { m_max_iter = n; }
   int get_max_iter() const override { return m_max_iter; }
+  void set_max_p(int n) override { m_max_p = n; }
+  int get_max_p() const override { return m_max_p; }
+  void set_p_threshold(double threshold) override { m_p_threshold = threshold; }
+  double get_p_threshold() const override { return m_p_threshold; }
   //! Access dimensions of the subspace
   const subspace::Dimensions& dimensions() const override { return m_xspace->dimensions(); }
   scalar_type value() const override {
     return m_xspace->data.count(subspace::EqnData::value) > 0 ? m_xspace->data[subspace::EqnData::value](0, 0)
                                                               : nan("molpro::linalg::itsolv::IterativeSolver::value");
   }
+//  void set_profiler(molpro::profiler::Profiler& profiler) override { m_profiler.reset(&profiler); }
+  void set_profiler(molpro::profiler::Profiler& profiler) override { m_profiler = std::shared_ptr<molpro::profiler::Profiler>(m_profiler_default, &profiler); }
+  const std::shared_ptr<molpro::profiler::Profiler>& profiler() const override { return m_profiler; }
 
-  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem) override {
+  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
+             bool generate_initial_guess = false) override {
     if (parameters.empty())
       throw std::runtime_error("Empty container passed to IterativeSolver::solve()");
     if (parameters.size() != actions.size())
       throw std::runtime_error("Inconsistent container sizes in IterativeSolver::solve()");
-    auto nwork = parameters.size();
+    this->m_logger->max_trace_level = Logger::None;
+    if (this->m_verbosity == Verbosity::Detailed) {
+      this->m_logger->max_trace_level = Logger::Info;
+      this->m_logger->data_dump = true;
+    }
+    bool use_diagonals = problem.diagonals(actions.at(0));
+    std::unique_ptr<Q> diagonals;
+    if (use_diagonals)
+      diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
+    if (generate_initial_guess) {
+      if (not use_diagonals)
+        throw std::runtime_error("Default initial guess requested, but diagonal elements are not available");
+      auto guess = m_handlers->qq().select(parameters.size(), *diagonals);
+      size_t root = 0;
+      if (this->m_verbosity >= Verbosity::Summary)
+        molpro::cout << "Initial guess generated from diagonal elements" << std::endl;
+      for (const auto& g : guess) {
+        m_handlers->rp().copy(parameters[root], P{{g.first, 1}});
+        if (this->m_verbosity >= Verbosity::Detailed)
+          molpro::cout << " initial guess " << g.first << std::endl;
+        root++;
+      }
+    }
+    int nwork = parameters.size();
+    std::vector<P> pspace;
+    if (use_diagonals and m_max_p > 0) {
+      auto selectp = m_handlers->qq().select(m_max_p, *diagonals);
+      for (auto s = selectp.begin(); s != selectp.end(); s++)
+        if (s->second > selectp.begin()->second + m_p_threshold) {
+          selectp.erase(s, selectp.end());
+          break;
+        }
+      if (this->m_verbosity >= Verbosity::Summary and not selectp.empty())
+        molpro::cout << selectp.size() << "-dimensional P space selected with threshold "
+                     << (m_p_threshold < 1e20 ? std::to_string(m_p_threshold) : "infinity") << " and limit " << m_max_p
+                     << std::endl;
+      if (this->m_verbosity >= Verbosity::Detailed)
+        for (const auto& s : selectp)
+          molpro::cout << "P space element " << s.first << " : " << s.second << std::endl;
+      for (const auto& s : selectp)
+        pspace.emplace_back((P){{s.first, 1}});
+      fapply_on_p_type apply_on_p = [&problem](const std::vector<std::vector<value_type>>& pcoeff,
+                                               const CVecRef<P>& pparams, const VecRef<R>& actions) {
+        problem.p_action(pcoeff, pparams, actions);
+      };
+      auto action_matrix = problem.pp_action_matrix(pspace);
+      nwork = add_p(cwrap(pspace), array::Span<value_type>(action_matrix.data(), action_matrix.size()), parameters,
+                    actions, apply_on_p);
+    }
     for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
       value_type value;
       if (this->nonlinear()) {
         value = problem.residual(*parameters.begin(), *actions.begin());
         nwork = this->add_vector(*parameters.begin(), *actions.begin(), value);
-      } else {
+      } else if (iter > 0 or pspace.empty()) {
         problem.action(cwrap(parameters.begin(), parameters.begin() + nwork),
                        wrap(actions.begin(), actions.begin() + nwork));
         nwork = this->add_vector(parameters, actions);
       }
-      if (nwork > 0)
-        problem.precondition(wrap(actions.begin(), actions.begin() + nwork), this->working_set_eigenvalues());
+      if (nwork > 0) {
+        if (use_diagonals) {
+          m_handlers->rq().copy(parameters.at(0), *diagonals);
+          problem.precondition(wrap(actions.begin(), actions.begin() + nwork), this->working_set_eigenvalues(),
+                               parameters.at(0));
+        } else
+          problem.precondition(wrap(actions.begin(), actions.begin() + nwork), this->working_set_eigenvalues());
+      }
       nwork = this->end_iteration(parameters, actions);
       if (this->m_verbosity >= Verbosity::Iteration)
         report();
@@ -340,6 +408,7 @@ protected:
    * @return size of the working set
    */
   size_t solve_and_generate_working_set(const VecRef<R>& parameters, const VecRef<R>& action) {
+    auto prof = this->m_profiler->push("itsolv::solve_and_generate_working_set");
     m_subspace_solver->solve(*m_xspace, n_roots());
     auto nsol = m_subspace_solver->size();
     std::vector<std::pair<Q, Q>> temp_solutions{};
@@ -380,8 +449,8 @@ protected:
     return m_working_set.size();
   }
 
-  template <typename I>
-  void check_consistent_number_of_roots_and_solutions(const std::vector<I>& roots, const size_t nparams) {
+  template <typename TTT>
+  void check_consistent_number_of_roots_and_solutions(const std::vector<TTT>& roots, const size_t nparams) {
     if (roots.size() > nparams)
       throw std::runtime_error("asking for more roots than parameters");
     if (!roots.empty() && *std::max_element(roots.begin(), roots.end()) >= m_subspace_solver->solutions().size())
@@ -404,6 +473,10 @@ protected:
   fapply_on_p_type m_apply_p = {};              //!< function that evaluates effect of action on the P space projection
   Verbosity m_verbosity = Verbosity::Iteration; //!< how much output to print in solve()
   int m_max_iter = 100;                         //!< maximum number of iterations in solve()
+  size_t m_max_p = 0;                           //!< maximum size of P space
+  double m_p_threshold = std::numeric_limits<double>::max(); //!< threshold for selecting P space
+  std::shared_ptr<molpro::profiler::Profiler> m_profiler_default = std::make_shared<molpro::profiler::Profiler>("IterativeSolver");
+  std::shared_ptr<molpro::profiler::Profiler> m_profiler = m_profiler_default;
 };
 
 } // namespace molpro::linalg::itsolv

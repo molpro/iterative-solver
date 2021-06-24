@@ -1,9 +1,11 @@
 #include "DistrArray.h"
+#include "util/select.h"
 #include "util/select_max_dot.h"
 #include <algorithm>
 #include <functional>
 #include <iostream>
 #include <numeric>
+#include <molpro/Profiler.h>
 
 namespace molpro::linalg::array {
 
@@ -13,11 +15,16 @@ void DistrArray::sync() const { MPI_Barrier(m_communicator); }
 
 void DistrArray::error(const std::string& message) const {
   std::cerr << message << std::endl;
+#ifdef HAVE_MPI_H
   MPI_Abort(m_communicator, 1);
+#else
+  throw std::runtime_error(message);
+#endif
 }
 
 bool DistrArray::compatible(const DistrArray& other) const {
   bool result = (m_dimension == other.m_dimension);
+#ifdef HAVE_MPI_H
   if (m_communicator == other.m_communicator)
     result &= true;
   else if (m_communicator == MPI_COMM_NULL || other.m_communicator == MPI_COMM_NULL)
@@ -27,6 +34,7 @@ bool DistrArray::compatible(const DistrArray& other) const {
     MPI_Comm_compare(m_communicator, other.m_communicator, &comp);
     result &= (comp == MPI_IDENT || comp == MPI_CONGRUENT);
   }
+#endif
   return result;
 }
 
@@ -111,15 +119,26 @@ void DistrArray::times(const DistrArray& y, const DistrArray& z) {
 }
 
 DistrArray::value_type DistrArray::dot(const DistrArray& y) const {
+  auto prof = molpro::Profiler::single()->push("DistArray::dot()");
   auto name = std::string{"Array::dot"};
   if (!compatible(y))
     error(name + " array x is incompatible");
+  molpro::Profiler::single()->start("loc_x");
   auto loc_x = local_buffer();
+  molpro::Profiler::single()->stop();
+  molpro::Profiler::single()->start("loc_y");
   auto loc_y = y.local_buffer();
+  molpro::Profiler::single()->stop();
   if (!loc_x->compatible(*loc_y))
     error(name + " incompatible local buffers");
+  molpro::Profiler::single()->start("std::inner_product");
   auto a = std::inner_product(begin(*loc_x), end(*loc_x), begin(*loc_y), (value_type)0);
+  molpro::Profiler::single()->stop();
+#ifdef HAVE_MPI_H
+  molpro::Profiler::single()->start("MPI_Allreduce");
   MPI_Allreduce(MPI_IN_PLACE, &a, 1, MPI_DOUBLE, MPI_SUM, communicator());
+  molpro::Profiler::single()->stop();
+#endif
   return a;
 }
 
@@ -155,6 +174,7 @@ void DistrArray::_divide(const DistrArray& y, const DistrArray& z, DistrArray::v
 namespace util {
 std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, double>& local_selection,
                                                   MPI_Comm communicator) {
+#ifdef HAVE_MPI_H
   auto indices = std::vector<DistrArray::index_type>();
   auto values = std::vector<double>();
   indices.reserve(n);
@@ -183,7 +203,7 @@ std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, dou
     using pair_t = std::pair<double, size_t>;
     auto pq = std::priority_queue<pair_t, std::vector<pair_t>, std::greater<>>();
     for (size_t i = 0; i < n; ++i)
-      pq.emplace(std::numeric_limits<double>::min(), std::numeric_limits<DistrArray::index_type>::max());
+      pq.emplace(-std::numeric_limits<double>::max(), std::numeric_limits<DistrArray::index_type>::max());
     for (size_t i = 0, ii = 0; i < comm_size; ++i) {
       for (size_t j = 0; j < n - n_dummy_elements[i]; ++j, ++ii) {
         pq.emplace(values[ii], indices[ii]);
@@ -210,6 +230,7 @@ std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, dou
   local_selection.clear();
   for (size_t i = 0; i < n; ++i)
     local_selection.emplace(indices[i], values[i]);
+#endif
   return local_selection;
 }
 } // namespace util
@@ -244,6 +265,21 @@ std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, co
   return util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
 }
 
+std::map<size_t, DistrArray::value_type> DistrArray::select(size_t n, bool max, bool ignore_sign) const {
+  if (n > size())
+    error("DistrArray::select: n is too large");
+  auto xbuf = local_buffer();
+  auto local_selection = util::select<LocalBuffer, value_type>(std::min(n, xbuf->size()), *xbuf, max, ignore_sign);
+  auto shifted_local_selection = decltype(local_selection)();
+  for (const auto& el : local_selection)
+    shifted_local_selection.emplace(xbuf->start() + el.first, max ? el.second : -el.second);
+  std::map<size_t, double> result = util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
+  if (not max)
+    for (auto& el : result)
+      el.second = -el.second;
+  return result;
+}
+
 namespace util {
 template <class Compare>
 std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(const DistrArray& x, int n) {
@@ -272,6 +308,7 @@ std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(con
     values_loc[ind] = it.second;
     ++ind;
   }
+#ifdef HAVE_MPI_H
   MPI_Request requests[3];
   int comm_rank, comm_size;
   MPI_Comm_rank(x.communicator(), &comm_rank);
@@ -302,6 +339,7 @@ std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(con
       indices_loc.resize(ntot - tot_dummy);
       values_loc.resize(ntot - tot_dummy);
     }
+#endif
     std::vector<unsigned int> sort_permutation(indices_loc.size());
     std::iota(begin(sort_permutation), end(sort_permutation), (unsigned int)0);
     std::sort(begin(sort_permutation), end(sort_permutation), [&values_loc, &compare](const auto& i1, const auto& i2) {
@@ -312,6 +350,7 @@ std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(con
       indices_glob[i] = indices_loc[j];
       values_glob[i] = values_loc[j];
     }
+#ifdef HAVE_MPI_H
   } else {
     auto d = int(n - nmin);
     MPI_Igather(&d, 1, MPI_INT, nullptr, 1, MPI_INT, 0, x.communicator(), &requests[0]);
@@ -323,6 +362,7 @@ std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(con
   MPI_Ibcast(indices_glob.data(), n, MPI_UNSIGNED_LONG, 0, x.communicator(), &requests[0]);
   MPI_Ibcast(values_glob.data(), n, MPI_DOUBLE, 0, x.communicator(), &requests[1]);
   MPI_Waitall(2, requests, MPI_STATUSES_IGNORE);
+#endif
   auto map_extrema = std::list<std::pair<DistrArray::index_type, double>>();
   for (size_t i = 0; i < n; ++i)
     map_extrema.emplace_back(indices_glob[i], values_glob[i]);
@@ -395,7 +435,9 @@ DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
       res += (*loc_x)[i - loc_x->start()] * v;
     }
   }
+#ifdef HAVE_MPI_H
   MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_DOUBLE, MPI_SUM, communicator());
+#endif
   return res;
 }
 

@@ -24,7 +24,7 @@ namespace molpro::linalg::itsolv {
  * -----------------
  * @todo Explain some of the theory
  */
-template <class R, class Q, class P>
+template <class R, class Q = R, class P = std::map<size_t, typename R::value_type>>
 class LinearEquationsDavidson : public IterativeSolverTemplate<LinearEquations, R, Q, P> {
 public:
   using SolverTemplate = IterativeSolverTemplate<LinearEquations, R, Q, P>;
@@ -46,13 +46,14 @@ public:
   bool nonlinear() const override { return false; }
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
+    auto prof = this->m_profiler->push("itsolv::end_iteration");
     if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
       this->m_working_set = m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
                                                   m_norm_thresh, m_svd_thresh, *this->m_handlers, *this->m_logger);
     } else {
-      this->m_working_set =
-          detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
-                                 *this->m_handlers, *this->m_logger, m_svd_thresh, m_norm_thresh, m_max_size_qspace);
+      this->m_working_set = detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
+                                                   *this->m_handlers, *this->m_logger, m_svd_thresh, m_norm_thresh,
+                                                   m_max_size_qspace, *this->m_profiler);
     }
     this->m_stats->iterations++;
     return this->working_set().size();
@@ -69,6 +70,7 @@ public:
   }
 
   void add_equations(const CVecRef<R>& rhs) override {
+    auto prof = this->m_profiler->push("itsolv::add_equations");
     auto xspace = std::static_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace);
     xspace->add_rhs_equations(rhs);
     this->set_n_roots(xspace->dimensions().nRHS);
@@ -154,12 +156,12 @@ public:
     return opt;
   }
 
-  void report(std::ostream& cout) const override {
-    SolverTemplate::report(cout);
-    cout << "errors " << std::scientific;
+  void report(std::ostream& cout, bool endl=true) const override {
+    SolverTemplate::report(cout, false);
+    cout << ", errors " << std::scientific;
     auto& err = this->m_errors;
     std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(molpro::cout, ", "));
-    cout << std::defaultfloat << std::endl;
+    cout << std::defaultfloat; if (endl) cout << std::endl;
   }
   std::shared_ptr<Logger> logger;
 

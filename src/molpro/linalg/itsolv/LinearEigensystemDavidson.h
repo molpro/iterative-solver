@@ -1,6 +1,7 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LINEAREIGENSYSTEMDAVIDSON_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LINEAREIGENSYSTEMDAVIDSON_H
 #include <iterator>
+#include <map>
 #include <molpro/linalg/itsolv/CastOptions.h>
 #include <molpro/linalg/itsolv/DSpaceResetter.h>
 #include <molpro/linalg/itsolv/IterativeSolverTemplate.h>
@@ -22,7 +23,7 @@ namespace molpro::linalg::itsolv {
  * @tparam Q
  * @tparam P
  */
-template <class R, class Q, class P>
+template <class R, class Q = R, class P = std::map<size_t, typename R::value_type>>
 class LinearEigensystemDavidson : public IterativeSolverTemplate<LinearEigensystem, R, Q, P> {
 public:
   using SolverTemplate = IterativeSolverTemplate<LinearEigensystem, R, Q, P>;
@@ -59,6 +60,7 @@ public:
    * @return number of significant parameters to calculate the action for
    */
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
+    auto prof = this->m_profiler->push("itsolv::end_iteration");
     if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
       m_resetting_in_progress = true;
       this->m_working_set = m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
@@ -68,7 +70,7 @@ public:
       m_resetting_in_progress = false;
       this->m_working_set = detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
                                                    *this->m_handlers, *this->m_logger, propose_rspace_svd_thresh,
-                                                   propose_rspace_norm_thresh, m_max_size_qspace);
+                                                   propose_rspace_norm_thresh, m_max_size_qspace, *this->m_profiler);
     }
     this->m_stats->iterations++;
     read_handler_counts(this->m_stats, this->m_handlers);
@@ -105,7 +107,7 @@ public:
       m_last_values = current_values;
   }
 
-  void report(std::ostream& cout) const override {
+  void report(std::ostream& cout, bool endl=true) const override {
     SolverTemplate::report(cout);
     cout << "errors " << std::scientific;
     auto& err = this->m_errors;
@@ -115,7 +117,7 @@ public:
     auto ev = eigenvalues();
     cout << std::fixed << std::setprecision(14);
     std::copy(begin(ev), end(ev), std::ostream_iterator<scalar_type>(molpro::cout, ", "));
-    cout << std::defaultfloat << std::endl;
+    cout << std::defaultfloat; if (endl) cout << std::endl;
   }
 
   //! Set the period in iterations for resetting the D space
@@ -175,6 +177,7 @@ public:
                                              //!< deletion of parameters from the Q space
 protected:
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
+    auto prof = this->m_profiler->push("itsolv::construct_residual");
     assert(params.size() >= roots.size());
     const auto& eigvals = eigenvalues();
     for (size_t i = 0; i < roots.size(); ++i)

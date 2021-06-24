@@ -17,7 +17,7 @@ namespace molpro::linalg::itsolv {
  * @tparam R The class encapsulating solution and residual vectors
  * @tparam Q Used internally as a class for storing vectors on backing store
  */
-template <class R, class Q, class P = std::map<size_t, typename R::value_type>>
+template <class R, class Q = R, class P = std::map<size_t, typename R::value_type>>
 class OptimizeBFGS : public IterativeSolverTemplate<Optimize, R, Q, P> {
 public:
   using SolverTemplate = IterativeSolverTemplate<Optimize, R, Q, P>;
@@ -38,6 +38,7 @@ public:
   bool nonlinear() const override { return true; }
 
   int add_vector(R& parameters, R& residual, value_type value) override {
+    auto prof = this->m_profiler->push("itsolv::add_vector");
     using namespace subspace;
     auto& xspace = this->m_xspace;
     auto& xdata = xspace->data;
@@ -86,7 +87,9 @@ public:
         molpro::cout << "m_convergence_threshold=" << this->m_convergence_threshold << std::endl;
         molpro::cout << "Wolfe conditions: " << Wolfe_1 << Wolfe_2 << std::endl;
       }
-      if (std::abs(gcurrent) < this->m_convergence_threshold or (Wolfe_1 && Wolfe_2))
+      if (
+//          std::abs(gcurrent) < this->m_convergence_threshold or
+          (Wolfe_1 && Wolfe_2))
         goto accept;
       //      molpro::cout << "evaluating line search" << std::endl;
       Interpolate inter({-1, fprev, gprev}, {0, fcurrent, gcurrent});
@@ -103,6 +106,12 @@ public:
         xspace->eraseq(erased);
         //        std::cout << "Value after erasure: "<<as_string(Value)<<std::endl;
         m_linesearch = true;
+        if (false) {
+          while (xspace->size() >= 2) {
+            std::cout << "delete Q because line searching" << std::endl;
+            xspace->eraseq(xspace->size() - 1);
+          }
+        }
         return -1;
       }
     }
@@ -115,6 +124,12 @@ public:
     const auto& u = xspace->actionsq();
     //    this->m_errors.front() = std::sqrt(this->m_handlers->rr().dot(residual,residual));
     for (int a = 0; a < m_alpha.size(); a++) {
+      if (std::abs(H(a, a) - H(a, a + 1) - H(a + 1, a) + H(a + 1, a + 1)) <
+          std::max(5e-14 * std::abs(H(a, a)), 1e-15)) {
+        xspace->eraseq(a + 1);
+        this->m_logger->msg("Erase redundant Q", Logger::Info);
+        goto accept;
+      }
       m_alpha[a] = (this->m_handlers->rq().dot(residual, q[a]) - this->m_handlers->rq().dot(residual, q[a + 1])) /
                    (H(a, a) - H(a, a + 1) - H(a + 1, a) + H(a + 1, a + 1));
       //      std::cout << "alpha[" << a << "] = " << m_alpha[a] << std::endl;
@@ -125,6 +140,7 @@ public:
   }
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
+    auto prof = this->m_profiler->push("itsolv::end_iteration");
     if (not m_linesearch) { // action is expected to hold the preconditioned residual
       m_last_iteration_linesearching = false;
       this->solution_params(this->m_working_set, parameters);
@@ -214,12 +230,10 @@ public:
     return opt;
   }
 
-  void report(std::ostream& cout) const override {
-    SolverTemplate::report(cout);
-    cout << "value " << this->value() << ", errors " << std::scientific;
-    auto& err = this->m_errors;
-    std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(molpro::cout, ", "));
-    cout << std::defaultfloat << std::endl;
+  void report(std::ostream& cout, bool endl=true) const override {
+    SolverTemplate::report(cout, false);
+    cout << ", value " << this->value() <<  (m_linesearch ? ", line-searching" : ", quasi-Newton step");
+    if (endl) cout << std::endl;
   }
   std::shared_ptr<Logger> logger;
 

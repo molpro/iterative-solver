@@ -6,6 +6,7 @@
 #include <molpro/linalg/itsolv/propose_rspace.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceSolverDIIS.h>
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
+#include <molpro/profiler/Profiler.h>
 
 namespace molpro::linalg::itsolv {
 /*!
@@ -16,7 +17,7 @@ namespace molpro::linalg::itsolv {
  * @tparam R The class encapsulating solution and residual vectors
  * @tparam Q Used internally as a class for storing vectors on backing store
  */
-template <class R, class Q, class P = std::map<size_t, typename R::value_type>>
+template <class R, class Q = R, class P = std::map<size_t, typename R::value_type>>
 class NonLinearEquationsDIIS : public IterativeSolverTemplate<NonLinearEquations, R, Q, P> {
 public:
   using SolverTemplate = IterativeSolverTemplate<NonLinearEquations, R, Q, P>;
@@ -36,6 +37,7 @@ public:
   bool nonlinear() const override { return true; }
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
+    auto prof = this->m_profiler->push("itsolv::end_iteration");
     this->solution_params(this->m_working_set, parameters);
     if (this->m_errors.front() < this->m_convergence_threshold) {
       this->m_working_set.clear();
@@ -88,11 +90,12 @@ public:
     return opt;
   }
 
-  void report(std::ostream& cout) const override {
-    SolverTemplate::report(cout);
+  void report(std::ostream& cout, bool endl=true) const override {
+    SolverTemplate::report(cout, false);
     auto& err = this->m_errors;
     std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(molpro::cout, ", "));
-    cout << std::defaultfloat << std::endl;
+    cout << std::defaultfloat;
+    if (endl) cout << std::endl;
   }
   std::shared_ptr<Logger> logger;
 
