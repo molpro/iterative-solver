@@ -1,6 +1,7 @@
 #include "DistrArrayHDF5.h"
 #include "util/Distribution.h"
 #include <algorithm>
+#include <molpro/Profiler.h>
 
 #include "PHDF5Handle.h"
 #include "util/TempHandle.h"
@@ -135,6 +136,8 @@ void DistrArrayHDF5::set(index_type ind, value_type val) { put(ind, ind + 1, &va
 void DistrArrayHDF5::get(index_type lo, index_type hi, value_type *buf) const {
   if (lo >= hi)
     return;
+  auto prof = molpro::Profiler::single()->push("DistrArrayHDF5::get()");
+  prof += hi - lo;
   if (!dataset_is_open())
     error("call open_access() before RMA operations");
   hsize_t count[1] = {hi - lo};
@@ -161,6 +164,8 @@ std::vector<DistrArrayHDF5::value_type> DistrArrayHDF5::get(DistrArray::index_ty
 void DistrArrayHDF5::put(DistrArray::index_type lo, DistrArray::index_type hi, const DistrArray::value_type *data) {
   if (!dataset_is_open())
     error("call open_access() before RMA operations");
+  auto prof = molpro::Profiler::single()->push("DistrArrayHDF5::put()");
+  prof += hi - lo;
   hsize_t count[1] = {hi - lo};
   hsize_t offset[1] = {lo};
   auto memspace = H5Screate_simple(1, count, nullptr);

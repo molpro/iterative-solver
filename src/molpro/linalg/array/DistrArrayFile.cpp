@@ -83,7 +83,7 @@ DistrArrayFile::DistrArrayFile(size_t dimension, MPI_Comm comm, const std::strin
 
 DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm, const std::string& directory)
 : DistrArrayDisk(std::move(distribution), comm) {
-  auto prof = molpro::Profiler::single()->push("DistrArrayFile()");
+  //auto prof = molpro::Profiler::single()->push("DistrArrayFile()");
   if (m_distribution->border().first != 0)
     DistrArray::error("Distribution of array must start from 0");
   if (!file) {
@@ -144,7 +144,7 @@ bool DistrArrayFile::compatible(const DistrArrayFile& source) const {
 }
 
 std::fstream DistrArrayFile::make_file(const fs::path& dir) {
-  auto prof = molpro::Profiler::single()->push("DistrArrayFile::make_file()");
+  //auto prof = molpro::Profiler::single()->push("DistrArrayFile::make_file()");
   std::fstream tfile;
   std::string file_name = util::temp_file_name(dir.string() + "/", "");
   tfile.open(file_name.c_str(), std::ios::out | std::ios::binary);

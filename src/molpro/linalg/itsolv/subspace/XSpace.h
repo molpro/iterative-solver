@@ -32,6 +32,8 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
                         const CVecRef<Q>& qparams, const CVecRef<Q>& qactions, const CVecRef<Q>& dparams,
                         const CVecRef<Q>& dactions, const CVecRef<Q>& rhs, const Dimensions& dims,
                         ArrayHandlers<R, Q, P>& handlers, Logger& logger) {
+  auto prof = molpro::Profiler::single();
+  prof->start("slice");
   auto nQnew = params.size();
   auto data = NewData(nQnew, dims.nX, rhs.size());
   auto& qq = data.qq;
@@ -48,6 +50,8 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
   xq[EqnData::H].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}) = util::overlap(qparams, actions, handlers.qr());
   xq[EqnData::H].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}) = util::overlap(dparams, actions, handlers.qr());
   qq[EqnData::rhs] = util::overlap(params, rhs, handlers.qr());
+  prof->stop();
+  prof->start("transpose_copy");
   transpose_copy(xq[EqnData::S].slice({dims.oP, 0}, {dims.oP + dims.nP, nQnew}),
                  qx[EqnData::S].slice({0, dims.oP}, {nQnew, dims.oP + dims.nP}));
   transpose_copy(xq[EqnData::S].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}),
@@ -67,6 +71,7 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
     logger.msg("Hxq = " + as_string(xq[EqnData::H]), Logger::Info);
     logger.msg("rhs_q = " + as_string(qq[EqnData::rhs]), Logger::Info);
   }
+  prof->stop();
   return data;
 }
 

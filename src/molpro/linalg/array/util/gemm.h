@@ -9,6 +9,7 @@
 #include <molpro/linalg/array/type_traits.h>
 #include <molpro/linalg/itsolv/wrap_util.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
+#include <molpro/Profiler.h>
 
 using molpro::linalg::itsolv::VecRef;
 using molpro::linalg::itsolv::CVecRef;
@@ -19,14 +20,19 @@ namespace molpro::linalg::array::util {
 template <class AL, class AR = AL>
 void gemm_outer_distr_distr(const Matrix<typename array::mapped_or_value_type_t<AL>> alphas, const CVecRef<AR> &xx,
                             const VecRef<AL> &yy) {
+  auto prof = molpro::Profiler::single();
+  prof->start("gemm_outer_distr_distr");
+  *prof += alphas.rows() * alphas.cols() * yy[0].get().local_buffer()->size() * 2;
   for (size_t ii = 0; ii < alphas.rows(); ++ii) {
     auto loc_x = xx.at(ii).get().local_buffer();
     for (size_t jj = 0; jj < alphas.cols(); ++jj) {
       auto loc_y = yy[jj].get().local_buffer();
-      for (size_t i = 0; i < loc_y->size(); ++i)
+      for (size_t i = 0; i < loc_y->size(); ++i){
         (*loc_y)[i] += alphas(ii, jj) * (*loc_x)[i];
+      }
     }
   }
+  prof->stop();
 }
 
 template <class AL, class AR = AL>
@@ -61,9 +67,11 @@ void gemm_outer_default(Handler &handler, const Matrix<typename Handler::value_t
 template <class AL, class AR = AL>
 Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const CVecRef<AL> &xx,
                                                                           const CVecRef<AR> &yy) {
+  auto prof = molpro::Profiler::single()->push("gemm_inner_distr_distr");
   using value_type = typename array::mapped_or_value_type_t<AL>;
   auto mat = Matrix<value_type>({xx.size(), yy.size()});
   if (xx.size() == 0 || yy.size() == 0) return mat;
+  prof += mat.cols() * mat.rows() * xx.at(0).get().local_buffer()->size()*2;
   for (size_t j = 0; j < mat.cols(); ++j) {
     auto loc_y = yy.at(j).get().local_buffer();
     for (size_t i = 0; i < mat.rows(); ++i) {

@@ -103,8 +103,10 @@ public:
                    std::to_string(xspace.dimensions().nQ) + ", " + std::to_string(xspace.dimensions().nD) + ", " +
                    std::to_string(rparams.size()),
                Logger::Trace);
+    auto prof = molpro::Profiler::single();
     auto solutions_proj = solutions;
     if (solution_params.empty() && !rparams.empty()) {
+      prof->start("dspace::run (construct solutions)");
       logger.msg("constructing solutions", Logger::Debug);
       const auto dims = xspace.dimensions();
       const auto overlap = xspace.data.at(subspace::EqnData::S);
@@ -127,12 +129,16 @@ public:
                                 handlers.qq());
       VecRef<Q> null_params, null_actions;
       xspace.update_dspace(null_params, null_actions);
+      prof->stop();
     }
+    prof->start("dspace::run (copy_params)");
     const auto nR = std::min(rparams.size(), solution_params.size());
     for (size_t i = 0; i < nR; ++i) {
       handlers.rq().copy(rparams[i], solution_params.front());
       solution_params.pop_front();
     }
+    prof->stop();
+    prof->start("dspace::run (new working set)");
     const auto wparams = cwrap(begin(rparams), begin(rparams) + nR);
     auto q_delete = max_overlap_with_R(wparams, xspace.cparamsq(), handlers.rq(), logger);
     for (auto i : q_delete)
@@ -141,6 +147,7 @@ public:
       resize_qspace(xspace, solutions, m_max_Qsize_after_reset > nR ? m_max_Qsize_after_reset - nR : 0, logger);
     auto new_working_set = std::vector<int>(nR);
     std::iota(begin(new_working_set), end(new_working_set), 0);
+    prof->stop();
     return new_working_set;
   }
 };

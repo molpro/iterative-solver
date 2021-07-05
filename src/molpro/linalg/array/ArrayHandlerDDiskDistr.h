@@ -38,19 +38,43 @@ public:
   using ArrayHandler<AL, AR>::lazy_handle;
   using ArrayHandler<AL, AR>::error;
 
-  AL copy(const AR &source) override { this->m_counter->copy++; return m_copy_func(source); };
+  AL copy(const AR &source) override {
+    auto prof = molpro::Profiler::single()->push("ArrayHandlerDDiskDistr::copy");
+    this->m_counter->copy++;
+    return m_copy_func(source);
+  };
 
-  void copy(AL &x, const AR &y) override { this->m_counter->copy++; x.copy(y); };
+  void copy(AL &x, const AR &y) override {
+    auto prof = molpro::Profiler::single()->push("ArrayHandlerDDiskDistr::copy");
+    this->m_counter->copy++;
+    x.copy(y);
+  };
 
-  void scal(value_type alpha, AL &x) override { this->m_counter->scal++; x.scal(alpha); }
+  void scal(value_type alpha, AL &x) override {
+    auto prof = molpro::Profiler::single()->push("ArrayHandlerDDiskDistr:scal");
+    this->m_counter->scal++;
+    x.scal(alpha);
+  }
 
-  void fill(value_type alpha, AL &x) override { x.fill(alpha); }
+  void fill(value_type alpha, AL &x) override {
+    auto prof = molpro::Profiler::single()->push("ArrayHandlerDDiskDistr:fill");
+    x.fill(alpha);
+  }
 
-  void axpy(value_type alpha, const AR &x, AL &y) override { this->m_counter->axpy++; y.axpy(alpha, x); }
+  void axpy(value_type alpha, const AR &x, AL &y) override {
+    auto prof = molpro::Profiler::single()->push("ArrayHandlerDDiskDistr::axpy");
+    this->m_counter->axpy++;
+    y.axpy(alpha, x);
+  }
 
-  value_type dot(const AL &x, const AR &y) override { this->m_counter->dot++; return x.dot(y); }
+  value_type dot(const AL &x, const AR &y) override {
+    auto prof = molpro::Profiler::single()->push("ArrayHandlerDDiskDistr::dot");
+    this->m_counter->dot++;
+    return x.dot(y);
+  }
   
   void gemm_outer(const Matrix<value_type> alphas, const CVecRef<AR> &xx, const VecRef<AL> &yy) override {
+    auto prof = molpro::Profiler::single()->push("ArrayHandlerDDiskDistr::gemm_outer");
     this->m_counter->gemm_outer++;
     gemm_outer_distr_distr(alphas, xx, yy);
   }
@@ -62,10 +86,12 @@ public:
   }
 
   std::map<size_t, value_type_abs> select_max_dot(size_t n, const AL &x, const AR &y) override {
+    auto prof = molpro::Profiler::single()->push("ArrayHandlerDDiskDistr::select_max_dot");
     return x.select_max_dot(n, y);
   }
 
   std::map<size_t, value_type_abs> select(size_t n, const AL &x, bool max = false, bool ignore_sign = false) override {
+    auto prof = molpro::Profiler::single()->push("ArrayHandlerDDiskDistr::select");
     return x.select(n, max, ignore_sign);
   }
 

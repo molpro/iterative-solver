@@ -1,6 +1,7 @@
 #ifdef LINEARALGEBRA_ARRAY_GA
 #include "DistrArrayGA.h"
 #include "util/Distribution.h"
+#include <molpro/Profiler.h>
 
 #include <algorithm>
 #include <ga-mpi.h>
@@ -126,6 +127,8 @@ void DistrArrayGA::set(index_type ind, value_type val) { put(ind, ind + 1, &val)
 void DistrArrayGA::get(index_type lo, index_type hi, value_type *buf) const {
   if (lo >= hi)
     return;
+  auto prof = molpro::Profiler::single()->push("DistrArrayGA::get()");
+  prof += hi - lo;
   check_ga_ind_overlow(lo);
   check_ga_ind_overlow(hi);
   int ld, ilo = lo, ihi = int(hi) - 1;
@@ -143,6 +146,8 @@ std::vector<DistrArrayGA::value_type> DistrArrayGA::get(index_type lo, index_typ
 void DistrArrayGA::put(index_type lo, index_type hi, const value_type *data) {
   if (lo >= hi)
     return;
+  auto prof = molpro::Profiler::single()->push("DistrArrayGA::put()");
+  prof += hi - lo;
   check_ga_ind_overlow(lo);
   check_ga_ind_overlow(hi);
   int ld, ilo = lo, ihi = int(hi) - 1;

@@ -545,21 +545,24 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
                     subspace::IXSpace<R, Q, P>& xspace, subspace::ISubspaceSolver<R, Q, P>& subspace_solver,
                     ArrayHandlers<R, Q, P>& handlers, Logger& logger, value_type_abs svd_thresh,
                     value_type_abs res_norm_thresh, int max_size_qspace, molpro::profiler::Profiler& profiler) {
-  auto prof = profiler.push("itsolv::propose_rspace");
+  //auto prof = profiler.push("itsolv::propose_rspace");
+  auto prof = molpro::Profiler::single();
   logger.msg("itsolv::detail::propose_rspace", Logger::Trace);
   logger.msg("dimensions {nP, nQ, nD, nW} = " + std::to_string(xspace.dimensions().nP) + ", " +
                  std::to_string(xspace.dimensions().nQ) + ", " + std::to_string(xspace.dimensions().nD) + ", " +
                  std::to_string(solver.working_set().size()),
              Logger::Trace);
-  profiler.start("itsolv::ISubspaceSolver::solutions");
+  prof->start("solutions");
   auto solutions = subspace_solver.solutions();
-  profiler.stop();
   auto q_delete = limit_qspace_size(xspace.dimensions(), max_size_qspace, solutions, logger);
+  prof->stop();
   logger.msg("delete Q parameter indices = ", q_delete.begin(), q_delete.end(), Logger::Debug);
   if (!q_delete.empty()) {
-    auto prof = profiler.push("construct_dspace");
+    prof->start("construct_dspace");
     auto [dparams, dactions] =
         construct_dspace(solutions, xspace, q_delete, res_norm_thresh, svd_thresh, handlers.qq(), logger);
+    prof->stop();
+    prof->start("update_dspace");
     std::sort(begin(q_delete), end(q_delete), std::greater<int>());
     for (auto iq : q_delete)
       xspace.eraseq(iq);
@@ -573,36 +576,41 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
                    std::back_inserter(eigval_error), [](auto& e_ref, auto& e_new) { return std::abs(e_ref - e_new); });
     logger.msg("eigenvalue error due to new D space = ", std::begin(eigval_error), std::end(eigval_error),
                Logger::Debug);
+    prof->stop();
     // FIXME Optionally, solve the subspace problem again and get an estimate of the error due to new D
   }
   // Use modified GS to orthonormalise z against P+Q+D, removing any null parameters.
+  prof->start("get residual");
   auto wresidual = wrap(residuals.begin(), residuals.begin() + solver.working_set().size());
-  profiler.start("normalise");
   normalise(wresidual, handlers.rr(), logger);
-  profiler.stop();
-  profiler.start("append_overlap_with_r");
+  prof->stop();
+  prof->start("append_overlap_with_r");
   const auto full_overlap =
       append_overlap_with_r(xspace.data.at(subspace::EqnData::S), cwrap(wresidual), xspace.cparamsp(),
                             xspace.cparamsq(), xspace.cparamsd(), handlers, logger);
-  profiler.stop();
+  prof->stop();
+  prof->start("redundant indices");
   auto redundant_indices =
       redundant_parameters(full_overlap, xspace.dimensions().nX, wresidual.size(), svd_thresh, logger);
   logger.msg("redundant indices = ", std::begin(redundant_indices), std::end(redundant_indices), Logger::Debug);
   util::delete_parameters(redundant_indices, wresidual);
-  profiler.start("modified_gram_schmidt");
+  prof->stop();
+  prof->start("modified_gram_schmidt");
   auto null_param_indices =
       modified_gram_schmidt(wresidual, xspace.data.at(subspace::EqnData::S), xspace.dimensions(), xspace.cparamsp(),
                             xspace.cparamsq(), xspace.cparamsd(), res_norm_thresh, handlers, logger);
-  profiler.stop();
+  prof->stop();
   // Now that there is SVD null_param_indices should always be empty
   logger.msg("null parameters = ", std::begin(null_param_indices), std::end(null_param_indices), Logger::Debug);
   util::delete_parameters(null_param_indices, wresidual);
   normalise(wresidual, handlers.rr(), logger);
+  prof->start("copy parameters");
   for (size_t i = 0; i < wresidual.size(); ++i)
     handlers.rr().copy(parameters.at(i), wresidual.at(i));
-  profiler.start("get_new_working_set");
+  prof->stop();
+  prof->start("get_new_working_set");
   auto new_working_set = get_new_working_set(solver.working_set(), cwrap(residuals), cwrap(wresidual));
-  profiler.stop();
+  prof->stop();
   return new_working_set;
 }
 } // namespace molpro::linalg::itsolv::detail

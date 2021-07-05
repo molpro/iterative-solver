@@ -4,6 +4,7 @@
 #include <molpro/mpi.h>
 #include <string>
 #include <iostream>
+#include <molpro/Profiler.h>
 
 namespace molpro::linalg::array {
 
@@ -144,6 +145,8 @@ void DistrArraySpan::set(DistrArray::index_type ind, DistrArray::value_type val)
 void DistrArraySpan::get(DistrArray::index_type lo, DistrArray::index_type hi, DistrArray::value_type* buf) const {
   if (lo >= hi)
     return;
+  auto prof = molpro::Profiler::single()->push("DistrArraySpan::get()");
+  prof += hi - lo;
   DistrArray::index_type lo_loc, hi_loc;
   std::tie(lo_loc, hi_loc) = m_distribution->range(mpi_rank(m_communicator));
   if (lo < lo_loc || hi > hi_loc) {
@@ -168,6 +171,8 @@ std::vector<DistrArraySpan::value_type> DistrArraySpan::get(DistrArray::index_ty
 void DistrArraySpan::put(DistrArray::index_type lo, DistrArray::index_type hi, const DistrArray::value_type* data) {
   if (lo >= hi)
     return;
+  auto prof = molpro::Profiler::single()->push("DistrArraySpan::put()");
+  prof += hi - lo;
   DistrArray::index_type lo_loc, hi_loc;
   std::tie(lo_loc, hi_loc) = m_distribution->range(mpi_rank(m_communicator));
   if (lo < lo_loc || hi > hi_loc) {

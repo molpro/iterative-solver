@@ -76,6 +76,8 @@ struct QSpace {
   void update(const CVecRef<R>& params, const CVecRef<R>& actions, const SubspaceData& qq, const SubspaceData& qx,
               const SubspaceData& xq, const Dimensions& dims, SubspaceData& old_data) {
     m_logger->msg("QSpace::update", Logger::Trace);
+    auto prof = molpro::Profiler::single();
+    prof->start("qspace::update copy");
     auto it_begin = m_params.begin();
     for (size_t i = 0; i < params.size(); ++i) {
       m_params.emplace(it_begin,
@@ -85,6 +87,8 @@ struct QSpace {
     const size_t nQnew = params.size();
     const auto nXnew = dims.nX + nQnew;
     auto data = old_data;
+    prof->stop();
+    prof->start("qspace::update slice");
     for (auto d : {EqnData::H, EqnData::S}) {
       data[d].resize({dims.nX + nQnew, dims.nX + nQnew});
       data[d].slice({dims.oQ + nQnew, dims.oQ + nQnew}, {data[d].rows(), data[d].cols()}) =
@@ -113,6 +117,7 @@ struct QSpace {
       m_logger->msg("H = " + as_string(data.at(EqnData::H)), Logger::Info);
       m_logger->msg("rhs = " + as_string(data.at(EqnData::rhs)), Logger::Info);
     }
+    prof->stop();
   }
 
   void clear() { m_params.clear(); }

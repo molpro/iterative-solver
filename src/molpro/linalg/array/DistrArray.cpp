@@ -41,12 +41,17 @@ bool DistrArray::compatible(const DistrArray& other) const {
 void DistrArray::zero() { fill(0); }
 
 void DistrArray::fill(DistrArray::value_type val) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::fill");
   auto lb = local_buffer();
   for (auto& el : *lb)
     el = val;
+  prof->stop();
 }
 
 void DistrArray::axpy(value_type a, const DistrArray& y) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::axpy");
   auto name = std::string{"Array::axpy"};
   if (!compatible(y))
     error(name + " incompatible arrays");
@@ -65,20 +70,27 @@ void DistrArray::axpy(value_type a, const DistrArray& y) {
   else
     for (size_t i = 0; i < loc_x->size(); ++i)
       (*loc_x)[i] += a * (*loc_y)[i];
+  prof->stop();
 }
 
 void DistrArray::scal(DistrArray::value_type a) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::scal");
   auto x = local_buffer();
   for (auto& el : *x)
     el *= a;
+  prof->stop();
 }
 
-void DistrArray::add(const DistrArray& y) { return axpy(1, y); }
+void DistrArray::add(const DistrArray& y) {return axpy(1, y); }
 
 void DistrArray::add(DistrArray::value_type a) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::add");
   auto x = local_buffer();
   for (auto& el : *x)
     el += a;
+  prof->stop();
 }
 
 void DistrArray::sub(const DistrArray& y) { return axpy(-1, y); }
@@ -92,6 +104,8 @@ void DistrArray::recip() {
 }
 
 void DistrArray::times(const DistrArray& y) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::times");
   auto name = std::string{"Array::times"};
   if (!compatible(y))
     error(name + " incompatible arrays");
@@ -101,9 +115,12 @@ void DistrArray::times(const DistrArray& y) {
     error(name + " incompatible local buffers");
   for (size_t i = 0; i < loc_x->size(); ++i)
     (*loc_x)[i] *= (*loc_y)[i];
+  prof->stop();
 }
 
 void DistrArray::times(const DistrArray& y, const DistrArray& z) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::times");
   auto name = std::string{"Array::times"};
   if (!compatible(y))
     error(name + " array y is incompatible");
@@ -116,34 +133,39 @@ void DistrArray::times(const DistrArray& y, const DistrArray& z) {
     error(name + " incompatible local buffers");
   for (size_t i = 0; i < loc_x->size(); ++i)
     (*loc_x)[i] = (*loc_y)[i] * (*loc_z)[i];
+  prof->stop();
 }
 
 DistrArray::value_type DistrArray::dot(const DistrArray& y) const {
-  auto prof = molpro::Profiler::single()->push("DistArray::dot()");
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::dot");
   auto name = std::string{"Array::dot"};
   if (!compatible(y))
     error(name + " array x is incompatible");
-  molpro::Profiler::single()->start("loc_x");
+  //molpro::Profiler::single()->start("loc_x");
   auto loc_x = local_buffer();
-  molpro::Profiler::single()->stop();
-  molpro::Profiler::single()->start("loc_y");
+  //molpro::Profiler::single()->stop();
+  //molpro::Profiler::single()->start("loc_y");
   auto loc_y = y.local_buffer();
-  molpro::Profiler::single()->stop();
+  //molpro::Profiler::single()->stop();
   if (!loc_x->compatible(*loc_y))
     error(name + " incompatible local buffers");
-  molpro::Profiler::single()->start("std::inner_product");
+  //molpro::Profiler::single()->start("std::inner_product");
   auto a = std::inner_product(begin(*loc_x), end(*loc_x), begin(*loc_y), (value_type)0);
-  molpro::Profiler::single()->stop();
+  //molpro::Profiler::single()->stop();
 #ifdef HAVE_MPI_H
-  molpro::Profiler::single()->start("MPI_Allreduce");
+  //molpro::Profiler::single()->start("MPI_Allreduce");
   MPI_Allreduce(MPI_IN_PLACE, &a, 1, MPI_DOUBLE, MPI_SUM, communicator());
-  molpro::Profiler::single()->stop();
+  //molpro::Profiler::single()->stop();
 #endif
+  prof->stop();
   return a;
 }
 
 void DistrArray::_divide(const DistrArray& y, const DistrArray& z, DistrArray::value_type shift, bool append,
                          bool negative) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::_divide");
   auto name = std::string{"Array::divide"};
   if (!compatible(y))
     error(name + " array y is incompatible");
@@ -169,11 +191,14 @@ void DistrArray::_divide(const DistrArray& y, const DistrArray& z, DistrArray::v
       for (size_t i = 0; i < loc_x->size(); ++i)
         (*loc_x)[i] = (*loc_y)[i] / ((*loc_z)[i] + shift);
   }
+  prof->stop();
 }
 
 namespace util {
 std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, double>& local_selection,
                                                   MPI_Comm communicator) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::select_max_dot_broadcast");
 #ifdef HAVE_MPI_H
   auto indices = std::vector<DistrArray::index_type>();
   auto values = std::vector<double>();
@@ -231,11 +256,14 @@ std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, dou
   for (size_t i = 0; i < n; ++i)
     local_selection.emplace(indices[i], values[i]);
 #endif
+  prof->stop();
   return local_selection;
 }
 } // namespace util
 
 std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, const DistrArray& y) const {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::select_max_dot");
   if (!compatible(y))
     error("DistrArray::select_max_dot: incompatible arrays");
   if (n > size() || n > y.size())
@@ -247,10 +275,13 @@ std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, co
   auto shifted_local_selection = decltype(local_selection)();
   for (auto& el : local_selection)
     shifted_local_selection.emplace(xbuf->start() + el.first, el.second);
+  prof->stop();
   return util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
 }
 
 std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, const DistrArray::SparseArray& y) const {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::select_max_dot");
   auto name = std::string("DistrArray::select_max_dot:");
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is too large");
@@ -262,10 +293,13 @@ std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, co
   auto shifted_local_selection = decltype(local_selection)();
   for (auto& el : local_selection)
     shifted_local_selection.emplace(xbuf->start() + el.first, el.second);
+  prof->stop();
   return util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
 }
 
 std::map<size_t, DistrArray::value_type> DistrArray::select(size_t n, bool max, bool ignore_sign) const {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::select");
   if (n > size())
     error("DistrArray::select: n is too large");
   auto xbuf = local_buffer();
@@ -277,12 +311,15 @@ std::map<size_t, DistrArray::value_type> DistrArray::select(size_t n, bool max, 
   if (not max)
     for (auto& el : result)
       el.second = -el.second;
+  prof->stop();
   return result;
 }
 
 namespace util {
 template <class Compare>
 std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(const DistrArray& x, int n) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::extrema");
   if (x.size() == 0)
     return {};
   auto buffer = x.local_buffer();
@@ -366,6 +403,7 @@ std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(con
   auto map_extrema = std::list<std::pair<DistrArray::index_type, double>>();
   for (size_t i = 0; i < n; ++i)
     map_extrema.emplace_back(indices_glob[i], values_glob[i]);
+  prof->stop();
   return map_extrema;
 }
 } // namespace util
@@ -387,13 +425,18 @@ std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> DistrArray:
 }
 
 std::vector<DistrArray::index_type> DistrArray::min_loc_n(int n) const {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::min_loc_n");
   auto min_list = min_abs_n(n);
   auto min_vec = std::vector<index_type>(n);
   std::transform(begin(min_list), end(min_list), begin(min_vec), [](const auto& p) { return p.first; });
+  prof->stop();
   return min_vec;
 }
 
 void DistrArray::copy(const DistrArray& y) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::copy");
   auto name = std::string{"Array::copy"};
   if (!compatible(y))
     error(name + " incompatible arrays");
@@ -403,9 +446,12 @@ void DistrArray::copy(const DistrArray& y) {
     error(name + " incompatible local buffers");
   for (size_t i = 0; i < loc_x->size(); ++i)
     (*loc_x)[i] = (*loc_y)[i];
+  prof->stop();
 }
 
 void DistrArray::copy_patch(const DistrArray& y, DistrArray::index_type start, DistrArray::index_type end) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::copy_patch");
   auto name = std::string{"Array::copy_patch"};
   if (!compatible(y))
     error(name + " incompatible arrays");
@@ -419,9 +465,12 @@ void DistrArray::copy_patch(const DistrArray& y, DistrArray::index_type start, D
   auto e = end - start + 1 >= loc_x->size() ? loc_x->size() : end - start + 1;
   for (auto i = s; i < e; ++i)
     (*loc_x)[i] = (*loc_y)[i];
+  prof->stop();
 }
 
 DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::dot");
   auto name = std::string{"Array::dot SparseArray "};
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is incompatible");
@@ -438,10 +487,13 @@ DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
 #ifdef HAVE_MPI_H
   MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_DOUBLE, MPI_SUM, communicator());
 #endif
+  prof->stop();
   return res;
 }
 
 void DistrArray::axpy(value_type a, const SparseArray& y) {
+  auto prof = molpro::Profiler::single();
+  prof->start("DistrArray::axpy");
   auto name = std::string{"Array::axpy SparseArray"};
   if (a == 0)
     return;
@@ -467,5 +519,6 @@ void DistrArray::axpy(value_type a, const SparseArray& y) {
         (*loc_x)[i - loc_x->start()] += a * v;
       }
   }
+  prof->stop();
 }
 } // namespace molpro::linalg::array
