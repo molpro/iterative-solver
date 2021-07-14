@@ -6,10 +6,12 @@
 #include <iostream>
 #include <vector>
 #include <numeric>
+#include <memory>
 #include <molpro/linalg/array/type_traits.h>
 #include <molpro/linalg/itsolv/wrap_util.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/Profiler.h>
+#include "stdint.h"
 
 using molpro::linalg::itsolv::VecRef;
 using molpro::linalg::itsolv::CVecRef;
@@ -65,18 +67,65 @@ void gemm_outer_default(Handler &handler, const Matrix<typename Handler::value_t
 }
 
 template <class AL, class AR = AL>
+bool is_spacing_even(const CVecRef<AL> &xx, const CVecRef<AR> &yy, /*OUT*/ long int spacing_x, long int spacing_y){
+
+  auto one = xx.at(0).get().local_buffer()->start();
+  auto two = xx.at(1).get().local_buffer()->start();
+  auto three = xx.at(2).get().local_buffer()->start();
+  auto four = xx.at(3).get().local_buffer()->start();
+  auto five = xx.at(4).get().local_buffer()->start();
+  std::cout << one << " " << two << " " << three << " " << four << " " << five << "\n";
+
+  long int prev_spacing_x = 0;
+  long int prev_spacing_y = 0;
+  auto prev_x = xx.at(0).get().local_buffer()->start();
+  auto prev_y = yy.at(0).get().local_buffer()->start();
+  for (size_t i = 0; i < xx.size(); ++i) {
+    auto loc_x = xx.at(i).get().local_buffer()->start();
+    if ( i > 0 && loc_x - prev_x != prev_spacing_x){ return false; }
+    prev_spacing_x = loc_x - prev_x;
+    prev_x = loc_x;
+  }
+
+  for (size_t i = 0; i < yy.size(); ++i) {
+    auto loc_y = yy.at(i).get().local_buffer()->start();
+    if ( i > 0 && loc_y - prev_y != prev_spacing_y){ return false; }
+    prev_spacing_y = loc_y - prev_y; 
+    prev_y = loc_y;
+  }
+
+  spacing_x = prev_spacing_x;
+  spacing_y = prev_spacing_y;
+  std::cout << "spacing (x,y): " << spacing_y << ", " << spacing_x << "\n";
+  return true;
+
+}
+
+template <class AL, class AR = AL>
 Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const CVecRef<AL> &xx,
                                                                           const CVecRef<AR> &yy) {
+  // xx and yy are at some point initialised by copying from our R vectors
+  // this info should be written to the file, without a local buffer
+  // 
   auto prof = molpro::Profiler::single()->push("gemm_inner_distr_distr");
   using value_type = typename array::mapped_or_value_type_t<AL>;
   auto mat = Matrix<value_type>({xx.size(), yy.size()});
   if (xx.size() == 0 || yy.size() == 0) return mat;
   prof += mat.cols() * mat.rows() * xx.at(0).get().local_buffer()->size()*2;
-  for (size_t j = 0; j < mat.cols(); ++j) {
-    auto loc_y = yy.at(j).get().local_buffer();
-    for (size_t i = 0; i < mat.rows(); ++i) {
-      auto loc_x = xx.at(i).get().local_buffer();
-      mat(i, j) = std::inner_product(begin(*loc_x), end(*loc_x), begin(*loc_y), (value_type)0);
+
+  long int spacing_x;
+  long int spacing_y;
+  is_spacing_even(xx, yy, spacing_x, spacing_y);
+
+  if (false){
+    std::cout << "???";
+  } else {
+    for (size_t j = 0; j < mat.cols(); ++j) {
+      auto loc_y = yy.at(j).get().local_buffer();
+      for (size_t i = 0; i < mat.rows(); ++i) {
+        auto loc_x = xx.at(i).get().local_buffer();
+        mat(i, j) = std::inner_product(begin(*loc_x), end(*loc_x), begin(*loc_y), (value_type)0);
+      }
     }
   }
 #ifdef HAVE_MPI_H
