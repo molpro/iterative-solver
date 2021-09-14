@@ -12,10 +12,11 @@
 #ifdef _WIN32
 #include <stdio.h>
 #else
-#include <sys/types.h>
-#include <sys/time.h>
 #include <sys/resource.h>
+#include <sys/time.h>
+#include <sys/types.h>
 #endif
+#include <iostream>
 
 namespace molpro::linalg::array {
 namespace {
@@ -56,8 +57,8 @@ DistrArrayFile::DistrArrayFile(size_t dimension, MPI_Comm comm, const std::strin
                      comm, directory) {}
 
 DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm, const std::string& directory)
-    : DistrArrayDisk(std::move(distribution), comm), m_directory(fs::absolute(fs::path(directory)).native()),
-      m_filename(util::temp_file_name((fs::path(m_directory) / "DistrArrayFile-").native(), ".dat")),
+    : DistrArrayDisk(std::move(distribution), comm), m_directory(fs::absolute(fs::path(directory))),
+      m_filename(util::temp_file_name((fs::path(m_directory) / "DistrArrayFile-"), ".dat")),
       m_stream(std::make_unique<std::fstream>(m_filename,
                                               std::ios::out | std::ios::binary | std::ios::trunc | std::ios::in)) {
   {
@@ -75,8 +76,10 @@ DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_C
   }
   if (m_distribution->border().first != 0)
     DistrArray::error("Distribution of array must start from 0");
-  if (not m_stream->is_open())
-    DistrArray::error("Failure to open " + m_filename + ": " + std::strerror(errno));
+  if (not m_stream->is_open()) {
+    std::cerr << "File " << m_filename << ": ";
+    DistrArray::error(std::string{"Failure to open file, "} + std::strerror(errno));
+  }
 #if !defined(_WIN32) && !defined(WIN32)
   fs::remove(m_filename);
 #endif
@@ -179,8 +182,10 @@ void DistrArrayFile::get(DistrArray::index_type lo, DistrArray::index_type hi, D
   if (readlength == 0)
     return;
   m_stream->read((char*)buf, readlength);
-  if (m_stream->fail())
-    throw std::runtime_error("Error in reading " + m_filename + ": " + std::strerror(errno));
+  if (m_stream->fail()) {
+    std::cerr << "File " << m_filename << ": ";
+    throw std::runtime_error(std::string{"Error in reading ,"} + std::strerror(errno));
+  }
 }
 
 std::vector<DistrArrayFile::value_type> DistrArrayFile::get(DistrArray::index_type lo,
