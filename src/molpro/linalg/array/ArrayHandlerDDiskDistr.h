@@ -20,7 +20,7 @@ public:
   using typename ArrayHandler<AL, AR>::ProxyHandle;
 
   ArrayHandlerDDiskDistr()
-      : ArrayHandler<AL, AR>(), m_copy_func([](const AR &source) { return AL::CreateTempCopy(source); }) {}
+      : ArrayHandler<AL, AR>(), m_copy_func([](const AR &source) { std::cout << "ArrayHandlerDDiskDistr m_copy_func"<<std::endl;return AL::CreateTempCopy(source); }) {}
 
   /*!
    * @brief Constructor taking a copy function.
@@ -38,7 +38,9 @@ public:
   using ArrayHandler<AL, AR>::lazy_handle;
   using ArrayHandler<AL, AR>::error;
 
-  AL copy(const AR &source) override { this->m_counter->copy++; return m_copy_func(source); };
+  AL copy(const AR &source) override { this->m_counter->copy++;
+    std::cout << "ArrayHanderDDiskDistr::copy() about to call m_copy_func"<<std::endl;
+  return m_copy_func(source); };
 
   void copy(AL &x, const AR &y) override { this->m_counter->copy++; x.copy(y); };
 

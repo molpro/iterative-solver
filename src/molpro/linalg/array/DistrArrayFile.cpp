@@ -1,3 +1,4 @@
+#include <iostream>
 #include <unistd.h>
 
 #include <cstring>
@@ -60,6 +61,7 @@ DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_C
       m_stream(std::make_unique<std::fstream>(m_filename,
                                               std::ios::out | std::ios::binary | std::ios::trunc | std::ios::in)) {
   {
+    std::cout << "DistrArrayFile() "<<this<<" "<<m_filename<<std::endl;
 #ifdef _WIN32
     _setmaxstdio(8192);
 #else
@@ -82,27 +84,42 @@ DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_C
 
 DistrArrayFile::DistrArrayFile(const DistrArrayFile& source)
     : DistrArrayFile(std::make_unique<Distribution>(source.distribution()), source.communicator()) {
+  std::cout << "DistrArrayFile(DistrArrayFile&) "<<source.m_filename<<std::endl;
   DistrArrayFile::copy(source);
+}
+
+DistrArrayFile::DistrArrayFile(DistrArrayFile&& source)
+    : DistrArrayDisk(std::move(source))
+    , m_directory(std::move(source.m_directory))
+      , m_filename(std::move(source.m_filename))
+    , m_stream(std::move(source.m_stream))
+    {
+  std::cout << "DistrArrayFile(DistrArrayFile&&) "<<source.m_filename<<std::endl;
 }
 
 DistrArrayFile::DistrArrayFile(const DistrArray& source)
     : DistrArrayFile(std::make_unique<Distribution>(source.distribution()), source.communicator()) {
+  std::cout << "DistrArrayFile::operator=(DistrArray&) "<<std::endl;
   DistrArrayFile::copy(source);
 }
 
 DistrArrayFile& DistrArrayFile::operator=(DistrArrayFile&& source) noexcept {
+  std::cout << "DistrArrayFile::operator=(&&) "<<source.m_filename<<std::endl;
   DistrArrayFile t{std::move(source)};
   swap(*this, t);
   return *this;
 }
 
 DistrArrayFile DistrArrayFile::CreateTempCopy(const DistrArray& source, const std::string& directory) {
+  std::cout << "enter DistrArrayFile::CreateTempCopy() "<<std::endl;
   DistrArrayFile t(std::make_unique<Distribution>(source.distribution()), source.communicator(), directory);
   t.copy(source);
+  std::cout << "exit DistrArrayFile::CreateTempCopy() "<<t.m_filename<<std::endl;
   return t;
 }
 
 void swap(DistrArrayFile& x, DistrArrayFile& y) noexcept {
+  std::cout << "DistrArrayFile::swap() "<<x.m_filename<<" "<<y.m_filename<<std::endl;
   using std::swap;
   swap(x.m_dimension, y.m_dimension);
   swap(x.m_communicator, y.m_communicator);
@@ -114,10 +131,12 @@ void swap(DistrArrayFile& x, DistrArrayFile& y) noexcept {
 }
 
 DistrArrayFile::~DistrArrayFile() {
-  m_stream->close();
-  if (m_stream.release() != nullptr) {
+  if (m_stream.get() != nullptr) {
+    m_stream->close();
+    std::cout << "~DistrArrayFile() "<<this<<" "<<m_filename<<std::endl;
     if (fs::exists(m_filename))
       fs::remove(m_filename);
+    m_stream.release();
   }
 }
 
@@ -166,6 +185,7 @@ void DistrArrayFile::get(DistrArray::index_type lo, DistrArray::index_type hi, D
 
 std::vector<DistrArrayFile::value_type> DistrArrayFile::get(DistrArray::index_type lo,
                                                             DistrArray::index_type hi) const {
+  std::cout << "DistrArrayFile::get() " << m_filename<<" "<<lo<<" "<<hi<<std::endl;
   if (lo >= hi)
     return {};
   auto buf = std::vector<DistrArray::value_type>(hi - lo);
@@ -174,6 +194,7 @@ std::vector<DistrArrayFile::value_type> DistrArrayFile::get(DistrArray::index_ty
 }
 
 void DistrArrayFile::put(DistrArray::index_type lo, DistrArray::index_type hi, const DistrArray::value_type* data) {
+  std::cout << "DistrArrayFile::put() " << m_filename<<" "<<lo<<" "<<hi<<std::endl;
   auto lock = std::lock_guard<std::mutex>(m_mutex);
   if (lo >= hi)
     return;

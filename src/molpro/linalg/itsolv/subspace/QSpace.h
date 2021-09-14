@@ -78,6 +78,7 @@ struct QSpace {
     m_logger->msg("QSpace::update", Logger::Trace);
     auto it_begin = m_params.begin();
     for (size_t i = 0; i < params.size(); ++i) {
+      std::cout << "copy R->Q "<<i<<std::endl;
       m_params.emplace(it_begin,
                        qspace::QParam<Q>{std::make_unique<Q>(m_handlers->qr().copy(params.at(i))),
                                          std::make_unique<Q>(m_handlers->qr().copy(actions.at(i))), m_unique_id++});
