@@ -35,14 +35,12 @@ PROGRAM Linear_Equations_Example
   DO iaug = 1, SIZE(augmented_hessian_factors)
     augmented_hessian = augmented_hessian_factors(iaug)
     PRINT *, 'solve linear system with augmented hessian factor ', augmented_hessian
-    CALL Iterative_Solver_Linear_Equations_Initialize(n, nroot, rhs, augmented_hessian, thresh = 1d-11, verbosity = 4)
+    CALL Iterative_Solver_Linear_Equations_Initialize(n, nroot, rhs, augmented_hessian, thresh = 1d-11, verbosity = 1)
     c = 0; DO i = 1, nroot; c(i, i) = 1;
     ENDDO
     DO i = 1, n
       g = MATMUL(m, c)
-      write (6,*) '!! before add_vector'
       nwork = Iterative_Solver_Add_Vector(c, g)
-      write (6,*) '!! after add_vector'
         DO root = 1, nwork
           DO j = 1, n
             c(j, root) = c(j, root) - g(j, root) / m(j, j)

@@ -29,13 +29,11 @@ DistrArrayDisk::DistrArrayDisk() = default;
 
 DistrArrayDisk::DistrArrayDisk(const DistrArray& source)
     : DistrArray(source), m_distribution(std::make_unique<Distribution>(source.distribution())) {
-  std::cout << "DistrArrayDisk(const DistrArray& source)"<<std::endl;
   copy(source);
 }
 
 DistrArrayDisk::DistrArrayDisk(DistrArrayDisk&& source) noexcept
     : DistrArray(source), m_distribution(std::move(source.m_distribution)) {
-  std::cout << "DistrArrayDisk::DistrArrayDisk(DistrArrayDisk&& source) "<<this<<" <- "<<&source<<std::endl;
   using std::swap;
   if (source.m_allocated) {
     swap(m_allocated, source.m_allocated);
@@ -45,25 +43,22 @@ DistrArrayDisk::DistrArrayDisk(DistrArrayDisk&& source) noexcept
 DistrArrayDisk::~DistrArrayDisk() = default;
 
 void DistrArrayDisk::copy(const DistrArray& y) {
-  std::cout << "enter DistrArrayDisk::copy() "<<this<<" from "<<&y <<std::endl;
   auto name = std::string{"Array::copy"};
   if (!compatible(y))
     error(name + " incompatible arrays");
-//  auto loc_x = local_buffer();
   auto loc_y = y.local_buffer();
   auto range = m_distribution->range(mpi_rank(m_communicator));
   put(range.first, range.second,loc_y->data());
-  std::cout << "exit DistrArrayDisk::copy() "<<std::endl;
 }
 
 DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source) : m_source{source} {
-    std::cout << "DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source)  " << this << std::endl;
+  //  std::cout << "DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source)  " << this << std::endl;
   int rank = mpi_rank(source.communicator());
   index_type hi;
   std::tie(m_start, hi) = source.distribution().range(rank);
   m_size = hi - m_start;
-    std::cout << "LocalBufferDisk " << this << " resizes from  " << m_snapshot_buffer.size() << " to " << m_size
-              << std::endl;
+  //  std::cout << "LocalBufferDisk " << this << " resizes from  " << m_snapshot_buffer.size() << " to " << m_size
+  //            << std::endl;
   m_snapshot_buffer.resize(m_size);
   m_buffer = &m_snapshot_buffer[0];
   source.get(start(), start() + size(), m_buffer);
@@ -71,7 +66,6 @@ DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source) : m_sou
 
 DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source, const Span<value_type>& buffer)
     : m_source{source} {
-  std::cout << "DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source, const Span<value_type>& buffer)  " << this << std::endl;
   int rank = mpi_rank(source.communicator());
   index_type hi;
   std::tie(m_start, hi) = source.distribution().range(rank);
@@ -83,7 +77,7 @@ DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source, const S
 }
 
 DistrArrayDisk::LocalBufferDisk::~LocalBufferDisk() {
-    std::cout << "LocalBufferDisk destructor " << this << ", size = " << m_snapshot_buffer.size() << std::endl;
+  //  std::cout << "LocalBufferDisk destructor " << this << ", size = " << m_snapshot_buffer.size() << std::endl;
   if (do_dump)
     m_source.put(start(), start() + size(), m_buffer);
 }
@@ -95,23 +89,19 @@ const DistrArray::Distribution& DistrArrayDisk::distribution() const {
 }
 
 std::unique_ptr<DistrArray::LocalBuffer> DistrArrayDisk::local_buffer() {
-  std::cout << "DistrArrayDisk::local_buffer() "<<this<<std::endl;
   return std::make_unique<LocalBufferDisk>(*this);
 }
 
 std::unique_ptr<const DistrArray::LocalBuffer> DistrArrayDisk::local_buffer() const {
-  std::cout << "DistrArrayDisk::local_buffer() const "<<this<<std::endl;
   auto l = std::make_unique<LocalBufferDisk>(*const_cast<DistrArrayDisk*>(this));
   l->do_dump = false;
   return l;
 }
 
 std::unique_ptr<DistrArray::LocalBuffer> DistrArrayDisk::local_buffer(const Span<value_type>& buffer) {
-  std::cout << "DistrArrayDisk::local_buffer(Span) "<<this<<std::endl;
   return std::make_unique<LocalBufferDisk>(*this, buffer);
 }
 std::unique_ptr<const DistrArray::LocalBuffer> DistrArrayDisk::local_buffer(const Span<value_type>& buffer) const {
-  std::cout << "DistrArrayDisk::local_buffer(Span) const "<<this<<std::endl;
   auto l = std::make_unique<LocalBufferDisk>(*const_cast<DistrArrayDisk*>(this), buffer);
   l->do_dump = false;
   return l;

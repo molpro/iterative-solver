@@ -207,11 +207,8 @@ public:
   //! For a system of linear equations Ax=b, adds rhs vectors b.
   void add_rhs_equations(const CVecRef<R>& rhs) {
     m_rhs.reserve(m_rhs.size()+rhs.size());
-    for (const auto& r : rhs) {
-      std::cout << "RHS R->Q start &r="<<&(r.get())<<std::endl;
+    for (const auto& r : rhs)
       m_rhs.emplace_back(this->m_handlers->qr().copy(r));
-      std::cout << "RHS R->Q end"<<std::endl;
-    }
     for (const auto& r : rhs) {
       auto d = std::abs(this->m_handlers->rr().dot(r, r));
       if (d == 0)

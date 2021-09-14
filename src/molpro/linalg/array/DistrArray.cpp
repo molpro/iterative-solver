@@ -389,7 +389,6 @@ std::vector<DistrArray::index_type> DistrArray::min_loc_n(int n) const {
 }
 
 void DistrArray::copy(const DistrArray& y) {
-  std::cout << "enter DistrArray::copy() "<<this<<" from "<<&y <<std::endl;
   auto name = std::string{"Array::copy"};
   if (!compatible(y))
     error(name + " incompatible arrays");
@@ -399,7 +398,6 @@ void DistrArray::copy(const DistrArray& y) {
     error(name + " incompatible local buffers");
   for (size_t i = 0; i < loc_x->size(); ++i)
     (*loc_x)[i] = (*loc_y)[i];
-  std::cout << "exit DistrArray::copy() "<<std::endl;
 }
 
 void DistrArray::copy_patch(const DistrArray& y, DistrArray::index_type start, DistrArray::index_type end) {
