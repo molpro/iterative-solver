@@ -142,17 +142,22 @@ TEST(TestGemm, ddiskdistr_inner) {
     cx.back().put(crange.first, crange.second, &(*(vx[i].cbegin() + crange.first)));
     cy.emplace_back(dim, Span<DistrArraySpan::value_type>(&vy[i][crange.first], clength), comm_global());
   }
+  
   std::vector<double> vref(n * n), vgemm(n * n);
   std::pair<size_t, size_t> mat_dim = std::make_pair(n, n);
   Matrix<double> gemm_dot(vref, mat_dim);
   Matrix<double> ref_dot(vgemm, mat_dim);
-  gemm_dot = handler.gemm_inner(cwrap(cx), cwrap(cy));
+  EXPECT_THROW(gemm_dot = handler.gemm_inner(cwrap(cx), cwrap(cy)), std::runtime_error);
+  // This might be temporary
+  // gemm_dot = handler.gemm_inner(cwrap(cx), cwrap(cy));
+  /*
   for (size_t i = 0; i < n; i++) {
     for (size_t j = 0; j < n; j++) {
       ref_dot(i, j) = handler.dot(cx[i], cy[j]);
     }
   }
   EXPECT_THAT(vgemm, Pointwise(DoubleEq(), vref));
+  */
 }
 
 TEST(TestGemm, distrddisk_inner) {
@@ -396,6 +401,8 @@ TEST(TestGemm, ddiskdistr_outer) {
   std::iota(coeff.begin(), coeff.end(), 1);
   std::pair<size_t, size_t> mat_dim = std::make_pair(n, n);
   Matrix<double> alpha(coeff, mat_dim);
+  EXPECT_THROW(handler.gemm_outer(alpha, cwrap(cz), wrap(cx)), std::runtime_error);
+  /* this might be temporary
   handler.gemm_outer(alpha, cwrap(cz), wrap(cx));
   for (size_t i = 0; i < n; i++) {
     for (size_t j = 0; j < n; j++) {
@@ -409,6 +416,7 @@ TEST(TestGemm, ddiskdistr_outer) {
     cy[i].get(crange.first, crange.second, &(*(ty.begin() + crange.first)));
     EXPECT_THAT(ty, Pointwise(DoubleEq(), tx));
   }
+  */
 }
 
 TEST(TestGemm, ddisk_outer) {

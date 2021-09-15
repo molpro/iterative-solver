@@ -89,19 +89,23 @@ const DistrArray::Distribution& DistrArrayDisk::distribution() const {
 }
 
 std::unique_ptr<DistrArray::LocalBuffer> DistrArrayDisk::local_buffer() {
+  //throw std::runtime_error("local_buffer created (this should never happen)");
   return std::make_unique<LocalBufferDisk>(*this);
 }
 
 std::unique_ptr<const DistrArray::LocalBuffer> DistrArrayDisk::local_buffer() const {
+  //throw std::runtime_error("local_buffer created (this should never happen)");
   auto l = std::make_unique<LocalBufferDisk>(*const_cast<DistrArrayDisk*>(this));
   l->do_dump = false;
   return l;
 }
 
 std::unique_ptr<DistrArray::LocalBuffer> DistrArrayDisk::local_buffer(const Span<value_type>& buffer) {
+  //throw std::runtime_error("local_buffer created (this should never happen)");
   return std::make_unique<LocalBufferDisk>(*this, buffer);
 }
 std::unique_ptr<const DistrArray::LocalBuffer> DistrArrayDisk::local_buffer(const Span<value_type>& buffer) const {
+  //throw std::runtime_error("local_buffer created (this should never happen)");
   auto l = std::make_unique<LocalBufferDisk>(*const_cast<DistrArrayDisk*>(this), buffer);
   l->do_dump = false;
   return l;

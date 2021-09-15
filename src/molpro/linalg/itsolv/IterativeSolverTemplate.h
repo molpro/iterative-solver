@@ -420,6 +420,12 @@ protected:
         dotgraph_file.end())
       profiler()->dotgraph(dotgraph_file, options()->parameter("PROFILER_THRESHOLD", .01));
     molpro::Profiler::single()->set_max_depth(m_profiler_saved_depth);
+    auto print_prof = options()->parameter("PRINT_PROFILE", 1);
+    if (print_prof > 0){
+      //auto profile = molpro::Profiler::single();
+      // std::cout << *profile << "\n"; // todo: fix this
+    }
+
   }
 
   //! Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)
