@@ -27,9 +27,9 @@ DistrArrayDisk::DistrArrayDisk(std::unique_ptr<Distribution> distr, MPI_Comm com
 
 DistrArrayDisk::DistrArrayDisk() = default;
 
-DistrArrayDisk::DistrArrayDisk(const DistrArrayDisk& source)
-    : DistrArray(source), m_distribution(std::make_unique<Distribution>(*source.m_distribution)) {
-  DistrArray::copy(source);
+DistrArrayDisk::DistrArrayDisk(const DistrArray& source)
+    : DistrArray(source), m_distribution(std::make_unique<Distribution>(source.distribution())) {
+  copy(source);
 }
 
 DistrArrayDisk::DistrArrayDisk(DistrArrayDisk&& source) noexcept
@@ -42,8 +42,17 @@ DistrArrayDisk::DistrArrayDisk(DistrArrayDisk&& source) noexcept
 
 DistrArrayDisk::~DistrArrayDisk() = default;
 
+void DistrArrayDisk::copy(const DistrArray& y) {
+  auto name = std::string{"Array::copy"};
+  if (!compatible(y))
+    error(name + " incompatible arrays");
+  auto loc_y = y.local_buffer();
+  auto range = m_distribution->range(mpi_rank(m_communicator));
+  put(range.first, range.second,loc_y->data());
+}
+
 DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source) : m_source{source} {
-  //  std::cout << "LocalBufferDisk constructor " << this << std::endl;
+  //  std::cout << "DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source)  " << this << std::endl;
   int rank = mpi_rank(source.communicator());
   index_type hi;
   std::tie(m_start, hi) = source.distribution().range(rank);
@@ -80,19 +89,23 @@ const DistrArray::Distribution& DistrArrayDisk::distribution() const {
 }
 
 std::unique_ptr<DistrArray::LocalBuffer> DistrArrayDisk::local_buffer() {
+  //throw std::runtime_error("local_buffer created (this should never happen)");
   return std::make_unique<LocalBufferDisk>(*this);
 }
 
 std::unique_ptr<const DistrArray::LocalBuffer> DistrArrayDisk::local_buffer() const {
+  //throw std::runtime_error("local_buffer created (this should never happen)");
   auto l = std::make_unique<LocalBufferDisk>(*const_cast<DistrArrayDisk*>(this));
   l->do_dump = false;
   return l;
 }
 
 std::unique_ptr<DistrArray::LocalBuffer> DistrArrayDisk::local_buffer(const Span<value_type>& buffer) {
+  //throw std::runtime_error("local_buffer created (this should never happen)");
   return std::make_unique<LocalBufferDisk>(*this, buffer);
 }
 std::unique_ptr<const DistrArray::LocalBuffer> DistrArrayDisk::local_buffer(const Span<value_type>& buffer) const {
+  //throw std::runtime_error("local_buffer created (this should never happen)");
   auto l = std::make_unique<LocalBufferDisk>(*const_cast<DistrArrayDisk*>(this), buffer);
   l->do_dump = false;
   return l;
