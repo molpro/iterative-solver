@@ -35,7 +35,7 @@ int mpi_rank(MPI_Comm comm) {
     return molpro::mpi::rank_global();
 #ifdef HAVE_MPI_H
   int rank;
-  MPI_Comm_rank(comm, &rank);
+  std::cout << "daf comm_rank \n"; MPI_Comm_rank(comm, &rank);
   return rank;
 #endif
   throw std::logic_error("Attempt to access MPI communicator in serial mode");

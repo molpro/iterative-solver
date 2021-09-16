@@ -10,7 +10,7 @@ namespace molpro::linalg::array::util {
 #ifdef HAVE_MPI_H
 fs::path temp_file_name(const fs::path& base_name, const std::string& suffix, MPI_Comm comm) {
   int rank;
-  MPI_Comm_rank(comm, &rank);
+  std::cout << "temp file comm_rank \n"; MPI_Comm_rank(comm, &rank);
   auto fname = rank != 0 ? fs::path{""}.native() : temp_file_name(base_name, suffix).native();
   int fnamesize = fname.size();
   MPI_Bcast(&fnamesize, 1, MPI_INT, 0, comm);

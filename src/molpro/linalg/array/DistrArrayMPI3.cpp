@@ -84,7 +84,7 @@ void DistrArrayMPI3::allocate_buffer() {
   if (!m_distribution)
     error("Cannot allocate an array without distribution");
   int rank;
-  MPI_Comm_rank(m_communicator, &rank);
+  std::cout << "dam comm_rank \n"; MPI_Comm_rank(m_communicator, &rank);
   index_type lo, hi;
   std::tie(lo, hi) = m_distribution->range(rank);
   MPI_Aint n = hi - lo;
@@ -99,7 +99,7 @@ void DistrArrayMPI3::allocate_buffer() {
 DistrArrayMPI3::DistrArrayMPI3(std::unique_ptr<Distribution> distribution, MPI_Comm commun, Span<value_type> buffer)
     : DistrArray(distribution->border().second, commun), m_distribution(std::move(distribution)) {
   int rank;
-  MPI_Comm_rank(m_communicator, &rank);
+  std::cout << "dam comm_rank \n"; MPI_Comm_rank(m_communicator, &rank);
   index_type lo, hi;
   std::tie(lo, hi) = m_distribution->range(rank);
   MPI_Aint n = hi - lo;
@@ -235,7 +235,7 @@ DistrArrayMPI3::LocalBufferMPI3::LocalBufferMPI3(DistrArrayMPI3& source) {
   if (!source.m_allocated)
     source.error("attempting to access local buffer of empty array");
   int rank;
-  MPI_Comm_rank(source.communicator(), &rank);
+  std::cout << "locbuf comm_rank \n"; MPI_Comm_rank(source.communicator(), &rank);
   index_type hi;
   std::tie(m_start, hi) = source.distribution().range(rank);
   m_size = hi - m_start;

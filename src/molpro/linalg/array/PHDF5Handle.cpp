@@ -42,7 +42,7 @@ PHDF5Handle& PHDF5Handle::operator=(PHDF5Handle&& source) noexcept {
 }
 PHDF5Handle::~PHDF5Handle() {
   int rank;
-  MPI_Comm_rank(communicator(), &rank);
+  std::cout << "phdf5 comm_rank \n"; MPI_Comm_rank(communicator(), &rank);
   PHDF5Handle::close_file();
   if (m_erase_file_on_destroy) {
     if (rank == 0)

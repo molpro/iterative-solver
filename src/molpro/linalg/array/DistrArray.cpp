@@ -183,7 +183,7 @@ std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, dou
   int n_dummy = static_cast<int>(n) - local_selection.size();
   MPI_Request requests[3];
   int comm_rank, comm_size;
-  MPI_Comm_rank(communicator, &comm_rank);
+  std::cout << "da comm_rank \n"; MPI_Comm_rank(communicator, &comm_rank);
   MPI_Comm_size(communicator, &comm_size);
   if (comm_rank == 0) {
     auto n_tot = n * comm_size;
@@ -306,7 +306,7 @@ std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(con
 #ifdef HAVE_MPI_H
   MPI_Request requests[3];
   int comm_rank, comm_size;
-  MPI_Comm_rank(x.communicator(), &comm_rank);
+  std::cout << "da x comm_rank \n"; MPI_Comm_rank(x.communicator(), &comm_rank);
   MPI_Comm_size(x.communicator(), &comm_size);
   // root collects values, does the final sort and sends the result back
   if (comm_rank == 0) {

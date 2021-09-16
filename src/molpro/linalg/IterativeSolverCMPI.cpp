@@ -76,7 +76,7 @@ std::stack<Instance> instances;
 std::pair<size_t, size_t> DistrArrayDefaultRange() {
   auto& instance = instances.top();
   int mpi_rank, comm_size;
-  MPI_Comm_rank(instance.comm, &mpi_rank);
+  std::cout << "cmpi comm_rank \n"; MPI_Comm_rank(instance.comm, &mpi_rank);
   MPI_Comm_size(instance.comm, &comm_size);
   auto d = make_distribution_spread_remainder<size_t>(instance.dimension, comm_size);
   auto range = d.range(mpi_rank);
@@ -87,7 +87,7 @@ std::vector<Rvector> CreateDistrArray(size_t nvec, double* data) {
   auto& instance = instances.top();
   MPI_Comm ccomm = instance.comm;
   int mpi_rank, comm_size;
-  MPI_Comm_rank(instance.comm, &mpi_rank);
+  std::cout << "cmpi comm_rank \n"; MPI_Comm_rank(instance.comm, &mpi_rank);
   MPI_Comm_size(instance.comm, &comm_size);
   auto distr = make_distribution_spread_remainder<size_t>(instance.dimension, comm_size);
   auto range = distr.range(mpi_rank);
@@ -106,7 +106,7 @@ std::vector<Rvector> CreateDistrArray(size_t nvec, const double* data) {
   auto& instance = instances.top();
   MPI_Comm ccomm = instance.comm;
   int mpi_rank, comm_size;
-  MPI_Comm_rank(instance.comm, &mpi_rank);
+  std::cout << "cmpi comm_rank \n"; MPI_Comm_rank(instance.comm, &mpi_rank);
   MPI_Comm_size(instance.comm, &comm_size);
   auto distr = make_distribution_spread_remainder<size_t>(instance.dimension, comm_size);
   auto range = distr.range(mpi_rank);
@@ -133,7 +133,7 @@ void DistrArraySynchronize(size_t nvec, std::vector<Rvector>& c, double* data) {
 std::pair<size_t, size_t> DistrArrayGetRange(Rvector& rvec) {
   auto& instance = instances.top();
   int mpi_rank;
-  MPI_Comm_rank(instance.comm, &mpi_rank);
+  std::cout << "cmpi comm_rank \n"; MPI_Comm_rank(instance.comm, &mpi_rank);
   auto range = rvec.distribution().range(mpi_rank);
   return range;
 }

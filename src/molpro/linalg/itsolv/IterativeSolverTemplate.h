@@ -420,6 +420,13 @@ protected:
         dotgraph_file.end())
       profiler()->dotgraph(dotgraph_file, options()->parameter("PROFILER_THRESHOLD", .01));
     molpro::Profiler::single()->set_max_depth(m_profiler_saved_depth);
+    if (options()->parameter("PRINT_PROFILE", 1) > 0){
+      auto profile = molpro::Profiler::single();
+      std::cout << *profile << "\n";
+#ifdef HAVE_MPI_H
+      MPI_Finalize();
+#endif
+    }
   }
 
   //! Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)

@@ -18,7 +18,7 @@ int get_communicator_size(MPI_Comm comm) {
 
 int get_communicator_rank(MPI_Comm comm) {
   int rank;
-  MPI_Comm_rank(comm, &rank);
+  std::cout << "ga comm_rank \n"; MPI_Comm_rank(comm, &rank);
   return rank;
 }
 
@@ -230,7 +230,7 @@ void DistrArrayGA::allocate_buffer() {
     int loc_size, glob_size, glob_rank;
     MPI_Comm_size(m_communicator, &loc_size);
     MPI_Comm_size(GA_MPI_Comm(), &glob_size);
-    MPI_Comm_rank(GA_MPI_Comm(), &glob_rank);
+    std::cout << "da comm_rank \n"; MPI_Comm_rank(GA_MPI_Comm(), &glob_rank);
     auto glob_ranks = std::vector<int>(loc_size);
     MPI_Allgather(&glob_rank, 1, MPI_INT, glob_ranks.data(), 1, MPI_INT, m_communicator);
     // create new GA processor group

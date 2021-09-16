@@ -3,8 +3,8 @@
 namespace {
 int mpi_rank(MPI_Comm comm) {
   int rank;
-  MPI_Comm_rank(comm, &rank);
-  return rank;
+  std::cout << "distrflags comm_rank \n"; MPI_Comm_rank(comm, &rank);
+  return rank; 
 }
 
 } // namespace

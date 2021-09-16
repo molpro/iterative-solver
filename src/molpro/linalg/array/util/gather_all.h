@@ -14,8 +14,8 @@ namespace molpro::linalg::array::util {
  */
 void gather_all(const Distribution<size_t>& distr, MPI_Comm commun, double* first_elem) {
   int nproc, mpi_rank;
-  MPI_Comm_size(commun, &nproc);
-  MPI_Comm_rank(commun, &mpi_rank);
+  MPI_Comm_size(commun, &nproc); 
+  std::cout << "gather comm_rank \n"; MPI_Comm_rank(commun, &mpi_rank);
   int chunks[nproc], displs[nproc];
   for (int i = 0; i < nproc; i++) {
     displs[i] = distr.range(i).first;
