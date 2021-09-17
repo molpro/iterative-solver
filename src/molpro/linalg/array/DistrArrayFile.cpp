@@ -4,6 +4,7 @@
 #include <molpro/linalg/array/DistrArrayFile.h>
 #include <molpro/linalg/array/util/Distribution.h>
 #include <molpro/linalg/array/util/temp_file.h>
+#include "util/select.h"
 #include <utility>
 
 #include <memory>
@@ -261,6 +262,21 @@ std::vector<DistrArrayFile::value_type> DistrArrayFile::vec() const {
   auto bounds_loc = local_bounds();
   std::tie(lo_loc, hi_loc) = {std::get<0>(bounds_loc), std::get<1>(bounds_loc)};
   return get(lo_loc, hi_loc);
+}
+
+std::map<size_t, DistrArray::value_type> DistrArrayFile::select(size_t n, bool max, bool ignore_sign) const {
+  if (n > size())
+    error("DistrArray::select: n is too large");
+  auto xbuf = local_buffer();
+  auto local_selection = util::select<LocalBuffer, DistrArray::value_type>(std::min(n, xbuf->size()), *xbuf, max, ignore_sign);
+  auto shifted_local_selection = decltype(local_selection)();
+  for (const auto& el : local_selection)
+    shifted_local_selection.emplace(xbuf->start() + el.first, max ? el.second : -el.second);
+  std::map<size_t, double> result = util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
+  if (not max)
+    for (auto& el : result)
+      el.second = -el.second;
+  return result;
 }
 
 } // namespace molpro::linalg::array

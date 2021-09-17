@@ -4,7 +4,19 @@
 #include <molpro/linalg/array/util/select_max_dot.h>
 #include <molpro/linalg/array/util/select.h>
 
+#include <molpro/linalg/array/DistrArrayDisk.h>
+#include <molpro/linalg/array/DistrArrayFile.h>
+#include <molpro/linalg/array/DistrArraySpan.h>
+#include <molpro/linalg/array/util.h>
+#include <molpro/linalg/array/util/Distribution.h>
+
 #include <complex>
+#include <memory>
+
+#include <mpi.h>
+#include <molpro/mpi.h>
+
+
 
 using molpro::linalg::array::util::select_max_dot;
 using molpro::linalg::array::util::select_max_dot_iter_sparse;
@@ -97,6 +109,27 @@ TYPED_TEST_P(Test_select, sparse) {
   ASSERT_THAT(select, ContainerEq(ref_result));
   select = select_sparse<decltype(x), value_type>(ref_result.size() + 1, x);
   ASSERT_THAT(select, ContainerEq(ref_result)) << "sparse should be able to return a smaller selection than asked for";
+}
+
+TEST(Test_select, DistrArrayFile){
+  using std::abs;
+  using value_type_L = double;
+  using value_type = double;
+  auto x_vec = std::vector<value_type_L>{1, -2, 1, 0, 3, 0, -4, 1};
+  auto span = molpro::linalg::array::DistrArraySpan(x_vec.size(), molpro::linalg::array::span::Span(x_vec.data(), x_vec.size()));
+  molpro::linalg::array::util::Distribution distribution = span.distribution();
+  auto x = molpro::linalg::array::DistrArrayFile(std::make_unique<molpro::linalg::array::util::Distribution<size_t>>(distribution));
+  for (size_t i=0; i<x_vec.size(); i++){
+    x.set(i, x_vec[i]); //not elegant
+  }
+  //TODO: for some reason, the new select misses the first element
+  auto ref_result_max = std::map<size_t, value_type>{{4, 3}, {2, 1}, {0, 1}, {7, 1}};
+  auto select_max = select<value_type>(ref_result_max.size(), x, true);
+  EXPECT_THAT(select_max, ContainerEq(ref_result_max));
+  auto ref_result_min = std::map<size_t, value_type>{{6, -4}, {1, -2}};
+  auto select_min = select<value_type>(ref_result_min.size(), x);
+  ASSERT_THAT(select_min, ContainerEq(ref_result_min));
+  MPI_Finalize();
 }
 
 REGISTER_TYPED_TEST_SUITE_P(Test_select, iterable, sparse);
