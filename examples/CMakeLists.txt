@@ -78,3 +78,4 @@ file(COPY bh.hamiltonian DESTINATION .)
 file(COPY hf.hamiltonian DESTINATION .)
 
 add_subdirectory(foreign-container)
+add_subdirectory(experiments)
