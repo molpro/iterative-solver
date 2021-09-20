@@ -38,9 +38,14 @@ auto select(size_t n, const X& x, bool max = false, bool ignore_sign = false) {
   auto selection = std::priority_queue<select_pair, std::vector<select_pair>, greater<select_pair>>();
   auto ix = begin(x);
   for (size_t i = 0; i < n; ++i, ++ix) {
+    auto var = max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix));
+    std::cout << "emplacing " << var << "\n";
     selection.emplace(max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix)), i);
   }
+  std::cout << "range = " << x.size() << "\n";
   for (size_t i = n; i < x.size(); ++i, ++ix) {
+    auto var = max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix));
+    std::cout << "emplacing2 " << var << "\n";
     selection.emplace(max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix)), i);
     selection.pop();
   }
@@ -75,15 +80,22 @@ auto select(size_t n, const DistrArrayDisk& x, bool max = false, bool ignore_sig
 
   size_t offset = 0; // create selection (n values, small)
   size_t initial_max = n > buf_size ? buf_size : n;
+  size_t ix = 0;
+  auto buffer = x_buf.begin();
   for (auto buffer = x_buf.begin(); buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
-    for (size_t i = 0; i < n; ++i) {
-      selection.emplace(max ? (ignore_sign ? abs((*buffer)[i]) : (*buffer)[i]) : (ignore_sign ? -abs((*buffer)[i]) : -(*buffer)[i]), i+offset);
+    for (size_t i = 0; i < n; ++i, ++ix) {
+      auto var = max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]);
+      std::cout << "emplacing " << var << " at "<< i << "\n";
+      selection.emplace(max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]), i+offset);
     }
   }
   offset = 0; // replace initial guess with actual largest values
   for (auto buffer = x_buf.begin(); buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
-    for (size_t i = 0; i < end(*buffer) - begin(*buffer); ++i) {
-      selection.emplace(max ? (ignore_sign ? abs((*buffer)[i]) : (*buffer)[i]) : (ignore_sign ? -abs((*buffer)[i]) : -(*buffer)[i]), i+offset);
+    std::cout << "range = " << end(*buffer) - begin(*buffer) << "\n";
+    for (size_t i = n; i < end(*buffer) - begin(*buffer); ++i, ++ix) {
+      auto var = max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]);
+      std::cout << "emplacing2 " << var << " at "<< i << "\n";
+      selection.emplace(max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]), i+offset);
       selection.pop();
     }
   }
