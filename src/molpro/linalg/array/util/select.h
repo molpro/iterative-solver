@@ -99,15 +99,19 @@ auto select(size_t n, const DistrArrayDisk& x, bool max = false, bool ignore_sig
       break;
     }
   }
+
+  // loop from n to the end of the distrarray
   for (buffer; buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
     std::cout << "range = " << end(*buffer) - begin(*buffer) << "\n";
-    for (i = n; i < end(*buffer) - begin(*buffer); ++i, ++ix) {
+    for (i = n; i < end(*buffer) - begin(*buffer); ++i, ++ix) { // i is the index in this array, ii is the index of x
       auto var = max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]);
       std::cout << "emplacing2 " << var << " at "<< i << "\n";
       selection.emplace(max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]), i+offset);
       selection.pop();
     }
   }
+
+  // sort
   auto selection_map = std::map<size_t, value_type>();
   auto m = selection.size();
   for (size_t i = 0; i < m; ++i) {

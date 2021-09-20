@@ -116,13 +116,14 @@ TEST(Test_select, DistrArrayFile){
   using value_type_L = double;
   using value_type = double;
   auto x_vec = std::vector<value_type_L>{1, -2, 1, 0, 3, 0, -4, 1};
-  auto span = molpro::linalg::array::DistrArraySpan(x_vec.size(), molpro::linalg::array::span::Span(x_vec.data(), x_vec.size()));
+  auto span = molpro::linalg::array::DistrArraySpan(x_vec.size(),
+                                                    molpro::linalg::array::span::Span(x_vec.data(), x_vec.size()));
   molpro::linalg::array::util::Distribution distribution = span.distribution();
-  auto x = molpro::linalg::array::DistrArrayFile(std::make_unique<molpro::linalg::array::util::Distribution<size_t>>(distribution));
+  auto x = molpro::linalg::array::DistrArrayFile(
+                                    std::make_unique<molpro::linalg::array::util::Distribution<size_t>>(distribution));
   for (size_t i=0; i<x_vec.size(); i++){
     x.set(i, x_vec[i]); //not elegant
   }
-  //TODO: for some reason, the new select misses the first element
   auto ref_result_max = std::map<size_t, value_type>{{4, 3}, {2, 1}, {0, 1}, {7, 1}};
   auto select_max = select<value_type>(ref_result_max.size(), x, true);
   EXPECT_THAT(select_max, ContainerEq(ref_result_max));
