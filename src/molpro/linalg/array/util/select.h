@@ -38,14 +38,10 @@ auto select(size_t n, const X& x, bool max = false, bool ignore_sign = false) {
   auto selection = std::priority_queue<select_pair, std::vector<select_pair>, greater<select_pair>>();
   auto ix = begin(x);
   for (size_t i = 0; i < n; ++i, ++ix) {
-    auto var = max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix));
-    std::cout << "emplacing " << var << "\n";
     selection.emplace(max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix)), i);
   }
   std::cout << "range = " << x.size() << "\n";
   for (size_t i = n; i < x.size(); ++i, ++ix) {
-    auto var = max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix));
-    std::cout << "emplacing2 " << var << "\n";
     selection.emplace(max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix)), i);
     selection.pop();
   }
@@ -61,10 +57,19 @@ auto select(size_t n, const X& x, bool max = false, bool ignore_sign = false) {
   return selection_map;
 }
 
+/*!
+ * @brief Select n indices with largest (or smallest) actual (or absolute) value
+ *
+ * @tparam value_type type for X elements
+ * @param n number of indices to select
+ * @param x DistrArrayDisk containing values to examine
+ * @param max If true, select largest values, otherwise smallest
+ * @param ignore_sign If true, consider std::abs() of elements
+ * @return map of indices and corresponding x,y product
+ */
 template <typename value_type, typename std::enable_if<!std::is_compound<value_type>::value,
           value_type>::type* = nullptr>
 auto select(size_t n, const DistrArrayDisk& x, bool max = false, bool ignore_sign = false) {
-  //throw std::runtime_error("TEst2");
   using std::abs;
   using std::begin;
   using std::end;
@@ -90,8 +95,6 @@ auto select(size_t n, const DistrArrayDisk& x, bool max = false, bool ignore_sig
   auto buffer = x_buf.begin();
   for (buffer; buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
     for (i; i < n; ++i, ++ix) {
-      auto var = max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]);
-      std::cout << "emplacing " << var << " at "<< i << "\n";
       selection.emplace(max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]), i+offset);
     }
     // break here to re-use the buffer for the next loop
@@ -102,10 +105,7 @@ auto select(size_t n, const DistrArrayDisk& x, bool max = false, bool ignore_sig
 
   // loop from n to the end of the distrarray
   for (buffer; buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
-    std::cout << "range = " << end(*buffer) - begin(*buffer) << "\n";
     for (i = n; i < end(*buffer) - begin(*buffer); ++i, ++ix) { // i is the index in this array, ii is the index of x
-      auto var = max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]);
-      std::cout << "emplacing2 " << var << " at "<< i << "\n";
       selection.emplace(max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]), i+offset);
       selection.pop();
     }

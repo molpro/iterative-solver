@@ -270,8 +270,7 @@ std::map<size_t, DistrArray::value_type> DistrArrayFile::select(size_t n, bool m
   auto local_selection = util::select<DistrArray::value_type>(std::min(n, this->size()), *this, max, ignore_sign);
   auto shifted_local_selection = decltype(local_selection)();
   for (const auto& el : local_selection)
-    shifted_local_selection.emplace(xbuf->start() + el.first, max ? el.second : -el.second);
-  // I think util::select_max_dot_broadcast will have to be rewritten and will probably need to read the file in again
+    shifted_local_selection.emplace(this->distribution().range(0).first + el.first, max ? el.second : -el.second);
   std::map<size_t, double> result = util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
   if (not max)
     for (auto& el : result)

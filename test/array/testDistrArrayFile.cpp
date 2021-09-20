@@ -238,6 +238,19 @@ TEST_F(DistrArrayFile_Fixture, scatter_acc) {
   EXPECT_THAT(y, Pointwise(DoubleEq(), w));
 }
 
+TEST_F(DistrArrayFile_Fixture, select){
+  auto x_vec = std::vector<double>{1, -2, 1, 0, 3, 0, -4, 1};
+  auto span = DistrArraySpan(x_vec.size(), Span(x_vec.data(), x_vec.size()));
+  auto distribution = span.distribution();
+  auto file = DistrArrayFile(std::make_unique<molpro::linalg::array::util::Distribution<size_t>>(distribution));
+  for (size_t i=0; i<x_vec.size(); i++){
+    file.set(i, x_vec[i]); //not elegant
+  }
+  auto ref_max = span.select(4);
+  auto max = file.select(4);
+  EXPECT_THAT(ref_max, ContainerEq(max));
+}
+
 TEST_F(DistrArrayFile_Fixture, dot_DistrArray) {
   std::vector<double> v(size);
   std::iota(v.begin(), v.end(), 0);
@@ -269,15 +282,10 @@ TEST_F(DistrArrayFile_Fixture, dot_DistrArrayFile) {
 }
 
 TEST_F(DistrArrayFile_Fixture, contiguous_allocation){
-  
   size_t n = 10;
   size_t dim = 10;
-
   auto [cx, cy, cz] = molpro::linalg::test::get_contiguous(n, dim);
-
   auto cx_wrapped = molpro::linalg::itsolv::cwrap(cx);
-
-  // check contiguity
   int previous_stride=0;
   for (size_t j = 0; j<n-1; ++j){
     auto unique_ptr_j = cx_wrapped.at(j).get().local_buffer()->data();
@@ -289,7 +297,5 @@ TEST_F(DistrArrayFile_Fixture, contiguous_allocation){
       }
     }
     previous_stride = stride;
-
   }
-  
 }
