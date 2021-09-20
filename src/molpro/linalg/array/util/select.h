@@ -71,6 +71,8 @@ auto select(size_t n, const DistrArrayDisk& x, bool max = false, bool ignore_sig
   using std::greater;
   using select_pair = std::pair<value_type, size_t>; // value and index
   auto selection = std::priority_queue<select_pair, std::vector<select_pair>, greater<select_pair>>();
+
+  // create buffermanager
   auto options = molpro::linalg::options();
   const BufferManager::buffertype number_of_buffers = (options->parameter("GEMM_BUFFERS", 2) > 1)
                                                           ? BufferManager::buffertype::Double
@@ -78,21 +80,28 @@ auto select(size_t n, const DistrArrayDisk& x, bool max = false, bool ignore_sig
   const int buf_size = options->parameter("GEMM_PAGESIZE", 8192) * number_of_buffers;
   BufferManager x_buf = BufferManager(x, buf_size, number_of_buffers);
 
-  size_t offset = 0; // create selection (n values, small)
+  // init loop variables
+  size_t offset = 0;
   size_t initial_max = n > buf_size ? buf_size : n;
   size_t ix = 0;
+  size_t i = 0;
+
+  // loop from 0 to n
   auto buffer = x_buf.begin();
-  for (auto buffer = x_buf.begin(); buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
-    for (size_t i = 0; i < n; ++i, ++ix) {
+  for (buffer; buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
+    for (i; i < n; ++i, ++ix) {
       auto var = max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]);
       std::cout << "emplacing " << var << " at "<< i << "\n";
       selection.emplace(max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]), i+offset);
     }
+    // break here to re-use the buffer for the next loop
+    if (i == n){
+      break;
+    }
   }
-  offset = 0; // replace initial guess with actual largest values
-  for (auto buffer = x_buf.begin(); buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
+  for (buffer; buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
     std::cout << "range = " << end(*buffer) - begin(*buffer) << "\n";
-    for (size_t i = n; i < end(*buffer) - begin(*buffer); ++i, ++ix) {
+    for (i = n; i < end(*buffer) - begin(*buffer); ++i, ++ix) {
       auto var = max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]);
       std::cout << "emplacing2 " << var << " at "<< i << "\n";
       selection.emplace(max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]), i+offset);
