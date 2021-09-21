@@ -6,6 +6,7 @@
 #include <iostream>
 #include <numeric>
 #include <molpro/Profiler.h>
+#include <molpro/linalg/array/DistrArrayFile.h>
 
 namespace molpro::linalg::array {
 
@@ -389,6 +390,9 @@ std::vector<DistrArray::index_type> DistrArray::min_loc_n(int n) const {
 }
 
 void DistrArray::copy(const DistrArray& y) {
+  if (dynamic_cast<const DistrArrayFile*>(&y)){
+    throw std::runtime_error("Don't call DistrArray::copy with a DistrArrayFile as the parameter!");
+  }
   auto name = std::string{"Array::copy"};
   if (!compatible(y))
     error(name + " incompatible arrays");

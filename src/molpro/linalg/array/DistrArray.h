@@ -188,6 +188,7 @@ public:
   //! Copies all elements of y. If both arrays are empty than does nothing. If only one is empty, throws an
   //! error.
   virtual void copy(const DistrArray &y);
+
   /*!
    * @brief Copies elements in a patch of y. If both arrays are empty than does nothing. If only one is empty,
    * throws an error.

@@ -278,4 +278,15 @@ std::map<size_t, DistrArray::value_type> DistrArrayFile::select(size_t n, bool m
   return result;
 }
 
+void DistrArrayFile::copy(const DistrArray& y) {
+  auto name = std::string{"Array::copy"};
+  if (m_dimension != y.size() || m_communicator != y.communicator()){
+    error(name + " incompatible arrays");
+  }
+  auto loc_y = y.local_buffer();
+  auto distrange = distribution().range(molpro::mpi::rank_global());
+  std::cout << "hi, lo for chunk " << molpro::mpi::rank_global() << " = " << distrange.first << ", " << distrange.second << "\n";
+  put(distrange.first, distrange.second, (*loc_y).data());
+}
+
 } // namespace molpro::linalg::array

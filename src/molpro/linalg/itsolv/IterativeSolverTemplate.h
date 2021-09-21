@@ -384,7 +384,8 @@ public:
       //      std::cout << "** nwork="<<nwork<<"use_diagonals="<<use_diagonals<<std::endl;
       if (nwork > 0) {
         if (use_diagonals) {
-          m_handlers->rq().copy(parameters.at(0), *diagonals);
+          m_handlers->rq().axpy(0, *diagonals, parameters.at(0)); // this is temporary (copy without local_buffer)
+          //m_handlers->rq().copy(parameters.at(0), *diagonals); // TODO: do this without a copy
           problem.precondition(wrap(actions.begin(), actions.begin() + nwork), this->working_set_eigenvalues(),
                                parameters.at(0));
         } else

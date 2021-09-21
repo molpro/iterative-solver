@@ -239,15 +239,12 @@ TEST_F(DistrArrayFile_Fixture, scatter_acc) {
 }
 
 TEST_F(DistrArrayFile_Fixture, select){
-  auto x_vec = std::vector<double>{1, -2, 1, 0, 3, 0, -4, 1};
-  auto span = DistrArraySpan(x_vec.size(), Span(x_vec.data(), x_vec.size()));
-  auto distribution = span.distribution();
-  auto file = DistrArrayFile(std::make_unique<molpro::linalg::array::util::Distribution<size_t>>(distribution));
-  for (size_t i=0; i<x_vec.size(); i++){
-    file.set(i, x_vec[i]); //not elegant
-  }
-  auto ref_max = span.select(4);
-  auto max = file.select(4);
+  std::vector<double> v(size);
+  std::iota(v.begin(), v.end(), 0);
+  a.put(left, right, &(*(v.cbegin() + left)));
+  const DistrArraySpan s(size,Span<double>(&(*(v.begin() + left)),right-left));
+  auto ref_max = s.select(10);
+  auto max = a.select(10);
   EXPECT_THAT(ref_max, ContainerEq(max));
 }
 

@@ -68,6 +68,7 @@ public:
   void scatter_acc(std::vector<index_type>& indices, const std::vector<value_type>& data) override;
   std::vector<value_type> vec() const override;
   std::map<size_t, value_type> select(size_t n, bool max = false, bool ignore_sign = false) const;
+  void copy(const DistrArray& y);
 };
 
 } // namespace molpro::linalg::array
