@@ -31,8 +31,10 @@ template <class AL>
 Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const CVecRef<AL>& yy,
                                                                           const CVecRef<DistrArrayFile>& xx) {
   auto prof = molpro::Profiler::single()->push("gemm_inner_distr_distr (buffered)");
-  if (not yy.empty())
-    prof += xx.size() * yy.size() * yy[0].get().local_buffer()->size() * 2;
+  if (not yy.empty()){
+    auto local_range = yy[0].get().distribution().range(molpro::mpi::rank_global());
+    prof += xx.size() * yy.size() * (local_range.second - local_range.first) * 2;
+  }
   using value_type = typename array::mapped_or_value_type_t<AL>;
   auto alphas = Matrix<value_type>({yy.size(), xx.size()});
   alphas.fill(0);
@@ -51,8 +53,10 @@ void gemm_outer_distr_distr(const Matrix<typename array::mapped_or_value_type_t<
   if (yy.empty() or xx.empty())
     return;
   auto prof = molpro::Profiler::single()->push("gemm_outer_distr_distr (buffered)");
-  if (not yy.empty())
-    prof += xx.size() * yy.size() * yy[0].get().local_buffer()->size() * 2;
+  if (not yy.empty()){
+    auto local_range = yy[0].get().distribution().range(molpro::mpi::rank_global());
+    prof += xx.size() * yy.size() * (local_range.second - local_range.first) * 2;
+  }
   if (alphas.rows() != xx.size())
     throw std::out_of_range(std::string{"gemm_outer_distr_distr: dimensions of xx and alphas are different: "} +
                             std::to_string(alphas.rows()) + " " + std::to_string(xx.size()));

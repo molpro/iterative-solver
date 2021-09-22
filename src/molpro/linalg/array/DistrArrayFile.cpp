@@ -285,7 +285,6 @@ void DistrArrayFile::copy(const DistrArray& y) {
   }
   auto loc_y = y.local_buffer();
   auto distrange = distribution().range(molpro::mpi::rank_global());
-  std::cout << "hi, lo for chunk " << molpro::mpi::rank_global() << " = " << distrange.first << ", " << distrange.second << "\n";
   put(distrange.first, distrange.second, (*loc_y).data());
 }
 

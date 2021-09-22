@@ -7,6 +7,11 @@
 #include <numeric>
 #include <molpro/Profiler.h>
 #include <molpro/linalg/array/DistrArrayFile.h>
+#include <molpro/linalg/array/DistrArraySpan.h>
+#include <molpro/linalg/itsolv/subspace/Matrix.h>
+#include <molpro/linalg/itsolv/wrap.h>
+#include <molpro/linalg/array/util/gemm.h>
+
 
 namespace molpro::linalg::array {
 
@@ -48,6 +53,12 @@ void DistrArray::fill(DistrArray::value_type val) {
 }
 
 void DistrArray::axpy(value_type a, const DistrArray& y) {
+  if (dynamic_cast<const DistrArrayFile*>(&y)){ // TODO: avoid using this dynamic_cast to check the type
+    auto a_matrix = molpro::linalg::itsolv::subspace::Matrix<value_type>(std::vector<value_type>(1,a), {1,1});
+    molpro::linalg::array::util::gemm_outer_distr_distr(a_matrix, molpro::linalg::itsolv::cwrap_arg(y),
+                                                        molpro::linalg::itsolv::wrap_arg(*this));
+    return;
+  }
   auto prof = molpro::Profiler::single();
   prof->start("DistrArray::axpy");
   auto name = std::string{"Array::axpy"};
