@@ -86,14 +86,13 @@ auto select(size_t n, const DistrArrayDisk& x, bool max = false, bool ignore_sig
 
   // init loop variables
   size_t offset = 0;
-  size_t initial_max = n > buf_size ? buf_size : n;
   size_t ix = 0;
   size_t i = 0;
 
   // loop from 0 to n
   auto buffer = x_buf.begin();
-  for (buffer; buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
-    for (i; i < n; ++i, ++ix) {
+  for (; buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
+    for (; i < n; ++i, ++ix) {
       selection.emplace(max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]), i+offset);
     }
     // break here to re-use the buffer for the next loop
@@ -103,8 +102,8 @@ auto select(size_t n, const DistrArrayDisk& x, bool max = false, bool ignore_sig
   }
 
   // loop from n to the end of the distrarray
-  for (buffer; buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
-    for (i = n; i < end(*buffer) - begin(*buffer); ++i, ++ix) { // i is the index in this array, ii is the index of x
+  for (; buffer != x_buf.end(); offset += x_buf.chunk_size, ++buffer) {
+    for (i = n; i < (size_t)(end(*buffer) - begin(*buffer)); ++i, ++ix) { // i is the index in this array, ii is the index of x
       selection.emplace(max ? (ignore_sign ? abs((*buffer)[ix]) : (*buffer)[ix]) : (ignore_sign ? -abs((*buffer)[ix]) : -(*buffer)[ix]), i+offset);
       selection.pop();
     }
