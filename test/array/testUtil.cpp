@@ -13,7 +13,6 @@
 #include <complex>
 #include <memory>
 
-#include <mpi.h>
 #include <molpro/mpi.h>
 
 
@@ -130,7 +129,6 @@ TEST(Test_select, DistrArrayFile){
   auto ref_result_min = std::map<size_t, value_type>{{6, -4}, {1, -2}};
   auto select_min = select<value_type>(ref_result_min.size(), x);
   ASSERT_THAT(select_min, ContainerEq(ref_result_min));
-  MPI_Finalize();
 }
 
 REGISTER_TYPED_TEST_SUITE_P(Test_select, iterable, sparse);
