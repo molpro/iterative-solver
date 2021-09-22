@@ -40,7 +40,6 @@ auto select(size_t n, const X& x, bool max = false, bool ignore_sign = false) {
   for (size_t i = 0; i < n; ++i, ++ix) {
     selection.emplace(max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix)), i);
   }
-  std::cout << "range = " << x.size() << "\n";
   for (size_t i = n; i < x.size(); ++i, ++ix) {
     selection.emplace(max ? (ignore_sign ? abs((*ix)) : (*ix)) : (ignore_sign ? -abs((*ix)) : -(*ix)), i);
     selection.pop();

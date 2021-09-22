@@ -7,7 +7,6 @@
 #include <numeric>
 #include <molpro/Profiler.h>
 #include <molpro/linalg/array/DistrArrayFile.h>
-#include <molpro/linalg/array/DistrArraySpan.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/wrap.h>
 #include <molpro/linalg/array/util/gemm.h>
