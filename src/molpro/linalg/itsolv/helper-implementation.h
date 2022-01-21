@@ -124,7 +124,7 @@ int eigensolver_lapacke_dsyev(const std::vector<double>& matrix, std::vector<dou
   }
 
   if (eigenvectors.size() != dimension * dimension || eigenvalues.size() != dimension) {
-    throw std::runtime_error("Size of eigenvectors/eigenvlaues do not match dimension!");
+    throw std::runtime_error("Size of eigenvectors/eigenvalues do not match dimension!");
   }
 
   // magic letters
@@ -133,18 +133,67 @@ int eigensolver_lapacke_dsyev(const std::vector<double>& matrix, std::vector<dou
   //  static const char store_upper_triangle = 'U';
   static const char store_lower_triangle = 'L';
 
-  // copy input matrix (lapack overwrites)
-  std::copy(matrix.begin(), matrix.end(), eigenvectors.begin());
-
-  // set lapack vars
   lapack_int status;
-  lapack_int leading_dimension = dimension;
-  lapack_int order = dimension;
+  std::vector<double> diagonal_shift(dimension, 0);
+  bool degeneracy = false;
+//  std::cout << "matrix:\n";
+//  for (size_t i = 0; i < dimension; ++i) {
+//  for (size_t j = 0; j < dimension; ++j) std::cout <<" "<<matrix[i*dimension+j];
+//  std::cout << std::endl;
+//  }
+  constexpr double degeneracy_threshold=1e-14;
+  for (double dshift_initial = degeneracy_threshold*2; dshift_initial < 1; dshift_initial *= 2) {
+//    std::cout << "degeneracy_threshold"<<degeneracy_threshold<<std::endl;
+//    std::cout << "dshift_initial"<<dshift_initial<<std::endl;
+    // copy input matrix (lapack overwrites)
+    std::copy(matrix.begin(), matrix.end(), eigenvectors.begin());
+    if (degeneracy)
+      for (size_t i = 0; i < dimension; ++i)
+        eigenvectors[(dimension + 1) * i] +=   diagonal_shift[i];
+//    std::cout << "diagonal_shift:";
+//    for (size_t i = 0; i < dimension; ++i) std::cout <<" "<<diagonal_shift[i];
+//    std::cout << std::endl;
+//    std::cout << "shifted matrix:\n";
+//    for (size_t i = 0; i < dimension; ++i) {
+//      for (size_t j = 0; j < dimension; ++j) std::cout <<" "<<eigenvectors[i*dimension+j];
+//      std::cout << std::endl;
+//    }
 
-  // call to lapack
-  status = LAPACKE_dsyev(LAPACK_COL_MAJOR, compute_eigenvalues_eigenvectors, store_lower_triangle, order,
-                         eigenvectors.data(), leading_dimension, eigenvalues.data());
+    // set lapack vars
+    lapack_int leading_dimension = dimension;
+    lapack_int order = dimension;
 
+    // call to lapack
+
+    status = LAPACKE_dsyev(LAPACK_COL_MAJOR, compute_eigenvalues_eigenvectors, store_lower_triangle, order,
+                           eigenvectors.data(), leading_dimension, eigenvalues.data());
+//    std::cout << "eigenvalues:";
+//    for (size_t i = 0; i < dimension; ++i) std::cout <<" "<<eigenvalues[i];
+//    std::cout << std::endl;
+    degeneracy = false;
+    double dshift=dshift_initial;
+    for (size_t i = 0; i < dimension; ++i) {
+      auto eigenvector = molpro::linalg::array::Span<double>(&eigenvectors[i * dimension], dimension);
+      int maxvec = 0;
+      for (size_t j = 0; j < dimension; ++j) {
+        if (std::abs(eigenvector[j]) > std::abs(eigenvector[maxvec]) + degeneracy_threshold)
+          maxvec = j;
+      }
+      if (eigenvector[maxvec] < 0)
+        for (auto& v : eigenvector)
+          v = -v;
+      if ( i+1 < dimension and std::abs(eigenvalues[i] - eigenvalues[i + 1]) < degeneracy_threshold
+      and std::abs(eigenvalues[i]-double(1))>degeneracy_threshold
+          and std::abs(eigenvalues[i]-double(0))>degeneracy_threshold
+          ) {
+//        std::cout << "eigenvalue "<<eigenvalues[i]<<std::endl;
+        degeneracy = true;
+        diagonal_shift[maxvec] = dshift; dshift += dshift_initial;
+//        std::cout << "diagonal shift "<<maxvec<<" "<<diagonal_shift[maxvec]<<std::endl;
+      }
+    }
+    if (not degeneracy) break;
+  }
   return status;
 }
 

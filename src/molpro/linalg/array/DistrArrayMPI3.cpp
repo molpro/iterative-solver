@@ -132,7 +132,7 @@ std::unique_ptr<DistrArrayMPI3::LocalBuffer> DistrArrayMPI3::local_buffer() {
 }
 
 DistrArray::value_type DistrArrayMPI3::at(index_type ind) const {
-  value_type val;
+  value_type val{0};
   get(ind, ind + 1, &val);
   return val;
 }
