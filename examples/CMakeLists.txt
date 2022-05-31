@@ -7,6 +7,7 @@ if (FORTRAN
             LinearEquationsExampleF.F90
             OptimizeExampleF.F90
             OptimizeExampleF-problem.F90
+            LinearEigensystemExampleF-problem.F90
             )
 endif ()
 set(EXAMPLES
