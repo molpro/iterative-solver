@@ -14,6 +14,8 @@ MODULE Iterative_Solver
   PUBLIC :: Iterative_Solver_Eigenvalues, Iterative_Solver_Working_Set_Eigenvalues
   PUBLIC :: Iterative_Solver_Print_Statistics
   PUBLIC :: Iterative_Solver_Solve
+  PUBLIC :: Iterative_Solver_Value
+  PUBLIC :: Iterative_Solver_Verbosity
   INTEGER, PUBLIC, PARAMETER :: mpicomm_kind = KIND(c_int64_t)
   PUBLIC :: mpicomm_global, set_mpicomm_compute, mpicomm_self, mpicomm_compute
   PRIVATE
@@ -33,6 +35,12 @@ MODULE Iterative_Solver
       INTEGER, PARAMETER :: mpicomm_kind = KIND(c_int64_t)
       INTEGER(KIND = mpicomm_kind) :: mpicomm_global
     END FUNCTION mpicomm_global
+    DOUBLE PRECISION FUNCTION Iterative_Solver_Value() BIND(C, name='IterativeSolverValue')
+    END FUNCTION Iterative_Solver_Value
+    FUNCTION Iterative_Solver_Verbosity() BIND(C, name='IterativeSolverVerbosity')
+      USE iso_c_binding, only : c_int
+      INTEGER(c_int) :: Iterative_Solver_Verbosity
+    END FUNCTION Iterative_Solver_Verbosity
   END INTERFACE
 
 CONTAINS
@@ -814,45 +822,40 @@ CONTAINS
       guess = generate_initial_guess
     end if
     use_diagonals = problem%diagonals(actions_(:, 1))
-    if (use_diagonals) then
-      write (6,*) 'obtained diagonals ',actions_(:,1)
-      call IterativeSolverSetDiagonals(actions_(:,1))
-      write (6,*) 'after setdiagonals'
-      actions_=0d0
-      call IterativeSolverDiagonals(actions_(:,1))
-      write (6,*) 'recovered diagonals ',actions_(:,1)
-    end if
-    write (6, *) 'IterativeSolver_Solve nonlinear=', IterativeSolverNonLinear(), ' use_diagonals=', use_diagonals
+    if (use_diagonals) call IterativeSolverSetDiagonals(actions_(:,1))
+    if (Iterative_Solver_Verbosity() .ge. 3) write (6, *) &
+      'IterativeSolver_Solve nonlinear=', IterativeSolverNonLinear(), ' use_diagonals=', use_diagonals
     if (guess) error stop 'generate_initial_guess not yet implemented'
     if (guess .and. .not. use_diagonals) &
       error stop 'Default initial guess requested, but diagonal elements are not available'
     nwork = nbuffer
     do iter = 1, 20
-      write (6, *) 'iter=', iter
-      write (6,*) 'parameters_ ',parameters_
-      if (IterativeSolverNonLinear().gt.0) then
+!      if (IterativeSolverNonLinear().gt.0) then
         value = problem%residual(parameters_, actions_)
-        write (6,*) 'value=',value
         nwork = Iterative_Solver_Add_Vector(parameters_, actions_, value = value)
-      else
-        call problem%action(parameters_, actions_)
-        nwork = Iterative_Solver_Add_Vector(parameters_, actions_)
-      end if
-      write (6,*) 'actions_ ',actions_
+!      else
+!        call problem%action(parameters_, actions_)
+!        nwork = Iterative_Solver_Add_Vector(parameters_, actions_)
+!      end if
       if (nwork.gt.0) then
-        write (6,*) 'working set eigenvalues ',Iterative_Solver_Working_Set_Eigenvalues(nwork)
         if (use_diagonals) then
           call IterativeSolverDiagonals(parameters_(:,1))
           call problem%precondition(actions_(:,:nwork),Iterative_Solver_Working_Set_Eigenvalues(nwork), parameters_(:,1))
           else
           call problem%precondition(actions_(:,:nwork),Iterative_Solver_Working_Set_Eigenvalues(nwork))
         end if
-        write (6,*) 'preconditioned extrapolated residual ',actions_(:,:nwork)
       end if
       if (Iterative_Solver_End_Iteration(parameters_, actions_).lt.1) exit
+      if (Iterative_Solver_Verbosity() .ge. 2) then
+        write (6,*) 'Iteration ',iter, 'Error=',Iterative_Solver_Errors()
+        if (value.ne.0d0) write (6,*) 'Objective function value ',Iterative_Solver_Value()
+      end if
     end do
+    if (Iterative_Solver_Verbosity() .ge. 1) then
+      write (6,*) 'Termination after iteration ',iter, 'Error=',Iterative_Solver_Errors()
+      if (value.ne.0d0) write (6,*) 'Objective function value ',Iterative_Solver_Value()
+    end if
   END SUBROUTINE Iterative_Solver_Solve
-
 
   !> @private
   !> @brief Convert from Fortran string to C string

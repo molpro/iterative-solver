@@ -1,24 +1,26 @@
-!> @examples OptimizeExampleF.F90
-!> This is an examples of simplest use of the Optimize framework for iterative
-!> solution of non-linear equations.
-!> With forced=.false., the examples makes stationary a normalised quadratic form, so is equivalent to finding an eigenvector.
-!> With forced=.true., the examples makes stationary a quadratic form plus a linear force.
+!> @examples OptimizeExampleF-problem.F90
+!> This is an example of use of the Optimize framework for iterative
+!> minimisation of a non-linear function using the simplified driver.
+!> The first example makes stationary a normalised quadratic form, so is equivalent to finding an eigenvector.
+!> The second example makes stationary a quadratic form plus a linear force.
 module QuasiNewton_Examples
   USE Iterative_Solver_Problem
   private
+  !> @brief objective function is (1/2) * c . m . c - sum(c)  where m(i,j) = 1 + (3*i-1)*delta(i,j)
   type, extends(Problem), public :: forced_t
+    integer :: size
   contains
     procedure, pass :: residual => forced_residual
     procedure, pass :: diagonals => forced_diagonals
   end type forced_t
 
+  !> @brief objective function is (1/2) * c . m . c / c . c  where m(i,j) = 1 + (3*i-1)*delta(i,j)
   type, extends(Problem), public :: quadratic_t
   contains
     procedure, pass :: residual => quadratic_residual
+    procedure, pass :: diagonals => quadratic_diagonals
   end type quadratic_t
 
-  INTEGER, PARAMETER, public :: n = 2
-  DOUBLE PRECISION, DIMENSION (n, n), public :: m
 
 contains
 
@@ -27,36 +29,36 @@ contains
     double precision :: e
     double precision, intent(in), dimension(:, :) :: parameters
     double precision, intent(inout), dimension(:, :) :: residuals
-    m = 1; DO i = 1, n; m(i, i) = 3 * i;
-    END DO
-    residuals = MATMUL(m, parameters)
-    write (6,*) 'forced_residual parameters=',parameters
-    write (6,*) 'forced_residual actions=',residuals
+    do i = lbound(residuals, 1), ubound(residuals, 1); residuals(i, 1) = sum(parameters(:, 1)) + (3 * i - 1) * parameters(i, 1);
+    enddo
     e = 0.5 * dot_product(parameters(:, 1), residuals(:, 1)) - sum(parameters(:, 1))
     residuals = residuals - 1
-    write (6,*) 'forced_residual residuals=',residuals
   end function forced_residual
 
-  logical function forced_diagonals(this,d)
+  logical function forced_diagonals(this, d)
     class(forced_t), intent(in) :: this
     double precision, intent(inout), dimension(:) :: d
-    do i=1,n
-      d(i) = 3*i
-    end do
+    d = [(3 * i, i = 1, size(d))]
     forced_diagonals = .true.
-    end function forced_diagonals
+  end function forced_diagonals
 
-  function quadratic_residual(this, parameters, residuals) result(value)
+  function quadratic_residual(this, parameters, residuals) result(e)
     class(quadratic_t), intent(in) :: this
-    double precision :: value
+    double precision :: e
     double precision, intent(in), dimension(:, :) :: parameters
     double precision, intent(inout), dimension(:, :) :: residuals
-    m = 1; DO i = 1, n; m(i, i) = 3 * i;
-    END DO
-    residuals = MATMUL(m, parameters)
-    e = dot_product(parameters(:,1), residuals(:,1)) / dot_product(parameters(:,1), parameters(:,1))
-    residuals = (residuals - e * parameters) / dot_product(parameters(:,1), parameters(:,1))
+    do i = lbound(residuals, 1), ubound(residuals, 1); residuals(i, 1) = sum(parameters(:, 1)) + (3 * i - 1) * parameters(i, 1);
+    enddo
+    e = dot_product(parameters(:, 1), residuals(:, 1)) / dot_product(parameters(:, 1), parameters(:, 1))
+    residuals = (residuals - e * parameters) / dot_product(parameters(:, 1), parameters(:, 1))
   end function quadratic_residual
+
+  logical function quadratic_diagonals(this, d)
+    class(quadratic_t), intent(in) :: this
+    double precision, intent(inout), dimension(:) :: d
+    d = [(3 * i, i = 1, size(d))]
+    quadratic_diagonals = .true.
+  end function quadratic_diagonals
 
 end module QuasiNewton_Examples
 
@@ -69,57 +71,29 @@ PROGRAM QuasiNewton_Example
     end subroutine mpi_init
     subroutine mpi_finalize() BIND (C, name = 'mpi_finalize')
     end subroutine mpi_finalize
-    !    function mpi_comm_global() BIND (C, name = 'mpi_comm_global')
-    !      use iso_c_binding, only: c_int64_t
-    !      integer(c_int64_t) mpi_comm_global
-    !    end function mpi_comm_global
   end interface
-!  INTEGER, PARAMETER :: n = 2
-!  DOUBLE PRECISION, DIMENSION (n, n) :: m
+  INTEGER, PARAMETER :: n = 5, verbosity = 2
   DOUBLE PRECISION, DIMENSION (n) :: c, g
-  DOUBLE PRECISION :: e, e0
-  INTEGER :: i, j
-  LOGICAL :: converged
-  LOGICAL, PARAMETER :: forced = .TRUE.
-  type(forced_t) :: problem
+  ! try one of the following
+    type(quadratic_t) :: problem
+!  type(forced_t) :: problem
+
   call mpi_init
   PRINT *, 'Fortran binding of IterativeSolver::IOptimize'
-  m = 1; DO i = 1, n; m(i, i) = 3 * i;
-  END DO
-  c = 0; if (.not. forced) c(1) = 1
-  CALL Iterative_Solver_Optimize_Initialize(n, thresh = 1d-9, verbosity = 1, algorithm = "BFGS", options = "max_size_qspace=7")
-  CALL Iterative_Solver_Solve(c,g, problem)
+
+  CALL Iterative_Solver_Optimize_Initialize(n, thresh = 1d-6, verbosity = verbosity, algorithm = "BFGS", &
+    options = "max_size_qspace=3")
+  c = 0;  c(1) = 1
+  CALL Iterative_Solver_Solve(c, g, problem)
+  if (verbosity.lt.1) then
+    print *, 'Optimized function value ', Iterative_Solver_Value()
+    print *, 'Error ', Iterative_Solver_Errors()
+  end if
+  if (verbosity.gt.1) then
+    call Iterative_Solver_Solution([1], c, g)
+    PRINT *, 'solution ', c(1:MIN(n, 10))
+  end if
   CALL Iterative_Solver_Finalize
-  CALL Iterative_Solver_Optimize_Initialize(n, thresh = 1d-9, verbosity = 1, algorithm = "BFGS", options = "max_size_qspace=7")
-  c = 0; if (.not. forced) c(1) = 1
-  e0 = m(1, 1)
-  DO i = 1, 30
-    g = MATMUL(m, c)
-    if (forced) then
-      e = 0.5 * dot_product(c, g) - sum(c)
-      g = g - 1
-    else
-      e = dot_product(c, g) / dot_product(c, c)
-      g = (g - e * c) / dot_product(c, c)
-    end if
-    write (6, *) 'function value ', e
-    write (6, *) 'c ', c
-    write (6, *) 'g ', g
-    IF (Iterative_Solver_Add_Vector(c, g, value = e).gt.0) THEN
-      if (forced) then
-        g = g / [(m(j, j), j = 1, n)]
-      else
-        g = g / ([(m(j, j), j = 1, n)] - e + 1d-15) &
-          + (sum([(c(j) * g(j), j = 1, n)]) / sum([(c(j)**2, j = 1, n)])) * c &
-            / ([(m(j, j), j = 1, n)] - e + 1d-15)
-      end if
-    END IF
-    write (6,*) 'preconditioned extrapolated residual ',g
-    converged = Iterative_Solver_End_Iteration(c, g) .eq.0
-    IF (converged) EXIT
-  END DO
-  if (.not. forced) c = c / sqrt(dot_product(c, c))
-  PRINT *, 'solution ', c(1:MIN(n, 10))
-  CALL Iterative_Solver_Finalize
+
   call mpi_finalize
 END PROGRAM QuasiNewton_Example

@@ -30,6 +30,7 @@ using molpro::linalg::array::util::Distribution;
 using molpro::linalg::array::util::gather_all;
 using molpro::linalg::array::util::make_distribution_spread_remainder;
 using molpro::linalg::itsolv::ArrayHandlers;
+using molpro::linalg::itsolv::cwrap;
 using molpro::linalg::itsolv::IterativeSolver;
 using molpro::linalg::itsolv::LinearEigensystem;
 using molpro::linalg::itsolv::LinearEigensystemDavidson;
@@ -38,9 +39,8 @@ using molpro::linalg::itsolv::LinearEquationsDavidson;
 using molpro::linalg::itsolv::NonLinearEquations;
 using molpro::linalg::itsolv::Optimize;
 using molpro::linalg::itsolv::wrap;
-using molpro::linalg::itsolv::cwrap;
 
-//using Rvector = molpro::linalg::array::DistrArrayMPI3;
+// using Rvector = molpro::linalg::array::DistrArrayMPI3;
 using Rvector = molpro::linalg::array::DistrArraySpan;
 #ifdef LINEARALGEBRA_Q_HDF5
 using Qvector = molpro::linalg::array::DistrArrayHDF5;
@@ -97,8 +97,7 @@ std::vector<Rvector> CreateDistrArray(size_t nvec, double* data) {
   c.reserve(nvec);
   for (size_t ivec = 0; ivec < nvec; ivec++) {
     c.emplace_back(std::make_unique<Distribution<Rvector::index_type>>(distr),
-                   Span<typename Rvector::value_type>(&data[ivec * instance.dimension + range.first], rn),
-                   ccomm);
+                   Span<typename Rvector::value_type>(&data[ivec * instance.dimension + range.first], rn), ccomm);
   }
   return c;
 }
@@ -115,9 +114,10 @@ std::vector<Rvector> CreateDistrArray(size_t nvec, const double* data) {
   std::vector<Rvector> c;
   c.reserve(nvec);
   for (size_t ivec = 0; ivec < nvec; ivec++) {
-    c.emplace_back(std::make_unique<Distribution<Rvector::index_type>>(distr),
-                   Span<typename Rvector::value_type>(&const_cast<double*>(data)[ivec * instance.dimension
-                                                                                            + range.first], rn), ccomm);
+    c.emplace_back(
+        std::make_unique<Distribution<Rvector::index_type>>(distr),
+        Span<typename Rvector::value_type>(&const_cast<double*>(data)[ivec * instance.dimension + range.first], rn),
+        ccomm);
   }
   return c;
 }
@@ -129,7 +129,6 @@ void DistrArraySynchronize(size_t nvec, std::vector<Rvector>& c, double* data) {
     gather_all(c[ivec].distribution(), ccomm, &data[ivec * instance.dimension]);
   }
 }
-
 
 std::pair<size_t, size_t> DistrArrayGetRange(Rvector& rvec) {
   auto& instance = instances.top();
@@ -169,8 +168,7 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
   if (!pname.empty()) {
     profiler = Profiler::single(pname);
   }
-  instances.emplace(Instance{molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>(algorithm, "")
-                             ,
+  instances.emplace(Instance{molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>(algorithm, ""),
                              profiler, nQ, comm});
   auto& instance = instances.top();
   instance.solver->set_n_roots(nroot);
@@ -205,9 +203,8 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
     profiler = Profiler::single(pname);
   }
   instances.emplace(
-      Instance{molpro::linalg::itsolv::create_LinearEquations<Rvector, Qvector, Pvector>(algorithm, options)
-               ,
-               profiler, n, comm});
+      Instance{molpro::linalg::itsolv::create_LinearEquations<Rvector, Qvector, Pvector>(algorithm, options), profiler,
+               n, comm});
   auto& instance = instances.top();
   auto rr = CreateDistrArray(nroot, rhs);
   auto solver = dynamic_cast<LinearEquationsDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get());
@@ -235,8 +232,9 @@ extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* ra
   if (!pname.empty()) {
     profiler = Profiler::single(pname);
   }
-  instances.emplace(Instance{
-      molpro::linalg::itsolv::create_NonLinearEquations<Rvector, Qvector, Pvector>(algorithm, options), profiler, n, comm});
+  instances.emplace(
+      Instance{molpro::linalg::itsolv::create_NonLinearEquations<Rvector, Qvector, Pvector>(algorithm, options),
+               profiler, n, comm});
   auto& instance = instances.top();
   instance.solver->set_convergence_threshold(thresh);
   // instance.solver->m_verbosity = verbosity;
@@ -252,13 +250,13 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   if (!pname.empty()) {
     profiler = Profiler::single(pname);
   }
-  instances.emplace(
-      Instance{molpro::linalg::itsolv::create_Optimize<Rvector, Qvector, Pvector>(algorithm, options), profiler, n, comm});
+  instances.emplace(Instance{molpro::linalg::itsolv::create_Optimize<Rvector, Qvector, Pvector>(algorithm, options),
+                             profiler, n, comm});
   auto& instance = instances.top();
   instance.solver->set_n_roots(1);
   instance.solver->set_convergence_threshold(thresh);
   instance.solver->set_convergence_threshold_value(thresh_value);
-  // instance.solver->m_verbosity = verbosity;
+  instance.solver->set_verbosity(verbosity);
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
 
@@ -276,9 +274,9 @@ extern "C" size_t IterativeSolverAddValue(double value, double* parameters, doub
     instance.prof->start("AddValue:Call");
   size_t working_set_size =
       dynamic_cast<molpro::linalg::itsolv::Optimize<Rvector, Qvector, Pvector>*>(instance.solver.get())
-          ->add_vector(ccc[0], ggg[0], value)
-      ? 1
-      : 0;
+              ->add_vector(ccc[0], ggg[0], value)
+          ? 1
+          : 0;
   if (instance.prof != nullptr) {
     instance.prof->stop();
     instance.prof->start("AddValue:Sync");
@@ -401,8 +399,8 @@ extern "C" size_t IterativeSolverAddP(size_t buffer_size, size_t nP, const size_
     instance.prof->start("AddP:Call");
   size_t working_set_size = instance.solver->add_p(
       cwrap(Pvectors),
-      Span<Rvector::value_type>(&const_cast<double*>(pp)[0], (instance.solver->dimensions().oP + nP) * nP),
-      wrap(cc), wrap(gg), apply_on_p);
+      Span<Rvector::value_type>(&const_cast<double*>(pp)[0], (instance.solver->dimensions().oP + nP) * nP), wrap(cc),
+      wrap(gg), apply_on_p);
   if (instance.prof != nullptr) {
     instance.prof->stop();
     instance.prof->start("AddP:Sync");
@@ -455,8 +453,7 @@ extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* 
     instance.prof->start("SuggestP");
   auto cc = CreateDistrArray(instance.solver->n_roots(), solution);
   auto gg = CreateDistrArray(instance.solver->n_roots(), residual);
-  auto result = instance.solver->suggest_p(cwrap(cc), molpro::linalg::itsolv::cwrap(gg), maximumNumber,
-                                           threshold);
+  auto result = instance.solver->suggest_p(cwrap(cc), molpro::linalg::itsolv::cwrap(gg), maximumNumber, threshold);
   for (size_t i = 0; i < result.size(); i++) {
     indices[i] = result[i];
   }
@@ -467,18 +464,25 @@ extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* 
 
 extern "C" void IterativeSolverPrintStatistics() { molpro::cout << instances.top().solver->statistics() << std::endl; }
 
-int IterativeSolverNonLinear() {
-  auto& instance = instances.top();
-  return instance.solver->nonlinear() ? 1 : 0;
-}
+int IterativeSolverNonLinear() { return instances.top().solver->nonlinear() ? 1 : 0; }
+
 void IterativeSolverSetDiagonals(const double* diagonals) {
-  auto& instance = instances.top();
-  auto dd = CreateDistrArray(1, diagonals);
-  std::cout << "IterativeSolverSetDiagonals receives "<<*diagonals<<std::endl;
-  instance.diagonals.reset(new Qvector(dd.front()));
+  instances.top().diagonals.reset(new Qvector(CreateDistrArray(1, diagonals).front()));
 }
 void IterativeSolverDiagonals(double* diagonals) {
-  auto dd = CreateDistrArray(1, diagonals);
-  auto& instance = instances.top();
-  dd.front().copy(*instance.diagonals);
+  CreateDistrArray(1, diagonals).front().copy(*instances.top().diagonals);
+}
+double IterativeSolverValue() { return instances.top().solver->value(); }
+int IterativeSolverVerbosity() {
+  auto verbosity = instances.top().solver->get_verbosity();
+  switch (verbosity) {
+  case decltype(verbosity)::None:
+    return 0;
+  case decltype(verbosity)::Summary:
+    return 1;
+  case decltype(verbosity)::Iteration:
+    return 2;
+  case decltype(verbosity)::Detailed:
+    return 3;
+  }
 }

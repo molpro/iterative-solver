@@ -53,6 +53,10 @@ extern "C" void IterativeSolverSetDiagonals(const double* diagonals);
 
 extern "C" void IterativeSolverDiagonals(double* diagonals);
 
+extern "C" double IterativeSolverValue();
+
+extern "C" int IterativeSolverVerbosity();
+
 extern "C" int64_t mpicomm_self();
 
 extern "C" int64_t mpicomm_global();
