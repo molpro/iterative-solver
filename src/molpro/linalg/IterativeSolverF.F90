@@ -801,6 +801,10 @@ CONTAINS
     double precision :: value
     integer :: nq, nbuffer, nwork, iter
     INTERFACE
+      FUNCTION IterativeSolverHasValues() BIND(C, name = 'IterativeSolverHasValues')
+        use iso_c_binding
+        INTEGER(c_int) :: IterativeSolverHasValues
+      END FUNCTION IterativeSolverHasValues
       FUNCTION IterativeSolverNonLinear() BIND(C, name = 'IterativeSolverNonLinear')
         use iso_c_binding
         INTEGER(c_int) :: IterativeSolverNonLinear
@@ -830,13 +834,13 @@ CONTAINS
       error stop 'Default initial guess requested, but diagonal elements are not available'
     nwork = nbuffer
     do iter = 1, 20
-!      if (IterativeSolverNonLinear().gt.0) then
+      if (IterativeSolverNonLinear().gt.0) then
         value = problem%residual(parameters_, actions_)
         nwork = Iterative_Solver_Add_Vector(parameters_, actions_, value = value)
-!      else
-!        call problem%action(parameters_, actions_)
-!        nwork = Iterative_Solver_Add_Vector(parameters_, actions_)
-!      end if
+      else
+        call problem%action(parameters_, actions_)
+        nwork = Iterative_Solver_Add_Vector(parameters_, actions_)
+      end if
       if (nwork.gt.0) then
         if (use_diagonals) then
           call IterativeSolverDiagonals(parameters_(:,1))
@@ -848,12 +852,12 @@ CONTAINS
       if (Iterative_Solver_End_Iteration(parameters_, actions_).lt.1) exit
       if (Iterative_Solver_Verbosity() .ge. 2) then
         write (6,*) 'Iteration ',iter, 'Error=',Iterative_Solver_Errors()
-        if (value.ne.0d0) write (6,*) 'Objective function value ',Iterative_Solver_Value()
+        if (IterativeSolverHasValues().gt.0) write (6,*) 'Objective function value ',Iterative_Solver_Value()
       end if
     end do
     if (Iterative_Solver_Verbosity() .ge. 1) then
       write (6,*) 'Termination after iteration ',iter, 'Error=',Iterative_Solver_Errors()
-      if (value.ne.0d0) write (6,*) 'Objective function value ',Iterative_Solver_Value()
+      if (IterativeSolverHasValues().gt.0) write (6,*) 'Objective function value ',Iterative_Solver_Value()
     end if
   END SUBROUTINE Iterative_Solver_Solve
 

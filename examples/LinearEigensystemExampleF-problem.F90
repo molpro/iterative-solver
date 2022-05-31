@@ -39,23 +39,23 @@ PROGRAM QuasiNewton_Example
     subroutine mpi_finalize() BIND (C, name = 'mpi_finalize')
     end subroutine mpi_finalize
   end interface
-  INTEGER, PARAMETER :: n = 5, verbosity = 2
-  DOUBLE PRECISION, DIMENSION (n) :: c, g
+  INTEGER, PARAMETER :: n = 50, verbosity = 2
+  DOUBLE PRECISION, DIMENSION (n,2) :: c, g
   type(problem_t) :: problem
 
   call mpi_init
 
   CALL Iterative_Solver_Linear_Eigensystem_Initialize(n, thresh = 1d-6, verbosity = verbosity, &
     options = "max_size_qspace=10", nroot=2)
-  c = 0;  c(1) = 1
+  c = 0;  c(1,1) = 1; c(2,2)=1
   CALL Iterative_Solver_Solve(c, g, problem)
-  if (verbosity.lt.1) then
     print *, 'Optimized eigenvalues ', Iterative_Solver_Eigenvalues()
+  if (verbosity.lt.1) then
     print *, 'Error ', Iterative_Solver_Errors()
   end if
   if (verbosity.gt.1) then
     call Iterative_Solver_Solution([1], c, g)
-    PRINT *, 'solution ', c(1:MIN(n, 10))
+    PRINT *, 'solution ', c(1:MIN(n, 10),:)
   end if
   CALL Iterative_Solver_Finalize
 

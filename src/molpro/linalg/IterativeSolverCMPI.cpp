@@ -70,6 +70,7 @@ struct Instance {
   size_t dimension;
   MPI_Comm comm;
   std::unique_ptr<Qvector> diagonals;
+  bool has_values = false;
 };
 std::stack<Instance> instances;
 } // namespace
@@ -182,8 +183,8 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
     //    solver_cast->set_max_size_qspace(10);
     //    solver_cast->set_reset_D(50);
     solver->logger->max_trace_level =
-        verbosity > 1 ? molpro::linalg::itsolv::Logger::Info
-                      : (verbosity > 0 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
+        verbosity > 2 ? molpro::linalg::itsolv::Logger::Info
+                      : (verbosity > 1 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
     solver->logger->max_warn_level =
         verbosity > 1 ? molpro::linalg::itsolv::Logger::Warn : molpro::linalg::itsolv::Logger::Error;
     solver->logger->data_dump = (verbosity > 0);
@@ -214,8 +215,8 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
   solver->set_convergence_threshold(thresh);
   solver->set_convergence_threshold_value(thresh_value);
   solver->logger->max_trace_level =
-      verbosity > 1 ? molpro::linalg::itsolv::Logger::Info
-                    : (verbosity > 0 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
+      verbosity > 2 ? molpro::linalg::itsolv::Logger::Info
+                    : (verbosity > 1 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
   solver->logger->max_warn_level =
       verbosity > 1 ? molpro::linalg::itsolv::Logger::Warn : molpro::linalg::itsolv::Logger::Error;
   solver->logger->data_dump = (verbosity > 0);
@@ -257,6 +258,7 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   instance.solver->set_convergence_threshold(thresh);
   instance.solver->set_convergence_threshold_value(thresh_value);
   instance.solver->set_verbosity(verbosity);
+  instance.has_values = true;
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
 
@@ -465,6 +467,7 @@ extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* 
 extern "C" void IterativeSolverPrintStatistics() { molpro::cout << instances.top().solver->statistics() << std::endl; }
 
 int IterativeSolverNonLinear() { return instances.top().solver->nonlinear() ? 1 : 0; }
+int IterativeSolverHasValues() { return instances.top().has_values ? 1 : 0; }
 
 void IterativeSolverSetDiagonals(const double* diagonals) {
   instances.top().diagonals.reset(new Qvector(CreateDistrArray(1, diagonals).front()));
