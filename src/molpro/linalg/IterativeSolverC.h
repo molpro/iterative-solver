@@ -47,6 +47,12 @@ extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* 
 
 extern "C" void IterativeSolverPrintStatistics();
 
+extern "C" int IterativeSolverNonLinear();
+
+extern "C" void IterativeSolverSetDiagonals(const double* diagonals);
+
+extern "C" void IterativeSolverDiagonals(double* diagonals);
+
 extern "C" int64_t mpicomm_self();
 
 extern "C" int64_t mpicomm_global();

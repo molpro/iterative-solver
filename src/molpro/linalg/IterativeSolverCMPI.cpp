@@ -69,6 +69,7 @@ struct Instance {
   Apply_on_p_fort apply_on_p_fort;
   size_t dimension;
   MPI_Comm comm;
+  std::unique_ptr<Qvector> diagonals;
 };
 std::stack<Instance> instances;
 } // namespace
@@ -465,3 +466,19 @@ extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* 
 }
 
 extern "C" void IterativeSolverPrintStatistics() { molpro::cout << instances.top().solver->statistics() << std::endl; }
+
+int IterativeSolverNonLinear() {
+  auto& instance = instances.top();
+  return instance.solver->nonlinear() ? 1 : 0;
+}
+void IterativeSolverSetDiagonals(const double* diagonals) {
+  auto& instance = instances.top();
+  auto dd = CreateDistrArray(1, diagonals);
+  std::cout << "IterativeSolverSetDiagonals receives "<<*diagonals<<std::endl;
+  instance.diagonals.reset(new Qvector(dd.front()));
+}
+void IterativeSolverDiagonals(double* diagonals) {
+  auto dd = CreateDistrArray(1, diagonals);
+  auto& instance = instances.top();
+  dd.front().copy(*instance.diagonals);
+}
