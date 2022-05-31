@@ -847,7 +847,7 @@ CONTAINS
           else
           call problem%precondition(actions_(:,:nwork),Iterative_Solver_Working_Set_Eigenvalues(nwork))
         end if
-        write (6,*) 'preconditioned actions_ ',actions_(:,:nwork)
+        write (6,*) 'preconditioned extrapolated residual ',actions_(:,:nwork)
       end if
       if (Iterative_Solver_End_Iteration(parameters_, actions_).lt.1) exit
     end do

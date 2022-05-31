@@ -114,6 +114,7 @@ PROGRAM QuasiNewton_Example
             / ([(m(j, j), j = 1, n)] - e + 1d-15)
       end if
     END IF
+    write (6,*) 'preconditioned extrapolated residual ',g
     converged = Iterative_Solver_End_Iteration(c, g) .eq.0
     IF (converged) EXIT
   END DO
