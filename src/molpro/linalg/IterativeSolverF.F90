@@ -710,6 +710,7 @@ CONTAINS
         do i = 1, offsets(nP)
             indicesC(i) = INT(indices(i) - 1, c_size_t) ! 1-base to 0-base
         end do
+        write (6,'(A,Z20)') 'cproc ',cproc
         Iterative_Solver_Add_P = int(IterativeSolverAddPC( &
             INT(ubound(parameters,2)-lbound(parameters,2)+1, c_size_t), &
             INT(nP, c_size_t), offsetsC, indicesC, coefficients, &

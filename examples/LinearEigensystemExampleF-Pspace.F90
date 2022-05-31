@@ -4,7 +4,7 @@ module matrix_problem
   INTEGER, DIMENSION(nP) :: indices
   INTEGER, DIMENSION(0:nP) :: offsets
 contains
-  subroutine apply_p(p, g, nvec, ranges) bind(c)
+  subroutine apply_p(p, g, nvec, ranges)! bind(c)
     use iso_c_binding
     implicit none
     integer(c_size_t), intent(in), value :: nvec

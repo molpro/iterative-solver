@@ -153,7 +153,9 @@ void apply_on_p_c(const std::vector<vectorP>& pvectors, const CVecRef<Pvector>& 
       pvecs_to_send.push_back(j);
     }
   }
-  instance.apply_on_p_fort(pvecs_to_send.data(), &(*action.front().get().local_buffer())[0], update_size,
+  double* pvecs = pvecs_to_send.data();
+  double* paction = &(*action.front().get().local_buffer())[0];
+  instance.apply_on_p_fort(pvecs, paction, update_size,
                            ranges.data());
 }
 
