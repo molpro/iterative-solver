@@ -35,9 +35,9 @@ MODULE Iterative_Solver
       INTEGER, PARAMETER :: mpicomm_kind = KIND(c_int64_t)
       INTEGER(KIND = mpicomm_kind) :: mpicomm_global
     END FUNCTION mpicomm_global
-    DOUBLE PRECISION FUNCTION Iterative_Solver_Value() BIND(C, name='IterativeSolverValue')
+    DOUBLE PRECISION FUNCTION Iterative_Solver_Value() BIND(C, name = 'IterativeSolverValue')
     END FUNCTION Iterative_Solver_Value
-    FUNCTION Iterative_Solver_Verbosity() BIND(C, name='IterativeSolverVerbosity')
+    FUNCTION Iterative_Solver_Verbosity() BIND(C, name = 'IterativeSolverVerbosity')
       USE iso_c_binding, only : c_int
       INTEGER(c_int) :: Iterative_Solver_Verbosity
     END FUNCTION Iterative_Solver_Verbosity
@@ -787,14 +787,15 @@ CONTAINS
     CALL IterativeSolverWorkingSetEigenvalues(Iterative_Solver_Working_Set_Eigenvalues)
   END FUNCTION Iterative_Solver_Working_Set_Eigenvalues
 
-  SUBROUTINE Iterative_Solver_Solve(parameters, actions, problem, generate_initial_guess)
+  SUBROUTINE Iterative_Solver_Solve(parameters, actions, problem, generate_initial_guess, max_iter)
     USE Iterative_Solver_Problem, only : problem_class => Problem
     USE iso_c_binding, only : c_loc, c_f_pointer
     implicit none
     double precision, dimension(..), intent(inout), target :: parameters
     double precision, dimension(..), intent(inout), target :: actions
-    class(problem_class), intent(inout) :: problem
+    class(problem_class), intent(in) :: problem
     logical, optional :: generate_initial_guess
+    integer, optional :: max_iter
     logical :: guess
     logical :: use_diagonals
     double precision, dimension(:, :), pointer :: parameters_, actions_
@@ -805,6 +806,14 @@ CONTAINS
         use iso_c_binding
         INTEGER(c_int) :: IterativeSolverHasValues
       END FUNCTION IterativeSolverHasValues
+      FUNCTION IterativeSolverMaxIter() BIND(C, name = 'IterativeSolverMaxIter')
+        use iso_c_binding
+        INTEGER(c_int) :: IterativeSolverMaxIter
+      END FUNCTION IterativeSolverMaxIter
+      SUBROUTINE IterativeSolverSetMaxIter(max_iter) BIND(C, name = 'IterativeSolverSetMaxIter')
+        use iso_c_binding
+        INTEGER(c_int), INTENT(in), VALUE :: max_iter
+      END SUBROUTINE IterativeSolverSetMaxIter
       FUNCTION IterativeSolverNonLinear() BIND(C, name = 'IterativeSolverNonLinear')
         use iso_c_binding
         INTEGER(c_int) :: IterativeSolverNonLinear
@@ -813,9 +822,11 @@ CONTAINS
         double precision, dimension(*), intent(in) :: diagonals
       END SUBROUTINE IterativeSolverSetDiagonals
       SUBROUTINE IterativeSolverDiagonals(diagonals) BIND(C, name = 'IterativeSolverDiagonals')
-         double precision, dimension(*), intent(inout) :: diagonals
+        double precision, dimension(*), intent(inout) :: diagonals
       END SUBROUTINE IterativeSolverDiagonals
     END INTERFACE
+    integer :: i
+    integer, dimension(1) :: loc
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     nbuffer = 1
     if (rank(parameters).gt.1) nbuffer = ubound(parameters, 2) - lbound(parameters, 2) + 1
@@ -825,15 +836,24 @@ CONTAINS
     if (present(generate_initial_guess)) then
       guess = generate_initial_guess
     end if
+    if (present(max_iter)) then
+      call IterativeSolverSetMaxIter(int(max_iter, c_int))
+    end if
     use_diagonals = problem%diagonals(actions_(:, 1))
-    if (use_diagonals) call IterativeSolverSetDiagonals(actions_(:,1))
+    if (use_diagonals) call IterativeSolverSetDiagonals(actions_(:, 1))
     if (Iterative_Solver_Verbosity() .ge. 3) write (6, *) &
       'IterativeSolver_Solve nonlinear=', IterativeSolverNonLinear(), ' use_diagonals=', use_diagonals
-    if (guess) error stop 'generate_initial_guess not yet implemented'
-    if (guess .and. .not. use_diagonals) &
-      error stop 'Default initial guess requested, but diagonal elements are not available'
+    if (guess)  then
+      if (.not. use_diagonals) error stop 'Default initial guess requested, but diagonal elements are not available'
+      parameters_ = 0
+      do i = lbound(parameters_,2),ubound(parameters_,2)
+        loc = minloc(actions_(:, 1))
+        parameters_(loc(1), i) = 1d0
+        actions_(loc(1), 1) = 1d50
+      end do
+    end if
     nwork = nbuffer
-    do iter = 1, 20
+    do iter = 1, IterativeSolverMaxIter()
       if (IterativeSolverNonLinear().gt.0) then
         value = problem%residual(parameters_, actions_)
         nwork = Iterative_Solver_Add_Vector(parameters_, actions_, value = value)
@@ -843,21 +863,21 @@ CONTAINS
       end if
       if (nwork.gt.0) then
         if (use_diagonals) then
-          call IterativeSolverDiagonals(parameters_(:,1))
-          call problem%precondition(actions_(:,:nwork),Iterative_Solver_Working_Set_Eigenvalues(nwork), parameters_(:,1))
-          else
-          call problem%precondition(actions_(:,:nwork),Iterative_Solver_Working_Set_Eigenvalues(nwork))
+          call IterativeSolverDiagonals(parameters_(:, 1))
+          call problem%precondition(actions_(:, :nwork), Iterative_Solver_Working_Set_Eigenvalues(nwork), parameters_(:, 1))
+        else
+          call problem%precondition(actions_(:, :nwork), Iterative_Solver_Working_Set_Eigenvalues(nwork))
         end if
       end if
       if (Iterative_Solver_End_Iteration(parameters_, actions_).lt.1) exit
       if (Iterative_Solver_Verbosity() .ge. 2) then
-        write (6,*) 'Iteration ',iter, 'Error=',Iterative_Solver_Errors()
-        if (IterativeSolverHasValues().gt.0) write (6,*) 'Objective function value ',Iterative_Solver_Value()
+        write (6, *) 'Iteration ', iter, 'Error=', Iterative_Solver_Errors()
+        if (IterativeSolverHasValues().gt.0) write (6, *) 'Objective function value ', Iterative_Solver_Value()
       end if
     end do
     if (Iterative_Solver_Verbosity() .ge. 1) then
-      write (6,*) 'Termination after iteration ',iter, 'Error=',Iterative_Solver_Errors()
-      if (IterativeSolverHasValues().gt.0) write (6,*) 'Objective function value ',Iterative_Solver_Value()
+      write (6, *) 'Termination after iteration ', iter-1, 'Error=', Iterative_Solver_Errors()
+      if (IterativeSolverHasValues().gt.0) write (6, *) 'Objective function value ', Iterative_Solver_Value()
     end if
   END SUBROUTINE Iterative_Solver_Solve
 

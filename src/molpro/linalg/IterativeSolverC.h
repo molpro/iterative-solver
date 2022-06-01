@@ -59,6 +59,9 @@ extern "C" double IterativeSolverValue();
 
 extern "C" int IterativeSolverVerbosity();
 
+extern "C" int IterativeSolverMaxIter();
+extern "C" void IterativeSolverSetMaxIter(int max_iter);
+
 extern "C" int64_t mpicomm_self();
 
 extern "C" int64_t mpicomm_global();

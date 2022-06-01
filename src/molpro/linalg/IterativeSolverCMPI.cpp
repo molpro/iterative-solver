@@ -173,6 +173,7 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
                              profiler, nQ, comm});
   auto& instance = instances.top();
   instance.solver->set_n_roots(nroot);
+  instance.solver->set_verbosity(verbosity);
   LinearEigensystemDavidson<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<LinearEigensystemDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get());
   if (solver) {
@@ -183,8 +184,8 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
     //    solver_cast->set_max_size_qspace(10);
     //    solver_cast->set_reset_D(50);
     solver->logger->max_trace_level =
-        verbosity > 2 ? molpro::linalg::itsolv::Logger::Info
-                      : (verbosity > 1 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
+        verbosity > 3 ? molpro::linalg::itsolv::Logger::Info
+                      : (verbosity > 2 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
     solver->logger->max_warn_level =
         verbosity > 1 ? molpro::linalg::itsolv::Logger::Warn : molpro::linalg::itsolv::Logger::Error;
     solver->logger->data_dump = (verbosity > 0);
@@ -215,12 +216,13 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
   solver->set_convergence_threshold(thresh);
   solver->set_convergence_threshold_value(thresh_value);
   solver->logger->max_trace_level =
-      verbosity > 2 ? molpro::linalg::itsolv::Logger::Info
-                    : (verbosity > 1 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
+      verbosity > 3 ? molpro::linalg::itsolv::Logger::Info
+                    : (verbosity > 2 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
   solver->logger->max_warn_level =
       verbosity > 1 ? molpro::linalg::itsolv::Logger::Warn : molpro::linalg::itsolv::Logger::Error;
   solver->logger->data_dump = (verbosity > 0);
   // instance.solver->m_verbosity = verbosity;
+  instance.solver->set_verbosity(verbosity);
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
 
@@ -239,6 +241,7 @@ extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* ra
   auto& instance = instances.top();
   instance.solver->set_convergence_threshold(thresh);
   // instance.solver->m_verbosity = verbosity;
+  instance.solver->set_verbosity(verbosity);
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
 
@@ -489,3 +492,5 @@ int IterativeSolverVerbosity() {
     return 3;
   }
 }
+int IterativeSolverMaxIter() { return instances.top().solver->get_max_iter(); }
+void IterativeSolverSetMaxIter(int max_iter) { instances.top().solver->set_max_iter(max_iter); }
