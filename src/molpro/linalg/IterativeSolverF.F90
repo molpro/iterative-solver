@@ -826,6 +826,7 @@ CONTAINS
       END SUBROUTINE IterativeSolverDiagonals
     END INTERFACE
     integer :: i, verbosity
+    logical :: reported
     integer, dimension(1) :: loc
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     verbosity = Iterative_Solver_Verbosity()
@@ -847,7 +848,7 @@ CONTAINS
     if (guess)  then
       if (.not. use_diagonals) error stop 'Default initial guess requested, but diagonal elements are not available'
       parameters_ = 0
-      do i = lbound(parameters_,2),ubound(parameters_,2)
+      do i = lbound(parameters_, 2), ubound(parameters_, 2)
         loc = minloc(actions_(:, 1))
         parameters_(loc(1), i) = 1d0
         actions_(loc(1), 1) = 1d50
@@ -872,13 +873,22 @@ CONTAINS
       end if
       nwork = Iterative_Solver_End_Iteration(parameters_, actions_)
       if (nwork.le.0) verbosity = verbosity + 1
-      if (verbosity .ge. 2) then
-!        write (6, '(A,I3,1X,A,(T30,10D8.1))') 'Iteration', iter, '|residual|=', Iterative_Solver_Errors()
+      if (IterativeSolverHasValues().ne.0) then
+        reported = problem%report(iter, verbosity, Iterative_Solver_Errors(), value = Iterative_Solver_Value())
+      else
+        reported = problem%report(iter, verbosity, Iterative_Solver_Errors())
+      end if
+      if (.not.reported .and. verbosity .ge. 2) then
         write (6, '(A,I3,1X,A,(T32,10F7.2))') 'Iteration', iter, 'log10(|residual|)=', log10(Iterative_Solver_Errors())
         if (IterativeSolverHasValues().gt.0) write (6, *) 'Objective function value ', Iterative_Solver_Value()
       end if
       if (nwork.lt.1) exit
     end do
+    if (IterativeSolverHasValues().ne.0) then
+      reported = problem%report(-nwork, verbosity, Iterative_Solver_Errors(), value = Iterative_Solver_Value())
+    else
+      reported = problem%report(-nwork, verbosity, Iterative_Solver_Errors())
+    end if
   END SUBROUTINE Iterative_Solver_Solve
 
   !> @private
