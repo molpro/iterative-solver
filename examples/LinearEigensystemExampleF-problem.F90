@@ -44,7 +44,7 @@ program Eigenproblem_Example
     subroutine mpi_finalize() bind (C, name = 'mpi_finalize')
     end subroutine mpi_finalize
   end interface
-  double precision, dimension (50, 4) :: c, g
+  double precision, dimension (5000, 10) :: c, g
   integer :: i
 
   call mpi_init
@@ -60,6 +60,7 @@ program Eigenproblem_Example
       print *, 'Eigenvector ', c(1:MIN(ubound(c, 1), 5), i)
     end do
   end if
+  call Iterative_Solver_Print_Statistics
   call Iterative_Solver_Finalize
 
   call mpi_finalize

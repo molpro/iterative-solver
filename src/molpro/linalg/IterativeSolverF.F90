@@ -825,9 +825,10 @@ CONTAINS
         double precision, dimension(*), intent(inout) :: diagonals
       END SUBROUTINE IterativeSolverDiagonals
     END INTERFACE
-    integer :: i
+    integer :: i, verbosity
     integer, dimension(1) :: loc
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
+    verbosity = Iterative_Solver_Verbosity()
     nbuffer = 1
     if (rank(parameters).gt.1) nbuffer = ubound(parameters, 2) - lbound(parameters, 2) + 1
     call c_f_pointer(c_loc(parameters), parameters_, [nq, nbuffer])
@@ -841,7 +842,7 @@ CONTAINS
     end if
     use_diagonals = problem%diagonals(actions_(:, 1))
     if (use_diagonals) call IterativeSolverSetDiagonals(actions_(:, 1))
-    if (Iterative_Solver_Verbosity() .ge. 3) write (6, *) &
+    if (verbosity .ge. 3) write (6, *) &
       'IterativeSolver_Solve nonlinear=', IterativeSolverNonLinear(), ' use_diagonals=', use_diagonals
     if (guess)  then
       if (.not. use_diagonals) error stop 'Default initial guess requested, but diagonal elements are not available'
@@ -869,16 +870,15 @@ CONTAINS
           call problem%precondition(actions_(:, :nwork), Iterative_Solver_Working_Set_Eigenvalues(nwork))
         end if
       end if
-      if (Iterative_Solver_End_Iteration(parameters_, actions_).lt.1) exit
-      if (Iterative_Solver_Verbosity() .ge. 2) then
-        write (6, *) 'Iteration ', iter, 'Error=', Iterative_Solver_Errors()
+      nwork = Iterative_Solver_End_Iteration(parameters_, actions_)
+      if (nwork.le.0) verbosity = verbosity + 1
+      if (verbosity .ge. 2) then
+!        write (6, '(A,I3,1X,A,(T30,10D8.1))') 'Iteration', iter, '|residual|=', Iterative_Solver_Errors()
+        write (6, '(A,I3,1X,A,(T32,10F7.2))') 'Iteration', iter, 'log10(|residual|)=', log10(Iterative_Solver_Errors())
         if (IterativeSolverHasValues().gt.0) write (6, *) 'Objective function value ', Iterative_Solver_Value()
       end if
+      if (nwork.lt.1) exit
     end do
-    if (Iterative_Solver_Verbosity() .ge. 1) then
-      write (6, *) 'Termination after iteration ', iter-1, 'Error=', Iterative_Solver_Errors()
-      if (IterativeSolverHasValues().gt.0) write (6, *) 'Objective function value ', Iterative_Solver_Value()
-    end if
   END SUBROUTINE Iterative_Solver_Solve
 
   !> @private
