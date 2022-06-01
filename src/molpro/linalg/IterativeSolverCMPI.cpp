@@ -71,6 +71,7 @@ struct Instance {
   MPI_Comm comm;
   std::unique_ptr<Qvector> diagonals;
   bool has_values = false;
+  bool has_eigenvalues = false;
 };
 std::stack<Instance> instances;
 } // namespace
@@ -174,6 +175,7 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
   auto& instance = instances.top();
   instance.solver->set_n_roots(nroot);
   instance.solver->set_verbosity(verbosity);
+  instance.has_eigenvalues = true;
   LinearEigensystemDavidson<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<LinearEigensystemDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get());
   if (solver) {
@@ -471,6 +473,7 @@ extern "C" void IterativeSolverPrintStatistics() { molpro::cout << instances.top
 
 int IterativeSolverNonLinear() { return instances.top().solver->nonlinear() ? 1 : 0; }
 int IterativeSolverHasValues() { return instances.top().has_values ? 1 : 0; }
+int IterativeSolverHasEigenvalues() { return instances.top().has_eigenvalues ? 1 : 0; }
 
 void IterativeSolverSetDiagonals(const double* diagonals) {
   instances.top().diagonals.reset(new Qvector(CreateDistrArray(1, diagonals).front()));

@@ -50,6 +50,7 @@ extern "C" void IterativeSolverPrintStatistics();
 extern "C" int IterativeSolverNonLinear();
 
 extern "C" int IterativeSolverHasValues();
+extern "C" int IterativeSolverHasEigenvalues();
 
 extern "C" void IterativeSolverSetDiagonals(const double* diagonals);
 

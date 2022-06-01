@@ -109,7 +109,7 @@ contains
         write (6, *) 'Objective function value ', value
       end if
       if (present(eigenvalues)) then
-        write (6, *) 'Eigenvalues ', value
+        write (6, *) 'Eigenvalues ', eigenvalues
       end if
     end if
     report = .true.

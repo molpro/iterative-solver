@@ -806,6 +806,10 @@ CONTAINS
         use iso_c_binding
         INTEGER(c_int) :: IterativeSolverHasValues
       END FUNCTION IterativeSolverHasValues
+      FUNCTION IterativeSolverHasEigenvalues() BIND(C, name = 'IterativeSolverHasEigenvalues')
+        use iso_c_binding
+        INTEGER(c_int) :: IterativeSolverHasEigenvalues
+      END FUNCTION IterativeSolverHasEigenvalues
       FUNCTION IterativeSolverMaxIter() BIND(C, name = 'IterativeSolverMaxIter')
         use iso_c_binding
         INTEGER(c_int) :: IterativeSolverMaxIter
@@ -875,6 +879,8 @@ CONTAINS
       if (nwork.le.0) verbosity = verbosity + 1
       if (IterativeSolverHasValues().ne.0) then
         reported = problem%report(iter, verbosity, Iterative_Solver_Errors(), value = Iterative_Solver_Value())
+      else if (IterativeSolverHasEigenvalues().ne.0) then
+        reported = problem%report(iter, verbosity, Iterative_Solver_Errors(), eigenvalues = Iterative_Solver_Eigenvalues())
       else
         reported = problem%report(iter, verbosity, Iterative_Solver_Errors())
       end if
