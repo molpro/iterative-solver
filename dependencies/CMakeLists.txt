@@ -18,6 +18,8 @@ DependencyManager_Declare(utilities https://github.com/molpro/utilities.git)
 
 if (NOT PPIDD AND (MPI AND LINEARALGEBRA_ARRAY_GA))
     set(GA_RUNTIME "MPI_RMA" CACHE STRING "overwriting default for GA runtime protocol")
+    set(ENABLE_CXX OFF)
+    set(ENABLE_FORTRAN OFF)
     if (NOT TARGET ga::ga)
         find_program(ga-config ga-config)
         if (ga-config)
