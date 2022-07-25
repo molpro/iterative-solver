@@ -1,9 +1,10 @@
 iterative-solver
 ================
 
-[![pipeline status](https://gitlab.com/molpro/linearalgebra/badges/master/pipeline.svg)](https://gitlab.com/molpro/linearalgebra/-/commits/master)
-[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://gitlab.com/molpro/linearalgebra/-/blob/master/LICENSE)
-[![license](https://img.shields.io/badge/documentation-blue.svg)](https://molpro.gitlab.io/linearalgebra/)
+[![build-and-test workflow](https://github.com/molpro/iterative-solver/actions/workflows/build-and-test/badge.svg)](https://gitlab.com/molpro/iterative-solver/commits/master)
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/molpro/iterative-solver/blob/master/LICENSE)
+
+[//]: # ([![license]&#40;https://img.shields.io/badge/documentation-blue.svg&#41;]&#40;https://molpro.gitlab.io/linearalgebra/&#41;)
 
 
 ## Overview
@@ -31,7 +32,7 @@ CMake is used to build the library and it can integrate easily with other CMake 
 ```cmake
 include(FetchContent)
 FetchContent_Declare(
-        linearalgebra
+        iterative-solver
         GIT_REPOSITORY https://github.com/molpro/iterative-solver.git
         GIT_TAG ${COMMIT_HASH_OR_TAG_VALUE})
 FetchContent_MakeAvailable(iterative-solver)
