@@ -105,7 +105,7 @@ restrictions on containers:
 * must have conforming element type (currently `double` and `std::complex<double>`, but this can be easily extended)
 
 ArrayHandler is an abstract class used by IterativeSolver to perform copy and linear algebra operations (`dot`, `axpy`). 
-LinearAlgebra provides implementations for Iterable containers (e.g. `std::vector`), distributed containers (e.g. `molpro::linalg::array::DistrArray`),
+iterative-solver provides implementations for Iterable containers (e.g. `std::vector`), distributed containers (e.g. `molpro::linalg::array::DistrArray`),
 and mapped containers (e.g. `std::map`). However, some users might need/want to provide their own implementations. 
 
 ## Citing
