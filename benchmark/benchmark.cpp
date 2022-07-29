@@ -52,6 +52,12 @@ int main(int argc, char* argv[]) {
       std::cout << bm;
     }
 #endif
+    {
+      auto bm = molpro::linalg::ArrayBenchmarkDistributed<molpro::linalg::array::DistrArrayFile>(
+          "molpro::linalg::array::DistrArrayFile", length, false, 0.1);
+      bm.all();
+      std::cout << bm;
+    }
   }
   molpro::mpi::finalize();
 }
