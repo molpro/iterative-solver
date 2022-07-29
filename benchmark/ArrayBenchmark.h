@@ -47,7 +47,8 @@ auto allocate<array::DistrArrayGA>(size_t n) {
 #ifdef LINEARALGEBRA_ARRAY_HDF5
 template <>
 auto allocate<array::DistrArrayHDF5>(size_t n) {
-  auto handle = std::make_shared<array::util::PHDF5Handle>(array::util::temp_phdf5_handle("benchmark", molpro::mpi::comm_global()));
+  auto handle = std::make_shared<array::util::PHDF5Handle>(
+      array::util::temp_phdf5_handle("benchmark", molpro::mpi::comm_global()));
   handle->open_file(array::util::HDF5Handle::Access::read_write);
   handle->open_group("/");
   handle->close_file();
@@ -72,9 +73,8 @@ public:
   explicit ArrayBenchmark(std::string title, std::unique_ptr<array::ArrayHandler<L, R>> handler, size_t n = 10000000,
                           bool profile_individual = false, double target_seconds = 1)
       : m_size(n), m_target_seconds(target_seconds), m_bufferL(allocate<L>(n)), m_bufferR(allocate<R>(n)),
-        m_profiler(title), m_handler(std::move(handler)), m_profile_individual(profile_individual), m_mpi_size(molpro::mpi::size_global()),
-        m_repeat(std::max(1, int(1e9 * m_target_seconds / m_size))) {
-  }
+        m_profiler(title), m_handler(std::move(handler)), m_profile_individual(profile_individual),
+        m_mpi_size(molpro::mpi::size_global()), m_repeat(std::max(1, int(1e9 * m_target_seconds / m_size))) {}
 
   void dot() {
     auto prof = m_profiler.push("dot");
@@ -86,15 +86,23 @@ public:
   void axpy() {
     auto prof = m_profiler.push("axpy");
     for (size_t i = 0; i < m_repeat; i++)
-      m_handler->axpy(1.0, *m_bufferL, *m_bufferR);
+      m_handler->axpy(1.0, *m_bufferR, *m_bufferL);
     prof += m_size * m_repeat / m_mpi_size;
   }
 
-  void copy() {
-    auto prof = m_profiler.push("copy");
+  void copyin() {
+    auto prof = m_profiler.push("copy in");
     auto buffer = allocate<L>(m_bufferL->size());
     for (size_t i = 0; i < m_repeat / m_mpi_size; i++)
       *buffer = m_handler->copy(*m_bufferR);
+    prof += m_size * m_repeat / m_mpi_size;
+  }
+
+  void copyout() {
+    auto prof = m_profiler.push("copy out");
+    auto buffer = allocate<R>(m_bufferR->size());
+    for (size_t i = 0; i < m_repeat / m_mpi_size; i++)
+      *buffer = m_handler->copy(*m_bufferL);
     prof += m_size * m_repeat / m_mpi_size;
   }
 
@@ -107,7 +115,7 @@ public:
   }
 
   void scal() {
-//    using scalar_type = typename L::value_type;
+    //    using scalar_type = typename L::value_type;
     if (m_profile_individual)
       for (size_t i = 0; i < m_repeat; i++) {
         auto prof = m_profiler.push("scal");
@@ -125,7 +133,8 @@ public:
   void all() {
     fill();
     scal();
-    copy();
+    copyin();
+    copyout();
     dot();
     axpy();
   }

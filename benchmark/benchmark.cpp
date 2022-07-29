@@ -31,30 +31,33 @@ int main(int argc, char* argv[]) {
 #ifdef LINEARALGEBRA_ARRAY_MPI3
     {
       auto bm = molpro::linalg::ArrayBenchmarkDistributed<molpro::linalg::array::DistrArrayMPI3>(
-          "molpro::linalg::array::DistrArrayMPI3", length, false, 0.1);
+          "DistrArrayMPI3", length, false, 0.1);
       bm.all();
       std::cout << bm;
     }
+    using fast_container = molpro::linalg::array::DistrArrayMPI3;
+#else
+    using fast_container = std::vector<double>;
 #endif
 #ifdef LINEARALGEBRA_ARRAY_GA
     {
       auto bm = molpro::linalg::ArrayBenchmarkDistributed<molpro::linalg::array::DistrArrayGA>(
-          "molpro::linalg::array::DistrArrayGA", length, false, 0.1);
+          "DistrArrayGA", length, false, 0.1);
       bm.all();
       std::cout << bm;
     }
 #endif
 #ifdef LINEARALGEBRA_ARRAY_HDF5
     {
-      auto bm = molpro::linalg::ArrayBenchmarkDDisk<molpro::linalg::array::DistrArrayHDF5>(
-          "molpro::linalg::array::DistrArrayHDF5", length, false, 0.01);
+      auto bm = molpro::linalg::ArrayBenchmarkDDisk<molpro::linalg::array::DistrArrayHDF5, fast_container>(
+          "DistrArrayHDF5 / memory", length, false, 0.01);
       bm.all();
       std::cout << bm;
     }
 #endif
     {
-      auto bm = molpro::linalg::ArrayBenchmarkDistributed<molpro::linalg::array::DistrArrayFile>(
-          "molpro::linalg::array::DistrArrayFile", length, false, 0.1);
+      auto bm = molpro::linalg::ArrayBenchmarkDDisk<molpro::linalg::array::DistrArrayFile, fast_container>(
+          "DistrArrayFile / memory", length, false, 0.1);
       bm.all();
       std::cout << bm;
     }
