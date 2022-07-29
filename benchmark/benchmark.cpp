@@ -1,16 +1,16 @@
 #include "ArrayBenchmark.h"
 #include <iostream>
-#include <molpro/mpi.h>
-#ifdef HAVE_MPI_H
-#include <mpi.h>
+#ifdef LINEARALGEBRA_ARRAY_GA
+#define HAVE_GA_H 1
 #endif
+#include <molpro/mpi.h>
 int main(int argc, char* argv[]) {
   molpro::mpi::init();
+#ifdef LINEARALGEBRA_ARRAY_GA
+  GA_Initialize();
+#endif
   auto rank = molpro::mpi::rank_global();
   auto mpi_size = molpro::mpi::size_global();
-//#ifdef LINEARALGEBRA_ARRAY_GA
-//  GA_Initialize();
-//#endif
   if (rank == 0)
     std::cout << mpi_size << " MPI ranks" << std::endl;
   for (const auto& length : std::vector<size_t>{500, 1000, 10000, 100000, 1000000, 10000000, 100000000}) {
