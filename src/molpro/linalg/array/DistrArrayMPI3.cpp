@@ -238,7 +238,7 @@ DistrArrayMPI3::LocalBufferMPI3::LocalBufferMPI3(DistrArrayMPI3& source) {
   MPI_Comm_rank(source.communicator(), &rank);
   index_type hi;
   std::tie(m_start, hi) = source.distribution().range(rank);
-  m_size = hi - m_start + 1;
+  m_size = hi - m_start;
   int flag;
   MPI_Win_get_attr(source.m_win, MPI_WIN_BASE, &m_buffer, &flag);
 }
