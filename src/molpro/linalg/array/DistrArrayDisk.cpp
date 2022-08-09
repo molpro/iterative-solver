@@ -56,7 +56,7 @@ DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source) : m_sou
   int rank = mpi_rank(source.communicator());
   index_type hi;
   std::tie(m_start, hi) = source.distribution().range(rank);
-  m_size = hi - m_start;
+  m_size = hi - m_start + 1;
   //  std::cout << "LocalBufferDisk " << this << " resizes from  " << m_snapshot_buffer.size() << " to " << m_size
   //            << std::endl;
   m_snapshot_buffer.resize(m_size);
@@ -69,7 +69,7 @@ DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source, const S
   int rank = mpi_rank(source.communicator());
   index_type hi;
   std::tie(m_start, hi) = source.distribution().range(rank);
-  m_size = hi - m_start;
+  m_size = hi - m_start + 1;
   if (m_size > buffer.size())
     source.error("LocalBufferDisk(): attempting to construct from a buffer that is too small");
   m_buffer = buffer.empty() ? nullptr : &buffer[0];
