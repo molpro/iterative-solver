@@ -14762,6 +14762,13 @@
       <anchor>a12b3a57e72d2ca5fd50a2925191f0ff9</anchor>
       <arglist></arglist>
     </member>
+    <member kind="variable">
+      <type>std::mutex</type>
+      <name>s_open_error_mutex</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>af25a43293d1736bcb38d4f07b8056745</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="namespace">
     <name>molpro::linalg::array::detail</name>

@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['s_5fmutex_1697',['s_mutex',['../namespacemolpro_1_1linalg_1_1array_1_1util.html#ac5b51a7de2c9b92d70b9342bd48e5ed1',1,'molpro::linalg::array::util']]],
+  ['s_5fmutex_1696',['s_mutex',['../namespacemolpro_1_1linalg_1_1array_1_1util.html#ac5b51a7de2c9b92d70b9342bd48e5ed1',1,'molpro::linalg::array::util']]],
+  ['s_5fopen_5ferror_5fmutex_1697',['s_open_error_mutex',['../namespacemolpro_1_1linalg_1_1array.html#af25a43293d1736bcb38d4f07b8056745',1,'molpro::linalg::array']]],
   ['s_5ftemp_5ffile_5fname_5fcount_1698',['s_temp_file_name_count',['../namespacemolpro_1_1linalg_1_1array_1_1util.html#a3be37e974c75f3bd166cc7303542dd4a',1,'molpro::linalg::array::util']]],
   ['scal_1699',['scal',['../structmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1Counter.html#a9d520e242d7fcaaa775768eaf9a834dc',1,'molpro::linalg::array::ArrayHandler::Counter']]],
   ['solution_5fparams_1700',['solution_params',['../classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#aa99c75dd44f4e6947199bb2bd1c8decf',1,'molpro::linalg::itsolv::detail::DSpaceResetter']]],

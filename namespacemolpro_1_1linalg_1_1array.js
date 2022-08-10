@@ -80,5 +80,6 @@ var namespacemolpro_1_1linalg_1_1array =
     [ "is_disk_v", "namespacemolpro_1_1linalg_1_1array.html#a299c3ce7c7b32979a20409256f6d667b", null ],
     [ "is_distributed_v", "namespacemolpro_1_1linalg_1_1array.html#ad3bfb249746efc65f70c9af4fc1667a1", null ],
     [ "is_iterable_v", "namespacemolpro_1_1linalg_1_1array.html#a37f32650280ead1187209883828505be", null ],
-    [ "is_sparse_v", "namespacemolpro_1_1linalg_1_1array.html#a032b081004cd9ee22ff6d6061eaa7684", null ]
+    [ "is_sparse_v", "namespacemolpro_1_1linalg_1_1array.html#a032b081004cd9ee22ff6d6061eaa7684", null ],
+    [ "s_open_error_mutex", "namespacemolpro_1_1linalg_1_1array.html#af25a43293d1736bcb38d4f07b8056745", null ]
 ];
