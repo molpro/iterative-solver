@@ -91,7 +91,7 @@ public:
  * into one or more chunks that are independent windows on the data. Sequential access to the data is provided through
  * iterators.
  */
-class BufferManager {
+class BufferManager_old {
 
 public:
   enum buffertype { Single = 1, Double = 2 };
@@ -101,8 +101,8 @@ public:
    * @param buffer Provided buffer
    * @param number_of_buffers how many buffers.
    */
-  BufferManager(const DistrArrayDisk& distr_array_disk, Span<DistrArrayDisk::value_type> buffer,
-                enum buffertype number_of_buffers = buffertype::Double, bool aggregated_async = false);
+  BufferManager_old(const DistrArrayDisk& distr_array_disk, Span<DistrArrayDisk::value_type> buffer,
+                    enum buffertype number_of_buffers = buffertype::Double, bool aggregated_async = false);
   /**
    * @brief Construct a new Buffer Manager object and allocate memory for the chunks.
    *
@@ -110,8 +110,8 @@ public:
    * @param chunk_size number of array elements in each chunk.
    * @param number_of_buffers how many buffers.
    */
-  BufferManager(const DistrArrayDisk& distr_array_disk, size_t chunk_size = 8192,
-                enum buffertype number_of_buffers = buffertype::Double, bool aggregated_async = false);
+  BufferManager_old(const DistrArrayDisk& distr_array_disk, size_t chunk_size = 8192,
+                    enum buffertype number_of_buffers = buffertype::Double, bool aggregated_async = false);
   using value_type = DistrArray::value_type;
   const size_t chunk_size = 8192;
     bool m_aggregated_async = false;
@@ -138,7 +138,7 @@ public:
      * @param begin set this->m_value to the start of the iteration
      * @param end set this->m_value to the end of the iteration
      */
-    Iterator(BufferManager& manager, bool begin = false, bool end = false)
+    Iterator(BufferManager_old& manager, bool begin = false, bool end = false)
         : m_manager(manager), m_value(end ? value_type(nullptr, 0) : manager.next(begin)) {}
     // iterator operators
     reference operator*() const { return m_value; }
@@ -159,7 +159,7 @@ public:
     friend bool operator!=(const Iterator& a, const Iterator& b) { return not(a == b); };
 
   private:
-    BufferManager& m_manager; // BufferManager object containing buffers
+    BufferManager_old& m_manager; // BufferManager object containing buffers
     value_type m_value;       // iterator value
   };
   [[nodiscard]] Iterator begin() { return Iterator(*this, true); }

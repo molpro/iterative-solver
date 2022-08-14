@@ -130,8 +130,8 @@ DistrArray::value_type DistrArrayDisk::dot(const DistrArray::SparseArray& y) con
 
 // BufferManager class functions
 
-BufferManager::BufferManager(const DistrArrayDisk& distr_array_disk, Span<DistrArray::value_type> buffer,
-                             BufferManager::buffertype number_of_buffers, bool aggregated_async)
+BufferManager_old::BufferManager_old(const DistrArrayDisk& distr_array_disk, Span<DistrArray::value_type> buffer,
+                             BufferManager_old::buffertype number_of_buffers, bool aggregated_async)
     : chunk_size(std::move(buffer.size() / number_of_buffers)), distr_array_disk(distr_array_disk),
       next_chunk_futures(number_of_buffers), range(distr_array_disk.distribution().range(molpro::mpi::rank_global())), m_aggregated_async(aggregated_async) {
   auto prof = molpro::Profiler::single()->push("BufferManager()");
@@ -139,8 +139,8 @@ BufferManager::BufferManager(const DistrArrayDisk& distr_array_disk, Span<DistrA
     this->chunks.emplace_back(buffer.data() + (chunk_size * buffer_count));
 }
 
-BufferManager::BufferManager(const DistrArrayDisk& distr_array_disk, size_t chunk_size,
-                             BufferManager::buffertype number_of_buffers, bool aggregated_async)
+BufferManager_old::BufferManager_old(const DistrArrayDisk& distr_array_disk, size_t chunk_size,
+                             BufferManager_old::buffertype number_of_buffers, bool aggregated_async)
     : chunk_size(std::move(chunk_size)), distr_array_disk(distr_array_disk), next_chunk_futures(number_of_buffers),
       range(distr_array_disk.distribution().range(molpro::mpi::rank_global())), m_aggregated_async(aggregated_async) {
   own_buffer.reserve(chunk_size * number_of_buffers);
@@ -151,7 +151,7 @@ template <class T>
 inline void DistrArrayGet(const T& obj, size_t lo, size_t hi, typename T::value_type* data) {
   obj.get(lo, hi, data);
 }
-Span<BufferManager::value_type> BufferManager::next(bool initial) {
+Span<BufferManager_old::value_type> BufferManager_old::next(bool initial) {
   auto prof = molpro::Profiler::single()->push(std::string{"BufferManager::next("} + (initial ? "T" : "F") + ")");
   if (initial)
     curr_chunk = 0;
@@ -167,7 +167,7 @@ Span<BufferManager::value_type> BufferManager::next(bool initial) {
 
   {
     if (m_read_parameters[0].m_offset >= range.second)
-      return Span<BufferManager::value_type>(nullptr, 0);
+      return Span<BufferManager_old::value_type>(nullptr, 0);
     if (chunks.size() == 1 or m_read_parameters[0].m_offset == range.first) {
 //        this->distr_array_disk.get(m_read_parameters[0].m_offset, m_read_parameters[0].m_high, buffer);
         read(0);
@@ -192,7 +192,7 @@ Span<BufferManager::value_type> BufferManager::next(bool initial) {
   return Span<value_type>(buffer, m_read_parameters[0].m_high-m_read_parameters[0].m_offset);
 }
 
-    void BufferManager::read(int buffer) {
+    void BufferManager_old::read(int buffer) {
         this->distr_array_disk.get(m_read_parameters[buffer].m_offset, m_read_parameters[buffer].m_high, m_read_parameters[buffer].m_buffer);
     }
 
