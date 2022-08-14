@@ -131,18 +131,18 @@ DistrArray::value_type DistrArrayDisk::dot(const DistrArray::SparseArray& y) con
 // BufferManager class functions
 
 BufferManager::BufferManager(const DistrArrayDisk& distr_array_disk, Span<DistrArray::value_type> buffer,
-                             BufferManager::buffertype number_of_buffers)
+                             BufferManager::buffertype number_of_buffers, bool aggregated_async)
     : chunk_size(std::move(buffer.size() / number_of_buffers)), distr_array_disk(distr_array_disk),
-      next_chunk_futures(number_of_buffers), range(distr_array_disk.distribution().range(molpro::mpi::rank_global())) {
+      next_chunk_futures(number_of_buffers), range(distr_array_disk.distribution().range(molpro::mpi::rank_global())), m_aggregated_async(aggregated_async) {
   auto prof = molpro::Profiler::single()->push("BufferManager()");
   for (size_t buffer_count = 0; buffer_count < number_of_buffers; ++buffer_count)
     this->chunks.emplace_back(buffer.data() + (chunk_size * buffer_count));
 }
 
 BufferManager::BufferManager(const DistrArrayDisk& distr_array_disk, size_t chunk_size,
-                             BufferManager::buffertype number_of_buffers)
+                             BufferManager::buffertype number_of_buffers, bool aggregated_async)
     : chunk_size(std::move(chunk_size)), distr_array_disk(distr_array_disk), next_chunk_futures(number_of_buffers),
-      range(distr_array_disk.distribution().range(molpro::mpi::rank_global())) {
+      range(distr_array_disk.distribution().range(molpro::mpi::rank_global())), m_aggregated_async(aggregated_async) {
   own_buffer.reserve(chunk_size * number_of_buffers);
   for (size_t buffer_count = 0; buffer_count < number_of_buffers; ++buffer_count)
     this->chunks.emplace_back(own_buffer.data() + (chunk_size * buffer_count) / number_of_buffers);
@@ -155,36 +155,45 @@ Span<BufferManager::value_type> BufferManager::next(bool initial) {
   auto prof = molpro::Profiler::single()->push(std::string{"BufferManager::next("} + (initial ? "T" : "F") + ")");
   if (initial)
     curr_chunk = 0;
-  const size_t offset = range.first + curr_chunk * this->chunk_size;
-  const auto buffer_id = curr_chunk % chunks.size();
+  m_read_parameters[0].m_buffer = chunks[curr_chunk%chunks.size()];
+   m_read_parameters[0].m_offset = range.first + curr_chunk * this->chunk_size;
+   m_read_parameters[0].m_high = std::min(m_read_parameters[0].m_offset + this->chunk_size, range.second);
+   m_read_parameters[1].m_offset = range.first + (curr_chunk + 1) * this->chunk_size;
+   m_read_parameters[1].m_high = std::min(m_read_parameters[1].m_offset + this->chunk_size, range.second);
+   m_read_parameters[1].m_buffer = chunks[(curr_chunk + 1) % chunks.size()];
+    const auto buffer_id = curr_chunk % chunks.size();
   DistrArray::value_type* buffer = chunks[buffer_id];
 
 
   {
-    if (offset >= range.second)
+    if (m_read_parameters[0].m_offset >= range.second)
       return Span<BufferManager::value_type>(nullptr, 0);
-    if (chunks.size() == 1 or offset == range.first) {
-      this->distr_array_disk.get(offset, std::min(offset + this->chunk_size, range.second), buffer);
+    if (chunks.size() == 1 or m_read_parameters[0].m_offset == range.first) {
+//        this->distr_array_disk.get(m_read_parameters[0].m_offset, m_read_parameters[0].m_high, buffer);
+        read(0);
     } else {
       this->next_chunk_futures[buffer_id].wait();
     }
   }
 
+    if (chunks.size() > 1 and m_read_parameters[1].m_offset < range.second) {
+        if (m_aggregated_async) {
+  } else
     {
-      auto next_offset = range.first + (curr_chunk + 1) * this->chunk_size;
-      if (chunks.size() > 1 and next_offset < range.second) {
-        auto next_hi = std::min(next_offset + this->chunk_size, range.second);
-        const auto next_buffer_id = (curr_chunk + 1) % chunks.size();
-        auto next_data = chunks[next_buffer_id];
-        this->next_chunk_futures.at(next_buffer_id) =
-            std::async(std::launch::async, [this, next_offset, next_hi, next_data]() {
-              this->distr_array_disk.get(next_offset, next_hi, next_data);
+        this->next_chunk_futures.at((curr_chunk + 1) % chunks.size()) =
+            std::async(std::launch::async, [this]() {
+//              this->distr_array_disk.get(m_read_parameters[1].m_offset, m_read_parameters[1].m_high, m_read_parameters[1].m_buffer);
+              read(1);
             });
       }
     }
 
   ++curr_chunk;
-  return Span<value_type>(buffer, offset >= range.second ? 0 : std::min(size_t(chunk_size), range.second - offset));
+  return Span<value_type>(buffer, m_read_parameters[0].m_high-m_read_parameters[0].m_offset);
 }
+
+    void BufferManager::read(int buffer) {
+        this->distr_array_disk.get(m_read_parameters[buffer].m_offset, m_read_parameters[buffer].m_high, m_read_parameters[buffer].m_buffer);
+    }
 
 } // namespace molpro::linalg::array

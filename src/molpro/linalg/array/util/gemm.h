@@ -72,6 +72,13 @@ void gemm_outer_distr_distr(const Matrix<typename array::mapped_or_value_type_t<
                    gemm_type::outer);
 }
 
+inline void do_reads(std::vector<BufferManager>& buffers) {
+    for (const auto& buffer : buffers) {
+
+    }
+//    return true;
+}
+
 template <class AL>
 void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRef<DistrArrayFile>& xx,
                       const VecRef<AL>& yy, gemm_type gemm_type) {
@@ -80,6 +87,7 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
   if (xx.size() == 0 || yy.size() == 0) {
     return;
   }
+
 
   bool yy_constant_stride = true;
   int previous_stride = 0;
@@ -96,6 +104,7 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
   yy_constant_stride = yy_constant_stride && (yy_stride > 0);
 
   auto options = molpro::linalg::options();
+  bool aggregated_sync =  options->parameter("GEMM_AGGREGATED_SYNC", false);
   const BufferManager::buffertype number_of_buffers = (options->parameter("GEMM_BUFFERS", 2) > 1)
                                                           ? BufferManager::buffertype::Double
                                                           : BufferManager::buffertype::Single;
@@ -111,19 +120,27 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
   std::vector<BufferManager::Iterator> buffer_iterators;
   buffers.reserve(xx.size());
   buffer_iterators.reserve(xx.size());
+  std::future<void> async_read_future;
   for (size_t j = 0; j < xx.size(); ++j) {
     {
       auto prof = molpro::Profiler::single()->push("gemm_distr_distr emplace BufferManager");
       buffers.emplace_back(xx.at(j).get(),
                            Span<DistrArray::value_type>(buffers_memory.data() + (buf_size * j), buf_size),
-                           number_of_buffers);
+                           number_of_buffers
+                           , aggregated_sync
+                           );
+
+//        BufferManager(const DistrArrayDisk& distr_array_disk, size_t chunk_size = 8192,
+//        enum buffertype number_of_buffers = buffertype::Double, bool aggregated_async = false);
     }
-    {
+      {
       auto prof = molpro::Profiler::single()->push("gemm_distr_distr emplace BufferManager::Iterator");
       buffer_iterators.emplace_back(buffers[j].begin());
     }
   }
-  molpro::Profiler::single()->stop("gemm: buffer setup");
+    if (aggregated_sync && number_of_buffers != BufferManager::Single)
+        async_read_future = std::async(std::launch::async, [ &buffers]() { do_reads(buffers); });
+    molpro::Profiler::single()->stop("gemm: buffer setup");
   int current_buf_size; // = buffer_iterators.front()->size();
   const auto y_size = int(yy[0].get().local_buffer()->size());
   for (int container_offset = 0; container_offset < y_size; container_offset += current_buf_size) {
@@ -164,7 +181,11 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
       }
     }
     for (auto& iter : buffer_iterators)
-      ++iter;
+        ++iter;
+      if (aggregated_sync && number_of_buffers != BufferManager::Single && container_offset+current_buf_size<y_size) {
+          async_read_future.get();
+          async_read_future = std::async(std::launch::async, [&buffers]() { do_reads(buffers); });
+      }
   }
 }
 

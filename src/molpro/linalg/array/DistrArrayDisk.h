@@ -102,7 +102,7 @@ public:
    * @param number_of_buffers how many buffers.
    */
   BufferManager(const DistrArrayDisk& distr_array_disk, Span<DistrArrayDisk::value_type> buffer,
-                enum buffertype number_of_buffers = buffertype::Double);
+                enum buffertype number_of_buffers = buffertype::Double, bool aggregated_async = false);
   /**
    * @brief Construct a new Buffer Manager object and allocate memory for the chunks.
    *
@@ -111,9 +111,15 @@ public:
    * @param number_of_buffers how many buffers.
    */
   BufferManager(const DistrArrayDisk& distr_array_disk, size_t chunk_size = 8192,
-                enum buffertype number_of_buffers = buffertype::Double);
+                enum buffertype number_of_buffers = buffertype::Double, bool aggregated_async = false);
   using value_type = DistrArray::value_type;
   const size_t chunk_size = 8192;
+    bool m_aggregated_async = false;
+    struct {
+        value_type *m_buffer;
+        Span<value_type>::size_type m_offset;
+        Span<value_type>::size_type m_high;
+    } m_read_parameters[2];
   /**
    * @brief Custom iterator for the BufferManager. This iterator is responsible for loading data into the buffers and
    * providing access to that data.
@@ -173,6 +179,9 @@ protected:
   std::vector<std::future<void>> next_chunk_futures;
   const std::pair<size_t, size_t> range; // memory offsets for MPI found via distr_array_disk.distribution().range(...)
   std::vector<DistrArray::value_type> own_buffer;
+
+public:
+  void read(int buffer );
 };
 
 double dot(const DistrArrayDisk& x, const DistrArrayDisk& y);
