@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 #endif
   auto rank = molpro::mpi::rank_global();
   auto mpi_size = molpro::mpi::size_global();
-  const size_t nSlow = 1, nFast = 10;
+  const size_t nSlow = 100, nFast = 10;
   molpro::linalg::set_options(molpro::Options("ITERATIVE-SOLVER", "GEMM_PAGESIZE=8192, GEMM_BUFFERS=2" ));
   std::cout << "GEMM_PAGESIZE=" << molpro::linalg::options()->parameter("GEMM_PAGESIZE", 0) << std::endl;
   std::cout << "GEMM_BUFFERS=" << molpro::linalg::options()->parameter("GEMM_BUFFERS", 0) << std::endl;
