@@ -298,7 +298,7 @@ TEST_F(DistrArrayFile_Fixture, BufferManager) {
   DistrArrayFile f(106);
   DistrArrayFile f2(f.size());
   auto range = f.distribution().range(molpro::mpi::rank_global());
-  std::cout << "rank="<<molpro::mpi::rank_global()<<", range="<<range.first<<":"<<range.second<<std::endl;
+//  std::cout << "rank="<<molpro::mpi::rank_global()<<", range="<<range.first<<":"<<range.second<<std::endl;
   auto size = range.second-range.first;
   std::vector<double> values(size);
   std::iota(values.begin(), values.end(), double(range.first));
