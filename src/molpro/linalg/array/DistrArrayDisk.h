@@ -167,7 +167,7 @@ public:
 
 protected:
   /**
-   * @brief Update the values in this->chunks, toggle this->curr_chunk, and allocate this->next_chunk_future. This is
+   * @brief Update the values in this->chunks, toggle this->m_current_segment, and allocate this->next_chunk_future. This is
    * called via ++buffer.
    * @param initial whether this is the first iteration
    * @return the iterator value for the next iteration
