@@ -101,14 +101,11 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
   const int buf_size =
       std::min(int(yy.front().get().local_buffer()->size()), options->parameter("GEMM_PAGESIZE", 8192)) *
       number_of_buffers;
-  //    std::cout << "buf_size=" << buf_size << " number_of_buffers=" << number_of_buffers << std::endl;
+//      std::cout << "buf_size=" << buf_size << " number_of_buffers=" << number_of_buffers << std::endl;
 
   molpro::Profiler::single()->start("gemm: buffer setup");
   BufferManager buffer(xx, buf_size, number_of_buffers);
-//  auto buffer_iterator = buffer.begin();
   molpro::Profiler::single()->stop("gemm: buffer setup");
-  const auto y_size = int(yy[0].get().local_buffer()->size());
-//  for (int container_offset = 0; container_offset < y_size; container_offset += current_buf_size) {
   for (auto buffer_iterator = buffer.begin(); buffer_iterator != buffer.end(); ++buffer_iterator) {
     auto container_offset = buffer.buffer_offset();
     int current_buf_size = buffer.buffer_size();
@@ -118,7 +115,7 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
         auto prof =
             molpro::Profiler::single()->push("gemm_outer: cblas_dgemm dimensions " + std::to_string(xx.size()) + ", " +
                                              std::to_string(yy.size()) + ", " + std::to_string(current_buf_size));
-//        std::cout << "outer dgemm"<<std::endl;
+//        std::cout << "outer dgemm container_offset="<<container_offset<<std::endl;
         cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, current_buf_size, yy.size(), xx.size(), 1,
                     buffer_iterator->data(), buffer.buffer_stride(), alphadata, yy.size(), 1,
                     yy[0].get().local_buffer()->data() + container_offset, yy_stride);
@@ -152,7 +149,6 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
         }
       }
     }
-    ++buffer_iterator;
   }
 }
 
