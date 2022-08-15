@@ -118,7 +118,7 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
         auto prof =
             molpro::Profiler::single()->push("gemm_outer: cblas_dgemm dimensions " + std::to_string(xx.size()) + ", " +
                                              std::to_string(yy.size()) + ", " + std::to_string(current_buf_size));
-        std::cout << "outer dgemm"<<std::endl;
+//        std::cout << "outer dgemm"<<std::endl;
         cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, current_buf_size, yy.size(), xx.size(), 1,
                     buffer_iterator->data(), buffer.buffer_stride(), alphadata, yy.size(), 1,
                     yy[0].get().local_buffer()->data() + container_offset, yy_stride);
@@ -126,7 +126,7 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
         auto prof =
             molpro::Profiler::single()->push("gemm_outer: cblas_dgemv dimensions " + std::to_string(xx.size()) + ", " +
                                              std::to_string(yy.size()) + ", " + std::to_string(current_buf_size));
-        std::cout << "outer dgemv"<<std::endl;
+//        std::cout << "outer dgemv"<<std::endl;
         for (size_t i = 0; i < yy.size(); ++i) {
           cblas_dgemv(CblasColMajor, CblasNoTrans, current_buf_size, xx.size(), 1, buffer_iterator->data(), buffer.buffer_stride(),
                       alphadata + i, yy.size(), 1, yy[i].get().local_buffer()->data() + container_offset, 1);
@@ -137,7 +137,7 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
         auto prof =
             molpro::Profiler::single()->push("gemm_inner: cblas_dgemm dimensions " + std::to_string(xx.size()) + ", " +
                                              std::to_string(yy.size()) + ", " + std::to_string(current_buf_size));
-        std::cout << "inner dgemm"<<std::endl;
+//        std::cout << "inner dgemm"<<std::endl;
         cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, xx.size(), yy.size(), current_buf_size, 1,
                     buffer_iterator->data(), buffer.buffer_stride(), yy[0].get().local_buffer()->data() + container_offset, yy_stride,
                     1, alphadata, xx.size());
@@ -145,7 +145,7 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
         auto prof =
             molpro::Profiler::single()->push("gemm_inner: cblas_dgemv dimensions " + std::to_string(xx.size()) + ", " +
                                              std::to_string(yy.size()) + ", " + std::to_string(current_buf_size));
-        std::cout << "inner dgemv"<<std::endl;
+//        std::cout << "inner dgemv"<<std::endl;
         for (size_t k = 0; k < yy.size(); ++k) {
           cblas_dgemv(CblasColMajor, CblasTrans, current_buf_size, xx.size(), 1, buffer_iterator->data(), buffer.buffer_stride(),
                       yy[k].get().local_buffer()->data() + container_offset, 1, 1, alphadata + k * xx.size(), 1);
