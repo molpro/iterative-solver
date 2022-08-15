@@ -1739,129 +1739,119 @@
     </member>
   </compound>
   <compound kind="class">
-    <name>molpro::linalg::array::BufferManager</name>
-    <filename>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</filename>
-    <class kind="struct">molpro::linalg::array::BufferManager::Iterator</class>
-    <member kind="enumeration">
-      <type></type>
-      <name>buffertype</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>acf768581141901bc8ce31d89c509f6b4</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>Single</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>acf768581141901bc8ce31d89c509f6b4a910feedbe04e3d59fb588727832fab9d</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>Double</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>acf768581141901bc8ce31d89c509f6b4af9a2c26e9c73203e81db202ca577ab62</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="typedef">
-      <type>DistrArray::value_type</type>
-      <name>value_type</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>a7dbfe978c10fcc6fb2dc4d92cf13e995</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>Single</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>acf768581141901bc8ce31d89c509f6b4a910feedbe04e3d59fb588727832fab9d</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>Double</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>acf768581141901bc8ce31d89c509f6b4af9a2c26e9c73203e81db202ca577ab62</anchor>
-      <arglist></arglist>
-    </member>
+    <name>molpro::linalg::array::util::BufferManager</name>
+    <filename>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</filename>
+    <class kind="struct">molpro::linalg::array::util::BufferManager::Iterator</class>
     <member kind="function">
       <type></type>
       <name>BufferManager</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>ae924cda07ced3f14fa9588dcf3410c8f</anchor>
-      <arglist>(const DistrArrayDisk &amp;distr_array_disk, Span&lt; DistrArrayDisk::value_type &gt; buffer, enum buffertype number_of_buffers=buffertype::Double)</arglist>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>a7a5c9b07f24ac31db58fa7e41567c36e</anchor>
+      <arglist>(const CVecRef&lt; DistrArrayFile &gt; &amp;arrays, size_t buffer_size=8192, int number_of_buffers=2)</arglist>
     </member>
     <member kind="function">
-      <type></type>
-      <name>BufferManager</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>acd6f43ab73b66fc9c3742a56562094f6</anchor>
-      <arglist>(const DistrArrayDisk &amp;distr_array_disk, size_t chunk_size=8192, enum buffertype number_of_buffers=buffertype::Double)</arglist>
+      <type>size_t</type>
+      <name>buffer_size</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>abe91d02c50579589418f88d82204a3e0</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>buffer_stride</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>a47088628a3a75e0a92f49749def6b5bc</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>buffer_offset</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>add5b3a303400c9476cb1ae1db022fc19</anchor>
+      <arglist>() const</arglist>
     </member>
     <member kind="function">
       <type>Iterator</type>
       <name>begin</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>a0fd76780ae6a6c1f4670ab9a20923619</anchor>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>a8b07e867b3feecc96120e93cbddf94a8</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>Iterator</type>
       <name>end</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>a372b28df89a51b869d07617e3fc5bfc0</anchor>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>affc85076c0cc4652a8ea8a2a6d25ab11</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="variable">
-      <type>const size_t</type>
-      <name>chunk_size</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>a751c429fb78f8bc108390327aa749f39</anchor>
+    <member kind="typedef" protection="protected">
+      <type>DistrArray::value_type</type>
+      <name>value_type</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>a9dd30a4e36adcb35067e0c48cb63c536</anchor>
       <arglist></arglist>
     </member>
     <member kind="function" protection="protected">
       <type>Span&lt; value_type &gt;</type>
       <name>next</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>ac345a320080d13284157acac732695b2</anchor>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>acaa1c76ebe32603fc0a9ff7e9e8057c4</anchor>
       <arglist>(bool initial=false)</arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>const DistrArrayDisk &amp;</type>
-      <name>distr_array_disk</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>ad6f238b6aacc798a0d05449c11c349d1</anchor>
+      <type>const CVecRef&lt; DistrArrayFile &gt; &amp;</type>
+      <name>m_arrays</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>ae8f1b305dcd8ee529e73ccc442881070</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>std::vector&lt; DistrArray::value_type * &gt;</type>
-      <name>chunks</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>a223ed4563416c3dbe828c318c6aa0fbf</anchor>
+      <type>const size_t</type>
+      <name>m_buffer_size</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>a9998fbe83b67a150c558f8bd3302bd93</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>const int</type>
+      <name>m_number_of_buffers</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>aafa9f57374f312efb8863f9803e588b2</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>size_t</type>
-      <name>curr_chunk</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>a1d21585063914b1a29bb8e60084a17df</anchor>
+      <name>m_current_buffer_size</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>aa6803d0cf2f4c7b1e33e022ae1a611ab</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>std::vector&lt; std::future&lt; void &gt; &gt;</type>
-      <name>next_chunk_futures</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>a1d17691c6b2a86512a7f44b6473bfffb</anchor>
+      <type>size_t</type>
+      <name>m_current_segment</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>a028a7a81c40940c1463848d13ebf92c3</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>const std::pair&lt; size_t, size_t &gt;</type>
-      <name>range</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>a71a022d0b5bebe5147cb5aa599acc4f9</anchor>
+      <name>m_range</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>a294e2b8d63f0f675c420747e376590dc</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>std::vector&lt; DistrArray::value_type &gt;</type>
-      <name>own_buffer</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1BufferManager.html</anchorfile>
-      <anchor>ac800831305300886350821b1c9901d2a</anchor>
+      <name>m_buffer</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>a8825e63ab7c9fa5bf52afc5d588c33cc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::future&lt; void &gt;</type>
+      <name>m_read_future</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>ab519bebddee5512724702a9dd5109997</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -7876,89 +7866,89 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>molpro::linalg::array::BufferManager::Iterator</name>
-    <filename>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</filename>
+    <name>molpro::linalg::array::util::BufferManager::Iterator</name>
+    <filename>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</filename>
     <member kind="typedef">
       <type>std::forward_iterator_tag</type>
       <name>iterator_category</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>a19b205974b9b89fc861abeb032582835</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>a5a542b64ab45a0d220c2f88c17c831d0</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>std::ptrdiff_t</type>
       <name>difference_type</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>a243e89d3ecc0a9ff3247761d6f27393f</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>a1ebe6f80cc8699a59d28c1e2f4bf2d50</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>Span&lt; DistrArray::value_type &gt;</type>
       <name>value_type</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>ac3ac7bf67ebdb054f73123ed16f6c845</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>aff40b87955ff69a9015bb0677a6db08f</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>Span&lt; DistrArray::value_type &gt; *</type>
       <name>pointer</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>a4138d7ba9474a24ed5ce2ba584a5e37f</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>a2b45e392772a99307829c11e5343580c</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>const Span&lt; DistrArray::value_type &gt; &amp;</type>
       <name>reference</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>a63def3571c6fec15ada44ecc4dda4a83</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>ac4e71b11d097aff7f509f0454f2baa1b</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>Iterator</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>afdee7f960dc2bde46187a3afd37089c9</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>a2c056a157a44417fa658c9daf091c30a</anchor>
       <arglist>(BufferManager &amp;manager, bool begin=false, bool end=false)</arglist>
     </member>
     <member kind="function">
       <type>reference</type>
       <name>operator*</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>adafeee43daf314bec0f469f9f457d66f</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>a1c5fe500c2913d7617136466514e8e06</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
       <type>pointer</type>
       <name>operator-&gt;</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>a9d6494d1012c9d73634b179bbe176c32</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>a6e9b2760916d7ba969d5bcf6e413bca6</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>Iterator &amp;</type>
       <name>operator++</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>a22f704654069bbe17de17f5aead6d6be</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>a6ee26f4d94af02eabb205defa343d1ab</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>Iterator</type>
       <name>operator++</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
-      <anchor>a84bf7ff902d9088fc0b29519be8f1793</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchor>a198a967a526d7999d969f0b712953aac</anchor>
       <arglist>(int)</arglist>
     </member>
     <member kind="friend">
       <type>friend bool</type>
       <name>operator==</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
       <anchor>adf9a9358b475317bd816d7b47a0f5cd1</anchor>
       <arglist>(const Iterator &amp;a, const Iterator &amp;b)</arglist>
     </member>
     <member kind="friend">
       <type>friend bool</type>
       <name>operator!=</name>
-      <anchorfile>structmolpro_1_1linalg_1_1array_1_1BufferManager_1_1Iterator.html</anchorfile>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html</anchorfile>
       <anchor>a27aed9f3ea67a677964fa51de28a5824</anchor>
       <arglist>(const Iterator &amp;a, const Iterator &amp;b)</arglist>
     </member>
@@ -14610,7 +14600,6 @@
     <class kind="class">molpro::linalg::array::ArrayHandlerDistrSparse&lt; AL, AR, true &gt;</class>
     <class kind="class">molpro::linalg::array::DistrArray</class>
     <class kind="class">molpro::linalg::array::DistrArrayDisk</class>
-    <class kind="class">molpro::linalg::array::BufferManager</class>
     <class kind="class">molpro::linalg::array::DistrArrayFile</class>
     <class kind="class">molpro::linalg::array::DistrArraySpan</class>
     <class kind="class">molpro::linalg::array::DistrArrayMPI3</class>
@@ -14684,13 +14673,6 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
       <anchor>a9127fd56dbfe49e8698f14dcca382295</anchor>
       <arglist>(const DistrArray &amp;x, const DistrArrayDisk &amp;y)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>DistrArrayGet</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
-      <anchor>a1af02b5cf343c352af87bd847d845a42</anchor>
-      <arglist>(const T &amp;obj, size_t lo, size_t hi, typename T::value_type *data)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -14824,6 +14806,7 @@
     <class kind="class">molpro::linalg::array::util::Task</class>
     <class kind="class">molpro::linalg::array::util::PHDF5Handle</class>
     <class kind="struct">molpro::linalg::array::util::TempHandle</class>
+    <class kind="class">molpro::linalg::array::util::BufferManager</class>
     <class kind="class">molpro::linalg::array::util::DistrFlags</class>
     <member kind="enumeration">
       <type></type>
