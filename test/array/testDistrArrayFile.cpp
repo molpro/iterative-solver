@@ -297,22 +297,25 @@ TEST_F(DistrArrayFile_Fixture, contiguous_allocation) {
 TEST_F(DistrArrayFile_Fixture, BufferManager) {
   DistrArrayFile f(106);
   DistrArrayFile f2(f.size());
-  std::vector<double> values(f.size());
-  std::iota(values.begin(), values.end(), double(0));
-  f.put(0, f.size(), values.data());
-  std::vector<double> received_values(f.size());
-  f.get(0, f.size(), received_values.data());
+  auto range = f.distribution().range(molpro::mpi::rank_global());
+  std::cout << "rank="<<molpro::mpi::rank_global()<<", range="<<range.first<<":"<<range.second<<std::endl;
+  auto size = range.second-range.first;
+  std::vector<double> values(size);
+  std::iota(values.begin(), values.end(), double(range.first));
+  f.put(range.first, range.second, values.data());
+  std::vector<double> received_values(size);
+  f.get(range.first, range.second, received_values.data());
   EXPECT_THAT(received_values, Pointwise(DoubleEq(), values));
-  std::vector<double> values2(f.size());
-  std::iota(values2.begin(), values2.end(), double(100000));
-  f2.put(0, f2.size(), values2.data());
-  std::vector<double> received_values2(f.size());
+  std::vector<double> values2(size);
+  std::iota(values2.begin(), values2.end(), double(range.first+100000));
+  f2.put(range.first, range.second, values2.data());
+  std::vector<double> received_values2(size);
 
   std::vector<std::reference_wrapper<const DistrArrayFile>> ff;
   ff.emplace_back(std::cref(f));
   ff.emplace_back(std::cref(f2));
   for (const auto& number_of_buffers : std::vector<size_t>{1, 2}) {
-    for (const auto& buffer_size : std::vector<size_t>{1, f.size()-1, f.size(), f.size()+1, f.size()*2}) {
+    for (const auto& buffer_size : std::vector<size_t>{1, size-1, size, size+1, size*2}) {
       molpro::linalg::array::util::BufferManager manager(ff, buffer_size, number_of_buffers);
       std::fill(received_values.begin(), received_values.end(), -999);
       std::fill(received_values2.begin(), received_values2.end(), -999);

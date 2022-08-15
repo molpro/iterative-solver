@@ -120,7 +120,7 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
     int current_buf_size = buffer.buffer_size();
 //    std::cout << "container_offset="<<container_offset<<", current_buf_size="<<current_buf_size<<std::endl;
     if (gemm_type == gemm_type::outer) {
-      if (false and yy_constant_stride and not yy.empty()) {
+      if (false and yy_constant_stride and not yy.empty()) { // TODO remove debugging
         auto prof =
             molpro::Profiler::single()->push("gemm_outer: cblas_dgemm dimensions " + std::to_string(xx.size()) + ", " +
                                              std::to_string(yy.size()) + ", " + std::to_string(current_buf_size));
@@ -137,7 +137,7 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
         }
       }
     } else if (gemm_type == gemm_type::inner) {
-      if (false and yy_constant_stride and not yy.empty()) {
+      if (false and yy_constant_stride and not yy.empty()) { // TODO remove debugging
         auto prof =
             molpro::Profiler::single()->push("gemm_inner: cblas_dgemm dimensions " + std::to_string(xx.size()) + ", " +
                                              std::to_string(yy.size()) + ", " + std::to_string(current_buf_size));
