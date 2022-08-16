@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>iterative-solver: molpro::linalg::array::util::BufferManager::Iterator Struct Reference</title>
+<title>iterative-solver: molpro::linalg::array::util::BufferManager&lt; T &gt;::Iterator Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('structmolpro_1_1linalg_1_1array_1_1uti
 <a href="#friends">Friends</a> &#124;
 <a href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">molpro::linalg::array::util::BufferManager::Iterator Struct Reference</div>  </div>
+<div class="title">molpro::linalg::array::util::BufferManager&lt; T &gt;::Iterator Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -107,34 +107,37 @@ $(document).ready(function(){initNavTree('structmolpro_1_1linalg_1_1array_1_1uti
 
 <p><code>#include &lt;<a class="el" href="BufferManager_8h_source.html">BufferManager.h</a>&gt;</code></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Custom iterator for the <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html" title="BufferManager provides single-buffered or asynchronous double-buffered read access to the data in a c...">BufferManager</a>. This iterator is responsible for loading data into the buffers and providing access to that data. </p>
+<div class="textblock"><h3>template&lt;class T&gt;<br />
+struct molpro::linalg::array::util::BufferManager&lt; T &gt;::Iterator</h3>
+
+<p>Custom iterator for the <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html" title="BufferManager provides single-buffered or asynchronous double-buffered read access to the data in a c...">BufferManager</a>. This iterator is responsible for loading data into the buffers and providing access to that data. </p>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a5a542b64ab45a0d220c2f88c17c831d0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a5a542b64ab45a0d220c2f88c17c831d0">iterator_category</a> = std::forward_iterator_tag</td></tr>
-<tr class="separator:a5a542b64ab45a0d220c2f88c17c831d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ebe6f80cc8699a59d28c1e2f4bf2d50"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a1ebe6f80cc8699a59d28c1e2f4bf2d50">difference_type</a> = std::ptrdiff_t</td></tr>
-<tr class="separator:a1ebe6f80cc8699a59d28c1e2f4bf2d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff40b87955ff69a9015bb0677a6db08f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#aff40b87955ff69a9015bb0677a6db08f">value_type</a> = <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> &gt;</td></tr>
-<tr class="separator:aff40b87955ff69a9015bb0677a6db08f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b45e392772a99307829c11e5343580c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a2b45e392772a99307829c11e5343580c">pointer</a> = <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> &gt; *</td></tr>
-<tr class="separator:a2b45e392772a99307829c11e5343580c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4e71b11d097aff7f509f0454f2baa1b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#ac4e71b11d097aff7f509f0454f2baa1b">reference</a> = const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> &gt; &amp;</td></tr>
-<tr class="separator:ac4e71b11d097aff7f509f0454f2baa1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06230c7716ffad96ca26bce1cae3579f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a06230c7716ffad96ca26bce1cae3579f">iterator_category</a> = std::forward_iterator_tag</td></tr>
+<tr class="separator:a06230c7716ffad96ca26bce1cae3579f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43308df88cca249fdf84c45a844e3770"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a43308df88cca249fdf84c45a844e3770">difference_type</a> = std::ptrdiff_t</td></tr>
+<tr class="separator:a43308df88cca249fdf84c45a844e3770"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9112b86782257926b2cdc20269895908"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a9112b86782257926b2cdc20269895908">value_type</a> = <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; typename T::value_type &gt;</td></tr>
+<tr class="separator:a9112b86782257926b2cdc20269895908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacebebf6dceff2f2aa6de463efe0eab2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#aacebebf6dceff2f2aa6de463efe0eab2">pointer</a> = <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; typename T::value_type &gt; *</td></tr>
+<tr class="separator:aacebebf6dceff2f2aa6de463efe0eab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5cafdf8da25bebb7fd82e8112e024b8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#af5cafdf8da25bebb7fd82e8112e024b8">reference</a> = const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; typename T::value_type &gt; &amp;</td></tr>
+<tr class="separator:af5cafdf8da25bebb7fd82e8112e024b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2c056a157a44417fa658c9daf091c30a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a2c056a157a44417fa658c9daf091c30a">Iterator</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">BufferManager</a> &amp;manager, bool <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#a8b07e867b3feecc96120e93cbddf94a8">begin</a>=false, bool <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#affc85076c0cc4652a8ea8a2a6d25ab11">end</a>=false)</td></tr>
-<tr class="memdesc:a2c056a157a44417fa658c9daf091c30a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html" title="Custom iterator for the BufferManager. This iterator is responsible for loading data into the buffers...">Iterator</a> object.  <a href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a2c056a157a44417fa658c9daf091c30a">More...</a><br /></td></tr>
-<tr class="separator:a2c056a157a44417fa658c9daf091c30a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c5fe500c2913d7617136466514e8e06"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#ac4e71b11d097aff7f509f0454f2baa1b">reference</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a1c5fe500c2913d7617136466514e8e06">operator*</a> () const</td></tr>
-<tr class="separator:a1c5fe500c2913d7617136466514e8e06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e9b2760916d7ba969d5bcf6e413bca6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a2b45e392772a99307829c11e5343580c">pointer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a6e9b2760916d7ba969d5bcf6e413bca6">operator-&gt;</a> ()</td></tr>
-<tr class="separator:a6e9b2760916d7ba969d5bcf6e413bca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ee26f4d94af02eabb205defa343d1ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html">Iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a6ee26f4d94af02eabb205defa343d1ab">operator++</a> ()</td></tr>
-<tr class="separator:a6ee26f4d94af02eabb205defa343d1ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a198a967a526d7999d969f0b712953aac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html">Iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a198a967a526d7999d969f0b712953aac">operator++</a> (int)</td></tr>
-<tr class="separator:a198a967a526d7999d969f0b712953aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e953e7f21a8dd27afe039fd1cfe0b26"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a5e953e7f21a8dd27afe039fd1cfe0b26">Iterator</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">BufferManager</a> &amp;manager, bool <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#ac79be08b05f977d56fc944fb7302836e">begin</a>=false, bool <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#a9095a1d96c2d44d2202aca4c3f7265be">end</a>=false)</td></tr>
+<tr class="memdesc:a5e953e7f21a8dd27afe039fd1cfe0b26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html" title="Custom iterator for the BufferManager. This iterator is responsible for loading data into the buffers...">Iterator</a> object.  <a href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a5e953e7f21a8dd27afe039fd1cfe0b26">More...</a><br /></td></tr>
+<tr class="separator:a5e953e7f21a8dd27afe039fd1cfe0b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cc510a10cc03be27c1f86f488063223"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#af5cafdf8da25bebb7fd82e8112e024b8">reference</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a7cc510a10cc03be27c1f86f488063223">operator*</a> () const</td></tr>
+<tr class="separator:a7cc510a10cc03be27c1f86f488063223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a271e3d0797aebcc8b9d18988fa8bb812"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#aacebebf6dceff2f2aa6de463efe0eab2">pointer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a271e3d0797aebcc8b9d18988fa8bb812">operator-&gt;</a> ()</td></tr>
+<tr class="separator:a271e3d0797aebcc8b9d18988fa8bb812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b702fa694d6e63e614213c69d324f4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html">Iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a0b702fa694d6e63e614213c69d324f4f">operator++</a> ()</td></tr>
+<tr class="separator:a0b702fa694d6e63e614213c69d324f4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7051005b8d21e423c34d14cf701989aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html">Iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a7051005b8d21e423c34d14cf701989aa">operator++</a> (int)</td></tr>
+<tr class="separator:a7051005b8d21e423c34d14cf701989aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -144,70 +147,80 @@ Friends</h2></td></tr>
 <tr class="separator:a27aed9f3ea67a677964fa51de28a5824"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a1ebe6f80cc8699a59d28c1e2f4bf2d50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ebe6f80cc8699a59d28c1e2f4bf2d50">&#9670;&nbsp;</a></span>difference_type</h2>
+<a id="a43308df88cca249fdf84c45a844e3770"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43308df88cca249fdf84c45a844e3770">&#9670;&nbsp;</a></span>difference_type</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a1ebe6f80cc8699a59d28c1e2f4bf2d50">molpro::linalg::array::util::BufferManager::Iterator::difference_type</a> =  std::ptrdiff_t</td>
+          <td class="memname">using <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::<a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a43308df88cca249fdf84c45a844e3770">Iterator::difference_type</a> =  std::ptrdiff_t</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a5a542b64ab45a0d220c2f88c17c831d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a542b64ab45a0d220c2f88c17c831d0">&#9670;&nbsp;</a></span>iterator_category</h2>
+<a id="a06230c7716ffad96ca26bce1cae3579f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06230c7716ffad96ca26bce1cae3579f">&#9670;&nbsp;</a></span>iterator_category</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a5a542b64ab45a0d220c2f88c17c831d0">molpro::linalg::array::util::BufferManager::Iterator::iterator_category</a> =  std::forward_iterator_tag</td>
+          <td class="memname">using <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::<a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a06230c7716ffad96ca26bce1cae3579f">Iterator::iterator_category</a> =  std::forward_iterator_tag</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a2b45e392772a99307829c11e5343580c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b45e392772a99307829c11e5343580c">&#9670;&nbsp;</a></span>pointer</h2>
+<a id="aacebebf6dceff2f2aa6de463efe0eab2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacebebf6dceff2f2aa6de463efe0eab2">&#9670;&nbsp;</a></span>pointer</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a2b45e392772a99307829c11e5343580c">molpro::linalg::array::util::BufferManager::Iterator::pointer</a> =  <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt;<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a>&gt;*</td>
+          <td class="memname">using <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::<a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#aacebebf6dceff2f2aa6de463efe0eab2">Iterator::pointer</a> =  <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt;typename T::value_type&gt;*</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ac4e71b11d097aff7f509f0454f2baa1b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4e71b11d097aff7f509f0454f2baa1b">&#9670;&nbsp;</a></span>reference</h2>
+<a id="af5cafdf8da25bebb7fd82e8112e024b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5cafdf8da25bebb7fd82e8112e024b8">&#9670;&nbsp;</a></span>reference</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#ac4e71b11d097aff7f509f0454f2baa1b">molpro::linalg::array::util::BufferManager::Iterator::reference</a> =  const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt;<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a>&gt;&amp;</td>
+          <td class="memname">using <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::<a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#af5cafdf8da25bebb7fd82e8112e024b8">Iterator::reference</a> =  const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt;typename T::value_type&gt;&amp;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aff40b87955ff69a9015bb0677a6db08f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff40b87955ff69a9015bb0677a6db08f">&#9670;&nbsp;</a></span>value_type</h2>
+<a id="a9112b86782257926b2cdc20269895908"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9112b86782257926b2cdc20269895908">&#9670;&nbsp;</a></span>value_type</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#aff40b87955ff69a9015bb0677a6db08f">molpro::linalg::array::util::BufferManager::Iterator::value_type</a> =  <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt;<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a>&gt;</td>
+          <td class="memname">using <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::<a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a9112b86782257926b2cdc20269895908">Iterator::value_type</a> =  <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt;typename T::value_type&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -215,17 +228,19 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2c056a157a44417fa658c9daf091c30a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c056a157a44417fa658c9daf091c30a">&#9670;&nbsp;</a></span>Iterator()</h2>
+<a id="a5e953e7f21a8dd27afe039fd1cfe0b26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e953e7f21a8dd27afe039fd1cfe0b26">&#9670;&nbsp;</a></span>Iterator()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">molpro::linalg::array::util::BufferManager::Iterator::Iterator </td>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::Iterator::Iterator </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">BufferManager</a> &amp;&#160;</td>
           <td class="paramname"><em>manager</em>, </td>
@@ -268,17 +283,19 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1c5fe500c2913d7617136466514e8e06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c5fe500c2913d7617136466514e8e06">&#9670;&nbsp;</a></span>operator*()</h2>
+<a id="a7cc510a10cc03be27c1f86f488063223"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cc510a10cc03be27c1f86f488063223">&#9670;&nbsp;</a></span>operator*()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#ac4e71b11d097aff7f509f0454f2baa1b">reference</a> molpro::linalg::array::util::BufferManager::Iterator::operator* </td>
+          <td class="memname"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#af5cafdf8da25bebb7fd82e8112e024b8">reference</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::Iterator::operator* </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -293,17 +310,19 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a6ee26f4d94af02eabb205defa343d1ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ee26f4d94af02eabb205defa343d1ab">&#9670;&nbsp;</a></span>operator++() <span class="overload">[1/2]</span></h2>
+<a id="a0b702fa694d6e63e614213c69d324f4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b702fa694d6e63e614213c69d324f4f">&#9670;&nbsp;</a></span>operator++() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html">Iterator</a>&amp; molpro::linalg::array::util::BufferManager::Iterator::operator++ </td>
+          <td class="memname"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html">Iterator</a>&amp; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::Iterator::operator++ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -318,17 +337,19 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a198a967a526d7999d969f0b712953aac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a198a967a526d7999d969f0b712953aac">&#9670;&nbsp;</a></span>operator++() <span class="overload">[2/2]</span></h2>
+<a id="a7051005b8d21e423c34d14cf701989aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7051005b8d21e423c34d14cf701989aa">&#9670;&nbsp;</a></span>operator++() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html">Iterator</a> molpro::linalg::array::util::BufferManager::Iterator::operator++ </td>
+          <td class="memname"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html">Iterator</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::Iterator::operator++ </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -344,17 +365,19 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a6e9b2760916d7ba969d5bcf6e413bca6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e9b2760916d7ba969d5bcf6e413bca6">&#9670;&nbsp;</a></span>operator-&gt;()</h2>
+<a id="a271e3d0797aebcc8b9d18988fa8bb812"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a271e3d0797aebcc8b9d18988fa8bb812">&#9670;&nbsp;</a></span>operator-&gt;()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a2b45e392772a99307829c11e5343580c">pointer</a> molpro::linalg::array::util::BufferManager::Iterator::operator-&gt; </td>
+          <td class="memname"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#aacebebf6dceff2f2aa6de463efe0eab2">pointer</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html">molpro::linalg::array::util::BufferManager</a>&lt; T &gt;::Iterator::operator-&gt; </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -375,6 +398,8 @@ Friends</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -411,6 +436,8 @@ Friends</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
