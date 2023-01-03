@@ -54,6 +54,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver =
     [ "solve", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#ac87a7c8e687fb61521e51daed48b1ba5", null ],
     [ "statistics", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#ac9aa6c58067a555a39d3ce70af4da914", null ],
     [ "suggest_p", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a151a8c9a56ccb0d75449a5ba910aba75", null ],
+    [ "test_problem", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a25e573d21d3d8eea3aa66f5cb8606aff", null ],
     [ "value", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a1a1d0c58c9e41e405bfa1cfff8179e1e", null ],
     [ "working_set", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#ad1311f667ca86f437490945fff637b0f", null ],
     [ "working_set_eigenvalues", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a9a4225adadce2e8fa278f691aaf6c6c9", null ]

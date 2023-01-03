@@ -153,6 +153,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1d0d76a1e2656cdac6400d7860790355"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a1d0d76a1e2656cdac6400d7860790355">p_action</a> (const std::vector&lt; std::vector&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a4f65ebe42fc79462292b72586c342e63">value_t</a> &gt;&gt; &amp;p_coefficients, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; P &gt; &amp;pparams, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a10aafe6ea77b7b593ae4803b65adbe63">container_t</a> &gt; &amp;actions) const</td></tr>
 <tr class="memdesc:a1d0d76a1e2656cdac6400d7860790355"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the action of the kernel matrix on a set of vectors in the P space.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a1d0d76a1e2656cdac6400d7860790355">More...</a><br /></td></tr>
 <tr class="separator:a1d0d76a1e2656cdac6400d7860790355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2396d45227f1ffaa7f71da4a5087f1f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ae2396d45227f1ffaa7f71da4a5087f1f">test_parameters</a> (unsigned int instance, R &amp;parameters) const</td></tr>
+<tr class="memdesc:ae2396d45227f1ffaa7f71da4a5087f1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provide values of R vectors for testing the problem class. For use in a non-linear solver, the first vector (instance=0) should be a reference point, and the remainder (instance&gt;0) should be close to it, such that meaningful numerical differentation can be done to test the residual function.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ae2396d45227f1ffaa7f71da4a5087f1f">More...</a><br /></td></tr>
+<tr class="separator:ae2396d45227f1ffaa7f71da4a5087f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a10aafe6ea77b7b593ae4803b65adbe63"></a>
@@ -578,6 +581,54 @@ template&lt;typename R , typename P  = std::map&lt;size_t, typename R::value_typ
 <dl class="section return"><dt>Returns</dt><dd>In the case where the residual is an exact differential, the corresponding function value. Used by <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Optimize.html" title="Optimises to a stationary point using methods such as L-BFGS.">Optimize</a> but not <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquations.html" title="Solves non-linear system of equations using methods such as DIIS.">NonLinearEquations</a>. </dd></dl>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="ExampleProblem_8h-example.html#a4">ExampleProblem.h</a>, and <a class="el" href="ExampleProblemDistrArray_8h-example.html#a4">ExampleProblemDistrArray.h</a>.</dd>
 </dl>
+
+</div>
+</div>
+<a id="ae2396d45227f1ffaa7f71da4a5087f1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2396d45227f1ffaa7f71da4a5087f1f">&#9670;&nbsp;</a></span>test_parameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename R , typename P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">molpro::linalg::itsolv::Problem</a>&lt; R, P &gt;::test_parameters </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Provide values of R vectors for testing the problem class. For use in a non-linear solver, the first vector (instance=0) should be a reference point, and the remainder (instance&gt;0) should be close to it, such that meaningful numerical differentation can be done to test the residual function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instance</td><td></td></tr>
+    <tr><td class="paramname">parameters</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if a vector has been provided </dd></dl>
 
 </div>
 </div>

@@ -215,6 +215,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaa15c94f22aef32292f8c81bc4d5b4dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0f9db2eec5cb8d9153fe5ab23db017f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ac0f9db2eec5cb8d9153fe5ab23db017f">solve</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;problem, bool generate_initial_guess=false) override</td></tr>
 <tr class="separator:ac0f9db2eec5cb8d9153fe5ab23db017f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d2794b425152880052b48e64116f295"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a5d2794b425152880052b48e64116f295">test_problem</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity, double threshold) const override</td></tr>
+<tr class="separator:a5d2794b425152880052b48e64116f295"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -2005,6 +2007,62 @@ template&lt;template&lt; class, class, class &gt; class Solver, class R , class 
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d2794b425152880052b48e64116f295"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d2794b425152880052b48e64116f295">&#9670;&nbsp;</a></span>test_problem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class, class, class &gt; class Solver, class R , class Q , class P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate</a>&lt; Solver, R, Q, P &gt;::test_problem </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>v0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>v1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>threshold</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>

@@ -5896,6 +5896,13 @@
       <anchor>a4e6e0aa65f68824fd479ea2832e61876</anchor>
       <arglist>() const =0</arglist>
     </member>
+    <member kind="function" virtualness="pure">
+      <type>virtual bool</type>
+      <name>test_problem</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
+      <anchor>a25e573d21d3d8eea3aa66f5cb8606aff</anchor>
+      <arglist>(const Problem&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity=0, double threshold=1e-5) const =0</arglist>
+    </member>
   </compound>
   <compound kind="class">
     <name>molpro::linalg::itsolv::IterativeSolverTemplate</name>
@@ -6225,6 +6232,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
       <anchor>ac0f9db2eec5cb8d9153fe5ab23db017f</anchor>
       <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, const Problem&lt; R &gt; &amp;problem, bool generate_initial_guess=false) override</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>test_problem</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a5d2794b425152880052b48e64116f295</anchor>
+      <arglist>(const Problem&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity, double threshold) const override</arglist>
     </member>
     <member kind="function" protection="protected">
       <type></type>
@@ -6721,6 +6735,13 @@
       <anchor>ac0f9db2eec5cb8d9153fe5ab23db017f</anchor>
       <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, const Problem&lt; R &gt; &amp;problem, bool generate_initial_guess=false) override</arglist>
     </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>test_problem</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a5d2794b425152880052b48e64116f295</anchor>
+      <arglist>(const Problem&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity, double threshold) const override</arglist>
+    </member>
     <member kind="function" protection="protected">
       <type></type>
       <name>IterativeSolverTemplate</name>
@@ -7216,6 +7237,13 @@
       <anchor>ac0f9db2eec5cb8d9153fe5ab23db017f</anchor>
       <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, const Problem&lt; R &gt; &amp;problem, bool generate_initial_guess=false) override</arglist>
     </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>test_problem</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a5d2794b425152880052b48e64116f295</anchor>
+      <arglist>(const Problem&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity, double threshold) const override</arglist>
+    </member>
     <member kind="function" protection="protected">
       <type></type>
       <name>IterativeSolverTemplate</name>
@@ -7710,6 +7738,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
       <anchor>ac0f9db2eec5cb8d9153fe5ab23db017f</anchor>
       <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, const Problem&lt; R &gt; &amp;problem, bool generate_initial_guess=false) override</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>test_problem</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a5d2794b425152880052b48e64116f295</anchor>
+      <arglist>(const Problem&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity, double threshold) const override</arglist>
     </member>
     <member kind="function" protection="protected">
       <type></type>
@@ -11466,6 +11501,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Problem.html</anchorfile>
       <anchor>a1d0d76a1e2656cdac6400d7860790355</anchor>
       <arglist>(const std::vector&lt; std::vector&lt; value_t &gt;&gt; &amp;p_coefficients, const CVecRef&lt; P &gt; &amp;pparams, const VecRef&lt; container_t &gt; &amp;actions) const</arglist>
+    </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual bool</type>
+      <name>test_parameters</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Problem.html</anchorfile>
+      <anchor>ae2396d45227f1ffaa7f71da4a5087f1f</anchor>
+      <arglist>(unsigned int instance, R &amp;parameters) const</arglist>
     </member>
   </compound>
   <compound kind="class">
