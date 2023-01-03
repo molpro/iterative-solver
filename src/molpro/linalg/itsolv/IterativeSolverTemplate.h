@@ -420,11 +420,11 @@ public:
       if (!problem.test_parameters(0, v0))
         return true;
       auto value0 = problem.residual(v0, v1);
-//      if (verbosity > 1) {
-//        std::cout << "value0 " << value0 << std::endl;
+      if (verbosity > 1) {
+        std::cout << "value0 " << value0 << std::endl;
 //        std::cout << "parameters0 " << v0[0] << "," << v0[1] << ",..." << std::endl;
 //        std::cout << "residual0 " << v1[0] << "," << v1[1] << ",..." << std::endl;
-//      }
+      }
       Q parameters0{v0};
       Q residual0{v1};
       for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
@@ -432,8 +432,8 @@ public:
         if (verbosity > 1) {
           std::cout << "testing instance" << instance << std::endl;
           std::cout << "value1 " << value1 << std::endl;
-          std::cout << "parameters1 " << v0[0] << "," << v0[1] << ",..." << std::endl;
-          std::cout << "residual1 " << v1[0] << "," << v1[1] << ",..." << std::endl;
+//          std::cout << "parameters1 " << v0[0] << "," << v0[1] << ",..." << std::endl;
+//          std::cout << "residual1 " << v1[0] << "," << v1[1] << ",..." << std::endl;
         }
         Q parameters1{v0};
         Q residual1{v1};
