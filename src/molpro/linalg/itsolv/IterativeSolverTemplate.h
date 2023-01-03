@@ -444,10 +444,10 @@ public:
         m_handlers->rq().copy(v1, parameters1);
         m_handlers->rq().axpy(-1, parameters0, v1);
         auto dv_analytic = m_handlers->rr().dot(v0, v1);
-        if (verbosity > 1) {
-          std::cout << "mean residual " << v0[0] << "," << v0[1] << ",..." << std::endl;
-          std::cout << "step " << v1[0] << "," << v1[1] << ",..." << std::endl;
-        }
+//        if (verbosity > 1) {
+//          std::cout << "mean residual " << v0[0] << "," << v0[1] << ",..." << std::endl;
+//          std::cout << "step " << v1[0] << "," << v1[1] << ",..." << std::endl;
+//        }
         success = success && std::abs(dv_analytic - (value1 - value0)) < threshold;
         if (verbosity > 0 or (verbosity > -1 and not success))
           std::cout << "{actual, extrapolated} value change: {" << value1 - value0 << ", " << dv_analytic << "}"
