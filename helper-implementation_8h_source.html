@@ -31,7 +31,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">iterative-solver
-   &#160;<span id="projectnumber">.</span>
+   &#160;<span id="projectnumber">0.0</span>
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -208,7 +208,7 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">int</span> dsyev_c(<span class="keywordtype">char</span>, <span class="keywordtype">char</span>, <span class="keywordtype">int</span>, <span class="keywordtype">double</span>*, <span class="keywordtype">int</span>, <span class="keywordtype">double</span>*);</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac08926114067c3eafad9a758df73dabc">  122</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac08926114067c3eafad9a758df73dabc">eigensolver_lapacke_dsyev</a>(<span class="keyword">const</span> std::vector&lt;double&gt;&amp; matrix, std::vector&lt;double&gt;&amp; eigenvectors,</div>
+<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac08926114067c3eafad9a758df73dabc">  122</a></span>&#160;<span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac08926114067c3eafad9a758df73dabc">eigensolver_lapacke_dsyev</a>(<span class="keyword">const</span> std::vector&lt;double&gt;&amp; matrix, std::vector&lt;double&gt;&amp; eigenvectors,</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                              std::vector&lt;double&gt;&amp; eigenvalues, <span class="keyword">const</span> <span class="keywordtype">size_t</span> dimension) {</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  <span class="comment">// validate input</span></div>
@@ -246,7 +246,7 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  <span class="keywordflow">return</span> status;</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;}</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#a3bdd3fd38d1ba9aa765db3684fb866ff">  167</a></span>&#160;std::list&lt;SVD&lt;double&gt;&gt; <a class="code" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac08926114067c3eafad9a758df73dabc">eigensolver_lapacke_dsyev</a>(<span class="keywordtype">size_t</span> dimension, std::vector&lt;double&gt;&amp; matrix) {</div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#a3bdd3fd38d1ba9aa765db3684fb866ff">  167</a></span>&#160;<span class="keyword">inline</span> std::list&lt;SVD&lt;double&gt;&gt; <a class="code" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac08926114067c3eafad9a758df73dabc">eigensolver_lapacke_dsyev</a>(<span class="keywordtype">size_t</span> dimension, std::vector&lt;double&gt;&amp; matrix) {</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  std::vector&lt;double&gt; eigvecs(dimension * dimension);</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  std::vector&lt;double&gt; eigvals(dimension);</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
@@ -276,7 +276,7 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;  <span class="keywordflow">return</span> eigensystem;</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;}</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
-<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#a516f42ae956054880e6649b626657478">  205</a></span>&#160;std::list&lt;SVD&lt;double&gt;&gt; <a class="code" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac08926114067c3eafad9a758df73dabc">eigensolver_lapacke_dsyev</a>(<span class="keywordtype">size_t</span> dimension,</div>
+<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#a516f42ae956054880e6649b626657478">  205</a></span>&#160;<span class="keyword">inline</span> std::list&lt;SVD&lt;double&gt;&gt; <a class="code" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac08926114067c3eafad9a758df73dabc">eigensolver_lapacke_dsyev</a>(<span class="keywordtype">size_t</span> dimension,</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                                                 <span class="keyword">const</span> <a class="code" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">molpro::linalg::array::span::Span&lt;double&gt;</a>&amp; matrix) {</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;  <span class="comment">// TODO: this should be the other way around, eigensolver_lapacke_dsyev should take a span by default and this should</span></div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  <span class="comment">// wrap it with a vector</span></div>
