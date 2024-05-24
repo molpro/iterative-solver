@@ -107,10 +107,9 @@ class IterativeSolver:
                 if IterativeSolverHasValues() != 0:
                     print('Objective function value', value)
             if nwork < 1: break
-
 class Optimize(IterativeSolver):
     def __init__(self, n, range=None, thresh=1e-10, thresh_value=1e50, verbosity=0, minimize=True,
-                  pname='', mpicomm=None, algorithm='', options=''):
+                 pname='', mpicomm=None, algorithm='', options=''):
         super().__init__(n)
         cdef size_t n_ = n
         cdef size_t range_[2]
@@ -139,3 +138,84 @@ class Optimize(IterativeSolver):
 
     # def __init__(self):
     #     print('Optimize.__init__()')
+
+class NonLinearEquations(IterativeSolver):
+    def __init__(self, n, range=None, thresh=1e-10, verbosity=0,
+                  pname='', mpicomm=None, algorithm='', options=''):
+        super().__init__(n)
+        cdef size_t n_ = n
+        cdef size_t range_[2]
+        if range is None:
+            range_ = [0, 0]
+        else:
+            range_ = range
+        cdef size_t * rb = &range_[0]
+        cdef size_t * re = &range_[1]
+        cdef double thresh_ = thresh
+        cdef int verbosity_ = verbosity
+        cdef bytes pname__ = pname.encode()
+        cdef char * pname_ = pname__
+        cdef int mpicomm_ = mpicomm if mpicomm is not None else self.mpicomm_compute()
+        cdef bytes algorithm__ = algorithm.encode()
+        cdef char * algorithm_ = algorithm__
+        cdef bytes options__ = options.encode()
+        cdef char * options_ = options__
+        IterativeSolverNonLinearEquationsInitialize(n_, rb, re, thresh_, verbosity_,
+                                          pname_, mpicomm_, algorithm_,
+                                          options_)
+        if range is not None:
+            range[0] = rb[0]
+            range[1] = re[0]
+
+class LinearEquations(IterativeSolver):
+    def __init__(self, n, nroot, rhs, range=None, aughes=0.0, thresh=1e-10, thresh_value=1e50, hermitian=False, verbosity=0,
+                 pname='', mpicomm=None, algorithm='', options=''):
+        super().__init__(n)
+        cdef size_t n_ = n
+        cdef size_t nroot_ = nroot
+        cdef double[::1] rhs_ = rhs
+        cdef size_t range_[2]
+        if range is None:
+            range_ = [0, 0]
+        else:
+            range_ = range
+        cdef size_t * rb = &range_[0]
+        cdef size_t * re = &range_[1]
+        cdef double aughes_ = aughes
+        cdef double thresh_ = thresh
+        cdef double thresh_value_ = thresh_value
+        cdef int verbosity_ = verbosity
+        cdef bytes pname__ = pname.encode()
+        cdef char * pname_ = pname__
+        cdef int mpicomm_ = mpicomm if mpicomm is not None else self.mpicomm_compute()
+
+class LinearEigensystem(IterativeSolver):
+    def __init__(self, n, nroot, range=None, thresh=1e-10, thresh_value=1e50, hermitian=False, verbosity=0,
+                 pname='', mpicomm=None, algorithm='', options=''):
+        super().__init__(n)
+        cdef size_t n_ = n
+        cdef size_t nroot_ = nroot
+        cdef size_t range_[2]
+        if range is None:
+            range_ = [0, 0]
+        else:
+            range_ = range
+        cdef size_t * rb = &range_[0]
+        cdef size_t * re = &range_[1]
+        cdef double thresh_ = thresh
+        cdef double thresh_value_ = thresh_value
+        cdef int verbosity_ = verbosity
+        cdef bytes pname__ = pname.encode()
+        cdef char * pname_ = pname__
+        cdef int mpicomm_ = mpicomm if mpicomm is not None else self.mpicomm_compute()
+        cdef bytes algorithm__ = algorithm.encode()
+        cdef char * algorithm_ = algorithm__
+        cdef bytes options__ = options.encode()
+        cdef char * options_ = options__
+        IterativeSolverLinearEigensystemInitialize(n_, nroot_, rb, re, thresh_, thresh_value_,
+                                                 1 if hermitian else 0, verbosity_,
+                                                 pname_, mpicomm_, algorithm_,
+                                                 options_)
+        if range is not None:
+            range[0] = rb[0]
+            range[1] = re[0]
