@@ -58,7 +58,7 @@ class TestCase(unittest.TestCase):
         parameters[0] = 1
         residual = np.zeros(problem.size)
 
-        solver = iterative_solver.Optimize(problem.size, verbosity=5)
+        solver = iterative_solver.Optimize(problem.size, verbosity=0)
         self.assertEqual(type(solver), iterative_solver.Optimize)
         # print('initial parameters', parameters)
         solver.solve(parameters, residual, problem)
@@ -71,31 +71,31 @@ class TestCase(unittest.TestCase):
 
     def test_diagonalize(self):
         problem = TestCase.RayleighQuotient(8, 0.1)
-        print(problem.matrix)
+        # print(problem.matrix)
         nroot = 2
         parameters = np.zeros([nroot, problem.size])
         for i in range(nroot):
             parameters[i, i] = 1
         residual = np.ndarray([nroot, problem.size])
 
-        solver = iterative_solver.LinearEigensystem(problem.size, nroot, verbosity=2)
+        solver = iterative_solver.LinearEigensystem(problem.size, nroot, verbosity=0)
         self.assertEqual(type(solver), iterative_solver.LinearEigensystem)
         solver.solve(parameters, residual, problem)
         solver.solution([i for i in range(nroot)], parameters, residual)
-        print('final parameters', parameters)
-        print('final residual', residual)
-        print('final eigenvalues', solver.eigenvalues)
-        print('final errors', solver.errors)
+        # print('final parameters', parameters)
+        # print('final residual', residual)
+        # print('final eigenvalues', solver.eigenvalues)
+        # print('final errors', solver.errors)
         self.assertEqual(solver.errors.size, nroot)
         for e in solver.errors:
             self.assertAlmostEqual(e, 0.0)
         for root in range(nroot):
             for i in range(problem.size):
                 self.assertAlmostEqual(residual[root, i], 0.0)
-            print('residual before residual function', residual[root])
+            # print('residual before residual function', residual[root])
             value = problem.residual(parameters[root], residual[root])
             self.assertAlmostEqual(value, solver.eigenvalues[root])
-            print('residual from residual function', residual[root])
+            # print('residual from residual function', residual[root])
             for i in range(problem.size):
                 self.assertAlmostEqual(residual[root, i], 0.0)
 
