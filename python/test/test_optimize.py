@@ -63,9 +63,9 @@ class TestCase(unittest.TestCase):
         # print('initial parameters', parameters)
         solver.solve(parameters, residual, problem)
         answer = solver.solution([0], parameters, residual)
-        print('final parameters', parameters)
-        print('final function value', answer)
-        print('final residual', residual)
+        # print('final parameters', parameters)
+        # print('final function value', answer)
+        # print('final residual', residual)
         for i in range(problem.size):
             self.assertAlmostEqual(residual[i], 0.0)
 
