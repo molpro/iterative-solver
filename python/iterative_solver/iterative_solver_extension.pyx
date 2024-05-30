@@ -42,16 +42,16 @@ class IterativeSolver:
 
     def add_vector(self, buffer_size, parameters, action, sync=True):
         # print('add_vector',buffer_size, parameters)
-        cdef double[::1] parameters_ = parameters.reshape([self.n*self.nroot])
-        cdef double[::1] action_ = action.reshape([self.n*self.nroot])
+        cdef double[::1] parameters_ = parameters.reshape([self.n*buffer_size])
+        cdef double[::1] action_ = action.reshape([self.n*buffer_size])
         cdef size_t buffer_size_ = buffer_size
         result = IterativeSolverAddVector(buffer_size_, &parameters_[0], &action_[0], 1 if sync else 0)
         return result
 
     def end_iteration(self, solution, residual, sync=True):
-        cdef double[::1] solution_ = solution.reshape([self.n*self.nroot])
-        cdef double[::1] residual_ = residual.reshape([self.n*self.nroot])
         nbuffer = solution.shape[0] if len(solution.shape) > 1 else 1
+        cdef double[::1] solution_ = solution.reshape([self.n*nbuffer])
+        cdef double[::1] residual_ = residual.reshape([self.n*nbuffer])
         cdef size_t nbuffer_ = nbuffer
         result = IterativeSolverEndIteration(nbuffer_, &solution_[0], &residual_[0], 1 if sync else 0)
         return int(result)
@@ -64,11 +64,14 @@ class IterativeSolver:
         pass
 
     def solve(self, parameters, actions, problem, generate_initial_guess=False, max_iter=None):
+        # print ('solve:',parameters.shape, actions.shape, self.nroot, self.n)
         if len(parameters.shape) <2 or len(actions.shape) < 2:
-            return self.solve(parameters.reshape([self.nroot,self.n]),actions.reshape([self.nroot,self.n]),problem,generate_initial_guess,max_iter)
-        cdef double[::1] parameters_ = parameters.reshape([self.n*self.nroot])
-        cdef double[::1] actions_ = actions.reshape([self.n*self.nroot])
+            parameters_reshape = parameters.reshape([self.nroot, self.n])
+            actions_reshape = actions.reshape([self.nroot, self.n])
+            return self.solve(parameters_reshape, actions_reshape, problem, generate_initial_guess, max_iter)
         nbuffer = parameters.shape[0] if len(parameters.shape) > 1 else 1
+        cdef double[::1] parameters_ = parameters.reshape([self.n*nbuffer])
+        cdef double[::1] actions_ = actions.reshape([self.n*nbuffer])
         ev = np.zeros([self.nroot],dtype=float)
         cdef double[::1] ev_ = ev
         errors = np.array([self.nroot],dtype=float)
@@ -242,85 +245,3 @@ class LinearEigensystem(IterativeSolver):
         cdef double[::1] e_ = e
         IterativeSolverEigenvalues(&e_[0])
         return e
-        pass
-
-class NonLinearEquations(IterativeSolver):
-    def __init__(self, n, range=None, thresh=1e-10, verbosity=0,
-                  pname='', mpicomm=None, algorithm='', options=''):
-        super().__init__(n)
-        cdef size_t n_ = n
-        cdef size_t range_[2]
-        if range is None:
-            range_ = [0, 0]
-        else:
-            range_ = range
-        cdef size_t * rb = &range_[0]
-        cdef size_t * re = &range_[1]
-        cdef double thresh_ = thresh
-        cdef int verbosity_ = verbosity
-        cdef bytes pname__ = pname.encode()
-        cdef char * pname_ = pname__
-        cdef int mpicomm_ = mpicomm if mpicomm is not None else self.mpicomm_compute()
-        cdef bytes algorithm__ = algorithm.encode()
-        cdef char * algorithm_ = algorithm__
-        cdef bytes options__ = options.encode()
-        cdef char * options_ = options__
-        IterativeSolverNonLinearEquationsInitialize(n_, rb, re, thresh_, verbosity_,
-                                          pname_, mpicomm_, algorithm_,
-                                          options_)
-        if range is not None:
-            range[0] = rb[0]
-            range[1] = re[0]
-
-class LinearEquations(IterativeSolver):
-    def __init__(self, n, nroot, rhs, range=None, aughes=0.0, thresh=1e-10, thresh_value=1e50, hermitian=False, verbosity=0,
-                 pname='', mpicomm=None, algorithm='', options=''):
-        super().__init__(n)
-        cdef size_t n_ = n
-        cdef size_t nroot_ = nroot
-        cdef double[::1] rhs_ = rhs
-        cdef size_t range_[2]
-        if range is None:
-            range_ = [0, 0]
-        else:
-            range_ = range
-        cdef size_t * rb = &range_[0]
-        cdef size_t * re = &range_[1]
-        cdef double aughes_ = aughes
-        cdef double thresh_ = thresh
-        cdef double thresh_value_ = thresh_value
-        cdef int verbosity_ = verbosity
-        cdef bytes pname__ = pname.encode()
-        cdef char * pname_ = pname__
-        cdef int mpicomm_ = mpicomm if mpicomm is not None else self.mpicomm_compute()
-
-class LinearEigensystem(IterativeSolver):
-    def __init__(self, n, nroot, range=None, thresh=1e-10, thresh_value=1e50, hermitian=False, verbosity=0,
-                 pname='', mpicomm=None, algorithm='', options=''):
-        super().__init__(n)
-        cdef size_t n_ = n
-        cdef size_t nroot_ = nroot
-        cdef size_t range_[2]
-        if range is None:
-            range_ = [0, 0]
-        else:
-            range_ = range
-        cdef size_t * rb = &range_[0]
-        cdef size_t * re = &range_[1]
-        cdef double thresh_ = thresh
-        cdef double thresh_value_ = thresh_value
-        cdef int verbosity_ = verbosity
-        cdef bytes pname__ = pname.encode()
-        cdef char * pname_ = pname__
-        cdef int mpicomm_ = mpicomm if mpicomm is not None else self.mpicomm_compute()
-        cdef bytes algorithm__ = algorithm.encode()
-        cdef char * algorithm_ = algorithm__
-        cdef bytes options__ = options.encode()
-        cdef char * options_ = options__
-        IterativeSolverLinearEigensystemInitialize(n_, nroot_, rb, re, thresh_, thresh_value_,
-                                                 1 if hermitian else 0, verbosity_,
-                                                 pname_, mpicomm_, algorithm_,
-                                                 options_)
-        if range is not None:
-            range[0] = rb[0]
-            range[1] = re[0]

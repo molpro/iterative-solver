@@ -14,19 +14,19 @@ class Problem:
     def precondition(self, residual, shift=None, diagonals=None):
         # print('base precondition')
         # print('residual', residual, residual.shape, len(residual.shape))
-        # print('shift',shift,type(shift))
+        # print('shift', shift, type(shift))
         small = 1e-14
         if len(residual.shape) > 1:
             for i in range(residual.shape[0]):
+                assert type(shift) == np.ndarray
                 self.precondition(residual[i, :], float(shift[i]) if shift is not None else None, diagonals)
             return
-        # print('past matrix redirect')
         if diagonals is not None:
+            # print(type(shift))
+            # shift_ = shift if type(shift) is float else shift[0]
+            # print('residual', residual)
+            # print('diagonals', diagonals)
             if shift is not None:
-                # print(type(shift))
-                # shift_ = shift if type(shift) is float else shift[0]
-                # print('residual', residual)
-                # print('diagonals', diagonals)
                 for j in range(residual.size):
                     residual[j] = residual[j] / (diagonals[j] + shift + small)
             else:

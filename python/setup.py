@@ -24,7 +24,7 @@ ext = Extension('iterative_solver.iterative_solver_extension',
 
 setup(
     name="iterative_solver",
-    version=(os.environ['VERSION']),
+    version=(os.environ['VERSION'] if 'VERSION' in os.environ else '0.0.0'),
     license="MIT",
     packages=['iterative_solver'],
     ext_modules=cythonize(
