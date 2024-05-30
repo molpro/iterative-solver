@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['gather_1769',['gather',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html#a43e14b96f07b56ed6865773c6c5fdcdba76a79a1cdd981d7b73a1b7cf9cc6e0de',1,'molpro::linalg::array::DistrArrayMPI3']]],
-  ['get_1770',['get',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html#a43e14b96f07b56ed6865773c6c5fdcdbab5eda0a74558a342cf659187f06f746f',1,'molpro::linalg::array::DistrArrayMPI3']]]
+  ['fatal_2032',['Fatal',['../structmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a8adb6b8c05cd17ed24547b35ed5cf4b0a61719e7779d976d0ec7051bc5f04ada6',1,'molpro::linalg::itsolv::Logger']]]
 ];

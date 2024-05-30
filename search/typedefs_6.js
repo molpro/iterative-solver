@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['op_1731',['OP',['../structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html#adec453c471eab2cf48d7c8c43a9e31c2',1,'molpro::linalg::array::util::OperationRegister']]],
-  ['options_5fmap_1732',['options_map',['../namespacemolpro_1_1linalg_1_1itsolv.html#a784351a2599ca33773a9809818edb5a1',1,'molpro::linalg::itsolv']]]
+  ['mapped_5for_5fvalue_5ftype_5ft_1988',['mapped_or_value_type_t',['../namespacemolpro_1_1linalg_1_1array.html#a5aeb80119c6ea1e4cd9155b6fb025344',1,'molpro::linalg::array']]]
 ];

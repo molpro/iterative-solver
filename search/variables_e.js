@@ -1,13 +1,13 @@
 var searchData=
 [
-  ['q_5fcreations_1678',['q_creations',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#ab7af8cd1fe8aea3f2f034244bae0dac9',1,'molpro::linalg::itsolv::Statistics']]],
-  ['q_5fdeletions_1679',['q_deletions',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#af9d6d357bf7a662cbdd2d8fb7941a8c6',1,'molpro::linalg::itsolv::Statistics']]],
-  ['qp_1680',['qp',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#ae2bfc2e0ce3f1abeea46cfb576577d50',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
-  ['qp_5fops_1681',['qp_ops',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#a8b85920c1e8007df608ca10f7a5be30c',1,'molpro::linalg::itsolv::Statistics']]],
-  ['qq_1682',['qq',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#a2be277beaf97a327fa797d46253cca3b',1,'molpro::linalg::itsolv::ArrayHandlers::Builder::qq()'],['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#a66a2d505fb37b57b65c72bcee085677e',1,'molpro::linalg::itsolv::subspace::xspace::NewData::qq()']]],
-  ['qq_5fops_1683',['qq_ops',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#afc80d997e12454aa6ea3b96e59f433a8',1,'molpro::linalg::itsolv::Statistics']]],
-  ['qr_1684',['qr',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#ad939522fa33168f18c57e576cd134e75',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
-  ['qr_5fops_1685',['qr_ops',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#abd2e9fa234e44677bb31e1c4bdf20953',1,'molpro::linalg::itsolv::Statistics']]],
-  ['qspace_1686',['qspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ad4d634f34be831eb4dbf09514069cf8a',1,'molpro::linalg::itsolv::subspace::XSpace']]],
-  ['qx_1687',['qx',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#a789820bcb8ea398dbdd20ac3857b7de5',1,'molpro::linalg::itsolv::subspace::xspace::NewData']]]
+  ['p_5fcreations_1922',['p_creations',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#a0eed3bdf7711c1a5ca19ede06b3ae2ff',1,'molpro::linalg::itsolv::Statistics']]],
+  ['p_5fthreshold_1923',['p_threshold',['../structmolpro_1_1linalg_1_1itsolv_1_1Options.html#a63ef706a59c01216999aa65ddf6a0f80',1,'molpro::linalg::itsolv::Options']]],
+  ['param_1924',['param',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1qspace_1_1QParam.html#a160e66d4cc94927f248b425abba0650d',1,'molpro::linalg::itsolv::subspace::qspace::QParam']]],
+  ['parent_1925',['parent',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Node.html#a87140036a8602a54fab125a88f7b32b0',1,'molpro::profiler::Node']]],
+  ['path_1926',['path',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1detail_1_1TreePath.html#aed5c02639d52ec44aa114b973fa04e98',1,'molpro::profiler::detail::TreePath']]],
+  ['pp_1927',['pp',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#a297b6cbd16b811019b4e3bb3a5a9702a',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
+  ['prof_1928',['prof',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1Profiler_1_1Proxy.html#a070687ea3da0dbc7d8f419132aa57d78',1,'molpro::profiler::Profiler::Proxy']]],
+  ['propose_5frspace_5fnorm_5fthresh_1929',['propose_rspace_norm_thresh',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#abc0bdc92047dafddad208549048eef54',1,'molpro::linalg::itsolv::LinearEigensystemDavidson::propose_rspace_norm_thresh()'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a5884a9bbbfc0101fd01fc528de91e544',1,'molpro::linalg::itsolv::LinearEigensystemRSPT::propose_rspace_norm_thresh()']]],
+  ['propose_5frspace_5fsvd_5fthresh_1930',['propose_rspace_svd_thresh',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a3b96209972872ffece08f78a2c747c5a',1,'molpro::linalg::itsolv::LinearEigensystemDavidson::propose_rspace_svd_thresh()'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a48ea5dfd740161c89349f6bddeda3ea3',1,'molpro::linalg::itsolv::LinearEigensystemRSPT::propose_rspace_svd_thresh()']]],
+  ['pspace_1931',['pspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a6a08f34eb3f54264bcd9f5917e522d22',1,'molpro::linalg::itsolv::subspace::XSpace']]]
 ];

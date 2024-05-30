@@ -1,10 +1,8 @@
 var searchData=
 [
-  ['p_5fcreations_1671',['p_creations',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#a0eed3bdf7711c1a5ca19ede06b3ae2ff',1,'molpro::linalg::itsolv::Statistics']]],
-  ['p_5fthreshold_1672',['p_threshold',['../structmolpro_1_1linalg_1_1itsolv_1_1Options.html#a63ef706a59c01216999aa65ddf6a0f80',1,'molpro::linalg::itsolv::Options']]],
-  ['param_1673',['param',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1qspace_1_1QParam.html#a160e66d4cc94927f248b425abba0650d',1,'molpro::linalg::itsolv::subspace::qspace::QParam']]],
-  ['pp_1674',['pp',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#a297b6cbd16b811019b4e3bb3a5a9702a',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
-  ['propose_5frspace_5fnorm_5fthresh_1675',['propose_rspace_norm_thresh',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#abc0bdc92047dafddad208549048eef54',1,'molpro::linalg::itsolv::LinearEigensystemDavidson::propose_rspace_norm_thresh()'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a5884a9bbbfc0101fd01fc528de91e544',1,'molpro::linalg::itsolv::LinearEigensystemRSPT::propose_rspace_norm_thresh()']]],
-  ['propose_5frspace_5fsvd_5fthresh_1676',['propose_rspace_svd_thresh',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a3b96209972872ffece08f78a2c747c5a',1,'molpro::linalg::itsolv::LinearEigensystemDavidson::propose_rspace_svd_thresh()'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a48ea5dfd740161c89349f6bddeda3ea3',1,'molpro::linalg::itsolv::LinearEigensystemRSPT::propose_rspace_svd_thresh()']]],
-  ['pspace_1677',['pspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a6a08f34eb3f54264bcd9f5917e522d22',1,'molpro::linalg::itsolv::subspace::XSpace']]]
+  ['od_1917',['oD',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#aa019fa3b705f49ce4e180221bf57398c',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
+  ['op_1918',['oP',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a8b2d29e64f9ba7bb0ceddbba9e0e4632',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
+  ['operation_5fcount_1919',['operation_count',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Counter.html#ae417f08433018267b65ddebe77852719',1,'molpro::profiler::Counter']]],
+  ['operations_1920',['operations',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1dotgraph_1_1GraphEntry.html#a0f7c348d94630a806490824ca320c21a',1,'molpro::profiler::dotgraph::GraphEntry']]],
+  ['oq_1921',['oQ',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a06259f6b0e7d2a7298b78186c869d593',1,'molpro::linalg::itsolv::subspace::Dimensions']]]
 ];
