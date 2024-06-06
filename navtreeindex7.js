@@ -1,8 +1,5 @@
 var NAVTREEINDEX7 =
 {
-"structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#a5c907211361ce4d9f8ae13bd08973a8b":[10,2,0,1,34,8],
-"structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#aa6d77eb00715031a13b4fa721819e6c5":[10,2,0,1,34,4],
-"structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#ac4f63d5c28880e35d9246ae34e51688e":[10,2,0,1,34,0],
 "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#ac66b95b29d700bbf65b35385be58cc13":[10,2,0,1,34,3],
 "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#ad51a99040ec9f0fecd6bf2c55947535b":[10,2,0,1,34,6],
 "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#adf37f6cd71efda9948e29f1731e4701e":[10,2,0,1,34,7],
@@ -114,5 +111,8 @@ var NAVTREEINDEX7 =
 "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#ac3fb0fc2845c5ff018049ab157034433":[10,2,0,1,1,2,0,0],
 "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#af2d362a7c1d45b75a57d790a06be77ed":[10,2,0,1,1,2,0,3],
 "structmolpro_1_1linalg_1_1itsolv_1_1util_1_1ArrayHandlersError.html":[10,2,0,1,2,0],
-"structtry__iterative__solver__problem_1_1my__problem.html":[10,3,0]
+"structtry__iterative__solver__problem_1_1my__problem.html":[10,3,0],
+"":[11,0,2,1,0],
+"":[11,0,2,1,1],
+"":[11,0,3]
 };
