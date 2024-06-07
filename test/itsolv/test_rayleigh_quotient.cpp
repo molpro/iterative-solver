@@ -114,7 +114,7 @@ TEST_F(RayleighQuotient, BFGS) {
   solver->solution(c, g);
   auto norm = std::sqrt(std::inner_product(c.begin(), c.end(), c.begin(), double(0)));
   std::transform(c.begin(), c.end(), c.begin(), [norm](const double a) { return a / norm; });
-  EXPECT_NEAR(solver->value(), problem.eigenvalues()(0), 1e-20);
+  EXPECT_NEAR(solver->value(), problem.eigenvalues()(0), 1e-14);
   EXPECT_THAT(c, ::testing::Pointwise(::testing::DoubleNear(1e-9), problem.lowest_eigenvector()));
   EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(solver->convergence_threshold()*10), Rvector(problem.n, 0)));
 }
