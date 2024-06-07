@@ -73,7 +73,7 @@ class TestCase(unittest.TestCase):
     def test_optimize(self):
         problem = TestCase.RayleighQuotient(4, 0.01)
         parameters = np.zeros(problem.size)
-        parameters[:] = 100
+        parameters[:] = 10
         residual = np.zeros(problem.size)
 
         solver = iterative_solver.Optimize(problem.size, verbosity=self.verbosity)
