@@ -10,6 +10,15 @@ on:
 jobs:
   python-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    container:
+      # relies on repository name being all lower case
+      image: ghcr.io/${{ github.repository }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     defaults:
       run:
         shell: bash -el {0}
