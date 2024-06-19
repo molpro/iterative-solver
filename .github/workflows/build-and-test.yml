@@ -21,9 +21,9 @@ jobs:
     container:
       # relies on repository name being all lower case
       image: ghcr.io/${{ github.repository }}
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+#      credentials:
+#        username: ${{ github.actor }}
+#        password: ${{ secrets.GITHUB_TOKEN }}
     defaults:
       run:
         shell: bash -el {0}
