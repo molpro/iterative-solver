@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xspace_1700',['XSpace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a32b02602bb7ce60e66572b25c59f98d8',1,'molpro::linalg::itsolv::subspace::XSpace']]]
+  ['xspace_0',['XSpace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aefe44c3b84f05eea1dc1cd03c10b0bef',1,'molpro::linalg::itsolv::subspace::XSpace']]]
 ];

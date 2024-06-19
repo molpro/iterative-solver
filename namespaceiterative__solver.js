@@ -2,9 +2,7 @@ var namespaceiterative__solver =
 [
     [ "mpi_init", "interfaceiterative__solver_1_1mpi__init.html", null ],
     [ "mpi_rank_global", "interfaceiterative__solver_1_1mpi__rank__global.html", null ],
-    [ "c_string_from_f", "namespaceiterative__solver.html#afd46f686804151ebfff3ca088add17b1", null ],
     [ "iterative_solver_add_p", "namespaceiterative__solver.html#aa924c3a27ae8d7dfb5f6946c9ab55222", null ],
-    [ "iterative_solver_add_value", "namespaceiterative__solver.html#a5c4eb6868a69b970ec6891093e2504a1", null ],
     [ "iterative_solver_add_vector", "namespaceiterative__solver.html#a70258968c6cc6e822b9008afcccd8a79", null ],
     [ "iterative_solver_diis_initialize", "namespaceiterative__solver.html#a0193308603bbbe44226e4745032d12f7", null ],
     [ "iterative_solver_eigenvalues", "namespaceiterative__solver.html#afad8d58daf37b4b32e1f85046611ece6", null ],
@@ -20,9 +18,5 @@ var namespaceiterative__solver =
     [ "iterative_solver_working_set_eigenvalues", "namespaceiterative__solver.html#a11e3d198ebd7872c9ed08cbbdf9dd012", null ],
     [ "mpicomm_compute", "namespaceiterative__solver.html#a2890fe920d167483bcac382af12afe5d", null ],
     [ "set_mpicomm_compute", "namespaceiterative__solver.html#a508258aa021cc2d872fba06bd1cff849", null ],
-    [ "hermitian_default", "namespaceiterative__solver.html#af4cba6b12115ede27fb60231c4155d7d", null ],
-    [ "m_nq", "namespaceiterative__solver.html#a96d827896d07aad06b6cc5699193f82a", null ],
-    [ "m_nroot", "namespaceiterative__solver.html#a1b2f1d6f503aea242d90569735f545a9", null ],
-    [ "mpicomm_kind", "namespaceiterative__solver.html#a8e7b0afa0169579bd571c1aac764d4e8", null ],
-    [ "s_mpicomm_compute", "namespaceiterative__solver.html#a99746c52d7bc4a0e9c9a073a217c9ec1", null ]
+    [ "mpicomm_kind", "namespaceiterative__solver.html#a8e7b0afa0169579bd571c1aac764d4e8", null ]
 ];

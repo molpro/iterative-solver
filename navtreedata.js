@@ -25,23 +25,23 @@
 var NAVTREE =
 [
   [ "iterative-solver", "index.html", [
-    [ "Overview", "index.html#autotoc_md11", null ],
-    [ "Installation", "index.html#autotoc_md12", null ],
-    [ "Usage", "index.html#autotoc_md13", [
-      [ "Interfaces", "index.html#autotoc_md14", null ],
-      [ "Example", "index.html#autotoc_md15", null ],
-      [ "Containers and array handlers", "index.html#autotoc_md16", null ]
+    [ "Overview", "index.html#autotoc_md7", null ],
+    [ "Installation", "index.html#autotoc_md8", null ],
+    [ "Usage", "index.html#autotoc_md9", [
+      [ "Interfaces", "index.html#autotoc_md10", null ],
+      [ "Example", "index.html#autotoc_md11", null ],
+      [ "Containers and array handlers", "index.html#autotoc_md12", null ]
     ] ],
-    [ "Citing", "index.html#autotoc_md17", null ],
-    [ "List of Contributors", "index.html#autotoc_md18", null ],
+    [ "Citing", "index.html#autotoc_md13", null ],
+    [ "List of Contributors", "index.html#autotoc_md14", null ],
     [ "Library Design", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html", [
-      [ "Iterative solvers", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md19", [
-        [ "Solver interfaces and implementations", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md20", null ],
-        [ "Dependency inversion mechanism", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md21", null ],
-        [ "Setting solver Options", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md22", null ],
-        [ "Solver Factory", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md23", null ]
+      [ "Iterative solvers", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md15", [
+        [ "Solver interfaces and implementations", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md16", null ],
+        [ "Dependency inversion mechanism", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md17", null ],
+        [ "Setting solver Options", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md18", null ],
+        [ "Solver Factory", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md19", null ]
       ] ],
-      [ "Distributed Arrays", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md24", null ]
+      [ "Distributed Arrays", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md20", null ]
     ] ],
     [ "Iterative solvers", "TopicIterativeSolver.html", null ],
     [ "Distributed arrays", "TopicDistrArrays.html", null ],
@@ -66,13 +66,18 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "ExampleProblemDistrArray_8h-example.html",
-"classmolpro_1_1linalg_1_1array_1_1DistrArray.html#abe2b8d71f06ec792bef8887f28cc6c80",
-"classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#abfee585dea165b08f8f6a6ede9705eaf",
-"classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#ac9aa6c58067a555a39d3ce70af4da914",
-"classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html#ac4621edf4faf1df489e2fdca814fc409",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ada7db3bae61ca8227a4fcae0cc8ef890",
-"namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1qspace.html#afee738de72b9ee5c99f56ac51d19883b",
-"structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#ac66b95b29d700bbf65b35385be58cc13"
+"classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrSparse_3_01AL_00_01AR_00_01true_01_4.html#aabd1dc42a41f54d0a3bf81ce90004671",
+"classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ad416250c4a3eb8b72999ccdc8fe2b253",
+"classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html#a9d0184264e90cd661d127acf7aa36db8",
+"classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags.html#a12151540a614a07226f2f366fb2eebdd",
+"classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524",
+"classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a482db55c4914b82cedcbbb3190c519f8",
+"classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a62a4f2dc5d5fc2d3cc93d8d562612c3a",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html#adaf014c37112f0f0a60bf4f8bfe88c73",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a2dcb242fbc0afca00d2b44f666702932",
+"namespacemolpro_1_1linalg_1_1array_1_1util.html#a55169e39683dee9b69ec1a0c0f6f68c0",
+"structmolpro_1_1linalg_1_1array_1_1default__handler_3_01T_00_01S_00_01ArrayFamily_1_1Distributedbd43e8f0864faf7cff59f1977d87f421.html#a2197ae85b68a26480bf2aa88aa594638",
+"structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#adf37f6cd71efda9948e29f1731e4701e"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

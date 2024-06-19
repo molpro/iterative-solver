@@ -1,7 +1,7 @@
 var classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson =
 [
     [ "SolverTemplate", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a2bce4af8274b02f9a9f97d09b3f7833a", null ],
-    [ "LinearEquationsDavidson", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a8741814cb825c9122851b853bb01cf69", null ],
+    [ "LinearEquationsDavidson", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a56310ff60c45992c5dc838b171138e2a", null ],
     [ "add_equations", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a4b3ac46bb1923f18acbc1c985d4af7a1", null ],
     [ "add_equations", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a5b0aa5eb730099d33bd9076a3bc5eaff", null ],
     [ "add_equations", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a1726e87cb076209df93e371ee02d578d", null ],
@@ -13,7 +13,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson =
     [ "get_hermiticity", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#aad9d42bd1b1b22ac1b6b0957d00a6cdc", null ],
     [ "get_max_size_qspace", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#aef031425d38100193d223466f7741cf8", null ],
     [ "get_norm_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a2393848822b65c218f6d425e89bfd9e2", null ],
-    [ "get_options", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ac19464932a6a7bea2db0ebc396a8ac2c", null ],
+    [ "get_options", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a4bb63422b55572e405b7f7399691639e", null ],
     [ "get_reset_D", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a02ef4c76e400651eef9805a20a3e2350", null ],
     [ "get_reset_D_maxQ_size", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a64c70aa7cafca66228994805f913fa91", null ],
     [ "get_svd_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ad4c8f30e7653281e580044176b7579b0", null ],
@@ -21,7 +21,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson =
     [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ab4748964a82d882be6cfebd7c158511e", null ],
     [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a2586061786c83f40ee932189f6a59353", null ],
     [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#aad10a92985b4c8ca6119e00096410f19", null ],
-    [ "rhs", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a538c386fb27387813f7a1d472de8ef46", null ],
+    [ "rhs", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a8e3f14d5cd05418e40e614a20ffc4053", null ],
     [ "set_augmented_hessian", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a1cb407598df11ffef8877bb72a5815c9", null ],
     [ "set_hermiticity", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a1a13c94801544066f87353fb5ec6e692", null ],
     [ "set_max_size_qspace", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#af8393b6f0edfedf8331fb2bd0f88a1ed", null ],

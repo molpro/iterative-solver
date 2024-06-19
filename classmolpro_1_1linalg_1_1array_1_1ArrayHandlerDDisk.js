@@ -7,11 +7,11 @@ var classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk =
     [ "copy", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a40f21d8a1d3a4c9e3761f02d0d195a56", null ],
     [ "dot", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#afec5927acb5661806b8af05328e5be32", null ],
     [ "fill", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a540ff543dbf816ade506e4cbac615325", null ],
-    [ "gemm_inner", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a02eab2349f8c53cb8b1aecafe72962b6", null ],
+    [ "gemm_inner", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a27a49873388daafd66e5dad2a4212a21", null ],
     [ "gemm_outer", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a2a654c1a1e213a884b9d36b78a683102", null ],
     [ "lazy_handle", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a05a5d5f3a57548f6d5d6451dd4236172", null ],
     [ "scal", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a9bdd2084e01645890ad067df4f557629", null ],
-    [ "select", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a4ad2492afd95e5431ca27bf757faa261", null ],
-    [ "select_max_dot", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a471119f661ddfb40992cdb7337b75ac4", null ],
+    [ "select", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a4481d9881f5c20990b3db602e4da0698", null ],
+    [ "select_max_dot", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a4ec7f5bbe19dea40d3fd3bb27a06718e", null ],
     [ "m_copy_func", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a311ece305fc0afcf359911dd69816cf9", null ]
 ];
