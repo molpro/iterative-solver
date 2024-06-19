@@ -44,6 +44,7 @@ public:
    * derivative, if no other minimum was found in the interval
    */
   Interpolate::point minimize(double xa, double xb, size_t bracket_grid = 100, size_t max_bracket_grid = 100000) const;
+  Interpolate::point minimize_cubic() const;
   static std::vector<std::string> interpolants();
 
   const std::vector<double>& parameters() const { return m_parameters; }

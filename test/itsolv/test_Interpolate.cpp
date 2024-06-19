@@ -46,12 +46,13 @@ TEST(Interpolate, quadratic) {
     double lambda(1e-3);
 //    std::cout << interpolant << std::endl;
     Interpolate::point p0{0, 0.25, -1};
+//    Interpolate::point p0{-1, 2.25-lambda, -3+3*lambda};
     Interpolate::point p1{1, 0.25+lambda, 1+3*lambda};
     Interpolate inter(p0, p1, interpolant, 0);
 //    std::cout << "found interpolant"<<inter<<std::endl;
     auto x0_expected = (-2.0+std::sqrt(4.0+12*lambda))/(6*lambda);
     auto minimum = inter.minimize(0, 1);
 //    std::cout << "found minimum "<<minimum.x<<" value="<<minimum.f<< " slope="<<minimum.f1<<" second="<<minimum.f2<<std::endl;
-    EXPECT_NEAR(minimum.x, x0_expected, 1e-8);
+    EXPECT_NEAR(minimum.x, x0_expected, 1e-8) << interpolant;
   }
 }
