@@ -42,15 +42,15 @@ jobs:
 
     - name: Configure CMake
       if: steps.check_configuration.outputs.files_exists == 'true'
-      run: conda deactivate; cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
     - name: Build
       if: steps.check_configuration.outputs.files_exists == 'true'
-      run: conda deactivate; cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}}
+      run: cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}}
 
     - name: Test
       if: steps.check_configuration.outputs.files_exists == 'true'
-      run: conda deactivate; cd ${{github.workspace}}/build && ctest -C ${{env.CMAKE_BUILD_TYPE}} || ctest -C ${{env.CMAKE_BUILD_TYPE}} --rerun-failed --output-on-failure
+      run: cd ${{github.workspace}}/build && ctest -C ${{env.CMAKE_BUILD_TYPE}} || ctest -C ${{env.CMAKE_BUILD_TYPE}} --rerun-failed --output-on-failure
 
     - name: Build doxygen
-      run: conda deactivate; cmake --build ${{github.workspace}}/build --target DependencyManagerDocs
+      run: cmake --build ${{github.workspace}}/build --target DependencyManagerDocs
