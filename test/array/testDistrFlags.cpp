@@ -102,6 +102,7 @@ TEST(DistrFlags, replace) {
   auto rank = mpi_rank();
   DistrFlags df{mpi_comm, alpha};
   auto a = df.access(0);
+  ASSERT_EQ(a.get(),alpha);
   auto v = a.replace(rank);
   ASSERT_EQ(v, alpha);
   v = a.replace(alpha);
