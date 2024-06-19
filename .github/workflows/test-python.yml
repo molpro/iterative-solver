@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: conda activate base
+      - run: echo 'conda activate base' >> ~/.bashrc
       - run: env
       - run: conda info
       - run: bash python/build.sh
