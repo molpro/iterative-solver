@@ -91,10 +91,11 @@ TEST(DistrFlags, access_rank) {
 
 TEST(DistrFlags, get) {
   auto rank = mpi_rank();
-  DistrFlags df{mpi_comm, rank};
+  int test_value{42};
+  DistrFlags df{mpi_comm, test_value};
   auto v = df.access().get();
   ScopeLock l{mpi_comm};
-  ASSERT_EQ(v, rank);
+  ASSERT_EQ(v, test_value);
 }
 
 TEST(DistrFlags, replace) {
