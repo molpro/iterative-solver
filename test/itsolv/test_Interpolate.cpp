@@ -27,15 +27,15 @@ TEST(Interpolate, minimize) {
       Interpolate::point p0{0, 0, 0.25};
       Interpolate::point p1{1, .25, 1.25};
       Interpolate inter(p0, p1, interpolant, 0);
-      EXPECT_NEAR(inter.minimize(0, 1, 5).x, 0.5, 1e-13);
-      EXPECT_NEAR(inter.minimize(0, 1).f, 0, 1e-13);
-      EXPECT_NEAR(inter.minimize(0, 1).f1, 0, 1e-13);
-      EXPECT_GT(inter.minimize(0.3, 0.6).f2, 0);
-      EXPECT_NEAR(inter.minimize(0, -1).x, -1, 1e-13);
-      EXPECT_NEAR(inter.minimize(0.51, 1).x, .51, 1e-13);
-      EXPECT_NEAR(inter.minimize(0.1, 2).x, .5, 1e-13);
-      EXPECT_NEAR(inter.minimize(-1200, 2).x, .5, 1e-13);
-      EXPECT_NEAR(inter.minimize(.4, 200).x, .5, 1e-13);
+      EXPECT_NEAR(inter.minimize(0, 1, 5, 1000, false).x, 0.5, 1e-13);
+      EXPECT_NEAR(inter.minimize(0, 1, 100, 100000, false).f, 0, 1e-13);
+      EXPECT_NEAR(inter.minimize(0, 1, 100, 100000, false).f1, 0, 1e-13);
+      EXPECT_GT(inter.minimize(0.3, 0.6, 100, 100000, false).f2, 0);
+      EXPECT_NEAR(inter.minimize(0, -1, 100, 100000, false).x, -1, 1e-13);
+      EXPECT_NEAR(inter.minimize(0.51, 1, 100, 100000, false).x, .51, 1e-13);
+      EXPECT_NEAR(inter.minimize(0.1, 2, 100, 100000, false).x, .5, 1e-13);
+      EXPECT_NEAR(inter.minimize(-1200, 2, 100, 100000, false).x, .5, 1e-13);
+      EXPECT_NEAR(inter.minimize(.4, 200, 100, 100000, false).x, .5, 1e-13);
     }
   }
 }

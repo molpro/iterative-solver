@@ -43,7 +43,7 @@ public:
    * @return The minimum point. The result may be one of Interpolate(xa), Interpolate(xb) with non-zero first
    * derivative, if no other minimum was found in the interval
    */
-  Interpolate::point minimize(double xa, double xb, size_t bracket_grid = 100, size_t max_bracket_grid = 100000) const;
+  Interpolate::point minimize(double xa, double xb, size_t bracket_grid = 100, size_t max_bracket_grid = 100000, bool analytic=true) const;
   Interpolate::point minimize_cubic() const;
   static std::vector<std::string> interpolants();
 

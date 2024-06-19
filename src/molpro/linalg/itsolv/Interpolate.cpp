@@ -133,12 +133,12 @@ Interpolate::point Interpolate::minimize_cubic() const {
   return pm.f < pp.f ? pm : pp;
 }
 
-Interpolate::point Interpolate::minimize(double xa, double xb, size_t bracket_grid, size_t max_bracket_grid) const {
+Interpolate::point Interpolate::minimize(double xa, double xb, size_t bracket_grid, size_t max_bracket_grid, bool analytic) const {
   if (xa > xb)
     std::swap(xa, xb);
 //  std::cout << "Interpolate::minimize " << xa << " " << xb << ", starting grid size " << bracket_grid << std::endl;
 //  std::cout << "Interpolant:" << *this << std::endl;
-  if (m_interpolant == "cubic")
+  if (analytic && m_interpolant == "cubic")
     return minimize_cubic();
 //    std::cout << "minimize_cubic() " << minimize_cubic() << std::endl;
   for (size_t ngrid = bracket_grid; ngrid < std::max(bracket_grid, max_bracket_grid) + 1; ngrid *= 2) {
