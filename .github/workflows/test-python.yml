@@ -19,5 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - run: env
+      - run: conda info
       - run: bash python/build.sh
       - run: cd python/test && python -m unittest
