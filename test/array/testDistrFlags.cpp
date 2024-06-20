@@ -26,6 +26,8 @@ int mpi_rank() {
 
 TEST(DistrFlags, MPI_RMA) {
 
+  std::cout << "mpi_size: "<<mpi_size()<<std::endl;
+  std::cout << "mpi_rank: "<<mpi_rank()<<std::endl;
   int* a;
   MPI_Win win;
   /* collectively create remote accessible memory in a window */
@@ -35,12 +37,12 @@ TEST(DistrFlags, MPI_RMA) {
   MPI_Win_lock(MPI_LOCK_EXCLUSIVE, 0, 0, win);
   int val1 = 42;
   MPI_Put(&val1, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
-  int val2;
+  int val2 = 12345;
   MPI_Get(&val2, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
   ASSERT_EQ(val1, val2);
   MPI_Get(&val2, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
   ASSERT_EQ(val1, val2);
-  int val3 = 84, res=9999;
+  int val3 = 84, res = 9999;
   auto code = MPI_Fetch_and_op(&val3, &res, MPI_INT, 0, 0, MPI_REPLACE, win); // this seems not always to work
   ASSERT_EQ(code, MPI_SUCCESS);
   ASSERT_EQ(val1, res);
