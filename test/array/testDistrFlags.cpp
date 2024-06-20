@@ -5,6 +5,8 @@
 #include <molpro/linalg/array/util.h>
 #include <molpro/linalg/array/util/DistrFlags.h>
 
+#include <mpi.h>
+
 using molpro::linalg::array::util::DistrFlags;
 using molpro::linalg::array::util::ScopeLock;
 using molpro::linalg::test::mpi_comm;
@@ -21,6 +23,30 @@ int mpi_rank() {
   return rank;
 }
 } // namespace
+
+TEST(DistrFlags, MPI_RMA) {
+
+  int* a;
+  MPI_Win win;
+  /* collectively create remote accessible memory in a window */
+  MPI_Win_allocate(sizeof(int), sizeof(int), MPI_INFO_NULL, mpi_comm, &a, &win);
+  /* Array ‘a’ is now accessible from all processes in
+   * mpi_comm */
+  MPI_Win_lock(MPI_LOCK_EXCLUSIVE, 0, 0, win);
+  int val1 = 42;
+  MPI_Put(&val1, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
+  int val2;
+  MPI_Get(&val2, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
+  ASSERT_EQ(val1, val2);
+  MPI_Get(&val2, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
+  ASSERT_EQ(val1, val2);
+  int val3 = 84, res=9999;
+  auto code = MPI_Fetch_and_op(&val3, &res, MPI_INT, 0, 0, MPI_REPLACE, win); // this seems not always to work
+  ASSERT_EQ(code, MPI_SUCCESS);
+  ASSERT_EQ(val1, res);
+  MPI_Win_unlock(0, win);
+  MPI_Win_free(&win);
+}
 
 TEST(DistrFlags, constructor_default) {
   DistrFlags df{};
@@ -99,12 +125,12 @@ TEST(DistrFlags, get) {
 }
 
 TEST(DistrFlags, replace) {
-  const int alpha = 0;
+  const int alpha = 42;
   auto rank = mpi_rank();
   DistrFlags df{mpi_comm, alpha};
   auto a = df.access(0);
-//  MPI_Win_flush(m_rank, m_win);
-  ASSERT_EQ(a.get(),alpha);
+  //  MPI_Win_flush(m_rank, m_win);
+  ASSERT_EQ(a.get(), alpha);
   auto v = a.replace(rank);
   ASSERT_EQ(v, alpha);
   v = a.replace(alpha);

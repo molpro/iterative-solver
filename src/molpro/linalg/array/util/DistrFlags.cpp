@@ -83,20 +83,21 @@ DistrFlags::Proxy::~Proxy() {
 int DistrFlags::Proxy::get() const {
   int val;
   MPI_Get(&val, 1, MPI_INT, m_rank, 0, 1, MPI_INT, m_win);
-  MPI_Win_flush(m_rank, m_win);
+//  MPI_Get_accumulate(&val,1,MPI_INT,
+//                     &val,1,MPI_INT,
+//                     m_rank,0,1,MPI_INT,
+//                     MPI_NO_OP, m_win);
   return val;
 }
 
 int DistrFlags::Proxy::replace(int val) {
   int res;
-  if (false) {
+  if (true) {
     MPI_Fetch_and_op(&val, &res, MPI_INT, m_rank, 0, MPI_REPLACE, m_win); // this seems not always to work
   } else {
     MPI_Get(&res, 1, MPI_INT, m_rank, 0, 1, MPI_INT, m_win);
-    MPI_Win_flush(m_rank, m_win);
     MPI_Put(&val, 1, MPI_INT, m_rank, 0, 1, MPI_INT, m_win);
   }
-  MPI_Win_flush(m_rank, m_win);
   return res;
 }
 
