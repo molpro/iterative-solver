@@ -40,17 +40,13 @@ jobs:
 #    - name: ccache
 #      uses: hendrikmuhs/ccache-action@v1.2
 
-    - run: echo PATH=$PATH
-    - run: . /opt/intel/oneapi/mpi/latest/env/vars.sh
-    - run: echo PATH=$PATH
-    - run: conda deactivate; mpiexec --version; which mpicc
     - name: Configure CMake
       if: steps.check_configuration.outputs.files_exists == 'true'
-      run: . /opt/intel/oneapi/mpi/latest/env/vars.sh ; cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} # -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} # -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
     - name: Build
       if: steps.check_configuration.outputs.files_exists == 'true'
-      run: PATH=/opt/intel/oneapi/mpi/latest/bin:$PATH cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}}
+      run: cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}}
 
     - name: Test
       if: steps.check_configuration.outputs.files_exists == 'true'
