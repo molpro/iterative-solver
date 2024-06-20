@@ -40,18 +40,19 @@ jobs:
 #    - name: ccache
 #      uses: hendrikmuhs/ccache-action@v1.2
 
-    - run: mpiexec --version
+    - run: echo PATH=$PATH
+    - run: conda deactivate; mpiexec --version; which mpicc
     - name: Configure CMake
       if: steps.check_configuration.outputs.files_exists == 'true'
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} # -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+      run: PATH=/opt/intel/oneapi/mpi/latest/bin:$PATH make -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.CMAKE_BUILD_TYPE}} # -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
     - name: Build
       if: steps.check_configuration.outputs.files_exists == 'true'
-      run: cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}}
+      run: PATH=/opt/intel/oneapi/mpi/latest/bin:$PATH cmake --build ${{github.workspace}}/build --config ${{env.CMAKE_BUILD_TYPE}}
 
     - name: Test
       if: steps.check_configuration.outputs.files_exists == 'true'
-      run: cd ${{github.workspace}}/build && ctest -C ${{env.CMAKE_BUILD_TYPE}} || ctest -C ${{env.CMAKE_BUILD_TYPE}} --rerun-failed --output-on-failure
+      run: cd ${{github.workspace}}/build && PATH=/opt/intel/oneapi/mpi/latest/bin:$PATH ctest -C ${{env.CMAKE_BUILD_TYPE}} || ctest -C ${{env.CMAKE_BUILD_TYPE}} --rerun-failed --output-on-failure
 
     - name: Build doxygen
       run: cmake --build ${{github.workspace}}/build --target DependencyManagerDocs
