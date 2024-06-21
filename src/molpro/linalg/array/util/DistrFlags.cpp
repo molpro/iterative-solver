@@ -98,6 +98,7 @@ int DistrFlags::Proxy::replace(int val) {
     MPI_Get(&res, 1, MPI_INT, m_rank, 0, 1, MPI_INT, m_win);
     MPI_Put(&val, 1, MPI_INT, m_rank, 0, 1, MPI_INT, m_win);
   }
+  MPI_Win_flush(m_rank, m_win);
   return res;
 }
 

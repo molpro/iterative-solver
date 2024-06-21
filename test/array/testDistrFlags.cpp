@@ -26,27 +26,46 @@ int mpi_rank() {
 
 TEST(DistrFlags, MPI_RMA) {
 
-  std::cout << "mpi_size: "<<mpi_size()<<std::endl;
-  std::cout << "mpi_rank: "<<mpi_rank()<<std::endl;
+  std::cout << "mpi_size: " << mpi_size() << std::endl;
+  std::cout << "mpi_rank: " << mpi_rank() << std::endl;
+  int target_rank = mpi_size() - 1;
+  int client_rank = mpi_size() / 2;
   int* a;
   MPI_Win win;
-  /* collectively create remote accessible memory in a window */
   MPI_Win_allocate(sizeof(int), sizeof(int), MPI_INFO_NULL, mpi_comm, &a, &win);
-  /* Array ‘a’ is now accessible from all processes in
-   * mpi_comm */
-  MPI_Win_lock(MPI_LOCK_EXCLUSIVE, 0, 0, win);
-  int val1 = 42;
-  MPI_Put(&val1, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
+  const int reference[3] = {420, 421, 423};
+  *a = reference[0];
+
+  MPI_Win_lock(MPI_LOCK_EXCLUSIVE, target_rank, 0, win);
   int val2 = 12345;
   MPI_Get(&val2, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
-  ASSERT_EQ(val1, val2);
-  MPI_Get(&val2, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
-  ASSERT_EQ(val1, val2);
-  int val3 = 84, res = 9999;
-  auto code = MPI_Fetch_and_op(&val3, &res, MPI_INT, 0, 0, MPI_REPLACE, win); // this seems not always to work
-  ASSERT_EQ(code, MPI_SUCCESS);
-  ASSERT_EQ(val1, res);
-  MPI_Win_unlock(0, win);
+  MPI_Win_unlock(target_rank, win);
+  ASSERT_EQ(val2, reference[0]);
+
+  if (mpi_rank() == client_rank) {
+    int val1 = 42;
+    MPI_Win_lock(MPI_LOCK_EXCLUSIVE, target_rank, 0, win);
+    MPI_Put(&reference[1], 1, MPI_INT, target_rank, 0, 1, MPI_INT, win);
+    MPI_Win_unlock(target_rank, win);
+  }
+  MPI_Barrier(mpi_comm);
+  val2 = 12345;
+  MPI_Win_lock(MPI_LOCK_SHARED, target_rank, 0, win);
+  MPI_Get(&val2, 1, MPI_INT, target_rank, 0, 1, MPI_INT, win);
+  ASSERT_EQ(reference[1], val2);
+  MPI_Get(&val2, 1, MPI_INT, target_rank, 0, 1, MPI_INT, win);
+  MPI_Win_unlock(target_rank, win);
+  ASSERT_EQ(reference[1], val2);
+
+  MPI_Barrier(mpi_comm);
+  if (mpi_rank() == client_rank) {
+    int res = 9999;
+    MPI_Win_lock(MPI_LOCK_EXCLUSIVE, target_rank, 0, win);
+    auto code = MPI_Fetch_and_op(&reference[2], &res, MPI_INT, 0, 0, MPI_REPLACE, win); // this seems not always to work
+    ASSERT_EQ(code, MPI_SUCCESS);
+    MPI_Win_unlock(0, win);
+    ASSERT_EQ(reference[1], res);
+  }
   MPI_Win_free(&win);
 }
 
@@ -131,7 +150,6 @@ TEST(DistrFlags, replace) {
   auto rank = mpi_rank();
   DistrFlags df{mpi_comm, alpha};
   auto a = df.access(0);
-  //  MPI_Win_flush(m_rank, m_win);
   ASSERT_EQ(a.get(), alpha);
   auto v = a.replace(rank);
   ASSERT_EQ(v, alpha);
