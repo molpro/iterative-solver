@@ -26,14 +26,14 @@ int mpi_rank() {
 
 TEST(DistrFlags, MPI_RMA) {
 
-  std::cout << "mpi_size: " << mpi_size() << std::endl;
-  std::cout << "mpi_rank: " << mpi_rank() << std::endl;
+//  std::cout << "mpi_size: " << mpi_size() << std::endl;
   int target_rank = mpi_size() - 1;
   int client_rank = mpi_size() / 2;
+//  std::cout << "mpi_rank: " << mpi_rank() << ", target? " << (target_rank == mpi_rank())<<", client? "<<(client_rank==mpi_rank())<< std::endl;
   int* a;
   MPI_Win win;
   MPI_Win_allocate(sizeof(int), sizeof(int), MPI_INFO_NULL, mpi_comm, &a, &win);
-  const int reference[3] = {420, 421, 423};
+  const int reference[3] = {420, 421, 422};
   *a = reference[0];
 
   MPI_Win_lock(MPI_LOCK_EXCLUSIVE, target_rank, 0, win);
@@ -61,9 +61,9 @@ TEST(DistrFlags, MPI_RMA) {
   if (mpi_rank() == client_rank) {
     int res = 9999;
     MPI_Win_lock(MPI_LOCK_EXCLUSIVE, target_rank, 0, win);
-    auto code = MPI_Fetch_and_op(&reference[2], &res, MPI_INT, 0, 0, MPI_REPLACE, win); // this seems not always to work
+    auto code = MPI_Fetch_and_op(&reference[2], &res, MPI_INT, target_rank, 0, MPI_REPLACE, win); // this seems not always to work
     ASSERT_EQ(code, MPI_SUCCESS);
-    MPI_Win_unlock(0, win);
+    MPI_Win_unlock(target_rank, win);
     ASSERT_EQ(reference[1], res);
   }
   MPI_Win_free(&win);
