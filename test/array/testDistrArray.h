@@ -231,7 +231,7 @@ template <typename Array>
 class DistrArrayRangeF : public Array {
 public:
   //! Stores a range in the buffer {1, 2, 3, 4, 5, .., dim}
-  DistrArrayRangeF() : Array((size_t)dim, mpi_comm), lock(mpi_comm), p_rank(0), p_size(0) {
+  DistrArrayRangeF() : Array((size_t)30, mpi_comm), lock(mpi_comm), p_rank(0), p_size(0) {
     MPI_Comm_rank(mpi_comm, &p_rank);
     MPI_Comm_size(mpi_comm, &p_size);
     values.resize(dim);
