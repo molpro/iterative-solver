@@ -40,7 +40,7 @@ TEST(DistrFlags, MPI_RMA) {
   int val2 = 12345;
   MPI_Get(&val2, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
   MPI_Win_unlock(target_rank, win);
-  ASSERT_EQ(val2, reference[0]);
+  EXPECT_EQ(val2, reference[0]);
 
   if (mpi_rank() == client_rank) {
     int val1 = 42;
@@ -52,19 +52,19 @@ TEST(DistrFlags, MPI_RMA) {
   val2 = 12345;
   MPI_Win_lock(MPI_LOCK_SHARED, target_rank, 0, win);
   MPI_Get(&val2, 1, MPI_INT, target_rank, 0, 1, MPI_INT, win);
-  ASSERT_EQ(reference[1], val2);
+  EXPECT_EQ(reference[1], val2);
   MPI_Get(&val2, 1, MPI_INT, target_rank, 0, 1, MPI_INT, win);
   MPI_Win_unlock(target_rank, win);
-  ASSERT_EQ(reference[1], val2);
+  EXPECT_EQ(reference[1], val2);
 
   MPI_Barrier(mpi_comm);
   if (mpi_rank() == client_rank) {
     int res = 9999;
     MPI_Win_lock(MPI_LOCK_EXCLUSIVE, target_rank, 0, win);
     auto code = MPI_Fetch_and_op(&reference[2], &res, MPI_INT, target_rank, 0, MPI_REPLACE, win); // this seems not always to work
-    ASSERT_EQ(code, MPI_SUCCESS);
+    EXPECT_EQ(code, MPI_SUCCESS);
     MPI_Win_unlock(target_rank, win);
-    ASSERT_EQ(reference[1], res);
+    EXPECT_EQ(reference[1], res);
   }
   MPI_Win_free(&win);
 }
