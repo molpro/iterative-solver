@@ -52,6 +52,7 @@ TEST(DistrFlags, MPI_RMA) {
   val2 = 54321;
   MPI_Win_lock(MPI_LOCK_SHARED, target_rank, 0, win);
   MPI_Get(&val2, 1, MPI_INT, target_rank, 0, 1, MPI_INT, win);
+  MPI_Win_flush(target_rank,win);
   EXPECT_EQ(reference[1], val2);
   MPI_Get(&val2, 1, MPI_INT, target_rank, 0, 1, MPI_INT, win);
   MPI_Win_unlock(target_rank, win);
@@ -140,8 +141,8 @@ TEST(DistrFlags, get) {
   auto rank = mpi_rank();
   int test_value{42};
   DistrFlags df{mpi_comm, test_value};
-  auto v = df.access().get();
   ScopeLock l{mpi_comm};
+  auto v = df.access().get();
   ASSERT_EQ(v, test_value);
 }
 
