@@ -241,12 +241,6 @@ public:
     sub_indices = {0, 1, 7, 15, 21, 29};
     for (auto el : sub_indices)
       sub_values.push_back(values[el]);
-    std::cout << "sub_indices";
-    for (const auto el : sub_indices) std::cout <<" "<<el;
-    std::cout<<std::endl;
-    std::cout << "sub_values";
-    for (const auto el : sub_values) std::cout <<" "<<el;
-    std::cout<<std::endl;
     Array::sync();
   }
 
