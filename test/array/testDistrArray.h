@@ -197,8 +197,8 @@ TYPED_TEST_P(DistArrayBasicRMAF, get) {
 TYPED_TEST_P(DistArrayBasicRMAF, put) {
   {
     auto l = this->lock.scope();
-    auto range = std::vector<double>(this->dim);
-    std::iota(range.begin(), range.end(), this->m_comm_rank);
+    auto range = std::vector<double>(this->dim, this->m_comm_rank);
+//    std::iota(range.begin(), range.end(), this->m_comm_rank);
     TypeParam::put(0, this->dim, range.data());
     auto from_ga_buffer = TypeParam::get(0, this->dim);
     ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), range));
