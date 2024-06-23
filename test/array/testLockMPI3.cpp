@@ -49,7 +49,6 @@ TEST(LockMPI3, locking_mechanism_simulates_fetch_and_op) {
     auto proxy = lock.scope();
     MPI_Get(&v, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
     ++v;
-    MPI_Win_fence(0, win);
     MPI_Put(&v, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
   }
   MPI_Win_fence(0, win);
