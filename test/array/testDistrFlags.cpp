@@ -38,7 +38,7 @@ TEST(DistrFlags, MPI_RMA) {
 
   MPI_Win_lock(MPI_LOCK_EXCLUSIVE, target_rank, 0, win);
   int val2 = 12345;
-  MPI_Get(&val2, 1, MPI_INT, 0, 0, 1, MPI_INT, win);
+  MPI_Get(&val2, 1, MPI_INT, target_rank, 0, 1, MPI_INT, win);
   MPI_Win_unlock(target_rank, win);
   EXPECT_EQ(val2, reference[0]);
 
@@ -49,7 +49,7 @@ TEST(DistrFlags, MPI_RMA) {
     MPI_Win_unlock(target_rank, win);
   }
   MPI_Barrier(mpi_comm);
-  val2 = 12345;
+  val2 = 54321;
   MPI_Win_lock(MPI_LOCK_SHARED, target_rank, 0, win);
   MPI_Get(&val2, 1, MPI_INT, target_rank, 0, 1, MPI_INT, win);
   EXPECT_EQ(reference[1], val2);
