@@ -231,7 +231,7 @@ template <typename Array>
 class DistrArrayRangeF : public Array {
 public:
   //! Stores a range in the buffer {1, 2, 3, 4, 5, .., dim}
-  DistrArrayRangeF() : Array((size_t)30, mpi_comm), lock(mpi_comm), p_rank(0), p_size(0) {
+  DistrArrayRangeF() : Array((size_t)dim, mpi_comm), lock(mpi_comm), p_rank(0), p_size(0) {
     MPI_Comm_rank(mpi_comm, &p_rank);
     MPI_Comm_size(mpi_comm, &p_size);
     values.resize(dim);
@@ -241,6 +241,12 @@ public:
     sub_indices = {0, 1, 7, 15, 21, 29};
     for (auto el : sub_indices)
       sub_values.push_back(values[el]);
+    std::cout << "sub_indices";
+    for (const auto el : sub_indices) std::cout <<" "<<el;
+    std::cout<<std::endl;
+    std::cout << "sub_values";
+    for (const auto el : sub_values) std::cout <<" "<<el;
+    std::cout<<std::endl;
     Array::sync();
   }
 
@@ -262,7 +268,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, gather) {
   auto from_ga_buffer = TypeParam::gather(this->sub_indices);
   {
     auto l = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->sub_values));
+    EXPECT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->sub_values));
   }
   TypeParam::sync();
 }
@@ -274,7 +280,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, scatter) {
     auto proxy = this->lock.scope();
     TypeParam::scatter(this->sub_indices, this->sub_values);
     auto from_ga_buffer = TypeParam::gather(this->sub_indices);
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->sub_values));
+    EXPECT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->sub_values));
     auto zero_values = std::vector<double>(this->sub_values.size(), 0.);
     TypeParam::scatter(this->sub_indices, zero_values);
   }
