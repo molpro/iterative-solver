@@ -103,6 +103,15 @@ $(document).ready(function(){initNavTree('classmolpro_1_1linalg_1_1itsolv_1_1Pro
  <a href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="IterativeSolver_8h_source.html">IterativeSolver.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for molpro::linalg::itsolv::Problem&lt; R, P &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmolpro_1_1linalg_1_1itsolv_1_1Problem__inherit__graph.png" border="0" usemap="#amolpro_1_1linalg_1_1itsolv_1_1Problem_3_01R_00_01P_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="amolpro_1_1linalg_1_1itsolv_1_1Problem_3_01R_00_01P_01_4_inherit__map" id="amolpro_1_1linalg_1_1itsolv_1_1Problem_3_01R_00_01P_01_4_inherit__map">
+<area shape="rect" title="Abstract class defining the problem&#45;specific interface for the simplified solver interface to Iterati..." alt="" coords="9,5,165,47"/>
+<area shape="rect" href="classMorse__problem.html" title=" " alt="" coords="5,95,168,121"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename R, typename P = std::map&lt;size_t, typename R::value_type&gt;&gt;<br />
 class molpro::linalg::itsolv::Problem&lt; R, P &gt;</div><p >Abstract class defining the problem-specific interface for the simplified solver interface to <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html" title="Base class defining the interface common to all iterative solvers.">IterativeSolver</a>. </p>
@@ -571,6 +580,8 @@ template&lt;typename R , typename P  = std::map&lt;size_t, typename R::value_typ
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>In the case where the residual is an exact differential, the corresponding function value. Used by <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Optimize.html" title="Optimises to a stationary point using methods such as L-BFGS.">Optimize</a> but not <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquations.html" title="Solves non-linear system of equations using methods such as DIIS.">NonLinearEquations</a>. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classMorse__problem.html#abdd1b24df0694f03976f384ec57b4bbf">Morse_problem</a>.</p>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="ExampleProblem_8h-example.html#a2">ExampleProblem.h</a>, and <a class="el" href="ExampleProblemDistrArray_8h-example.html#a2">ExampleProblemDistrArray.h</a>.</dd>
 </dl>
 

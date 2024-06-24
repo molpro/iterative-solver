@@ -74,6 +74,8 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "get_rank", "namespacemolpro_1_1linalg_1_1itsolv.html#a9f4b69d5700c5c0199c7424183b6641f", null ],
     [ "get_rank< value_type >", "namespacemolpro_1_1linalg_1_1itsolv.html#a7ee90b05dcbb6a130dd3a37de50dabce", null ],
     [ "operator<<", "namespacemolpro_1_1linalg_1_1itsolv.html#a2ddf9d9d9e8eb84510e54c64d86dad16", null ],
+    [ "operator<<", "namespacemolpro_1_1linalg_1_1itsolv.html#a32fc8c3fc3217ba8e8c4abb2c7de9f2e", null ],
+    [ "operator<<", "namespacemolpro_1_1linalg_1_1itsolv.html#a165abd9e57fd61f69482f77d58c8940f", null ],
     [ "operator==", "namespacemolpro_1_1linalg_1_1itsolv.html#ad845d8e72c3518d938b7c0250c70de87", null ],
     [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#a8229dae1b2c144af940193d4aae8a460", null ],
     [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#a87291e93a2c4e59b1af5b46cdb7d2db6", null ],

@@ -155,5 +155,6 @@ var annotated =
     ] ],
     [ "try_iterative_solver_problem", "namespacetry__iterative__solver__problem.html", [
       [ "my_problem", "structtry__iterative__solver__problem_1_1my__problem.html", null ]
-    ] ]
+    ] ],
+    [ "Morse_problem", "classMorse__problem.html", "classMorse__problem" ]
 ];
