@@ -139,6 +139,8 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:ad609af42ab2050142d98f5ca57522322"><td class="memItemLeft" align="right" valign="top">function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#ad609af42ab2050142d98f5ca57522322">iterative_solver_end_iteration</a> (solution, residual, synchronize)</td></tr>
 <tr class="memdesc:ad609af42ab2050142d98f5ca57522322"><td class="mdescLeft">&#160;</td><td class="mdescRight">For most methods, does nothing; for Optimize it is required. Also write progress to standard output.  <a href="namespaceiterative__solver.html#ad609af42ab2050142d98f5ca57522322">More...</a><br /></td></tr>
 <tr class="separator:ad609af42ab2050142d98f5ca57522322"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b5146c464788a63c87081ee8f50473d"><td class="memItemLeft" align="right" valign="top">logical function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a5b5146c464788a63c87081ee8f50473d">iterative_solver_end_iteration_needed</a> ()</td></tr>
+<tr class="separator:a5b5146c464788a63c87081ee8f50473d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa924c3a27ae8d7dfb5f6946c9ab55222"><td class="memItemLeft" align="right" valign="top">integer function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#aa924c3a27ae8d7dfb5f6946c9ab55222">iterative_solver_add_p</a> (nP, offsets, indices, coefficients, pp, parameters, action, fproc, synchronize)</td></tr>
 <tr class="memdesc:aa924c3a27ae8d7dfb5f6946c9ab55222"><td class="mdescLeft">&#160;</td><td class="mdescRight">add P-space vectors to the expansion set, and return new solution.  <a href="namespaceiterative__solver.html#aa924c3a27ae8d7dfb5f6946c9ab55222">More...</a><br /></td></tr>
 <tr class="separator:aa924c3a27ae8d7dfb5f6946c9ab55222"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -476,6 +478,20 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a5b5146c464788a63c87081ee8f50473d" name="a5b5146c464788a63c87081ee8f50473d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b5146c464788a63c87081ee8f50473d">&#9670;&nbsp;</a></span>iterative_solver_end_iteration_needed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">logical function, public iterative_solver::iterative_solver_end_iteration_needed</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a8771b451fe4f3381b22d6a64d96f23bd" name="a8771b451fe4f3381b22d6a64d96f23bd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8771b451fe4f3381b22d6a64d96f23bd">&#9670;&nbsp;</a></span>iterative_solver_errors()</h2>
 
@@ -632,7 +648,7 @@ Variables</h2></td></tr>
 <div class="line">  <span class="keyword">CALL </span>iterative_solver_finalize</div>
 <div class="line">  <span class="keyword">CALL </span>mpi_finalize</div>
 <div class="line"><span class="keyword">END PROGRAM </span>linear_eigensystem_example</div>
-<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:45</div></div>
+<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:46</div></div>
 </div><!-- fragment --><p> Example including use of P space: </p><div class="fragment"><div class="line"> </div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">MODULE</span> pspace</div>

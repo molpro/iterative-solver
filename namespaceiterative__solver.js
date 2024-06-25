@@ -7,6 +7,7 @@ var namespaceiterative__solver =
     [ "iterative_solver_diis_initialize", "namespaceiterative__solver.html#a0193308603bbbe44226e4745032d12f7", null ],
     [ "iterative_solver_eigenvalues", "namespaceiterative__solver.html#afad8d58daf37b4b32e1f85046611ece6", null ],
     [ "iterative_solver_end_iteration", "namespaceiterative__solver.html#ad609af42ab2050142d98f5ca57522322", null ],
+    [ "iterative_solver_end_iteration_needed", "namespaceiterative__solver.html#a5b5146c464788a63c87081ee8f50473d", null ],
     [ "iterative_solver_errors", "namespaceiterative__solver.html#a8771b451fe4f3381b22d6a64d96f23bd", null ],
     [ "iterative_solver_finalize", "namespaceiterative__solver.html#a40a3d04d226f8315ed2a57baa5d78304", null ],
     [ "iterative_solver_linear_eigensystem_initialize", "namespaceiterative__solver.html#aeeac19cec453d5df15b17ea1b0f157fb", null ],

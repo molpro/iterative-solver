@@ -234,6 +234,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a54c5badcc785eede77893bfe2c8c8cb9"><td class="memTemplParams" colspan="2">template&lt;typename TTT &gt; </td></tr>
 <tr class="memitem:a54c5badcc785eede77893bfe2c8c8cb9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a54c5badcc785eede77893bfe2c8c8cb9">check_consistent_number_of_roots_and_solutions</a> (const std::vector&lt; TTT &gt; &amp;roots, const size_t nparams)</td></tr>
 <tr class="separator:a54c5badcc785eede77893bfe2c8c8cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaabdae7c67ee909b5e7ddfc40fb46e0e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aaabdae7c67ee909b5e7ddfc40fb46e0e">end_iteration_needed</a> () override</td></tr>
+<tr class="separator:aaabdae7c67ee909b5e7ddfc40fb46e0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -288,6 +290,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a9cd1557340c1bdd64cf98ffdd3e6287a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a9cd1557340c1bdd64cf98ffdd3e6287a">m_p_threshold</a> = std::numeric_limits&lt;double&gt;::max()</td></tr>
 <tr class="memdesc:a9cd1557340c1bdd64cf98ffdd3e6287a"><td class="mdescLeft">&#160;</td><td class="mdescRight">threshold for selecting P space  <a href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a9cd1557340c1bdd64cf98ffdd3e6287a">More...</a><br /></td></tr>
 <tr class="separator:a9cd1557340c1bdd64cf98ffdd3e6287a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ee1b0fd61900d12fcaa7ba7663c55e1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a9ee1b0fd61900d12fcaa7ba7663c55e1">m_end_iteration_needed</a> = true</td></tr>
+<tr class="memdesc:a9ee1b0fd61900d12fcaa7ba7663c55e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether end_iteration should be called after any preconditioner  <a href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a9ee1b0fd61900d12fcaa7ba7663c55e1">More...</a><br /></td></tr>
+<tr class="separator:a9ee1b0fd61900d12fcaa7ba7663c55e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acd19351fb4f3e8e98507cf0ec6b0032a" name="acd19351fb4f3e8e98507cf0ec6b0032a"></a>
@@ -828,6 +833,33 @@ template&lt;template&lt; class, class, class &gt; class Solver, class R , class 
 </div><div class="memdoc">
 
 <p>Access dimensions of the subspace. </p>
+
+</div>
+</div>
+<a id="aaabdae7c67ee909b5e7ddfc40fb46e0e" name="aaabdae7c67ee909b5e7ddfc40fb46e0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaabdae7c67ee909b5e7ddfc40fb46e0e">&#9670;&nbsp;</a></span>end_iteration_needed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class, class, class &gt; class Solver, class R , class Q , class P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate</a>&lt; Solver, R, Q, P &gt;::end_iteration_needed </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2202,6 +2234,32 @@ template&lt;template&lt; class, class, class &gt; class Solver, class R , class 
 <div class="line">      std::numeric_limits&lt;double&gt;::max()}</div>
 </div><!-- fragment -->
 <p>value changes less than this mark a converged solution </p>
+
+</div>
+</div>
+<a id="a9ee1b0fd61900d12fcaa7ba7663c55e1" name="a9ee1b0fd61900d12fcaa7ba7663c55e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ee1b0fd61900d12fcaa7ba7663c55e1">&#9670;&nbsp;</a></span>m_end_iteration_needed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class, class, class &gt; class Solver, class R , class Q , class P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate</a>&lt; Solver, R, Q, P &gt;::m_end_iteration_needed = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>whether end_iteration should be called after any preconditioner </p>
 
 </div>
 </div>

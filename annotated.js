@@ -5,6 +5,7 @@ var annotated =
       [ "mpi_rank_global", "interfaceiterative__solver_1_1mpi__rank__global.html", null ]
     ] ],
     [ "iterative_solver_problem", "namespaceiterative__solver__problem.html", [
+      [ "matrix_problem", "structiterative__solver__problem_1_1matrix__problem.html", "structiterative__solver__problem_1_1matrix__problem" ],
       [ "problem", "structiterative__solver__problem_1_1problem.html", "structiterative__solver__problem_1_1problem" ]
     ] ],
     [ "molpro", "namespacemolpro.html", [

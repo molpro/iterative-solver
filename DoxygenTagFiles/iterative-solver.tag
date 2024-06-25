@@ -4545,6 +4545,13 @@
       <arglist>(const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residual)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
+      <type>virtual bool</type>
+      <name>end_iteration_needed</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
+      <anchor>acc90c71218893490dbf3ef515c1a9b14</anchor>
+      <arglist>()=0</arglist>
+    </member>
+    <member kind="function" virtualness="pure">
       <type>virtual std::vector&lt; size_t &gt;</type>
       <name>suggest_p</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
@@ -5182,6 +5189,13 @@
       <anchor>a54c5badcc785eede77893bfe2c8c8cb9</anchor>
       <arglist>(const std::vector&lt; TTT &gt; &amp;roots, const size_t nparams)</arglist>
     </member>
+    <member kind="function" protection="protected">
+      <type>bool</type>
+      <name>end_iteration_needed</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>aaabdae7c67ee909b5e7ddfc40fb46e0e</anchor>
+      <arglist>() override</arglist>
+    </member>
     <member kind="variable" protection="protected">
       <type>std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt;</type>
       <name>m_handlers</name>
@@ -5299,6 +5313,13 @@
       <name>m_p_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
       <anchor>a9cd1557340c1bdd64cf98ffdd3e6287a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>bool</type>
+      <name>m_end_iteration_needed</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a9ee1b0fd61900d12fcaa7ba7663c55e1</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -7314,6 +7335,32 @@
       <name>m_buffer</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html</anchorfile>
       <anchor>a47e15fb815a6fae994798da646ddc529</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>iterative_solver_problem::matrix_problem</name>
+    <filename>structiterative__solver__problem_1_1matrix__problem.html</filename>
+    <base>iterative_solver_problem::problem</base>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>diagonals</name>
+      <anchorfile>structiterative__solver__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>ada705c5dde5040bb0c04d52f4afd5311</anchor>
+      <arglist>=&gt; matrix_diagonals</arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>action</name>
+      <anchorfile>structiterative__solver__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>af2dbc92bce3d455a45473bc2bc67f6b9</anchor>
+      <arglist>=&gt; matrix_action</arglist>
+    </member>
+    <member kind="variable">
+      <type>double precision, dimension(:,:), pointer</type>
+      <name>matrix</name>
+      <anchorfile>structiterative__solver__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>aacc8abaebfadfd7d651f8ebb36f7bace</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -10278,6 +10325,13 @@
       <arglist>(solution, residual, synchronize)</arglist>
     </member>
     <member kind="function">
+      <type>logical function, public</type>
+      <name>iterative_solver_end_iteration_needed</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>a5b5146c464788a63c87081ee8f50473d</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
       <type>integer function, public</type>
       <name>iterative_solver_add_p</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
@@ -10330,6 +10384,7 @@
   <compound kind="namespace">
     <name>iterative_solver_problem</name>
     <filename>namespaceiterative__solver__problem.html</filename>
+    <class kind="type">iterative_solver_problem::matrix_problem</class>
     <class kind="type">iterative_solver_problem::problem</class>
     <member kind="function">
       <type>logical function</type>
