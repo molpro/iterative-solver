@@ -27,7 +27,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace =
     [ "paramsp", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a8672c92eecff09900f7d0083482df8dc", null ],
     [ "paramsq", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a522cde7457f11fec16c7a57d8a9002f2", null ],
     [ "paramsq", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a38a43598c37b739d9dad7406442fe153", null ],
-    [ "size", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a3ac02a0481246aa8deb48f2b1a264b6f", null ],
+    [ "size", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5f90338e4f03d9298641a4ad3f603522", null ],
     [ "update_dspace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#afb897ccb015c8d42dbe57a6f0c92ae62", null ],
     [ "update_pspace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a90ffba67ffb0262cf996e73d0cd95354", null ],
     [ "update_qspace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aea25a4672a5baaeba2fcb36ad9b09b2e", null ],

@@ -5470,8 +5470,8 @@
       <type>size_t</type>
       <name>size</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html</anchorfile>
-      <anchor>a3ac02a0481246aa8deb48f2b1a264b6f</anchor>
-      <arglist>()</arglist>
+      <anchor>a5f90338e4f03d9298641a4ad3f603522</anchor>
+      <arglist>() const</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
@@ -7593,6 +7593,20 @@
       <arglist>(R &amp;parameters, R &amp;residual, value_type value) override</arglist>
     </member>
     <member kind="function">
+      <type>void</type>
+      <name>BFGS_update_1</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
+      <anchor>a27e9a19a8c2a15222c173d48bfdbcee7</anchor>
+      <arglist>(R &amp;residual, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const Matrix&lt; double &gt; &amp;H)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>BFGS_update_2</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
+      <anchor>a6ec030db3fc6b6055169c4f7f21dfa41</anchor>
+      <arglist>(R &amp;z, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const Matrix&lt; double &gt; &amp;H)</arglist>
+    </member>
+    <member kind="function">
       <type>size_t</type>
       <name>end_iteration</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
@@ -7685,9 +7699,9 @@
     </member>
     <member kind="variable" protection="protected">
       <type>std::vector&lt; double &gt;</type>
-      <name>m_alpha</name>
+      <name>m_BFGS_update_alpha</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a0bf2c09ad1ced4be31c44d0f8a7dff4e</anchor>
+      <anchor>a706ec8e6979add2a97617a91fd85e6c1</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
