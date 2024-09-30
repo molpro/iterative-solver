@@ -191,14 +191,3 @@ contains
   end function test_parameters
 
 end module Iterative_Solver_Problem
-
-module try_Iterative_Solver_Problem
-  use Iterative_Solver_Problem
-  type, extends(Problem) :: my_Problem
-  end type my_Problem
-
-contains
-  subroutine try
-    type(my_Problem) :: thing
-  end subroutine try
-end module try_Iterative_Solver_Problem
