@@ -4,8 +4,8 @@ module Iterative_Solver_Problem
 
   !> @brief Abstract class defining the problem-specific interface for the simplified solver
   !> interface to IterativeSolver
-  !type, abstract, public :: Problem
-  type, public :: Problem
+  type, abstract, public :: Problem
+!  type, public :: Problem
     type(PSpace) :: p_space
   contains
     procedure, pass :: diagonals

@@ -1,8 +1,7 @@
 module Iterative_Solver_Matrix_Problem
   use Iterative_Solver_Problem, only : Problem
-
   private
-
+  !> @brief A specialisation of the Problem class for linear problems in which the kernel matrix is stored in full in an existing array
   type, public, extends(Problem) :: Matrix_Problem
     double precision, pointer, dimension(:, :) :: matrix
     double precision, dimension(:, :), pointer :: m_RHS
@@ -17,6 +16,7 @@ module Iterative_Solver_Matrix_Problem
 
 contains
 
+  !> @brief Define the problem in terms of an existing kernel matrix, and (for linear equations only), an existing matrix giving the inhomogeneous parts of the equations
   subroutine attach(this, matrix, RHS)
     class(Matrix_Problem), intent(inout) :: this
     double precision, dimension(:, :), target, optional :: matrix
@@ -25,6 +25,11 @@ contains
     if (present(RHS)) this%m_RHS => RHS
   end subroutine attach
 
+  !> @brief Provide the inhomgeneous part of one of the sets of linear equations
+  !> @param vector Will contain the requested RHS on exit
+  !> @param instance Which equation set for which the RHS should be provided
+  !> @param range The range of the space for which actions should be computed. It's OK to provide also the values outside this range (which will happen in a multiprocessing context), but they will be ignored by the solver.
+  !> @return Whether the requested instance exists
   logical function RHS(this, vector, instance, range)
     class(Matrix_Problem), intent(in) :: this
     double precision, intent(inout), dimension(:) :: vector
@@ -33,7 +38,7 @@ contains
     RHS = .false.
     if (instance.lt.lbound(this%m_RHS, 2).or.instance.gt.ubound(this%m_RHS, 2)) return
     RHS = .true.
-    vector(range(1)+1:range(2)) = this%m_RHS(range(1)+1:range(2), instance)
+    vector(range(1) + 1:range(2)) = this%m_RHS(range(1) + 1:range(2), instance)
   end function RHS
 
   logical function diagonals(this, d)
@@ -87,6 +92,5 @@ contains
       end do
     end do
   end subroutine p_action
-
 
 end module Iterative_Solver_Matrix_Problem

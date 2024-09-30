@@ -62,7 +62,9 @@ PROGRAM Linear_Equations_Example
   call mpi_init
   IF (mpi_rank_global() .gt. 0) close(6)
   PRINT *, 'Fortran binding of IterativeSolver'
-  converged = Solve_Linear_Equations(c, g, linear_problem(n, nroot), thresh = 1d-11, verbosity = 2)
+  problem%n = n
+  problem%nroot = nroot
+  converged = Solve_Linear_Equations(c, g, problem, thresh = 1d-11, verbosity = 2)
   PRINT*, 'convergence?', converged, ', residual length: ', norm2(g)
   CALL Iterative_Solver_Print_Statistics
   CALL Iterative_Solver_Finalize

@@ -1,5 +1,5 @@
 module mod_linear_problem
-  use Iterative_Solver_Problem
+  use Iterative_Solver_Matrix_Problem
   type, extends(matrix_Problem) :: linear_problem
     double precision, dimension(:,:), pointer :: rhss
     contains
@@ -108,7 +108,7 @@ contains
     use mod_linear_problem, only : linear_problem
     type(linear_problem) :: prob
     logical :: result
-    prob = linear_problem(matrix, rhs)
+    call prob%attach(matrix, rhs)
     result = Solve_Linear_Equations(c, g, prob, augmented_hessian = augmented_hessian, &
         hermitian = hermitian.ne.0, &
         thresh = thresh, thresh_value = 1d50, verbosity=2)

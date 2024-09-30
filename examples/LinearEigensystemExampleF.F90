@@ -1,37 +1,42 @@
 !> @examples LinearEigensystemExampleF.F90
-!> This is an example of simplest use of the LinearEigensystem framework for iterative
+!> This is an examples of use of the LinearEigensystem framework for iterative
 !> finding of the lowest few eigensolutions of a large matrix.
-program Eigenproblem_Example
-  use Iterative_Solver, only : Solve_Linear_Eigensystem, Iterative_Solver_Verbosity, Iterative_Solver_Solution, Iterative_Solver_Eigenvalues, Iterative_Solver_Errors, Iterative_Solver_Finalize, Iterative_Solver_Print_Statistics, mpi_init, mpi_rank_global, mpi_finalize
-  use Iterative_Solver_Matrix_Problem, only : matrix_problem
-  use iso_fortran_env, only : output_unit
-  implicit none
-  double precision, dimension (500, 500), target :: matrix = 1d0
-  double precision, dimension (ubound(matrix, 1), 5) :: c, g
-  integer :: i, j
-  logical :: converged
-  type(matrix_problem) :: problem
-  call mpi_init
+!> Comparison is made of explicitly declaring a (bad) P-space, generating one automatically, or not using one
+PROGRAM Linear_Eigensystem_Example
+  USE Iterative_Solver, only : mpi_init, mpi_finalize, mpi_rank_global, &
+      Solve_Linear_Eigensystem, Iterative_Solver_Print_Statistics, Iterative_Solver_Finalize
+  USE Iterative_Solver_Matrix_Problem, only : matrix_problem
+  USE iso_fortran_env, only : output_unit
+  INTEGER, PARAMETER :: n = 300, nroot = 3
+  INTEGER :: nP, max_p
+  DOUBLE PRECISION, DIMENSION (:, :), allocatable, target :: m
+  INTEGER :: i
+  CALL MPI_INIT
   IF (mpi_rank_global() .gt. 0) close(output_unit)
-  do i = lbound(matrix, 1), ubound(matrix, 1)
-    matrix(i, i) = 3 * i
-  end do
-  call problem%attach(matrix)
-  converged = Solve_Linear_Eigensystem(c, g, problem &
-      , nroot = ubound(c, 2) &
-      , thresh = 1d-7 &
-      , verbosity = 2 &
-      , max_iter = 30&
-      )
-  print *, 'Converged?', converged, ', Eigenvalues ', Iterative_Solver_Eigenvalues()
-  if (Iterative_Solver_Verbosity().lt.1) print *, 'Error ', Iterative_Solver_Errors()
-  if (Iterative_Solver_Verbosity().gt.1) then
-    call Iterative_Solver_Solution([(i, i = lbound(c, 2), ubound(c, 2))], c, g)
-    do i = lbound(c, 2), ubound(c, 2)
-      print *, 'Eigenvector ', c(1:MIN(ubound(c, 1), 5), i)
+  ALLOCATE(m(n, n))
+  m = 1
+  DO i = lbound(m,1), ubound(m,1)
+    m(i, i) = 3 * (n + 1 - i)
+  END DO
+  do nP = 0, 50, 50
+    do max_p = 0, 50, 10
+      if (max_p.gt.0 .and. nP.gt.0) cycle
+      WRITE (6, *) 'Explicit P-space=', nP, ', auto P-space=', max_p, ', dimension=', n, ', roots=', nroot
+      call solve(m, nP, max_p)
     end do
-  end if
-  call Iterative_Solver_Print_Statistics
-  call Iterative_Solver_Finalize
-  call mpi_finalize
-end program Eigenproblem_Example
+  end do
+  CALL MPI_Finalize
+CONTAINS
+  subroutine solve(m, nP, max_P)
+    DOUBLE PRECISION, DIMENSION (:, :), INTENT(IN), target :: m
+    integer, intent(in) :: nP, max_P
+    DOUBLE PRECISION, DIMENSION (ubound(m,1), nroot) :: c, g
+    TYPE(Matrix_Problem) :: problem
+    logical :: success
+    CALL problem%attach(m)
+    CALL problem%p_space%add_simple([(i, i = 1, nP)]) ! the first nP components, so not the best
+    success = Solve_Linear_Eigensystem(c, g, problem, nroot, verbosity = 2, thresh = 1d-8, hermitian = .true., max_p = max_p)
+    if (mpi_rank_global().eq.0) CALL Iterative_Solver_Print_Statistics
+    CALL Iterative_Solver_Finalize
+  end subroutine solve
+END PROGRAM Linear_Eigensystem_Example

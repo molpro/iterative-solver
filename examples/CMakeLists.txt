@@ -3,8 +3,6 @@ if (FORTRAN
         )
     set(ITERATIVESOLVER_FORTRAN_EXAMPLES
             LinearEigensystemExampleF.F90
-#            LinearEigensystemExampleF-Pspace-adaptive.F90
-            LinearEigensystemExampleF-Pspace.F90
             LinearEquationsExampleF.F90
             LinearEquationsExampleF-matrix.F90
             OptimizeExampleF.F90
@@ -21,17 +19,6 @@ set(EXAMPLES
         OptimizeDistrArrayExample.cpp
         ${ITERATIVESOLVER_FORTRAN_EXAMPLES}
         )
-if (LINEARALGEBRA_ARRAY_MPI3 AND MPI)
-    list(APPEND EXAMPLES
-            )
-    if (FORTRAN
-            AND MPIFORTRAN
-            )
-        list(APPEND EXAMPLES
-                LinearEigensystemExampleF-Pspace-mpi.F90
-                )
-    endif ()
-endif ()
 
 if (FORTRAN AND MPI AND MPIFORTRAN)
     find_package(MPI COMPONENTS Fortran)
