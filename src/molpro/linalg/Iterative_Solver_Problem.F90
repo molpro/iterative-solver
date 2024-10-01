@@ -21,8 +21,8 @@ contains
 
   !> @brief Optionally provide the diagonal elements of the underlying kernel. If
   !> implemented and returning true, the provided diagonals will be used by
-  !> IterativeSolver for preconditioning (and therefore the precondition() function does
-  !> not need to be implemented), and, in the case of linear problems, for selection of
+  !> the base precondition() function for preconditioning (and therefore the precondition() function does
+  !> not need to be reimplemented), and, in the case of linear problems, for selection of
   !> the P space. Otherwise, preconditioning will be done with precondition(), and any P
   !> space has to be provided manually.
   !> @param d On exit, contains the diagonal elements
@@ -34,7 +34,8 @@ contains
   end function diagonals
 
   !> @brief Apply preconditioning to a residual vector in order to predict a step towards
-  !> the solution
+  !> the solution.
+  !> This is a complete implementation provided that the diagonals() function is reimplemented, but can be overridden if desired.
   !> @param residual On entry, assumed to be the residual. On exit, the negative of the
   !> predicted step.
   !> @param shift When called from LinearEigensystem, contains the corresponding current
@@ -93,7 +94,7 @@ contains
     integer, dimension(2), intent(in) :: range
   end subroutine action
 
-  !> @brief Provide the inhomgeneous part of one of the sets of linear equations
+  !> @brief Provide the inhomogeneous part of one of the sets of linear equations. Implementation required only for linear equation solver.
   !> @param vector Will contain the requested RHS on exit
   !> @param instance Which equation set for which the RHS should be provided
   !> @param range The range of the space for which actions should be computed. It's OK to provide also the values outside this range (which will happen in a multiprocessing context), but they will be ignored by the solver.
@@ -107,7 +108,7 @@ contains
   end function RHS
 
   !> @brief Report progress at the end of each iteration, or at the end of the calculation
-  !> @return .true. if the information was used, and therefore the caller should be silent
+  !> @return .true. if the information was used, and therefore the caller should be silent. This is a complete implementation that can be used, but can be overridden if desired.
   logical function report(this, iteration, verbosity, errors, value, eigenvalues)
     class(Problem), intent(in) :: this
     integer, intent(in) :: iteration !< The iteration number if positive, or zero indicating successful convergence, or a negative number indicating failure to converge
@@ -136,7 +137,7 @@ contains
     report = .true.
   end function report
 
-  !> @brief Calculate the representation of the kernel matrix in the P space
+  !> @brief Calculate the representation of the kernel matrix in the P space. Implementation required only for linear hermitian problems for which P-space acceleration is wanted.
   function pp_action_matrix(this) result(matrix)
     class(Problem), intent(in) :: this
     double precision, dimension(:, :), allocatable :: matrix
@@ -155,10 +156,10 @@ contains
 !    end do
   end function pp_action_matrix
 
-  !> @brief Calculate the action of the kernel matrix on a set of vectors in the P space
+  !> @brief Calculate the action of the kernel matrix on a set of vectors in the P space. Implementation required only for linear hermitian problems for which P-space acceleration is wanted.
   !> @param p_coefficients The projection of the vectors onto to the P space
   !> @param actions On exit, the computed action has been added to the original contents
-  !> @param range The range of the space for which actions should be computed.
+  !> @param range The range of the full space for which actions should be computed.
   subroutine p_action(this, p_coefficients, actions, range)
     class(Problem), intent(in) :: this
     double precision, dimension(:, :), intent(in) :: p_coefficients
