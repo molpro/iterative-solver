@@ -5,8 +5,8 @@ MODULE Iterative_Solver
   public :: apply_p_current_problem ! temporary
   PUBLIC :: Solve_Linear_Eigensystem
   PUBLIC :: Solve_Linear_Equations
-!  PUBLIC :: Solve_Nonlinear_Equations
-!  PUBLIC :: Optimize
+  PUBLIC :: Solve_Nonlinear_Equations
+  PUBLIC :: Optimize
   PUBLIC :: Iterative_Solver_Linear_Eigensystem_Initialize, Iterative_Solver_Finalize
   PUBLIC :: Iterative_Solver_Linear_Eigensystem_Initialize_Ranges
   PUBLIC :: Iterative_Solver_DIIS_Initialize, Iterative_Solver_Linear_Equations_Initialize
@@ -184,6 +184,84 @@ CONTAINS
     call Iterative_Solver_Solution([(i,i=1,min(ubound(parameters,2)-lbound(parameters,2)+1,m_nroot))], parameters, actions, .true.)
     Solve_Linear_Equations = Iterative_Solver_Converged()
   END FUNCTION Solve_Linear_Equations
+
+    FUNCTION Solve_Nonlinear_Equations(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
+    thresh, &
+    hermitian, verbosity, pname, mpicomm, algorithm, range, options)
+        USE Iterative_Solver_Problem, only : problem_class => Problem
+        IMPLICIT NONE
+        LOGICAL :: Solve_Nonlinear_Equations
+        DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: parameters
+    DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: actions
+    CLASS(problem_class), INTENT(inout), TARGET :: problem
+    INTEGER, INTENT(in), OPTIONAL :: nroot !< number of eigensolutions desired
+    LOGICAL, OPTIONAL :: generate_initial_guess !< whether to generate an initial guess (default) or use what is passed in parameters
+    INTEGER, OPTIONAL :: max_iter !< maximum number of iterations
+    DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh !< convergence threshold
+    LOGICAL, INTENT(in), OPTIONAL :: hermitian !< whether the underlying kernel is hermitian
+    INTEGER, INTENT(in), OPTIONAL :: verbosity !< how much to print. Default is zero, which prints nothing except errors.
+    !< One gives a summary at the end; two gives a single progress-report line each iteration.
+    CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
+    INTEGER, INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
+    CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
+    DOUBLE PRECISION, DIMENSION(1) :: rhs
+    logical :: flag, guess
+    integer :: i, nq
+    nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
+    call Iterative_Solver_DIIS_Initialize(nq, thresh, &
+    verbosity, pname, mpicomm, algorithm, range, options)
+        Solve_Nonlinear_Equations = .false.
+        m_nroot = 1
+        guess = .true.
+        if (present(generate_initial_guess)) then
+        guess = generate_initial_guess
+        end if
+        call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter)
+        call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, m_nroot))], parameters, actions, .true.)
+    Solve_Nonlinear_Equations = Iterative_Solver_Converged()
+        END FUNCTION Solve_Nonlinear_Equations
+
+        FUNCTION Optimize(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
+    thresh, thresh_value, &
+    hermitian, verbosity, minimize, pname, mpicomm, algorithm, range, options)
+        USE Iterative_Solver_Problem, only : problem_class => Problem
+        IMPLICIT NONE
+        LOGICAL :: Optimize
+        DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: parameters
+    DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: actions
+    CLASS(problem_class), INTENT(inout), TARGET :: problem
+    INTEGER, INTENT(in), OPTIONAL :: nroot !< number of eigensolutions desired
+    LOGICAL, OPTIONAL :: generate_initial_guess !< whether to generate an initial guess (default) or use what is passed in parameters
+    INTEGER, OPTIONAL :: max_iter !< maximum number of iterations
+    DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh !< convergence threshold
+    DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh_value !< value convergence threshold
+    LOGICAL, INTENT(in), OPTIONAL :: hermitian !< whether the underlying kernel is hermitian
+    INTEGER, INTENT(in), OPTIONAL :: verbosity !< how much to print. Default is zero, which prints nothing except errors.
+    !< One gives a summary at the end; two gives a single progress-report line each iteration.
+    LOGICAL, INTENT(in), OPTIONAL :: minimize !< whether to minimize (default) or maximize
+    CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
+    INTEGER, INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
+    CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
+    DOUBLE PRECISION, DIMENSION(1) :: rhs
+    logical :: flag, guess
+    integer :: i, nq
+    nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
+    call Iterative_Solver_Optimize_Initialize(nq, thresh, &
+    verbosity, minimize, pname, mpicomm, algorithm, range, thresh_value, options)
+        Optimize = .false.
+        m_nroot = 1
+        guess = .true.
+    if (present(generate_initial_guess)) then
+    guess = generate_initial_guess
+    end if
+    call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter)
+        call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, m_nroot))], parameters, actions, .true.)
+        Optimize = Iterative_Solver_Converged()
+        END FUNCTION Optimize
 
   !> \brief Finds the lowest eigensolutions of a matrix. The default algorithm is Davidson's method, i.e. preconditioned Lanczos.
   !> Example of simplest use: @include LinearEigensystemExampleF.F90
@@ -398,7 +476,7 @@ CONTAINS
 
   !> \brief Optimization
   !> through the L-BFGS or related methods.
-  !> Example of simplest use: @include OptimizeExampleF.F90
+  !> Example of simplest use: @include NonLinearExampleF.F90
   SUBROUTINE Iterative_Solver_Optimize_Initialize(nq, thresh, verbosity, minimize, pname, mpicomm, algorithm, range, &
     thresh_value, options)
     INTEGER, INTENT(in) :: nq !< dimension of parameter space
@@ -573,7 +651,7 @@ CONTAINS
       optionsC(1) = c_null_char
     ENDIF
     CALL Iterative_Solver_DIIS_InitializeC(m_nq, m_range_begin, m_range_end, threshC, verbosityC, &
-      pnameC, mpicommC, algorithm, optionsC)
+      pnameC, mpicommC, algorithmC, optionsC)
     IF (PRESENT(range)) THEN
       range(1) = int(m_range_begin)
       range(2) = int(m_range_end)
@@ -1054,7 +1132,11 @@ CONTAINS
     do iter = 1, IterativeSolverMaxIter()
       if (IterativeSolverNonLinear().gt.0) then
         value = problem%residual(parameters_, actions_, Iterative_Solver_Range())
-        nwork = Iterative_Solver_Add_Vector(parameters_, actions_, value = value)
+        if (IterativeSolverHasValues().gt.0) then
+          nwork = Iterative_Solver_Add_Vector(parameters_, actions_, value = value)
+        else
+          nwork = Iterative_Solver_Add_Vector(parameters_, actions_)
+        end if
       else if (iter.eq.1 .and. problem%p_space%size.gt.0) then
         current_problem => problem
         nwork = Iterative_Solver_Add_P(problem%p_space%size, problem%p_space%offsets, problem%p_space%indices, problem%p_space%coefficients, problem%pp_action_matrix(), parameters_, actions_, apply_p_current_problem, .true.)

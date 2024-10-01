@@ -5,9 +5,8 @@ if (FORTRAN
             LinearEigensystemExampleF.F90
             LinearEquationsExampleF.F90
             LinearEquationsExampleF-matrix.F90
-            OptimizeExampleF.F90
-            OptimizeExampleF-problem.F90
-            )
+            NonLinearExampleF.F90
+    )
 endif ()
 set(EXAMPLES
         LinearEigensystemExample.cpp
