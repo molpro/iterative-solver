@@ -75,7 +75,7 @@ PROGRAM QuasiNewton_Example
   call mpi_init
   success = &
       ! try one of the following
-      Optimize(&
+      Solve_Optimization(&
           !      Solve_Nonlinear_Equations(&
           c, g, problem, n, thresh = 1d-6, verbosity = verbosity)
   if (verbosity.lt.1) then

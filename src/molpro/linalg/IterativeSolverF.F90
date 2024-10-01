@@ -6,7 +6,7 @@ MODULE Iterative_Solver
   PUBLIC :: Solve_Linear_Eigensystem
   PUBLIC :: Solve_Linear_Equations
   PUBLIC :: Solve_Nonlinear_Equations
-  PUBLIC :: Optimize
+  PUBLIC :: Solve_Optimization
   PUBLIC :: Iterative_Solver_Linear_Eigensystem_Initialize, Iterative_Solver_Finalize
   PUBLIC :: Iterative_Solver_Linear_Eigensystem_Initialize_Ranges
   PUBLIC :: Iterative_Solver_DIIS_Initialize, Iterative_Solver_Linear_Equations_Initialize
@@ -223,12 +223,12 @@ CONTAINS
     Solve_Nonlinear_Equations = Iterative_Solver_Converged()
         END FUNCTION Solve_Nonlinear_Equations
 
-        FUNCTION Optimize(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
+        FUNCTION Solve_Optimization(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
     thresh, thresh_value, &
     hermitian, verbosity, minimize, pname, mpicomm, algorithm, range, options)
         USE Iterative_Solver_Problem, only : problem_class => Problem
         IMPLICIT NONE
-        LOGICAL :: Optimize
+        LOGICAL :: Solve_Optimization
         DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: parameters
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: actions
     CLASS(problem_class), INTENT(inout), TARGET :: problem
@@ -252,7 +252,7 @@ CONTAINS
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     call Iterative_Solver_Optimize_Initialize(nq, thresh, &
     verbosity, minimize, pname, mpicomm, algorithm, range, thresh_value, options)
-        Optimize = .false.
+        Solve_Optimization = .false.
         m_nroot = 1
         guess = .true.
     if (present(generate_initial_guess)) then
@@ -260,8 +260,8 @@ CONTAINS
     end if
     call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter)
         call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, m_nroot))], parameters, actions, .true.)
-        Optimize = Iterative_Solver_Converged()
-        END FUNCTION Optimize
+        Solve_Optimization = Iterative_Solver_Converged()
+        END FUNCTION Solve_Optimization
 
   !> \brief Finds the lowest eigensolutions of a matrix. The default algorithm is Davidson's method, i.e. preconditioned Lanczos.
   !> Example of simplest use: @include LinearEigensystemExampleF.F90
