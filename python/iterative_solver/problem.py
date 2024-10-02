@@ -1,6 +1,7 @@
+import numpy as np
 import sys
 
-import numpy as np
+from .pspace import PSpace
 
 
 class Problem:
@@ -9,6 +10,7 @@ class Problem:
     '''
 
     def __init__(self):
+        self.p_space = PSpace()
         self.dimension = None
 
     def residual(self, parameters, residual):
@@ -82,12 +84,14 @@ class Problem:
         else:
             raise NotImplementedError
 
-    def pp_action_matrix(self, pparams):
+    def pp_action_matrix(self):
+        if self.p_space.size > 0:
+            raise NotImplementedError('P-space unavailable: unimplemented pp_action_matrix() in Problem class')
         return np.array([], dtype=np.double)
 
-    def p_action(self, p_coefficients, pparams, actions):
-        raise NotImplementedError('P-space unavailable: unimplemented p_action() in Problem class')
-        pass
+    def p_action(self, p_coefficients, actions):
+        if self.p_space.size > 0:
+            raise NotImplementedError('P-space unavailable: unimplemented p_action() in Problem class')
 
     def test_parameters(self, instance, parameters):
         return False

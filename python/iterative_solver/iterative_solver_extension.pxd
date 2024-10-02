@@ -65,3 +65,5 @@ cdef extern from "molpro/linalg/IterativeSolverC.h":
 
     int IterativeSolver_mpicomm_self()
     int IterativeSolver_mpicomm_global()
+
+    int IterativeSolverConverged()

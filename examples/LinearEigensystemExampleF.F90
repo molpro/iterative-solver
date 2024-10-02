@@ -32,10 +32,9 @@ CONTAINS
     integer, intent(in) :: nP, max_P
     DOUBLE PRECISION, DIMENSION (ubound(m,1), nroot) :: c, g
     TYPE(Matrix_Problem) :: problem
-    logical :: success
     CALL problem%attach(m)
     CALL problem%p_space%add_simple([(i, i = 1, nP)]) ! the first nP components, so not the best
-    success = Solve_Linear_Eigensystem(c, g, problem, nroot, verbosity = 2, thresh = 1d-8, hermitian = .true., max_p = max_p)
+    CALL Solve_Linear_Eigensystem(c, g, problem, nroot, verbosity = 2, thresh = 1d-8, hermitian = .true., max_p = max_p)
     if (mpi_rank_global().eq.0) CALL Iterative_Solver_Print_Statistics
     CALL Iterative_Solver_Finalize
   end subroutine solve

@@ -17,7 +17,7 @@ MODULE Iterative_Solver
   PUBLIC :: Iterative_Solver_Add_Vector
   PUBLIC :: Iterative_Solver_Solution
   PUBLIC :: Iterative_Solver_Add_P, Iterative_Solver_Suggest_P
-  PUBLIC :: Iterative_Solver_Errors
+  PUBLIC :: Iterative_Solver_Errors, Iterative_Solver_Converged
   PUBLIC :: Iterative_Solver_Eigenvalues, Iterative_Solver_Working_Set_Eigenvalues
   PUBLIC :: Iterative_Solver_Print_Statistics
   PUBLIC :: Iterative_Solver_Solve
@@ -87,12 +87,11 @@ CONTAINS
     INTEGER(KIND = mpicomm_kind), intent(IN) :: comm
     s_mpicomm_compute = comm
   END SUBROUTINE set_mpicomm_compute
-  FUNCTION Solve_Linear_Eigensystem(parameters, actions, problem, nroot, generate_initial_guess, max_iter, max_p, &
+  SUBROUTINE Solve_Linear_Eigensystem(parameters, actions, problem, nroot, generate_initial_guess, max_iter, max_p, &
       thresh, thresh_value, &
       hermitian, verbosity, pname, mpicomm, algorithm, range, options)
     USE Iterative_Solver_Problem, only : problem_class => Problem
     IMPLICIT NONE
-    LOGICAL :: Solve_Linear_Eigensystem
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: parameters
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: actions
     CLASS(problem_class), INTENT(inout), TARGET :: problem
@@ -116,7 +115,6 @@ CONTAINS
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     call Iterative_Solver_Linear_Eigensystem_Initialize(nq, nroot, thresh, thresh_value, &
         hermitian, verbosity, pname, mpicomm, algorithm, range, options)
-    Solve_Linear_Eigensystem = .false.
     if (m_nroot.le.0) return
     guess = .true.
     if (present(generate_initial_guess)) then
@@ -124,15 +122,13 @@ CONTAINS
     end if
     call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter, max_p)
     call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, m_nroot))], parameters, actions, .true.)
-    Solve_Linear_Eigensystem = Iterative_Solver_Converged()
-  END FUNCTION Solve_Linear_Eigensystem
+  END SUBROUTINE Solve_Linear_Eigensystem
 
-  FUNCTION Solve_Linear_Equations(parameters, actions, problem, generate_initial_guess, max_iter, max_p, &
+  SUBROUTINE Solve_Linear_Equations(parameters, actions, problem, generate_initial_guess, max_iter, max_p, &
       augmented_hessian, thresh, thresh_value, &
       hermitian, verbosity, pname, mpicomm, algorithm, range, options)
     USE Iterative_Solver_Problem, only : problem_class => Problem
     IMPLICIT NONE
-    LOGICAL :: Solve_Linear_Equations
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: parameters
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: actions
     CLASS(problem_class), INTENT(inout) :: problem
@@ -174,7 +170,6 @@ CONTAINS
           call Iterative_Solver_Add_Equations(parameters(:, lbound(parameters, 2)))
         end do
     end select
-    Solve_Linear_Equations = .false.
     if (m_nroot.le.0) return
     guess = .true.
     if (present(generate_initial_guess)) then
@@ -182,15 +177,13 @@ CONTAINS
     end if
     call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter, max_p)
     call Iterative_Solver_Solution([(i,i=1,min(ubound(parameters,2)-lbound(parameters,2)+1,m_nroot))], parameters, actions, .true.)
-    Solve_Linear_Equations = Iterative_Solver_Converged()
-  END FUNCTION Solve_Linear_Equations
+  END SUBROUTINE Solve_Linear_Equations
 
-    FUNCTION Solve_Nonlinear_Equations(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
+    SUBROUTINE Solve_Nonlinear_Equations(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
     thresh, &
     hermitian, verbosity, pname, mpicomm, algorithm, range, options)
         USE Iterative_Solver_Problem, only : problem_class => Problem
         IMPLICIT NONE
-        LOGICAL :: Solve_Nonlinear_Equations
         DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: parameters
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: actions
     CLASS(problem_class), INTENT(inout), TARGET :: problem
@@ -212,7 +205,6 @@ CONTAINS
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     call Iterative_Solver_DIIS_Initialize(nq, thresh, &
     verbosity, pname, mpicomm, algorithm, range, options)
-        Solve_Nonlinear_Equations = .false.
         m_nroot = 1
         guess = .true.
         if (present(generate_initial_guess)) then
@@ -220,15 +212,13 @@ CONTAINS
         end if
         call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter)
         call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, m_nroot))], parameters, actions, .true.)
-    Solve_Nonlinear_Equations = Iterative_Solver_Converged()
-        END FUNCTION Solve_Nonlinear_Equations
+        END SUBROUTINE Solve_Nonlinear_Equations
 
-        FUNCTION Solve_Optimization(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
+        SUBROUTINE Solve_Optimization(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
     thresh, thresh_value, &
     hermitian, verbosity, minimize, pname, mpicomm, algorithm, range, options)
         USE Iterative_Solver_Problem, only : problem_class => Problem
         IMPLICIT NONE
-        LOGICAL :: Solve_Optimization
         DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: parameters
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: actions
     CLASS(problem_class), INTENT(inout), TARGET :: problem
@@ -252,7 +242,6 @@ CONTAINS
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     call Iterative_Solver_Optimize_Initialize(nq, thresh, &
     verbosity, minimize, pname, mpicomm, algorithm, range, thresh_value, options)
-        Solve_Optimization = .false.
         m_nroot = 1
         guess = .true.
     if (present(generate_initial_guess)) then
@@ -260,8 +249,7 @@ CONTAINS
     end if
     call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter)
         call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, m_nroot))], parameters, actions, .true.)
-        Solve_Optimization = Iterative_Solver_Converged()
-        END FUNCTION Solve_Optimization
+        END SUBROUTINE Solve_Optimization
 
   !> \brief Finds the lowest eigensolutions of a matrix. The default algorithm is Davidson's method, i.e. preconditioned Lanczos.
   !> Example of simplest use: @include LinearEigensystemExampleF.F90

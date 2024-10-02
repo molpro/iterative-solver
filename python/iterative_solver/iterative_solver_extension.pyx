@@ -5,7 +5,8 @@ cimport numpy as np
 import cython
 from libcpp.vector cimport vector
 
-import iterative_solver
+# import iterative_solver
+from .problem import Problem
 
 # distutils : language = c++
 m_mpicomm_compute = None
@@ -75,6 +76,11 @@ class IterativeSolver:
         cdef double[::1] e_ = e
         IterativeSolverErrors(&e_[0])
         return e
+
+    @property
+    def converged(self):
+        return IterativeSolverConverged() != 0
+        pass
 
     def solve(self, parameters, actions, problem, generate_initial_guess=False, max_iter=None):
         '''
@@ -173,6 +179,7 @@ class IterativeSolver:
                 if IterativeSolverHasValues() != 0:
                     print('Objective function value', value)
             if nwork < 1: break
+        return self.converged
 class Optimize(IterativeSolver):
     def __init__(self, n, range=None, thresh=1e-10, thresh_value=1e50, verbosity=0, minimize=True,
                  pname='', mpicomm=None, algorithm='', options=''):

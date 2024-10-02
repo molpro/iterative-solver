@@ -40,6 +40,8 @@ extern "C" size_t IterativeSolverAddP(size_t buffer_size, size_t nP, const size_
 
 extern "C" void IterativeSolverErrors(double* errors);
 
+extern "C" int IterativeSolverConverged();
+
 extern "C" void IterativeSolverEigenvalues(double* eigenvalues);
 
 extern "C" void IterativeSolverWorkingSetEigenvalues(double* eigenvalues);

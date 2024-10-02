@@ -3,7 +3,7 @@
 !> solution of linear equations
 PROGRAM Linear_Equations_Example
   USE Iterative_Solver, only : mpi_init, mpi_finalize, mpi_rank_global, &
-      Solve_Linear_Equations, Iterative_Solver_Print_Statistics, Iterative_Solver_Finalize
+      Solve_Linear_Equations, Iterative_Solver_Print_Statistics, Iterative_Solver_Finalize, Iterative_Solver_Converged
   USE Iterative_Solver_Matrix_Problem, only : Matrix_Problem
   IMPLICIT NONE
   INTEGER, PARAMETER :: n = 300, nroot = 2
@@ -11,15 +11,14 @@ PROGRAM Linear_Equations_Example
   DOUBLE PRECISION, DIMENSION (n, n), target :: m
   DOUBLE PRECISION, DIMENSION (n, nroot), target :: rhs
   DOUBLE PRECISION, DIMENSION (n, nroot) :: c, g
-  LOGICAL :: converged
   TYPE(Matrix_Problem) :: problem
   CALL mpi_init
   PRINT *, 'Fortran binding of IterativeSolver'
   IF (mpi_rank_global() .gt. 0) CLOSE(6)
   CALL initialise_matrices
   CALL problem%attach(m, rhs)
-  converged = Solve_Linear_Equations(c, g, problem, thresh = 1d-11, verbosity = 2, max_p = 30, hermitian = .true.)
-  PRINT *, 'convergence?', converged, ', residual length: ', norm2(g)
+  CALL Solve_Linear_Equations(c, g, problem, thresh = 1d-11, verbosity = 2, max_p = 30, hermitian = .true.)
+  PRINT *, 'convergence?', Iterative_Solver_Converged(), ', residual length: ', norm2(g)
   !    print *,c
   !    print *,g
   CALL Iterative_Solver_Print_Statistics

@@ -57,15 +57,14 @@ PROGRAM Linear_Equations_Example
   IMPLICIT NONE
   INTEGER, PARAMETER :: n = 30, nroot = 2
   DOUBLE PRECISION, DIMENSION (n, nroot) :: c, g
-  LOGICAL :: converged
   TYPE(linear_problem) :: problem
   call mpi_init
   IF (mpi_rank_global() .gt. 0) close(6)
   PRINT *, 'Fortran binding of IterativeSolver'
   problem%n = n
   problem%nroot = nroot
-  converged = Solve_Linear_Equations(c, g, problem, thresh = 1d-11, verbosity = 2)
-  PRINT*, 'convergence?', converged, ', residual length: ', norm2(g)
+  CALL Solve_Linear_Equations(c, g, problem, thresh = 1d-11, verbosity = 2)
+  PRINT*, 'convergence?', Iterative_Solver_Converged(), ', residual length: ', norm2(g)
   CALL Iterative_Solver_Print_Statistics
   CALL Iterative_Solver_Finalize
   CALL mpi_finalize

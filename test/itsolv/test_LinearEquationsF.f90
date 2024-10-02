@@ -107,12 +107,11 @@ contains
   subroutine simplified_solver
     use mod_linear_problem, only : linear_problem
     type(linear_problem) :: prob
-    logical :: result
     call prob%attach(matrix, rhs)
-    result = Solve_Linear_Equations(c, g, prob, augmented_hessian = augmented_hessian, &
+    call Solve_Linear_Equations(c, g, prob, augmented_hessian = augmented_hessian, &
         hermitian = hermitian.ne.0, &
         thresh = thresh, thresh_value = 1d50, verbosity=2)
-    if (.not. result) then
+    if (.not. Iterative_Solver_Converged()) then
       error stop  '!!! failure !!!'
     end if
     call Iterative_Solver_Finalize

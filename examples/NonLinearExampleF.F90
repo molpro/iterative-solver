@@ -71,16 +71,15 @@ PROGRAM QuasiNewton_Example
   ! try one of the following
   !      type(quadratic_t) :: problem
   type(forced_t) :: problem
-  logical :: success
   call mpi_init
-  success = &
+  call &
       ! try one of the following
       Solve_Optimization(&
           !      Solve_Nonlinear_Equations(&
           c, g, problem, n, thresh = 1d-6, verbosity = verbosity)
   if (verbosity.lt.1) then
     print *, 'Optimized function value ', Iterative_Solver_Value()
-    print *, 'Error ', Iterative_Solver_Errors(), success
+    print *, 'Error ', Iterative_Solver_Errors(), Iterative_Solver_Converged()
   end if
   if (verbosity.gt.1) then
     call Iterative_Solver_Solution([1], c, g)
