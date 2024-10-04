@@ -10,6 +10,24 @@ from .problem import Problem
 
 # distutils : language = c++
 m_mpicomm_compute = None
+
+cdef extern:
+  ctypedef void (*apply_p_func_type)(const double*, double*, const size_t, const size_t*)
+  # void apply_p_python(apply_p_func_type apply_p_func)
+#   size_t IterativeSolverAddP(size_t buffer_size, size_t nP, const size_t* offsets, const size_t* indices,
+#                              const double* coefficients, const double* pp, double* parameters, double* action,
+#                              int sync, void (*func)(const double*, double*, const size_t, const size_t*))
+# cdef void  IterativeSolverAddP_wrap(size_t nbuffer_, size_t nP_, size_t* offsets_, size_t* indices_, double* coefficients_, double* pp_, double* parameters_, double* action_, int sync, apply_p_func_type apply_p_python) noexcept:
+#     IterativeSolverAddP(nbuffer_, nP_, &offsets_[0], &indices_[0], &coefficients_[0], &pp_[0], &parameters_[0], &action_[0], sync, apply_p_python)
+
+# cdef void apply_p_callback(double* p, double* g, size_t nvec, size_t* ranges, void *f) noexcept:
+# (<object>f)(p, g, nvec, [ranges[0],ranges[1]])
+
+# cdef void apply_p_for_python(double* p, double* g, size_t nvec, size_t* ranges) noexcept:
+#   print('apply_p_for_python',nvec)
+cdef void callback(char *name, void *f) noexcept:
+print('callback', name)
+(<object>f)(name.decode('utf-8'))
 class IterativeSolver:
     '''
     Base class inherited by Optimize, NonLinearEquations, LinearEquations, LinearEigensystem
@@ -57,6 +75,19 @@ class IterativeSolver:
         result = IterativeSolverAddVector(nbuffer_, &parameters_[0], &action_[0], 1 if sync else 0)
         return result
 
+    def add_P(self, pp, parameters, action):
+        nbuffer = parameters.shape[0] if len(parameters.shape) > 1 else 1
+        cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*nbuffer])
+        cdef double[::1] action_ = action.reshape([parameters.shape[-1]*nbuffer])
+        cdef size_t nbuffer_ = nbuffer
+        cdef size_t nP_ = self.problem.p_space.size
+        cdef double[::1] pp_ = pp.reshape([nP_*nP_])
+        cdef size_t[::1] offsets_ = self.problem.p_space.offsets
+        cdef size_t[::1] indices_ = self.problem.p_space.indices
+        cdef double[::1] coefficients_ = self.problem.p_space.coefficients
+        IterativeSolverAddP(nbuffer_, nP_, &offsets_[0], &indices_[0], &coefficients_[0], &pp_[0], &parameters_[0], &action_[0], 1, callback)
+
+
     def end_iteration(self, parameters, residual, sync=True):
         nbuffer = parameters.shape[0] if len(parameters.shape) > 1 else 1
         cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*nbuffer])
@@ -82,7 +113,7 @@ class IterativeSolver:
         return IterativeSolverConverged() != 0
         pass
 
-    def solve(self, parameters, actions, problem, generate_initial_guess=False, max_iter=None):
+    def solve(self, parameters, actions, problem, generate_initial_guess=False, max_iter=None, max_p=0):
         '''
         Driver for iterating towards problem solution.
         :param parameters:
@@ -118,7 +149,14 @@ class IterativeSolver:
             IterativeSolverSetMaxIter(max_iter_)
         if use_diagonals:
             IterativeSolverSetDiagonals(&actions_[0])
-        if generate_initial_guess:
+        if IterativeSolverNonLinear() == 0 and max_p>0 and problem.p_space.size == 0:
+            if max_p >= self.nroot:
+                print('generate P space',max_p)
+                for i in range(min(max_p,self.n)):
+                    argmin = np.argmin(actions[0,:])
+                    actions[0,argmin] = sys.float_info.max
+                    problem.p_space.add_simple([argmin])
+        if generate_initial_guess and problem.p_space.size == 0:
             parameters[:,:] = 0
             if type(self) == LinearEigensystem:
                 if not use_diagonals:
@@ -143,9 +181,12 @@ class IterativeSolver:
                     nwork = self.add_value(value, parameters, actions)
                 else:
                     nwork = self.add_vector(parameters[0,:], actions[0,:])
+            # elif iter == 0 and problem.p_space.size> 0:
+               # self.problem = problem # TODO ? needed
+               # nwork = self.add_p
             else:
                 problem.action(parameters,  actions)
-                nwork = self.add_vector(parameters[:nwork,:], actions[:nwork,:])
+                nwork = self.add_vector(parameters, actions)
                 # print('actions',actions)
             # print('nwork after add_v*',nwork)
             while self.end_iteration_needed:

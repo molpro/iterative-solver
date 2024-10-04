@@ -34,7 +34,7 @@ class MatrixProblem(Problem):
         :param action: The action vectors
         :type action: np.ndarray(dtype=float)
         """
-        action = copy.copy(np.matmul(parameters , self.matrix))
+        np.copyto(action,np.matmul(parameters, self.matrix))
 
     def diagonals(self, diagonals):
         """
@@ -50,10 +50,11 @@ class MatrixProblem(Problem):
         :return: Whether diagonals have been provided.
         :rtype: bool
         """
-        diagonals = self.matrix.diagonal()
+        np.copyto(diagonals[:self.matrix.shape[0]] ,self.matrix.diagonal())
         return True
 
     def pp_action_matrix(self):
+        print('pp_action_matrix',self.p_space.size)
         matrix = np.array([self.p_space.size, self.p_space.size], dtype=np.double)
         for i in range(self.p_space.size):
             for j in range(self.p_space.size):
@@ -71,22 +72,3 @@ class MatrixProblem(Problem):
                     for j in range(actions.shape[0]):
                         actions[i, j] = actions[j, i] + self.matrix[j, self.p_space.indices[kc]] * \
                                         self.p_space.coefficients[kc] * p_coefficients[i, k]
-
-    def test_parameters(self, instance, parameters):
-        return False
-
-    def report(self, iteration, verbosity, errors, value=None, eigenvalues=None):
-        if (iteration <= 0 and verbosity >= 1) or verbosity >= 2:
-            if iteration > 0 and verbosity >= 2:
-                print('Iteration', iteration, 'log10(|residual|)=', np.log10(errors))
-            elif iteration == 0:
-                print('Converged', 'log10(|residual|)=', np.log10(errors + sys.float_info.min))
-            else:
-                print('Unconverged', 'log10(|residual|)=', np.log10(errors + sys.float_info.min))
-            if value is not None:
-                print('Objective function value', value)
-            if eigenvalues is not None:
-                print('Eigenvalues', eigenvalues)
-            return True
-        else:
-            return False
