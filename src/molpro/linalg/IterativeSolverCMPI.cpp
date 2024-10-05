@@ -59,14 +59,13 @@ using molpro::linalg::itsolv::VecRef;
 // FIXME Only top solver is active at any one time. This should be documented somewhere.
 
 namespace {
-typedef void (*Apply_on_p_fort)(const double*, double*, const size_t, const size_t*);
 struct Instance {
   Instance(std::unique_ptr<IterativeSolver<Rvector, Qvector, Pvector>> solver, std::shared_ptr<Profiler> prof,
            size_t dimension, MPI_Comm comm)
       : solver(std::move(solver)), prof(std::move(prof)), dimension(dimension), comm(comm){};
   std::unique_ptr<IterativeSolver<Rvector, Qvector, Pvector>> solver;
   std::shared_ptr<Profiler> prof;
-  Apply_on_p_fort apply_on_p_fort;
+  apply_on_p_t apply_on_p_fort;
   size_t dimension;
   MPI_Comm comm;
   std::unique_ptr<Qvector> diagonals;
@@ -406,7 +405,7 @@ extern "C" int IterativeSolverEndIterationNeeded(){
 
 extern "C" size_t IterativeSolverAddP(size_t buffer_size, size_t nP, const size_t* offsets, const size_t* indices,
                                       const double* coefficients, const double* pp, double* parameters, double* action,
-                                      int sync, void (*func)(const double*, double*, const size_t, const size_t*)) {
+                                      int sync, apply_on_p_t func) {
   auto& instance = instances.top();
   instance.apply_on_p_fort = func;
   if (instance.prof != nullptr)
