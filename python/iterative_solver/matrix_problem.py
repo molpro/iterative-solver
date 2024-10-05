@@ -64,10 +64,10 @@ class MatrixProblem(Problem):
                                        self.p_space.coefficients[ic] * self.p_space.coefficients[jc]
         return matrix
 
-    def p_action(self, p_coefficients, actions):
+    def p_action(self, p_coefficients, actions, ranges):
         for i in range(actions.shape[0]):
             for k in range(self.p_space.size):
                 for kc in range(self.p_space.offsets[k], self.p_space.offsets[k + 1]):
-                    for j in range(actions.shape[1]):
-                        actions[i, j] = actions[i, j] + self.matrix[self.p_space.indices[kc], j] * \
-                                        self.p_space.coefficients[kc] * p_coefficients[i, k]
+                    j = range(ranges[0], ranges[1])
+                    actions[i, j] = actions[i, j] + self.matrix[self.p_space.indices[kc], j] * \
+                                    self.p_space.coefficients[kc] * p_coefficients[i, k]

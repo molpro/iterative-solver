@@ -89,7 +89,7 @@ class Problem:
             raise NotImplementedError('P-space unavailable: unimplemented pp_action_matrix() in Problem class')
         return np.array([], dtype=np.double)
 
-    def p_action(self, p_coefficients, actions):
+    def p_action(self, p_coefficients, actions, ranges):
         if self.p_space.size > 0:
             raise NotImplementedError('P-space unavailable: unimplemented p_action() in Problem class')
 

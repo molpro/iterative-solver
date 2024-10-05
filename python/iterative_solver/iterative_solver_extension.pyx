@@ -2,11 +2,7 @@ import sys
 
 import numpy as np
 cimport numpy as np
-import cython
-from libcpp.vector cimport vector
 
-# import iterative_solver
-from .problem import Problem
 
 # distutils : language = c++
 m_mpicomm_compute = None
@@ -22,45 +18,14 @@ cdef extern from "../src/molpro/linalg/IterativeSolverC.h":
 
 
 
-# void apply_p_python(apply_p_func_type apply_p_func)
-#   size_t IterativeSolverAddP(size_t buffer_size, size_t nP, const size_t* offsets, const size_t* indices,
-#                              const double* coefficients, const double* pp, double* parameters, double* action,
-#                              int sync, void (*func)(const double*, double*, const size_t, const size_t*))
-# cdef void  IterativeSolverAddP_wrap(size_t nbuffer_, size_t nP_, size_t* offsets_, size_t* indices_, double* coefficients_, double* pp_, double* parameters_, double* action_, int sync, apply_p_func_type apply_p_python) noexcept:
-#     IterativeSolverAddP(nbuffer_, nP_, &offsets_[0], &indices_[0], &coefficients_[0], &pp_[0], &parameters_[0], &action_[0], sync, apply_p_python)
-
-# cdef void apply_p_callback(double* p, double* g, size_t nvec, size_t* ranges, void *f) noexcept:
-# (<object>f)(p, g, nvec, [ranges[0],ranges[1]])
-
-# cdef void apply_p_for_python(double* p, double* g, size_t nvec, size_t* ranges) noexcept:
-#   print('apply_p_for_python',nvec)
-# cdef void callback(char *name, void *f) noexcept:
-# print('callback', name)
-# (<object>f)(name.decode('utf-8'))
-
 current_problem = None
 
 from libcpp.vector cimport vector
 cdef void apply_on_p(const double* coefficients, double* action, const size_t size, const size_t* ranges) noexcept:
     cdef size_t size_ = size
-    # cdef vector[double] action_ =
-    # cdef double[size_][300] action
-    # cdef double[size_][current_problem.p_space.size] coefficients
-    # print('hello from apply_on_p', size_)
-    # print(current_problem)
-    # print('P space size: ',current_problem.p_space.size)
     coefficients_ = np.asarray(<np.float64_t[:current_problem.p_space.size*size_]> coefficients).reshape((size_,current_problem.p_space.size))
-    # print('coefficients_',coefficients_)
     action_ = np.asarray(<np.float64_t[:current_problem.size_*size_]> action).reshape((size_,current_problem.size_))
-    # cdef double [:current_problem.p_space.size:1, :size_] action_ = action
-    # cdef double [:current_problem.p_space.size:1, :size_] coefficients_ = coefficients
-    # action_ =np.array(action[:300], copy=False)
-    # for i in range()
-    # cdef array.array coefficients_ = array.array('d',coefficients)
-    # cdef double[::1] action_ = action
-    current_problem.p_action(coefficients_, action_)
-    # print('after p_action',action_)
-    # print(coefficients[:size])
+    current_problem.p_action(coefficients_, action_, [ranges[0],ranges[1]])
 
 class IterativeSolver:
     '''
@@ -84,8 +49,6 @@ class IterativeSolver:
         return m_mpicomm_compute
 
     def solution(self,roots, parameters, residual, sync=True):
-        # from cpython cimport array
-        # cimport array
         cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*len(roots)])
         cdef double[::1] residual_ = residual.reshape([parameters.shape[-1]*len(roots)])
         cdef vector[int] roots_ = roots
@@ -98,7 +61,6 @@ class IterativeSolver:
         cdef double[::1] action_ = action.reshape([parameters.shape[-1]*nbuffer])
         result = IterativeSolverAddValue(value, &parameters_[0], &action_[0], 1 if sync else 0)
         self.value = value
-        # print('add_value returns',result)
         return result
 
     def add_vector(self, parameters, action, sync=True):
@@ -209,7 +171,6 @@ class IterativeSolver:
 
         nwork = nbuffer
         for iter in range(IterativeSolverMaxIter()):
-            # print('parameters',parameters)
             if IterativeSolverNonLinear() > 0:
                 value = problem.residual(parameters.reshape([parameters.shape[-1]]), actions.reshape([parameters.shape[-1]]))
                 if type(self) == Optimize:
@@ -223,8 +184,6 @@ class IterativeSolver:
             else:
                 problem.action(parameters,  actions)
                 nwork = self.add_vector(parameters, actions)
-                # print('actions',actions)
-            # print('nwork after add_v*',nwork)
             while self.end_iteration_needed:
                 if nwork > 0:
                     IterativeSolverWorkingSetEigenvalues(&ev_[0])
@@ -233,16 +192,8 @@ class IterativeSolver:
                         problem.precondition(actions[:nwork,:], shift=ev[:nwork], diagonals=parameters.reshape([parameters.size])[:parameters.shape[-1]])
                     else:
                         problem.precondition(actions[:nwork,:], shift=ev[:nwork])
-                # print('before end_iteration')
-                # print('parameters',parameters, parameters.shape)
-                # print('actions',actions, actions.shape)
                 nwork = self.end_iteration(parameters,actions)
-            # print('after end_iteration', nwork)
-            # print('parameters',parameters, parameters.shape)
-            # print('actions',actions, actions.shape)
-            # if nwork <= 0: verbosity += 1
             IterativeSolverErrors(&errors_[0])
-            # print('after errors',nwork,errors)
             self.value = IterativeSolverValue()
             if IterativeSolverHasValues() != 0:
                 reported = problem.report(iter+1 if nwork > 0 else 0, verbosity, errors, value=value)
