@@ -4,7 +4,7 @@ from .iterative_solver_extension import Optimize, LinearEigensystem, LinearEquat
 
 def Solve_Linear_Eigensystem(parameters, actions, problem: Problem, nroot=1, generate_initial_guess=True, max_iter=1000000, max_p=0, **kwargs):
     solver = LinearEigensystem(parameters.shape[-1], nroot, **kwargs)
-    solver.solve(parameters, actions, problem, generate_initial_guess=generate_initial_guess, max_iter=max_iter)#, max_p=max_p)
+    solver.solve(parameters, actions, problem, generate_initial_guess=generate_initial_guess, max_iter=max_iter, max_p=max_p)
     solver.solution(range(min(nroot,parameters.shape[0])),parameters,actions)
     return solver
 
