@@ -110,21 +110,15 @@ class IterativeSolver:
         return result
 
     def add_P(self, pp, parameters, action):
-        # print('hello from add_P')
         nbuffer = parameters.shape[0] if len(parameters.shape) > 1 else 1
         cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*nbuffer])
         cdef double[::1] action_ = action.reshape([parameters.shape[-1]*nbuffer])
         cdef size_t nbuffer_ = nbuffer
         cdef size_t nP_ = self.problem.p_space.size
         cdef double[::1] pp_ = pp.reshape([nP_*nP_])
-        # print('offsets',self.problem.p_space.offsets)
         cdef size_t[::1] offsets_ = np.array(self.problem.p_space.offsets,dtype=np.uintp)
         cdef size_t[::1] indices_ = np.array(self.problem.p_space.indices,dtype=np.uintp)
-        # cdef size_t[::1] indices_ = self.problem.p_space.indices
         cdef double[::1] coefficients_ = np.array(self.problem.p_space.coefficients)
-        # print('offsets_',offsets_)
-        # print('indices_',indices_)
-        # print('coefficients_',coefficients_)
         global current_problem
         current_problem = self.problem
         current_problem.size_ = parameters.shape[-1]
@@ -173,7 +167,6 @@ class IterativeSolver:
         :return:
         :rtype:
         '''
-        # print ('solve:',parameters.shape, actions.shape, self.nroot, self.n)
         if len(parameters.shape) <2 or len(actions.shape) < 2:
             parameters_reshape = parameters.reshape([self.nroot, self.n])
             actions_reshape = actions.reshape([self.nroot, self.n])
@@ -195,7 +188,6 @@ class IterativeSolver:
             IterativeSolverSetDiagonals(&actions_[0])
         if IterativeSolverNonLinear() == 0 and max_p>0 and problem.p_space.size == 0:
             if max_p >= self.nroot:
-                print('generate P space',max_p)
                 for i in range(min(max_p,self.n)):
                     argmin = np.argmin(actions[0,:])
                     actions[0,argmin] = sys.float_info.max

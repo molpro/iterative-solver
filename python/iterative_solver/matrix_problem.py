@@ -34,7 +34,7 @@ class MatrixProblem(Problem):
         :param action: The action vectors
         :type action: np.ndarray(dtype=float)
         """
-        np.copyto(action,np.matmul(parameters, self.matrix))
+        np.copyto(action, np.matmul(parameters, self.matrix))
 
     def diagonals(self, diagonals):
         """
@@ -50,7 +50,7 @@ class MatrixProblem(Problem):
         :return: Whether diagonals have been provided.
         :rtype: bool
         """
-        np.copyto(diagonals[:self.matrix.shape[0]] ,self.matrix.diagonal())
+        np.copyto(diagonals[:self.matrix.shape[0]], self.matrix.diagonal())
         return True
 
     def pp_action_matrix(self):
