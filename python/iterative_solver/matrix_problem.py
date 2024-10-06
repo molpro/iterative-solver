@@ -54,6 +54,9 @@ class MatrixProblem(Problem):
         return True
 
     def pp_action_matrix(self):
+        """
+        Calculate the representation of the kernel matrix in the P space. Implementation required only for linear hermitian problems for which P-space acceleration is wanted.
+        """
         matrix = np.zeros((self.p_space.size, self.p_space.size), dtype=np.double)
         for i in range(self.p_space.size):
             for j in range(self.p_space.size):
@@ -65,6 +68,13 @@ class MatrixProblem(Problem):
         return matrix
 
     def p_action(self, p_coefficients, actions, ranges):
+        """
+        Calculate the action of the kernel matrix on a set of vectors in the P space. Implementation required only for linear hermitian problems for which P-space acceleration is wanted.
+
+        :param p_coefficients The projection of the vectors onto to the P space
+        :param actions On exit, the computed action has been added to the original contents
+        :param range The range of the full space for which actions should be computed.
+        """
         for i in range(actions.shape[0]):
             for k in range(self.p_space.size):
                 for kc in range(self.p_space.offsets[k], self.p_space.offsets[k + 1]):

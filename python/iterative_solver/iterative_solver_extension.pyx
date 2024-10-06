@@ -84,7 +84,7 @@ class IterativeSolver:
         global current_problem
         current_problem = self.problem
         current_problem.size_ = parameters.shape[-1]
-        IterativeSolverAddP(nbuffer_, nP_, &offsets_[0], &indices_[0], &coefficients_[0], &pp_[0], &parameters_[0], &action_[0], 1, &apply_on_p)
+        IterativeSolverAddP(nbuffer_, nP_, &offsets_[0], &indices_[0], &coefficients_[0], &pp_[0], &parameters_[0], &action_[0], 1, apply_on_p)
         return nbuffer
 
 
