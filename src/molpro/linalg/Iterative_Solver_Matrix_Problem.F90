@@ -66,7 +66,9 @@ contains
         matrix(i, j) = 0d0
         do ic = this%p_space%offsets(i - 1) + 1, this%p_space%offsets(i)
           do jc = this%p_space%offsets(j - 1) + 1, this%p_space%offsets(j)
-            matrix(i, j) = matrix(i, j) + this%matrix(this%p_space%indices(ic), this%p_space%indices(jc)) * this%p_space%coefficients(ic) * this%p_space%coefficients(jc)
+            matrix(i, j) = matrix(i, j) + &
+                this%matrix(this%p_space%indices(ic), this%p_space%indices(jc)) * &
+                    this%p_space%coefficients(ic) * this%p_space%coefficients(jc)
           end do
         end do
       end do
