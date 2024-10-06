@@ -83,7 +83,6 @@ class Problem:
                     residual[j] = residual[j] / (diagonals[j] + small)
         else:
             raise NotImplementedError
-
     def pp_action_matrix(self):
         """
         Calculate the representation of the kernel matrix in the P space. Implementation required only for linear hermitian problems for which P-space acceleration is wanted.
