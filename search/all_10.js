@@ -10,8 +10,9 @@ var searchData=
   ['qq_5fops_7',['qq_ops',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#afc80d997e12454aa6ea3b96e59f433a8',1,'molpro::linalg::itsolv::Statistics']]],
   ['qr_8',['qr',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#ad939522fa33168f18c57e576cd134e75',1,'molpro::linalg::itsolv::ArrayHandlers::Builder::qr()'],['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html#a06cc917ff69b072ee3025815654ed73f',1,'molpro::linalg::itsolv::ArrayHandlers::qr()']]],
   ['qr_5fops_9',['qr_ops',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#abd2e9fa234e44677bb31e1c4bdf20953',1,'molpro::linalg::itsolv::Statistics']]],
-  ['qspace_10',['QSpace',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html',1,'molpro::linalg::itsolv::subspace::QSpace&lt; Rt, Qt, Pt &gt;'],['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#acb898c8d68927cb03e9c00f027940e14',1,'molpro::linalg::itsolv::subspace::QSpace::QSpace()']]],
+  ['qspace_10',['QSpace',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html',1,'molpro::linalg::itsolv::subspace']]],
   ['qspace_11',['qspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ad4d634f34be831eb4dbf09514069cf8a',1,'molpro::linalg::itsolv::subspace::XSpace']]],
-  ['qspace_3c_20r_2c_20q_2c_20p_20_3e_12',['QSpace&lt; R, Q, P &gt;',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html',1,'molpro::linalg::itsolv::subspace']]],
-  ['qx_13',['qx',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#a789820bcb8ea398dbdd20ac3857b7de5',1,'molpro::linalg::itsolv::subspace::xspace::NewData']]]
+  ['qspace_12',['QSpace',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#acb898c8d68927cb03e9c00f027940e14',1,'molpro::linalg::itsolv::subspace::QSpace']]],
+  ['qspace_3c_20r_2c_20q_2c_20p_20_3e_13',['QSpace&lt; R, Q, P &gt;',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html',1,'molpro::linalg::itsolv::subspace']]],
+  ['qx_14',['qx',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#a789820bcb8ea398dbdd20ac3857b7de5',1,'molpro::linalg::itsolv::subspace::xspace::NewData']]]
 ];

@@ -30,6 +30,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson =
     [ "set_reset_D", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#aa18de07639b2a59f4aab0fa00b3336ed", null ],
     [ "set_reset_D_maxQ_size", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ad70a9b4f851fc510bdf189a107ab68e2", null ],
     [ "set_svd_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a211a4e48e4723b609af546dcc90c72e4", null ],
+    [ "solve", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a070cbeddff5d6ca1b30055fa7b30f8ef", null ],
     [ "logger", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a07c643a999d2eb1e02fe312d120dc94e", null ],
     [ "m_dspace_resetter", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a0472ab791f0ddb7074cec65c3dbbca0e", null ],
     [ "m_hermiticity", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a7a816bb027c4409f79fbe2f616350a1e", null ],

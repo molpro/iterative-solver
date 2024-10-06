@@ -111,10 +111,20 @@ Data Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
+<tr class="memitem:a762cf435ede70697d8e9df140d410d27"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a762cf435ede70697d8e9df140d410d27">test_select</a></td></tr>
+<tr class="separator:a762cf435ede70697d8e9df140d410d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2890fe920d167483bcac382af12afe5d"><td class="memItemLeft" align="right" valign="top">integer(kind=<a class="el" href="namespaceiterative__solver.html#a8e7b0afa0169579bd571c1aac764d4e8">mpicomm_kind</a>) function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a2890fe920d167483bcac382af12afe5d">mpicomm_compute</a> ()</td></tr>
 <tr class="separator:a2890fe920d167483bcac382af12afe5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a508258aa021cc2d872fba06bd1cff849"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a508258aa021cc2d872fba06bd1cff849">set_mpicomm_compute</a> (comm)</td></tr>
 <tr class="separator:a508258aa021cc2d872fba06bd1cff849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ec8e7c839d5189981da473f64b78ade"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a0ec8e7c839d5189981da473f64b78ade">solve_linear_eigensystem</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, nroot, generate_initial_guess, max_iter, max_p, thresh, thresh_value, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</td></tr>
+<tr class="separator:a0ec8e7c839d5189981da473f64b78ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ce14b9eca351507039f752494a53349"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a0ce14b9eca351507039f752494a53349">solve_linear_equations</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, generate_initial_guess, max_iter, max_p, augmented_hessian, thresh, thresh_value, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</td></tr>
+<tr class="separator:a0ce14b9eca351507039f752494a53349"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05c7eeda78e69ee7c484fe069ab0231b"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a05c7eeda78e69ee7c484fe069ab0231b">solve_nonlinear_equations</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, nroot, generate_initial_guess, max_iter, thresh, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</td></tr>
+<tr class="separator:a05c7eeda78e69ee7c484fe069ab0231b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafc0c445dbb353da38c92aa1ce4640f2"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#aafc0c445dbb353da38c92aa1ce4640f2">solve_optimization</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, nroot, generate_initial_guess, max_iter, thresh, thresh_value, hermitian, verbosity, minimize, pname, mpicomm, algorithm, range, options)</td></tr>
+<tr class="separator:aafc0c445dbb353da38c92aa1ce4640f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeeac19cec453d5df15b17ea1b0f157fb"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#aeeac19cec453d5df15b17ea1b0f157fb">iterative_solver_linear_eigensystem_initialize</a> (nq, nroot, thresh, thresh_value, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</td></tr>
 <tr class="memdesc:aeeac19cec453d5df15b17ea1b0f157fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the lowest eigensolutions of a matrix. The default algorithm is Davidson's method, i.e. preconditioned Lanczos. Example of simplest use:  <a href="namespaceiterative__solver.html#aeeac19cec453d5df15b17ea1b0f157fb">More...</a><br /></td></tr>
 <tr class="separator:aeeac19cec453d5df15b17ea1b0f157fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,9 +140,14 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a40a3d04d226f8315ed2a57baa5d78304"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a40a3d04d226f8315ed2a57baa5d78304">iterative_solver_finalize</a></td></tr>
 <tr class="memdesc:a40a3d04d226f8315ed2a57baa5d78304"><td class="mdescLeft">&#160;</td><td class="mdescRight">Terminate the iterative solver.  <a href="namespaceiterative__solver.html#a40a3d04d226f8315ed2a57baa5d78304">More...</a><br /></td></tr>
 <tr class="separator:a40a3d04d226f8315ed2a57baa5d78304"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2174400663d4e6e433bf197150e423ce"><td class="memItemLeft" align="right" valign="top">integer function, dimension(2)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a2174400663d4e6e433bf197150e423ce">iterative_solver_range</a> ()</td></tr>
+<tr class="separator:a2174400663d4e6e433bf197150e423ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70258968c6cc6e822b9008afcccd8a79"><td class="memItemLeft" align="right" valign="top">integer function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a70258968c6cc6e822b9008afcccd8a79">iterative_solver_add_vector</a> (parameters, action, synchronize, value)</td></tr>
 <tr class="memdesc:a70258968c6cc6e822b9008afcccd8a79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take, typically, a current solution and residual, add it to the expansion set, and return new solution. In the context of Lanczos-like linear methods, the input will be a current expansion vector and the result of acting on it with the matrix, and the output will be a new expansion vector.  <a href="namespaceiterative__solver.html#a70258968c6cc6e822b9008afcccd8a79">More...</a><br /></td></tr>
 <tr class="separator:a70258968c6cc6e822b9008afcccd8a79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8b03a6e82fb1df6df6b25e5017d3714"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#aa8b03a6e82fb1df6df6b25e5017d3714">iterative_solver_add_equations</a> (rhs)</td></tr>
+<tr class="memdesc:aa8b03a6e82fb1df6df6b25e5017d3714"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a right hand side to augment the set of linear equations to be solved.  <a href="namespaceiterative__solver.html#aa8b03a6e82fb1df6df6b25e5017d3714">More...</a><br /></td></tr>
+<tr class="separator:aa8b03a6e82fb1df6df6b25e5017d3714"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03f7586355d8dab8557e6cde9fc0078b"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a03f7586355d8dab8557e6cde9fc0078b">iterative_solver_solution</a> (roots, parameters, action, synchronize)</td></tr>
 <tr class="memdesc:a03f7586355d8dab8557e6cde9fc0078b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the current solution.  <a href="namespaceiterative__solver.html#a03f7586355d8dab8557e6cde9fc0078b">More...</a><br /></td></tr>
 <tr class="separator:a03f7586355d8dab8557e6cde9fc0078b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,17 +171,89 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a11e3d198ebd7872c9ed08cbbdf9dd012"><td class="memItemLeft" align="right" valign="top">double precision function, dimension(working_set_size), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a11e3d198ebd7872c9ed08cbbdf9dd012">iterative_solver_working_set_eigenvalues</a> (working_set_size)</td></tr>
 <tr class="memdesc:a11e3d198ebd7872c9ed08cbbdf9dd012"><td class="mdescLeft">&#160;</td><td class="mdescRight">the eigenvalues of the reduced problem, for the number of roots in working set (not yet converged).  <a href="namespaceiterative__solver.html#a11e3d198ebd7872c9ed08cbbdf9dd012">More...</a><br /></td></tr>
 <tr class="separator:a11e3d198ebd7872c9ed08cbbdf9dd012"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c16d60f650492b99c576d20b2af5d15"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a1c16d60f650492b99c576d20b2af5d15">iterative_solver_solve</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, generate_initial_guess, max_iter)</td></tr>
-<tr class="separator:a1c16d60f650492b99c576d20b2af5d15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeed2ec3b74a21dd29d3ab3853ace408b"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#aeed2ec3b74a21dd29d3ab3853ace408b">iterative_solver_solve</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, generate_initial_guess, max_iter, max_p)</td></tr>
+<tr class="separator:aeed2ec3b74a21dd29d3ab3853ace408b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e077733271d54ad4d3182d2d9aeb9ab"><td class="memItemLeft" align="right" valign="top">logical function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a3e077733271d54ad4d3182d2d9aeb9ab">iterative_solver_converged</a> ()</td></tr>
+<tr class="separator:a3e077733271d54ad4d3182d2d9aeb9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af549c18c82c1991ba10874982d745626"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#af549c18c82c1991ba10874982d745626">apply_p_current_problem</a> (p, g, nvec, ranges)</td></tr>
+<tr class="separator:af549c18c82c1991ba10874982d745626"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a8e7b0afa0169579bd571c1aac764d4e8"><td class="memItemLeft" align="right" valign="top">integer, parameter, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a8e7b0afa0169579bd571c1aac764d4e8">mpicomm_kind</a> = KIND(c_int64_t)</td></tr>
 <tr class="separator:a8e7b0afa0169579bd571c1aac764d4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1ae0165bd555ba3fbf8d9c6e55d83c0"><td class="memItemLeft" align="right" valign="top">class(problem_class), pointer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#ad1ae0165bd555ba3fbf8d9c6e55d83c0">current_problem</a></td></tr>
+<tr class="separator:ad1ae0165bd555ba3fbf8d9c6e55d83c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >IterativeSolver Fortran binding. </p>
 </div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="af549c18c82c1991ba10874982d745626" name="af549c18c82c1991ba10874982d745626"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af549c18c82c1991ba10874982d745626">&#9670;&nbsp;</a></span>apply_p_current_problem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public iterative_solver::apply_p_current_problem </td>
+          <td>(</td>
+          <td class="paramtype">real(c_double), dimension(<a class="el" href="namespaceiterative__solver.html#ad1ae0165bd555ba3fbf8d9c6e55d83c0">current_problem</a>%p_space%size, nvec), intent(in)&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(m_nq, nvec), intent(inout)&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_size_t), intent(in), value&#160;</td>
+          <td class="paramname"><em>nvec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_size_t), dimension(2, nvec), intent(in)&#160;</td>
+          <td class="paramname"><em>ranges</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa8b03a6e82fb1df6df6b25e5017d3714" name="aa8b03a6e82fb1df6df6b25e5017d3714"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8b03a6e82fb1df6df6b25e5017d3714">&#9670;&nbsp;</a></span>iterative_solver_add_equations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine iterative_solver::iterative_solver_add_equations </td>
+          <td>(</td>
+          <td class="paramtype">double precision, dimension(..), intent(in), target&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a right hand side to augment the set of linear equations to be solved. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rhs</td><td>On input, the desired RHS </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="aa924c3a27ae8d7dfb5f6946c9ab55222" name="aa924c3a27ae8d7dfb5f6946c9ab55222"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa924c3a27ae8d7dfb5f6946c9ab55222">&#9670;&nbsp;</a></span>iterative_solver_add_p()</h2>
 
@@ -305,6 +392,20 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a3e077733271d54ad4d3182d2d9aeb9ab" name="a3e077733271d54ad4d3182d2d9aeb9ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e077733271d54ad4d3182d2d9aeb9ab">&#9670;&nbsp;</a></span>iterative_solver_converged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">logical function, public iterative_solver::iterative_solver_converged</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0193308603bbbe44226e4745032d12f7" name="a0193308603bbbe44226e4745032d12f7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0193308603bbbe44226e4745032d12f7">&#9670;&nbsp;</a></span>iterative_solver_diis_initialize()</h2>
 
@@ -368,40 +469,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Accelerated convergence of non-linear equations through the DIIS or related methods. Example of simplest use: </p>
-<div class="fragment"><div class="line"> </div>
-<div class="line"><span class="keyword">PROGRAM</span> diis_example</div>
-<div class="line">  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver.html">iterative_solver</a></div>
-<div class="line">  <span class="keywordtype">IMPLICIT NONE</span></div>
-<div class="line">  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 1000</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, n)</span> :: m</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n)</span> :: c, g</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span> :: e</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION(1)</span> :: error</div>
-<div class="line">  <span class="keywordtype">INTEGER</span> :: i, j</div>
-<div class="line">  <span class="keywordtype">LOGICAL</span> :: converged</div>
-<div class="line">  print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver::DIIS&#39;</span></div>
-<div class="line">  m = 1; <span class="keywordflow">DO</span> i = 1, n; m(i, i) = 3 * i;</div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_diis_initialize(n, thresh = 1d-11, verbosity = 1)</div>
-<div class="line">  c = 0; c(1) = 1</div>
-<div class="line">  <span class="keywordflow">DO</span> i = 1, n</div>
-<div class="line">    c = c / sqrt(dot_product(c, c))</div>
-<div class="line">    g = matmul(m, c)</div>
-<div class="line">    e = dot_product(c, g)</div>
-<div class="line">    g = g - e * c</div>
-<div class="line">    <span class="keywordflow">IF</span> (iterative_solver_add_vector(c, g)) &amp;</div>
-<div class="line">      c = c - g / ([(m(j, j), j = 1, n)] - e + 1d-15)</div>
-<div class="line">    converged = iterative_solver_end_iteration(c, g, error)</div>
-<div class="line">    <span class="keywordflow">IF</span> (converged) <span class="keywordflow">EXIT</span></div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  print *, <span class="stringliteral">&#39;error =&#39;</span>, error</div>
-<div class="line">  c = c / sqrt(dot_product(c, c))</div>
-<div class="line">  print *, <span class="stringliteral">&#39;solution &#39;</span>, c(1 : min(n, 10))</div>
-<div class="line">  print *, <span class="stringliteral">&#39;expectation &#39;</span>, e</div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_finalize</div>
-<div class="line"><span class="keyword">END PROGRAM </span>diis_example</div>
-<div class="ttc" id="anamespaceiterative__solver_html"><div class="ttname"><a href="namespaceiterative__solver.html">iterative_solver</a></div><div class="ttdoc">IterativeSolver Fortran binding.</div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:2</div></div>
-</div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
+<div class="fragment"></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">nq</td><td>dimension of parameter space </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">thresh</td><td>convergence threshold </td></tr>
@@ -607,200 +675,48 @@ Variables</h2></td></tr>
 <p>Finds the lowest eigensolutions of a matrix. The default algorithm is Davidson's method, i.e. preconditioned Lanczos. Example of simplest use: </p>
 <div class="fragment"><div class="line"> </div>
 <div class="line"><span class="keyword">PROGRAM</span> linear_eigensystem_example</div>
-<div class="line">  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver.html">iterative_solver</a></div>
-<div class="line">  <span class="keyword">interface</span></div>
-<div class="line">    <span class="keyword">subroutine </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a>() bind (C, name = &#39;mpi_init&#39;)</div>
-<div class="line">    <span class="keyword">end subroutine </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a></div>
-<div class="line">    <span class="keyword">subroutine </span>mpi_finalize() bind (C, name = &#39;mpi_finalize&#39;)</div>
-<div class="line">    <span class="keyword">end subroutine </span>mpi_finalize</div>
-<div class="line">    <span class="comment">!    function mpi_comm_global() BIND (C, name = &#39;mpi_comm_global&#39;)</span></div>
-<div class="line">    <span class="comment">!      use iso_c_binding, only: c_int64_t</span></div>
-<div class="line">    <span class="comment">!      integer(c_int64_t) mpi_comm_global</span></div>
-<div class="line">    <span class="comment">!    end function mpi_comm_global</span></div>
-<div class="line">  <span class="keyword">end interface</span></div>
-<div class="line">  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 6, nroot = 3</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, n)</span> :: m</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, nroot)</span> :: c, g</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (nroot)</span> :: e, error</div>
-<div class="line">  <span class="keywordtype">INTEGER</span> :: i, j, root</div>
-<div class="line">  <span class="keywordtype">LOGICAL</span> :: converged</div>
-<div class="line">  print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver&#39;</span></div>
-<div class="line">  m = 1; <span class="keywordflow">DO</span> i = 1, n; m(i, i) = 3 * i;</div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_linear_eigensystem_initialize(n, nroot, thresh = 1d-7, verbosity = 1)</div>
-<div class="line">  c = 0; <span class="keywordflow">DO</span> i = 1, nroot; c(i, i) = 1;</div>
-<div class="line"><span class="keywordflow">  ENDDO</span></div>
-<div class="line">  <span class="keywordflow">DO</span> i = 1, n</div>
-<div class="line">    g = matmul(m, c)</div>
-<div class="line">    <span class="keywordflow">IF</span> (iterative_solver_add_vector(c, g, e)) <span class="keywordflow">THEN</span></div>
-<div class="line">      e = iterative_solver_eigenvalues()</div>
-<div class="line">      <span class="keywordflow">DO</span> root = 1, nroot</div>
-<div class="line">        <span class="keywordflow">DO</span> j = 1, n</div>
-<div class="line">          c(j, root) = c(j, root) - g(j, root) / (m(j, j) - e(root) + 1e-15)</div>
-<div class="line"><span class="keywordflow">        END DO</span></div>
-<div class="line"><span class="keywordflow">      END DO</span></div>
-<div class="line"><span class="keywordflow">    END IF</span></div>
-<div class="line">    converged = iterative_solver_end_iteration(c, g, error)</div>
-<div class="line">    <span class="keywordflow">IF</span> (converged) <span class="keywordflow">EXIT</span></div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  print *, <span class="stringliteral">&#39;error =&#39;</span>, error, <span class="stringliteral">&#39; eigenvalue =&#39;</span>, e</div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_print_statistics</div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_finalize</div>
-<div class="line">  <span class="keyword">CALL </span>mpi_finalize</div>
-<div class="line"><span class="keyword">END PROGRAM </span>linear_eigensystem_example</div>
-<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:46</div></div>
-</div><!-- fragment --><p> Example including use of P space: </p><div class="fragment"><div class="line"> </div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">MODULE</span> pspace</div>
-<div class="line">  use, <span class="keywordtype">INTRINSIC</span> :: iso_c_binding</div>
-<div class="line">  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 60, nroot = 3, np = 20</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, n)</span> :: m</div>
-<div class="line">  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">DIMENSION(nP)</span> :: indices</div>
-<div class="line">  <span class="keywordtype">INTEGER</span> :: i, j, root, offset</div>
-<div class="line">  <span class="keyword">CONTAINS</span></div>
-<div class="line">    <span class="keyword">subroutine </span>apply_on_p(p, g, update_size, ranges) <span class="keyword">BIND(C)</span></div>
-<div class="line">      <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION(*)</span>, <span class="keywordtype">INTENT(inout)</span> :: g</div>
-<div class="line">      <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION(nP,nroot)</span>, <span class="keywordtype">INTENT(inout)</span> :: p</div>
-<div class="line">      <span class="keywordtype">INTEGER</span>, <span class="keywordtype">DIMENSION(*)</span>, <span class="keywordtype">INTENT(in)</span> :: ranges</div>
-<div class="line">      <span class="keywordtype">INTEGER(c_size_t)</span>, <span class="keywordtype">INTENT(in)</span>, <span class="keywordtype">VALUE</span> :: update_size</div>
-<div class="line">      <span class="keywordtype">INTEGER</span> :: irange, root, range</div>
-<div class="line">      <span class="comment">!write(*,*) &quot;APPLY_ON_P was called!!!&quot;</span></div>
-<div class="line">      irange = 1</div>
-<div class="line">      <span class="keywordflow">DO</span> root = 1, update_size</div>
-<div class="line">        offset = ranges(irange)</div>
-<div class="line">        <span class="comment">!range = ranges(irange+1) - ranges(irange)</span></div>
-<div class="line">        <span class="comment">!if (rank == 1) then</span></div>
-<div class="line">        <span class="comment">!  write(*,*) &quot;gg[&quot;,root,&quot;] : &quot;, g((root-1)*n+1:(root-1)*n+range)</span></div>
-<div class="line">        <span class="comment">!  write(*,*) &quot;p[&quot;,root,&quot;] : &quot;, p(:,root)</span></div>
-<div class="line">        <span class="comment">!end if</span></div>
-<div class="line">        <span class="keywordflow">DO</span> i = 1, np</div>
-<div class="line">          <span class="keywordflow">DO</span> j = ranges(irange)+1, ranges(irange+1)</div>
-<div class="line">            <span class="comment">!! To be used if action vector is fully stored on each process</span></div>
-<div class="line">            g((root-1)*n+j-offset) = g((root-1)*n+j-offset) + m(j, indices(i)) * p(i,root)</div>
-<div class="line">            <span class="comment">!! To be used if action vector is distributed across processes</span></div>
-<div class="line">            <span class="comment">!g((root-1)*range+j-offset) = g((root-1)*range+j-offset) + m(j, indices(i)) * p(i,root)</span></div>
-<div class="line"><span class="keywordflow">          END DO</span></div>
-<div class="line"><span class="keywordflow">        END DO</span></div>
-<div class="line">        <span class="comment">!if (rank == 1) then</span></div>
-<div class="line">        <span class="comment">!  write(*,*) &quot;gg[&quot;,root,&quot;] after : &quot;, g((root-1)*n+1:(root-1)*n+range)</span></div>
-<div class="line">        <span class="comment">!end if</span></div>
-<div class="line">        irange = irange + 2</div>
-<div class="line"><span class="keywordflow">      END DO</span></div>
-<div class="line">    <span class="keyword">end subroutine </span>apply_on_p</div>
-<div class="line"><span class="keyword">END MODULE </span>pspace</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">PROGRAM</span> linear_eigensystem_example</div>
-<div class="line">  <span class="keywordtype">USE </span>pspace</div>
-<div class="line">  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver.html">iterative_solver</a></div>
-<div class="line">  <span class="keywordtype">USE </span><a class="code hl_namespaceRef" href="https://molpro.github.io/profiler/namespaceprofilerf.html">profilerf</a></div>
-<div class="line">  include <span class="stringliteral">&#39;mpif.h&#39;</span></div>
-<div class="line"> </div>
-<div class="line">  <span class="comment">!INTEGER, PARAMETER :: n = 20, nroot = 3, nP = 10</span></div>
-<div class="line">  <span class="comment">!DOUBLE PRECISION, DIMENSION (n, n) :: m</span></div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, nroot)</span> :: c, g</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION(nP, nroot)</span> :: p</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (nroot)</span> :: e</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">ALLOCATABLE</span>, <span class="keywordtype">DIMENSION(:)</span> :: we</div>
-<div class="line">  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">DIMENSION(0 : nP)</span> :: offsets</div>
-<div class="line">  <span class="comment">!INTEGER, DIMENSION(nP) :: indices</span></div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION(nP)</span> :: coefficients</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION(nP, nP)</span> :: pp</div>
-<div class="line">  <span class="comment">!INTEGER :: i, j, root</span></div>
-<div class="line">  <span class="keywordtype">LOGICAL</span> :: update</div>
-<div class="line">  <span class="keywordtype">INTEGER</span> :: nwork, alloc_stat</div>
-<div class="line">  <span class="keywordtype">INTEGER</span> :: rank, comm_size, ierr</div>
-<div class="line">  <span class="keywordtype">INTEGER</span> :: roots(nroot)</div>
-<div class="line">  <span class="keywordtype">TYPE</span>(Profiler) :: prof</div>
-<div class="line">  rank = 0</div>
-<div class="line">  <span class="keyword">call </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a>(ierr)</div>
-<div class="line">  <span class="keyword">call </span>mpi_comm_rank(mpi_comm_world, rank, ierr)</div>
-<div class="line">  <span class="keyword">call </span>mpi_comm_size(mpi_comm_world, comm_size, ierr)</div>
-<div class="line">  <span class="keywordflow">if</span> (rank == 0) <span class="keywordflow">then</span></div>
-<div class="line">    print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver&#39;</span></div>
-<div class="line">    print *, <span class="stringliteral">&#39;Using parallel version&#39;</span></div>
-<div class="line"><span class="keywordflow">  endif</span></div>
+<div class="line">  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver.html">iterative_solver</a>, <span class="keywordtype">only</span> : <a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a>, mpi_finalize, <a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__rank__global.html">mpi_rank_global</a>, &amp;</div>
+<div class="line">      solve_linear_eigensystem, iterative_solver_print_statistics, iterative_solver_finalize</div>
+<div class="line">  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver__matrix__problem.html">iterative_solver_matrix_problem</a>, <span class="keywordtype">only</span> : <a class="code hl_struct" href="structiterative__solver__matrix__problem_1_1matrix__problem.html">matrix_problem</a></div>
+<div class="line">  <span class="keywordtype">USE </span>iso_fortran_env, <span class="keywordtype">only</span> : output_unit</div>
+<div class="line">  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 300, nroot = 3</div>
+<div class="line">  <span class="keywordtype">INTEGER</span> :: nP, max_p</div>
+<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (:, :)</span>, <span class="keywordtype">allocatable</span>, <span class="keywordtype">target</span> :: m</div>
+<div class="line">  <span class="keywordtype">INTEGER</span> :: i</div>
+<div class="line">  <span class="keyword">CALL </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a></div>
+<div class="line">  <span class="keywordflow">IF</span> (<a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__rank__global.html">mpi_rank_global</a>() .gt. 0) <span class="keyword">close</span>(output_unit)</div>
+<div class="line">  <span class="keyword">ALLOCATE</span>(m(n, n))</div>
 <div class="line">  m = 1</div>
-<div class="line">  <span class="keywordflow">DO</span> i = 1, n</div>
-<div class="line">    m(i, i) = 3 * i</div>
+<div class="line">  <span class="keywordflow">DO</span> i = lbound(m,1), ubound(m,1)</div>
+<div class="line">    m(i, i) = 3 * (n + 1 - i)</div>
 <div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  prof=<a class="code hl_structRef" href="https://molpro.github.io/profiler/structprofilerf_1_1profiler.html">profiler</a>(<span class="stringliteral">&#39;Eigensystem_Example_P&#39;</span>, 1, 0)</div>
-<div class="line">  <span class="keywordflow">if</span> (rank == 0) <span class="keywordflow">then</span></div>
-<div class="line">    <span class="keyword">WRITE</span> (6, *) <span class="stringliteral">&#39;P-space=&#39;</span>, np, <span class="stringliteral">&#39;, dimension=&#39;</span>, n, <span class="stringliteral">&#39;, roots=&#39;</span>, nroot</div>
-<div class="line"><span class="keywordflow">  end if</span></div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_linear_eigensystem_initialize(n, nroot, thresh = 1d-8, thresh_value = 1d-14, hermitian=.true., &amp;</div>
-<div class="line">                                              verbosity = 1, pname = <span class="stringliteral">&#39;Eigensystem_Example_P&#39;</span>, mpicomm = mpi_comm_world)</div>
-<div class="line">  offsets(0) = 0</div>
-<div class="line">  <span class="keywordflow">DO</span> i = 1, np</div>
-<div class="line">    offsets(i) = i</div>
-<div class="line">    indices(i) = i <span class="comment">! the first nP components</span></div>
-<div class="line">    coefficients(i) = 1</div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  <span class="keywordflow">DO</span> i = 1, np</div>
-<div class="line">    <span class="keywordflow">DO</span> j = 1, np</div>
-<div class="line">      pp(i, j) = m(indices(i), indices(j))</div>
-<div class="line"><span class="keywordflow">    END DO</span></div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  nwork =  iterative_solver_add_p(np, offsets, indices, coefficients, pp, c, g, fproc=apply_on_p)</div>
-<div class="line">  <span class="comment">!g = 0.0d0</span></div>
-<div class="line">  <span class="keywordflow">DO</span> iter = 1, 100</div>
-<div class="line"><span class="comment">!    IF (rank == 0) THEN</span></div>
-<div class="line"><span class="comment">!      PRINT *, &#39;ITERATION #&#39;, iter</span></div>
-<div class="line"><span class="comment">!      PRINT *, &#39;nwork after Add_Vector():&#39;, nwork</span></div>
-<div class="line"><span class="comment">!    END IF</span></div>
-<div class="line">    <span class="keyword">allocate</span>(we(nwork), stat=alloc_stat)</div>
-<div class="line">    we = iterative_solver_working_set_eigenvalues(nwork)</div>
-<div class="line"><span class="comment">!    IF (rank == 0) THEN</span></div>
-<div class="line"><span class="comment">!      PRINT *, &#39;Working set roots after Add_Vector():&#39;, we</span></div>
-<div class="line"><span class="comment">!    END IF</span></div>
-<div class="line">    <span class="keywordflow">DO</span> root = 1, nwork</div>
-<div class="line">      <span class="keywordflow">DO</span> j = 1, n</div>
-<div class="line">        g(j, root) = - g(j, root) * 1.0d0 / (m(j, j) - we(root) + 1e-15)</div>
-<div class="line"><span class="keywordflow">      END DO</span></div>
-<div class="line"><span class="keywordflow">    END DO</span></div>
-<div class="line">    <span class="keyword">deallocate</span>(we)</div>
-<div class="line">    nwork = iterative_solver_end_iteration(c, g)</div>
-<div class="line">    <span class="keywordflow">IF</span> (nwork == 0) <span class="keywordflow">THEN</span></div>
-<div class="line">      <span class="keywordflow">EXIT</span></div>
-<div class="line"><span class="keywordflow">    END IF</span></div>
-<div class="line">    <span class="keyword">allocate</span>(we(nwork), stat=alloc_stat)</div>
-<div class="line">    we = iterative_solver_working_set_eigenvalues(nwork)</div>
-<div class="line"><span class="comment">!    IF (rank == 0) THEN</span></div>
-<div class="line"><span class="comment">!      PRINT *, &#39;Working set roots after End_Iteration():&#39;, we</span></div>
-<div class="line"><span class="comment">!    END IF</span></div>
-<div class="line">    <span class="keyword">deallocate</span>(we)</div>
-<div class="line">    g = matmul(m, c)</div>
-<div class="line">    nwork = iterative_solver_add_vector(c, g)</div>
-<div class="line">    <span class="keywordflow">IF</span> (nwork == 0) <span class="keywordflow">THEN</span></div>
-<div class="line">      <span class="keywordflow">EXIT</span></div>
-<div class="line"><span class="keywordflow">    END IF</span></div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  <span class="keyword">allocate</span>(we(nroot), stat=alloc_stat)</div>
-<div class="line">  we = iterative_solver_eigenvalues()</div>
-<div class="line">  <span class="keywordflow">IF</span> (rank == 0) <span class="keywordflow">THEN</span></div>
-<div class="line">    print *, <span class="stringliteral">&#39;Converged roots:&#39;</span>, we</div>
-<div class="line"><span class="keywordflow">  END IF</span></div>
-<div class="line">  <span class="keyword">deallocate</span>(we)</div>
-<div class="line">  <span class="keywordflow">DO</span> root = 1, nroot</div>
-<div class="line">    roots(root) = root</div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  <span class="keywordflow">if</span> (rank == 0) <span class="keywordflow">then</span></div>
-<div class="line">    <span class="keyword">write</span>(*,*) <span class="stringliteral">&quot;Solution vector before the call to Solution(): &quot;</span>, c(:,1)</div>
-<div class="line">    <span class="keyword">write</span>(*,*) <span class="stringliteral">&quot;Residual before the call to Solution: &quot;</span>, g(:,1)</div>
-<div class="line"><span class="keywordflow">  end if</span></div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_solution(roots, c, g)</div>
-<div class="line">  <span class="keywordflow">if</span> (rank == 0) <span class="keywordflow">then</span></div>
-<div class="line">    <span class="keyword">write</span>(*,*) <span class="stringliteral">&quot;Solution vector after the call to Solution(): &quot;</span>, c(:,1)</div>
-<div class="line">    <span class="keyword">write</span>(*,*) <span class="stringliteral">&quot;Residual after the call to Solution: &quot;</span>, g(:,1)</div>
-<div class="line"><span class="keywordflow">  end if</span></div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_print_statistics</div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_finalize</div>
-<div class="line">  <span class="keyword">call </span>prof%print(6)</div>
-<div class="line">  <span class="keyword">call </span>prof%destroy()</div>
-<div class="line">  <span class="keyword">call </span>mpi_finalize(ierr)</div>
+<div class="line">  <span class="keywordflow">do</span> np = 0, 50, 50</div>
+<div class="line">    <span class="keywordflow">do</span> max_p = 0, 50, 10</div>
+<div class="line">      <span class="keywordflow">if</span> (max_p.gt.0 .and. np.gt.0) cycle</div>
+<div class="line">      <span class="keyword">WRITE</span> (6, *) <span class="stringliteral">&#39;Explicit P-space=&#39;</span>, np, <span class="stringliteral">&#39;, auto P-space=&#39;</span>, max_p, <span class="stringliteral">&#39;, dimension=&#39;</span>, n, <span class="stringliteral">&#39;, roots=&#39;</span>, nroot</div>
+<div class="line">      <span class="keyword">call </span>solve(m, np, max_p)</div>
+<div class="line"><span class="keywordflow">    end do</span></div>
+<div class="line"><span class="keywordflow">  end do</span></div>
+<div class="line">  <span class="keyword">CALL </span>mpi_finalize</div>
+<div class="line"><span class="keyword">CONTAINS</span></div>
+<div class="line">  <span class="keyword">subroutine </span>solve(m, nP, max_P)</div>
+<div class="line">    <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (:, :)</span>, <span class="keywordtype">INTENT(IN)</span>, <span class="keywordtype">target</span> :: m</div>
+<div class="line">    <span class="keywordtype">integer</span>, <span class="keywordtype">intent(in)</span> :: nP, max_P</div>
+<div class="line">    <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (ubound(m,1), nroot)</span> :: c, g</div>
+<div class="line">    <span class="keywordtype">TYPE</span>(Matrix_Problem) :: problem</div>
+<div class="line">    <span class="keyword">CALL </span>problem%attach(m)</div>
+<div class="line">    <span class="keyword">CALL </span>problem%p_space%add_simple([(i, i = 1, np)]) <span class="comment">! the first nP components, so not the best</span></div>
+<div class="line">    <span class="keyword">CALL </span>solve_linear_eigensystem(c, g, problem, nroot, verbosity = 2, thresh = 1d-8, hermitian = .true., max_p = max_p)</div>
+<div class="line">    <span class="keywordflow">if</span> (<a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__rank__global.html">mpi_rank_global</a>().eq.0) <span class="keyword">CALL </span>iterative_solver_print_statistics</div>
+<div class="line">    <span class="keyword">CALL </span>iterative_solver_finalize</div>
+<div class="line">  <span class="keyword">end subroutine </span>solve</div>
 <div class="line"><span class="keyword">END PROGRAM </span>linear_eigensystem_example</div>
-<div class="ttc" id="anamespaceprofilerf_html"><div class="ttname"><a href="https://molpro.github.io/profiler/namespaceprofilerf.html">profilerf</a></div></div>
-<div class="ttc" id="astructprofilerf_1_1profiler_html"><div class="ttname"><a href="https://molpro.github.io/profiler/structprofilerf_1_1profiler.html">profilerf::profiler</a></div></div>
-</div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
+<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:53</div></div>
+<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__rank__global_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__rank__global.html">iterative_solver::mpi_rank_global</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:61</div></div>
+<div class="ttc" id="anamespaceiterative__solver__matrix__problem_html"><div class="ttname"><a href="namespaceiterative__solver__matrix__problem.html">iterative_solver_matrix_problem</a></div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Matrix_Problem.F90:1</div></div>
+<div class="ttc" id="anamespaceiterative__solver_html"><div class="ttname"><a href="namespaceiterative__solver.html">iterative_solver</a></div><div class="ttdoc">IterativeSolver Fortran binding.</div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:2</div></div>
+<div class="ttc" id="astructiterative__solver__matrix__problem_1_1matrix__problem_html"><div class="ttname"><a href="structiterative__solver__matrix__problem_1_1matrix__problem.html">iterative_solver_matrix_problem::matrix_problem</a></div><div class="ttdoc">A specialisation of the Problem class for linear problems in which the kernel matrix is stored in ful...</div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Matrix_Problem.F90:5</div></div>
+</div><!-- fragment --><p> Example including use of P space: </p><div class="fragment"></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">nq</td><td>dimension of matrix </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">nroot</td><td>number of eigensolutions desired </td></tr>
@@ -913,53 +829,76 @@ Variables</h2></td></tr>
 
 <p>Finds the solutions of linear equation systems using a generalisation of Davidson's method, i.e. preconditioned Lanczos Example of simplest use: </p>
 <div class="fragment"><div class="line"> </div>
+<div class="line"><span class="keyword">module</span> mod_linear_problem</div>
+<div class="line">  <span class="keywordtype">use </span><a class="code hl_namespace" href="namespaceiterative__solver__problem.html">iterative_solver_problem</a>, <span class="keywordtype">only</span> : <a class="code hl_struct" href="structiterative__solver__problem_1_1problem.html">problem</a></div>
+<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">PARAMETER</span> :: alpha = 300</div>
+<div class="line">  <span class="keyword">type</span>, <span class="keyword">extends</span>(<a class="code hl_struct" href="structiterative__solver__problem_1_1problem.html">problem</a>) :: linear_problem</div>
+<div class="line">    <span class="keywordtype">integer</span> :: n, nroot</div>
+<div class="line">  <span class="keyword">contains</span></div>
+<div class="line">    <span class="keywordtype">procedure</span>, pass :: action</div>
+<div class="line">    <span class="keywordtype">procedure</span>, pass :: RHS</div>
+<div class="line">    <span class="keywordtype">procedure</span>, pass :: diagonals</div>
+<div class="line">  <span class="keyword">end type </span>linear_problem</div>
+<div class="line"><span class="keyword">contains</span></div>
+<div class="line">  <span class="keyword">subroutine </span>action(this, parameters, actions, range)</div>
+<div class="line">    <span class="keywordtype">class</span>(linear_problem), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:, :)</span> :: parameters</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:, :)</span> :: actions</div>
+<div class="line">    <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(2)</span>, <span class="keywordtype">intent(in)</span> :: range</div>
+<div class="line">    <span class="keywordtype">integer</span> :: i, j, k</div>
+<div class="line">    <span class="keywordflow">do</span> k = lbound(parameters, 2), ubound(parameters, 2)</div>
+<div class="line">      <span class="keywordflow">do</span> i = range(1) + 1, range(2)</div>
+<div class="line">        actions(i, k) = alpha * i * parameters(i, k)</div>
+<div class="line">        <span class="keywordflow">do</span> j = 1, this%n</div>
+<div class="line">          actions(i, k) = actions(i, k) + dble(i + j - 2) * parameters(j, k)</div>
+<div class="line"><span class="keywordflow">        end do</span></div>
+<div class="line"><span class="keywordflow">      end do</span></div>
+<div class="line"><span class="keywordflow">    end do</span></div>
+<div class="line">  <span class="keyword">end subroutine </span>action</div>
+<div class="line">  <span class="keyword">logical </span><span class="keyword">function </span>diagonals(this, d)</div>
+<div class="line">    <span class="keywordtype">class</span>(linear_problem), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:)</span> :: d</div>
+<div class="line">    <span class="keywordtype">integer</span> :: i</div>
+<div class="line">    <span class="keywordflow">do</span> i = 1, this%n</div>
+<div class="line">      d(i) = alpha * i + 2 * i - 2</div>
+<div class="line"><span class="keywordflow">    end do</span></div>
+<div class="line">    diagonals = .true.</div>
+<div class="line">  <span class="keyword">end function </span>diagonals</div>
+<div class="line">  <span class="keyword">logical </span><span class="keyword">function </span>rhs(this, vector, instance, range)</div>
+<div class="line">    <span class="keywordtype">class</span>(linear_problem), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:)</span> :: vector</div>
+<div class="line">    <span class="keywordtype">integer</span>, <span class="keywordtype">intent(in)</span> :: instance</div>
+<div class="line">    <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(2)</span>, <span class="keywordtype">intent(in)</span> :: range</div>
+<div class="line">    <span class="keywordtype">integer</span> :: i</div>
+<div class="line">    rhs = .false.</div>
+<div class="line">    <span class="keywordflow">if</span> (instance.lt.1 .or. instance.gt.this%nroot) <span class="keywordflow">return</span></div>
+<div class="line">    rhs = .true.</div>
+<div class="line">    <span class="keywordflow">do</span> i = range(1) + 1, range(2)</div>
+<div class="line">      vector(i) = 1 / dble(i + instance - 1)</div>
+<div class="line"><span class="keywordflow">    end do</span></div>
+<div class="line">  <span class="keyword">end function </span>rhs</div>
+<div class="line"><span class="keyword">end module </span>mod_linear_problem</div>
+<div class="line"> </div>
 <div class="line"><span class="keyword">PROGRAM</span> linear_equations_example</div>
 <div class="line">  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver.html">iterative_solver</a></div>
+<div class="line">  <span class="keywordtype">USE </span>mod_linear_problem, <span class="keywordtype">only</span> : linear_problem</div>
 <div class="line">  <span class="keywordtype">IMPLICIT NONE</span></div>
 <div class="line">  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 30, nroot = 2</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">PARAMETER</span> :: alpha = 300</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION(5)</span>, <span class="keywordtype">PARAMETER</span> :: augmented_hessian_factors = [0.0_8, .001_8, .01_8, .1_8, 1.0_8]</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, n)</span> :: m</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, nroot)</span> :: c, g, rhs</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (nroot)</span> :: error</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span> :: augmented_hessian</div>
-<div class="line">  <span class="keywordtype">INTEGER</span> :: i, j, root, iaug, nwork</div>
-<div class="line">  <span class="keywordtype">LOGICAL</span> :: converged</div>
-<div class="line">  print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver&#39;</span></div>
+<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, nroot)</span> :: c, g</div>
+<div class="line">  <span class="keywordtype">TYPE</span>(linear_problem) :: problem</div>
 <div class="line">  <span class="keyword">call </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a></div>
-<div class="line">  <span class="keywordflow">DO</span> i = 1, n; m(i, i) = alpha * i + 2 * i - 2; <span class="keywordflow">DO</span> j = 1, n; <span class="keywordflow">IF</span> (i.NE.j) m(i, j) = i + j - 2;</div>
-<div class="line">  <span class="keyword">END </span>do;</div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  <span class="keywordflow">DO</span> i = 1, nroot; <span class="keywordflow">DO</span> j = 1, n; rhs(j, i) = 1 / dble(j + i - 1);</div>
-<div class="line">  <span class="keyword">END </span>do;</div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  nwork = nroot</div>
-<div class="line">  <span class="keywordflow">DO</span> iaug = 1, <span class="keyword">SIZE</span>(augmented_hessian_factors)</div>
-<div class="line">    augmented_hessian = augmented_hessian_factors(iaug)</div>
-<div class="line">    print *, <span class="stringliteral">&#39;solve linear system with augmented hessian factor &#39;</span>, augmented_hessian</div>
-<div class="line">    <span class="keyword">CALL </span>iterative_solver_linear_equations_initialize(n, nroot, rhs, augmented_hessian, thresh = 1d-11, verbosity = 1)</div>
-<div class="line">    c = 0; <span class="keywordflow">DO</span> i = 1, nroot; c(i, i) = 1;</div>
-<div class="line"><span class="keywordflow">    ENDDO</span></div>
-<div class="line">    <span class="keywordflow">DO</span> i = 1, n</div>
-<div class="line">      g = matmul(m, c)</div>
-<div class="line">      nwork = iterative_solver_add_vector(c, g)</div>
-<div class="line">        <span class="keywordflow">DO</span> root = 1, nwork</div>
-<div class="line">          <span class="keywordflow">DO</span> j = 1, n</div>
-<div class="line">            c(j, root) = c(j, root) - g(j, root) / m(j, j)</div>
-<div class="line"><span class="keywordflow">          END DO</span></div>
-<div class="line"><span class="keywordflow">        END DO</span></div>
-<div class="line">      nwork = iterative_solver_end_iteration(c, g)</div>
-<div class="line">      <span class="keywordflow">IF</span> (nwork .LE. 0) <span class="keywordflow">EXIT</span></div>
-<div class="line"><span class="keywordflow">    END DO</span></div>
-<div class="line">    print *, <span class="stringliteral">&#39;error =&#39;</span>, iterative_solver_errors()</div>
-<div class="line">    <span class="keywordflow">DO</span> i = 1, nroot</div>
-<div class="line">      print *, <span class="stringliteral">&#39;solution &#39;</span>, c(1 : min(n, 10), i)</div>
-<div class="line"><span class="keywordflow">    END DO</span></div>
-<div class="line">    <span class="keyword">Call </span>iterative_solver_print_statistics</div>
-<div class="line">    <span class="keyword">CALL </span>iterative_solver_finalize</div>
-<div class="line"><span class="keywordflow">  ENDDO</span></div>
+<div class="line">  <span class="keywordflow">IF</span> (<a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__rank__global.html">mpi_rank_global</a>() .gt. 0) <span class="keyword">close</span>(6)</div>
+<div class="line">  print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver&#39;</span></div>
+<div class="line">  problem%n = n</div>
+<div class="line">  problem%nroot = nroot</div>
+<div class="line">  <span class="keyword">CALL </span>solve_linear_equations(c, g, problem, thresh = 1d-11, verbosity = 2)</div>
+<div class="line">  print*, <span class="stringliteral">&#39;convergence?&#39;</span>, iterative_solver_converged(), <span class="stringliteral">&#39;, residual length: &#39;</span>, norm2(g)</div>
+<div class="line">  <span class="keyword">CALL </span>iterative_solver_print_statistics</div>
+<div class="line">  <span class="keyword">CALL </span>iterative_solver_finalize</div>
 <div class="line">  <span class="keyword">CALL </span>mpi_finalize</div>
 <div class="line"><span class="keyword">END PROGRAM </span>linear_equations_example</div>
+<div class="ttc" id="anamespaceiterative__solver__problem_html"><div class="ttname"><a href="namespaceiterative__solver__problem.html">iterative_solver_problem</a></div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Problem.F90:1</div></div>
+<div class="ttc" id="astructiterative__solver__problem_1_1problem_html"><div class="ttname"><a href="structiterative__solver__problem_1_1problem.html">iterative_solver_problem::problem</a></div><div class="ttdoc">Abstract class defining the problem-specific interface for the simplified solver interface to Iterati...</div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Problem.F90:7</div></div>
 </div><!-- fragment --><p> Example including use of P space: include LinearEquationsExampleF-Pspace.F90 </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">nq</td><td>dimension of matrix </td></tr>
@@ -1056,49 +995,87 @@ Variables</h2></td></tr>
 
 <p>Optimization through the L-BFGS or related methods. Example of simplest use: </p>
 <div class="fragment"><div class="line"> </div>
+<div class="line"><span class="keyword">module</span> quasinewton_examples</div>
+<div class="line">  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver__problem.html">iterative_solver_problem</a></div>
+<div class="line">  <span class="keywordtype">private</span></div>
+<div class="line">  <span class="keyword">type</span>, <span class="keyword">extends</span>(<a class="code hl_struct" href="structiterative__solver__problem_1_1problem.html">problem</a>), <span class="keywordtype">public</span> :: forced_t</div>
+<div class="line">    <span class="keywordtype">integer</span> :: size</div>
+<div class="line">  <span class="keyword">contains</span></div>
+<div class="line">    <span class="keywordtype">procedure</span>, pass :: residual =&gt; forced_residual</div>
+<div class="line">    <span class="keywordtype">procedure</span>, pass :: diagonals =&gt; forced_diagonals</div>
+<div class="line">  <span class="keyword">end type </span>forced_t</div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">type</span>, <span class="keyword">extends</span>(<a class="code hl_struct" href="structiterative__solver__problem_1_1problem.html">problem</a>), <span class="keywordtype">public</span> :: quadratic_t</div>
+<div class="line">  <span class="keyword">contains</span></div>
+<div class="line">    <span class="keywordtype">procedure</span>, pass :: residual =&gt; quadratic_residual</div>
+<div class="line">    <span class="keywordtype">procedure</span>, pass :: diagonals =&gt; quadratic_diagonals</div>
+<div class="line">  <span class="keyword">end type </span>quadratic_t</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">contains</span></div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">function </span>forced_residual(this, parameters, residuals, range) <span class="keyword">result</span>(e)</div>
+<div class="line">    <span class="keywordtype">class</span>(forced_t), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line">    <span class="keywordtype">double precision</span> :: e</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:, :)</span> :: parameters</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:, :)</span> :: residuals</div>
+<div class="line">    <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(2)</span>, <span class="keywordtype">intent(in)</span> :: range</div>
+<div class="line">    <span class="keywordflow">do</span> i = range(1) + 1, range(2); residuals(i, 1) = sum(parameters(:, 1)) + (3 * i - 1) * parameters(i, 1) - 1;</div>
+<div class="line"><span class="keywordflow">    enddo</span></div>
+<div class="line">    e = 0.5 * dot_product(parameters(:, 1), residuals(:, 1)) - 0.5 * sum(parameters(:, 1))</div>
+<div class="line">  <span class="keyword">end function </span>forced_residual</div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">logical </span><span class="keyword">function </span>forced_diagonals(this, d)</div>
+<div class="line">    <span class="keywordtype">class</span>(forced_t), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:)</span> :: d</div>
+<div class="line">    d = [(3 * i, i = 1, <span class="keyword">size</span>(d))]</div>
+<div class="line">    forced_diagonals = .true.</div>
+<div class="line">  <span class="keyword">end function </span>forced_diagonals</div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">function </span>quadratic_residual(this, parameters, residuals, range) <span class="keyword">result</span>(e)</div>
+<div class="line">    <span class="keywordtype">class</span>(quadratic_t), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line">    <span class="keywordtype">double precision</span> :: e</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:, :)</span> :: parameters</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:, :)</span> :: residuals</div>
+<div class="line">    <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(2)</span>, <span class="keywordtype">intent(in)</span> :: range</div>
+<div class="line">    <span class="keywordflow">do</span> i = range(1) + 1, range(2); residuals(i, 1) = sum(parameters(:, 1)) + (3 * i - 1) * parameters(i, 1);</div>
+<div class="line"><span class="keywordflow">    enddo</span></div>
+<div class="line">    e = dot_product(parameters(:, 1), residuals(:, 1)) / dot_product(parameters(:, 1), parameters(:, 1))</div>
+<div class="line">    residuals = (residuals - e * parameters) / dot_product(parameters(:, 1), parameters(:, 1))</div>
+<div class="line">  <span class="keyword">end function </span>quadratic_residual</div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">logical </span><span class="keyword">function </span>quadratic_diagonals(this, d)</div>
+<div class="line">    <span class="keywordtype">class</span>(quadratic_t), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line">    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:)</span> :: d</div>
+<div class="line">    d = [(3 * i, i = 1, <span class="keyword">size</span>(d))]</div>
+<div class="line">    quadratic_diagonals = .true.</div>
+<div class="line">  <span class="keyword">end function </span>quadratic_diagonals</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">end module </span>quasinewton_examples</div>
+<div class="line"> </div>
 <div class="line"><span class="keyword">PROGRAM</span> quasinewton_example</div>
 <div class="line">  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver.html">iterative_solver</a></div>
+<div class="line">  <span class="keywordtype">USE </span>quasinewton_examples</div>
 <div class="line">  <span class="keywordtype">IMPLICIT NONE</span></div>
-<div class="line">  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 2</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, n)</span> :: m</div>
+<div class="line">  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 100, verbosity = 2</div>
 <div class="line">  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n)</span> :: c, g</div>
-<div class="line">  <span class="keywordtype">DOUBLE PRECISION</span> :: e, e0</div>
-<div class="line">  <span class="keywordtype">INTEGER</span> :: i, j</div>
-<div class="line">  <span class="keywordtype">LOGICAL</span> :: converged</div>
-<div class="line">  <span class="keywordtype">LOGICAL</span>, <span class="keywordtype">PARAMETER</span> :: forced = .false.</div>
+<div class="line">  <span class="comment">! try one of the following</span></div>
+<div class="line">  <span class="comment">!      type(quadratic_t) :: problem</span></div>
+<div class="line">  <span class="keywordtype">type</span>(forced_t) :: problem</div>
 <div class="line">  <span class="keyword">call </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a></div>
-<div class="line">  print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver::IOptimize&#39;</span></div>
-<div class="line">  m = 1; <span class="keywordflow">DO</span> i = 1, n; m(i, i) = 3 * i;</div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  <span class="keyword">CALL </span>iterative_solver_optimize_initialize(n, thresh = 1d-9, verbosity = 1, algorithm = <span class="stringliteral">&quot;BFGS&quot;</span>, options=<span class="stringliteral">&quot;max_size_qspace=7&quot;</span>)</div>
-<div class="line">  c = 0; <span class="keywordflow">if</span> ( .not. forced) c(1) = 1</div>
-<div class="line">  e0 = m(1, 1)</div>
-<div class="line">  <span class="keywordflow">DO</span> i = 1, 30</div>
-<div class="line">    g = matmul(m, c)</div>
-<div class="line">    <span class="keywordflow">if</span> (forced) <span class="keywordflow">then</span></div>
-<div class="line">      e = 0.5 * dot_product(c, g) - sum(c)</div>
-<div class="line">      g = g - 1</div>
-<div class="line">    <span class="keywordflow">else</span></div>
-<div class="line">      e = dot_product(c, g) / dot_product(c, c)</div>
-<div class="line">      g = (g - e * c) / dot_product(c, c)</div>
-<div class="line"><span class="keywordflow">    end if</span></div>
-<div class="line">    <span class="keyword">write</span> (6, *) <span class="stringliteral">&#39;function value &#39;</span>, e</div>
-<div class="line">    <span class="keyword">write</span> (6, *) <span class="stringliteral">&#39;c &#39;</span>, c</div>
-<div class="line">    <span class="keyword">write</span> (6, *) <span class="stringliteral">&#39;g &#39;</span>, g</div>
-<div class="line">    <span class="keywordflow">IF</span> (iterative_solver_add_vector(c, g, <span class="keywordtype">value</span> = e).gt.0) <span class="keywordflow">THEN</span></div>
-<div class="line">      <span class="keywordflow">if</span> (forced) <span class="keywordflow">then</span></div>
-<div class="line">        g = g / [(m(j, j), j = 1, n)]</div>
-<div class="line">      <span class="keywordflow">else</span></div>
-<div class="line">        g = g / ([(m(j, j), j = 1, n)] - e + 1d-15) &amp;</div>
-<div class="line">          + (sum([(c(j) * g(j), j = 1, n)]) / sum([(c(j)**2, j = 1, n)])) * c &amp;</div>
-<div class="line">            / ([(m(j, j), j = 1, n)] - e + 1d-15)</div>
-<div class="line"><span class="keywordflow">      end if</span></div>
-<div class="line"><span class="keywordflow">    END IF</span></div>
-<div class="line">    converged = iterative_solver_end_iteration(c, g) .eq.0</div>
-<div class="line">    <span class="keywordflow">IF</span> (converged) <span class="keywordflow">EXIT</span></div>
-<div class="line"><span class="keywordflow">  END DO</span></div>
-<div class="line">  <span class="keywordflow">if</span> (.not. forced) c = c / sqrt(dot_product(c, c))</div>
-<div class="line">  print *, <span class="stringliteral">&#39;solution &#39;</span>, c(1:min(n, 10))</div>
+<div class="line">  <span class="keyword">call </span>&amp;</div>
+<div class="line">      <span class="comment">! try one of the following</span></div>
+<div class="line">      solve_optimization(&amp;</div>
+<div class="line">          <span class="comment">!      Solve_Nonlinear_Equations(&amp;</span></div>
+<div class="line">          c, g, problem, n, thresh = 1d-6, verbosity = verbosity)</div>
+<div class="line">  <span class="keywordflow">if</span> (verbosity.lt.1) <span class="keywordflow">then</span></div>
+<div class="line">    print *, <span class="stringliteral">&#39;Optimized function value &#39;</span>, iterative_solver_value()</div>
+<div class="line">    print *, <span class="stringliteral">&#39;Error &#39;</span>, iterative_solver_errors(), iterative_solver_converged()</div>
+<div class="line"><span class="keywordflow">  end if</span></div>
+<div class="line">  <span class="keywordflow">if</span> (verbosity.gt.1) <span class="keywordflow">then</span></div>
+<div class="line">    <span class="keyword">call </span>iterative_solver_solution([1], c, g)</div>
+<div class="line">    print *, <span class="stringliteral">&#39;solution &#39;</span>, c(1:min(n, 10))</div>
+<div class="line">    print *, <span class="stringliteral">&#39;residual &#39;</span>, g(1:min(n, 10))</div>
+<div class="line"><span class="keywordflow">  end if</span></div>
 <div class="line">  <span class="keyword">CALL </span>iterative_solver_finalize</div>
 <div class="line">  <span class="keyword">call </span>mpi_finalize</div>
 <div class="line"><span class="keyword">END PROGRAM </span>quasinewton_example</div>
@@ -1117,6 +1094,20 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a2174400663d4e6e433bf197150e423ce" name="a2174400663d4e6e433bf197150e423ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2174400663d4e6e433bf197150e423ce">&#9670;&nbsp;</a></span>iterative_solver_range()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer function, dimension(2) iterative_solver::iterative_solver_range</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1171,8 +1162,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a1c16d60f650492b99c576d20b2af5d15" name="a1c16d60f650492b99c576d20b2af5d15"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c16d60f650492b99c576d20b2af5d15">&#9670;&nbsp;</a></span>iterative_solver_solve()</h2>
+<a id="aeed2ec3b74a21dd29d3ab3853ace408b" name="aeed2ec3b74a21dd29d3ab3853ace408b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeed2ec3b74a21dd29d3ab3853ace408b">&#9670;&nbsp;</a></span>iterative_solver_solve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1192,7 +1183,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">class(problem_class), intent(in)&#160;</td>
+          <td class="paramtype">class(problem_class), intent(inout), target&#160;</td>
           <td class="paramname"><em>problem</em>, </td>
         </tr>
         <tr>
@@ -1205,7 +1196,13 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">integer, optional&#160;</td>
-          <td class="paramname"><em>max_iter</em>&#160;</td>
+          <td class="paramname"><em>max_iter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, optional&#160;</td>
+          <td class="paramname"><em>max_p</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1321,7 +1318,537 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a0ec8e7c839d5189981da473f64b78ade" name="a0ec8e7c839d5189981da473f64b78ade"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ec8e7c839d5189981da473f64b78ade">&#9670;&nbsp;</a></span>solve_linear_eigensystem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public iterative_solver::solve_linear_eigensystem </td>
+          <td>(</td>
+          <td class="paramtype">double precision, dimension(..), intent(inout), target&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, dimension(..), intent(inout), target&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">class(problem_class), intent(inout), target&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>nroot</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, optional&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, optional&#160;</td>
+          <td class="paramname"><em>max_iter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, optional&#160;</td>
+          <td class="paramname"><em>max_p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, intent(in), optional&#160;</td>
+          <td class="paramname"><em>thresh</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, intent(in), optional&#160;</td>
+          <td class="paramname"><em>thresh_value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(in), optional&#160;</td>
+          <td class="paramname"><em>hermitian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>verbosity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len = *), intent(in), optional&#160;</td>
+          <td class="paramname"><em>pname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>mpicomm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len = *), intent(in), optional&#160;</td>
+          <td class="paramname"><em>algorithm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, dimension(2), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>range</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(*), intent(in), optional&#160;</td>
+          <td class="paramname"><em>options</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">nroot</td><td>number of eigensolutions desired</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">generate_initial_guess</td><td>whether to generate an initial guess (default) or use what is passed in parameters</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">max_iter</td><td>maximum number of iterations</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">max_p</td><td>maximum dimension of generated P space</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">thresh</td><td>convergence threshold</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">thresh_value</td><td>value convergence threshold</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hermitian</td><td>whether the underlying kernel is hermitian</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">verbosity</td><td>how much to print. Default is zero, which prints nothing except errors. One gives a summary at the end; two gives a single progress-report line each iteration.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pname</td><td>Profiler object name</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mpicomm</td><td>MPI communicator</td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">range</td><td>distributed array local range start and end indices</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">options</td><td>key1=value1, key2=value1,... to specify arbitrary options </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0ce14b9eca351507039f752494a53349" name="a0ce14b9eca351507039f752494a53349"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ce14b9eca351507039f752494a53349">&#9670;&nbsp;</a></span>solve_linear_equations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public iterative_solver::solve_linear_equations </td>
+          <td>(</td>
+          <td class="paramtype">double precision, dimension(..), intent(inout), target&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, dimension(..), intent(inout), target&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">class(problem_class), intent(inout)&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, optional&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, optional&#160;</td>
+          <td class="paramname"><em>max_iter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, optional&#160;</td>
+          <td class="paramname"><em>max_p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, intent(in), optional&#160;</td>
+          <td class="paramname"><em>augmented_hessian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, intent(in), optional&#160;</td>
+          <td class="paramname"><em>thresh</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, intent(in), optional&#160;</td>
+          <td class="paramname"><em>thresh_value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(in), optional&#160;</td>
+          <td class="paramname"><em>hermitian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>verbosity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len = *), intent(in), optional&#160;</td>
+          <td class="paramname"><em>pname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>mpicomm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len = *), intent(in), optional&#160;</td>
+          <td class="paramname"><em>algorithm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, dimension(2), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>range</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(*), intent(in), optional&#160;</td>
+          <td class="paramname"><em>options</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">generate_initial_guess</td><td>whether to generate an initial guess (default) or use what is passed in parameters</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">max_iter</td><td>maximum number of iterations</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">max_p</td><td>maximum dimension of generated P space</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">augmented_hessian</td><td>If zero, solve the inhomogeneous equations unmodified. If 1, solve instead the augmented hessian problem. Other values scale the augmented hessian damping.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">thresh</td><td>convergence threshold</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">thresh_value</td><td>value convergence threshold</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hermitian</td><td>whether the underlying kernel is hermitian</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">verbosity</td><td>how much to print. Default is zero, which prints nothing except errors. One gives a summary at the end; two gives a single progress-report line each iteration.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pname</td><td>Profiler object name</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mpicomm</td><td>MPI communicator</td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">range</td><td>distributed array local range start and end indices</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">options</td><td>key1=value1, key2=value1,... to specify arbitrary options </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a05c7eeda78e69ee7c484fe069ab0231b" name="a05c7eeda78e69ee7c484fe069ab0231b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05c7eeda78e69ee7c484fe069ab0231b">&#9670;&nbsp;</a></span>solve_nonlinear_equations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public iterative_solver::solve_nonlinear_equations </td>
+          <td>(</td>
+          <td class="paramtype">double precision, dimension(..), intent(inout), target&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, dimension(..), intent(inout), target&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">class(problem_class), intent(inout), target&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>nroot</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, optional&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, optional&#160;</td>
+          <td class="paramname"><em>max_iter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, intent(in), optional&#160;</td>
+          <td class="paramname"><em>thresh</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(in), optional&#160;</td>
+          <td class="paramname"><em>hermitian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>verbosity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len = *), intent(in), optional&#160;</td>
+          <td class="paramname"><em>pname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>mpicomm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len = *), intent(in), optional&#160;</td>
+          <td class="paramname"><em>algorithm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, dimension(2), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>range</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(*), intent(in), optional&#160;</td>
+          <td class="paramname"><em>options</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">nroot</td><td>number of eigensolutions desired</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">generate_initial_guess</td><td>whether to generate an initial guess (default) or use what is passed in parameters</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">max_iter</td><td>maximum number of iterations</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">thresh</td><td>convergence threshold</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hermitian</td><td>whether the underlying kernel is hermitian</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">verbosity</td><td>how much to print. Default is zero, which prints nothing except errors. One gives a summary at the end; two gives a single progress-report line each iteration.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pname</td><td>Profiler object name</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mpicomm</td><td>MPI communicator</td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">range</td><td>distributed array local range start and end indices</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">options</td><td>key1=value1, key2=value1,... to specify arbitrary options </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aafc0c445dbb353da38c92aa1ce4640f2" name="aafc0c445dbb353da38c92aa1ce4640f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafc0c445dbb353da38c92aa1ce4640f2">&#9670;&nbsp;</a></span>solve_optimization()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public iterative_solver::solve_optimization </td>
+          <td>(</td>
+          <td class="paramtype">double precision, dimension(..), intent(inout), target&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, dimension(..), intent(inout), target&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">class(problem_class), intent(inout), target&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>nroot</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, optional&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, optional&#160;</td>
+          <td class="paramname"><em>max_iter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, intent(in), optional&#160;</td>
+          <td class="paramname"><em>thresh</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double precision, intent(in), optional&#160;</td>
+          <td class="paramname"><em>thresh_value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(in), optional&#160;</td>
+          <td class="paramname"><em>hermitian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>verbosity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(in), optional&#160;</td>
+          <td class="paramname"><em>minimize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len = *), intent(in), optional&#160;</td>
+          <td class="paramname"><em>pname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>mpicomm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len = *), intent(in), optional&#160;</td>
+          <td class="paramname"><em>algorithm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, dimension(2), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>range</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(*), intent(in), optional&#160;</td>
+          <td class="paramname"><em>options</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">nroot</td><td>number of eigensolutions desired</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">generate_initial_guess</td><td>whether to generate an initial guess (default) or use what is passed in parameters</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">max_iter</td><td>maximum number of iterations</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">thresh</td><td>convergence threshold</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">thresh_value</td><td>value convergence threshold</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hermitian</td><td>whether the underlying kernel is hermitian</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">verbosity</td><td>how much to print. Default is zero, which prints nothing except errors. One gives a summary at the end; two gives a single progress-report line each iteration.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">minimize</td><td>whether to minimize (default) or maximize</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pname</td><td>Profiler object name</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mpicomm</td><td>MPI communicator</td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">range</td><td>distributed array local range start and end indices</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">options</td><td>key1=value1, key2=value1,... to specify arbitrary options </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a762cf435ede70697d8e9df140d410d27" name="a762cf435ede70697d8e9df140d410d27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a762cf435ede70697d8e9df140d410d27">&#9670;&nbsp;</a></span>test_select()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine iterative_solver::test_select</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="ad1ae0165bd555ba3fbf8d9c6e55d83c0" name="ad1ae0165bd555ba3fbf8d9c6e55d83c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1ae0165bd555ba3fbf8d9c6e55d83c0">&#9670;&nbsp;</a></span>current_problem</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">class(problem_class), pointer, public iterative_solver::current_problem</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a8e7b0afa0169579bd571c1aac764d4e8" name="a8e7b0afa0169579bd571c1aac764d4e8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8e7b0afa0169579bd571c1aac764d4e8">&#9670;&nbsp;</a></span>mpicomm_kind</h2>
 

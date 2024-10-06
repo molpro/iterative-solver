@@ -4,9 +4,14 @@ var annotated =
       [ "mpi_init", "interfaceiterative__solver_1_1mpi__init.html", null ],
       [ "mpi_rank_global", "interfaceiterative__solver_1_1mpi__rank__global.html", null ]
     ] ],
+    [ "iterative_solver_matrix_problem", "namespaceiterative__solver__matrix__problem.html", [
+      [ "matrix_problem", "structiterative__solver__matrix__problem_1_1matrix__problem.html", "structiterative__solver__matrix__problem_1_1matrix__problem" ]
+    ] ],
     [ "iterative_solver_problem", "namespaceiterative__solver__problem.html", [
-      [ "matrix_problem", "structiterative__solver__problem_1_1matrix__problem.html", "structiterative__solver__problem_1_1matrix__problem" ],
       [ "problem", "structiterative__solver__problem_1_1problem.html", "structiterative__solver__problem_1_1problem" ]
+    ] ],
+    [ "iterative_solver_pspace", "namespaceiterative__solver__pspace.html", [
+      [ "pspace", "structiterative__solver__pspace_1_1pspace.html", "structiterative__solver__pspace_1_1pspace" ]
     ] ],
     [ "molpro", "namespacemolpro.html", [
       [ "linalg", "namespacemolpro_1_1linalg.html", [
@@ -153,9 +158,6 @@ var annotated =
           [ "SVD", "structmolpro_1_1linalg_1_1itsolv_1_1SVD.html", "structmolpro_1_1linalg_1_1itsolv_1_1SVD" ]
         ] ]
       ] ]
-    ] ],
-    [ "try_iterative_solver_problem", "namespacetry__iterative__solver__problem.html", [
-      [ "my_problem", "structtry__iterative__solver__problem_1_1my__problem.html", null ]
     ] ],
     [ "Morse_problem", "classMorse__problem.html", "classMorse__problem" ]
 ];

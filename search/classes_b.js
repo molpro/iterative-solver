@@ -14,6 +14,7 @@ var searchData=
   ['proxy_3c_20r_2c_20q_20_3e_11',['Proxy&lt; R, Q &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
   ['proxy_3c_20r_2c_20r_20_3e_12',['Proxy&lt; R, R &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
   ['proxyhandle_13',['ProxyHandle',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1ProxyHandle.html',1,'molpro::linalg::array::ArrayHandler']]],
-  ['pspace_14',['PSpace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1PSpace.html',1,'molpro::linalg::itsolv::subspace']]],
-  ['pspace_3c_20r_2c_20p_20_3e_15',['PSpace&lt; R, P &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1PSpace.html',1,'molpro::linalg::itsolv::subspace']]]
+  ['pspace_14',['pspace',['../structiterative__solver__pspace_1_1pspace.html',1,'iterative_solver_pspace']]],
+  ['pspace_15',['PSpace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1PSpace.html',1,'molpro::linalg::itsolv::subspace']]],
+  ['pspace_3c_20r_2c_20p_20_3e_16',['PSpace&lt; R, P &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1PSpace.html',1,'molpro::linalg::itsolv::subspace']]]
 ];

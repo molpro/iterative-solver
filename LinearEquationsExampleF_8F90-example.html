@@ -97,55 +97,79 @@ $(document).ready(function(){initNavTree('LinearEquationsExampleF_8F90-example.h
 <p >@examples LinearEigensystemExampleF.F90 This is an example of simplest use of the LinearEigensystem framework for iterative finding of the lowest few eigensolutions of a large matrix.</p>
 <p >@examples LinearEigensystemExampleF.F90 This is an example of simplest use of the LinearEigensystem framework for iterative finding of the lowest few eigensolutions of a large matrix. This is an examples of simplest use of the LinearEquations framework for iterative solution of linear equations</p>
 <div class="fragment"><div class="line"><span class="lineno">    1</span> </div>
-<div class="line"><span class="lineno">    4</span><span class="keyword">PROGRAM</span> linear_equations_example</div>
-<div class="line"><span class="lineno">    5</span>  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver.html">iterative_solver</a></div>
-<div class="line"><span class="lineno">    6</span>  <span class="keywordtype">IMPLICIT NONE</span></div>
-<div class="line"><span class="lineno">    7</span>  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 30, nroot = 2</div>
-<div class="line"><span class="lineno">    8</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">PARAMETER</span> :: alpha = 300</div>
-<div class="line"><span class="lineno">    9</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION(5)</span>, <span class="keywordtype">PARAMETER</span> :: augmented_hessian_factors = [0.0_8, .001_8, .01_8, .1_8, 1.0_8]</div>
-<div class="line"><span class="lineno">   10</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, n)</span> :: m</div>
-<div class="line"><span class="lineno">   11</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, nroot)</span> :: c, g, rhs</div>
-<div class="line"><span class="lineno">   12</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (nroot)</span> :: error</div>
-<div class="line"><span class="lineno">   13</span>  <span class="keywordtype">DOUBLE PRECISION</span> :: augmented_hessian</div>
-<div class="line"><span class="lineno">   14</span>  <span class="keywordtype">INTEGER</span> :: i, j, root, iaug, nwork</div>
-<div class="line"><span class="lineno">   15</span>  <span class="keywordtype">LOGICAL</span> :: converged</div>
-<div class="line"><span class="lineno">   16</span>  print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver&#39;</span></div>
-<div class="line"><span class="lineno">   17</span>  <span class="keyword">call </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a></div>
-<div class="line"><span class="lineno">   18</span>  <span class="keywordflow">DO</span> i = 1, n; m(i, i) = alpha * i + 2 * i - 2; <span class="keywordflow">DO</span> j = 1, n; <span class="keywordflow">IF</span> (i.NE.j) m(i, j) = i + j - 2;</div>
-<div class="line"><span class="lineno">   19</span>  <span class="keyword">END </span>do;</div>
-<div class="line"><span class="lineno">   20</span><span class="keywordflow">  END DO</span></div>
-<div class="line"><span class="lineno">   21</span>  <span class="keywordflow">DO</span> i = 1, nroot; <span class="keywordflow">DO</span> j = 1, n; rhs(j, i) = 1 / dble(j + i - 1);</div>
-<div class="line"><span class="lineno">   22</span>  <span class="keyword">END </span>do;</div>
-<div class="line"><span class="lineno">   23</span><span class="keywordflow">  END DO</span></div>
-<div class="line"><span class="lineno">   24</span>  nwork = nroot</div>
-<div class="line"><span class="lineno">   25</span>  <span class="keywordflow">DO</span> iaug = 1, <span class="keyword">SIZE</span>(augmented_hessian_factors)</div>
-<div class="line"><span class="lineno">   26</span>    augmented_hessian = augmented_hessian_factors(iaug)</div>
-<div class="line"><span class="lineno">   27</span>    print *, <span class="stringliteral">&#39;solve linear system with augmented hessian factor &#39;</span>, augmented_hessian</div>
-<div class="line"><span class="lineno">   28</span>    <span class="keyword">CALL </span>iterative_solver_linear_equations_initialize(n, nroot, rhs, augmented_hessian, thresh = 1d-11, verbosity = 1)</div>
-<div class="line"><span class="lineno">   29</span>    c = 0; <span class="keywordflow">DO</span> i = 1, nroot; c(i, i) = 1;</div>
-<div class="line"><span class="lineno">   30</span><span class="keywordflow">    ENDDO</span></div>
-<div class="line"><span class="lineno">   31</span>    <span class="keywordflow">DO</span> i = 1, n</div>
-<div class="line"><span class="lineno">   32</span>      g = matmul(m, c)</div>
-<div class="line"><span class="lineno">   33</span>      nwork = iterative_solver_add_vector(c, g)</div>
-<div class="line"><span class="lineno">   34</span>        <span class="keywordflow">DO</span> root = 1, nwork</div>
-<div class="line"><span class="lineno">   35</span>          <span class="keywordflow">DO</span> j = 1, n</div>
-<div class="line"><span class="lineno">   36</span>            c(j, root) = c(j, root) - g(j, root) / m(j, j)</div>
-<div class="line"><span class="lineno">   37</span><span class="keywordflow">          END DO</span></div>
-<div class="line"><span class="lineno">   38</span><span class="keywordflow">        END DO</span></div>
-<div class="line"><span class="lineno">   39</span>      nwork = iterative_solver_end_iteration(c, g)</div>
-<div class="line"><span class="lineno">   40</span>      <span class="keywordflow">IF</span> (nwork .LE. 0) <span class="keywordflow">EXIT</span></div>
-<div class="line"><span class="lineno">   41</span><span class="keywordflow">    END DO</span></div>
-<div class="line"><span class="lineno">   42</span>    print *, <span class="stringliteral">&#39;error =&#39;</span>, iterative_solver_errors()</div>
-<div class="line"><span class="lineno">   43</span>    <span class="keywordflow">DO</span> i = 1, nroot</div>
-<div class="line"><span class="lineno">   44</span>      print *, <span class="stringliteral">&#39;solution &#39;</span>, c(1 : min(n, 10), i)</div>
-<div class="line"><span class="lineno">   45</span><span class="keywordflow">    END DO</span></div>
-<div class="line"><span class="lineno">   46</span>    <span class="keyword">Call </span>iterative_solver_print_statistics</div>
-<div class="line"><span class="lineno">   47</span>    <span class="keyword">CALL </span>iterative_solver_finalize</div>
-<div class="line"><span class="lineno">   48</span><span class="keywordflow">  ENDDO</span></div>
-<div class="line"><span class="lineno">   49</span>  <span class="keyword">CALL </span>mpi_finalize</div>
-<div class="line"><span class="lineno">   50</span><span class="keyword">END PROGRAM </span>linear_equations_example</div>
-<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:46</div></div>
+<div class="line"><span class="lineno">    4</span><span class="keyword">module</span> mod_linear_problem</div>
+<div class="line"><span class="lineno">    5</span>  <span class="keywordtype">use </span><a class="code hl_namespace" href="namespaceiterative__solver__problem.html">iterative_solver_problem</a>, <span class="keywordtype">only</span> : <a class="code hl_struct" href="structiterative__solver__problem_1_1problem.html">problem</a></div>
+<div class="line"><span class="lineno">    6</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">PARAMETER</span> :: alpha = 300</div>
+<div class="line"><span class="lineno">    7</span>  <span class="keyword">type</span>, <span class="keyword">extends</span>(<a class="code hl_struct" href="structiterative__solver__problem_1_1problem.html">problem</a>) :: linear_problem</div>
+<div class="line"><span class="lineno">    8</span>    <span class="keywordtype">integer</span> :: n, nroot</div>
+<div class="line"><span class="lineno">    9</span>  <span class="keyword">contains</span></div>
+<div class="line"><span class="lineno">   10</span>    <span class="keywordtype">procedure</span>, pass :: action</div>
+<div class="line"><span class="lineno">   11</span>    <span class="keywordtype">procedure</span>, pass :: RHS</div>
+<div class="line"><span class="lineno">   12</span>    <span class="keywordtype">procedure</span>, pass :: diagonals</div>
+<div class="line"><span class="lineno">   13</span>  <span class="keyword">end type </span>linear_problem</div>
+<div class="line"><span class="lineno">   14</span><span class="keyword">contains</span></div>
+<div class="line"><span class="lineno">   15</span>  <span class="keyword">subroutine </span>action(this, parameters, actions, range)</div>
+<div class="line"><span class="lineno">   16</span>    <span class="keywordtype">class</span>(linear_problem), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><span class="lineno">   17</span>    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:, :)</span> :: parameters</div>
+<div class="line"><span class="lineno">   18</span>    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:, :)</span> :: actions</div>
+<div class="line"><span class="lineno">   19</span>    <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(2)</span>, <span class="keywordtype">intent(in)</span> :: range</div>
+<div class="line"><span class="lineno">   20</span>    <span class="keywordtype">integer</span> :: i, j, k</div>
+<div class="line"><span class="lineno">   21</span>    <span class="keywordflow">do</span> k = lbound(parameters, 2), ubound(parameters, 2)</div>
+<div class="line"><span class="lineno">   22</span>      <span class="keywordflow">do</span> i = range(1) + 1, range(2)</div>
+<div class="line"><span class="lineno">   23</span>        actions(i, k) = alpha * i * parameters(i, k)</div>
+<div class="line"><span class="lineno">   24</span>        <span class="keywordflow">do</span> j = 1, this%n</div>
+<div class="line"><span class="lineno">   25</span>          actions(i, k) = actions(i, k) + dble(i + j - 2) * parameters(j, k)</div>
+<div class="line"><span class="lineno">   26</span><span class="keywordflow">        end do</span></div>
+<div class="line"><span class="lineno">   27</span><span class="keywordflow">      end do</span></div>
+<div class="line"><span class="lineno">   28</span><span class="keywordflow">    end do</span></div>
+<div class="line"><span class="lineno">   29</span>  <span class="keyword">end subroutine </span>action</div>
+<div class="line"><span class="lineno">   30</span>  <span class="keyword">logical </span><span class="keyword">function </span>diagonals(this, d)</div>
+<div class="line"><span class="lineno">   31</span>    <span class="keywordtype">class</span>(linear_problem), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><span class="lineno">   32</span>    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:)</span> :: d</div>
+<div class="line"><span class="lineno">   33</span>    <span class="keywordtype">integer</span> :: i</div>
+<div class="line"><span class="lineno">   34</span>    <span class="keywordflow">do</span> i = 1, this%n</div>
+<div class="line"><span class="lineno">   35</span>      d(i) = alpha * i + 2 * i - 2</div>
+<div class="line"><span class="lineno">   36</span><span class="keywordflow">    end do</span></div>
+<div class="line"><span class="lineno">   37</span>    diagonals = .true.</div>
+<div class="line"><span class="lineno">   38</span>  <span class="keyword">end function </span>diagonals</div>
+<div class="line"><span class="lineno">   39</span>  <span class="keyword">logical </span><span class="keyword">function </span>rhs(this, vector, instance, range)</div>
+<div class="line"><span class="lineno">   40</span>    <span class="keywordtype">class</span>(linear_problem), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><span class="lineno">   41</span>    <span class="keywordtype">double precision</span>, <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:)</span> :: vector</div>
+<div class="line"><span class="lineno">   42</span>    <span class="keywordtype">integer</span>, <span class="keywordtype">intent(in)</span> :: instance</div>
+<div class="line"><span class="lineno">   43</span>    <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(2)</span>, <span class="keywordtype">intent(in)</span> :: range</div>
+<div class="line"><span class="lineno">   44</span>    <span class="keywordtype">integer</span> :: i</div>
+<div class="line"><span class="lineno">   45</span>    rhs = .false.</div>
+<div class="line"><span class="lineno">   46</span>    <span class="keywordflow">if</span> (instance.lt.1 .or. instance.gt.this%nroot) <span class="keywordflow">return</span></div>
+<div class="line"><span class="lineno">   47</span>    rhs = .true.</div>
+<div class="line"><span class="lineno">   48</span>    <span class="keywordflow">do</span> i = range(1) + 1, range(2)</div>
+<div class="line"><span class="lineno">   49</span>      vector(i) = 1 / dble(i + instance - 1)</div>
+<div class="line"><span class="lineno">   50</span><span class="keywordflow">    end do</span></div>
+<div class="line"><span class="lineno">   51</span>  <span class="keyword">end function </span>rhs</div>
+<div class="line"><span class="lineno">   52</span><span class="keyword">end module </span>mod_linear_problem</div>
+<div class="line"><span class="lineno">   53</span> </div>
+<div class="line"><span class="lineno">   54</span><span class="keyword">PROGRAM</span> linear_equations_example</div>
+<div class="line"><span class="lineno">   55</span>  <span class="keywordtype">USE </span><a class="code hl_namespace" href="namespaceiterative__solver.html">iterative_solver</a></div>
+<div class="line"><span class="lineno">   56</span>  <span class="keywordtype">USE </span>mod_linear_problem, <span class="keywordtype">only</span> : linear_problem</div>
+<div class="line"><span class="lineno">   57</span>  <span class="keywordtype">IMPLICIT NONE</span></div>
+<div class="line"><span class="lineno">   58</span>  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 30, nroot = 2</div>
+<div class="line"><span class="lineno">   59</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, nroot)</span> :: c, g</div>
+<div class="line"><span class="lineno">   60</span>  <span class="keywordtype">TYPE</span>(linear_problem) :: problem</div>
+<div class="line"><span class="lineno">   61</span>  <span class="keyword">call </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a></div>
+<div class="line"><span class="lineno">   62</span>  <span class="keywordflow">IF</span> (<a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__rank__global.html">mpi_rank_global</a>() .gt. 0) <span class="keyword">close</span>(6)</div>
+<div class="line"><span class="lineno">   63</span>  print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver&#39;</span></div>
+<div class="line"><span class="lineno">   64</span>  problem%n = n</div>
+<div class="line"><span class="lineno">   65</span>  problem%nroot = nroot</div>
+<div class="line"><span class="lineno">   66</span>  <span class="keyword">CALL </span>solve_linear_equations(c, g, problem, thresh = 1d-11, verbosity = 2)</div>
+<div class="line"><span class="lineno">   67</span>  print*, <span class="stringliteral">&#39;convergence?&#39;</span>, iterative_solver_converged(), <span class="stringliteral">&#39;, residual length: &#39;</span>, norm2(g)</div>
+<div class="line"><span class="lineno">   68</span>  <span class="keyword">CALL </span>iterative_solver_print_statistics</div>
+<div class="line"><span class="lineno">   69</span>  <span class="keyword">CALL </span>iterative_solver_finalize</div>
+<div class="line"><span class="lineno">   70</span>  <span class="keyword">CALL </span>mpi_finalize</div>
+<div class="line"><span class="lineno">   71</span><span class="keyword">END PROGRAM </span>linear_equations_example</div>
+<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:53</div></div>
+<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__rank__global_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__rank__global.html">iterative_solver::mpi_rank_global</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:61</div></div>
+<div class="ttc" id="anamespaceiterative__solver__problem_html"><div class="ttname"><a href="namespaceiterative__solver__problem.html">iterative_solver_problem</a></div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Problem.F90:1</div></div>
 <div class="ttc" id="anamespaceiterative__solver_html"><div class="ttname"><a href="namespaceiterative__solver.html">iterative_solver</a></div><div class="ttdoc">IterativeSolver Fortran binding.</div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:2</div></div>
+<div class="ttc" id="astructiterative__solver__problem_1_1problem_html"><div class="ttname"><a href="structiterative__solver__problem_1_1problem.html">iterative_solver_problem::problem</a></div><div class="ttdoc">Abstract class defining the problem-specific interface for the simplified solver interface to Iterati...</div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Problem.F90:7</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('structiterative__solver__problem_1_1pr
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structiterative__solver__problem_1_1problem-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">iterative_solver_problem::problem Type Reference</div></div>
 </div><!--header-->
@@ -105,9 +106,8 @@ Inheritance diagram for iterative_solver_problem::problem:</div>
 <div class="dyncontent">
 <div class="center"><img src="structiterative__solver__problem_1_1problem__inherit__graph.png" border="0" usemap="#aiterative__solver__problem_1_1problem_inherit__map" alt="Inheritance graph"/></div>
 <map name="aiterative__solver__problem_1_1problem_inherit__map" id="aiterative__solver__problem_1_1problem_inherit__map">
-<area shape="rect" title="Abstract class defining the problem&#45;specific interface for the simplified solver interface to Iterati..." alt="" coords="107,5,292,47"/>
-<area shape="rect" href="structiterative__solver__problem_1_1matrix__problem.html" title=" " alt="" coords="5,95,191,136"/>
-<area shape="rect" href="structtry__iterative__solver__problem_1_1my__problem.html" title=" " alt="" coords="215,95,389,136"/>
+<area shape="rect" title="Abstract class defining the problem&#45;specific interface for the simplified solver interface to Iterati..." alt="" coords="10,5,195,47"/>
+<area shape="rect" href="structiterative__solver__matrix__problem_1_1matrix__problem.html" title="A specialisation of the Problem class for linear problems in which the kernel matrix is stored in ful..." alt="" coords="5,95,200,136"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -123,8 +123,19 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adf9c229878bfe6bac1c0e0967a94428c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a061ed74cbe7993c76ccee00b75218a93"><td class="memItemLeft" align="right" valign="top">procedure, pass&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiterative__solver__problem_1_1problem.html#a061ed74cbe7993c76ccee00b75218a93">action</a></td></tr>
 <tr class="separator:a061ed74cbe7993c76ccee00b75218a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5134b99305b8e07054d0a3e7eb0c246d"><td class="memItemLeft" align="right" valign="top">procedure, pass&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiterative__solver__problem_1_1problem.html#a5134b99305b8e07054d0a3e7eb0c246d">rhs</a></td></tr>
+<tr class="separator:a5134b99305b8e07054d0a3e7eb0c246d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab226e906c11bbee23169e73ca6f12280"><td class="memItemLeft" align="right" valign="top">procedure, pass&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiterative__solver__problem_1_1problem.html#ab226e906c11bbee23169e73ca6f12280">report</a></td></tr>
 <tr class="separator:ab226e906c11bbee23169e73ca6f12280"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a284e747ad56ea8980eaf65123547db8a"><td class="memItemLeft" align="right" valign="top">procedure, pass&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiterative__solver__problem_1_1problem.html#a284e747ad56ea8980eaf65123547db8a">p_action</a></td></tr>
+<tr class="separator:a284e747ad56ea8980eaf65123547db8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92f51ae6a758597adc86539eb92e10f9"><td class="memItemLeft" align="right" valign="top">procedure, pass&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiterative__solver__problem_1_1problem.html#a92f51ae6a758597adc86539eb92e10f9">pp_action_matrix</a></td></tr>
+<tr class="separator:a92f51ae6a758597adc86539eb92e10f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a0ee091c82a63ba2ffe604fe5713c79eb"><td class="memItemLeft" align="right" valign="top">type(<a class="el" href="structiterative__solver__pspace_1_1pspace.html">pspace</a>)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiterative__solver__problem_1_1problem.html#a0ee091c82a63ba2ffe604fe5713c79eb">p_space</a></td></tr>
+<tr class="separator:a0ee091c82a63ba2ffe604fe5713c79eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function/Subroutine Documentation</h2>
 <a id="a061ed74cbe7993c76ccee00b75218a93" name="a061ed74cbe7993c76ccee00b75218a93"></a>
@@ -149,6 +160,34 @@ Public Member Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">procedure, pass iterative_solver_problem::problem::diagonals</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a284e747ad56ea8980eaf65123547db8a" name="a284e747ad56ea8980eaf65123547db8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a284e747ad56ea8980eaf65123547db8a">&#9670;&nbsp;</a></span>p_action()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">procedure, pass iterative_solver_problem::problem::p_action</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a92f51ae6a758597adc86539eb92e10f9" name="a92f51ae6a758597adc86539eb92e10f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92f51ae6a758597adc86539eb92e10f9">&#9670;&nbsp;</a></span>pp_action_matrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">procedure, pass iterative_solver_problem::problem::pp_action_matrix</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -191,6 +230,35 @@ Public Member Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">procedure, pass iterative_solver_problem::problem::residual</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5134b99305b8e07054d0a3e7eb0c246d" name="a5134b99305b8e07054d0a3e7eb0c246d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5134b99305b8e07054d0a3e7eb0c246d">&#9670;&nbsp;</a></span>rhs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">procedure, pass iterative_solver_problem::problem::rhs</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a0ee091c82a63ba2ffe604fe5713c79eb" name="a0ee091c82a63ba2ffe604fe5713c79eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ee091c82a63ba2ffe604fe5713c79eb">&#9670;&nbsp;</a></span>p_space</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">type(<a class="el" href="structiterative__solver__pspace_1_1pspace.html">pspace</a>) iterative_solver_problem::problem::p_space</td>
         </tr>
       </table>
 </div><div class="memdoc">

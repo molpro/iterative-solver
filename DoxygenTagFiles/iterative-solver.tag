@@ -6353,6 +6353,13 @@
     </member>
     <member kind="function">
       <type>bool</type>
+      <name>solve</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
+      <anchor>a070cbeddff5d6ca1b30055fa7b30f8ef</anchor>
+      <arglist>(const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;actions, const Problem&lt; R &gt; &amp;problem, bool generate_initial_guess=false) override</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
       <name>nonlinear</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
       <anchor>a6bf15f4b37f912dc22393997154cdca7</anchor>
@@ -7339,28 +7346,63 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>iterative_solver_problem::matrix_problem</name>
-    <filename>structiterative__solver__problem_1_1matrix__problem.html</filename>
+    <name>iterative_solver_matrix_problem::matrix_problem</name>
+    <filename>structiterative__solver__matrix__problem_1_1matrix__problem.html</filename>
     <base>iterative_solver_problem::problem</base>
     <member kind="function">
       <type>procedure, pass</type>
+      <name>attach</name>
+      <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>ad3e7f40dd9b3fa1ad2158177f35159fe</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>rhs</name>
+      <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>a9be92f8f1a735537f99d8ebf7ff5aa96</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
       <name>diagonals</name>
-      <anchorfile>structiterative__solver__problem_1_1matrix__problem.html</anchorfile>
-      <anchor>ada705c5dde5040bb0c04d52f4afd5311</anchor>
-      <arglist>=&gt; matrix_diagonals</arglist>
+      <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>ab0d932f2cd05b9063f260222ad4753ed</anchor>
+      <arglist></arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>action</name>
-      <anchorfile>structiterative__solver__problem_1_1matrix__problem.html</anchorfile>
-      <anchor>af2dbc92bce3d455a45473bc2bc67f6b9</anchor>
-      <arglist>=&gt; matrix_action</arglist>
+      <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>ac59b38994c3c8d34a0a2edb6d85edca2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>pp_action_matrix</name>
+      <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>adf41b7d9e3a624890c717a9707a9759f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>p_action</name>
+      <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>a36009c3afe206e116e1589314c66578c</anchor>
+      <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>double precision, dimension(:,:), pointer</type>
+      <type>double precision, dimension(:, :), pointer</type>
       <name>matrix</name>
-      <anchorfile>structiterative__solver__problem_1_1matrix__problem.html</anchorfile>
-      <anchor>aacc8abaebfadfd7d651f8ebb36f7bace</anchor>
+      <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>a1f2b6aeb15895857cb5bf552d5acfd8a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double precision, dimension(:, :), pointer</type>
+      <name>m_rhs</name>
+      <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
+      <anchor>a53f0fec7e5f7adf8290927ffec385d9e</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -7390,11 +7432,6 @@
   <compound kind="interface">
     <name>iterative_solver::mpi_rank_global</name>
     <filename>interfaceiterative__solver_1_1mpi__rank__global.html</filename>
-  </compound>
-  <compound kind="struct">
-    <name>try_iterative_solver_problem::my_problem</name>
-    <filename>structtry__iterative__solver__problem_1_1my__problem.html</filename>
-    <base>iterative_solver_problem::problem</base>
   </compound>
   <compound kind="struct">
     <name>molpro::linalg::itsolv::subspace::xspace::NewData</name>
@@ -8181,9 +8218,37 @@
     </member>
     <member kind="function">
       <type>procedure, pass</type>
+      <name>rhs</name>
+      <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
+      <anchor>a5134b99305b8e07054d0a3e7eb0c246d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
       <name>report</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
       <anchor>ab226e906c11bbee23169e73ca6f12280</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>p_action</name>
+      <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
+      <anchor>a284e747ad56ea8980eaf65123547db8a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>pp_action_matrix</name>
+      <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
+      <anchor>a92f51ae6a758597adc86539eb92e10f9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>type(pspace)</type>
+      <name>p_space</name>
+      <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
+      <anchor>a0ee091c82a63ba2ffe604fe5713c79eb</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -8254,6 +8319,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Problem.html</anchorfile>
       <anchor>af0feba50834c98b633107e407900535b</anchor>
       <arglist>(const VecRef&lt; R &gt; &amp;residual, const std::vector&lt; value_t &gt; &amp;shift, const R &amp;diagonals) const</arglist>
+    </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual bool</type>
+      <name>RHS</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Problem.html</anchorfile>
+      <anchor>ae783f40d90e529325975408e94c3291c</anchor>
+      <arglist>(R &amp;RHS, unsigned int instance) const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual std::vector&lt; double &gt;</type>
@@ -8509,6 +8581,73 @@
       <name>m_off</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1ProxyHandle.html</anchorfile>
       <anchor>a9afd8b7fefd3a00507666f8197c0f934</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>iterative_solver_pspace::pspace</name>
+    <filename>structiterative__solver__pspace_1_1pspace.html</filename>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>add_complex</name>
+      <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
+      <anchor>a70bb8096bb364df84977c4e6291e99e6</anchor>
+      <arglist>=&gt; pspace_add_complex</arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>add_simple</name>
+      <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
+      <anchor>a0d239e70d6b9d6cbc8618859b4f91952</anchor>
+      <arglist>=&gt; pspace_add_simple</arglist>
+    </member>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>ensure</name>
+      <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
+      <anchor>a49827a40cea8691669ce6918e112729e</anchor>
+      <arglist>=&gt; pspace_ensure</arglist>
+    </member>
+    <member kind="function">
+      <type>final</type>
+      <name>pspace_final</name>
+      <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
+      <anchor>a0fb398b66fd222ec8ce0e31879d431d9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>integer, dimension(:), allocatable</type>
+      <name>indices</name>
+      <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
+      <anchor>a68c4f66b40654f8a3b47b632a5ab07aa</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>integer, dimension(:), allocatable</type>
+      <name>offsets</name>
+      <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
+      <anchor>ac73ce551415e7871f146b2ae06aea58e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double precision, dimension(:), allocatable</type>
+      <name>coefficients</name>
+      <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
+      <anchor>ab401c8d6b3adfe8a8a94d1e899ddfa51</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>integer</type>
+      <name>size</name>
+      <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
+      <anchor>a424431302b02c7b600beffee763a70be</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>logical</type>
+      <name>simple</name>
+      <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
+      <anchor>a31ded964a3790fad6862674ec5822a14</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -10269,6 +10408,13 @@
     <class kind="interface">iterative_solver::mpi_init</class>
     <class kind="interface">iterative_solver::mpi_rank_global</class>
     <member kind="function">
+      <type>subroutine</type>
+      <name>test_select</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>a762cf435ede70697d8e9df140d410d27</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
       <type>integer(kind=mpicomm_kind) function, public</type>
       <name>mpicomm_compute</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
@@ -10281,6 +10427,34 @@
       <anchorfile>namespaceiterative__solver.html</anchorfile>
       <anchor>a508258aa021cc2d872fba06bd1cff849</anchor>
       <arglist>(comm)</arglist>
+    </member>
+    <member kind="function">
+      <type>subroutine, public</type>
+      <name>solve_linear_eigensystem</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>a0ec8e7c839d5189981da473f64b78ade</anchor>
+      <arglist>(parameters, actions, problem, nroot, generate_initial_guess, max_iter, max_p, thresh, thresh_value, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</arglist>
+    </member>
+    <member kind="function">
+      <type>subroutine, public</type>
+      <name>solve_linear_equations</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>a0ce14b9eca351507039f752494a53349</anchor>
+      <arglist>(parameters, actions, problem, generate_initial_guess, max_iter, max_p, augmented_hessian, thresh, thresh_value, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</arglist>
+    </member>
+    <member kind="function">
+      <type>subroutine, public</type>
+      <name>solve_nonlinear_equations</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>a05c7eeda78e69ee7c484fe069ab0231b</anchor>
+      <arglist>(parameters, actions, problem, nroot, generate_initial_guess, max_iter, thresh, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</arglist>
+    </member>
+    <member kind="function">
+      <type>subroutine, public</type>
+      <name>solve_optimization</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>aafc0c445dbb353da38c92aa1ce4640f2</anchor>
+      <arglist>(parameters, actions, problem, nroot, generate_initial_guess, max_iter, thresh, thresh_value, hermitian, verbosity, minimize, pname, mpicomm, algorithm, range, options)</arglist>
     </member>
     <member kind="function">
       <type>subroutine, public</type>
@@ -10318,11 +10492,25 @@
       <arglist></arglist>
     </member>
     <member kind="function">
+      <type>integer function, dimension(2)</type>
+      <name>iterative_solver_range</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>a2174400663d4e6e433bf197150e423ce</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
       <type>integer function, public</type>
       <name>iterative_solver_add_vector</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
       <anchor>a70258968c6cc6e822b9008afcccd8a79</anchor>
       <arglist>(parameters, action, synchronize, value)</arglist>
+    </member>
+    <member kind="function">
+      <type>subroutine</type>
+      <name>iterative_solver_add_equations</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>aa8b03a6e82fb1df6df6b25e5017d3714</anchor>
+      <arglist>(rhs)</arglist>
     </member>
     <member kind="function">
       <type>subroutine, public</type>
@@ -10384,8 +10572,22 @@
       <type>subroutine, public</type>
       <name>iterative_solver_solve</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
-      <anchor>a1c16d60f650492b99c576d20b2af5d15</anchor>
-      <arglist>(parameters, actions, problem, generate_initial_guess, max_iter)</arglist>
+      <anchor>aeed2ec3b74a21dd29d3ab3853ace408b</anchor>
+      <arglist>(parameters, actions, problem, generate_initial_guess, max_iter, max_p)</arglist>
+    </member>
+    <member kind="function">
+      <type>logical function, public</type>
+      <name>iterative_solver_converged</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>a3e077733271d54ad4d3182d2d9aeb9ab</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>subroutine, public</type>
+      <name>apply_p_current_problem</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>af549c18c82c1991ba10874982d745626</anchor>
+      <arglist>(p, g, nvec, ranges)</arglist>
     </member>
     <member kind="variable">
       <type>integer, parameter, public</type>
@@ -10394,11 +10596,29 @@
       <anchor>a8e7b0afa0169579bd571c1aac764d4e8</anchor>
       <arglist></arglist>
     </member>
+    <member kind="variable">
+      <type>class(problem_class), pointer, public</type>
+      <name>current_problem</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>ad1ae0165bd555ba3fbf8d9c6e55d83c0</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="namespace">
+    <name>iterative_solver_matrix_problem</name>
+    <filename>namespaceiterative__solver__matrix__problem.html</filename>
+    <class kind="type">iterative_solver_matrix_problem::matrix_problem</class>
+    <member kind="function">
+      <type>subroutine</type>
+      <name>attach</name>
+      <anchorfile>namespaceiterative__solver__matrix__problem.html</anchorfile>
+      <anchor>a25d2e7a2cfa8e72dc78666f215609087</anchor>
+      <arglist>(this, matrix, RHS)</arglist>
+    </member>
   </compound>
   <compound kind="namespace">
     <name>iterative_solver_problem</name>
     <filename>namespaceiterative__solver__problem.html</filename>
-    <class kind="type">iterative_solver_problem::matrix_problem</class>
     <class kind="type">iterative_solver_problem::problem</class>
     <member kind="function">
       <type>logical function</type>
@@ -10406,6 +10626,18 @@
       <anchorfile>namespaceiterative__solver__problem.html</anchorfile>
       <anchor>ad69a0529c3ca725bddee33e94375e6d3</anchor>
       <arglist>(this, d)</arglist>
+    </member>
+  </compound>
+  <compound kind="namespace">
+    <name>iterative_solver_pspace</name>
+    <filename>namespaceiterative__solver__pspace.html</filename>
+    <class kind="type">iterative_solver_pspace::pspace</class>
+    <member kind="function">
+      <type>subroutine</type>
+      <name>pspace_ensure</name>
+      <anchorfile>namespaceiterative__solver__pspace.html</anchorfile>
+      <anchor>a2783f91d094f117bfdabfb21b3d97864</anchor>
+      <arglist>(this)</arglist>
     </member>
   </compound>
   <compound kind="namespace">
@@ -11254,6 +11486,27 @@
       <arglist>(const std::string &amp;method=&quot;Davidson&quot;, const std::string &amp;options=&quot;&quot;, const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers=std::make_shared&lt; molpro::linalg::itsolv::ArrayHandlers&lt; R, Q, P &gt; &gt;())</arglist>
     </member>
     <member kind="function">
+      <type>std::tuple&lt; bool, std::unique_ptr&lt; LinearEquations&lt; R, Q, P &gt; &gt; &gt;</type>
+      <name>Solve_LinearEquations</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a48c0611afbf73cb378d2124967668ace</anchor>
+      <arglist>(const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;actions, const Problem&lt; R &gt; &amp;problem, int verbosity=0, bool generate_initial_guess=true, const std::string &amp;method=&quot;Davidson&quot;, const std::string &amp;options=&quot;&quot;, const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers=std::make_shared&lt; molpro::linalg::itsolv::ArrayHandlers&lt; R, Q, P &gt; &gt;())</arglist>
+    </member>
+    <member kind="function">
+      <type>std::tuple&lt; bool, std::unique_ptr&lt; LinearEquations&lt; R, Q, P &gt; &gt; &gt;</type>
+      <name>Solve_LinearEquations</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>ab88f1f046717dbab4c74ce7758540162</anchor>
+      <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, const Problem&lt; R &gt; &amp;problem, int verbosity=0, bool generate_initial_guess=true, const std::string &amp;method=&quot;Davidson&quot;, const std::string &amp;options=&quot;&quot;, const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers=std::make_shared&lt; molpro::linalg::itsolv::ArrayHandlers&lt; R, Q, P &gt; &gt;())</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>Solve_LinearEquations</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>aacae3cfb0660f054b3def5468355b6b9</anchor>
+      <arglist>(R &amp;parameters, R &amp;actions, const Problem&lt; R &gt; &amp;problem, int verbosity=0, bool generate_initial_guess=true, const std::string &amp;method=&quot;Davidson&quot;, const std::string &amp;options=&quot;&quot;, const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers=std::make_shared&lt; molpro::linalg::itsolv::ArrayHandlers&lt; R, Q, P &gt; &gt;())</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; NonLinearEquations&lt; R, Q, P &gt; &gt;</type>
       <name>create_NonLinearEquations</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
@@ -11754,18 +12007,6 @@
   <compound kind="namespace">
     <name>molpro::profiler</name>
     <filename>namespacemolpro_1_1profiler.html</filename>
-  </compound>
-  <compound kind="namespace">
-    <name>try_iterative_solver_problem</name>
-    <filename>namespacetry__iterative__solver__problem.html</filename>
-    <class kind="type">try_iterative_solver_problem::my_problem</class>
-    <member kind="function">
-      <type>subroutine</type>
-      <name>try</name>
-      <anchorfile>namespacetry__iterative__solver__problem.html</anchorfile>
-      <anchor>a44848738a7f6f45ceddfffd5cfb2628d</anchor>
-      <arglist></arglist>
-    </member>
   </compound>
   <compound kind="page">
     <name>md____w_iterative_solver_iterative_solver_doc_LibraryDesign</name>

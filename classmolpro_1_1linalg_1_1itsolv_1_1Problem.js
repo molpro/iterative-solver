@@ -11,5 +11,6 @@ var classmolpro_1_1linalg_1_1itsolv_1_1Problem =
     [ "precondition", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a48be93529023c863f0631a2bcbafb64c", null ],
     [ "precondition", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#af0feba50834c98b633107e407900535b", null ],
     [ "residual", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ac8af88717d898dce1e6ae0884142ea6d", null ],
+    [ "RHS", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ae783f40d90e529325975408e94c3291c", null ],
     [ "test_parameters", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ae2396d45227f1ffaa7f71da4a5087f1f", null ]
 ];

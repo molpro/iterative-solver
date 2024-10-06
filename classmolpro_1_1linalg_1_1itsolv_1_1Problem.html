@@ -152,6 +152,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af0feba50834c98b633107e407900535b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#af0feba50834c98b633107e407900535b">precondition</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ac8af88717d898dce1e6ae0884142ea6d">residual</a>, const std::vector&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a4f65ebe42fc79462292b72586c342e63">value_t</a> &gt; &amp;shift, const R &amp;<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a6887ee4a7b23709c1164ebcf5221ce8e">diagonals</a>) const</td></tr>
 <tr class="memdesc:af0feba50834c98b633107e407900535b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply preconditioning to a residual vector in order to predict a step towards the solution.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#af0feba50834c98b633107e407900535b">More...</a><br /></td></tr>
 <tr class="separator:af0feba50834c98b633107e407900535b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae783f40d90e529325975408e94c3291c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ae783f40d90e529325975408e94c3291c">RHS</a> (R &amp;RHS, unsigned int instance) const</td></tr>
+<tr class="memdesc:ae783f40d90e529325975408e94c3291c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the inhomogeneous part of a linear equation system.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ae783f40d90e529325975408e94c3291c">More...</a><br /></td></tr>
+<tr class="separator:ae783f40d90e529325975408e94c3291c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cc421a58afcaceb42a0631828221cdd"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a3cc421a58afcaceb42a0631828221cdd">pp_action_matrix</a> (const std::vector&lt; P &gt; &amp;pparams) const</td></tr>
 <tr class="memdesc:a3cc421a58afcaceb42a0631828221cdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the kernel matrix in the P space.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a3cc421a58afcaceb42a0631828221cdd">More...</a><br /></td></tr>
 <tr class="separator:a3cc421a58afcaceb42a0631828221cdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -583,6 +586,56 @@ template&lt;typename R , typename P  = std::map&lt;size_t, typename R::value_typ
 
 <p>Reimplemented in <a class="el" href="classMorse__problem.html#abdd1b24df0694f03976f384ec57b4bbf">Morse_problem</a>.</p>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="ExampleProblem_8h-example.html#a2">ExampleProblem.h</a>, and <a class="el" href="ExampleProblemDistrArray_8h-example.html#a2">ExampleProblemDistrArray.h</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="ae783f40d90e529325975408e94c3291c" name="ae783f40d90e529325975408e94c3291c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae783f40d90e529325975408e94c3291c">&#9670;&nbsp;</a></span>RHS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename R , typename P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">molpro::linalg::itsolv::Problem</a>&lt; R, P &gt;::RHS </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>RHS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>instance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the inhomogeneous part of a linear equation system. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">RHS</td><td>On return, will contain the requested right-hand-side of equations if available. </td></tr>
+    <tr><td class="paramname">instance</td><td>Which RHS is required. If there are N sets of equations to solve, then 0,1,...N-1 number the instances. The solver will call this function repeatedly with instance=0,1,2,... until it receives a negative response. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>whether the requested RHS is available and has been provided </dd></dl>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="ExampleProblem_8h-example.html#a4">ExampleProblem.h</a>.</dd>
 </dl>
 
 </div>

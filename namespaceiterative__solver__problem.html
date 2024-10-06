@@ -100,8 +100,6 @@ $(document).ready(function(){initNavTree('namespaceiterative__solver__problem.ht
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Types</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiterative__solver__problem_1_1matrix__problem.html">matrix_problem</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract class defining the problem-specific interface for the simplified solver interface to IterativeSolver.  <a href="structiterative__solver__problem_1_1problem.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -109,7 +107,7 @@ Data Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
 <tr class="memitem:ad69a0529c3ca725bddee33e94375e6d3"><td class="memItemLeft" align="right" valign="top">logical function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver__problem.html#ad69a0529c3ca725bddee33e94375e6d3">diagonals</a> (this, d)</td></tr>
-<tr class="memdesc:ad69a0529c3ca725bddee33e94375e6d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optionally provide the diagonal elements of the underlying kernel. If implemented and returning true, the provided diagonals will be used by IterativeSolver for preconditioning (and therefore the precondition() function does not need to be implemented), and, in the case of linear problems, for selection of the P space. Otherwise, preconditioning will be done with precondition(), and any P space has to be provided manually.  <a href="namespaceiterative__solver__problem.html#ad69a0529c3ca725bddee33e94375e6d3">More...</a><br /></td></tr>
+<tr class="memdesc:ad69a0529c3ca725bddee33e94375e6d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optionally provide the diagonal elements of the underlying kernel. If implemented and returning true, the provided diagonals will be used by the base precondition() function for preconditioning (and therefore the precondition() function does not need to be reimplemented), and, in the case of linear problems, for selection of the P space. Otherwise, preconditioning will be done with precondition(), and any P space has to be provided manually.  <a href="namespaceiterative__solver__problem.html#ad69a0529c3ca725bddee33e94375e6d3">More...</a><br /></td></tr>
 <tr class="separator:ad69a0529c3ca725bddee33e94375e6d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function/Subroutine Documentation</h2>
@@ -139,7 +137,7 @@ Functions/Subroutines</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Optionally provide the diagonal elements of the underlying kernel. If implemented and returning true, the provided diagonals will be used by IterativeSolver for preconditioning (and therefore the precondition() function does not need to be implemented), and, in the case of linear problems, for selection of the P space. Otherwise, preconditioning will be done with precondition(), and any P space has to be provided manually. </p>
+<p>Optionally provide the diagonal elements of the underlying kernel. If implemented and returning true, the provided diagonals will be used by the base precondition() function for preconditioning (and therefore the precondition() function does not need to be reimplemented), and, in the case of linear problems, for selection of the P space. Otherwise, preconditioning will be done with precondition(), and any P space has to be provided manually. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">d</td><td>On exit, contains the diagonal elements </td></tr>
