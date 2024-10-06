@@ -1129,7 +1129,8 @@ end select
         if (nwork.gt.0) then
     if (use_diagonals) then
     call IterativeSolverDiagonals(parameters_(:, 1))
-        call problem%precondition(actions_(:, :nwork), Iterative_Solver_Working_Set_Eigenvalues(nwork), parameters_(:, 1), Iterative_Solver_Range())
+        call problem%precondition(actions_(:, :nwork), Iterative_Solver_Working_Set_Eigenvalues(nwork), &
+    parameters_(:, 1), Iterative_Solver_Range())
         else
         call problem%precondition(actions_(:, :nwork), Iterative_Solver_Working_Set_Eigenvalues(nwork), &
            range = Iterative_Solver_Range())
