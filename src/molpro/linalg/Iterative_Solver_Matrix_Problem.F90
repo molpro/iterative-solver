@@ -88,7 +88,9 @@ contains
       do k = 1, this%p_space%size
         do kc = this%p_space%offsets(k - 1) + 1, this%p_space%offsets(k)
           do j = range(1) + 1, range(2)
-            actions(j, i) = actions(j, i) + this%matrix(j, this%p_space%indices(kc)) * this%p_space%coefficients(kc) * p_coefficients(k, i)
+            actions(j, i) = actions(j, i) + &
+                this%matrix(j, this%p_space%indices(kc)) * this%p_space%coefficients(kc) * &
+                    p_coefficients(k, i)
           end do
         end do
       end do
