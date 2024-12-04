@@ -14,7 +14,7 @@ env:
 jobs:
 
   cmake-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 12
     permissions:
       contents: write
@@ -33,6 +33,7 @@ jobs:
         cmake-options:
           - ""
           - "-DFORTRAN_INTEGER8=OFF"
+          - "-DCMAKE_Fortran_FLAGS=-std=f2023"
 
     steps:
     - uses: actions/checkout@v3
