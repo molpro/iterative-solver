@@ -697,6 +697,7 @@ Variables</h2></td></tr>
 <div class="line">      <span class="keyword">call </span>solve(m, np, max_p)</div>
 <div class="line"><span class="keywordflow">    end do</span></div>
 <div class="line"><span class="keywordflow">  end do</span></div>
+<div class="line">  <span class="keyword">DEALLOCATE</span>(m)</div>
 <div class="line">  <span class="keyword">CALL </span>mpi_finalize</div>
 <div class="line"><span class="keyword">CONTAINS</span></div>
 <div class="line">  <span class="keyword">subroutine </span>solve(m, nP, max_P)</div>
