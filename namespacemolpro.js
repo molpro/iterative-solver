@@ -24,7 +24,8 @@ var namespacemolpro =
       [ "rank_global", "https://molpro.github.io/profiler/namespacemolpro_1_1profiler.html#a12ec6404997c63364ce0f8385e2d359c", null ],
       [ "report", "https://molpro.github.io/profiler/namespacemolpro_1_1profiler.html#a95116b9c056810080c206e1315c57597", null ],
       [ "report", "https://molpro.github.io/profiler/namespacemolpro_1_1profiler.html#ac11f7b0c852f3f13febeb7abcf47e76c", null ],
-      [ "size_global", "https://molpro.github.io/profiler/namespacemolpro_1_1profiler.html#a9b51b64942c4a95951e0b462e7f95f02", null ]
+      [ "size_global", "https://molpro.github.io/profiler/namespacemolpro_1_1profiler.html#a9b51b64942c4a95951e0b462e7f95f02", null ],
+      [ "s_saver", "https://molpro.github.io/profiler/namespacemolpro_1_1profiler.html#a4e8cf3b4735dcd93da951d038927fb8a", null ]
     ] ],
     [ "Profiler", "https://molpro.github.io/profiler/namespacemolpro.html#ac79b0d9202cceb3c8b8be0533e7ebe93", null ]
 ];

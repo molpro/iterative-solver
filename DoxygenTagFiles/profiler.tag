@@ -1065,6 +1065,13 @@
       <anchor>a0f84b251e1aa8ee01afc7a3bf638ec80</anchor>
       <arglist>()</arglist>
     </member>
+    <member kind="variable">
+      <type>std::shared_ptr&lt; Profiler &gt;</type>
+      <name>s_saver</name>
+      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
+      <anchor>a4e8cf3b4735dcd93da951d038927fb8a</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="namespace">
     <name>molpro::profiler::detail</name>
