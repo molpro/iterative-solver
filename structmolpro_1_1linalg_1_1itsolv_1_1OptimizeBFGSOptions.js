@@ -6,6 +6,7 @@ var structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions =
     [ "linesearch_tolerance", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#ac66b95b29d700bbf65b35385be58cc13", null ],
     [ "max_size_qspace", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#aa6d77eb00715031a13b4fa721819e6c5", null ],
     [ "norm_thresh", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#a3a8c26639074dfe38a89cfeac3c7a15f", null ],
+    [ "quasinewton_maximum_step", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#a10077924e329f444e1e18b30441734ef", null ],
     [ "strong_Wolfe", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#ad51a99040ec9f0fecd6bf2c55947535b", null ],
     [ "svd_thresh", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#adf37f6cd71efda9948e29f1731e4701e", null ],
     [ "Wolfe_1", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#a5c907211361ce4d9f8ae13bd08973a8b", null ],

@@ -9,5 +9,6 @@ var searchData=
   ['qr_6',['qr',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#ad939522fa33168f18c57e576cd134e75',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
   ['qr_5fops_7',['qr_ops',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#abd2e9fa234e44677bb31e1c4bdf20953',1,'molpro::linalg::itsolv::Statistics']]],
   ['qspace_8',['qspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ad4d634f34be831eb4dbf09514069cf8a',1,'molpro::linalg::itsolv::subspace::XSpace']]],
-  ['qx_9',['qx',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#a789820bcb8ea398dbdd20ac3857b7de5',1,'molpro::linalg::itsolv::subspace::xspace::NewData']]]
+  ['quasinewton_5fmaximum_5fstep_9',['quasinewton_maximum_step',['../structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#a10077924e329f444e1e18b30441734ef',1,'molpro::linalg::itsolv::OptimizeBFGSOptions']]],
+  ['qx_10',['qx',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#a789820bcb8ea398dbdd20ac3857b7de5',1,'molpro::linalg::itsolv::subspace::xspace::NewData']]]
 ];

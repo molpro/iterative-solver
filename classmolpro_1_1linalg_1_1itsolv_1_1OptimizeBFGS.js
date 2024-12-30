@@ -26,6 +26,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS =
     [ "m_linesearch_grow_factor", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#af4fc19800b03d96ce7185daafe8c84a1", null ],
     [ "m_linesearch_tolerance", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a2f6898258c8fcd943a4779b8eb8e740c", null ],
     [ "m_max_size_qspace", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a4d6b245df41c99eaa36f057d8e8a47a7", null ],
+    [ "m_quasinewton_maximum_step", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a4ea11459f591fea9ce30b9ac3d3dab66", null ],
     [ "m_strong_Wolfe", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a0df9462c03d7bd7aa35819b3b60b6b21", null ],
     [ "m_Wolfe_1", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a20ec1c340efd4c780f38320896acf8cb", null ],
     [ "m_Wolfe_2", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a19014fc6fc3451bfa09960ae2b905ffd", null ]

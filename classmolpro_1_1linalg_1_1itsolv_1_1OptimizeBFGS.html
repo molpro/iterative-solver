@@ -479,6 +479,8 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:af4fc19800b03d96ce7185daafe8c84a1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#af4fc19800b03d96ce7185daafe8c84a1">m_linesearch_grow_factor</a></td></tr>
 <tr class="memdesc:af4fc19800b03d96ce7185daafe8c84a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the predicted line search step is extrapolation, limit the step to this factor times the current step.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#af4fc19800b03d96ce7185daafe8c84a1">More...</a><br /></td></tr>
 <tr class="separator:af4fc19800b03d96ce7185daafe8c84a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ea11459f591fea9ce30b9ac3d3dab66"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a4ea11459f591fea9ce30b9ac3d3dab66">m_quasinewton_maximum_step</a> = std::numeric_limits&lt;double&gt;::max()</td></tr>
+<tr class="separator:a4ea11459f591fea9ce30b9ac3d3dab66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Optimize, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a></td></tr>
 <tr class="memitem:a3a9fde47c295d0370ba3d65b91bc9b95 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, R, std::map&lt; size_t, typename R::value_type &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a3a9fde47c295d0370ba3d65b91bc9b95">m_handlers</a></td></tr>
 <tr class="memdesc:a3a9fde47c295d0370ba3d65b91bc9b95 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array handlers.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a3a9fde47c295d0370ba3d65b91bc9b95">More...</a><br /></td></tr>
@@ -1372,6 +1374,30 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 </div><div class="memdoc">
 
 <p>maximum size of Q space </p>
+
+</div>
+</div>
+<a id="a4ea11459f591fea9ce30b9ac3d3dab66" name="a4ea11459f591fea9ce30b9ac3d3dab66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ea11459f591fea9ce30b9ac3d3dab66">&#9670;&nbsp;</a></span>m_quasinewton_maximum_step</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html">molpro::linalg::itsolv::OptimizeBFGS</a>&lt; R, Q, P &gt;::m_quasinewton_maximum_step = std::numeric_limits&lt;double&gt;::max()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
