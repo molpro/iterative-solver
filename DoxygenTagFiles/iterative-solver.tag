@@ -10611,6 +10611,13 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
+      <type>integer, public</type>
+      <name>iterative_solver_iterations</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>a260bebdd67c530e7e08bf211bc44760b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
       <type>class(problem_class), pointer, public</type>
       <name>current_problem</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>

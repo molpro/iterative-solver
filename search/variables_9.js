@@ -8,5 +8,6 @@ var searchData=
   ['is_5fiterable_5fv_5',['is_iterable_v',['../namespacemolpro_1_1linalg_1_1array.html#a37f32650280ead1187209883828505be',1,'molpro::linalg::array']]],
   ['is_5fsparse_5fv_6',['is_sparse_v',['../namespacemolpro_1_1linalg_1_1array.html#a032b081004cd9ee22ff6d6061eaa7684',1,'molpro::linalg::array']]],
   ['is_5fstd_5farray_5fv_7',['is_std_array_v',['../namespacemolpro_1_1linalg_1_1array_1_1util.html#a77d2028e5786d2fdb6331300bd4a5471',1,'molpro::linalg::array::util']]],
-  ['iterations_8',['iterations',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#a9a3fdf9f19e5eca76e3bcf6c1288e39f',1,'molpro::linalg::itsolv::Statistics']]]
+  ['iterations_8',['iterations',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#a9a3fdf9f19e5eca76e3bcf6c1288e39f',1,'molpro::linalg::itsolv::Statistics']]],
+  ['iterative_5fsolver_5fiterations_9',['iterative_solver_iterations',['../namespaceiterative__solver.html#a260bebdd67c530e7e08bf211bc44760b',1,'iterative_solver']]]
 ];

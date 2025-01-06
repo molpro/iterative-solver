@@ -182,6 +182,8 @@ Functions/Subroutines</h2></td></tr>
 Variables</h2></td></tr>
 <tr class="memitem:a8e7b0afa0169579bd571c1aac764d4e8"><td class="memItemLeft" align="right" valign="top">integer, parameter, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a8e7b0afa0169579bd571c1aac764d4e8">mpicomm_kind</a> = KIND(c_int64_t)</td></tr>
 <tr class="separator:a8e7b0afa0169579bd571c1aac764d4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a260bebdd67c530e7e08bf211bc44760b"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a260bebdd67c530e7e08bf211bc44760b">iterative_solver_iterations</a></td></tr>
+<tr class="separator:a260bebdd67c530e7e08bf211bc44760b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1ae0165bd555ba3fbf8d9c6e55d83c0"><td class="memItemLeft" align="right" valign="top">class(problem_class), pointer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#ad1ae0165bd555ba3fbf8d9c6e55d83c0">current_problem</a></td></tr>
 <tr class="separator:ad1ae0165bd555ba3fbf8d9c6e55d83c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -712,8 +714,8 @@ Variables</h2></td></tr>
 <div class="line">    <span class="keyword">CALL </span>iterative_solver_finalize</div>
 <div class="line">  <span class="keyword">end subroutine </span>solve</div>
 <div class="line"><span class="keyword">END PROGRAM </span>linear_eigensystem_example</div>
-<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:53</div></div>
-<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__rank__global_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__rank__global.html">iterative_solver::mpi_rank_global</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:61</div></div>
+<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:54</div></div>
+<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__rank__global_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__rank__global.html">iterative_solver::mpi_rank_global</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:62</div></div>
 <div class="ttc" id="anamespaceiterative__solver__matrix__problem_html"><div class="ttname"><a href="namespaceiterative__solver__matrix__problem.html">iterative_solver_matrix_problem</a></div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Matrix_Problem.F90:1</div></div>
 <div class="ttc" id="anamespaceiterative__solver_html"><div class="ttname"><a href="namespaceiterative__solver.html">iterative_solver</a></div><div class="ttdoc">IterativeSolver Fortran binding.</div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:2</div></div>
 <div class="ttc" id="astructiterative__solver__matrix__problem_1_1matrix__problem_html"><div class="ttname"><a href="structiterative__solver__matrix__problem_1_1matrix__problem.html">iterative_solver_matrix_problem::matrix_problem</a></div><div class="ttdoc">A specialisation of the Problem class for linear problems in which the kernel matrix is stored in ful...</div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Matrix_Problem.F90:5</div></div>
@@ -1844,6 +1846,20 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">class(problem_class), pointer, public iterative_solver::current_problem</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a260bebdd67c530e7e08bf211bc44760b" name="a260bebdd67c530e7e08bf211bc44760b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a260bebdd67c530e7e08bf211bc44760b">&#9670;&nbsp;</a></span>iterative_solver_iterations</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer, public iterative_solver::iterative_solver_iterations</td>
         </tr>
       </table>
 </div><div class="memdoc">

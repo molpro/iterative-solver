@@ -51,7 +51,7 @@ var NAVTREE =
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
+        [ "All", "namespacemembers.html", "namespacemembers_dup" ],
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
@@ -75,10 +75,10 @@ var NAVTREEINDEX =
 "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#af4fc19800b03d96ce7185daafe8c84a1",
 "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html#a6378d894eaed58ace5c65e23fd587030",
 "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html#a7a5e00b4d721319ffa310f6cbdf74620",
-"namespacemolpro_1_1linalg_1_1array.html#a08a3a46f7c8030c9161938fc76bf7441",
-"structiterative__solver__pspace_1_1pspace.html",
-"structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPTOptions.html#ad1788b0e32efb0ccda131656b9985e3c",
-"structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#a4cf7408d125c98bf680433b5cf258c78"
+"namespacemembers_i.html",
+"structiterative__solver__matrix__problem_1_1matrix__problem.html#adf41b7d9e3a624890c717a9707a9759f",
+"structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html#aa70d4f86a39f178faf148d005c84f7e5",
+"structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a96f96d22a10e2b6956a6e4e2356d6b29"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

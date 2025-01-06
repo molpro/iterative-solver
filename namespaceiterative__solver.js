@@ -29,5 +29,6 @@ var namespaceiterative__solver =
     [ "solve_optimization", "namespaceiterative__solver.html#aafc0c445dbb353da38c92aa1ce4640f2", null ],
     [ "test_select", "namespaceiterative__solver.html#a762cf435ede70697d8e9df140d410d27", null ],
     [ "current_problem", "namespaceiterative__solver.html#ad1ae0165bd555ba3fbf8d9c6e55d83c0", null ],
+    [ "iterative_solver_iterations", "namespaceiterative__solver.html#a260bebdd67c530e7e08bf211bc44760b", null ],
     [ "mpicomm_kind", "namespaceiterative__solver.html#a8e7b0afa0169579bd571c1aac764d4e8", null ]
 ];
