@@ -1010,6 +1010,27 @@
       <arglist>(const Profiler &amp;prof, std::ostream &amp;out, bool cumulative=true, SortBy sort_by=SortBy::wall)</arglist>
     </member>
     <member kind="function">
+      <type>void</type>
+      <name>report</name>
+      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
+      <anchor>a095eee337b8943511fbc51236cb21709</anchor>
+      <arglist>(const Profiler &amp;prof, std::ostream &amp;out, MPI_Comm communicator, bool cumulative=true, SortBy sort_by=SortBy::wall)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>report_root_process</name>
+      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
+      <anchor>ade25b229c6cf09ed8f722c9cfb04c786</anchor>
+      <arglist>(const Profiler &amp;prof, std::ostream &amp;out, MPI_Comm communicator, int root_process, bool cumulative=true, SortBy sort_by=SortBy::wall)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string</type>
+      <name>get_dotgraph</name>
+      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
+      <anchor>a0fe39ec6a2fce8a0556fb7f93256c5a5</anchor>
+      <arglist>(const Profiler &amp;prof, MPI_Comm communicator, int root_process, int *hot, int *cool, double threshold, bool get_percentage_time)</arglist>
+    </member>
+    <member kind="function">
       <type>std::string</type>
       <name>get_dotgraph</name>
       <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
@@ -1022,48 +1043,6 @@
       <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
       <anchor>a14b9a5bef664e269695fc781a7243194</anchor>
       <arglist>(std::ostream &amp;os, const Profiler &amp;obj)</arglist>
-    </member>
-    <member kind="function">
-      <type>MPI_Comm</type>
-      <name>comm_self</name>
-      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
-      <anchor>a33e5fcf11ef48517c70045c34eb845bc</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>MPI_Comm</type>
-      <name>comm_global</name>
-      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
-      <anchor>a4d67b0e0440a02ee2e44f62c44704eb6</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>size_global</name>
-      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
-      <anchor>a9b51b64942c4a95951e0b462e7f95f02</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>rank_global</name>
-      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
-      <anchor>a12ec6404997c63364ce0f8385e2d359c</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>init</name>
-      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
-      <anchor>a65334f2187f52342168b35a4a39e276c</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>finalize</name>
-      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
-      <anchor>a0f84b251e1aa8ee01afc7a3bf638ec80</anchor>
-      <arglist>()</arglist>
     </member>
     <member kind="variable">
       <type>std::shared_ptr&lt; Profiler &gt;</type>

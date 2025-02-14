@@ -76,9 +76,9 @@ var NAVTREEINDEX =
 "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html#a6378d894eaed58ace5c65e23fd587030",
 "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html#a7a5e00b4d721319ffa310f6cbdf74620",
 "namespacemembers_i.html",
-"structiterative__solver__matrix__problem_1_1matrix__problem.html#adf41b7d9e3a624890c717a9707a9759f",
-"structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html#aa70d4f86a39f178faf148d005c84f7e5",
-"structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a96f96d22a10e2b6956a6e4e2356d6b29"
+"structiterative__solver__problem_1_1problem.html",
+"structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html#aba4aedaad0f569c5f36c4c315db03b30",
+"structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#aaa8b93d2137e355b08e490922572a359"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
