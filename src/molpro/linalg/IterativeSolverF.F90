@@ -878,10 +878,10 @@ CONTAINS
       FUNCTION Iterative_Solver_End_Iteration_Needed_C() &
           BIND(C, name = 'IterativeSolverEndIterationNeeded')
         USE iso_c_binding
-        INTEGER(c_size_t) Iterative_Solver_End_Iteration_Needed_C
+        INTEGER(c_int) Iterative_Solver_End_Iteration_Needed_C
       END FUNCTION Iterative_Solver_End_Iteration_Needed_C
     END INTERFACE
-    Iterative_Solver_End_Iteration_Needed = Iterative_Solver_End_Iteration_Needed_C() .NE. 0
+    Iterative_Solver_End_Iteration_Needed = Iterative_Solver_End_Iteration_Needed_C() .NE. 0_c_int
   END FUNCTION Iterative_Solver_End_Iteration_Needed
 
   !> \brief add P-space vectors to the expansion set, and return new solution.
