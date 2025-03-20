@@ -10506,6 +10506,13 @@
       <arglist></arglist>
     </member>
     <member kind="function">
+      <type>subroutine, public</type>
+      <name>iterative_solver_finalize_all</name>
+      <anchorfile>namespaceiterative__solver.html</anchorfile>
+      <anchor>a6df84a0afbf7f6bc09810b700231b1aa</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
       <type>integer function, dimension(2)</type>
       <name>iterative_solver_range</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>

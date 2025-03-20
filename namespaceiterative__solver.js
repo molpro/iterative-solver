@@ -13,6 +13,7 @@ var namespaceiterative__solver =
     [ "iterative_solver_end_iteration_needed", "namespaceiterative__solver.html#a5b5146c464788a63c87081ee8f50473d", null ],
     [ "iterative_solver_errors", "namespaceiterative__solver.html#a8771b451fe4f3381b22d6a64d96f23bd", null ],
     [ "iterative_solver_finalize", "namespaceiterative__solver.html#a40a3d04d226f8315ed2a57baa5d78304", null ],
+    [ "iterative_solver_finalize_all", "namespaceiterative__solver.html#a6df84a0afbf7f6bc09810b700231b1aa", null ],
     [ "iterative_solver_linear_eigensystem_initialize", "namespaceiterative__solver.html#aeeac19cec453d5df15b17ea1b0f157fb", null ],
     [ "iterative_solver_linear_equations_initialize", "namespaceiterative__solver.html#a69c4bfefb260bc5df5c34a84a24a3138", null ],
     [ "iterative_solver_optimize_initialize", "namespaceiterative__solver.html#a7ec1c6cf65a2f9d40f2035e7ca0b77ec", null ],
