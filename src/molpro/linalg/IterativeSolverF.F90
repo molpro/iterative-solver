@@ -7,7 +7,7 @@ MODULE Iterative_Solver
   PUBLIC :: Solve_Linear_Equations
   PUBLIC :: Solve_Nonlinear_Equations
   PUBLIC :: Solve_Optimization
-  PUBLIC :: Iterative_Solver_Linear_Eigensystem_Initialize, Iterative_Solver_Finalize
+  PUBLIC :: Iterative_Solver_Linear_Eigensystem_Initialize, Iterative_Solver_Finalize, Iterative_Solver_Finalize_All
   PUBLIC :: Iterative_Solver_Linear_Eigensystem_Initialize_Ranges
   PUBLIC :: Iterative_Solver_DIIS_Initialize, Iterative_Solver_Linear_Equations_Initialize
   PUBLIC :: Iterative_Solver_Optimize_Initialize
@@ -649,6 +649,16 @@ CONTAINS
     END INTERFACE
     CALL IterativeSolverFinalize
   END SUBROUTINE Iterative_Solver_Finalize
+
+  !> \brief Terminate all instances of the iterative solver
+  SUBROUTINE Iterative_Solver_Finalize_All
+    INTERFACE
+      SUBROUTINE IterativeSolverFinalizeAll() BIND(C, name = 'IterativeSolverFinalizeAll')
+        USE iso_c_binding
+      END SUBROUTINE IterativeSolverFinalizeAll
+    END INTERFACE
+    CALL IterativeSolverFinalizeAll
+  END SUBROUTINE Iterative_Solver_Finalize_All
 
   FUNCTION Iterative_Solver_Range()
     INTERFACE
