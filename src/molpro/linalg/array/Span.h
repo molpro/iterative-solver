@@ -4,17 +4,19 @@
 #include <type_traits>
 #include <utility>
 
+#if defined(USE_STD_SPAN) && __cplusplus >= 202002L
+#include <span>
+#endif
+
 namespace molpro::linalg::array {
 
-#if __cplusplus >= 202002L
-#include <span>
-
+#if defined(USE_STD_SPAN) && __cplusplus >= 202002L
 //! For those who moved on to c++20
 using Span = std::span;
 
 #endif
 
-#if __cplusplus < 202002L
+#if !defined(USE_STD_SPAN) || __cplusplus < 202002L
 inline
 #endif
     namespace span {
