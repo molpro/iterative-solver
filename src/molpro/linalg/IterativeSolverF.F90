@@ -120,8 +120,13 @@ CONTAINS
       guess = generate_initial_guess
     end if
     call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter, max_p)
+    select rank(parameters)
+    rank(1)
+    call Iterative_Solver_Solution([1], parameters, actions, .true.)
+    rank(2)
     call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, int(m_nroot)))], &
         parameters, actions, .true.)
+end select
   END SUBROUTINE Solve_Linear_Eigensystem
 
   SUBROUTINE Solve_Linear_Equations(parameters, actions, problem, generate_initial_guess, max_iter, max_p, &
@@ -167,8 +172,13 @@ CONTAINS
       guess = generate_initial_guess
     end if
     call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter, max_p)
+    select rank(parameters)
+    rank(1)
+    call Iterative_Solver_Solution([1], parameters, actions, .true.)
+    rank(2)
     call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, int(m_nroot)))], &
         parameters, actions, .true.)
+    end select
   END SUBROUTINE Solve_Linear_Equations
 
   SUBROUTINE Solve_Nonlinear_Equations(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
@@ -203,8 +213,7 @@ CONTAINS
       guess = generate_initial_guess
     end if
     call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter)
-    call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, int(m_nroot)))], parameters, &
-        actions, .true.)
+    call Iterative_Solver_Solution([1], parameters, actions, .true.)
   END SUBROUTINE Solve_Nonlinear_Equations
 
   SUBROUTINE Solve_Optimization(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
@@ -241,8 +250,7 @@ CONTAINS
       guess = generate_initial_guess
     end if
     call Iterative_Solver_Solve(parameters, actions, problem, guess, max_iter)
-    call Iterative_Solver_Solution([(i, i = 1, min(ubound(parameters, 2) - lbound(parameters, 2) + 1, int(m_nroot)))], &
-        parameters, actions, .true.)
+    call Iterative_Solver_Solution([1], parameters, actions, .true.)
   END SUBROUTINE Solve_Optimization
 
   !> \brief Finds the lowest eigensolutions of a matrix. The default algorithm is Davidson's method, i.e. preconditioned Lanczos.
