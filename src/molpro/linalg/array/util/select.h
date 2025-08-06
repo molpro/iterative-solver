@@ -4,6 +4,7 @@
 #include <complex>
 #include <cstdlib>
 #include <queue>
+#include <type_traits>
 
 namespace molpro::linalg::array::util {
 // virtual std::map<size_t, value_type_abs> select(size_t n, const AL &x, bool max = false, bool abs = false) = 0;

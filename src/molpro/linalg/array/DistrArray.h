@@ -9,11 +9,12 @@
 #include <vector>
 
 #include <molpro/linalg/array/Span.h>
+#include <molpro/linalg/array/util/Distribution.h>
 
 namespace molpro::linalg::array {
 namespace util {
-template <typename Ind>
-class Distribution;
+// template <typename Ind>
+// class Distribution;
 }
 /*!
  * @brief Array distributed across many processes supporting remote-memory-access, access to process local buffer, and
