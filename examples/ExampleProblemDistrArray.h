@@ -91,7 +91,7 @@ public:
       for (const auto& pj : pparams) {
         for (const auto& pie : pi)
           for (const auto& pje : pj)
-            result[ij] = matrix(pje.first, pie.first) * pje.second * pie.second;
+            result[ij] += matrix(pje.first, pie.first) * pje.second * pie.second;
         ij++;
       }
     return result;
