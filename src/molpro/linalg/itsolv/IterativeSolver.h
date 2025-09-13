@@ -79,6 +79,7 @@ public:
   Problem() = default;
   virtual ~Problem() = default;
   using container_t = R;
+  using p_container_t = P;
   using value_t = typename R::value_type;
 
   /*!
