@@ -48,7 +48,7 @@ struct Logger {
    */
   enum Level : short { None, Trace, Debug, Info, Warn, Error, Fatal };
 
-  void msg(const std::string& message, Level log_lvl);
+  virtual void msg(const std::string& message, Level log_lvl);
 
   template <typename ForwardIt>
   void msg(const std::string& message, ForwardIt begin, ForwardIt end, Level log_lvl, int precision = 3) {
