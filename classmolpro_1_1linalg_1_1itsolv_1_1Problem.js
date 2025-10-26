@@ -1,6 +1,7 @@
 var classmolpro_1_1linalg_1_1itsolv_1_1Problem =
 [
     [ "container_t", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a10aafe6ea77b7b593ae4803b65adbe63", null ],
+    [ "p_container_t", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a3d767bd0b2ff918e6b7778d9c96fc610", null ],
     [ "value_t", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a4f65ebe42fc79462292b72586c342e63", null ],
     [ "Problem", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a4bbcd88d13af305c361523c22e78dbed", null ],
     [ "~Problem", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a5bf522d4b55091290e5d5a28bb7b4e9c", null ],

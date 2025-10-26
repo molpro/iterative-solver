@@ -8279,6 +8279,13 @@
       <arglist></arglist>
     </member>
     <member kind="typedef">
+      <type>P</type>
+      <name>p_container_t</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Problem.html</anchorfile>
+      <anchor>a3d767bd0b2ff918e6b7778d9c96fc610</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
       <type>typename R::value_type</type>
       <name>value_t</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Problem.html</anchorfile>
