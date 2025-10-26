@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.5...4.0)
 project(iterative-solver CXX)
 
 include(FetchContent)
 FetchContent_Declare(
         LibraryManager
         GIT_REPOSITORY https://github.com/molpro/library-manager.git
-        GIT_TAG 0.13.1
+        GIT_TAG 0.13.2
 )
 FetchContent_MakeAvailable(LibraryManager)
 
