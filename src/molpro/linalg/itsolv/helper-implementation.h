@@ -678,7 +678,7 @@ namespace molpro::linalg::itsolv::detail {
 /*!
  * @brief Deduces a set of parameters that are redundant due to linear dependencies
  *
- * Only the last nR parameters are considered for removal. Linea dependencies are discovered by performing SVD of the
+ * Only the last nR parameters are considered for removal. Linear dependencies are discovered by performing SVD of the
  * overlap matrix.
  *
  * @param overlap overlap matrix of the full subspace
