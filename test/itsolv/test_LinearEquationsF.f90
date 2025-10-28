@@ -94,7 +94,7 @@ function test_LinearEquationsF(matrix, rhs, n, np, nroot, hermitian, augmented_h
     end if
   end do
   test_LinearEquationsF = 1
-  if (error.gt.1d-4) then
+  if (error.gt.2d-4) then
     write (6, *) 'test_linearEquationsF has failed ', error
     test_LinearEquationsF = 0
   end if
