@@ -430,13 +430,13 @@ public:
         //        std::cout << "parameters0 " << v0[0] << "," << v0[1] << ",..." << std::endl;
         //        std::cout << "residual0 " << v1[0] << "," << v1[1] << ",..." << std::endl;
       }
-      Q parameters0{v0};
-      Q residual0{v1};
+      Q parameters0 = m_handlers->qr().copy(v0);
+      Q residual0 = m_handlers->qr().copy(v1);
       for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
-        Q parameters1{v0};
+        Q parameters1 = m_handlers->qr().copy(v0);
         m_handlers->rq().axpy(-1.0, parameters0, v0);
         m_handlers->rr().scal(1 / std::sqrt(m_handlers->rr().dot(v0, v0)), v0);
-        Q step1{v0};
+        Q step1 = m_handlers->qr().copy(v0);
         auto residual_analytic = m_handlers->rq().dot(v0, residual0);
         m_handlers->rq().copy(v0, parameters0);
         m_handlers->rq().axpy(-2*step, step1, v0);
@@ -458,7 +458,7 @@ public:
     } else {
       for (int instance = 0; problem.test_parameters(instance, v0); ++instance) {
         problem.action({v0}, {v1});
-        Q residual{v1};
+        Q residual = m_handlers->qr().copy(v1);
         auto norm2_residual = std::sqrt(m_handlers->rr().dot(v1, v1));
         constexpr double scale_factor{10.0};
         m_handlers->rr().scal(scale_factor, v0);
