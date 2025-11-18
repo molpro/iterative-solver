@@ -429,8 +429,8 @@ public:
         //        std::cout << "parameters0 " << v0[0] << "," << v0[1] << ",..." << std::endl;
         //        std::cout << "residual0 " << v1[0] << "," << v1[1] << ",..." << std::endl;
       }
-      Q parameters0{v0};
-      Q residual0{v1};
+      Q parameters0 = m_handlers->qr().copy(v0);
+      Q residual0 = m_handlers->qr().copy(v1);
       for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
         auto value1 = problem.residual(v0, v1);
         if (verbosity > 1) {
@@ -439,8 +439,8 @@ public:
           //          std::cout << "parameters1 " << v0[0] << "," << v0[1] << ",..." << std::endl;
           //          std::cout << "residual1 " << v1[0] << "," << v1[1] << ",..." << std::endl;
         }
-        Q parameters1{v0};
-        Q residual1{v1};
+        Q parameters1 = m_handlers->qr().copy(v0);
+        Q residual1 = m_handlers->qr().copy(v1);
         m_handlers->rq().copy(v0, residual1);
         m_handlers->rr().scal(0.5, v0);
         m_handlers->rq().axpy(0.5, residual0, v0);
@@ -459,7 +459,7 @@ public:
     } else {
       for (int instance = 0; problem.test_parameters(instance, v0); ++instance) {
         problem.action({v0}, {v1});
-        Q residual{v1};
+        Q residual = m_handlers->qr().copy(v1);
         auto norm2_residual = std::sqrt(m_handlers->rr().dot(v1, v1));
         constexpr double scale_factor{10.0};
         m_handlers->rr().scal(scale_factor, v0);
