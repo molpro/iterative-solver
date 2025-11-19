@@ -41,5 +41,5 @@ int main(int argc, char* argv[]) {
 
 #include <molpro/linalg/itsolv/SolverFactory-implementation.h>
 #include <vector>
-template class molpro::linalg::itsolv::SolverFactory<std::vector<double>, std::vector<double>,
+template class molpro::linalg::itsolv::SolverFactory<molpro::linalg::array::Span<double>, std::vector<double>,
                                                      std::map<size_t, double>>;
