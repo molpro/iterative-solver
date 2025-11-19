@@ -7,7 +7,7 @@ int main(int argc, char* argv[]) {
   molpro::mpi::init();
   {
     auto problem = ExampleProblem(argc > 1 ? std::stoi(argv[1]) : 20);
-    using Rvector = ExampleProblem::container_t;
+    using Rvector = decltype(problem)::container_t;
 
     // old
     auto solver = molpro::linalg::itsolv::create_LinearEquations<Rvector>("Davidson");
