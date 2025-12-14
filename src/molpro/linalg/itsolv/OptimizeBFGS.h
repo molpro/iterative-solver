@@ -120,7 +120,7 @@ public:
     m_linesearch = false;
     this->m_logger->msg("Quasi-Newton step taken", Logger::Info);
     //    this->m_errors.front() = std::sqrt(this->m_handlers->rr().dot(residual,residual));
-    for (size_t a = 0; a < m_BFGS_update_alpha.size(); a++) {
+    for (size_t a = 0; a < xspace->size() - 1; a++) {
       if (std::abs(H(a, a) - H(a, a + 1) - H(a + 1, a) + H(a + 1, a + 1)) <
           std::max(5e-14 * std::abs(H(a, a)), 1e-15)) {
         xspace->eraseq(a + 1);
