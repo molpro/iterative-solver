@@ -38,6 +38,16 @@ class TestCase(unittest.TestCase):
                 diagonals[i] = self.matrix[i, i] - 0  # TODO underlying bug in that 1 is added to diagonals
             return True
 
+        def test_parameters(self, instance, parameters):
+            print('test_parameters',instance)
+            if instance in range(parameters.shape[0]):
+                parameters[:] = 0
+                parameters[instance] = 1
+                print('test_parameters true ',instance,parameters)
+                return True
+            else:
+                return False
+
         @property
         def eigenvalues(self):
             eigenvalues, eigenvectors = np.linalg.eigh(self.matrix)
@@ -70,6 +80,12 @@ class TestCase(unittest.TestCase):
         # print(f0,f1, fm1)
         # print((f1-fm1)/(2*step),residual[0])
         self.assertAlmostEqual((f1 - fm1) / (2 * step), residual[0])
+
+        for i in range(problem.size):
+            problem.test_parameters(i, parameters)
+            iterative_solver.problem.test_problem_class(problem, parameters, verbosity=0)
+
+        problem.test(verbosity=0, tolerance=1e-10)
 
     def test_optimize(self):
         problem = TestCase.RayleighQuotient(4, 0.01)
