@@ -1,4 +1,4 @@
-from .problem import Problem
+from .problem import Problem, test_problem_class
 from .matrix_problem import MatrixProblem
 from .pspace import PSpace
 from .iterative_solver_extension import IterativeSolver, Optimize, LinearEigensystem, LinearEquations, NonLinearEquations
