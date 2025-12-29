@@ -4,5 +4,5 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y cmake git g++ gfortran doxygen
 ENV CMAKE_GENERATOR=Ninja
 RUN export VERSION=5.8.2 && wget https://github.com/GlobalArrays/ga/releases/download/v${VERSION}/ga-${VERSION}.tar.gz && tar xzf ga-${VERSION}.tar.gz && cd ga-${VERSION} && ./configure --disable-f77 --with-mpi3 --without-blas --without-lapack && make install && cd .. && rm -rf ga-${VERSION}*
 COPY python/requirements.txt .
-RUN conda CONDA_PLUGINS_AUTO_ACCEPT_TOS=true install --solver=classic conda-forge::conda-libmamba-solver conda-forge::libmamba conda-forge::libmambapy conda-forge::libarchive
-RUN conda CONDA_PLUGINS_AUTO_ACCEPT_TOS=true install --file requirements.txt -y -c conda-forge mkl mkl-include gcc=14 fortran-compiler
+RUN CONDA_PLUGINS_AUTO_ACCEPT_TOS=true conda install --solver=classic conda-forge::conda-libmamba-solver conda-forge::libmamba conda-forge::libmambapy conda-forge::libarchive
+RUN CONDA_PLUGINS_AUTO_ACCEPT_TOS=true conda install --file requirements.txt -y -c conda-forge mkl mkl-include gcc=14 fortran-compiler
