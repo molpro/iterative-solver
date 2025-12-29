@@ -11409,6 +11409,13 @@
       <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename std::enable_if&lt;!has_iterator&lt; T &gt;::value, void * &gt;::type=nullptr)</arglist>
     </member>
     <member kind="function">
+      <type>bool</type>
+      <name>test_problem_class</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a4f49b32a485caf5f3f765ab0a49309cb</anchor>
+      <arglist>(Problem&lt; R, P &gt; &amp;problem_class_instance, R &amp;parameters, R &amp;residual, double step=1e-4, double tolerance=1e-8, int verbosity=0, bool test_hessian=true)</arglist>
+    </member>
+    <member kind="function">
       <type>auto</type>
       <name>wrap</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>

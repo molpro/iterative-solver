@@ -103,6 +103,7 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "svd_system", "namespacemolpro_1_1linalg_1_1itsolv.html#ae6eeb8097d5224e6cca0ff9947dc8af5", null ],
     [ "svd_system", "namespacemolpro_1_1linalg_1_1itsolv.html#a7fcb72d6b1c715ed5d87f93aabf65581", null ],
     [ "svd_system< value_type >", "namespacemolpro_1_1linalg_1_1itsolv.html#ab7117e36c19daa3142245f1493a5fb8f", null ],
+    [ "test_problem_class", "namespacemolpro_1_1linalg_1_1itsolv.html#a4f49b32a485caf5f3f765ab0a49309cb", null ],
     [ "wrap", "namespacemolpro_1_1linalg_1_1itsolv.html#a7ad9256532df6a4b245a3679328edc1d", null ],
     [ "wrap", "namespacemolpro_1_1linalg_1_1itsolv.html#a7d650904c9a8f16d1ad6b8f2d3b766d5", null ],
     [ "wrap", "namespacemolpro_1_1linalg_1_1itsolv.html#ae37643fbaca3b182e357855888611778", null ],

@@ -304,6 +304,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a87291e93a2c4e59b1af5b46cdb7d2db6"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;, class  = void&gt; </td></tr>
 <tr class="memitem:a87291e93a2c4e59b1af5b46cdb7d2db6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a87291e93a2c4e59b1af5b46cdb7d2db6">precondition_default</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename std::enable_if&lt;!<a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html">has_iterator</a>&lt; T &gt;::value, void * &gt;::type=nullptr)</td></tr>
 <tr class="separator:a87291e93a2c4e59b1af5b46cdb7d2db6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f49b32a485caf5f3f765ab0a49309cb"><td class="memTemplParams" colspan="2">template&lt;typename R , typename P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </td></tr>
+<tr class="memitem:a4f49b32a485caf5f3f765ab0a49309cb"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a4f49b32a485caf5f3f765ab0a49309cb">test_problem_class</a> (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R, P &gt; &amp;problem_class_instance, R &amp;parameters, R &amp;residual, double step=1e-4, double tolerance=1e-8, int verbosity=0, bool test_hessian=true)</td></tr>
+<tr class="separator:a4f49b32a485caf5f3f765ab0a49309cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d650904c9a8f16d1ad6b8f2d3b766d5"><td class="memTemplParams" colspan="2">template&lt;class ForwardIt &gt; </td></tr>
 <tr class="memitem:a7d650904c9a8f16d1ad6b8f2d3b766d5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7d650904c9a8f16d1ad6b8f2d3b766d5">wrap</a> (ForwardIt begin, ForwardIt end)</td></tr>
 <tr class="memdesc:a7d650904c9a8f16d1ad6b8f2d3b766d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes a begin and end iterators and returns a vector of references to each element.  <a href="namespacemolpro_1_1linalg_1_1itsolv.html#a7d650904c9a8f16d1ad6b8f2d3b766d5">More...</a><br /></td></tr>
@@ -3061,6 +3064,66 @@ template&lt;typename value_type , typename std::enable_if_t&lt;!<a class="el" hr
           <td></td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>reduce_to_rank</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f49b32a485caf5f3f765ab0a49309cb" name="a4f49b32a485caf5f3f765ab0a49309cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f49b32a485caf5f3f765ab0a49309cb">&#9670;&nbsp;</a></span>test_problem_class()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename R , typename P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool molpro::linalg::itsolv::test_problem_class </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R, P &gt; &amp;&#160;</td>
+          <td class="paramname"><em>problem_class_instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>residual</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>step</em> = <code>1e-4</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em> = <code>1e-8</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>test_hessian</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
