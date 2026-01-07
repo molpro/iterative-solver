@@ -80,10 +80,10 @@ struct LinearEigensystemF : ::testing::Test {
 
   void residual(const std::vector<Rvector> &psx, std::vector<Rvector> &actions, const std::vector<double> &evals) {
     action(psx, actions);
-    for (size_t k = 0; k < psx.size(); k++) {
+    for (size_t k = 0; k < evals.size(); k++) {
       auto x = Eigen::Map<const Eigen::VectorXd>(psx.at(k).data(), psx.at(k).size());
       auto r = Eigen::Map<Eigen::VectorXd>(actions.at(k).data(), psx.at(k).size());
-      r -= evals[k] * x;
+      r -= evals.at(k) * x;
     }
   }
 
