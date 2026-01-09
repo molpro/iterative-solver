@@ -38,6 +38,13 @@ message(STATUS "iterative-solver: LINEARALGEBRA_ARRAY_GA=${LINEARALGEBRA_ARRAY_G
 message(STATUS "iterative-solver: LINEARALGEBRA_ARRAY_HDF5=${LINEARALGEBRA_ARRAY_HDF5}")
 ##############################
 
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+endif()
+
 
 add_subdirectory(dependencies)
 
