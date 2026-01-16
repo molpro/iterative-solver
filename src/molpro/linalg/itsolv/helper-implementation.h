@@ -3,6 +3,7 @@
 #include <Eigen/Dense>
 #include <cmath>
 #include <cstddef>
+#include <cassert>
 #include <molpro/Profiler.h>
 #include <molpro/lapacke.h>
 #include <molpro/linalg/itsolv/helper.h>

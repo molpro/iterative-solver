@@ -43,18 +43,19 @@ endif ()
 
 if (NOT TARGET Eigen3::Eigen)
     message(VERBOSE "Eigen3::Eigen is not yet a target")
-    find_package(Eigen3 3.3.0 QUIET)
+
+    find_package(Eigen3 5.0.1)
+
     if (EIGEN3_FOUND)
-        message(STATUS "Eigen3 found on system")
+        message(STATUS "Eigen3 (${Eigen3_VERSION})found on system: ${Eigen3_INCLUDE_DIRS}")
     else ()
         message(STATUS "Eigen3::Eigen not found on system, and will be downloaded")
         include(FetchContent)
         FetchContent_Declare(eigen3
                 GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-                GIT_TAG 3.3.7
+                GIT_TAG 5.0.1
                 )
         FetchContent_MakeAvailable(eigen3)
-        add_library(Eigen3::Eigen ALIAS eigen)
     endif ()
 else ()
     message(STATUS "iterative-solver: Eigen3::Eigen target already defined")
