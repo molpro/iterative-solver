@@ -183,6 +183,7 @@ public:
 
 template <typename R, typename P = std::map<size_t, typename R::value_type>>
 bool test_problem_class(Problem<R, P>& problem_class_instance, R& parameters, R& residual, double step=1e-4, double tolerance=1e-8, int verbosity=0, bool test_hessian=true) {
+  return false;
 }
 
 /*!
