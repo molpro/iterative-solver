@@ -2,7 +2,6 @@
 MODULE Iterative_Solver
   USE, INTRINSIC :: iso_c_binding
   USE Iterative_Solver_Problem, only : problem_class => Problem
-  public :: apply_p_current_problem ! temporary
   PUBLIC :: Solve_Linear_Eigensystem
   PUBLIC :: Solve_Linear_Equations
   PUBLIC :: Solve_Nonlinear_Equations
