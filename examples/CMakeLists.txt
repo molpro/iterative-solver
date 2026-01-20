@@ -10,6 +10,7 @@ if (FORTRAN
 endif ()
 set(EXAMPLES
         LinearEigensystemExample.cpp
+		LinearEigensystemSpanExample.cpp
         LinearEigensystemDistrArrayExample.cpp
         LinearEigensystemMultirootExample.cpp
         LinearEquationsExample.cpp

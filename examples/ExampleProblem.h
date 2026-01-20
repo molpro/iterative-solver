@@ -3,13 +3,14 @@
 #include <molpro/linalg/itsolv/IterativeSolver.h>
 #include <vector>
 
-class ExampleProblem : public molpro::linalg::itsolv::Problem<std::vector<double>> {
+template<typename Container = std::vector<double>>
+class ExampleProblem : public molpro::linalg::itsolv::Problem<Container> {
 protected:
   double matrix(int i, int j) const { return i == j ? i + 1 : 0.001 * ((i + j) % n); }
 
 public:
-  using Problem::container_t;
-  using Problem::value_t;
+  using container_t = Container;
+  using value_t = typename Container::value_type;
   const size_t n;
   ExampleProblem(size_t n = 10) : n(n) {}
 
