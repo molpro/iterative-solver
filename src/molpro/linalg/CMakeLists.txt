@@ -42,9 +42,10 @@ if (MKL_TYPE STREQUAL "lp64")
 endif ()
 
 if (NOT TARGET Eigen3::Eigen)
+    set(EIGEN_VERSION=3.4.0)
     message(VERBOSE "Eigen3::Eigen is not yet a target")
 
-    find_package(Eigen3 5.0.1)
+    find_package(Eigen3 ${EIGEN_VERSION} QUIET)
 
     if (EIGEN3_FOUND)
         message(STATUS "Eigen3 (${Eigen3_VERSION})found on system: ${Eigen3_INCLUDE_DIRS}")
@@ -53,9 +54,12 @@ if (NOT TARGET Eigen3::Eigen)
         include(FetchContent)
         FetchContent_Declare(eigen3
                 GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-                GIT_TAG 5.0.1
+                GIT_TAG ${EIGEN_VERSION}
                 )
         FetchContent_MakeAvailable(eigen3)
+    endif ()
+    if (NOT TARGET Eigen3::Eigen)
+        add_library(Eigen3::Eigen ALIAS eigen)
     endif ()
 else ()
     message(STATUS "iterative-solver: Eigen3::Eigen target already defined")
@@ -74,8 +78,8 @@ endif ()
 
 
 include(LibraryManagerUtils)
-print_target_properties(BLAS::BLAS STATUS)
-print_target_properties(LAPACK::LAPACK )
+print_target_properties(BLAS::BLAS DEBUG)
+print_target_properties(LAPACK::LAPACK DEBUG)
 print_target_properties(Eigen3::Eigen DEBUG)
 print_target_properties(ga::ga DEBUG)
 print_target_properties(ppidd::ppidd DEBUG)
