@@ -420,6 +420,7 @@ public:
 
   bool test_problem(const Problem<R>& problem, R& v0, R& v1, int verbosity, double threshold) const override {
     bool success = true;
+    double step=1e-4;
     if (this->nonlinear()) {
       if (!problem.test_parameters(0, v0))
         return true;
@@ -432,29 +433,27 @@ public:
       Q parameters0 = m_handlers->qr().copy(v0);
       Q residual0 = m_handlers->qr().copy(v1);
       for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
-        auto value1 = problem.residual(v0, v1);
-        if (verbosity > 1) {
-          std::cout << "testing instance" << instance << std::endl;
-          std::cout << "value1 " << value1 << std::endl;
-          //          std::cout << "parameters1 " << v0[0] << "," << v0[1] << ",..." << std::endl;
-          //          std::cout << "residual1 " << v1[0] << "," << v1[1] << ",..." << std::endl;
-        }
         Q parameters1 = m_handlers->qr().copy(v0);
-        Q residual1 = m_handlers->qr().copy(v1);
-        m_handlers->rq().copy(v0, residual1);
-        m_handlers->rr().scal(0.5, v0);
-        m_handlers->rq().axpy(0.5, residual0, v0);
-        m_handlers->rq().copy(v1, parameters1);
-        m_handlers->rq().axpy(-1, parameters0, v1);
-        auto dv_analytic = m_handlers->rr().dot(v0, v1);
-        //        if (verbosity > 1) {
-        //          std::cout << "mean residual " << v0[0] << "," << v0[1] << ",..." << std::endl;
-        //          std::cout << "step " << v1[0] << "," << v1[1] << ",..." << std::endl;
-        //        }
-        success = success && std::abs(dv_analytic - (value1 - value0)) < threshold;
-        if (verbosity > 0 or (verbosity > -1 and not success))
-          std::cout << "{actual, extrapolated} value change: {" << value1 - value0 << ", " << dv_analytic << "}"
-                    << std::endl;
+        m_handlers->rq().axpy(-1.0, parameters0, v0);
+        m_handlers->rr().scal(1 / std::sqrt(m_handlers->rr().dot(v0, v0)), v0);
+        Q step1 = m_handlers->qr().copy(v0);
+        auto residual_analytic = m_handlers->rq().dot(v0, residual0);
+        m_handlers->rq().copy(v0, parameters0);
+        m_handlers->rq().axpy(-2*step, step1, v0);
+        auto valuem2 = problem.residual(v0, v1);
+        m_handlers->rq().copy(v0, parameters0);
+        m_handlers->rq().axpy(-1*step, step1, v0);
+        auto valuem1 = problem.residual(v0, v1);
+        m_handlers->rq().copy(v0, parameters0);
+        m_handlers->rq().axpy(+1*step, step1, v0);
+        auto valuep1 = problem.residual(v0, v1);
+        m_handlers->rq().copy(v0, parameters0);
+        m_handlers->rq().axpy(+2*step, step1, v0);
+        auto valuep2 = problem.residual(v0, v1);
+        auto residual_numerical = (valuem2 - 8*valuem1 + 8*valuep1 - valuep2) / (12*step);
+        if (verbosity > 1)
+          std::cout << "testing problem class, instance: " << instance << ", numerical: " << residual_numerical <<", analytical: "<<residual_analytic <<", difference: "<<residual_numerical-residual_analytic << std::endl;
+        success = success && std::abs(residual_numerical - residual_analytic) < threshold;
       }
     } else {
       for (int instance = 0; problem.test_parameters(instance, v0); ++instance) {

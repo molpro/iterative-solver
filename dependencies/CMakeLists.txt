@@ -44,7 +44,7 @@ if (NOT PPIDD AND (MPI AND LINEARALGEBRA_ARRAY_GA))
             FetchContent_Declare(
                     ga
                     GIT_REPOSITORY https://github.com/molpro/ga.git
-                    GIT_TAG 2518e23433385bfa3726d507b8cd0d7ed038021b
+                    GIT_TAG 0f3b92d814ffa47b82650bbd2662010a58052a16
             )
             FetchContent_MakeAvailable(ga)
             foreach (t ga ga_src dra eaf elio sf linalg)
