@@ -10610,13 +10610,6 @@
       <anchor>a3e077733271d54ad4d3182d2d9aeb9ab</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function">
-      <type>subroutine, public</type>
-      <name>apply_p_current_problem</name>
-      <anchorfile>namespaceiterative__solver.html</anchorfile>
-      <anchor>af549c18c82c1991ba10874982d745626</anchor>
-      <arglist>(p, g, nvec, ranges)</arglist>
-    </member>
     <member kind="variable">
       <type>integer, parameter, public</type>
       <name>mpicomm_kind</name>

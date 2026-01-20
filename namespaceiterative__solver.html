@@ -178,8 +178,6 @@ Functions/Subroutines</h2></td></tr>
 <tr class="separator:aeed2ec3b74a21dd29d3ab3853ace408b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e077733271d54ad4d3182d2d9aeb9ab"><td class="memItemLeft" align="right" valign="top">logical function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a3e077733271d54ad4d3182d2d9aeb9ab">iterative_solver_converged</a> ()</td></tr>
 <tr class="separator:a3e077733271d54ad4d3182d2d9aeb9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af549c18c82c1991ba10874982d745626"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#af549c18c82c1991ba10874982d745626">apply_p_current_problem</a> (p, g, nvec, ranges)</td></tr>
-<tr class="separator:af549c18c82c1991ba10874982d745626"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -193,46 +191,6 @@ Variables</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >IterativeSolver Fortran binding. </p>
 </div><h2 class="groupheader">Function/Subroutine Documentation</h2>
-<a id="af549c18c82c1991ba10874982d745626" name="af549c18c82c1991ba10874982d745626"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af549c18c82c1991ba10874982d745626">&#9670;&nbsp;</a></span>apply_p_current_problem()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine, public iterative_solver::apply_p_current_problem </td>
-          <td>(</td>
-          <td class="paramtype">real(c_double), dimension(<a class="el" href="namespaceiterative__solver.html#ad1ae0165bd555ba3fbf8d9c6e55d83c0">current_problem</a>%p_space%size, nvec), intent(in)&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real(c_double), dimension(m_nq, nvec), intent(inout)&#160;</td>
-          <td class="paramname"><em>g</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer(c_size_t), intent(in), value&#160;</td>
-          <td class="paramname"><em>nvec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer(c_size_t), dimension(2, nvec), intent(in)&#160;</td>
-          <td class="paramname"><em>ranges</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa8b03a6e82fb1df6df6b25e5017d3714" name="aa8b03a6e82fb1df6df6b25e5017d3714"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa8b03a6e82fb1df6df6b25e5017d3714">&#9670;&nbsp;</a></span>iterative_solver_add_equations()</h2>
 
@@ -733,8 +691,8 @@ Variables</h2></td></tr>
 <div class="line">    <span class="keyword">CALL </span>iterative_solver_finalize</div>
 <div class="line">  <span class="keyword">end subroutine </span>solve</div>
 <div class="line"><span class="keyword">END PROGRAM </span>linear_eigensystem_example</div>
-<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:54</div></div>
-<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__rank__global_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__rank__global.html">iterative_solver::mpi_rank_global</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:62</div></div>
+<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:53</div></div>
+<div class="ttc" id="ainterfaceiterative__solver_1_1mpi__rank__global_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__rank__global.html">iterative_solver::mpi_rank_global</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:61</div></div>
 <div class="ttc" id="anamespaceiterative__solver__matrix__problem_html"><div class="ttname"><a href="namespaceiterative__solver__matrix__problem.html">iterative_solver_matrix_problem</a></div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Matrix_Problem.F90:1</div></div>
 <div class="ttc" id="anamespaceiterative__solver_html"><div class="ttname"><a href="namespaceiterative__solver.html">iterative_solver</a></div><div class="ttdoc">IterativeSolver Fortran binding.</div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:2</div></div>
 <div class="ttc" id="astructiterative__solver__matrix__problem_1_1matrix__problem_html"><div class="ttname"><a href="structiterative__solver__matrix__problem_1_1matrix__problem.html">iterative_solver_matrix_problem::matrix_problem</a></div><div class="ttdoc">A specialisation of the Problem class for linear problems in which the kernel matrix is stored in ful...</div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Matrix_Problem.F90:5</div></div>

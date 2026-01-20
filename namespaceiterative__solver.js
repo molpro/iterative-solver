@@ -2,7 +2,6 @@ var namespaceiterative__solver =
 [
     [ "mpi_init", "interfaceiterative__solver_1_1mpi__init.html", null ],
     [ "mpi_rank_global", "interfaceiterative__solver_1_1mpi__rank__global.html", null ],
-    [ "apply_p_current_problem", "namespaceiterative__solver.html#af549c18c82c1991ba10874982d745626", null ],
     [ "iterative_solver_add_equations", "namespaceiterative__solver.html#aa8b03a6e82fb1df6df6b25e5017d3714", null ],
     [ "iterative_solver_add_p", "namespaceiterative__solver.html#aa924c3a27ae8d7dfb5f6946c9ab55222", null ],
     [ "iterative_solver_add_vector", "namespaceiterative__solver.html#a70258968c6cc6e822b9008afcccd8a79", null ],
