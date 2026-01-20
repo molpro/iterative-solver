@@ -98,7 +98,7 @@ public:
   virtual std::vector<scalar_type> working_set_eigenvalues() const override {
     auto eval = std::vector<scalar_type>{};
     for (auto i : this->working_set()) {
-      eval.emplace_back(this->m_subspace_solver->eigenvalues().at(i));
+      eval.push_back(i < this->m_subspace_solver->eigenvalues().size() ? this->m_subspace_solver->eigenvalues().at(i) : 0);
     }
     return eval;
   }

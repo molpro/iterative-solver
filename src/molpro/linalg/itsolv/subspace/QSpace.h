@@ -9,6 +9,8 @@
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/PSpace.h>
 #include <molpro/linalg/itsolv/wrap.h>
+#include <molpro/linalg/itsolv/util.h>
+#include <molpro/linalg/itsolv/helper-implementation.h>
 
 namespace molpro::linalg::itsolv::subspace {
 
@@ -82,14 +84,22 @@ struct QSpace {
                        qspace::QParam<Q>{std::make_unique<Q>(m_handlers->qr().copy(params.at(i))),
                                          std::make_unique<Q>(m_handlers->qr().copy(actions.at(i))), m_unique_id++});
     }
-    const size_t nQnew = params.size();
+    size_t nQnew = params.size();
+    if (nQnew>1) {
+      auto s = Matrix<double>({nQnew,nQnew});
+      s.slice() = qq.at(EqnData::S).slice({0,0},{nQnew,nQnew});
+      auto rp = molpro::linalg::itsolv::detail::redundant_parameters(s, 0, nQnew,
+                                                                     1e-8, *m_logger);
+      nQnew -= rp.size();
+      for (auto& p : rp) {m_params.pop_back();}
+    }
     const auto nXnew = dims.nX + nQnew;
     auto data = old_data;
     for (auto d : {EqnData::H, EqnData::S}) {
       data[d].resize({dims.nX + nQnew, dims.nX + nQnew});
       data[d].slice({dims.oQ + nQnew, dims.oQ + nQnew}, {data[d].rows(), data[d].cols()}) =
           old_data[d].slice({dims.oQ, dims.oQ}, {dims.nX, dims.nX});
-      data[d].slice({dims.oQ, dims.oQ}, {dims.oQ + nQnew, dims.oQ + nQnew}) = qq.at(d);
+      data[d].slice({dims.oQ, dims.oQ}, {dims.oQ + nQnew, dims.oQ + nQnew}) = qq.at(d).slice({0,0},{nQnew,nQnew});
       data[d].slice({dims.oQ, 0}, {dims.oQ + nQnew, dims.oQ}) = qx.at(d).slice({0, 0}, {nQnew, dims.oQ});
       data[d].slice({dims.oQ, dims.oQ + nQnew}, {dims.oQ + nQnew, nXnew}) =
           qx.at(d).slice({0, dims.oQ}, {nQnew, dims.nX});

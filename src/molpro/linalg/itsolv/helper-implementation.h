@@ -8,6 +8,9 @@
 #include <molpro/lapacke.h>
 #include <molpro/linalg/itsolv/helper.h>
 
+#include "Logger.h"
+#include "subspace/Matrix.h"
+
 namespace molpro::linalg::itsolv {
 
 template <typename value_type>
@@ -669,5 +672,56 @@ void solve_DIIS(std::vector<value_type>& solution, const std::vector<value_type>
   }
 }
 } // namespace molpro::linalg::itsolv
+
+
+namespace molpro::linalg::itsolv::detail {
+
+/*!
+ * @brief Deduces a set of parameters that are redundant due to linear dependencies
+ *
+ * Only the last nR parameters are considered for removal. Linear dependencies are discovered by performing SVD of the
+ * overlap matrix.
+ *
+ * @param overlap overlap matrix of the full subspace
+ * @param oR offset to the start of parameter block
+ * @param nR number of parameters to consider for removal
+ * @param svd_thresh singular value threshold for choosing the null space
+ * @param logger logger
+ * @return indices of the last nR parameters that are considered redundant.
+ */
+template <typename value_type, typename value_type_abs>
+auto redundant_parameters(const subspace::Matrix<value_type>& overlap, const size_t oR, const size_t nR,
+                          const value_type_abs svd_thresh, Logger& logger) {
+  auto prof = molpro::Profiler::single();
+  prof->start("itsolv::svd_system");
+  logger.msg("redundant_parameters()", Logger::Trace);
+  auto redundant_params = std::vector<int>{};
+  auto rspace_indices = std::vector<int>(nR);
+  std::iota(std::begin(rspace_indices), std::end(rspace_indices), 0);
+  auto svd = svd_system(overlap.rows(), overlap.cols(),
+                        array::Span(const_cast<value_type*>(overlap.data().data()), overlap.size()), svd_thresh, true);
+  prof->stop();
+  prof->start("find redundant parameters");
+  for (const auto& singular_system : svd) {
+    if (!rspace_indices.empty()) {
+      auto rspace_contribution = std::vector<value_type_abs>{};
+      for (auto i : rspace_indices)
+        rspace_contribution.push_back(std::abs(singular_system.v.at(oR + i)));
+      auto it_min = std::max_element(std::begin(rspace_contribution), std::end(rspace_contribution));
+      auto imin = std::distance(std::begin(rspace_contribution), it_min);
+      redundant_params.push_back(rspace_indices[imin]);
+      rspace_indices.erase(std::begin(rspace_indices) + imin);
+      std::stringstream ss;
+      ss << std::setprecision(3) << "redundant parameter found, i = " << redundant_params.back()
+         << ", svd.value = " << singular_system.value
+         << ", svd.v[i] = " << singular_system.v[oR + redundant_params.back()];
+      logger.msg(ss.str(), Logger::Info);
+    }
+  }
+  prof->stop();
+  return redundant_params;
+}
+
+}
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ITERATIVESOLVER_HELPER_IMPLEMENTATION_H_
