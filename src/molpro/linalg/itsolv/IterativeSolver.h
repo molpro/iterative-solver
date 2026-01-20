@@ -181,6 +181,11 @@ public:
   virtual bool test_parameters(unsigned int instance, R& parameters) const { return false; }
 };
 
+template <typename R, typename P = std::map<size_t, typename R::value_type>>
+bool test_problem_class(Problem<R, P>& problem_class_instance, R& parameters, R& residual, double step=1e-4, double tolerance=1e-8, int verbosity=0, bool test_hessian=true) {
+  return false;
+}
+
 /*!
  * @brief Base class defining the interface common to all iterative solvers
  *
@@ -387,7 +392,8 @@ public:
    * @param problem
    * @param v0
    * @param v1
-   * @param v2
+   * @param verbosity
+   * @param threshold
    * @return false if errors were found, otherwise true
    */
   virtual bool test_problem(const Problem<R>& problem, R& v0, R& v1, int verbosity = 0,
