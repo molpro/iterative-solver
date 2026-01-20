@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('NonLinearEquationsExample_8cpp-example
 <div class="line">  molpro::mpi::init();</div>
 <div class="line">  {</div>
 <div class="line">    <span class="keyword">auto</span> problem = ExampleProblem(argc &gt; 1 ? std::stoi(argv[1]) : 20);</div>
-<div class="line">    <span class="keyword">using </span><a id="_a0" name="_a0"></a><a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">Rvector</a> = ExampleProblem::container_t;</div>
+<div class="line">    <span class="keyword">using </span><a id="_a0" name="_a0"></a><a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">Rvector</a> = <span class="keyword">decltype</span>(problem)::container_t;</div>
 <div class="line">    <span class="keyword">auto</span> solver = molpro::linalg::itsolv::create_NonLinearEquations&lt;Rvector&gt;(<span class="stringliteral">&quot;DIIS&quot;</span>);</div>
 <div class="line">    solver-&gt;set_verbosity(<a id="a1" name="a1"></a><a class="code hl_enumvalue" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac8246e59286ac3630c4c80231d6ed172a290612199861c31d1036b185b4e69b75">molpro::linalg::itsolv::Verbosity::Summary</a>);</div>
 <div class="line">    <a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">Rvector</a> c(problem.n, 0), g(problem.n);</div>

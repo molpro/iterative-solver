@@ -28,6 +28,8 @@ var annotated =
             [ "CompareAbs", "structmolpro_1_1linalg_1_1array_1_1util_1_1CompareAbs.html", "structmolpro_1_1linalg_1_1array_1_1util_1_1CompareAbs" ],
             [ "DistrFlags", "classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags" ],
             [ "Distribution", "classmolpro_1_1linalg_1_1array_1_1util_1_1Distribution.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1Distribution" ],
+            [ "is_allocatable", "structmolpro_1_1linalg_1_1array_1_1util_1_1is__allocatable.html", null ],
+            [ "is_allocatable< T, std::enable_if_t< std::is_constructible_v< T, std::size_t > > >", "structmolpro_1_1linalg_1_1array_1_1util_1_1is__allocatable_3_01T_00_01std_1_1enable__if__t_3_01s4c121521a6d4db1772cdee40d8878c6b.html", null ],
             [ "is_std_array", "structmolpro_1_1linalg_1_1array_1_1util_1_1is__std__array.html", null ],
             [ "is_std_array< std::array< T, N > >", "structmolpro_1_1linalg_1_1array_1_1util_1_1is__std__array_3_01std_1_1array_3_01T_00_01N_01_4_01_4.html", null ],
             [ "LockMPI3", "classmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3" ],

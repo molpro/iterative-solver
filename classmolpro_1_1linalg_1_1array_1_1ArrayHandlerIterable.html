@@ -197,7 +197,10 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memTemplParams" colspan="2">template&lt;typename T , typename S , typename std::enable_if_t&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a6ab167ff19207a0141449fb9e359dc7e">util::is_array_v</a>&lt; T &gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
 <tr class="memitem:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html#a16b328328cac8d8cbfccf744fa7baa4f">copyAny</a> (const S &amp;source)</td></tr>
 <tr class="separator:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memTemplParams" colspan="2">template&lt;typename T , typename S , typename std::enable_if_t&lt;!<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a6ab167ff19207a0141449fb9e359dc7e">util::is_array_v</a>&lt; T &gt;, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memTemplParams" colspan="2">template&lt;typename T , typename S , typename std::enable_if_t&lt;!<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a6ab167ff19207a0141449fb9e359dc7e">util::is_array_v</a>&lt; T &gt; &amp;&amp;<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#aaba327f38775ab51cf90be6370a3cf25">util::is_allocatable_v</a>&lt; T &gt;, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html#a16b328328cac8d8cbfccf744fa7baa4f">copyAny</a> (const S &amp;source)</td></tr>
+<tr class="separator:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memTemplParams" colspan="2">template&lt;typename T , typename S , typename std::enable_if_t&lt;!<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a6ab167ff19207a0141449fb9e359dc7e">util::is_array_v</a>&lt; T &gt; &amp;&amp;!<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#aaba327f38775ab51cf90be6370a3cf25">util::is_allocatable_v</a>&lt; T &gt;, int &gt;  = 0&gt; </td></tr>
 <tr class="memitem:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html#a16b328328cac8d8cbfccf744fa7baa4f">copyAny</a> (const S &amp;source)</td></tr>
 <tr class="separator:a16b328328cac8d8cbfccf744fa7baa4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">molpro::linalg::array::ArrayHandler&lt; AL, AL &gt;</a></td></tr>
@@ -406,7 +409,7 @@ template&lt;typename AL , typename AR  = AL&gt; </div>
 </div>
 </div>
 <a id="a16b328328cac8d8cbfccf744fa7baa4f" name="a16b328328cac8d8cbfccf744fa7baa4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16b328328cac8d8cbfccf744fa7baa4f">&#9670;&nbsp;</a></span>copyAny() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a16b328328cac8d8cbfccf744fa7baa4f">&#9670;&nbsp;</a></span>copyAny() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -436,14 +439,44 @@ template&lt;typename T , typename S , typename std::enable_if_t&lt; <a class="el
 </div>
 </div>
 <a id="a16b328328cac8d8cbfccf744fa7baa4f" name="a16b328328cac8d8cbfccf744fa7baa4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16b328328cac8d8cbfccf744fa7baa4f">&#9670;&nbsp;</a></span>copyAny() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a16b328328cac8d8cbfccf744fa7baa4f">&#9670;&nbsp;</a></span>copyAny() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename AL , typename AR  = AL&gt; </div>
 <div class="memtemplate">
-template&lt;typename T , typename S , typename std::enable_if_t&lt;!<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a6ab167ff19207a0141449fb9e359dc7e">util::is_array_v</a>&lt; T &gt;, int &gt;  = 0&gt; </div>
+template&lt;typename T , typename S , typename std::enable_if_t&lt;!<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a6ab167ff19207a0141449fb9e359dc7e">util::is_array_v</a>&lt; T &gt; &amp;&amp;<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#aaba327f38775ab51cf90be6370a3cf25">util::is_allocatable_v</a>&lt; T &gt;, int &gt;  = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html">molpro::linalg::array::ArrayHandlerIterable</a>&lt; AL, AR &gt;::copyAny </td>
+          <td>(</td>
+          <td class="paramtype">const S &amp;&#160;</td>
+          <td class="paramname"><em>source</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a16b328328cac8d8cbfccf744fa7baa4f" name="a16b328328cac8d8cbfccf744fa7baa4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16b328328cac8d8cbfccf744fa7baa4f">&#9670;&nbsp;</a></span>copyAny() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AL , typename AR  = AL&gt; </div>
+<div class="memtemplate">
+template&lt;typename T , typename S , typename std::enable_if_t&lt;!<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a6ab167ff19207a0141449fb9e359dc7e">util::is_array_v</a>&lt; T &gt; &amp;&amp;!<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#aaba327f38775ab51cf90be6370a3cf25">util::is_allocatable_v</a>&lt; T &gt;, int &gt;  = 0&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

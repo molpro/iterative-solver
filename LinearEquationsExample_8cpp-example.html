@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('LinearEquationsExample_8cpp-example.ht
 <div class="line">  molpro::mpi::init();</div>
 <div class="line">  {</div>
 <div class="line">    <span class="keyword">auto</span> problem = ExampleProblem(argc &gt; 1 ? std::stoi(argv[1]) : 20);</div>
-<div class="line">    <span class="keyword">using </span><a id="_a0" name="_a0"></a><a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">Rvector</a> = ExampleProblem::container_t;</div>
+<div class="line">    <span class="keyword">using </span><a id="_a0" name="_a0"></a><a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">Rvector</a> = <span class="keyword">decltype</span>(problem)::container_t;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// old</span></div>
 <div class="line">    <span class="keyword">auto</span> solver = molpro::linalg::itsolv::create_LinearEquations&lt;Rvector&gt;(<span class="stringliteral">&quot;Davidson&quot;</span>);</div>

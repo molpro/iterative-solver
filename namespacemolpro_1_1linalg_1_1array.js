@@ -59,6 +59,7 @@ var namespacemolpro_1_1linalg_1_1array =
       [ "Distributed", "namespacemolpro_1_1linalg_1_1array.html#acc52e65e7b1ba494644a4783d10a8500a8c16cbebef45d87fd2b36ce69f46c526", null ],
       [ "DistributedDisk", "namespacemolpro_1_1linalg_1_1array.html#acc52e65e7b1ba494644a4783d10a8500a7767e6bfd66b2c629f74e4be4031e01e", null ]
     ] ],
+    [ "allocate_array", "namespacemolpro_1_1linalg_1_1array.html#a0f1558ddafd2f5f706c0b761ab27af32", null ],
     [ "begin", "namespacemolpro_1_1linalg_1_1array_1_1span.html#a10915fd6a2e9dcdac5d6c13e3cce49be", null ],
     [ "begin", "namespacemolpro_1_1linalg_1_1array_1_1span.html#a1685994156d0ee2713c481e85594a8d8", null ],
     [ "check_abs", "namespacemolpro_1_1linalg_1_1array.html#a6acd07fa233242b91864374861696f46", null ],

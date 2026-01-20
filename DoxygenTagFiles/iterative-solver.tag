@@ -1030,6 +1030,13 @@
       <anchor>a16b328328cac8d8cbfccf744fa7baa4f</anchor>
       <arglist>(const S &amp;source)</arglist>
     </member>
+    <member kind="function" protection="protected">
+      <type>T</type>
+      <name>copyAny</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html</anchorfile>
+      <anchor>a16b328328cac8d8cbfccf744fa7baa4f</anchor>
+      <arglist>(const S &amp;source)</arglist>
+    </member>
   </compound>
   <compound kind="class">
     <name>molpro::linalg::array::ArrayHandlerIterableSparse</name>
@@ -4204,6 +4211,17 @@
       <anchor>a99e796dd3705718bb375477d04e4fa28</anchor>
       <arglist>(std::ostream &amp;os, const Interpolate &amp;interpolant)</arglist>
     </member>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::array::util::is_allocatable</name>
+    <filename>structmolpro_1_1linalg_1_1array_1_1util_1_1is__allocatable.html</filename>
+    <templarg>typename T</templarg>
+    <templarg>typename</templarg>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::array::util::is_allocatable&lt; T, std::enable_if_t&lt; std::is_constructible_v&lt; T, std::size_t &gt; &gt; &gt;</name>
+    <filename>structmolpro_1_1linalg_1_1array_1_1util_1_1is__allocatable_3_01T_00_01std_1_1enable__if__t_3_01s4c121521a6d4db1772cdee40d8878c6b.html</filename>
+    <templarg>typename T</templarg>
   </compound>
   <compound kind="struct">
     <name>molpro::linalg::itsolv::is_complex</name>
@@ -10781,6 +10799,13 @@
       <enumvalue file="namespacemolpro_1_1linalg_1_1array.html" anchor="acc52e65e7b1ba494644a4783d10a8500a7767e6bfd66b2c629f74e4be4031e01e">DistributedDisk</enumvalue>
     </member>
     <member kind="function">
+      <type>T</type>
+      <name>allocate_array</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>a0f1558ddafd2f5f706c0b761ab27af32</anchor>
+      <arglist>(std::size_t size)</arglist>
+    </member>
+    <member kind="function">
       <type>constexpr auto</type>
       <name>check_abs</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
@@ -10932,6 +10957,8 @@
     <class kind="struct">molpro::linalg::array::util::CompareAbs</class>
     <class kind="class">molpro::linalg::array::util::DistrFlags</class>
     <class kind="class">molpro::linalg::array::util::Distribution</class>
+    <class kind="struct">molpro::linalg::array::util::is_allocatable</class>
+    <class kind="struct">molpro::linalg::array::util::is_allocatable&lt; T, std::enable_if_t&lt; std::is_constructible_v&lt; T, std::size_t &gt; &gt; &gt;</class>
     <class kind="struct">molpro::linalg::array::util::is_std_array</class>
     <class kind="struct">molpro::linalg::array::util::is_std_array&lt; std::array&lt; T, N &gt; &gt;</class>
     <class kind="class">molpro::linalg::array::util::LockMPI3</class>
@@ -11125,6 +11152,13 @@
       <name>is_array_v</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
       <anchor>a6ab167ff19207a0141449fb9e359dc7e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_allocatable_v</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>aaba327f38775ab51cf90be6370a3cf25</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">

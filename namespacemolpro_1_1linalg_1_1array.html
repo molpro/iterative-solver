@@ -257,6 +257,10 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a0f1558ddafd2f5f706c0b761ab27af32"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a0f1558ddafd2f5f706c0b761ab27af32"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array.html#a0f1558ddafd2f5f706c0b761ab27af32">allocate_array</a> (std::size_t size)</td></tr>
+<tr class="memdesc:a0f1558ddafd2f5f706c0b761ab27af32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates an array of type T to hold the specified amount of items.  <a href="namespacemolpro_1_1linalg_1_1array.html#a0f1558ddafd2f5f706c0b761ab27af32">More...</a><br /></td></tr>
+<tr class="separator:a0f1558ddafd2f5f706c0b761ab27af32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1685994156d0ee2713c481e85594a8d8"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a1685994156d0ee2713c481e85594a8d8"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1span.html#a1685994156d0ee2713c481e85594a8d8">begin</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; T &gt; &amp;x)</td></tr>
 <tr class="separator:a1685994156d0ee2713c481e85594a8d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -396,6 +400,37 @@ template&lt;class... Ts&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a0f1558ddafd2f5f706c0b761ab27af32" name="a0f1558ddafd2f5f706c0b761ab27af32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f1558ddafd2f5f706c0b761ab27af32">&#9670;&nbsp;</a></span>allocate_array()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T molpro::linalg::array::allocate_array </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Allocates an array of type T to hold the specified amount of items. </p>
+<p >This function serves as a customization point for array types that don't support allocation via a constructor that takes in a size. The default implementation will throw an exception for such types and is hence only viable in case no such allocations are required during any point of execution.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>The number of objects the to-be-allocated array should encompass </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The allocated array</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>There exists no hook for deallocation. It is assumed that the memory allocated by specializations of this function is managed and tracked externally and freed once this library has done all requested work (or in between solver invocations). </dd></dl>
+
+</div>
+</div>
 <a id="a6acd07fa233242b91864374861696f46" name="a6acd07fa233242b91864374861696f46"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6acd07fa233242b91864374861696f46">&#9670;&nbsp;</a></span>check_abs()</h2>
 
