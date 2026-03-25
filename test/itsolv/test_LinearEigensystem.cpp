@@ -139,6 +139,7 @@ struct LinearEigensystemF : ::testing::Test {
     return std::make_tuple(x, g);
   }
 
+  bool repeated_guess = false;
   auto initial_guess(std::vector<Rvector> &x) {
     const auto n_roots = x.size();
     std::vector<size_t> guess;
@@ -148,7 +149,7 @@ struct LinearEigensystemF : ::testing::Test {
     }
     for (size_t root = 0; root < n_roots; root++) {
       guess.push_back(std::min_element(diagonals.begin(), diagonals.end()) - diagonals.begin()); // initial guess
-      *std::min_element(diagonals.begin(), diagonals.end()) = 1e99;
+      if (! repeated_guess) *std::min_element(diagonals.begin(), diagonals.end()) = 1e99;
       x[root][guess.back()] = 1; // initial guess
     }
   }
@@ -234,7 +235,8 @@ struct LinearEigensystemF : ::testing::Test {
       action(x, g);
       solver->add_vector(x, g);
     }
-    auto n_working_vectors_guess = std::max(nroot, n_working_vectors_max > 0 ? n_working_vectors_max : nroot);
+    auto n_working_vectors_guess = std::min(
+      g.size(), std::max(nroot, n_working_vectors_max > 0 ? n_working_vectors_max : nroot));
     x.resize(n_working_vectors_guess);
     g.resize(n_working_vectors_guess);
     update(g, solver->working_set_eigenvalues());
@@ -429,5 +431,14 @@ TEST_F(LinearEigensystemF, solution) {
         }
       }
     }
+  }
+}
+
+TEST_F(LinearEigensystemF, linearly_dependent_guess) {
+  LinearEigensystemF::repeated_guess = true;
+  LinearEigensystemF::verbosity = 99;
+  for (const size_t n : std::vector<size_t>{2}) {
+      load_matrix(n, "", (double)1);
+      test_eigen(std::to_string(n));
   }
 }
