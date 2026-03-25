@@ -9,5 +9,6 @@ LibraryManager_Append(${PROJECT_NAME}
         NonLinearEquationsDIISOptions.h
         SOURCES Interpolate.cpp
         PUBLIC_HEADER Interpolate.h
+        PUBLIC_HEADER helper-implementation.h
         )
 add_subdirectory(subspace)
