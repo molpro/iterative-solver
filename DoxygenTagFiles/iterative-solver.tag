@@ -11765,13 +11765,6 @@
     </member>
     <member kind="function">
       <type>auto</type>
-      <name>redundant_parameters</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>af6f410b0781a5f1d5b8c88afece5d4b1</anchor>
-      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t oR, const size_t nR, const value_type_abs svd_thresh, Logger &amp;logger)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
       <name>get_new_working_set</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
       <anchor>ad3c2afce975327f0d495ef8f7d2eff86</anchor>
@@ -11797,6 +11790,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
       <anchor>a7e59cce18c2d88b4a7f69312b4736043</anchor>
       <arglist>(const CVecRef&lt; R &gt; &amp;rparams, const CVecRef&lt; Q &gt; &amp;qparams, array::ArrayHandler&lt; R, Q &gt; &amp;handler, Logger &amp;logger)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>redundant_parameters</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>af6f410b0781a5f1d5b8c88afece5d4b1</anchor>
+      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t oR, const size_t nR, const value_type_abs svd_thresh, Logger &amp;logger)</arglist>
     </member>
   </compound>
   <compound kind="namespace">
