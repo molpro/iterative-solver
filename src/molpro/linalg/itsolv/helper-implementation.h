@@ -90,9 +90,9 @@ std::list<SVD<value_type>> svd_lapacke_dgesvd(size_t nrows, size_t ncols, const 
   int n = ncols;
   int sdim = std::min(m, n);
   std::vector<double> sv(sdim), u(nrows * nrows), v(ncols * ncols);
-  double superb[sdim - 1];
+  std::vector<double> superb(sdim - 1);
   info = LAPACKE_dgesvd(LAPACK_ROW_MAJOR, 'N', 'A', int(nrows), int(ncols), const_cast<double*>(mat.data()), int(ncols),
-                        sv.data(), u.data(), int(nrows), v.data(), int(ncols), superb);
+                        sv.data(), u.data(), int(nrows), v.data(), int(ncols), superb.data());
   auto svd_system = std::list<SVD<value_type>>{};
   for (int i = int(ncols) - 1; i >= 0; --i) {
     if (std::abs(sv[i]) < threshold) {
