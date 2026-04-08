@@ -7,6 +7,9 @@
 #include <molpro/linalg/itsolv/propose_rspace.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceSolverOptBFGS.h>
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
+#include <cmath>
+#include <map>
+#include <memory>
 
 namespace molpro::linalg::itsolv {
 /*!
@@ -95,6 +98,8 @@ public:
       Interpolate inter({-1, fprev, gprev}, {0, fcurrent, gcurrent});
       auto [x, f, g, h] = inter.minimize(-1 - this->m_linesearch_grow_factor, this->m_linesearch_grow_factor);
       //      molpro::cout << "interpolation" << x << " f=" << f << " g=" << g << " h=" << h << std::endl;
+      if (std::isnan(x))
+        throw std::runtime_error("NaN in line search");
       if (std::abs(x) > m_linesearch_tolerance) {
         //        molpro::cout << "taking line search" << std::endl;
         this->m_logger->msg("Line search step taken", Logger::Info);
