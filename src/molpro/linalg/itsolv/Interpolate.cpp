@@ -119,8 +119,8 @@ Interpolate::point Interpolate::minimize_cubic() const {
   const auto c = m_parameters[1];
   const auto b = 2 * m_parameters[2];
   const auto a = 3 * m_parameters[3];
-  if (std::abs(a) < 1e-6) { // quadratic not cubic
-    return Interpolate::point{-c/b};
+  if (std::abs(a) < 1e-10 * std::max(std::abs(c), std::abs(b))) { // quadratic not cubic
+    return Interpolate::point{-c / b};
   }
   auto discriminant = b*b / (4 * a*a) - c /  a;
 //  std::cout << "a " << a << std::endl;
