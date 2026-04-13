@@ -325,7 +325,7 @@ public:
       throw std::runtime_error("Inconsistent container sizes in IterativeSolver::solve()");
     this->m_logger->set_verbosity(log::Verbosity::None);
     if (this->m_verbosity == Verbosity::Detailed) {
-      this->m_logger->set_verbosity(log::Verbosity::Info);
+      this->m_logger->set_verbosity(log::Verbosity::Trace);
       this->m_logger->enable_data_dumps(true);
     }
     bool use_diagonals = problem.diagonals(actions.at(0));

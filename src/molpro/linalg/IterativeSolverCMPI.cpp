@@ -190,8 +190,8 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
     //    solver_cast->set_max_size_qspace(10);
     //    solver_cast->set_reset_D(50);
     solver->logger->set_verbosity(
-        verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Info
-                      : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Trace : molpro::linalg::itsolv::log::Verbosity::None));
+        verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Trace
+                      : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Debug : molpro::linalg::itsolv::log::Verbosity::Info));
     solver->logger->set_min_severity(
         verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
     solver->logger->enable_data_dumps(verbosity > 0);
@@ -223,8 +223,8 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
   solver->set_convergence_threshold(thresh);
   solver->set_convergence_threshold_value(thresh_value);
   solver->logger->set_verbosity(
-      verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Info
-                    : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Trace : molpro::linalg::itsolv::log::Verbosity::None));
+      verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Trace
+                    : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Debug : molpro::linalg::itsolv::log::Verbosity::Info));
   solver->logger->set_min_severity(
       verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
   solver->logger->enable_data_dumps(verbosity > 0);
@@ -253,8 +253,8 @@ extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* ra
   molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>*>(instance.solver.get());
   solver->logger->set_verbosity(
-     verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Info
-                   : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Trace : molpro::linalg::itsolv::log::Verbosity::None));
+     verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Trace
+                   : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Debug : molpro::linalg::itsolv::log::Verbosity::Info));
   solver->logger->set_min_severity(
       verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
   solver->logger->enable_data_dumps(verbosity > 0);
@@ -279,8 +279,8 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>*>(instance.solver.get());
   solver->logger->set_verbosity(
-     verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Info
-                   : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Trace : molpro::linalg::itsolv::log::Verbosity::None));
+     verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Trace
+                   : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Debug : molpro::linalg::itsolv::log::Verbosity::Info));
   solver->logger->set_min_severity(
       verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
   solver->logger->enable_data_dumps(verbosity > 0);
