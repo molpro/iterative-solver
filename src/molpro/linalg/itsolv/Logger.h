@@ -435,33 +435,37 @@ protected:
   // These functions are the traditional customization points by means of subclassing and overwriting
 
   virtual void default_message_handler(log::Severity severity, log::Verbosity verbosity, std::string_view msg) const {
-    bool add_colon = true;
+    bool add_colon = false;
     switch (severity) {
     case log::Severity::Normal:
-        add_colon = false;
         break;
     case log::Severity::Warning:
         molpro::cout << "[WARNING]";
+        add_colon = true;
         break;
     case log::Severity::Error:
         molpro::cout << "[ERROR]:";
+        add_colon = true;
         break;
     case log::Severity::Fatal:
         molpro::cout << "[FATAL]:";
+        add_colon = true;
         break;
     }
     switch (verbosity) {
     case log::Verbosity::None:
-        add_colon = false;
         break;
     case log::Verbosity::Info:
         molpro::cout << "[INFO]";
+        add_colon = true;
         break;
     case log::Verbosity::Debug:
         molpro::cout << "[DEBUG]";
+        add_colon = true;
         break;
     case log::Verbosity::Trace:
         molpro::cout << "[TRACE]";
+        add_colon = true;
         break;
     };
 
