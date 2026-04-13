@@ -1,9 +1,9 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_SUBSPACESOLVERDIIS_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_SUBSPACESOLVERDIIS_H
-#include <algorithm>
 #include <molpro/linalg/itsolv/subspace/ISubspaceSolver.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
+#include <molpro/linalg/itsolv/Logger.h>
 
 namespace molpro::linalg::itsolv::subspace {
 
@@ -25,14 +25,12 @@ public:
       : m_converged(converged), m_logger(std::move(logger)) {}
 
   void solve(IXSpace<R, Q, P>& xspace, const size_t nroots_max) override {
-    m_logger->msg("SubspaceSolverDIIS::solve", Logger::Trace);
+    m_logger->trace("SubspaceSolverDIIS::solve");
 
     auto kH = xspace.data[EqnData::H];
     auto kS = xspace.data[EqnData::S];
-    if (m_logger->data_dump) {
-      m_logger->msg("S = " + as_string(kS), Logger::Info);
-      m_logger->msg("H = " + as_string(kH, 15), Logger::Info);
-    }
+    m_logger->data_dump("S = ", kS);
+    m_logger->data_dump<15>("H = ", kH);
     auto kDim = kH.rows();
     m_solutions.resize({1, kDim});
     if (m_converged) {
@@ -60,9 +58,7 @@ public:
     for (size_t i = 0; i < kDim; ++i)
       m_solutions(0, i) = solution[i];
     m_errors.assign(1, kH(0, 0)); // TODO fix
-    if (m_logger->data_dump) {
-      m_logger->msg("solution = " + as_string(m_solutions), Logger::Info);
-    }
+    m_logger->data_dump("solution = ", m_solutions);
   }
 
 public:

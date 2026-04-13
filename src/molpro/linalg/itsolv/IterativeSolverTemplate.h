@@ -1,7 +1,5 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_ITERATIVESOLVERTEMPLATE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_ITERATIVESOLVERTEMPLATE_H
-#include <cmath>
-#include <iostream>
 #include <molpro/Profiler.h>
 #include <molpro/iostream.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
@@ -13,7 +11,10 @@
 #include <molpro/linalg/itsolv/util.h>
 #include <molpro/linalg/itsolv/wrap.h>
 #include <molpro/profiler/Profiler.h>
-#include <stack>
+
+#include <cmath>
+#include <format>
+#include <iostream>
 
 namespace molpro::linalg::itsolv {
 namespace detail {
@@ -87,7 +88,7 @@ void normalise(const size_t n_roots, const VecRef<R>& params, const VecRef<R>& a
       handler.scal(1. / dot, params.at(i));
       handler.scal(1. / dot, actions.at(i));
     } else {
-      logger.msg("solution parameter's length is too small, dot = " + Logger::scientific(dot), Logger::Warn);
+      logger.warn("solution parameter's length is too small, dot = " + std::format("{:.2e}", dot));
     }
   }
 }
@@ -140,12 +141,9 @@ public:
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     profiler()->push("itsolv::add_vector");
     auto prof = molpro::Profiler::single();
-    m_logger->msg("IterativeSolverTemplate::add_vector  iteration = " + std::to_string(m_stats->iterations),
-                  Logger::Trace);
-    m_logger->msg("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = " +
-                      std::to_string(parameters.size()) + ", " + std::to_string(actions.size()) + ", " +
-                      std::to_string(m_working_set.size()) + ", ",
-                  Logger::Debug);
+    m_logger->trace("IterativeSolverTemplate::add_vector  iteration = ", m_stats->iterations);
+    m_logger->debug("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = ",
+                      parameters.size(), actions.size(), m_working_set.size());
     if (m_xspace->dimensions().nP != 0 && !m_apply_p)
       throw std::runtime_error(
           "Solver contains P space but no valid apply_p function. Make sure add_p was called correctly.");
@@ -325,10 +323,10 @@ public:
       throw std::runtime_error("Empty container passed to IterativeSolver::solve()");
     if (parameters.size() != actions.size())
       throw std::runtime_error("Inconsistent container sizes in IterativeSolver::solve()");
-    this->m_logger->max_trace_level = Logger::None;
+    this->m_logger->set_verbosity(log::Verbosity::None);
     if (this->m_verbosity == Verbosity::Detailed) {
-      this->m_logger->max_trace_level = Logger::Info;
-      this->m_logger->data_dump = true;
+      this->m_logger->set_verbosity(log::Verbosity::Info);
+      this->m_logger->enable_data_dumps(true);
     }
     bool use_diagonals = problem.diagonals(actions.at(0));
     std::unique_ptr<Q> diagonals;
@@ -376,6 +374,7 @@ public:
                     actions, apply_on_p);
     }
     for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
+      m_logger->info<log::NewIteration>("Iteration, Current errors", iter, m_errors);
       value_type value;
       if (this->nonlinear()) {
         value = problem.residual(*parameters.begin(), *actions.begin());
@@ -560,7 +559,7 @@ protected:
         }
       }
     }
-    m_logger->msg("add_vector::errors = ", begin(m_errors), end(m_errors), Logger::Trace, 6);
+    m_logger->trace("add_vector::errors = ", m_errors);
     return m_working_set.size();
   }
 

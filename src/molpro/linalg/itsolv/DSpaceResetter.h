@@ -14,9 +14,9 @@ namespace molpro::linalg::itsolv::detail {
 template <class R, class Q, class P, typename value_type>
 void resize_qspace(subspace::IXSpace<R, Q, P>& xspace, const subspace::Matrix<value_type>& solutions,
                    int m_max_Qsize_after_reset, Logger& logger) {
-  logger.msg("resize_qspace()", Logger::Trace);
+  logger.trace("resize_qspace()");
   auto q_delete = limit_qspace_size(xspace.dimensions(), m_max_Qsize_after_reset, solutions, logger);
-  logger.msg("delete Q parameter indices = ", q_delete.begin(), q_delete.end(), Logger::Debug);
+  logger.debug("delete Q parameter indices = ", q_delete);
   std::sort(begin(q_delete), end(q_delete), std::greater<int>());
   for (auto iq : q_delete)
     xspace.eraseq(iq);
@@ -32,7 +32,7 @@ void resize_qspace(subspace::IXSpace<R, Q, P>& xspace, const subspace::Matrix<va
 template <class R, class Q>
 auto max_overlap_with_R(const CVecRef<R>& rparams, const CVecRef<Q>& qparams, array::ArrayHandler<R, Q>& handler,
                         Logger& logger) {
-  logger.msg("max_overlap_with_R()", Logger::Trace);
+  logger.trace("max_overlap_with_R()");
   const auto nR = rparams.size();
   auto overlap = subspace::util::overlap(rparams, qparams, handler);
   auto q_indices = std::vector<int>(qparams.size());
@@ -44,8 +44,7 @@ auto max_overlap_with_R(const CVecRef<R>& rparams, const CVecRef<Q>& qparams, ar
       ov.push_back(std::abs(overlap(i, j)));
     auto it_max = std::max_element(ov.begin(), ov.end());
     auto i_max = std::distance(ov.begin(), it_max);
-    logger.msg("removed q index = " + std::to_string(q_indices[i_max]) + ", with overlap = " + std::to_string(*it_max),
-               Logger::Debug);
+    logger.debug("removed q index = " + std::to_string(q_indices[i_max]) + ", with overlap = " + std::to_string(*it_max));
     q_max_overlap.push_back(q_indices[i_max]);
     q_indices.erase(q_indices.begin() + i_max);
   }
@@ -98,14 +97,12 @@ public:
   std::vector<int> run(const VecRef<R>& rparams, subspace::IXSpace<R, Q, P>& xspace,
                        const subspace::Matrix<value_type>& solutions, const value_type_abs norm_thresh,
                        const value_type_abs svd_thresh, ArrayHandlers<R, Q, P>& handlers, Logger& logger) {
-    logger.msg("DSpaceResetter::run()", Logger::Trace);
-    logger.msg("dimensions {nP, nQ, nD, nR} = " + std::to_string(xspace.dimensions().nP) + ", " +
-                   std::to_string(xspace.dimensions().nQ) + ", " + std::to_string(xspace.dimensions().nD) + ", " +
-                   std::to_string(rparams.size()),
-               Logger::Trace);
+    logger.trace("DSpaceResetter::run()");
+    logger.trace("dimensions {nP, nQ, nD, nR} = ", xspace.dimensions().nP, xspace.dimensions().nQ,
+			xspace.dimensions().nD, rparams.size());
     auto solutions_proj = solutions;
     if (solution_params.empty() && !rparams.empty()) {
-      logger.msg("constructing solutions", Logger::Debug);
+      logger.debug("constructing solutions");
       const auto dims = xspace.dimensions();
       const auto overlap = xspace.data.at(subspace::EqnData::S);
       auto q_indices = std::vector<int>(xspace.dimensions().nQ);

@@ -14,6 +14,7 @@
 #else
 #include <molpro/linalg/array/DistrArrayFile.h>
 #endif
+#include <molpro/linalg/itsolv/Logger.h>
 #include <molpro/linalg/array/DistrArrayMPI3.h>
 #include <molpro/linalg/array/DistrArraySpan.h>
 #include <molpro/linalg/array/Span.h>
@@ -188,12 +189,12 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
     //    solver_cast->propose_rspace_norm_thresh = 1.0e-14;
     //    solver_cast->set_max_size_qspace(10);
     //    solver_cast->set_reset_D(50);
-    solver->logger->max_trace_level =
-        verbosity > 3 ? molpro::linalg::itsolv::Logger::Info
-                      : (verbosity > 2 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
-    solver->logger->max_warn_level =
-        verbosity > 1 ? molpro::linalg::itsolv::Logger::Warn : molpro::linalg::itsolv::Logger::Error;
-    solver->logger->data_dump = (verbosity > 0);
+    solver->logger->set_verbosity(
+        verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Info
+                      : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Trace : molpro::linalg::itsolv::log::Verbosity::None));
+    solver->logger->set_min_severity(
+        verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
+    solver->logger->enable_data_dumps(verbosity > 0);
   }
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
@@ -221,12 +222,12 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
   solver->add_equations(rr);
   solver->set_convergence_threshold(thresh);
   solver->set_convergence_threshold_value(thresh_value);
-  solver->logger->max_trace_level =
-      verbosity > 3 ? molpro::linalg::itsolv::Logger::Info
-                    : (verbosity > 2 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
-  solver->logger->max_warn_level =
-      verbosity > 1 ? molpro::linalg::itsolv::Logger::Warn : molpro::linalg::itsolv::Logger::Error;
-  solver->logger->data_dump = (verbosity > 0);
+  solver->logger->set_verbosity(
+      verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Info
+                    : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Trace : molpro::linalg::itsolv::log::Verbosity::None));
+  solver->logger->set_min_severity(
+      verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
+  solver->logger->enable_data_dumps(verbosity > 0);
   // instance.solver->m_verbosity = verbosity;
   instance.solver->set_verbosity(verbosity);
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
@@ -251,12 +252,12 @@ extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* ra
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
   molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>*>(instance.solver.get());
-  solver->logger->max_trace_level =
-     verbosity > 3 ? molpro::linalg::itsolv::Logger::Info
-                   : (verbosity > 2 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
-  solver->logger->max_warn_level =
-      verbosity > 1 ? molpro::linalg::itsolv::Logger::Warn : molpro::linalg::itsolv::Logger::Error;
-  solver->logger->data_dump = (verbosity > 0);
+  solver->logger->set_verbosity(
+     verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Info
+                   : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Trace : molpro::linalg::itsolv::log::Verbosity::None));
+  solver->logger->set_min_severity(
+      verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
+  solver->logger->enable_data_dumps(verbosity > 0);
 }
 
 extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin, size_t* range_end, double thresh,
@@ -277,12 +278,12 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   instance.solver->set_verbosity(verbosity);
   molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>*>(instance.solver.get());
-  solver->logger->max_trace_level =
-     verbosity > 3 ? molpro::linalg::itsolv::Logger::Info
-                   : (verbosity > 2 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
-  solver->logger->max_warn_level =
-      verbosity > 1 ? molpro::linalg::itsolv::Logger::Warn : molpro::linalg::itsolv::Logger::Error;
-  solver->logger->data_dump = (verbosity > 0);
+  solver->logger->set_verbosity(
+     verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Info
+                   : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Trace : molpro::linalg::itsolv::log::Verbosity::None));
+  solver->logger->set_min_severity(
+      verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
+  solver->logger->enable_data_dumps(verbosity > 0);
 
   instance.has_values = true;
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
