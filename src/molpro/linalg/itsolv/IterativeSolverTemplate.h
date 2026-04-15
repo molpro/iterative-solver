@@ -119,6 +119,20 @@ std::vector<int> select_working_set(const size_t nw, const std::vector<T>& error
 
 } // namespace detail
 
+namespace log {
+
+/*!
+ * Context used when logging about the beginning of a new iteration
+ */
+struct NewIteration : ContextBase<NewIteration, true, int, std::vector<double>> {
+  static constexpr const char *name = "NewIteration";
+  static constexpr std::size_t iter = 0;
+  static constexpr std::size_t errors = 1;
+};
+static_assert(context<NewIteration>);
+
+}
+
 /*!
  * @brief Implements IterativeSolver interface that is common to all solvers
  *
