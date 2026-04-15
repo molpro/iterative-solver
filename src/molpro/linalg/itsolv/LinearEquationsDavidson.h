@@ -4,6 +4,8 @@
 #include <molpro/linalg/itsolv/DSpaceResetter.h>
 #include <molpro/linalg/itsolv/IterativeSolverTemplate.h>
 #include <molpro/linalg/itsolv/propose_rspace.h>
+#include <molpro/linalg/itsolv/subspace/SubspaceSolverLinEig.h>
+#include <molpro/linalg/itsolv/subspace/XSpace.h>
 
 namespace molpro::linalg::itsolv {
 /*!
