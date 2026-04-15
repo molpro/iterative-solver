@@ -324,13 +324,13 @@ public:
 
   void iteration_report() const {
     std::stringstream sstream;
-    report(sstream);
+    report(sstream, false);
     this->m_logger->info<log::IterationReport>(sstream.str());
   }
 
   void summary_report() const {
     std::stringstream sstream;
-    report(sstream);
+    report(sstream, false);
     this->m_logger->info<log::SummaryReport>(sstream.str());
   }
 
