@@ -510,9 +510,8 @@ public:
 
   template<std::size_t precision = log::default_precision, typename ...Ts>
   void data_dump(std::string_view what, Ts...data) const {
-    log_ctx(log::DataDump::name, sizeof...(data));
-
     if (!m_dump_data) {
+      log_ctx(log::DataDump::name, sizeof...(data));
       return;
     }
 
