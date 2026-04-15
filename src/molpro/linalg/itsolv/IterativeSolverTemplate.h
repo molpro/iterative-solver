@@ -12,6 +12,7 @@
 #include <molpro/linalg/itsolv/wrap.h>
 #include <molpro/profiler/Profiler.h>
 
+#include <cassert>
 #include <cmath>
 #include <format>
 #include <iostream>
@@ -151,6 +152,13 @@ public:
   IterativeSolverTemplate(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(const IterativeSolverTemplate<Solver, R, Q, P>&) = delete;
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
+
+  void set_logger(std::shared_ptr<Logger> logger) override {
+    assert(logger);
+    m_logger = std::move(logger);
+  }
+
+  Logger &logger() override { return *m_logger; }
 
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     profiler()->push("itsolv::add_vector");
