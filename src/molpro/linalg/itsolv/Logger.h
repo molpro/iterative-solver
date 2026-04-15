@@ -399,14 +399,14 @@ struct LogHandler {
 };
 
 template< typename Context, typename ...Args >
-concept static_handler_exists = requires (const Logger &logger) {
+concept static_handler_exists = requires (const Logger &logger, Args ...args) {
   LogHandler<Context>::handle(logger, std::declval<Severity>(), std::declval<Verbosity>(),
-      std::declval<std::string_view>(),std::declval<Args>()...);
+      std::declval<std::string_view>(), args...);
 };
 template< typename Context, typename ...Args >
-concept member_handler_exists = requires (const LogHandler<Context> &handler) {
+concept member_handler_exists = requires (const LogHandler<Context> &handler, Args ...args) {
   handler.handle(std::declval<Severity>(), std::declval<Verbosity>(),
-      std::declval<std::string_view>(), std::declval<Args>()...);
+      std::declval<std::string_view>(), args...);
 };
 
 /*!
