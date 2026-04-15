@@ -9,6 +9,7 @@ if (FORTRAN
     )
 endif ()
 set(EXAMPLES
+        CustomizedLoggingExample.cpp
         LinearEigensystemExample.cpp
 		LinearEigensystemSpanExample.cpp
         LinearEigensystemDistrArrayExample.cpp
