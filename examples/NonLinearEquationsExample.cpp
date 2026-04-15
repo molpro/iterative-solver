@@ -9,7 +9,6 @@ int main(int argc, char* argv[]) {
     auto problem = ExampleProblem(argc > 1 ? std::stoi(argv[1]) : 20);
     using Rvector = decltype(problem)::container_t;
     auto solver = molpro::linalg::itsolv::create_NonLinearEquations<Rvector>("DIIS");
-    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::Summary);
     Rvector c(problem.n, 0), g(problem.n);
     if (not solver->solve(c, g, problem))
       std::cout << "failed" << std::endl;

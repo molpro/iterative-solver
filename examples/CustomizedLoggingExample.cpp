@@ -101,7 +101,6 @@ int main(int argc, char* argv[]) {
     auto solver = create_LinearEigensystem<Rvector>("Davidson");
 
     solver->set_n_roots(argc > 2 ? std::stoi(argv[2]) : 2);
-    solver->set_verbosity(Verbosity::Detailed);
     solver->set_max_iter(100);
 
     std::vector<Rvector> c, g;

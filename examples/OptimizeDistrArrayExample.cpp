@@ -12,8 +12,9 @@ int main(int argc, char* argv[]) {
     using Rvector = molpro::linalg::array::DistrArraySpan;
     auto solver = molpro::linalg::itsolv::create_Optimize<Rvector, molpro::linalg::array::DistrArrayFile>("BFGS");
     auto problem = ExampleProblem(argc > 1 ? std::stoi(argv[1]) : 20);
-    solver->set_verbosity(molpro::mpi::rank_global() == 0 ? molpro::linalg::itsolv::Verbosity::Summary
-                                                          : molpro::linalg::itsolv::Verbosity::None);
+    if (molpro::mpi::rank_global() != 0) {
+      solver->logger().set_verbosity(molpro::linalg::itsolv::log::Verbosity::None);
+    }
     solver->set_max_iter(100);
     auto distribution = molpro::linalg::array::util::make_distribution_spread_remainder<Rvector::index_type>(
         problem.n, molpro::mpi::size_global());

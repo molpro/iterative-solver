@@ -17,7 +17,6 @@ int main(int argc, char* argv[]) {
 	using Qvector = std::vector<double>;
     auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector>("Davidson");
     solver->set_n_roots(argc > 2 ? std::stoi(argv[2]) : 2);
-    //  solver->set_verbosity(molpro::linalg::itsolv::Verbosity::Detailed);
     solver->set_max_iter(100);
 
 	// This simulates having some sort of externally managed buffers that are used
