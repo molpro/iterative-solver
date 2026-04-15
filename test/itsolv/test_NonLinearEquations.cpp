@@ -235,7 +235,6 @@ TEST(NonLinearEquations, trig) {
       }
     } else {
       auto problem = trigProblem();
-      solver->set_verbosity(molpro::linalg::itsolv::Verbosity::Iteration);
       solver->solve(x,g, problem);
     }
     molpro::cout << "final x=" << x << ", g=" << g << std::endl;

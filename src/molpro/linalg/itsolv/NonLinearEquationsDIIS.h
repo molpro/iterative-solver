@@ -159,7 +159,7 @@ public:
   void report(std::ostream& cout, bool endl = true) const override {
     SolverTemplate::report(cout, endl);
     //    auto& err = this->m_errors;
-    //    std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(molpro::cout, ", "));
+    //    std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(cout, ", "));
     //    cout << std::defaultfloat;
     //    cout << ", max q" << this->m_max_size_qspace; // get_max_size_qspace();
     //    if (endl)

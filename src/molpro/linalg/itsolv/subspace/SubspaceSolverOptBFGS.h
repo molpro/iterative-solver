@@ -3,6 +3,7 @@
 #include <molpro/linalg/itsolv/subspace/ISubspaceSolver.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
+#include <molpro/linalg/itsolv/Logger.h>
 
 namespace molpro::linalg::itsolv::subspace {
 
@@ -21,7 +22,7 @@ public:
   explicit SubspaceSolverOptBFGS(std::shared_ptr<Logger> logger) : m_logger(std::move(logger)) {}
 
   void solve(IXSpace<R, Q, P>& xspace, const size_t nroots_max) override {
-    m_logger->msg("SubspaceSolverOptBFGS::solve", Logger::Trace);
+    m_logger->trace("SubspaceSolverOptBFGS::solve");
     assert(xspace.data.end() != xspace.data.find(EqnData::value));
     auto values = xspace.data[EqnData::value];
     assert(xspace.size() == values.size());
@@ -29,19 +30,15 @@ public:
     auto kH = xspace.data[EqnData::H];
     auto kS = xspace.data[EqnData::S];
     auto kValue = xspace.data[EqnData::value];
-    if (m_logger->data_dump) {
-      m_logger->msg("S = " + as_string(kS), Logger::Info);
-      m_logger->msg("H = " + as_string(kH, 15), Logger::Info);
-      m_logger->msg("value = " + as_string(kValue, 15), Logger::Info);
-    }
+    m_logger->data_dump("S = ", kS);
+    m_logger->data_dump<15>("H = ", kH);
+    m_logger->data_dump<15>("value = ", kValue);
     auto kDim = kH.rows();
     m_solutions.resize({1, kDim});
     m_solutions.slice().fill(0);
     m_solutions(0, 0) = 1;
     m_errors.assign(1, kH(0, 0)); // FIXME
-    if (m_logger->data_dump) {
-      m_logger->msg("solution = " + as_string(m_solutions), Logger::Info);
-    }
+    m_logger->data_dump("solution = ", m_solutions);
   }
 
 public:

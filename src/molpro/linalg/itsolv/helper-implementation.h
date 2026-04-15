@@ -1,15 +1,20 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITERATIVESOLVER_HELPER_IMPLEMENTATION_H_
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITERATIVESOLVER_HELPER_IMPLEMENTATION_H_
 #include <Eigen/Dense>
-#include <cmath>
-#include <cstddef>
-#include <cassert>
+
 #include <molpro/Profiler.h>
 #include <molpro/lapacke.h>
 #include <molpro/linalg/itsolv/helper.h>
 
 #include "Logger.h"
 #include "subspace/Matrix.h"
+
+#include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <iomanip>
+#include <list>
+#include <numeric>
 
 namespace molpro::linalg::itsolv {
 
@@ -694,7 +699,7 @@ auto redundant_parameters(const subspace::Matrix<value_type>& overlap, const siz
                           const value_type_abs svd_thresh, Logger& logger) {
   auto prof = molpro::Profiler::single();
   prof->start("itsolv::svd_system");
-  logger.msg("redundant_parameters()", Logger::Trace);
+  logger.trace("redundant_parameters()");
   auto redundant_params = std::vector<int>{};
   auto rspace_indices = std::vector<int>(nR);
   std::iota(std::begin(rspace_indices), std::end(rspace_indices), 0);
@@ -715,7 +720,7 @@ auto redundant_parameters(const subspace::Matrix<value_type>& overlap, const siz
       ss << std::setprecision(3) << "redundant parameter found, i = " << redundant_params.back()
          << ", svd.value = " << singular_system.value
          << ", svd.v[i] = " << singular_system.v[oR + redundant_params.back()];
-      logger.msg(ss.str(), Logger::Info);
+      logger.info(ss.str());
     }
   }
   prof->stop();

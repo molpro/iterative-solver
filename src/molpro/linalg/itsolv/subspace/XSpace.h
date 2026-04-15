@@ -1,12 +1,14 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_XSPACE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_XSPACE_H
-#include <cassert>
 #include <molpro/linalg/itsolv/helper.h>
+#include <molpro/linalg/itsolv/subspace/util.h>
 #include <molpro/linalg/itsolv/subspace/DSpace.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 #include <molpro/linalg/itsolv/subspace/PSpace.h>
 #include <molpro/linalg/itsolv/subspace/QSpace.h>
+
+#include <cassert>
 
 namespace molpro::linalg::itsolv::subspace {
 namespace xspace {
@@ -69,16 +71,14 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
                  qx[EqnData::S].slice({0, dims.oQ}, {nQnew, dims.oQ + dims.nQ}));
   transpose_copy(xq[EqnData::S].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}),
                  qx[EqnData::S].slice({0, dims.oD}, {nQnew, dims.oD + dims.nD}));
-  if (logger.data_dump) {
-    logger.msg("xspace::update_qspace_data() nQnew = " + std::to_string(nQnew), Logger::Info);
-    logger.msg("Sqq = " + as_string(qq[EqnData::S]), Logger::Info);
-    logger.msg("Hqq = " + as_string(qq[EqnData::H]), Logger::Info);
-    logger.msg("Sqx = " + as_string(qx[EqnData::S]), Logger::Info);
-    logger.msg("Hqx = " + as_string(qx[EqnData::H]), Logger::Info);
-    logger.msg("Sxq = " + as_string(xq[EqnData::S]), Logger::Info);
-    logger.msg("Hxq = " + as_string(xq[EqnData::H]), Logger::Info);
-    logger.msg("rhs_q = " + as_string(qq[EqnData::rhs]), Logger::Info);
-  }
+  logger.data_dump("xspace::update_qspace_data() nQnew = ", nQnew);
+  logger.data_dump("Sqq = ", qq[EqnData::S]);
+  logger.data_dump("Hqq = ", qq[EqnData::H]);
+  logger.data_dump("Sqx = ", qx[EqnData::S]);
+  logger.data_dump("Hqx = ", qx[EqnData::H]);
+  logger.data_dump("Sxq = ", xq[EqnData::S]);
+  logger.data_dump("Hxq = ", xq[EqnData::H]);
+  logger.data_dump("rhs_q = ", qq[EqnData::rhs]);
   return data;
 }
 
@@ -98,12 +98,10 @@ auto update_dspace_overlap_data(const CVecRef<P>& pparams, const CVecRef<Q>& qpa
   data.qx[EqnData::S].slice({0, nP}, {nD, nX}) = util::overlap(dparams, qparams, handler_qq);
   data.qq[EqnData::rhs].slice() = util::overlap(dparams, rhs, handler_qq);
   transpose_copy(data.xq[EqnData::S].slice(), data.qx[EqnData::S].slice());
-  if (logger.data_dump) {
-    logger.msg("xspace::update_dspace_overlap_data() nD = " + std::to_string(nD), Logger::Info);
-    logger.msg("Sdd = " + as_string(data.qq[EqnData::S]), Logger::Info);
-    logger.msg("Sdx = " + as_string(data.qx[EqnData::S]), Logger::Info);
-    logger.msg("rhs_d = " + as_string(data.qq[EqnData::rhs]), Logger::Info);
-  }
+  logger.data_dump("xspace::update_dspace_overlap_data() nD = ", nD);
+  logger.data_dump("Sdd = ", data.qq[EqnData::S]);
+  logger.data_dump("Sdx = ", data.qx[EqnData::S]);
+  logger.data_dump("rhs_d = ", data.qq[EqnData::rhs]);
   return data;
 }
 
@@ -124,12 +122,10 @@ auto update_dspace_action_data(const CVecRef<P>& pparams, const CVecRef<Q>& qpar
   data.xq[e].slice({nP, 0}, {nX, nD}) = util::overlap(qparams, dactions, handler_qq);
   data.qx[e].slice({0, nP}, {nD, nX}) = util::overlap(dparams, qactions, handler_qq);
   transpose_copy(data.qx[e].slice({0, 0}, {nD, nP}), data.xq[e].slice({0, 0}, {nP, nD}));
-  if (logger.data_dump) {
-    logger.msg("xspace::update_dspace_action_data() nD = " + std::to_string(nD), Logger::Info);
-    logger.msg("Hdd = " + as_string(data.qq[e]), Logger::Info);
-    logger.msg("Hdx = " + as_string(data.qx[e]), Logger::Info);
-    logger.msg("Hxd = " + as_string(data.xq[e]), Logger::Info);
-  }
+  logger.data_dump("xspace::update_dspace_action_data() nD = ", nD);
+  logger.data_dump("Hdd = ", data.qq[e]);
+  logger.data_dump("Hdx = ", data.qx[e]);
+  logger.data_dump("Hxd = ", data.xq[e]);
   return data;
 }
 
@@ -162,7 +158,7 @@ public:
 
   //! Update parameters in Q space and corresponding equation data
   void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions) override {
-    m_logger->msg("QSpace::update_qspace", Logger::Trace);
+    m_logger->trace("QSpace::update_qspace");
     auto new_data =
         xspace::update_qspace_data(params, actions, cparamsp(), cparamsq(), cactionsq(), cparamsd(), cactionsd(),
                                    cwrap(m_rhs), m_dim, *m_handlers, *m_logger, m_hermitian, m_action_dot_action);

@@ -14,9 +14,9 @@ int main(int argc, char* argv[]) {
         molpro::linalg::itsolv::create_LinearEigensystem<Rvector, molpro::linalg::array::DistrArrayFile>("Davidson");
     solver->set_n_roots(argc > 2 ? std::stoi(argv[2]) : 2);
     auto problem = ExampleProblem(argc > 1 ? std::stoi(argv[1]) : 50, argc > 3 ? std::stoi(argv[3]) : solver->n_roots());
-    solver->set_verbosity(molpro::mpi::rank_global() == 0 ? molpro::linalg::itsolv::Verbosity::Summary
-                                                          : molpro::linalg::itsolv::Verbosity::None);
-    //  solver->set_verbosity(molpro::linalg::itsolv::Verbosity::Detailed);
+    if (molpro::mpi::rank_global() != 0) {
+      solver->logger().set_verbosity(molpro::linalg::itsolv::log::Verbosity::None);
+    }
     solver->set_max_iter(100);
     solver->set_max_p(5);
     //  solver->set_p_threshold(3.7);
