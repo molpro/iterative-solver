@@ -357,7 +357,6 @@ public:
   virtual double convergence_threshold_value() const = 0;
   [[deprecated("Set the verbosity on the logger directly")]]
   virtual void set_verbosity(Verbosity v) = 0;
-  [[deprecated("Set the verbosity on the logger directly")]]
   virtual void set_verbosity(int v) = 0;
   [[deprecated("Query the logger directly")]]
   virtual Verbosity get_verbosity() const = 0;

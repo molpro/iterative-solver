@@ -345,13 +345,22 @@ public:
   double convergence_threshold_value() const override { return m_convergence_threshold_value; }
   void set_verbosity(Verbosity v) override { m_verbosity = v; }
   void set_verbosity(int v) override {
-    m_verbosity = Verbosity::None;
-    if (v > 0)
-      m_verbosity = Verbosity::Summary;
-    if (v > 1)
-      m_verbosity = Verbosity::Iteration;
-    if (v > 2)
-      m_verbosity = Verbosity::Detailed;
+    if (v == 0) {
+      m_logger->set_verbosity(log::Verbosity::None);
+      m_logger->set_min_severity(log::Severity::Error);
+    } else if (v == 1) {
+      m_logger->set_verbosity(log::Verbosity::None);
+      m_logger->set_min_severity(log::Severity::Warning);
+    } else if (v == 2) {
+      m_logger->set_verbosity(log::Verbosity::Info);
+      m_logger->set_min_severity(log::Severity::Normal);
+    } else if (v == 3) {
+      m_logger->set_verbosity(log::Verbosity::Debug);
+      m_logger->set_min_severity(log::Severity::Normal);
+    } else {
+      m_logger->set_verbosity(log::Verbosity::Trace);
+      m_logger->set_min_severity(log::Severity::Normal);
+    }
   }
   Verbosity get_verbosity() const override { return m_verbosity.value_or(Verbosity::None); }
   void set_max_iter(int n) override { m_max_iter = n; }
