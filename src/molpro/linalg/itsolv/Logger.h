@@ -356,6 +356,8 @@ public:
    */
   template< log::tag Tag = log::General, std::size_t precision = log::default_precision, typename ...Ts >
   void msg(log::Severity severity, log::Verbosity verbosity, std::string_view message, Ts && ...args) const {
+    log_ctx(Context::name, sizeof...(args));
+
     if (verbosity < m_verbosity || severity < m_min_severity) {
       return;
     }
@@ -373,9 +375,9 @@ public:
         arg_str = "  ->  " + arg_str;
       }
 
-      default_message_handler(severity, verbosity, std::string(message) + arg_str);
+      default_message_handler(Context::name, severity, verbosity, std::string(message) + arg_str);
     } else {
-      default_message_handler(severity, verbosity, message);
+      default_message_handler(Context::name, severity, verbosity, message);
     }
   }
 
@@ -412,6 +414,8 @@ public:
 
   template<std::size_t precision = log::default_precision, typename ...Ts>
   void data_dump(std::string_view what, Ts...data) const {
+    log_ctx(log::DataDump::name, sizeof...(data));
+
     if (!m_dump_data) {
       return;
     }
@@ -434,7 +438,7 @@ public:
 protected:
   // These functions are the traditional customization points by means of subclassing and overwriting
 
-  virtual void default_message_handler(log::Severity severity, log::Verbosity verbosity, std::string_view msg) const {
+  virtual void default_message_handler(std::string_view ctx, log::Severity severity, log::Verbosity verbosity, std::string_view msg) const {
     bool add_colon = false;
     switch (severity) {
     case log::Severity::Normal:
@@ -469,6 +473,11 @@ protected:
         break;
     };
 
+    if (ctx != log::Generic::name) {
+      molpro::cout << "[" << ctx << "]";
+      add_colon = true;
+    }
+
     molpro::cout << (add_colon ? ": " : "") << msg;
     if (severity >= log::Severity::Error) {
       molpro::cout << std::endl;
@@ -477,7 +486,7 @@ protected:
     }
   }
 
-  virtual void log_tag(const char *tag, std::size_t num_args) const {
+  virtual void log_ctx(std::string_view ctx, std::size_t num_args) const {
     // By default we don't do anything
   }
 
