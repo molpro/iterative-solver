@@ -24,6 +24,7 @@
 #include <molpro/linalg/itsolv/LinearEquationsDavidson.h>
 #include <molpro/linalg/itsolv/SolverFactory.h>
 #include <molpro/linalg/itsolv/wrap.h>
+#include <molpro/linalg/itsolv/Logger.h>
 
 using molpro::Profiler;
 using molpro::linalg::array::Span;
@@ -528,17 +529,21 @@ void IterativeSolverDiagonals(double* diagonals) {
 }
 double IterativeSolverValue() { return instances.top().solver->value(); }
 int IterativeSolverVerbosity() {
-  auto verbosity = instances.top().solver->get_verbosity();
+  auto verbosity = instances.top().solver->logger().verbosity();
+  auto min_severity = instances.top().solver->logger().min_severity();
+
   switch (verbosity) {
-  case decltype(verbosity)::None:
-    return 0;
-  case decltype(verbosity)::Summary:
-    return 1;
-  case decltype(verbosity)::Iteration:
-    return 2;
-  case decltype(verbosity)::Detailed:
-    return 3;
+    using namespace molpro::linalg::itsolv;
+    case log::Verbosity::None:
+      return min_severity == log::Severity::Error ? 0 : 1;
+    case log::Verbosity::Info:
+      return 2;
+    case log::Verbosity::Debug:
+      return 3;
+    case log::Verbosity::Trace:
+      return 4;
   }
+
   return -1;
 }
 int IterativeSolverMaxIter() { return instances.top().solver->get_max_iter(); }
