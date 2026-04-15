@@ -398,12 +398,12 @@ public:
       size_t root = 0;
       if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary) {
         this->m_logger->info("Initial guess generated from diagonal elements");
-	  }
+      }
       for (const auto& g : guess) {
         m_handlers->rp().copy(parameters[root], P{{g.first, 1}});
         if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Detailed) {
           m_logger->debug("-> initial guess with index ", g.first);
-		}
+        }
         root++;
       }
     }
@@ -418,12 +418,12 @@ public:
         }
       if (!selectp.empty() && (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary)) {
         this->m_logger->info("P-space dimension, threshold and limit", selectp.size(), m_p_threshold, m_max_p);
-	  }
+      }
       if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Detailed) {
         for (const auto& s : selectp) {
           this->m_logger->debug(std::format("P space element {}: {}", s.first, s.second));
-		}
-	  }
+        }
+      }
       for (const auto& s : selectp)
         pspace.emplace_back((P){{s.first, 1}});
       fapply_on_p_type apply_on_p = [&problem](const std::vector<std::vector<value_type>>& pcoeff,
@@ -459,17 +459,17 @@ public:
       }
       if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Iteration) {
         iteration_report();
-	  }
+      }
     }
     if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary) {
       summary_report();
-	}
+    }
     if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary) {
       if (*std::max_element(m_errors.begin(), m_errors.end()) > m_convergence_threshold) {
         this->m_logger->warn("Solver has not converged to threshold ", m_convergence_threshold);
       } else {
         this->m_logger->info("Solver converged");
-	  }
+      }
     }
     return nwork == 0 and *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
   }
