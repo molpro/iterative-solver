@@ -116,12 +116,12 @@ public:
     SolverTemplate::report(cout);
     cout << "errors " << std::scientific;
     auto& err = this->m_errors;
-    std::copy(begin(err), end(err), std::ostream_iterator<scalar_type>(molpro::cout, ", "));
+    std::copy(begin(err), end(err), std::ostream_iterator<scalar_type>(cout, ", "));
     cout << std::endl;
     cout << "eigenvalues ";
     auto ev = eigenvalues();
     cout << std::fixed << std::setprecision(14);
-    std::copy(begin(ev), end(ev), std::ostream_iterator<scalar_type>(molpro::cout, ", "));
+    std::copy(begin(ev), end(ev), std::ostream_iterator<scalar_type>(cout, ", "));
     cout << std::defaultfloat;
     if (endl)
       cout << std::endl;
