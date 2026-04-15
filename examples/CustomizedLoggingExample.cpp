@@ -1,7 +1,9 @@
 #include "ExampleProblem.h"
-#include <molpro/linalg/itsolv/SolverFactory.h>
-#include <molpro/linalg/itsolv/Logger.h>
+
 #include <molpro/linalg/itsolv/IterativeSolverTemplate.h>
+#include <molpro/linalg/itsolv/Logger.h>
+#include <molpro/linalg/itsolv/SolverFactory.h>
+#include <molpro/mpi.h>
 
 #include <iostream>
 #include <string_view>
@@ -95,6 +97,7 @@ protected:
 
 
 int main(int argc, char* argv[]) {
+  molpro::mpi::init();
   {
     auto problem = ExampleProblem(argc > 1 ? std::stoi(argv[1]) : 20);
     using Rvector = decltype(problem)::container_t;
@@ -122,6 +125,7 @@ int main(int argc, char* argv[]) {
     for (const auto& ev : solver->eigenvalues())
       std::cout << "Final eigenvalue: " << ev << std::endl;
   }
+  molpro::mpi::finalize();
 }
 
 #include <molpro/linalg/itsolv/SolverFactory-implementation.h>
