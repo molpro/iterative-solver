@@ -542,8 +542,6 @@ protected:
     prof->stop();
     set_value_errors();
     m_errors = m_subspace_solver->errors();
-    for (size_t i = m_errors.size(); i < n_roots(); ++i)
-      m_errors.push_back(1);
     m_working_set = detail::select_working_set(parameters.size(), m_errors, m_convergence_threshold, m_value_errors,
                                                m_convergence_threshold_value);
     for (size_t i = 0; i < m_working_set.size(); ++i) {
