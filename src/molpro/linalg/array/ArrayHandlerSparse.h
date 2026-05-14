@@ -5,10 +5,9 @@
 #include <molpro/linalg/array/util/select.h>
 #include <molpro/linalg/array/util/select_max_dot.h>
 
+namespace molpro::linalg::array {
 using molpro::linalg::array::util::gemm_inner_default;
 using molpro::linalg::array::util::gemm_outer_default;
-
-namespace molpro::linalg::array {
 
 /*!
  * @brief Array handler between two sparse arrays (e.g. std::map)

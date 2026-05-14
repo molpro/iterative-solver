@@ -5,10 +5,9 @@
 #include <molpro/linalg/array/ArrayHandler.h>
 #include <molpro/linalg/array/util/gemm.h>
 
+namespace molpro::linalg::array {
 using molpro::linalg::array::util::gemm_inner_distr_distr;
 using molpro::linalg::array::util::gemm_outer_distr_distr;
-
-namespace molpro::linalg::array {
 
 template <class AL, class AR = AL>
 class ArrayHandlerDDiskDistr : public ArrayHandler<AL, AR> {
