@@ -52,7 +52,12 @@ DistrArraySpan::DistrArraySpan(const DistrArraySpan& source)
 
 DistrArraySpan::DistrArraySpan(const DistrArray& source)
     : DistrArray(source), m_distribution(std::make_unique<Distribution>(source.distribution())) {
-  DistrArraySpan::allocate_buffer(Span<value_type>(&(*source.local_buffer())[0], source.size()));
+  // NOTE: DistrArraySpan is non-owning. This wraps the source's local buffer,
+  // so the source must outlive *this and must use a buffer that survives a
+  // local_buffer() round-trip (memory-backed sources only — disk-backed
+  // sources free their snapshot when the LocalBuffer object is destroyed).
+  auto local = source.local_buffer();
+  DistrArraySpan::allocate_buffer(Span<value_type>(local->data(), local->size()));
 }
 
 DistrArraySpan::DistrArraySpan(DistrArraySpan&& source) noexcept
@@ -193,11 +198,13 @@ void DistrArraySpan::acc(DistrArray::index_type lo, DistrArray::index_type hi, c
 
 std::vector<DistrArraySpan::value_type> DistrArraySpan::gather(const std::vector<index_type>& indices) const {
   std::vector<value_type> data;
+  if (indices.empty())
+    return data;
   data.reserve(indices.size());
   auto minmax = std::minmax_element(indices.begin(), indices.end());
   DistrArray::index_type lo_loc, hi_loc;
   std::tie(lo_loc, hi_loc) = m_distribution->range(mpi_rank(m_communicator));
-  if (*minmax.first < lo_loc || *minmax.second > hi_loc) {
+  if (*minmax.first < lo_loc || *minmax.second >= hi_loc) {
     error("Only local array indices can be accessed via DistrArraySpan.gather() function");
   }
   for (auto i : indices) {
@@ -210,14 +217,16 @@ void DistrArraySpan::scatter(const std::vector<index_type>& indices, const std::
   if (indices.size() != data.size()) {
     error("Length of the indices and data vectors should be the same: DistrArray::scatter()");
   }
+  if (indices.empty())
+    return;
   auto minmax = std::minmax_element(indices.begin(), indices.end());
   DistrArray::index_type lo_loc, hi_loc;
   std::tie(lo_loc, hi_loc) = m_distribution->range(mpi_rank(m_communicator));
-  if (*minmax.first < lo_loc || *minmax.second > hi_loc) {
-    error("Only local array indices can be accessed via DistrArraySpan.gather() function");
+  if (*minmax.first < lo_loc || *minmax.second >= hi_loc) {
+    error("Only local array indices can be accessed via DistrArraySpan.scatter() function");
   }
-  for (auto i : indices) {
-    set(i, data[i - *minmax.first]);
+  for (size_t k = 0; k < indices.size(); ++k) {
+    set(indices[k], data[k]);
   }
 }
 

@@ -53,7 +53,7 @@ public:
    * @param ind array index
    */
   int cover(index_type ind) const {
-    if (ind < border().first || ind > border().second)
+    if (m_chunk_borders.empty() || ind < border().first || ind >= border().second)
       return size();
     auto iter = std::upper_bound(begin(m_chunk_borders), end(m_chunk_borders), ind);
     int chunk = iter == begin(m_chunk_borders) ? size() : distance(begin(m_chunk_borders), prev(iter));
