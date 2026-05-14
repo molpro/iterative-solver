@@ -11,13 +11,13 @@ There are four types of systems that iterative-solver can solve:
 
 The interface for different solvers is declared in ``molpro/linalg/itsolv/IterativeSolver.h``.
 
-Linear eigensystem solver is implemented in ``molpro/linalg/itsolv/LinearEigensystem.h``.
+Linear eigensystem solver is implemented in ``molpro/linalg/itsolv/LinearEigensystemDavidson.h``.
 
 Linear eigensystem and linear equations use a novel P space and D space algorithm described in the paper (WIP).
 
 There is significant overlap between different solvers and all common functionalities are declared in IterativeSolver
 base class and implemented in IterativeSolverTemplate. This makes it easy to extend the library with new solvers.
-See LinearEigensystem for an example of the structure.
+See LinearEigensystemDavidson for an example of the structure.
 
 */
 }
