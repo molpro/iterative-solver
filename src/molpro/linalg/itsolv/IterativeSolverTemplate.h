@@ -138,7 +138,7 @@ public:
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
 
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
-    profiler()->push("itsolv::add_vector");
+    auto outer = profiler()->push("itsolv::add_vector");
     auto prof = molpro::Profiler::single();
     m_logger->msg("IterativeSolverTemplate::add_vector  iteration = " + std::to_string(m_stats->iterations),
                   Logger::Trace);

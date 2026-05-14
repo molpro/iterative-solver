@@ -257,6 +257,8 @@ void DistrArrayFile::scatter(const std::vector<index_type>& indices, const std::
     error("Length of the indices and data vectors should be the same: DistrArray::scatter()");
   }
   auto prof = molpro::Profiler::single()->push("DistrArrayFile::scatter()");
+  if (indices.empty())
+    return;
   auto minmax = std::minmax_element(indices.begin(), indices.end());
   DistrArray::index_type lo_loc, hi_loc;
   auto bounds_loc = local_bounds();
@@ -264,8 +266,8 @@ void DistrArrayFile::scatter(const std::vector<index_type>& indices, const std::
   if (*minmax.first < lo_loc || *minmax.second > hi_loc) {
     error("Only local array indices can be accessed via DistrArrayFile.gather() function");
   }
-  for (auto i : indices) {
-    set(i, data[i - *minmax.first]); // TODO: check it shouldn't be data[*minmax.first++]??
+  for (size_t k = 0; k < indices.size(); ++k) {
+    set(indices[k], data[k]);
   }
   prof += indices.size();
 }

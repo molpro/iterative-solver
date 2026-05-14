@@ -1,13 +1,19 @@
 #include "options.h"
-std::shared_ptr<molpro::Options> s_options;
+namespace {
+std::shared_ptr<molpro::Options>& s_options() {
+  static std::shared_ptr<molpro::Options> instance;
+  return instance;
+}
+} // namespace
 
-const std::shared_ptr<const molpro::Options> molpro::linalg::options() {
-  if (s_options.get() == nullptr) {
-    s_options.reset(new molpro::Options("ITERATIVE-SOLVER", ""));
+std::shared_ptr<const molpro::Options> molpro::linalg::options() {
+  auto& opt = s_options();
+  if (opt.get() == nullptr) {
+    opt = std::make_shared<molpro::Options>("ITERATIVE-SOLVER", "");
   }
-  return s_options;
+  return opt;
 }
 
 void molpro::linalg::set_options(const molpro::Options& options) {
-  s_options = std::make_shared<molpro::Options>(options);
+  s_options() = std::make_shared<molpro::Options>(options);
 }

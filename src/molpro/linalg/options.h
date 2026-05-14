@@ -10,7 +10,7 @@ namespace molpro::linalg {
  * @return The current option set. If none has been assigned, in the Molpro context the "ITERATIVE-SOLVER" option set is
  * used, otherwise empty.
  */
-const std::shared_ptr<const molpro::Options> options();
+std::shared_ptr<const molpro::Options> options();
 /*!
  * @brief Set the options for iterative-solver
  * @param options
