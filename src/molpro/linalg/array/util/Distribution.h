@@ -62,11 +62,15 @@ public:
 
   //! Returns [fist, end) indices for section of array assigned to chunk
   std::pair<index_type, index_type> range(int chunk) const {
+    assert(chunk >= 0 && static_cast<size_t>(chunk) < size() && "chunk index out of range");
     return {m_chunk_borders[chunk], m_chunk_borders[chunk + 1]};
   };
 
   //! @returns [start, end) indices of the distribution
-  std::pair<index_type, index_type> border() const { return {m_chunk_borders.front(), m_chunk_borders.back()}; }
+  std::pair<index_type, index_type> border() const {
+    assert(!m_chunk_borders.empty() && "border() called on default-constructed Distribution");
+    return {m_chunk_borders.front(), m_chunk_borders.back()};
+  }
 
   //! Number of chunks in the distribution
   size_t size() const { return m_chunk_borders.size() ? m_chunk_borders.size() - 1 : 0; };

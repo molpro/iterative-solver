@@ -37,6 +37,10 @@ public:
     auto kDim = kH.rows();
     //    int kVerbosity = m_logger->max_trace_level == Logger::Info ? 3 : 0;
     m_solutions.resize({1, kDim});
+    if (kDim == 0) {
+      m_errors.clear();
+      return;
+    }
     m_solutions.slice().fill(0);
     m_solutions(0, 0) = 1;
     m_errors.assign(1, kH(0, 0));

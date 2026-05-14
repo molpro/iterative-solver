@@ -35,6 +35,10 @@ public:
     }
     auto kDim = kH.rows();
     m_solutions.resize({1, kDim});
+    if (kDim == 0) {
+      m_errors.clear();
+      return;
+    }
     if (m_converged) {
       m_solutions.fill(0);
       m_solutions(0, 0) = 1;

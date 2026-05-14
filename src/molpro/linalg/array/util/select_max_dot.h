@@ -64,16 +64,12 @@ auto select_max_dot_iter_sparse(size_t n, const X& x, const Y& y) {
   using std::greater;
   using select_pair = std::pair<value_type_abs, size_t>; // value and index
   auto selection = std::priority_queue<select_pair, std::vector<select_pair>, greater<select_pair>>();
-  auto iy = begin(y);
-  for (size_t i = 0; i < n; ++i, ++iy) {
-    if (iy->first < x.size())
-      selection.emplace(abs(x[iy->first] * iy->second), iy->first);
-  }
-  for (auto jy = iy; jy != end(y); ++jy) {
-    if (jy->first < x.size()) {
-      selection.emplace(abs(x[jy->first] * jy->second), jy->first);
+  for (auto iy = begin(y); iy != end(y); ++iy) {
+    if (iy->first >= x.size())
+      continue;
+    selection.emplace(abs(x[iy->first] * iy->second), iy->first);
+    if (selection.size() > n)
       selection.pop();
-    }
   }
   auto selection_map = std::map<size_t, value_type_abs>();
   auto m = selection.size();
@@ -104,21 +100,13 @@ auto select_max_dot_sparse(size_t n, const X& x, const Y& y) {
   using std::greater;
   using select_pair = std::pair<value_type_abs, size_t>; // value and index
   auto selection = std::priority_queue<select_pair, std::vector<select_pair>, greater<select_pair>>();
-  auto ix = begin(x);
-  auto iy = begin(y);
-  while (selection.size() < n && ix != end(x)) {
-    iy = y.find(ix->first);
-    if (iy != y.end())
-      selection.emplace(abs(ix->second * iy->second), ix->first);
-    ++ix;
-  }
-  while (ix != end(x)) {
-    iy = y.find(ix->first);
-    if (iy != y.end()) {
-      selection.emplace(abs(ix->second * iy->second), ix->first);
+  for (auto ix = begin(x); ix != end(x); ++ix) {
+    auto iy = y.find(ix->first);
+    if (iy == y.end())
+      continue;
+    selection.emplace(abs(ix->second * iy->second), ix->first);
+    if (selection.size() > n)
       selection.pop();
-    }
-    ++ix;
   }
   auto selection_map = std::map<size_t, value_type_abs>();
   auto m = selection.size();
