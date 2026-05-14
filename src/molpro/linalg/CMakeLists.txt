@@ -18,7 +18,6 @@ if (MPI)
     target_compile_definitions(${PROJECT_NAME} PUBLIC HAVE_MPI_H)
     target_link_libraries(${PROJECT_NAME} PUBLIC MPI::MPI_CXX)
 else ()
-    LibraryManager_Append(${PROJECT_NAME} SOURCES IterativeSolverCSerial.cpp)
     message(STATUS "Building serial iterative-solver")
 endif ()
 
