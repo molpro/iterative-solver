@@ -847,7 +847,7 @@ end select
   !> \return The size of the working set
   FUNCTION Iterative_Solver_End_Iteration(solution, residual, synchronize)
     USE iso_c_binding
-    INTEGER :: Iterative_Solver_End_Iteration1
+    INTEGER :: Iterative_Solver_End_Iteration
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), TARGET :: solution
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), TARGET :: residual
     LOGICAL, INTENT(in), OPTIONAL :: synchronize
