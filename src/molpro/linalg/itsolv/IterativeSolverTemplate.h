@@ -363,11 +363,19 @@ public:
     std::vector<P> pspace;
     if (use_diagonals and m_max_p > 0) {
       auto selectp = m_handlers->qq().select(m_max_p, *diagonals);
-      for (auto s = selectp.begin(); s != selectp.end(); s++)
-        if (s->second > selectp.begin()->second + m_p_threshold) {
-          selectp.erase(s, selectp.end());
-          break;
+      if (!selectp.empty()) {
+        // selectp is keyed by index, not value; find the smallest selected
+        // diagonal explicitly before applying the threshold.
+        auto min_val = std::min_element(selectp.begin(), selectp.end(),
+                                        [](const auto& a, const auto& b) { return a.second < b.second; })
+                           ->second;
+        for (auto s = selectp.begin(); s != selectp.end();) {
+          if (s->second > min_val + m_p_threshold)
+            s = selectp.erase(s);
+          else
+            ++s;
         }
+      }
       if (this->m_verbosity >= Verbosity::Summary and not selectp.empty())
         molpro::cout << selectp.size() << "-dimensional P space selected with threshold "
                      << (m_p_threshold < 1e20 ? std::to_string(m_p_threshold) : "infinity") << " and limit " << m_max_p
