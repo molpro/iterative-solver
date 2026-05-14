@@ -308,8 +308,11 @@ extern "C" void IterativeSolverAddEquation(double* rhs) {
   if (instance.prof != nullptr)
     instance.prof->start("AddEquation");
   auto ccc = CreateDistrArray(1, rhs);
-  dynamic_cast<molpro::linalg::itsolv::LinearEquationsDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get())
-      ->add_equations(ccc[0]);
+  auto* solver =
+      dynamic_cast<molpro::linalg::itsolv::LinearEquationsDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get());
+  if (!solver)
+    throw std::runtime_error("IterativeSolverAddEquation: current solver is not LinearEquationsDavidson");
+  solver->add_equations(ccc[0]);
   if (instance.prof != nullptr) {
     instance.prof->stop();
   }
@@ -325,11 +328,10 @@ extern "C" size_t IterativeSolverAddValue(double value, double* parameters, doub
   auto ggg = CreateDistrArray(1, action);
   if (instance.prof != nullptr)
     instance.prof->start("AddValue:Call");
-  size_t working_set_size =
-      dynamic_cast<molpro::linalg::itsolv::Optimize<Rvector, Qvector, Pvector>*>(instance.solver.get())
-              ->add_vector(ccc[0], ggg[0], value) > 0
-          ? 1
-          : 0;
+  auto* solver = dynamic_cast<molpro::linalg::itsolv::Optimize<Rvector, Qvector, Pvector>*>(instance.solver.get());
+  if (!solver)
+    throw std::runtime_error("IterativeSolverAddValue: current solver is not an Optimize solver");
+  size_t working_set_size = solver->add_vector(ccc[0], ggg[0], value) > 0 ? 1 : 0;
   if (instance.prof != nullptr) {
     instance.prof->stop();
     instance.prof->start("AddValue:Sync");
