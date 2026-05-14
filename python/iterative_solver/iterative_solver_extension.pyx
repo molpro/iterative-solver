@@ -108,7 +108,6 @@ class IterativeSolver:
     @property
     def converged(self):
         return IterativeSolverConverged() != 0
-        pass
 
     def solve(self, parameters, actions, problem, generate_initial_guess=False, max_iter=None, max_p=0):
         '''
