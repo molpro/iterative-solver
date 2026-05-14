@@ -2,7 +2,6 @@
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAYSPAN_H
 #include <molpro/linalg/array/DistrArray.h>
 #include <molpro/mpi.h>
-using molpro::mpi::comm_global;
 
 namespace molpro::linalg::array {
 class DistrArraySpan : public DistrArray {
@@ -13,8 +12,9 @@ protected:
 
 public:
   DistrArraySpan() = delete;
-  DistrArraySpan(size_t dimension, Span<value_type> buffer, MPI_Comm commun = comm_global());
-  DistrArraySpan(std::unique_ptr<Distribution> distribution, Span<value_type> buffer, MPI_Comm commun = comm_global());
+  DistrArraySpan(size_t dimension, Span<value_type> buffer, MPI_Comm commun = molpro::mpi::comm_global());
+  DistrArraySpan(std::unique_ptr<Distribution> distribution, Span<value_type> buffer,
+                 MPI_Comm commun = molpro::mpi::comm_global());
   DistrArraySpan(const DistrArraySpan &source);
   explicit DistrArraySpan(const DistrArray &source);
   DistrArraySpan(DistrArraySpan &&source) noexcept;

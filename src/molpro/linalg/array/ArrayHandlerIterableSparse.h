@@ -6,10 +6,9 @@
 #include <molpro/linalg/array/util/select_max_dot.h>
 #include <numeric>
 
+namespace molpro::linalg::array {
 using molpro::linalg::array::util::gemm_inner_default;
 using molpro::linalg::array::util::gemm_outer_default;
-
-namespace molpro::linalg::array {
 template <typename AL, typename AR, bool = has_mapped_type_v<AR>>
 class ArrayHandlerIterableSparse : public ArrayHandler<AL, AR> {};
 

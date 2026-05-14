@@ -402,10 +402,11 @@ public:
     }
     if (this->m_verbosity == Verbosity::Summary)
       report();
-    if (this->m_verbosity >= Verbosity::Summary and
-        *std::max_element(m_errors.begin(), m_errors.end()) > m_convergence_threshold)
+    auto max_error = m_errors.empty() ? std::numeric_limits<scalar_type>::infinity()
+                                      : *std::max_element(m_errors.begin(), m_errors.end());
+    if (this->m_verbosity >= Verbosity::Summary and max_error > m_convergence_threshold)
       std::cerr << "Solver has not converged to threshold " << m_convergence_threshold << std::endl;
-    return nwork == 0 and *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
+    return nwork == 0 and max_error <= m_convergence_threshold;
   }
 
   bool solve(R& parameters, R& actions, const Problem<R>& problem, bool generate_initial_guess = false) override {

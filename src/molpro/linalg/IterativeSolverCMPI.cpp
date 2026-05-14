@@ -215,6 +215,9 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
   auto& instance = instances.top();
   auto rr = CreateDistrArray(nroot, rhs);
   auto solver = dynamic_cast<LinearEquationsDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get());
+  if (!solver)
+    throw std::runtime_error("IterativeSolverLinearEquationsInitialize: solver factory returned an unexpected type for algorithm \"" +
+                             std::string(algorithm ? algorithm : "") + "\"");
   solver->set_augmented_hessian(aughes);
   solver->set_hermiticity(hermitian);
   solver->set_n_roots(nroot);
@@ -251,6 +254,9 @@ extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* ra
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
   molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>*>(instance.solver.get());
+  if (!solver)
+    throw std::runtime_error("IterativeSolverNonLinearEquationsInitialize: solver factory returned an unexpected type for algorithm \"" +
+                             std::string(algorithm ? algorithm : "") + "\"");
   solver->logger->max_trace_level =
      verbosity > 3 ? molpro::linalg::itsolv::Logger::Info
                    : (verbosity > 2 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
@@ -277,6 +283,9 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   instance.solver->set_verbosity(verbosity);
   molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>*>(instance.solver.get());
+  if (!solver)
+    throw std::runtime_error("IterativeSolverOptimizeInitialize: BFGS-specific configuration requested but the factory returned a different algorithm for \"" +
+                             std::string(algorithm ? algorithm : "") + "\"");
   solver->logger->max_trace_level =
      verbosity > 3 ? molpro::linalg::itsolv::Logger::Info
                    : (verbosity > 2 ? molpro::linalg::itsolv::Logger::Trace : molpro::linalg::itsolv::Logger::None);
