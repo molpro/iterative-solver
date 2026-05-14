@@ -23,6 +23,7 @@ option(LINEARALGEBRA_ARRAY_GA "Build with GA implementation of distributed array
 option(LINEARALGEBRA_ARRAY_HDF5 "Build with HDF5 implementation of distributed array" OFF)
 option(MPIFORTRAN "Build MPI fortran examples, using fortran MPI library" OFF)
 option(LIBRARY_ONLY "Build only the library" OFF)
+option(BENCHMARK "Build benchmark executables" OFF)
 option(VALGRIND "Run valgrind tests and examples" OFF)
 find_program(VALGRIND_EXISTS "valgrind")
 if (NOT VALGRIND_EXISTS)

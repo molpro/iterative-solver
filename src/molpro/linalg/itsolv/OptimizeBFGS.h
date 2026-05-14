@@ -241,7 +241,7 @@ public:
     opt->copy(*SolverTemplate::get_options());
     opt->max_size_qspace = get_max_size_qspace();
     opt->strong_Wolfe = m_strong_Wolfe;
-    opt->Wolfe_1 = m_strong_Wolfe;
+    opt->Wolfe_1 = m_Wolfe_1;
     opt->Wolfe_2 = m_Wolfe_2;
     opt->linesearch_tolerance = m_linesearch_tolerance;
     opt->linesearch_grow_factor = m_linesearch_grow_factor;
