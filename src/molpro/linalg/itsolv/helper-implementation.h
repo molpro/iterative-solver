@@ -17,8 +17,16 @@ template <typename value_type>
 std::list<SVD<value_type>> svd_eigen_jacobi(size_t nrows, size_t ncols, const array::Span<value_type>& m,
                                             double threshold) {
   auto mat = Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(m.data(), nrows, ncols);
+#if EIGEN_VERSION_AT_LEAST(3, 4, 90)
+  // Cast to unsigned int to avoid -Wdeprecated-enum-enum-conversion: the two
+  // Eigen flags belong to different enum types but are meant to be ORed here.
+  auto svd = Eigen::JacobiSVD<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(
+      mat, static_cast<unsigned int>(Eigen::ComputeThinV) |
+               static_cast<unsigned int>(Eigen::NoQRPreconditioner));
+#else
   auto svd = Eigen::JacobiSVD<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>, Eigen::NoQRPreconditioner>(
       mat, Eigen::ComputeThinV);
+#endif
   auto svd_system = std::list<SVD<value_type>>{};
   auto sv = svd.singularValues();
   for (int i = int(ncols) - 1; i >= 0; --i) {
