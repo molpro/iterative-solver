@@ -119,11 +119,8 @@ Interpolate::point Interpolate::minimize_cubic() const {
   const auto c = m_parameters[1];
   const auto b = 2 * m_parameters[2];
   const auto a = 3 * m_parameters[3];
-  auto xbar = 0.5 * (m_p1.x + m_p0.x);
   if (std::abs(a) < 1e-10 * std::max(std::abs(c), std::abs(b))) { // quadratic not cubic
-    // f'(x) = c + b*(x - xbar); stationary point is xbar - c/b. Evaluate the
-    // interpolant there so f, f1, f2 are populated like in the cubic branch.
-    return (*this)(xbar - c / b);
+    return Interpolate::point{-c / b};
   }
   auto discriminant = b*b / (4 * a*a) - c /  a;
 //  std::cout << "a " << a << std::endl;
@@ -132,6 +129,7 @@ Interpolate::point Interpolate::minimize_cubic() const {
 //  std::cout << "discriminant " << discriminant << std::endl;
   if (std::isnan(discriminant) || discriminant < 0)
     return {std::nan("unset")};
+  auto xbar = 0.5 * (m_p1.x + m_p0.x);
   Interpolate::point pm = (*this)(xbar - (b / (2 * a)) + std::sqrt(discriminant));
   Interpolate::point pp = (*this)(xbar - (b / (2 * a)) - std::sqrt(discriminant));
 //  std::cout << "extrema \n" << pm << "\n" << pp << std::endl;
