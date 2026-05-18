@@ -58,7 +58,9 @@ DistrArrayFile::DistrArrayFile(size_t dimension, MPI_Comm comm, const std::strin
   auto prof = molpro::Profiler::single()->push("DistrArrayFile(dimension)");
 }
 
+namespace {
 std::mutex s_open_error_mutex;
+} // namespace
 DistrArrayFile::DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm, const std::string& directory)
     : DistrArrayDisk(std::move(distribution), comm), m_directory(fs::absolute(fs::path(directory))),
       m_filename(util::temp_file_name((fs::path(m_directory) / ("DistrArrayFile-"+std::to_string(molpro::mpi::rank_global()))), ".dat")),
@@ -139,7 +141,7 @@ DistrArrayFile::~DistrArrayFile() {
     //    std::cout << "closing " << m_filename << std::endl;
     m_stream.release();
   }
-  if (fs::exists(m_filename));
+  if (fs::exists(m_filename))
     fs::remove(m_filename);
 #endif
 }
@@ -178,11 +180,15 @@ void DistrArrayFile::get(DistrArray::index_type lo, DistrArray::index_type hi, D
   m_stream->seekg(0, std::ios::end);
   const auto wordlength = sizeof(DistrArray::value_type);
   const size_t current = m_stream->tellg() / wordlength;
-  if (current < (offset + length)) {
-    std::fill(buf + current - offset, buf + length, 0);
+  if (current <= offset) {
+    std::fill(buf, buf + length, 0);
+    return;
+  }
+  if (current < offset + length) {
+    std::fill(buf + (current - offset), buf + length, 0);
   }
   m_stream->seekg(offset * wordlength);
-  const auto readlength = current - offset > 0 ? std::min(length, current - offset) * wordlength : 0;
+  const auto readlength = std::min(length, current - offset) * wordlength;
   //  if (readlength==0)
   //  std::cout << "current=" << current << ", offset=" << offset << ", length=" << length << ", readlength=" <<
   //  readlength
@@ -238,12 +244,14 @@ void DistrArrayFile::acc(DistrArray::index_type lo, DistrArray::index_type hi, c
 
 std::vector<DistrArrayFile::value_type> DistrArrayFile::gather(const std::vector<index_type>& indices) const {
   std::vector<value_type> data;
+  if (indices.empty())
+    return data;
   data.reserve(indices.size());
   auto minmax = std::minmax_element(indices.begin(), indices.end());
   DistrArray::index_type lo_loc, hi_loc;
   auto bounds_loc = local_bounds();
   std::tie(lo_loc, hi_loc) = {std::get<0>(bounds_loc), std::get<1>(bounds_loc)};
-  if (*minmax.first < lo_loc || *minmax.second > hi_loc) {
+  if (*minmax.first < lo_loc || *minmax.second >= hi_loc) {
     error("Only local array indices can be accessed via DistrArrayFile.gather() function");
   }
   for (auto i : indices) {
