@@ -6,6 +6,7 @@
 #include <molpro/linalg/itsolv/Statistics.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/wrap.h>
+#include <molpro/linalg/itsolv/Logger.h>
 
 #include <molpro/linalg/array/DistrArray.h>
 #include <molpro/linalg/array/util/Distribution.h>
@@ -354,8 +355,10 @@ public:
   virtual void set_convergence_threshold_value(double thresh) = 0;
   //! Reports the value convergence threshold
   virtual double convergence_threshold_value() const = 0;
+  [[deprecated("Set the verbosity on the logger directly")]]
   virtual void set_verbosity(Verbosity v) = 0;
   virtual void set_verbosity(int v) = 0;
+  [[deprecated("Query the logger directly")]]
   virtual Verbosity get_verbosity() const = 0;
   virtual void set_max_iter(int n) = 0;
   virtual int get_max_iter() const = 0;
@@ -387,6 +390,12 @@ public:
    */
   virtual void set_profiler(molpro::profiler::Profiler& profiler) = 0;
   virtual const std::shared_ptr<molpro::profiler::Profiler>& profiler() const = 0;
+  /*!
+   * @brief Set the logger instance that shall be used
+   * @param logger
+   */
+  virtual void set_logger(std::shared_ptr<Logger> logger) = 0;
+  virtual Logger &logger() = 0;
   /*!
    * @brief Test a supplied problem class
    * @param problem

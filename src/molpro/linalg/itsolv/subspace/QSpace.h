@@ -77,7 +77,7 @@ struct QSpace {
    */
   void update(const CVecRef<R>& params, const CVecRef<R>& actions, const SubspaceData& qq, const SubspaceData& qx,
               const SubspaceData& xq, const Dimensions& dims, SubspaceData& old_data) {
-    m_logger->msg("QSpace::update", Logger::Trace);
+    m_logger->trace("QSpace::update");
     auto it_begin = m_params.begin();
     for (size_t i = 0; i < params.size(); ++i) {
       m_params.emplace(it_begin,
@@ -118,11 +118,9 @@ struct QSpace {
           old_data[EqnData::rhs].slice({dims.oQ, 0}, {dims.nX, dims.nRHS});
       old_data[EqnData::rhs] = data[EqnData::rhs];
     }
-    if (m_logger->data_dump) {
-      m_logger->msg("S = " + as_string(data.at(EqnData::S)), Logger::Info);
-      m_logger->msg("H = " + as_string(data.at(EqnData::H)), Logger::Info);
-      m_logger->msg("rhs = " + as_string(data.at(EqnData::rhs)), Logger::Info);
-    }
+    m_logger->data_dump("S = ", data.at(EqnData::S));
+    m_logger->data_dump("H = ", data.at(EqnData::H));
+    m_logger->data_dump("rhs = ", data.at(EqnData::rhs));
   }
 
   void clear() { m_params.clear(); }

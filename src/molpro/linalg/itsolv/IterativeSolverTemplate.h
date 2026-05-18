@@ -1,7 +1,5 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_ITERATIVESOLVERTEMPLATE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_ITERATIVESOLVERTEMPLATE_H
-#include <cmath>
-#include <iostream>
 #include <molpro/Profiler.h>
 #include <molpro/iostream.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
@@ -13,7 +11,13 @@
 #include <molpro/linalg/itsolv/util.h>
 #include <molpro/linalg/itsolv/wrap.h>
 #include <molpro/profiler/Profiler.h>
-#include <stack>
+
+#include <cassert>
+#include <cmath>
+#include <format>
+#include <iostream>
+#include <optional>
+#include <sstream>
 
 namespace molpro::linalg::itsolv {
 namespace detail {
@@ -87,7 +91,7 @@ void normalise(const size_t n_roots, const VecRef<R>& params, const VecRef<R>& a
       handler.scal(1. / dot, params.at(i));
       handler.scal(1. / dot, actions.at(i));
     } else {
-      logger.msg("solution parameter's length is too small, dot = " + Logger::scientific(dot), Logger::Warn);
+      logger.warn("solution parameter's length is too small, dot = " + std::format("{:.2e}", dot));
     }
   }
 }
@@ -118,6 +122,36 @@ std::vector<int> select_working_set(const size_t nw, const std::vector<T>& error
 
 } // namespace detail
 
+namespace log {
+
+/*!
+ * Context used when logging about the beginning of a new iteration
+ */
+struct NewIteration : ContextBase<NewIteration, true, int, std::vector<double>> {
+  static constexpr const char *name = "NewIteration";
+  static constexpr std::size_t iter = 0;
+  static constexpr std::size_t errors = 1;
+};
+static_assert(context<NewIteration>);
+
+/*!
+ * Context used when logging a per-iteration report message
+ */
+struct IterationReport : ContextBase<IterationReport, true> {
+  static constexpr const char *name = "IterationReport";
+};
+static_assert(context<IterationReport>);
+
+/*!
+ * Context used when logging a summary report message
+ */
+struct SummaryReport : ContextBase<SummaryReport, true> {
+  static constexpr const char *name = "SummaryReport";
+};
+static_assert(context<SummaryReport>);
+
+}
+
 /*!
  * @brief Implements IterativeSolver interface that is common to all solvers
  *
@@ -137,15 +171,19 @@ public:
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(const IterativeSolverTemplate<Solver, R, Q, P>&) = delete;
   IterativeSolverTemplate<Solver, R, Q, P>& operator=(IterativeSolverTemplate<Solver, R, Q, P>&&) noexcept = default;
 
+  void set_logger(std::shared_ptr<Logger> logger) override {
+    assert(logger);
+    m_logger = std::move(logger);
+  }
+
+  Logger &logger() override { return *m_logger; }
+
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     profiler()->push("itsolv::add_vector");
     auto prof = molpro::Profiler::single();
-    m_logger->msg("IterativeSolverTemplate::add_vector  iteration = " + std::to_string(m_stats->iterations),
-                  Logger::Trace);
-    m_logger->msg("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = " +
-                      std::to_string(parameters.size()) + ", " + std::to_string(actions.size()) + ", " +
-                      std::to_string(m_working_set.size()) + ", ",
-                  Logger::Debug);
+    m_logger->trace("IterativeSolverTemplate::add_vector  iteration = ", m_stats->iterations);
+    m_logger->debug("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = ",
+                      parameters.size(), actions.size(), m_working_set.size());
     if (m_xspace->dimensions().nP != 0 && !m_apply_p)
       throw std::runtime_error(
           "Solver contains P space but no valid apply_p function. Make sure add_p was called correctly.");
@@ -284,7 +322,22 @@ public:
       cout << std::endl;
   }
 
-  void report() const override { report(molpro::cout); }
+  void iteration_report() const {
+    std::stringstream sstream;
+    report(sstream, false);
+    this->m_logger->info<log::IterationReport>(sstream.str());
+  }
+
+  void summary_report() const {
+    std::stringstream sstream;
+    report(sstream, false);
+    this->m_logger->info<log::SummaryReport>(sstream.str());
+  }
+
+  void report() const override {
+    // We don't know what kind of report this is supposed to be -> default to summary
+    summary_report();
+  }
 
   void set_convergence_threshold(double thresh) override { m_convergence_threshold = thresh; }
   double convergence_threshold() const override { return m_convergence_threshold; }
@@ -292,15 +345,24 @@ public:
   double convergence_threshold_value() const override { return m_convergence_threshold_value; }
   void set_verbosity(Verbosity v) override { m_verbosity = v; }
   void set_verbosity(int v) override {
-    m_verbosity = Verbosity::None;
-    if (v > 0)
-      m_verbosity = Verbosity::Summary;
-    if (v > 1)
-      m_verbosity = Verbosity::Iteration;
-    if (v > 2)
-      m_verbosity = Verbosity::Detailed;
+    if (v == 0) {
+      m_logger->set_verbosity(log::Verbosity::None);
+      m_logger->set_min_severity(log::Severity::Error);
+    } else if (v == 1) {
+      m_logger->set_verbosity(log::Verbosity::None);
+      m_logger->set_min_severity(log::Severity::Warning);
+    } else if (v == 2) {
+      m_logger->set_verbosity(log::Verbosity::Info);
+      m_logger->set_min_severity(log::Severity::Normal);
+    } else if (v == 3) {
+      m_logger->set_verbosity(log::Verbosity::Debug);
+      m_logger->set_min_severity(log::Severity::Normal);
+    } else {
+      m_logger->set_verbosity(log::Verbosity::Trace);
+      m_logger->set_min_severity(log::Severity::Normal);
+    }
   }
-  Verbosity get_verbosity() const override { return m_verbosity; }
+  Verbosity get_verbosity() const override { return m_verbosity.value_or(Verbosity::None); }
   void set_max_iter(int n) override { m_max_iter = n; }
   int get_max_iter() const override { return m_max_iter; }
   void set_max_p(int n) override { m_max_p = n; }
@@ -325,10 +387,13 @@ public:
       throw std::runtime_error("Empty container passed to IterativeSolver::solve()");
     if (parameters.size() != actions.size())
       throw std::runtime_error("Inconsistent container sizes in IterativeSolver::solve()");
-    this->m_logger->max_trace_level = Logger::None;
+    if (this->m_verbosity == Verbosity::None) {
+      // Backwards compatibility
+      this->m_logger->set_verbosity(log::Verbosity::None);
+    }
     if (this->m_verbosity == Verbosity::Detailed) {
-      this->m_logger->max_trace_level = Logger::Info;
-      this->m_logger->data_dump = true;
+      this->m_logger->set_verbosity(log::Verbosity::Trace);
+      this->m_logger->enable_data_dumps(true);
     }
     bool use_diagonals = problem.diagonals(actions.at(0));
     std::unique_ptr<Q> diagonals;
@@ -340,12 +405,14 @@ public:
         throw std::runtime_error("Default initial guess requested, but diagonal elements are not available");
       auto guess = m_handlers->qq().select(parameters.size(), *diagonals);
       size_t root = 0;
-      if (this->m_verbosity >= Verbosity::Summary)
-        molpro::cout << "Initial guess generated from diagonal elements" << std::endl;
+      if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary) {
+        this->m_logger->info("Initial guess generated from diagonal elements");
+      }
       for (const auto& g : guess) {
         m_handlers->rp().copy(parameters[root], P{{g.first, 1}});
-        if (this->m_verbosity >= Verbosity::Detailed)
-          molpro::cout << " initial guess " << g.first << std::endl;
+        if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Detailed) {
+          m_logger->debug("-> initial guess with index ", g.first);
+        }
         root++;
       }
     }
@@ -358,13 +425,14 @@ public:
           selectp.erase(s, selectp.end());
           break;
         }
-      if (this->m_verbosity >= Verbosity::Summary and not selectp.empty())
-        molpro::cout << selectp.size() << "-dimensional P space selected with threshold "
-                     << (m_p_threshold < 1e20 ? std::to_string(m_p_threshold) : "infinity") << " and limit " << m_max_p
-                     << std::endl;
-      if (this->m_verbosity >= Verbosity::Detailed)
-        for (const auto& s : selectp)
-          molpro::cout << "P space element " << s.first << " : " << s.second << std::endl;
+      if (!selectp.empty() && (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary)) {
+        this->m_logger->info("P-space dimension, threshold and limit", selectp.size(), m_p_threshold, m_max_p);
+      }
+      if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Detailed) {
+        for (const auto& s : selectp) {
+          this->m_logger->debug(std::format("P space element {}: {}", s.first, s.second));
+        }
+      }
       for (const auto& s : selectp)
         pspace.emplace_back((P){{s.first, 1}});
       fapply_on_p_type apply_on_p = [&problem](const std::vector<std::vector<value_type>>& pcoeff,
@@ -376,6 +444,7 @@ public:
                     actions, apply_on_p);
     }
     for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
+      m_logger->info<log::NewIteration>("Iteration, Current errors", iter, m_errors);
       value_type value;
       if (this->nonlinear()) {
         value = problem.residual(*parameters.begin(), *actions.begin());
@@ -397,14 +466,20 @@ public:
         }
         nwork = this->end_iteration(parameters, actions);
       }
-      if (this->m_verbosity >= Verbosity::Iteration)
-        report();
+      if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Iteration) {
+        iteration_report();
+      }
     }
-    if (this->m_verbosity == Verbosity::Summary)
-      report();
-    if (this->m_verbosity >= Verbosity::Summary and
-        *std::max_element(m_errors.begin(), m_errors.end()) > m_convergence_threshold)
-      std::cerr << "Solver has not converged to threshold " << m_convergence_threshold << std::endl;
+    if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary) {
+      summary_report();
+    }
+    if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary) {
+      if (*std::max_element(m_errors.begin(), m_errors.end()) > m_convergence_threshold) {
+        this->m_logger->warn("Solver has not converged to threshold ", m_convergence_threshold);
+      } else {
+        this->m_logger->info("Solver converged");
+      }
+    }
     return nwork == 0 and *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
   }
 
@@ -560,7 +635,7 @@ protected:
         }
       }
     }
-    m_logger->msg("add_vector::errors = ", begin(m_errors), end(m_errors), Logger::Trace, 6);
+    m_logger->trace("add_vector::errors = ", m_errors);
     return m_working_set.size();
   }
 
@@ -590,7 +665,7 @@ protected:
   std::shared_ptr<Logger> m_logger;             //!< logger
   bool m_normalise_solution = false;            //!< whether to normalise the solutions
   fapply_on_p_type m_apply_p = {};              //!< function that evaluates effect of action on the P space projection
-  Verbosity m_verbosity = Verbosity::Iteration; //!< how much output to print in solve()
+  std::optional<Verbosity> m_verbosity = {};    //!< how much output to print in solve()
   int m_max_iter = 100;                         //!< maximum number of iterations in solve()
   size_t m_max_p = 0;                           //!< maximum size of P space
   double m_p_threshold = std::numeric_limits<double>::max(); //!< threshold for selecting P space

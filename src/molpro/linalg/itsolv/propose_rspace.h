@@ -12,6 +12,8 @@
 #include <molpro/linalg/itsolv/wrap_util.h>
 #include <molpro/profiler/Profiler.h>
 
+#include <format>
+
 namespace molpro::linalg::itsolv::detail {
 
 template <class R>
@@ -22,7 +24,7 @@ void normalise(VecRef<R>& params, array::ArrayHandler<R, R>& handler, Logger& lo
     if (dot > thresh) {
       handler.scal(1. / dot, p);
     } else {
-      logger.msg("parameter's length is too small for normalisation, dot = " + Logger::scientific(dot), Logger::Warn);
+      logger.warn("parameter's length is too small for normalisation, dot = " + std::format("{:.2e}", dot));
     }
   }
 }
@@ -39,7 +41,7 @@ namespace dspace {
 template <typename value_type>
 auto construct_projected_solution(const subspace::Matrix<value_type>& solutions, const subspace::Dimensions& dims,
                                   const std::vector<int>& remove_qspace, Logger& logger) {
-  logger.msg("construct_projected_solution()", Logger::Trace);
+  logger.trace("construct_projected_solution()");
   const auto nQd = remove_qspace.size();
   const auto nSol = solutions.rows();
   auto solutions_proj = subspace::Matrix<value_type>({nSol, nQd + dims.nD});
@@ -51,8 +53,7 @@ auto construct_projected_solution(const subspace::Matrix<value_type>& solutions,
       solutions_proj(i, nQd + j) = solutions(i, dims.oD + j);
     }
   }
-  logger.msg("nSol, nQd, nD " + std::to_string(nSol) + ", " + std::to_string(nQd) + ", " + std::to_string(dims.nD),
-             Logger::Debug);
+  logger.debug("nSol, nQd, nD", nSol, nQd, dims.nD);
   return solutions_proj;
 }
 
@@ -75,7 +76,7 @@ auto construct_projected_solutions_overlap(const subspace::Matrix<value_type>& s
                                            const subspace::Matrix<value_type>& overlap,
                                            const subspace::Dimensions& dims, const std::vector<int>& remove_qspace,
                                            Logger& logger) {
-  logger.msg("construct_projected_solution_overlap()", Logger::Trace);
+  logger.trace("construct_projected_solution_overlap()");
   const auto nSol = solutions_proj.rows();
   const auto nQd = remove_qspace.size();
   auto overlap_proj = subspace::Matrix<value_type>({nSol, nSol});
@@ -117,7 +118,7 @@ auto construct_projected_solutions_overlap(const subspace::Matrix<value_type>& s
 template <typename value_type, typename value_type_abs>
 void remove_null_norm_and_normalise(subspace::Matrix<value_type>& parameters, subspace::Matrix<value_type>& overlap,
                                     const value_type_abs norm_thresh, Logger& logger) {
-  logger.msg("remove_null_norm_and_normalise()", Logger::Trace);
+  logger.trace("remove_null_norm_and_normalise()");
   const auto nSol = parameters.rows();
   auto norm_proj = std::vector<value_type_abs>(nSol, 0.);
   for (size_t i = 0; i < nSol; ++i)
@@ -133,14 +134,12 @@ void remove_null_norm_and_normalise(subspace::Matrix<value_type>& parameters, su
       overlap.remove_row_col(j, j);
       std::stringstream ss;
       ss << std::setprecision(3) << "remove projected solution parameter i = " << i << ", norm = " << norm_proj[i];
-      logger.msg(ss.str(), Logger::Info);
+      logger.info(ss.str());
     }
   }
-  if (logger.data_dump) {
-    logger.msg("norm  = ", std::begin(norm_proj), std::end(norm_proj), Logger::Info);
-    logger.msg("parameters after normalisation = " + as_string(parameters), Logger::Info);
-    logger.msg("overlap of parameters = " + as_string(overlap), Logger::Info);
-  }
+  logger.data_dump("norm  = ", norm_proj);
+  logger.data_dump("parameters after normalisation = ", parameters);
+  logger.data_dump("overlap of parameters = ", overlap);
 }
 
 /*!
@@ -159,8 +158,8 @@ template <typename value_type, typename value_type_abs>
 auto remove_null_projected_solutions(const subspace::Matrix<value_type>& solutions_proj,
                                      const subspace::Matrix<value_type>& overlap_proj, const value_type_abs svd_thresh,
                                      Logger& logger) {
-  logger.msg("remove_null_projected_solutions()", Logger::Trace);
-  logger.msg("nS on entry = " + std::to_string(solutions_proj.rows()), Logger::Debug);
+  logger.trace("remove_null_projected_solutions()");
+  logger.debug("nS on entry = ", solutions_proj.rows());
   value_type* m = const_cast<std::vector<value_type>&>(overlap_proj.data()).data();
   auto svd_vecs = svd_system(overlap_proj.rows(), overlap_proj.cols(), array::Span(m, overlap_proj.size()),
                              std::numeric_limits<value_type_abs>::max(), true);
@@ -174,7 +173,7 @@ auto remove_null_projected_solutions(const subspace::Matrix<value_type>& solutio
     for (size_t j = 0; j < overlap_proj.cols(); ++j)
       for (size_t k = 0; k < nX; ++k)
         solutions_stable(i, k) += svd->v[j] * solutions_proj(j, k);
-  logger.msg("nS without null space = " + std::to_string(solutions_stable.rows()), Logger::Debug);
+  logger.debug("nS without null space = ", solutions_stable.rows());
   return solutions_stable;
 }
 
@@ -272,7 +271,7 @@ template <class R, class Q, class P, typename value_type>
 auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CVecRef<R>& params,
                            const CVecRef<P>& pparams, const CVecRef<Q>& qparams, const CVecRef<Q>& dparams,
                            ArrayHandlers<R, Q, P>& handlers, Logger& logger) {
-  logger.msg("append_overlap_with_r()", Logger::Trace);
+  logger.trace("append_overlap_with_r()");
   const auto nP = pparams.size(), nQ = qparams.size(), nD = dparams.size(), nN = params.size();
   const auto nX = nP + nQ + nD + nN;
   const auto oP = 0;
@@ -293,9 +292,7 @@ auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CV
   copy_upper_to_lower(oP, nP);
   copy_upper_to_lower(oQ, nQ);
   copy_upper_to_lower(oD, nD);
-  if (logger.data_dump) {
-    logger.msg("full overlap P+Q+D+R = " + as_string(ov), Logger::Info);
-  }
+  logger.data_dump("full overlap P+Q+D+R = ", ov);
   return ov;
 }
 
@@ -310,7 +307,7 @@ auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CV
 template <typename value_type>
 auto limit_qspace_size(const subspace::Dimensions& dims, const size_t max_size_qspace,
                        const subspace::Matrix<value_type>& solutions, Logger& logger) {
-  logger.msg("limit_qspace_size()", Logger::Trace);
+  logger.trace("limit_qspace_size()");
   using value_type_abs = decltype(std::abs(solutions(0, 0)));
   auto q_delete = std::vector<int>{};
   auto q_indices = std::vector<int>(dims.nQ);
@@ -328,9 +325,8 @@ auto limit_qspace_size(const subspace::Dimensions& dims, const size_t max_size_q
     auto i = std::distance(begin(max_contrib_to_solution), it_min);
     q_delete.push_back(q_indices.at(i));
     q_indices.erase(begin(q_indices) + i);
-    logger.msg("contribution to solutions =", std::begin(max_contrib_to_solution), std::end(max_contrib_to_solution),
-               Logger::Info);
-    logger.msg("delete Q i = " + std::to_string(i), Logger::Info);
+    logger.info("contribution to solutions =", max_contrib_to_solution);
+    logger.info("delete Q i = ", i);
   }
   return q_delete;
 }
@@ -423,7 +419,7 @@ auto modified_gram_schmidt(const VecRef<R>& rparams, const subspace::Matrix<valu
                            const subspace::Dimensions& dims, const CVecRef<P>& pparams, const CVecRef<Q>& qparams,
                            const CVecRef<Q>& dparams, const value_type_abs norm_thresh,
                            ArrayHandlers<R, Q, P>& handlers, Logger& logger) {
-  logger.msg("modified_gram_schmidt()", Logger::Trace);
+  logger.trace("modified_gram_schmidt()");
   const auto nR = rparams.size(), nP = pparams.size(), nQ = qparams.size(), nD = dparams.size();
   // std::cout << "modified_gram_schmidt() nR="<<nR<<" nQ="<<nQ<<" nD="<<nD<<std::endl;
   assert(nP == dims.nP && nQ == dims.nQ && nD == dims.nD);
@@ -511,16 +507,14 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
                     value_type_abs res_norm_thresh, int max_size_qspace, molpro::profiler::Profiler& profiler) {
   // auto prof = profiler.push("itsolv::propose_rspace"); // FIXME two separate profilers
   auto prof = molpro::Profiler::single();
-  logger.msg("itsolv::detail::propose_rspace", Logger::Trace);
-  logger.msg("dimensions {nP, nQ, nD, nW} = " + std::to_string(xspace.dimensions().nP) + ", " +
-                 std::to_string(xspace.dimensions().nQ) + ", " + std::to_string(xspace.dimensions().nD) + ", " +
-                 std::to_string(solver.working_set().size()),
-             Logger::Trace);
+  logger.trace("itsolv::detail::propose_rspace");
+  logger.trace("dimensions {nP, nQ, nD, nW} = ", xspace.dimensions().nP, xspace.dimensions().nQ,
+		  xspace.dimensions().nD, solver.working_set().size());
   profiler.start("itsolv::ISubspaceSolver::solutions");
   auto solutions = subspace_solver.solutions();
   profiler.stop();
   auto q_delete = limit_qspace_size(xspace.dimensions(), max_size_qspace, solutions, logger);
-  logger.msg("delete Q parameter indices = ", q_delete.begin(), q_delete.end(), Logger::Debug);
+  logger.debug("delete Q parameter indices = ", q_delete);
   if (!q_delete.empty()) {
     auto prof = profiler.push("construct_dspace");
     auto [dparams, dactions] =
@@ -536,8 +530,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
     auto eigval_error = std::vector<double>{};
     std::transform(std::begin(eigenvalues_ref), std::end(eigenvalues_ref), std::begin(subspace_solver.eigenvalues()),
                    std::back_inserter(eigval_error), [](auto& e_ref, auto& e_new) { return std::abs(e_ref - e_new); });
-    logger.msg("eigenvalue error due to new D space = ", std::begin(eigval_error), std::end(eigval_error),
-               Logger::Debug);
+    logger.debug("eigenvalue error due to new D space = ", eigval_error);
     // FIXME Optionally, solve the subspace problem again and get an estimate of the error due to new D
   }
   // Use modified GS to orthonormalise z against P+Q+D, removing any null parameters.
@@ -556,7 +549,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   auto redundant_indices =
       redundant_parameters(full_overlap, xspace.dimensions().nX, wresidual.size(), svd_thresh, logger);
   prof->stop();
-  logger.msg("redundant indices = ", std::begin(redundant_indices), std::end(redundant_indices), Logger::Debug);
+  logger.debug("redundant indices = ", redundant_indices);
   util::delete_parameters(redundant_indices, wresidual);
   profiler.start("modified_gram_schmidt");
   prof->start("modified_gram_schmidt");
@@ -566,7 +559,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   profiler.stop();
   prof->stop();
   // Now that there is SVD null_param_indices should always be empty
-  logger.msg("null parameters = ", std::begin(null_param_indices), std::end(null_param_indices), Logger::Debug);
+  logger.debug("null parameters = ", null_param_indices);
   util::delete_parameters(null_param_indices, wresidual);
   normalise(wresidual, handlers.rr(), logger);
   for (size_t i = 0; i < wresidual.size(); ++i)

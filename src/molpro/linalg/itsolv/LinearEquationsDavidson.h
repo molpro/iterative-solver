@@ -4,6 +4,8 @@
 #include <molpro/linalg/itsolv/DSpaceResetter.h>
 #include <molpro/linalg/itsolv/IterativeSolverTemplate.h>
 #include <molpro/linalg/itsolv/propose_rspace.h>
+#include <molpro/linalg/itsolv/subspace/SubspaceSolverLinEig.h>
+#include <molpro/linalg/itsolv/subspace/XSpace.h>
 
 namespace molpro::linalg::itsolv {
 /*!
@@ -170,7 +172,7 @@ public:
     SolverTemplate::report(cout, false);
     cout << ", errors " << std::scientific;
     auto& err = this->m_errors;
-    std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(molpro::cout, ", "));
+    std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(cout, ", "));
     cout << std::defaultfloat;
     if (endl)
       cout << std::endl;
