@@ -26,6 +26,7 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "LinearEquationsOptions", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsOptions" ],
     [ "Logger", "classmolpro_1_1linalg_1_1itsolv_1_1Logger.html", "classmolpro_1_1linalg_1_1itsolv_1_1Logger" ],
     [ "NonLinearEquations", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquations.html", null ],
+    [ "NonLinearEquationsDIIS", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS" ],
     [ "NonLinearEquationsDIISOptions", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIISOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIISOptions" ],
     [ "NonLinearEquationsOptions", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsOptions" ],
     [ "Optimize", "classmolpro_1_1linalg_1_1itsolv_1_1Optimize.html", null ],

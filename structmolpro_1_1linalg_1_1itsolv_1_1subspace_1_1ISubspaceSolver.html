@@ -108,11 +108,12 @@ Inheritance diagram for molpro::linalg::itsolv::subspace::ISubspaceSolver&lt; RT
 <div class="dyncontent">
 <div class="center"><img src="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver__inherit__graph.png" border="0" usemap="#amolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver_3_01RT_00_01QT_00_01PT_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="amolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver_3_01RT_00_01QT_00_01PT_01_4_inherit__map" id="amolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver_3_01RT_00_01QT_00_01PT_01_4_inherit__map">
-<area shape="rect" title="Manages solution of the subspace problem and storage of those solutions." alt="" coords="5,85,212,141"/>
-<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html" title="Solves subspace problem for linear eigenvalues and system of linear equations." alt="" coords="262,5,483,61"/>
-<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html" title="Solves subspace problem for minimisation using the Steepest Descent algorithm." alt="" coords="260,85,485,141"/>
-<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html" title="Solves subspace problem for minimisation using the Steepest Descent algorithm." alt="" coords="260,165,485,221"/>
-<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html" title=" " alt="" coords="533,5,768,61"/>
+<area shape="rect" title="Manages solution of the subspace problem and storage of those solutions." alt="" coords="5,125,212,181"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html" title="Solves non&#45;linear equations using DIIS." alt="" coords="260,5,488,61"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html" title="Solves subspace problem for linear eigenvalues and system of linear equations." alt="" coords="263,85,485,141"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html" title="Solves subspace problem for minimisation using the Steepest Descent algorithm." alt="" coords="261,165,487,221"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html" title="Solves subspace problem for minimisation using the Steepest Descent algorithm." alt="" coords="261,245,487,301"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html" title=" " alt="" coords="536,85,771,141"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -296,7 +297,7 @@ template&lt;class RT , class QT , class PT &gt; </div>
 
 <p>Access eigenvalues from the last <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a35b9e44966f3b62ecdd402f330c5088b" title="Solve the subspace problem.">solve()</a> call. </p>
 
-<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a7f19feff38aadceb5b73bd5884413e01">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a4f91ff19919530ef6ade081a047bd63c">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#afe8e41b0f6a305366e87ec3afc732594">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#a066760bc8169151f1c48c9a889a4a4cd">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a7f19feff38aadceb5b73bd5884413e01">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a4f91ff19919530ef6ade081a047bd63c">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#afe8e41b0f6a305366e87ec3afc732594">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>
@@ -327,7 +328,7 @@ template&lt;class RT , class QT , class PT &gt; </div>
 
 <p>Access errors corresponding to each solution. </p>
 
-<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ac7350d5d571c9286f9a0f09f05c622ec">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#aee72fc161a9d35754814919a8a4c5cca">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a5acedd1dd88000f0bee1f614a0c0afa4">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#a315e0f133942e01145f9bfb1978dfc17">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ac7350d5d571c9286f9a0f09f05c622ec">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#aee72fc161a9d35754814919a8a4c5cca">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a5acedd1dd88000f0bee1f614a0c0afa4">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>
@@ -376,7 +377,7 @@ template&lt;class RT , class QT , class PT &gt; </div>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a28c48233a52096fc6185017555ae22ed">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a719c5da3aff3309e03b01d31c03269b4">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a3a431a73785c10fffd8855822482ccd0">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#abce7a2aef273fca624995b1bf695800d">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a28c48233a52096fc6185017555ae22ed">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a719c5da3aff3309e03b01d31c03269b4">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a3a431a73785c10fffd8855822482ccd0">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>
@@ -425,7 +426,7 @@ template&lt;class RT , class QT , class PT &gt; </div>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a44a9305e4ee7ff74a2b2378b9e5d755e">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#ac2ebdf74d36a67d1c028e7d7879e2f6a">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a58cb600cd3b90195ac9092fb71af1acc">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#aad046791abc9a149aee485d2e3c9f1bf">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a44a9305e4ee7ff74a2b2378b9e5d755e">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#ac2ebdf74d36a67d1c028e7d7879e2f6a">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a58cb600cd3b90195ac9092fb71af1acc">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>
@@ -456,7 +457,7 @@ template&lt;class RT , class QT , class PT &gt; </div>
 
 <p>Number of solutions stored in this object. </p>
 
-<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#afaa8f581eee9b0835a1b3ed70a4e478d">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#aba323c67f984e9bcb6ebd507812fffa3">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#ab3594645f031a4c20f80f532e303773b">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#aef5512aecc5060caf3bd3f64cbc94dd9">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#afaa8f581eee9b0835a1b3ed70a4e478d">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#aba323c67f984e9bcb6ebd507812fffa3">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#ab3594645f031a4c20f80f532e303773b">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>
@@ -487,7 +488,7 @@ template&lt;class RT , class QT , class PT &gt; </div>
 
 <p>Access solutions from the last <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a35b9e44966f3b62ecdd402f330c5088b" title="Solve the subspace problem.">solve()</a> call. </p>
 
-<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ae3e779ff0db09d996d79546c3e1f6148">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#ac6dbde31d4bce2d0d8326dfc99bce997">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#adfe554aa8183136b8863cedbf43f920a">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#a07a2f7f0370f13dfa00fafd5dd8f578f">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ae3e779ff0db09d996d79546c3e1f6148">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#ac6dbde31d4bce2d0d8326dfc99bce997">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#adfe554aa8183136b8863cedbf43f920a">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>
@@ -536,7 +537,7 @@ template&lt;class RT , class QT , class PT &gt; </div>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ab98147fb341f860edf75145eecec0392">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a5e1e046e765127193cf71b1bb45093f2">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a8f96a3c648e91c6ce61ece635a11fc45">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html#a7a5e00b4d721319ffa310f6cbdf74620">molpro::linalg::itsolv::subspace::SubspaceSolverRSPT&lt; RT, QT, PT &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#ad31e5db2c2212d78312be8e7d473d3c7">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ab98147fb341f860edf75145eecec0392">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a5e1e046e765127193cf71b1bb45093f2">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a8f96a3c648e91c6ce61ece635a11fc45">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html#a7a5e00b4d721319ffa310f6cbdf74620">molpro::linalg::itsolv::subspace::SubspaceSolverRSPT&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>

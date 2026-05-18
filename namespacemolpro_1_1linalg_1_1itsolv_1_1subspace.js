@@ -10,6 +10,7 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1subspace =
     [ "Matrix", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix" ],
     [ "PSpace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1PSpace.html", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1PSpace" ],
     [ "QSpace", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace" ],
+    [ "SubspaceSolverDIIS", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS" ],
     [ "SubspaceSolverLinEig", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig" ],
     [ "SubspaceSolverOptBFGS", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS" ],
     [ "SubspaceSolverOptSD", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD" ],

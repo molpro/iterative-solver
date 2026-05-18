@@ -7792,6 +7792,175 @@
     <templarg>class P</templarg>
     <base>molpro::linalg::itsolv::IterativeSolver</base>
   </compound>
+  <compound kind="class">
+    <name>molpro::linalg::itsolv::NonLinearEquationsDIIS</name>
+    <filename>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</filename>
+    <templarg>class R</templarg>
+    <templarg>class Q</templarg>
+    <templarg>class P</templarg>
+    <base>IterativeSolverTemplate&lt; NonLinearEquations, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</base>
+    <member kind="typedef">
+      <type>IterativeSolverTemplate&lt; NonLinearEquations, R, Q, P &gt;</type>
+      <name>SolverTemplate</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a8cdd367139fb2d1049cb999cb7ebb3d7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>NonLinearEquationsDIIS</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a22b46b180e6f1fef2c1253dda53537c2</anchor>
+      <arglist>(const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers, const std::shared_ptr&lt; Logger &gt; &amp;logger_=std::make_shared&lt; Logger &gt;())</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>nonlinear</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a9645368dbd7d4fe0f618951302232891</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>add_vector</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>aa8edc564a0368a4f004267f0178a98aa</anchor>
+      <arglist>(R &amp;parameters, R &amp;residual, value_type value) override</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>end_iteration</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a8a43efdb4eb6089132538c4a1862bb95</anchor>
+      <arglist>(const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;action) override</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>end_iteration</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a8a03eddf241a017a0c987282d8916c1a</anchor>
+      <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_norm_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a1c933107106d7a92bdf2cdea0ef8fc43</anchor>
+      <arglist>(double thresh)</arglist>
+    </member>
+    <member kind="function">
+      <type>double</type>
+      <name>get_norm_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>afab0054fac243503999e6c3d634c5f36</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_svd_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>aa1fd6cca7b816e4ef8763b321357a16c</anchor>
+      <arglist>(double thresh)</arglist>
+    </member>
+    <member kind="function">
+      <type>double</type>
+      <name>get_svd_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a57a307bb2d036098e1b400deb3669b56</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_max_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>ad9316b8cbf68a32e7a3649952dfbfaa5</anchor>
+      <arglist>(int n)</arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>get_max_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a8e82ae51bf0c801198fcdaec73375a77</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_options</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>af82daf87496a92fc451955e46862ee72</anchor>
+      <arglist>(const Options &amp;options) override</arglist>
+    </member>
+    <member kind="function">
+      <type>std::shared_ptr&lt; Options &gt;</type>
+      <name>get_options</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>abae2b5ab15d6343c4ab432565ce51882</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>report</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>ab81114cc93a0724802cbb61ff464f6fe</anchor>
+      <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>end_iteration</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a0ccbb4f204c39eb91b6b3266b585a2a0</anchor>
+      <arglist>(R &amp;parameters, R &amp;actions) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>report</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a2586061786c83f40ee932189f6a59353</anchor>
+      <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>report</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="variable">
+      <type>std::shared_ptr&lt; Logger &gt;</type>
+      <name>logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>acaaf45cdf09db7a3645931e5dc9466f3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>construct_residual</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>ab1da049238c39327fa45fb6a266d2f79</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions) override</arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>double</type>
+      <name>m_norm_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a7573b12084903d8c20be149c7b178779</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>double</type>
+      <name>m_svd_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>a152f10b0a4c038df6a9fa74b0aceb387</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>int</type>
+      <name>m_max_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
+      <anchor>abe54cdd1558eb286be62b0eede38ef4c</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
   <compound kind="struct">
     <name>molpro::linalg::itsolv::NonLinearEquationsDIISOptions</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIISOptions.html</filename>
@@ -9841,6 +10010,133 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>molpro::linalg::itsolv::subspace::SubspaceSolverDIIS</name>
+    <filename>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</filename>
+    <templarg>class RT</templarg>
+    <templarg>class QT</templarg>
+    <templarg>class PT</templarg>
+    <base>molpro::linalg::itsolv::subspace::ISubspaceSolver</base>
+    <member kind="typedef">
+      <type>typename ISubspaceSolver&lt; RT, QT, PT &gt;::value_type</type>
+      <name>value_type</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>a53a284cad70f77135bec50f189b9d4be</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename ISubspaceSolver&lt; RT, QT, PT &gt;::value_type_abs</type>
+      <name>value_type_abs</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>ac3b68b21ee7b3d44ff2a56b5c83518d3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename ISubspaceSolver&lt; RT, QT, PT &gt;::R</type>
+      <name>R</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>a3a7aed4da36ef9207ce254a41385b306</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename ISubspaceSolver&lt; RT, QT, PT &gt;::Q</type>
+      <name>Q</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>ae6d091a4782952c6e7c82aca7fc23c08</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename ISubspaceSolver&lt; RT, QT, PT &gt;::P</type>
+      <name>P</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>a7771eafc0d4c3b246f986f1ee053c9e6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>SubspaceSolverDIIS</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>acc28f194d0423795c1681f344d461474</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger, const bool &amp;converged)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>solve</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>ad31e5db2c2212d78312be8e7d473d3c7</anchor>
+      <arglist>(IXSpace&lt; R, Q, P &gt; &amp;xspace, const size_t nroots_max) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_error</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>aad046791abc9a149aee485d2e3c9f1bf</anchor>
+      <arglist>(int root, value_type_abs error) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_error</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>abce7a2aef273fca624995b1bf695800d</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;roots, const std::vector&lt; value_type_abs &gt; &amp;errors) override</arglist>
+    </member>
+    <member kind="function">
+      <type>const Matrix&lt; value_type &gt; &amp;</type>
+      <name>solutions</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>a07a2f7f0370f13dfa00fafd5dd8f578f</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>const std::vector&lt; value_type &gt; &amp;</type>
+      <name>eigenvalues</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>a066760bc8169151f1c48c9a889a4a4cd</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>const std::vector&lt; value_type_abs &gt; &amp;</type>
+      <name>errors</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>a315e0f133942e01145f9bfb1978dfc17</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>size</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>aef5512aecc5060caf3bd3f64cbc94dd9</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="variable">
+      <type>value_type_abs</type>
+      <name>m_svd_solver_threshold</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>ae3b8f54c6fd90df6be1498c298debeab</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>Matrix&lt; value_type &gt;</type>
+      <name>m_solutions</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>abce9022f32bac799f508af03c359ae83</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; value_type_abs &gt;</type>
+      <name>m_errors</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>a7b19065e0ec00ea9a4afa8b870c094ba</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::shared_ptr&lt; Logger &gt;</type>
+      <name>m_logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>a06793418aaaff1b48c29497be8f7a243</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>molpro::linalg::itsolv::subspace::SubspaceSolverLinEig</name>
     <filename>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</filename>
     <templarg>class RT</templarg>
@@ -11562,6 +11858,7 @@
     <class kind="struct">molpro::linalg::itsolv::LinearEquationsOptions</class>
     <class kind="class">molpro::linalg::itsolv::Logger</class>
     <class kind="class">molpro::linalg::itsolv::NonLinearEquations</class>
+    <class kind="class">molpro::linalg::itsolv::NonLinearEquationsDIIS</class>
     <class kind="struct">molpro::linalg::itsolv::NonLinearEquationsDIISOptions</class>
     <class kind="struct">molpro::linalg::itsolv::NonLinearEquationsOptions</class>
     <class kind="class">molpro::linalg::itsolv::Optimize</class>
@@ -11753,6 +12050,20 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>af57298c8ffb7301296ceb75fb179eab6</anchor>
       <arglist>(std::vector&lt; std::complex&lt; double &gt; &gt; &amp;solution, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const size_t dimension, double svdThreshold, int verbosity)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::list&lt; SVD&lt; value_type &gt; &gt;</type>
+      <name>svd_eigen_jacobi</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>aed5f5152ca0039709fc9f29a60595f68</anchor>
+      <arglist>(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, double threshold)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::list&lt; SVD&lt; value_type &gt; &gt;</type>
+      <name>svd_eigen_bdcsvd</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a30d21b580f20c0e56221dfc117418b6a</anchor>
+      <arglist>(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, double threshold)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -11979,20 +12290,6 @@
       <arglist>(std::ostream &amp;os, const Interpolate::point &amp;p)</arglist>
     </member>
     <member kind="function">
-      <type>std::list&lt; SVD&lt; value_type &gt; &gt;</type>
-      <name>svd_eigen_jacobi</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>aed5f5152ca0039709fc9f29a60595f68</anchor>
-      <arglist>(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, double threshold)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::list&lt; SVD&lt; value_type &gt; &gt;</type>
-      <name>svd_eigen_bdcsvd</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a30d21b580f20c0e56221dfc117418b6a</anchor>
-      <arglist>(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, double threshold)</arglist>
-    </member>
-    <member kind="function">
       <type>template void</type>
       <name>printMatrix&lt; value_type &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
@@ -12040,6 +12337,13 @@
     <filename>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</filename>
     <namespace>molpro::linalg::itsolv::detail::dspace</namespace>
     <class kind="class">molpro::linalg::itsolv::detail::DSpaceResetter</class>
+    <member kind="function">
+      <type>auto</type>
+      <name>redundant_parameters</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>af6f410b0781a5f1d5b8c88afece5d4b1</anchor>
+      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t oR, const size_t nR, const value_type_abs svd_thresh, Logger &amp;logger)</arglist>
+    </member>
     <member kind="function">
       <type>std::vector&lt; std::pair&lt; size_t, size_t &gt; &gt;</type>
       <name>parameter_batches</name>
@@ -12144,13 +12448,6 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
       <anchor>a7e59cce18c2d88b4a7f69312b4736043</anchor>
       <arglist>(const CVecRef&lt; R &gt; &amp;rparams, const CVecRef&lt; Q &gt; &amp;qparams, array::ArrayHandler&lt; R, Q &gt; &amp;handler, Logger &amp;logger)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>redundant_parameters</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>af6f410b0781a5f1d5b8c88afece5d4b1</anchor>
-      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t oR, const size_t nR, const value_type_abs svd_thresh, Logger &amp;logger)</arglist>
     </member>
   </compound>
   <compound kind="namespace">
@@ -12261,6 +12558,7 @@
     <class kind="class">molpro::linalg::itsolv::subspace::Matrix</class>
     <class kind="class">molpro::linalg::itsolv::subspace::PSpace</class>
     <class kind="struct">molpro::linalg::itsolv::subspace::QSpace</class>
+    <class kind="class">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS</class>
     <class kind="class">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig</class>
     <class kind="class">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS</class>
     <class kind="class">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD</class>

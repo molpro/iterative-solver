@@ -1,0 +1,6 @@
+<map id="molpro::linalg::itsolv::NonLinearEquationsDIIS&lt; R, Q, P &gt;" name="molpro::linalg::itsolv::NonLinearEquationsDIIS&lt; R, Q, P &gt;">
+<area shape="rect" id="node1" title="A class that optimises a function using a Quasi&#45;Newton or other method." alt="" coords="817,20,1004,76"/>
+<area shape="rect" id="node2" href="$classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html" title=" " alt="" coords="543,5,769,91"/>
+<area shape="rect" id="node3" href="$classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquations.html" title=" " alt="" coords="280,13,495,83"/>
+<area shape="rect" id="node4" href="$classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html" title=" " alt="" coords="5,13,232,83"/>
+</map>
