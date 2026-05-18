@@ -90,6 +90,17 @@ var annotated =
           [ "detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html", [
             [ "DSpaceResetter", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter" ]
           ] ],
+          [ "log", "namespacemolpro_1_1linalg_1_1itsolv_1_1log.html", [
+            [ "ConstexprString", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString" ],
+            [ "ContextBase", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase" ],
+            [ "DataDump", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump.html", null ],
+            [ "FormatOption", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1FormatOption.html", null ],
+            [ "Generic", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic.html", null ],
+            [ "IterationReport", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationReport.html", null ],
+            [ "LogHandler", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler" ],
+            [ "NewIteration", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration.html", null ],
+            [ "SummaryReport", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SummaryReport.html", null ]
+          ] ],
           [ "subspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html", [
             [ "qspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1qspace.html", [
               [ "QParam", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1qspace_1_1QParam.html", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1qspace_1_1QParam" ]
@@ -143,7 +154,7 @@ var annotated =
           [ "LinearEquationsDavidson", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson" ],
           [ "LinearEquationsDavidsonOptions", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions" ],
           [ "LinearEquationsOptions", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsOptions" ],
-          [ "Logger", "structmolpro_1_1linalg_1_1itsolv_1_1Logger.html", "structmolpro_1_1linalg_1_1itsolv_1_1Logger" ],
+          [ "Logger", "classmolpro_1_1linalg_1_1itsolv_1_1Logger.html", "classmolpro_1_1linalg_1_1itsolv_1_1Logger" ],
           [ "NonLinearEquations", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquations.html", null ],
           [ "NonLinearEquationsDIISOptions", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIISOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIISOptions" ],
           [ "NonLinearEquationsOptions", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsOptions" ],
@@ -160,6 +171,9 @@ var annotated =
           [ "SVD", "structmolpro_1_1linalg_1_1itsolv_1_1SVD.html", "structmolpro_1_1linalg_1_1itsolv_1_1SVD" ]
         ] ]
       ] ]
+    ] ],
+    [ "std", null, [
+      [ "formatter< molpro::linalg::itsolv::subspace::Matrix< T > >", "structstd_1_1formatter_3_01molpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_3_01T_01_4_01_4.html", "structstd_1_1formatter_3_01molpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_3_01T_01_4_01_4" ]
     ] ],
     [ "Morse_problem", "classMorse__problem.html", "classMorse__problem" ]
 ];

@@ -1,11 +1,24 @@
 var searchData=
 [
-  ['mapped_5for_5fvalue_5ftype_0',['mapped_or_value_type',['../structmolpro_1_1linalg_1_1array_1_1mapped__or__value__type.html',1,'molpro::linalg::array']]],
-  ['mapped_5for_5fvalue_5ftype_3c_20a_2c_20true_20_3e_1',['mapped_or_value_type&lt; A, true &gt;',['../structmolpro_1_1linalg_1_1array_1_1mapped__or__value__type_3_01A_00_01true_01_4.html',1,'molpro::linalg::array']]],
-  ['matrix_2',['Matrix',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html',1,'molpro::linalg::itsolv::subspace']]],
-  ['matrix_3c_20value_5ftype_20_3e_3',['Matrix&lt; value_type &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html',1,'molpro::linalg::itsolv::subspace']]],
-  ['matrix_5fproblem_4',['matrix_problem',['../structiterative__solver__matrix__problem_1_1matrix__problem.html',1,'iterative_solver_matrix_problem']]],
-  ['morse_5fproblem_5',['Morse_problem',['../classMorse__problem.html',1,'']]],
-  ['mpi_5finit_6',['mpi_init',['../interfaceiterative__solver_1_1mpi__init.html',1,'iterative_solver']]],
-  ['mpi_5frank_5fglobal_7',['mpi_rank_global',['../interfaceiterative__solver_1_1mpi__rank__global.html',1,'iterative_solver']]]
+  ['lazyhandle_0',['LazyHandle',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1LazyHandle.html',1,'molpro::linalg::array::ArrayHandler']]],
+  ['lineareigensystem_1',['LinearEigensystem',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem.html',1,'molpro::linalg::itsolv']]],
+  ['lineareigensystem_3c_20r_2c_20r_2c_20std_3a_3amap_3c_20size_5ft_2c_20typename_20r_3a_3avalue_5ftype_20_3e_20_3e_2',['LinearEigensystem&lt; R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem.html',1,'molpro::linalg::itsolv']]],
+  ['lineareigensystemdavidson_3',['LinearEigensystemDavidson',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html',1,'molpro::linalg::itsolv']]],
+  ['lineareigensystemdavidsonoptions_4',['LinearEigensystemDavidsonOptions',['../structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html',1,'molpro::linalg::itsolv']]],
+  ['lineareigensystemoptions_5',['LinearEigensystemOptions',['../structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemOptions.html',1,'molpro::linalg::itsolv']]],
+  ['lineareigensystemrspt_6',['LinearEigensystemRSPT',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html',1,'molpro::linalg::itsolv']]],
+  ['lineareigensystemrsptoptions_7',['LinearEigensystemRSPTOptions',['../structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPTOptions.html',1,'molpro::linalg::itsolv']]],
+  ['linearequations_8',['LinearEquations',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEquations.html',1,'molpro::linalg::itsolv']]],
+  ['linearequations_3c_20r_2c_20r_2c_20std_3a_3amap_3c_20size_5ft_2c_20typename_20r_3a_3avalue_5ftype_20_3e_20_3e_9',['LinearEquations&lt; R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEquations.html',1,'molpro::linalg::itsolv']]],
+  ['linearequationsdavidson_10',['LinearEquationsDavidson',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html',1,'molpro::linalg::itsolv']]],
+  ['linearequationsdavidsonoptions_11',['LinearEquationsDavidsonOptions',['../structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html',1,'molpro::linalg::itsolv']]],
+  ['linearequationsoptions_12',['LinearEquationsOptions',['../structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsOptions.html',1,'molpro::linalg::itsolv']]],
+  ['localbuffer_13',['LocalBuffer',['../classmolpro_1_1linalg_1_1array_1_1DistrArray_1_1LocalBuffer.html',1,'molpro::linalg::array::DistrArray']]],
+  ['localbufferdisk_14',['LocalBufferDisk',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html',1,'molpro::linalg::array::DistrArrayDisk']]],
+  ['localbufferga_15',['LocalBufferGA',['../structmolpro_1_1linalg_1_1array_1_1DistrArrayGA_1_1LocalBufferGA.html',1,'molpro::linalg::array::DistrArrayGA']]],
+  ['localbuffermpi3_16',['LocalBufferMPI3',['../structmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3_1_1LocalBufferMPI3.html',1,'molpro::linalg::array::DistrArrayMPI3']]],
+  ['localbufferspan_17',['LocalBufferSpan',['../structmolpro_1_1linalg_1_1array_1_1DistrArraySpan_1_1LocalBufferSpan.html',1,'molpro::linalg::array::DistrArraySpan']]],
+  ['lockmpi3_18',['LockMPI3',['../classmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3.html',1,'molpro::linalg::array::util']]],
+  ['logger_19',['Logger',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html',1,'molpro::linalg::itsolv']]],
+  ['loghandler_20',['LogHandler',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html',1,'molpro::linalg::itsolv::log']]]
 ];

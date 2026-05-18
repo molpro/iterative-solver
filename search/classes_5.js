@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['has_5fiterator_0',['has_iterator',['../structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html',1,'molpro::linalg::itsolv']]],
-  ['has_5fmapped_5ftype_1',['has_mapped_type',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type.html',1,'molpro::linalg::array']]],
-  ['has_5fmapped_5ftype_3c_20a_2c_20void_5ft_3c_20typename_20a_3a_3amapped_5ftype_20_3e_20_3e_2',['has_mapped_type&lt; A, void_t&lt; typename A::mapped_type &gt; &gt;',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type_3_01A_00_01void__t_3_01typename_01A_1_1mapped__type_01_4_01_4.html',1,'molpro::linalg::array']]]
+  ['generic_0',['Generic',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic.html',1,'molpro::linalg::itsolv::log']]],
+  ['graphentry_1',['GraphEntry',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1dotgraph_1_1GraphEntry.html',1,'molpro::profiler::dotgraph']]]
 ];

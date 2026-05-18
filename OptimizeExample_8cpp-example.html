@@ -106,7 +106,6 @@ $(document).ready(function(){initNavTree('OptimizeExample_8cpp-example.html','')
 <div class="line">    <span class="keyword">auto</span> problem = ExampleProblem(argc &gt; 1 ? std::stoi(argv[1]) : 20);</div>
 <div class="line">    <span class="keyword">using </span><a id="_a0" name="_a0"></a><a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">Rvector</a> = <span class="keyword">decltype</span>(problem)::container_t;</div>
 <div class="line">    <span class="keyword">auto</span> solver = molpro::linalg::itsolv::create_Optimize&lt;Rvector&gt;(<span class="stringliteral">&quot;BFGS&quot;</span>);</div>
-<div class="line">    solver-&gt;set_verbosity(<a id="a1" name="a1"></a><a class="code hl_enumvalue" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac8246e59286ac3630c4c80231d6ed172a290612199861c31d1036b185b4e69b75">molpro::linalg::itsolv::Verbosity::Summary</a>);</div>
 <div class="line">    <a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">Rvector</a> c(problem.n, 0), g(problem.n);</div>
 <div class="line">    c[0] = 1;</div>
 <div class="line">    <span class="keywordflow">if</span> (not solver-&gt;solve(c, g, problem))</div>
@@ -120,11 +119,10 @@ $(document).ready(function(){initNavTree('OptimizeExample_8cpp-example.html','')
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &lt;molpro/linalg/itsolv/SolverFactory-implementation.h&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><span class="keyword">template</span> <span class="keyword">class </span><a id="_a2" name="_a2"></a><a class="code hl_class" href="classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html">molpro::linalg::itsolv::SolverFactory&lt;std::vector&lt;double&gt;</a>, std::vector&lt;double&gt;,</div>
+<div class="line"><span class="keyword">template</span> <span class="keyword">class </span><a id="_a1" name="_a1"></a><a class="code hl_class" href="classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html">molpro::linalg::itsolv::SolverFactory&lt;std::vector&lt;double&gt;</a>, std::vector&lt;double&gt;,</div>
 <div class="line">                                                     std::map&lt;size_t, double&gt;&gt;;</div>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1DistrArraySpan_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">molpro::linalg::array::DistrArraySpan</a></div><div class="ttdef"><b>Definition:</b> DistrArraySpan.h:8</div></div>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1SolverFactory_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html">molpro::linalg::itsolv::SolverFactory</a></div><div class="ttdoc">Factory for creating instances of specific solver implementations from the corresponding Options obje...</div><div class="ttdef"><b>Definition:</b> SolverFactory.h:74</div></div>
-<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_ac8246e59286ac3630c4c80231d6ed172a290612199861c31d1036b185b4e69b75"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#ac8246e59286ac3630c4c80231d6ed172a290612199861c31d1036b185b4e69b75">molpro::linalg::itsolv::Verbosity::Summary</a></div><div class="ttdeci">@ Summary</div><div class="ttdoc">only summary at the start and end of solve</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

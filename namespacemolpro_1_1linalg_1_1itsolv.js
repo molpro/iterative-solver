@@ -1,6 +1,7 @@
 var namespacemolpro_1_1linalg_1_1itsolv =
 [
     [ "detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail" ],
+    [ "log", "namespacemolpro_1_1linalg_1_1itsolv_1_1log.html", "namespacemolpro_1_1linalg_1_1itsolv_1_1log" ],
     [ "subspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace" ],
     [ "util", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html", "namespacemolpro_1_1linalg_1_1itsolv_1_1util" ],
     [ "ArrayHandlers", "classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html", "classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers" ],
@@ -23,7 +24,7 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "LinearEquationsDavidson", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson" ],
     [ "LinearEquationsDavidsonOptions", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions" ],
     [ "LinearEquationsOptions", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsOptions" ],
-    [ "Logger", "structmolpro_1_1linalg_1_1itsolv_1_1Logger.html", "structmolpro_1_1linalg_1_1itsolv_1_1Logger" ],
+    [ "Logger", "classmolpro_1_1linalg_1_1itsolv_1_1Logger.html", "classmolpro_1_1linalg_1_1itsolv_1_1Logger" ],
     [ "NonLinearEquations", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquations.html", null ],
     [ "NonLinearEquationsDIISOptions", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIISOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIISOptions" ],
     [ "NonLinearEquationsOptions", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsOptions" ],

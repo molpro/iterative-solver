@@ -18,10 +18,11 @@ var searchData=
   ['min_5fabs_5fn_15',['min_abs_n',['../classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a53135a777219713f48d04eff91a21ac1',1,'molpro::linalg::array::DistrArray']]],
   ['min_5floc_5fn_16',['min_loc_n',['../classmolpro_1_1linalg_1_1array_1_1DistrArray.html#acb46e64c58bed7fc1336ceab608c4d4d',1,'molpro::linalg::array::DistrArray']]],
   ['min_5fn_17',['min_n',['../classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a2545957d3297b23695193a23b5f5c583',1,'molpro::linalg::array::DistrArray']]],
-  ['minimize_18',['minimize',['../classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html#affbc076b85dae30880c9f0aca5f72354',1,'molpro::linalg::itsolv::Interpolate']]],
-  ['minimize_5fcubic_19',['minimize_cubic',['../classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html#ae3403a7c5ea1be1d34b51549b29737aa',1,'molpro::linalg::itsolv::Interpolate']]],
-  ['modified_5fgram_5fschmidt_20',['modified_gram_schmidt',['../namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ae5d64fe02b3f3b416bb9b172f77f1bf5',1,'molpro::linalg::itsolv::detail::modified_gram_schmidt()'],['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a84fae4b760805b4b3e0b31eb13fb0ce2',1,'molpro::linalg::itsolv::subspace::util::modified_gram_schmidt()']]],
-  ['morse_5fproblem_21',['Morse_problem',['../classMorse__problem.html#abfeeb8c897c7b1eed654f65e1bb7337e',1,'Morse_problem']]],
-  ['mpicomm_5fcompute_22',['mpicomm_compute',['../namespaceiterative__solver.html#a2890fe920d167483bcac382af12afe5d',1,'iterative_solver']]],
-  ['msg_23',['msg',['../structmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a548d9fd08f153e05e91053ddd97d11e9',1,'molpro::linalg::itsolv::Logger::msg(const std::string &amp;message, ForwardIt begin, ForwardIt end, Level log_lvl, int precision=3)'],['../structmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a0a60cec13fb45bf89fc236ee3a541641',1,'molpro::linalg::itsolv::Logger::msg(const std::string &amp;message, Level log_lvl)']]]
+  ['min_5fseverity_18',['min_severity',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#abd38e80ae9e78fdb0879590b5d8be3bc',1,'molpro::linalg::itsolv::Logger']]],
+  ['minimize_19',['minimize',['../classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html#affbc076b85dae30880c9f0aca5f72354',1,'molpro::linalg::itsolv::Interpolate']]],
+  ['minimize_5fcubic_20',['minimize_cubic',['../classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html#ae3403a7c5ea1be1d34b51549b29737aa',1,'molpro::linalg::itsolv::Interpolate']]],
+  ['modified_5fgram_5fschmidt_21',['modified_gram_schmidt',['../namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ae5d64fe02b3f3b416bb9b172f77f1bf5',1,'molpro::linalg::itsolv::detail::modified_gram_schmidt()'],['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a84fae4b760805b4b3e0b31eb13fb0ce2',1,'molpro::linalg::itsolv::subspace::util::modified_gram_schmidt()']]],
+  ['morse_5fproblem_22',['Morse_problem',['../classMorse__problem.html#abfeeb8c897c7b1eed654f65e1bb7337e',1,'Morse_problem']]],
+  ['mpicomm_5fcompute_23',['mpicomm_compute',['../namespaceiterative__solver.html#a2890fe920d167483bcac382af12afe5d',1,'iterative_solver']]],
+  ['msg_24',['msg',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a53781ee8e06705d089207ada15c3fa57',1,'molpro::linalg::itsolv::Logger']]]
 ];

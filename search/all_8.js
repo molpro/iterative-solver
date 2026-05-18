@@ -1,7 +1,7 @@
 var searchData=
 [
   ['h_0',['H',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195ac1d9f50f86825a1a2302ec2449c17196',1,'molpro::linalg::itsolv::subspace']]],
-  ['handle_1',['handle',['https://molpro.github.io/profiler/structprofilerf_1_1profiler.html#ab0fc2e7b48fa188b792f578e863e2afd',1,'profilerf::profiler']]],
+  ['handle_1',['handle',['https://molpro.github.io/profiler/structprofilerf_1_1profiler.html#ab0fc2e7b48fa188b792f578e863e2afd',1,'profilerf::profiler::handle()'],['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html#ae85e4139a2e2212cb2eefe6a0d978919',1,'molpro::linalg::itsolv::log::LogHandler::handle(const Logger &amp;logger, Severity severity, Verbosity verbosity, std::string_view message, Ts...args)=delete'],['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html#a81e3ea5cdfe2c1fb17b21b9ae74c049b',1,'molpro::linalg::itsolv::log::LogHandler::handle(Severity severity, Verbosity verbosity, std::string_view message, Ts...args)=delete']]],
   ['handler_2',['handler',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html#ad3c2a9e4ce0b39b68faf7c96c11ec1b1',1,'molpro::linalg::itsolv::ArrayHandlers::Builder::Proxy']]],
   ['handles_3',['handles',['../structmolpro_1_1linalg_1_1array_1_1util_1_1TempHandle.html#a63da5f203df8218f905857e3f1eb4916',1,'molpro::linalg::array::util::TempHandle']]],
   ['has_5fiterator_4',['has_iterator',['../structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html',1,'molpro::linalg::itsolv']]],

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fatal_0',['Fatal',['../structmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a8adb6b8c05cd17ed24547b35ed5cf4b0a61719e7779d976d0ec7051bc5f04ada6',1,'molpro::linalg::itsolv::Logger']]]
+  ['fatal_0',['Fatal',['../namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0a882384ec38ce8d9582b57e70861730e4',1,'molpro::linalg::itsolv::log']]]
 ];

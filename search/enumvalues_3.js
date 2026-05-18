@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['error_0',['Error',['../structmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a8adb6b8c05cd17ed24547b35ed5cf4b0a819ab687a481cba7929cefb525913a10',1,'molpro::linalg::itsolv::Logger']]]
+  ['error_0',['Error',['../namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0a902b0d55fddef6f8d651fe1035b7d4bd',1,'molpro::linalg::itsolv::log']]]
 ];
