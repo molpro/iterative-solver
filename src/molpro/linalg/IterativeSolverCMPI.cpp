@@ -482,7 +482,15 @@ extern "C" size_t IterativeSolverAddP(size_t buffer_size, size_t nP, const size_
   return working_set_size;
 }
 
+namespace {
+void require_instance() {
+  if (instances.empty())
+    throw std::runtime_error("IterativeSolver not initialised properly");
+}
+} // namespace
+
 extern "C" void IterativeSolverErrors(double* errors) {
+  require_instance();
   auto& instance = instances.top();
   size_t k = 0;
   for (const auto& e : instance.solver.get()->errors())
@@ -491,6 +499,7 @@ extern "C" void IterativeSolverErrors(double* errors) {
 }
 
 extern "C" void IterativeSolverEigenvalues(double* eigenvalues) {
+  require_instance();
   auto& instance = instances.top();
   size_t k = 0;
   LinearEigensystem<Rvector, Qvector, Pvector>* solver_cast =
@@ -502,6 +511,7 @@ extern "C" void IterativeSolverEigenvalues(double* eigenvalues) {
 }
 
 extern "C" void IterativeSolverWorkingSetEigenvalues(double* eigenvalues) {
+  require_instance();
   auto& instance = instances.top();
   size_t k = 0;
   LinearEigensystemDavidson<Rvector, Qvector, Pvector>* solver_cast =
@@ -514,6 +524,7 @@ extern "C" void IterativeSolverWorkingSetEigenvalues(double* eigenvalues) {
 
 extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* residual, size_t maximumNumber,
                                           double threshold, size_t* indices) {
+  require_instance();
   auto& instance = instances.top();
   if (instance.prof != nullptr)
     instance.prof->start("SuggestP");
@@ -528,25 +539,45 @@ extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* 
   return result.size();
 }
 
-extern "C" void IterativeSolverPrintStatistics() { molpro::cout << instances.top().solver->statistics() << std::endl; }
+extern "C" void IterativeSolverPrintStatistics() {
+  require_instance();
+  molpro::cout << instances.top().solver->statistics() << std::endl;
+}
 
-extern "C" int IterativeSolverConverged() { return instances.top().solver->working_set().empty() ? 1 : 0; }
+extern "C" int IterativeSolverConverged() {
+  require_instance();
+  return instances.top().solver->working_set().empty() ? 1 : 0;
+}
 
-int IterativeSolverNonLinear() { return instances.top().solver->nonlinear() ? 1 : 0; }
-int IterativeSolverHasValues() { return instances.top().has_values ? 1 : 0; }
-int IterativeSolverHasEigenvalues() { return instances.top().has_eigenvalues ? 1 : 0; }
+int IterativeSolverNonLinear() {
+  require_instance();
+  return instances.top().solver->nonlinear() ? 1 : 0;
+}
+int IterativeSolverHasValues() {
+  require_instance();
+  return instances.top().has_values ? 1 : 0;
+}
+int IterativeSolverHasEigenvalues() {
+  require_instance();
+  return instances.top().has_eigenvalues ? 1 : 0;
+}
 
 void IterativeSolverSetDiagonals(const double* diagonals) {
+  require_instance();
   instances.top().diagonals.reset(new Qvector(CreateDistrArray(1, diagonals).front()));
 }
 void IterativeSolverDiagonals(double* diagonals) {
+  require_instance();
   CreateDistrArray(1, diagonals).front().copy(*instances.top().diagonals);
 }
-double IterativeSolverValue() { return instances.top().solver->value(); }
+double IterativeSolverValue() {
+  require_instance();
+  return instances.top().solver->value();
+}
 int IterativeSolverVerbosity() {
+  require_instance();
   auto verbosity = instances.top().solver->logger().verbosity();
   auto min_severity = instances.top().solver->logger().min_severity();
-
   switch (verbosity) {
     using namespace molpro::linalg::itsolv;
     case log::Verbosity::None:
@@ -561,8 +592,14 @@ int IterativeSolverVerbosity() {
 
   return -1;
 }
-int IterativeSolverMaxIter() { return instances.top().solver->get_max_iter(); }
-void IterativeSolverSetMaxIter(int max_iter) { instances.top().solver->set_max_iter(max_iter); }
+int IterativeSolverMaxIter() {
+  require_instance();
+  return instances.top().solver->get_max_iter();
+}
+void IterativeSolverSetMaxIter(int max_iter) {
+  require_instance();
+  instances.top().solver->set_max_iter(max_iter);
+}
 /*!
  * @brief C binding of mpi::comm_global(), suitable for calling from Fortran
  */
