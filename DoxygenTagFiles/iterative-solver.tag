@@ -8746,6 +8746,13 @@
       <anchor>a92f51ae6a758597adc86539eb92e10f9</anchor>
       <arglist></arglist>
     </member>
+    <member kind="function">
+      <type>procedure, pass</type>
+      <name>test_parameters</name>
+      <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
+      <anchor>a1d5d433d1e6f732f1ee2126bbaf71732</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="variable">
       <type>type(pspace)</type>
       <name>p_space</name>
@@ -11096,13 +11103,6 @@
     <class kind="interface">iterative_solver::mpi_init</class>
     <class kind="interface">iterative_solver::mpi_rank_global</class>
     <member kind="function">
-      <type>subroutine</type>
-      <name>test_select</name>
-      <anchorfile>namespaceiterative__solver.html</anchorfile>
-      <anchor>a762cf435ede70697d8e9df140d410d27</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function">
       <type>integer(kind=mpicomm_kind) function, public</type>
       <name>mpicomm_compute</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
@@ -11215,10 +11215,10 @@
       <arglist>(roots, parameters, action, synchronize)</arglist>
     </member>
     <member kind="function">
-      <type>function, public</type>
+      <type>integer function, public</type>
       <name>iterative_solver_end_iteration</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
-      <anchor>ad609af42ab2050142d98f5ca57522322</anchor>
+      <anchor>aad6209cf87f4525b8d7e54712cae966a</anchor>
       <arglist>(solution, residual, synchronize)</arglist>
     </member>
     <member kind="function">

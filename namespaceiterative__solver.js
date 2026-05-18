@@ -8,7 +8,7 @@ var namespaceiterative__solver =
     [ "iterative_solver_converged", "namespaceiterative__solver.html#a3e077733271d54ad4d3182d2d9aeb9ab", null ],
     [ "iterative_solver_diis_initialize", "namespaceiterative__solver.html#a0193308603bbbe44226e4745032d12f7", null ],
     [ "iterative_solver_eigenvalues", "namespaceiterative__solver.html#afad8d58daf37b4b32e1f85046611ece6", null ],
-    [ "iterative_solver_end_iteration", "namespaceiterative__solver.html#ad609af42ab2050142d98f5ca57522322", null ],
+    [ "iterative_solver_end_iteration", "namespaceiterative__solver.html#aad6209cf87f4525b8d7e54712cae966a", null ],
     [ "iterative_solver_end_iteration_needed", "namespaceiterative__solver.html#a5b5146c464788a63c87081ee8f50473d", null ],
     [ "iterative_solver_errors", "namespaceiterative__solver.html#a8771b451fe4f3381b22d6a64d96f23bd", null ],
     [ "iterative_solver_finalize", "namespaceiterative__solver.html#a40a3d04d226f8315ed2a57baa5d78304", null ],
@@ -27,7 +27,6 @@ var namespaceiterative__solver =
     [ "solve_linear_equations", "namespaceiterative__solver.html#a0ce14b9eca351507039f752494a53349", null ],
     [ "solve_nonlinear_equations", "namespaceiterative__solver.html#a05c7eeda78e69ee7c484fe069ab0231b", null ],
     [ "solve_optimization", "namespaceiterative__solver.html#aafc0c445dbb353da38c92aa1ce4640f2", null ],
-    [ "test_select", "namespaceiterative__solver.html#a762cf435ede70697d8e9df140d410d27", null ],
     [ "current_problem", "namespaceiterative__solver.html#ad1ae0165bd555ba3fbf8d9c6e55d83c0", null ],
     [ "iterative_solver_iterations", "namespaceiterative__solver.html#a260bebdd67c530e7e08bf211bc44760b", null ],
     [ "mpicomm_kind", "namespaceiterative__solver.html#a8e7b0afa0169579bd571c1aac764d4e8", null ]

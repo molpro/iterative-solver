@@ -111,8 +111,6 @@ Data Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:a762cf435ede70697d8e9df140d410d27"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a762cf435ede70697d8e9df140d410d27">test_select</a></td></tr>
-<tr class="separator:a762cf435ede70697d8e9df140d410d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2890fe920d167483bcac382af12afe5d"><td class="memItemLeft" align="right" valign="top">integer(kind=<a class="el" href="namespaceiterative__solver.html#a8e7b0afa0169579bd571c1aac764d4e8">mpicomm_kind</a>) function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a2890fe920d167483bcac382af12afe5d">mpicomm_compute</a> ()</td></tr>
 <tr class="separator:a2890fe920d167483bcac382af12afe5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a508258aa021cc2d872fba06bd1cff849"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a508258aa021cc2d872fba06bd1cff849">set_mpicomm_compute</a> (comm)</td></tr>
@@ -154,9 +152,9 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a03f7586355d8dab8557e6cde9fc0078b"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a03f7586355d8dab8557e6cde9fc0078b">iterative_solver_solution</a> (roots, parameters, action, synchronize)</td></tr>
 <tr class="memdesc:a03f7586355d8dab8557e6cde9fc0078b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the current solution.  <a href="namespaceiterative__solver.html#a03f7586355d8dab8557e6cde9fc0078b">More...</a><br /></td></tr>
 <tr class="separator:a03f7586355d8dab8557e6cde9fc0078b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad609af42ab2050142d98f5ca57522322"><td class="memItemLeft" align="right" valign="top">function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#ad609af42ab2050142d98f5ca57522322">iterative_solver_end_iteration</a> (solution, residual, synchronize)</td></tr>
-<tr class="memdesc:ad609af42ab2050142d98f5ca57522322"><td class="mdescLeft">&#160;</td><td class="mdescRight">For most methods, does nothing; for Optimize it is required. Also write progress to standard output.  <a href="namespaceiterative__solver.html#ad609af42ab2050142d98f5ca57522322">More...</a><br /></td></tr>
-<tr class="separator:ad609af42ab2050142d98f5ca57522322"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad6209cf87f4525b8d7e54712cae966a"><td class="memItemLeft" align="right" valign="top">integer function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#aad6209cf87f4525b8d7e54712cae966a">iterative_solver_end_iteration</a> (solution, residual, synchronize)</td></tr>
+<tr class="memdesc:aad6209cf87f4525b8d7e54712cae966a"><td class="mdescLeft">&#160;</td><td class="mdescRight">For most methods, does nothing; for Optimize it is required. Also write progress to standard output.  <a href="namespaceiterative__solver.html#aad6209cf87f4525b8d7e54712cae966a">More...</a><br /></td></tr>
+<tr class="separator:aad6209cf87f4525b8d7e54712cae966a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b5146c464788a63c87081ee8f50473d"><td class="memItemLeft" align="right" valign="top">logical function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a5b5146c464788a63c87081ee8f50473d">iterative_solver_end_iteration_needed</a> ()</td></tr>
 <tr class="separator:a5b5146c464788a63c87081ee8f50473d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa924c3a27ae8d7dfb5f6946c9ab55222"><td class="memItemLeft" align="right" valign="top">integer function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#aa924c3a27ae8d7dfb5f6946c9ab55222">iterative_solver_add_p</a> (nP, offsets, indices, coefficients, pp, parameters, action, fproc, synchronize)</td></tr>
@@ -464,14 +462,14 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ad609af42ab2050142d98f5ca57522322" name="ad609af42ab2050142d98f5ca57522322"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad609af42ab2050142d98f5ca57522322">&#9670;&nbsp;</a></span>iterative_solver_end_iteration()</h2>
+<a id="aad6209cf87f4525b8d7e54712cae966a" name="aad6209cf87f4525b8d7e54712cae966a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad6209cf87f4525b8d7e54712cae966a">&#9670;&nbsp;</a></span>iterative_solver_end_iteration()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">function, public iterative_solver::iterative_solver_end_iteration </td>
+          <td class="memname">integer function, public iterative_solver::iterative_solver_end_iteration </td>
           <td>(</td>
           <td class="paramtype">double precision, dimension(..), intent(inout), target&#160;</td>
           <td class="paramname"><em>solution</em>, </td>
@@ -1797,20 +1795,6 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a762cf435ede70697d8e9df140d410d27" name="a762cf435ede70697d8e9df140d410d27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a762cf435ede70697d8e9df140d410d27">&#9670;&nbsp;</a></span>test_select()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine iterative_solver::test_select</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>

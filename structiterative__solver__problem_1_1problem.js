@@ -8,5 +8,6 @@ var structiterative__solver__problem_1_1problem =
     [ "report", "structiterative__solver__problem_1_1problem.html#ab226e906c11bbee23169e73ca6f12280", null ],
     [ "residual", "structiterative__solver__problem_1_1problem.html#adf9c229878bfe6bac1c0e0967a94428c", null ],
     [ "rhs", "structiterative__solver__problem_1_1problem.html#a5134b99305b8e07054d0a3e7eb0c246d", null ],
+    [ "test_parameters", "structiterative__solver__problem_1_1problem.html#a1d5d433d1e6f732f1ee2126bbaf71732", null ],
     [ "p_space", "structiterative__solver__problem_1_1problem.html#a0ee091c82a63ba2ffe604fe5713c79eb", null ]
 ];
