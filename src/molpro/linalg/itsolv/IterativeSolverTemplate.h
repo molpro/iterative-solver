@@ -295,12 +295,22 @@ public:
       set_convergence_threshold(options.convergence_threshold.value());
     if (options.verbosity)
       set_verbosity(options.verbosity.value());
+    if (options.max_iter)
+      set_max_iter(options.max_iter.value());
+    if (options.max_p)
+      set_max_p(options.max_p.value());
+    if (options.p_threshold)
+      set_p_threshold(options.p_threshold.value());
   }
 
   std::shared_ptr<Options> get_options() const override {
     auto options = std::make_shared<Options>();
     options->n_roots = n_roots();
     options->convergence_threshold = convergence_threshold();
+    options->verbosity = get_verbosity();
+    options->max_iter = get_max_iter();
+    options->max_p = get_max_p();
+    options->p_threshold = get_p_threshold();
     return options;
   }
 
