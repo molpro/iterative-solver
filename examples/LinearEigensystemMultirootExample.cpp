@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
       std::cout << "failed" << std::endl;
     else
       std::cout << "converged in " << solver->statistics().iterations << " iterations" << std::endl;
-    std::vector<int> roots;
+    std::vector<int> roots(solver->n_roots());
     std::iota(roots.begin(), roots.end(), 0);
     solver->solution(roots, c, g);
     for (const auto& ev : solver->eigenvalues())
