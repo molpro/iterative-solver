@@ -11,7 +11,7 @@ var classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager =
     [ "buffer_stride", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#a7eb7ac21d7f7c2b1aba452a5bf4869b2", null ],
     [ "end", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#a9095a1d96c2d44d2202aca4c3f7265be", null ],
     [ "next", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#a9d567f6ee13c27e6e11fd9ba51ac2eef", null ],
-    [ "m_arrays", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#a2b25503f73cc1c73697ef0b91d520861", null ],
+    [ "m_arrays", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#a1255932b2f5459c3964824244671c9c8", null ],
     [ "m_buffer", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#ae51796188e203f326af9e58462506cd0", null ],
     [ "m_buffer_size", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#ab10d8d1e9817dec589cd6e9184363669", null ],
     [ "m_current_buffer_size", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#aabab9550ecab3a412f9f17199c48a288", null ],

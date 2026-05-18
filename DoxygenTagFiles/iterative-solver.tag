@@ -1421,10 +1421,10 @@
       <arglist>(bool initial=false)</arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>const CVecRef &amp;</type>
+      <type>const CVecRef</type>
       <name>m_arrays</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
-      <anchor>a2b25503f73cc1c73697ef0b91d520861</anchor>
+      <anchor>a1255932b2f5459c3964824244671c9c8</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -2991,15 +2991,15 @@
       <type></type>
       <name>DistrArrayFile</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html</anchorfile>
-      <anchor>a09d809f27869d6bf9bace2efdaabd415</anchor>
-      <arglist>(size_t dimension, MPI_Comm comm=comm_global(), const std::string &amp;directory=&quot;.&quot;)</arglist>
+      <anchor>a95aa4474e00a58cc60cb6cc37b6fd989</anchor>
+      <arglist>(size_t dimension, MPI_Comm comm=molpro::mpi::comm_global(), const std::string &amp;directory=&quot;.&quot;)</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>DistrArrayFile</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html</anchorfile>
-      <anchor>a26300675242f1aa928b662603ec1a4b0</anchor>
-      <arglist>(std::unique_ptr&lt; Distribution &gt; distribution, MPI_Comm comm=comm_global(), const std::string &amp;directory=&quot;.&quot;)</arglist>
+      <anchor>a3737da18d7f45def5dae112380ed599c</anchor>
+      <arglist>(std::unique_ptr&lt; Distribution &gt; distribution, MPI_Comm comm=molpro::mpi::comm_global(), const std::string &amp;directory=&quot;.&quot;)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -9672,10 +9672,10 @@
       <arglist></arglist>
     </member>
     <member kind="typedef">
-      <type>T &amp;</type>
+      <type>const T &amp;</type>
       <name>const_reference</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html</anchorfile>
-      <anchor>a823c7414acdf43ed7bcfd15867f3233c</anchor>
+      <anchor>a78ef507281d967bfe6c9d7821256ea09</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
@@ -11552,13 +11552,6 @@
       <anchor>a12b3a57e72d2ca5fd50a2925191f0ff9</anchor>
       <arglist></arglist>
     </member>
-    <member kind="variable">
-      <type>std::mutex</type>
-      <name>s_open_error_mutex</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
-      <anchor>af25a43293d1736bcb38d4f07b8056745</anchor>
-      <arglist></arglist>
-    </member>
   </compound>
   <compound kind="namespace">
     <name>molpro::linalg::array::detail</name>
@@ -11808,20 +11801,6 @@
       <name>is_allocatable_v</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
       <anchor>aaba327f38775ab51cf90be6370a3cf25</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>int</type>
-      <name>s_temp_file_name_count</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>a3be37e974c75f3bd166cc7303542dd4a</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::mutex</type>
-      <name>s_mutex</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>ac5b51a7de2c9b92d70b9342bd48e5ed1</anchor>
       <arglist></arglist>
     </member>
   </compound>

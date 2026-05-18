@@ -235,10 +235,6 @@ Variables</h2></td></tr>
 <tr class="memitem:aaba327f38775ab51cf90be6370a3cf25"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aaba327f38775ab51cf90be6370a3cf25"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#aaba327f38775ab51cf90be6370a3cf25">is_allocatable_v</a> = <a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1is__allocatable.html">is_allocatable</a>&lt;T&gt;::value</td></tr>
 <tr class="separator:aaba327f38775ab51cf90be6370a3cf25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3be37e974c75f3bd166cc7303542dd4a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a3be37e974c75f3bd166cc7303542dd4a">s_temp_file_name_count</a> = 0</td></tr>
-<tr class="separator:a3be37e974c75f3bd166cc7303542dd4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5b51a7de2c9b92d70b9342bd48e5ed1"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ac5b51a7de2c9b92d70b9342bd48e5ed1">s_mutex</a></td></tr>
-<tr class="separator:ac5b51a7de2c9b92d70b9342bd48e5ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="ac1856c20beb303170f5bbbbf9e08771f" name="ac1856c20beb303170f5bbbbf9e08771f"></a>
@@ -295,6 +291,9 @@ template&lt;class Compare &gt; </div>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void molpro::linalg::array::util::gather_all </td>
@@ -320,6 +319,11 @@ template&lt;class Compare &gt; </div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Replicate data of a full container on all the processes based on distributed pieces. </p>
@@ -1252,34 +1256,6 @@ template&lt;typename T &gt; </div>
 <span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac5b51a7de2c9b92d70b9342bd48e5ed1" name="ac5b51a7de2c9b92d70b9342bd48e5ed1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5b51a7de2c9b92d70b9342bd48e5ed1">&#9670;&nbsp;</a></span>s_mutex</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::mutex molpro::linalg::array::util::s_mutex</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3be37e974c75f3bd166cc7303542dd4a" name="a3be37e974c75f3bd166cc7303542dd4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3be37e974c75f3bd166cc7303542dd4a">&#9670;&nbsp;</a></span>s_temp_file_name_count</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int molpro::linalg::array::util::s_temp_file_name_count = 0</td>
-        </tr>
-      </table>
 </div><div class="memdoc">
 
 </div>

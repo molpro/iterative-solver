@@ -43,7 +43,5 @@ var namespacemolpro_1_1linalg_1_1array_1_1util =
     [ "temp_file_name", "namespacemolpro_1_1linalg_1_1array_1_1util.html#acfea8dacbd30c52cd53641219a873959", null ],
     [ "is_allocatable_v", "namespacemolpro_1_1linalg_1_1array_1_1util.html#aaba327f38775ab51cf90be6370a3cf25", null ],
     [ "is_array_v", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a6ab167ff19207a0141449fb9e359dc7e", null ],
-    [ "is_std_array_v", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a77d2028e5786d2fdb6331300bd4a5471", null ],
-    [ "s_mutex", "namespacemolpro_1_1linalg_1_1array_1_1util.html#ac5b51a7de2c9b92d70b9342bd48e5ed1", null ],
-    [ "s_temp_file_name_count", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a3be37e974c75f3bd166cc7303542dd4a", null ]
+    [ "is_std_array_v", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a77d2028e5786d2fdb6331300bd4a5471", null ]
 ];
