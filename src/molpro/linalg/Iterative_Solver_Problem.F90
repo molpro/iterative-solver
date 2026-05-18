@@ -16,6 +16,7 @@ module Iterative_Solver_Problem
     procedure, pass :: report
     procedure, pass :: p_action
     procedure, pass :: pp_action_matrix
+    procedure, pass :: test_parameters
   end type Problem
 contains
 
@@ -177,5 +178,19 @@ contains
     !      end do
     !    end do
   end subroutine p_action
+
+  !> @brief Provide values of R vectors for testing the problem class.
+  !> For use in a non-linear solver, the first vector (instance=0) should be a reference point, and the remainder
+  !> (instance>0) should be close to it, such that meaningful numerical differentation can be done to test the residual
+  !> function.
+  !> @param instance
+  !> @param parameters
+  !> @return true if a vector has been provided
+  logical function test_parameters(this, instance, parameters)
+    class(Problem), intent(in) :: this
+    integer, intent(in) :: instance
+    double precision, dimension(:), intent(inout) :: parameters
+    test_parameters = .false.
+  end function test_parameters
 
 end module Iterative_Solver_Problem
