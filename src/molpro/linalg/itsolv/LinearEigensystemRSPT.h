@@ -105,13 +105,13 @@ public:
     //    SolverTemplate::report(cout);
     //    cout << "errors " << std::scientific;
     //    auto& err = this->m_errors;
-    //    std::copy(begin(err), end(err), std::ostream_iterator<scalar_type>(molpro::cout, ", "));
+    //    std::copy(begin(err), end(err), std::ostream_iterator<scalar_type>(cout, ", "));
     //    cout << std::endl;
     //    cout << "eigenvalues ";
     //    auto ev = eigenvalues();
     cout << "Perturbed energies ";
     cout << std::fixed << std::setprecision(8);
-    std::copy(begin(m_rspt_values), end(m_rspt_values), std::ostream_iterator<scalar_type>(molpro::cout, ", "));
+    std::copy(begin(m_rspt_values), end(m_rspt_values), std::ostream_iterator<scalar_type>(cout, ", "));
     cout << std::defaultfloat;
     if (endl)
       cout << std::endl;

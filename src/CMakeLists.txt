@@ -1,5 +1,7 @@
 LibraryManager_Add(${PROJECT_NAME} NAMESPACE molpro)
 
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+
 # MPI has to be called in the same scope as LibraryManager_Install, if pkg-config file is needed
 # Otherwise MPI::MPI_CXX target is not available.
 if (MPI)

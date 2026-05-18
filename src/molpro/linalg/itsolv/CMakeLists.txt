@@ -1,5 +1,5 @@
 LibraryManager_Append(${PROJECT_NAME}
-        SOURCES util.cpp Logger.cpp Options.cpp LinearEigensystemDavidsonOptions.cpp LinearEquationsDavidsonOptions.cpp
+        SOURCES util.cpp Options.cpp LinearEigensystemDavidsonOptions.cpp LinearEquationsDavidsonOptions.cpp
         NonLinearEquationsDIISOptions.cpp OptimizeBFGSOptions.cpp OptimizeSDOptions.cpp LinearEigensystemRSPTOptions.cpp
         Interpolate.cpp
         PUBLIC_HEADER IterativeSolver.h IterativeSolverTemplate.h LinearEigensystemDavidson.h LinearEigensystemRSPT.h

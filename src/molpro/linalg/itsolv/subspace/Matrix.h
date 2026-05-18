@@ -3,9 +3,11 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <format>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -311,5 +313,49 @@ std::string as_string(const Mat& m, int precision = 6) {
 }
 
 } // namespace molpro::linalg::itsolv::subspace
+
+template<typename T>
+struct std::formatter<molpro::linalg::itsolv::subspace::Matrix<T>> : std::formatter<std::string_view> {
+  using Base = std::formatter<std::string_view>;
+
+  std::size_t precision = 6;
+
+  constexpr auto parse(std::format_parse_context &ctx) {
+    auto it = ctx.begin();
+
+    if (it == ctx.end()) {
+      return it;
+    }
+
+    if (*it != '.') {
+      return Base::parse(ctx);
+    }
+
+    ++it;
+
+    if (it == ctx.end() || ( *it < '0' && *it > '9' )) {
+      throw std::format_error("Format string uses precision quantifier '.' without giving a (numeric) precision");
+    }
+
+    // Parse specified precision
+    // Unfortunately, the stdlib doesn't have a constexpr function for this until C++23
+    precision = 0;
+    while (it != ctx.end() && ( *it >= '0' && *it <= '9' )) {
+      precision *= 10;
+      precision += *it - '0';
+      ++it;
+    }
+
+    // Interpret remaining format context as specification for std::string_view formatter
+    ctx.advance_to(it);
+    return Base::parse(ctx);
+  }
+
+  auto format(const molpro::linalg::itsolv::subspace::Matrix<T> &mat, std::format_context &ctx) const {
+    std::string tmp = molpro::linalg::itsolv::subspace::as_string(mat, precision);
+
+    return Base::format(tmp, ctx);
+  }
+};
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_MATRIX_H

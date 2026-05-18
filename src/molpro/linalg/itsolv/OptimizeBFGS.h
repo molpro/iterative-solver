@@ -7,6 +7,7 @@
 #include <molpro/linalg/itsolv/propose_rspace.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceSolverOptBFGS.h>
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
+
 #include <cmath>
 #include <map>
 #include <memory>
@@ -102,7 +103,7 @@ public:
         throw std::runtime_error("NaN in line search");
       if (std::abs(x) > m_linesearch_tolerance) {
         //        molpro::cout << "taking line search" << std::endl;
-        this->m_logger->msg("Line search step taken", Logger::Info);
+        this->m_logger->info("Line search step taken");
         this->m_handlers->rr().scal(1 + x, parameters);
         this->m_handlers->rq().axpy(-x, xspace->paramsq()[1], parameters);
         auto erased = fprev < fcurrent ? 0 : 1;
@@ -123,13 +124,13 @@ public:
 
   accept:
     m_linesearch = false;
-    this->m_logger->msg("Quasi-Newton step taken", Logger::Info);
+    this->m_logger->info("Quasi-Newton step taken");
     //    this->m_errors.front() = std::sqrt(this->m_handlers->rr().dot(residual,residual));
     for (size_t a = 0; a < xspace->size() - 1; a++) {
       if (std::abs(H(a, a) - H(a, a + 1) - H(a + 1, a) + H(a + 1, a + 1)) <
           std::max(5e-14 * std::abs(H(a, a)), 1e-15)) {
         xspace->eraseq(a + 1);
-        this->m_logger->msg("Erase redundant Q", Logger::Info);
+        this->m_logger->info("Erase redundant Q");
         goto accept;
       }
     }

@@ -11,7 +11,6 @@ int main(int argc, char* argv[]) {
 
     // old
     auto solver = molpro::linalg::itsolv::create_LinearEquations<Rvector>("Davidson");
-    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::Summary);
     Rvector c(problem.n), g(problem.n);
     if (not solver->solve(c, g, problem, true))
       std::cout << "failed" << std::endl;
