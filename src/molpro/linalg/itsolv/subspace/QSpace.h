@@ -85,13 +85,14 @@ struct QSpace {
                                          std::make_unique<Q>(m_handlers->qr().copy(actions.at(i))), m_unique_id++});
     }
     size_t nQnew = params.size();
-    // TODO: previously this branch attempted to detect linearly-redundant new
-    // parameters and drop them, but the implementation removed from the wrong
-    // end of m_params (pop_back popped the oldest history vector instead of a
-    // new one) and did not skip the corresponding rows/cols when slicing qq/qx
-    // into the subspace data below. Linear dependencies are handled later by
-    // the SVD-based subspace solver; we accept the redundant rows here rather
-    // than ship a half-broken pruning step.
+    if (nQnew>1) {
+      auto s = Matrix<double>({nQnew,nQnew});
+      s.slice() = qq.at(EqnData::S).slice({0,0},{nQnew,nQnew});
+      auto rp = molpro::linalg::itsolv::detail::redundant_parameters(s, 0, nQnew,
+                                                                     1e-8, *m_logger);
+      nQnew -= rp.size();
+      for (auto& p : rp) {m_params.pop_back();}
+    }
     const auto nXnew = dims.nX + nQnew;
     auto data = old_data;
     for (auto d : {EqnData::H, EqnData::S}) {

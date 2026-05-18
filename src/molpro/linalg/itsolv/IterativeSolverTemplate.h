@@ -491,18 +491,14 @@ public:
     if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary) {
       summary_report();
     }
-    // m_errors may be empty if the iteration loop never ran; treat that as
-    // not-yet-converged (infinity) rather than dereffing max_element on []. UB.
-    auto max_error = m_errors.empty() ? std::numeric_limits<scalar_type>::infinity()
-                                      : *std::max_element(m_errors.begin(), m_errors.end());
     if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary) {
-      if (max_error > m_convergence_threshold) {
+      if (*std::max_element(m_errors.begin(), m_errors.end()) > m_convergence_threshold) {
         this->m_logger->warn("Solver has not converged to threshold ", m_convergence_threshold);
       } else {
         this->m_logger->info("Solver converged");
       }
     }
-    return nwork == 0 and max_error <= m_convergence_threshold;
+    return nwork == 0 and *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
   }
 
   bool solve(R& parameters, R& actions, const Problem<R>& problem, bool generate_initial_guess = false) override {
