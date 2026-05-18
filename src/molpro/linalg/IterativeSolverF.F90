@@ -65,16 +65,6 @@ MODULE Iterative_Solver
   END INTERFACE
 
 CONTAINS
-  subroutine test_select
-    i = 1
-    select case(4)
-    case(0)
-      print*, 0
-    case(1)
-      print*, 1
-    end select
-  end subroutine test_select
-
   FUNCTION mpicomm_compute()
     INTEGER(KIND = mpicomm_kind) :: mpicomm_compute
     if (s_mpicomm_compute .EQ. -9999999) s_mpicomm_compute = mpicomm_global()
