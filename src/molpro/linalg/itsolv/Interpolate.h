@@ -53,7 +53,6 @@ public:
 private:
   const point m_p0, m_p1;
   const std::string m_interpolant;
-  double m_c0, m_c1, m_c2, m_c3; //< parameters defining the interpolant
   std::vector<double> m_parameters;
 };
 
