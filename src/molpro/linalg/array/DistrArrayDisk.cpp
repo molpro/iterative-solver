@@ -72,7 +72,10 @@ DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source, const S
   m_size = hi - m_start;
   if (m_size > buffer.size())
     source.error("LocalBufferDisk(): attempting to construct from a buffer that is too small");
-  m_buffer = buffer.empty() ? nullptr : &buffer[0];
+  // LocalBuffer logically owns write access to this buffer (source.get below
+  // and put in the destructor both write through m_buffer); the const-ref on
+  // the Span parameter is just the "I won't change the Span object" idiom.
+  m_buffer = buffer.empty() ? nullptr : const_cast<value_type*>(&buffer[0]);
   source.get(start(), start() + size(), m_buffer);
 }
 

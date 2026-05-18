@@ -1,6 +1,7 @@
 #include "DistrArrayMPI3.h"
 #include "util/Distribution.h"
 #include <algorithm>
+#include <iostream>
 #include <string>
 #include <tuple>
 namespace molpro::linalg::array {
@@ -223,7 +224,10 @@ std::vector<DistrArrayMPI3::value_type> DistrArrayMPI3::vec() const { return get
 
 void DistrArrayMPI3::acc(index_type lo, index_type hi, const value_type* data) { _get_put(lo, hi, data, RMAType::acc); }
 
-void DistrArrayMPI3::error(const std::string& message) const { MPI_Abort(m_communicator, 1); }
+void DistrArrayMPI3::error(const std::string& message) const {
+  std::cerr << message << std::endl;
+  MPI_Abort(m_communicator, 1);
+}
 
 const DistrArray::Distribution& DistrArrayMPI3::distribution() const {
   if (!m_distribution)
