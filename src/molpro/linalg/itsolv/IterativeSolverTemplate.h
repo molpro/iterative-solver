@@ -179,7 +179,7 @@ public:
   Logger &logger() override { return *m_logger; }
 
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
-    profiler()->push("itsolv::add_vector");
+    auto outer = profiler()->push("itsolv::add_vector");
     auto prof = molpro::Profiler::single();
     m_logger->trace("IterativeSolverTemplate::add_vector  iteration = ", m_stats->iterations);
     m_logger->debug("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = ",
