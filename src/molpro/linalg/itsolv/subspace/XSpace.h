@@ -224,11 +224,11 @@ public:
   const Dimensions& dimensions() const override { return m_dim; }
 
   void erase(size_t i) override {
-    if (m_dim.oP >= i && i < m_dim.oP + m_dim.nP) {
+    if (i >= m_dim.oP && i < m_dim.oP + m_dim.nP) {
       erasep(i - m_dim.oP);
-    } else if (m_dim.oQ >= i && i < m_dim.oQ + m_dim.nQ) {
+    } else if (i >= m_dim.oQ && i < m_dim.oQ + m_dim.nQ) {
       eraseq(i - m_dim.oQ);
-    } else if (m_dim.oD >= i && i < m_dim.oD + m_dim.nD) {
+    } else if (i >= m_dim.oD && i < m_dim.oD + m_dim.nD) {
       erased(i - m_dim.oD);
     }
   }
