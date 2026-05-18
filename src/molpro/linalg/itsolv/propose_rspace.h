@@ -392,6 +392,11 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
   }
   for (size_t i = 0; i < nD; ++i) {
     auto norm = std::sqrt(std::abs(handler.dot(dparams_new.at(i), dparams_new.at(i))));
+    if (norm < norm_thresh) {
+      logger.warn(std::format("construct_dspace: skipping normalisation of D vector {} with near-zero norm = {:.2e}",
+                              i, norm));
+      continue;
+    }
     handler.scal(1. / norm, dparams_new[i]);
     handler.scal(1. / norm, dactions_new[i]);
   }
