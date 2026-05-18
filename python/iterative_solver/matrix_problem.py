@@ -21,7 +21,7 @@ class MatrixProblem(Problem):
     def RHS(self, vector, instance):
         if instance < 0 or instance >= self.m_RHS.shape[1]:
             return False
-        vector = copy.deepcopy(self.m_RHS[instance, :])  # check index order
+        np.copyto(vector, self.m_RHS[instance, :])
         return True
 
     def action(self, parameters, action):
@@ -75,9 +75,9 @@ class MatrixProblem(Problem):
         :param actions On exit, the computed action has been added to the original contents
         :param range The range of the full space for which actions should be computed.
         """
+        s = slice(ranges[0], ranges[1])
         for i in range(actions.shape[0]):
             for k in range(self.p_space.size):
                 for kc in range(self.p_space.offsets[k], self.p_space.offsets[k + 1]):
-                    j = range(ranges[0], ranges[1])
-                    actions[i, j] = actions[i, j] + self.matrix[self.p_space.indices[kc], j] * \
+                    actions[i, s] = actions[i, s] + self.matrix[self.p_space.indices[kc], s] * \
                                     self.p_space.coefficients[kc] * p_coefficients[i, k]

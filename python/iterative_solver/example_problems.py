@@ -29,15 +29,12 @@ class Box(Problem):
         return True
 
     def hessian(self, x):
-        # print('hessian',x)
         x0 = min(max(x[0], -10), 10)
         x1 = min(max(x[1], -10), 10)
         h = np.zeros([2, 2])
         for i in range(1, 11):
             t = i * 0.1
             d = math.exp(-x0 * t) - math.exp(-x1 * t) - math.exp(-t) + math.exp(-10 * t)
-            g[0] -= 2 * d * t * math.exp(-x0 * t)
-            g[1] += 2 * d * t * math.exp(-x1 * t)
             h[0, 0] += 2 * d * t * t * math.exp(-x0 * t) + 2 * t * t * math.exp(-2 * x0 * t)
             h[1, 1] += -2 * d * t * t * math.exp(-x1 * t) + 2 * t * t * math.exp(-2 * x1 * t)
             h[1, 1] += -2 * t * t * math.exp(-x0 * t - x1 * t)
