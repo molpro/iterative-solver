@@ -1,7 +1,7 @@
 iterative-solver
 ================
 
-[![example workflow](https://github.com/molpro/iterative-solver/actions/workflows/build-and-test/badge.svg)]
+[![Build and test](https://github.com/molpro/iterative-solver/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/molpro/iterative-solver/actions/workflows/build-and-test.yml)
 
 [//]: # (&#40;https://github.com/molpro/iterative-solver/commits/master&#41;)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/molpro/iterative-solver/blob/master/LICENSE)
@@ -56,22 +56,27 @@ to add new iterative solvers, so there might be more than one implementation.
 
 ### Example
 
-The simplest way to use the library is to call `solve()` and pass a function for getting the action of the matrix on parameter set. 
-Here is an example of using `LinearEigensystem` with Davidson preconditioner,
+The simplest way to use the library is to define a `Problem` subclass that supplies
+the matrix action and (optionally) diagonals, then call `solve()`. Here is an example
+of using `LinearEigensystemDavidson`,
 
 ```cpp
-#include <molpro/linalg/itsolv/LinearEigensystem.h>
+#include <molpro/linalg/itsolv/LinearEigensystemDavidson.h>
+#include <molpro/linalg/itsolv/SolverFactory.h>
 // ...
-using molpro::linalg::itsolv::LinearEigensystem;
 using R = std::vector<double>;
-using Q = std::vector<double>;
-LinearEigensystemDavdison<R, Q> solver{};
-auto [x, g] = get_initial_parameters_and_action();
-solver.set_preconditioner_davidson(get_diagonal_matrix_elements());
-solver.solve(x, g, user_specified_action_function);
-if (!solver.converged()){
+class MyProblem : public molpro::linalg::itsolv::Problem<R> {
+    void action(const CVecRef<R>& parameters, const VecRef<R>& actions) const override { /* ... */ }
+    bool diagonals(R& d) const override { /* fill d */ return true; }
+};
+
+auto solver = molpro::linalg::itsolv::create_LinearEigensystem<R>();
+R parameters(n), actions(n);
+MyProblem problem;
+if (!solver->solve(parameters, actions, problem, /*generate_initial_guess=*/true)) {
     // deal with the unconverged case
 }
+solver->solution(parameters, actions);
 ```
 
 More advanced users can copy and modify the code in `solve()` to tailor it for their own use, see implementation in `molpro/linalg/itsolv/IterativeSolverTemplate.h`.
