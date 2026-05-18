@@ -8593,10 +8593,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::optional&lt; double &gt;</type>
+      <type>std::optional&lt; int &gt;</type>
       <name>max_p</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Options.html</anchorfile>
-      <anchor>abdcdb4d71ce0a3b9e2ab82e84420059e</anchor>
+      <anchor>afefb3302ebe4c1a16c43fb4168d47246</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
