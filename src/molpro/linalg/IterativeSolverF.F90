@@ -776,7 +776,6 @@ end select
 
   SUBROUTINE Iterative_Solver_Add_Equations(rhs)
     USE iso_c_binding
-    INTEGER :: Iterative_Solver_Add_Vector
     DOUBLE PRECISION, DIMENSION(..), INTENT(in), target :: rhs
     INTERFACE
       SUBROUTINE Add_Equation_C(rhs) &
