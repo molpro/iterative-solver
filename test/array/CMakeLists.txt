@@ -1,6 +1,6 @@
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/data)
-foreach (fil empty_file inner_group_dataset.hdf5 single_dataset.hdf5)
-    configure_file("data/${fil}" "${CMAKE_CURRENT_BINARY_DIR}/data/${file}" COPYONLY)
+foreach (file empty_file inner_group_dataset.hdf5 single_dataset.hdf5)
+    configure_file("data/${file}" "${CMAKE_CURRENT_BINARY_DIR}/data/${file}" COPYONLY)
 endforeach ()
 if (LINEARALGEBRA_ARRAY_HDF5)
     add_executable(test-${PROJECT_NAME}-HDF5Handle.exe testHDF5Handle.cpp)

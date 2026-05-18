@@ -1,13 +1,13 @@
 LibraryManager_Append(${PROJECT_NAME}
-        SOURCES util.cpp Options.cpp LinearEigensystemDavidsonOptions.cpp LinearEquationsDavidsonOptions.cpp NonLinearEquationsDIISOptions.cpp OptimizeBFGSOptions.cpp OptimizeSDOptions.cpp LinearEigensystemRSPTOptions.cpp
-        PUBLIC_HEADER IterativeSolver.h IterativeSolverTemplate.h LinearEigensystemDavidson.h Options.h LinearEquationsDavidson.h LinearEigensystemRSPT.h
-        PUBLIC_HEADER IterativeSolver.h IterativeSolverTemplate.h LinearEigensystemDavidson.h OptimizeBFGS.h OptimizeSD.h Options.h LinearEquationsDavidson.h
-        Logger.h wrap.h wrap_util.h propose_rspace.h util.h DSpaceResetter.h LinearEigensystemDavidsonOptions.h CastOptions.h LinearEigensystemRSPTOptions.h
-        LinearEquationsDavidsonOptions.h SolverFactory.h SolverFactory-implementation.h options_map.h
-        OptimizeBFGSOptions.h OptimizeSDOptions.h
-        NonLinearEquationsDIISOptions.h
-        SOURCES Interpolate.cpp
-        PUBLIC_HEADER Interpolate.h
-        PUBLIC_HEADER helper-implementation.h
+        SOURCES util.cpp Options.cpp LinearEigensystemDavidsonOptions.cpp LinearEquationsDavidsonOptions.cpp
+        NonLinearEquationsDIISOptions.cpp OptimizeBFGSOptions.cpp OptimizeSDOptions.cpp LinearEigensystemRSPTOptions.cpp
+        Interpolate.cpp
+        PUBLIC_HEADER IterativeSolver.h IterativeSolverTemplate.h LinearEigensystemDavidson.h LinearEigensystemRSPT.h
+        LinearEquationsDavidson.h NonLinearEquationsDIIS.h OptimizeBFGS.h OptimizeSD.h Options.h
+        Logger.h wrap.h wrap_util.h propose_rspace.h util.h DSpaceResetter.h CastOptions.h
+        LinearEigensystemDavidsonOptions.h LinearEigensystemRSPTOptions.h LinearEquationsDavidsonOptions.h
+        NonLinearEquationsDIISOptions.h OptimizeBFGSOptions.h OptimizeSDOptions.h
+        SolverFactory.h SolverFactory-implementation.h options_map.h
+        Interpolate.h
         )
 add_subdirectory(subspace)
