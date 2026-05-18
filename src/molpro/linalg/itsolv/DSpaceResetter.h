@@ -81,15 +81,9 @@ public:
     return ((iter + 1) % m_nreset == 0 && dims.nD > 0) || !solution_params.empty();
   }
 
-  void set_nreset(size_t i) {
-    assert(i >= 0);
-    m_nreset = i;
-  }
+  void set_nreset(size_t i) { m_nreset = i; }
   auto get_nreset() const { return m_nreset; }
-  void set_max_Qsize(size_t i) {
-    assert(i >= 0);
-    m_max_Qsize_after_reset = i;
-  }
+  void set_max_Qsize(size_t i) { m_max_Qsize_after_reset = i; }
   auto get_max_Qsize() const { return m_max_Qsize_after_reset; }
 
   //! Run the reset operation
