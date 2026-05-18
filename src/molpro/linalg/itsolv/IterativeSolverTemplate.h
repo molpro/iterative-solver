@@ -522,7 +522,6 @@ public:
       Q parameters0 = m_handlers->qr().copy(v0);
       Q residual0 = m_handlers->qr().copy(v1);
       for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
-        Q parameters1 = m_handlers->qr().copy(v0);
         m_handlers->rq().axpy(-1.0, parameters0, v0);
         m_handlers->rr().scal(1 / std::sqrt(m_handlers->rr().dot(v0, v0)), v0);
         Q step1 = m_handlers->qr().copy(v0);
