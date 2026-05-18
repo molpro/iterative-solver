@@ -59,7 +59,7 @@ public:
     return value;
   }
 
-  void action(const CVecRef<container_t>& parameters, const VecRef<container_t>& actions) const override {
+  void action(const molpro::linalg::itsolv::CVecRef<container_t>& parameters, const molpro::linalg::itsolv::VecRef<container_t>& actions) const override {
     for (size_t k = 0; k < parameters.size(); k++) {
       const auto& v = parameters[k].get();
       auto& a = actions[k].get();
@@ -97,8 +97,8 @@ public:
     return result;
   }
 
-  void p_action(const std::vector<std::vector<value_t>>& p_coefficients, const CVecRef<Pvector>& pparams,
-                const VecRef<container_t>& actions) const override {
+  void p_action(const std::vector<std::vector<value_t>>& p_coefficients, const molpro::linalg::itsolv::CVecRef<Pvector>& pparams,
+                const molpro::linalg::itsolv::VecRef<container_t>& actions) const override {
     for (size_t k = 0; k < p_coefficients.size(); k++) {
       auto& a = actions[k].get();
       auto action_local_buffer_pointer = a.local_buffer();

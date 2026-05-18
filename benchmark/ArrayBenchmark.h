@@ -202,7 +202,7 @@ public:
   void gemm_outer() {
     auto prof = m_profiler.push("gemm_outer");
     const size_t rep = std::max(size_t(1), m_repeat / m_buffervFast.size() / m_buffervSlow.size());
-    Matrix<double> alpha({m_buffervSlow.size(), m_buffervFast.size()});
+    itsolv::subspace::Matrix<double> alpha({m_buffervSlow.size(), m_buffervFast.size()});
     alpha.fill(1.0);
     for (size_t i = 0; i < rep; i++)
       m_fast_slow_handler->gemm_outer(alpha, itsolv::cwrap(m_buffervSlow), itsolv::wrap(m_buffervFast));

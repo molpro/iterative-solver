@@ -179,7 +179,7 @@ public:
 //    std::cout << "trigProblem::residual\nx=" << parameters << "\nvalue=" << value << "\ng=" << residual << std::endl;
     return value;
   }
-  void precondition(const VecRef<Rvector> &residual, const std::vector<value_t> &shift) const override {
+  void precondition(const molpro::linalg::itsolv::VecRef<Rvector> &residual, const std::vector<value_t> &shift) const override {
 //    std::cout << "trigProblem::precondition "<<residual.size()<<std::endl;
     for (auto &gr : residual) {
       auto g = gr.get();

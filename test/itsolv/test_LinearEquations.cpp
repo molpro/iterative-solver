@@ -33,7 +33,7 @@ public:
   Eigen::MatrixXd matrix;
   Eigen::MatrixXd rhs;
   Eigen::MatrixXd expected_solution;
-  void action(const CVecRef<Rvector>& parameters, const VecRef<Rvector>& action) const override {
+  void action(const molpro::linalg::itsolv::CVecRef<Rvector>& parameters, const molpro::linalg::itsolv::VecRef<Rvector>& action) const override {
     for (int v = 0; v <parameters.size(); ++v) {
       Eigen::Map<Eigen::VectorXd>(action[v].get().data(), n) =
           matrix * Eigen::Map<const Eigen::VectorXd>(parameters[v].get().data(), n);
