@@ -3638,15 +3638,15 @@
       <type></type>
       <name>DistrArraySpan</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html</anchorfile>
-      <anchor>a38f6789633cb1565a3d01c8ebba422a0</anchor>
-      <arglist>(size_t dimension, Span&lt; value_type &gt; buffer, MPI_Comm commun=comm_global())</arglist>
+      <anchor>aaeb83781219123e8e016eee8e6b189d0</anchor>
+      <arglist>(size_t dimension, Span&lt; value_type &gt; buffer, MPI_Comm commun=molpro::mpi::comm_global())</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>DistrArraySpan</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html</anchorfile>
-      <anchor>ac715284f205f30461651fe08eb8dd525</anchor>
-      <arglist>(std::unique_ptr&lt; Distribution &gt; distribution, Span&lt; value_type &gt; buffer, MPI_Comm commun=comm_global())</arglist>
+      <anchor>ac148cd2e34c3b5fa207a54a9babd2fdd</anchor>
+      <arglist>(std::unique_ptr&lt; Distribution &gt; distribution, Span&lt; value_type &gt; buffer, MPI_Comm commun=molpro::mpi::comm_global())</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -8121,15 +8121,15 @@
       <type>void</type>
       <name>BFGS_update_1</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a27e9a19a8c2a15222c173d48bfdbcee7</anchor>
-      <arglist>(R &amp;residual, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const Matrix&lt; double &gt; &amp;H)</arglist>
+      <anchor>a6b488ffdcaafee0fb390c198cd58fa34</anchor>
+      <arglist>(R &amp;residual, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const subspace::Matrix&lt; double &gt; &amp;H)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>BFGS_update_2</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a6ec030db3fc6b6055169c4f7f21dfa41</anchor>
-      <arglist>(R &amp;z, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const Matrix&lt; double &gt; &amp;H)</arglist>
+      <anchor>acc3dff99c4ced8568fb55d69481571da</anchor>
+      <arglist>(R &amp;z, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const subspace::Matrix&lt; double &gt; &amp;H)</arglist>
     </member>
     <member kind="function">
       <type>size_t</type>

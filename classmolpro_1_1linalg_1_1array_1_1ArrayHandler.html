@@ -128,16 +128,17 @@ Use cases</h2>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1ArrayHandler_html_a4e3e408ae09aaf1a463257dec668cb1f"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a4e3e408ae09aaf1a463257dec668cb1f">molpro::linalg::array::ArrayHandler::copy</a></div><div class="ttdeci">virtual AL copy(const AR &amp;source)=0</div></div>
 </div><!-- fragment --><p >Lazy evaluation of axpy </p><div class="fragment"><div class="line">std::vector&lt;AL&gt; a1;</div>
 <div class="line">std::vector&lt;AR&gt; a2;</div>
-<div class="line">Matrix alpha;</div>
+<div class="line"><a class="code hl_class" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a> alpha;</div>
 <div class="line"><span class="comment">// ... Assume initialization was done</span></div>
 <div class="line"><span class="keyword">auto</span> h = handle.lazy_handle();</div>
 <div class="line"><span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0; i &lt; a1.size(); ++i)</div>
 <div class="line">  <span class="keywordflow">for</span> (<span class="keyword">auto</span> j = 0; j &lt; a2.size(); ++j)</div>
 <div class="line">    h.axpy(alpha[i,j], a2[i], a1[j]);</div>
 <div class="line">h.eval(); <span class="comment">// or let destructor handle it</span></div>
+<div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">molpro::linalg::itsolv::subspace::Matrix</a></div><div class="ttdoc">Matrix container that allows simple data access, slicing, copying and resizing without loosing data.</div><div class="ttdef"><b>Definition:</b> Matrix.h:30</div></div>
 </div><!-- fragment --><p >Lazy evaluation of dot </p><div class="fragment"><div class="line">std::vector&lt;AL&gt; a1;</div>
 <div class="line">std::vector&lt;AR&gt; a2;</div>
-<div class="line">Matrix overlap;</div>
+<div class="line"><a class="code hl_class" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a> overlap;</div>
 <div class="line"><span class="comment">// ... Assume initialization was done</span></div>
 <div class="line"><span class="keyword">auto</span> h = handle.lazy_handle();</div>
 <div class="line"><span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0; i &lt; a1.size(); ++i)</div>
@@ -898,6 +899,8 @@ template&lt;class AL , class AR  = AL&gt; </div>
 </table>
 </div><div class="memdoc">
 <p >Perform <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a6e145dd6a76d8ddea588f2104a9c140e">axpy()</a> on multiple pairs of containers in an efficient manner </p>
+
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskSparse_3_01AL_00_01AR_00_01true_01_4.html#a8d31fc0225de9acd06e2e59fc9c3b2b3">molpro::linalg::array::ArrayHandlerDDiskSparse&lt; AL, AR, true &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrSparse_3_01AL_00_01AR_00_01true_01_4.html#a81cfa268825271be8554d65a401f5f49">molpro::linalg::array::ArrayHandlerDistrSparse&lt; AL, AR, true &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableSparse_3_01AL_00_01AR_00_01true_01_4.html#a0512e93ed50ecb56411f79740cc9dc68">molpro::linalg::array::ArrayHandlerIterableSparse&lt; AL, AR, true &gt;</a>.</p>
 
 </div>
 </div>
