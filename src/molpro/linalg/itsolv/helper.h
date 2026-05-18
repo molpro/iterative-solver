@@ -101,16 +101,6 @@ extern template void eigenproblem<double>(std::vector<double>& eigenvectors, std
                                           const size_t dimension, bool hermitian, double svdThreshold, int verbosity,
                                           bool condone_complex);
 
-extern template void eigenproblem<double>(std::vector<double>& eigenvectors, std::vector<double>& eigenvalues,
-                                          const std::vector<double>& matrix, const std::vector<double>& metric,
-                                          const size_t dimension, bool hermitian, double svdThreshold, int verbosity,
-                                          bool condone_complex);
-
-extern template void solve_LinearEquations<double>(std::vector<double>& solution, std::vector<double>& eigenvalues,
-                                                   const std::vector<double>& matrix, const std::vector<double>& metric,
-                                                   const std::vector<double>& rhs, size_t dimension, size_t nroot,
-                                                   double augmented_hessian, double svdThreshold, int verbosity);
-
 extern template void solve_LinearEquations<double>(std::vector<double>& solution, std::vector<double>& eigenvalues,
                                                    const std::vector<double>& matrix, const std::vector<double>& metric,
                                                    const std::vector<double>& rhs, size_t dimension, size_t nroot,
@@ -135,19 +125,6 @@ extern template void eigenproblem<std::complex<double>>(std::vector<std::complex
                                                         const std::vector<std::complex<double>>& metric,
                                                         const size_t dimension, bool hermitian, double svdThreshold,
                                                         int verbosity, bool condone_complex);
-
-extern template void eigenproblem<std::complex<double>>(std::vector<std::complex<double>>& eigenvectors,
-                                                        std::vector<std::complex<double>>& eigenvalues,
-                                                        const std::vector<std::complex<double>>& matrix,
-                                                        const std::vector<std::complex<double>>& metric,
-                                                        const size_t dimension, bool hermitian, double svdThreshold,
-                                                        int verbosity, bool condone_complex);
-
-extern template void solve_LinearEquations<std::complex<double>>(
-    std::vector<std::complex<double>>& solution, std::vector<std::complex<double>>& eigenvalues,
-    const std::vector<std::complex<double>>& matrix, const std::vector<std::complex<double>>& metric,
-    const std::vector<std::complex<double>>& rhs, size_t dimension, size_t nroot, double augmented_hessian,
-    double svdThreshold, int verbosity);
 
 extern template void solve_LinearEquations<std::complex<double>>(
     std::vector<std::complex<double>>& solution, std::vector<std::complex<double>>& eigenvalues,

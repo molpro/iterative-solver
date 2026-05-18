@@ -138,7 +138,8 @@ public:
     return nwork;
   }
 
-  void BFGS_update_1(R& residual, std::shared_ptr<const subspace::IXSpace<R, Q, P>> xspace, const Matrix<double>& H) {
+  void BFGS_update_1(R& residual, std::shared_ptr<const subspace::IXSpace<R, Q, P>> xspace,
+                     const subspace::Matrix<double>& H) {
     m_BFGS_update_alpha.resize(xspace->size() - 1);
     const auto& q = xspace->paramsq();
     const auto& u = xspace->actionsq();
@@ -151,7 +152,8 @@ public:
     }
   }
 
-  void BFGS_update_2(R& z, std::shared_ptr<const subspace::IXSpace<R, Q, P>> xspace, const Matrix<double>& H) {
+  void BFGS_update_2(R& z, std::shared_ptr<const subspace::IXSpace<R, Q, P>> xspace,
+                     const subspace::Matrix<double>& H) {
     const auto& q = xspace->paramsq();
     const auto& u = xspace->actionsq();
     for (int a = m_BFGS_update_alpha.size() - 1; a >= 0; a--) {

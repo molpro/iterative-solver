@@ -18,11 +18,11 @@
 #include <numeric>
 #include <vector>
 
+namespace molpro::linalg::array::util {
+
 using molpro::linalg::itsolv::CVecRef;
 using molpro::linalg::itsolv::VecRef;
 using molpro::linalg::itsolv::subspace::Matrix;
-
-namespace molpro::linalg::array::util {
 
 enum gemm_type { inner, outer };
 

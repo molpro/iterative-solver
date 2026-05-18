@@ -429,7 +429,7 @@ auto modified_gram_schmidt(const VecRef<R>& rparams, const subspace::Matrix<valu
       if (nR > 0) {
         auto dot_mat = handler.gemm_inner(cwrap(rparams), cwrap_arg(xparams.at(i).get()));
         std::pair<size_t, size_t> mcoeff_dim = std::make_pair(1, nR);
-        Matrix<double> mcoeff(dot_mat.data(), mcoeff_dim);
+        subspace::Matrix<double> mcoeff(dot_mat.data(), mcoeff_dim);
         for (size_t j = 0; j < nR; ++j) {
           mcoeff(0, j) = -mcoeff(0, j) / norm;
         }
