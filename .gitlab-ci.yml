@@ -102,7 +102,7 @@ build011:
     - export MPIPROCS=2
     - BUILDTYPE=Release
     - BUILD=build/FORTRAN=0/MPI=1/PPIDD=1 ; mkdir -p $BUILD && cd $BUILD && pwd && time cmake -DCMAKE_BUILD_TYPE=${BUILDTYPE} -DFORTRAN=0 -DMPI=1 -DPPIDD=1 $OLDPWD && time cmake --build . -j2 && (time ctest || ctest -V)
-clang110:
+clang011:
   stage: test
   image: ${CI_REGISTRY_IMAGE}:latest
   #  tags:
@@ -115,7 +115,7 @@ clang110:
   script:
     - export MPIPROCS=2
     - BUILDTYPE=Release
-    - BUILD=build-clang/FORTRAN=1/MPI=1/PPIDD=0 ; mkdir -p $BUILD && cd $BUILD && pwd && CXX=clang++ cmake -DCMAKE_BUILD_TYPE=${BUILDTYPE} -DFORTRAN=0 -DMPI=1 -DPPIDD=1 $OLDPWD && time cmake --build . -j2 && (time ctest || ctest -V)
+    - BUILD=build-clang/FORTRAN=0/MPI=1/PPIDD=1 ; mkdir -p $BUILD && cd $BUILD && pwd && CXX=clang++ cmake -DCMAKE_BUILD_TYPE=${BUILDTYPE} -DFORTRAN=0 -DMPI=1 -DPPIDD=1 $OLDPWD && time cmake --build . -j2 && (time ctest || ctest -V)
 pages:
   stage: deploy
   image: ${CI_REGISTRY_IMAGE}:latest
