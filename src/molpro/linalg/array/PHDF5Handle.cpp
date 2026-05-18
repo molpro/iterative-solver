@@ -18,6 +18,7 @@ PHDF5Handle::PHDF5Handle(const PHDF5Handle& source, MPI_Comm comm) : PHDF5Handle
 PHDF5Handle::PHDF5Handle(const PHDF5Handle& source) : PHDF5Handle{source, source.m_comm} {}
 PHDF5Handle& PHDF5Handle::operator=(const PHDF5Handle& source) {
   static_cast<HDF5Handle&>(*this) = static_cast<const HDF5Handle&>(source);
+  m_comm = source.m_comm;
   return *this;
 }
 PHDF5Handle::PHDF5Handle(PHDF5Handle&& source, MPI_Comm comm) noexcept : PHDF5Handle{comm} {
