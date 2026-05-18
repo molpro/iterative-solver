@@ -31,7 +31,7 @@ public:
     return value;
   }
 
-  void action(const CVecRef<container_t> &parameters, const VecRef<container_t> &actions) const override {
+  void action(const molpro::linalg::itsolv::CVecRef<container_t> &parameters, const molpro::linalg::itsolv::VecRef<container_t> &actions) const override {
     for (size_t k = 0; k < parameters.size(); k++) {
       const auto &v = parameters[k].get();
       auto &a = actions[k].get();

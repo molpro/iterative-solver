@@ -32,7 +32,7 @@ public:
     return true;
   }
 
-  void precondition(const VecRef<container_t> &action, const std::vector<double> &shift,
+  void precondition(const molpro::linalg::itsolv::VecRef<container_t> &action, const std::vector<double> &shift,
                     const container_t &diagonals) const override {
     for (size_t k = 0; k < action.size(); k++) {
       auto &a = action[k].get();
@@ -41,7 +41,7 @@ public:
     }
   }
 
-  void action(const CVecRef<container_t> &parameters, const VecRef<container_t> &actions) const override {
+  void action(const molpro::linalg::itsolv::CVecRef<container_t> &parameters, const molpro::linalg::itsolv::VecRef<container_t> &actions) const override {
     for (size_t k = 0; k < parameters.size(); k++) {
       const auto &v = parameters[k].get().data();
       auto &a = actions[k].get().data();
