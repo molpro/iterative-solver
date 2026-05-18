@@ -151,7 +151,7 @@ class IterativeSolver:
         cdef double[::1] actions_ = actions.reshape([parameters.shape[-1]*nbuffer])
         ev = np.zeros([self.nroot],dtype=float)
         cdef double[::1] ev_ = ev
-        errors = np.array([self.nroot],dtype=float)
+        errors = np.zeros(self.nroot, dtype=float)
         cdef double[::1] errors_ = errors
         verbosity = IterativeSolverVerbosity()
         use_diagonals = problem.diagonals(actions.reshape([actions.size]))
