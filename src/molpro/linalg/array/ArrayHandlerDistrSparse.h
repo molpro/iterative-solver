@@ -4,10 +4,9 @@
 #include <molpro/linalg/array/util/gemm.h>
 #include <stdexcept>
 
+namespace molpro::linalg::array {
 using molpro::linalg::array::util::gemm_inner_distr_sparse;
 using molpro::linalg::array::util::gemm_outer_distr_sparse;
-
-namespace molpro::linalg::array {
 template <typename AL, typename AR, bool = has_mapped_type_v<AR>>
 class ArrayHandlerDistrSparse : public ArrayHandler<AL, AR> {};
 

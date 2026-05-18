@@ -9,10 +9,10 @@
 #include <stdexcept>
 #include <string>
 
+namespace molpro::linalg::array {
 using molpro::linalg::array::util::gemm_inner_default;
 using molpro::linalg::array::util::gemm_outer_default;
 
-namespace molpro::linalg::array {
 namespace util {
 
 template <typename T>

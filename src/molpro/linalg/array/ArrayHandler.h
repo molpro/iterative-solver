@@ -15,11 +15,11 @@
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/wrap_util.h>
 
+namespace molpro::linalg::array {
 using molpro::linalg::itsolv::CVecRef;
 using molpro::linalg::itsolv::VecRef;
 using molpro::linalg::itsolv::subspace::Matrix;
 
-namespace molpro::linalg::array {
 namespace util {
 
 struct ArrayHandlerError : public std::logic_error {
