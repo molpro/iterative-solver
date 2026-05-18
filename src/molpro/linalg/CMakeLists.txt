@@ -1,8 +1,7 @@
 # Extra checking for HDF5 and global arrays will go here
 LibraryManager_Append(${PROJECT_NAME}
         SOURCES itsolv/IterativeSolver-double.cpp itsolv/IterativeSolver-complex-double.cpp options.cpp
-        PUBLIC_HEADER IterativeSolverC.h itsolv/helper.h itsolv/ArrayHandlers.h itsolv/Statistics.h options.h
-        PRIVATE_HEADER itsolv/helper-implementation.h
+        PUBLIC_HEADER IterativeSolverC.h itsolv/helper.h itsolv/helper-implementation.h itsolv/ArrayHandlers.h itsolv/Statistics.h options.h
         )
 if (FORTRAN)
     LibraryManager_Append(${PROJECT_NAME} SOURCES IterativeSolverF.F90 Iterative_Solver_Problem.F90 Iterative_Solver_PSpace.F90 Iterative_Solver_Matrix_Problem.F90)
@@ -42,19 +41,30 @@ if (MKL_TYPE STREQUAL "lp64")
 endif ()
 
 if (NOT TARGET Eigen3::Eigen)
-    set(EIGEN_VERSION=3.4.0)
+    set(EIGEN_MIN_VERSION 3.4.0)
+    set(EIGEN_FETCH_TAG 3.4.0)
     message(VERBOSE "Eigen3::Eigen is not yet a target")
 
-    find_package(Eigen3 ${EIGEN_VERSION} QUIET)
+    # Note: no version arg to find_package — Eigen's ConfigVersion file uses
+    # strict-major-version compatibility, so a request for 3.4.0 rejects an
+    # installed 5.x. We accept anything Eigen3Config provides and validate
+    # the minimum version ourselves below.
+    find_package(Eigen3 QUIET)
 
-    if (EIGEN3_FOUND)
-        message(STATUS "Eigen3 (${Eigen3_VERSION})found on system: ${Eigen3_INCLUDE_DIRS}")
+    if ((Eigen3_FOUND OR EIGEN3_FOUND) AND Eigen3_VERSION VERSION_LESS ${EIGEN_MIN_VERSION})
+        message(STATUS "System Eigen3 ${Eigen3_VERSION} is older than required ${EIGEN_MIN_VERSION}; ignoring")
+        set(Eigen3_FOUND FALSE)
+        set(EIGEN3_FOUND FALSE)
+    endif ()
+
+    if (Eigen3_FOUND OR EIGEN3_FOUND)
+        message(STATUS "Eigen3 (${Eigen3_VERSION}) found on system: ${Eigen3_INCLUDE_DIRS}")
     else ()
         message(STATUS "Eigen3::Eigen not found on system, and will be downloaded")
         include(FetchContent)
         FetchContent_Declare(eigen3
                 GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-                GIT_TAG ${EIGEN_VERSION}
+                GIT_TAG ${EIGEN_FETCH_TAG}
                 )
         FetchContent_MakeAvailable(eigen3)
     endif ()
@@ -63,9 +73,6 @@ if (NOT TARGET Eigen3::Eigen)
     endif ()
 else ()
     message(STATUS "iterative-solver: Eigen3::Eigen target already defined")
-endif ()
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "PGI")
-    set(EIGEN_DONT_VECTORIZE ON)
 endif ()
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/../../../cmake")
 message("CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}")

@@ -35,7 +35,7 @@ endif ()
 
 LibraryManager_Append(${PROJECT_NAME}
         SOURCES DistrArray.cpp DistrArrayDisk.cpp DistrArrayFile.cpp DistrArraySpan.cpp util.cpp
-        PUBLIC_HEADER DistrArray.h DistrArrayDisk.h DistrArrayFile.h DistrArraySpan.h util.h
+        PUBLIC_HEADER DistrArray.h DistrArrayDisk.h DistrArrayFile.h DistrArraySpan.h util.h ghc/filesystem.h
         )
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
@@ -52,7 +52,7 @@ if (MPI)
         message(STATUS "Building ${PROJECT_NAME} with MPI3 Array")
         target_compile_definitions(${PROJECT_NAME} PUBLIC LINEARALGEBRA_ARRAY_MPI3 LINEARALGEBRA_ARRAY_FILE)
         LibraryManager_Append(${PROJECT_NAME} SOURCES DistrArrayMPI3.cpp
-                PUBLIC_HEADER DistrArrayMPI3.h ghc/filesystem.h)
+                PUBLIC_HEADER DistrArrayMPI3.h)
     endif ()
 
     if (LINEARALGEBRA_ARRAY_GA)
