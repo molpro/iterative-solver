@@ -23,7 +23,7 @@ PHDF5Handle& PHDF5Handle::operator=(const PHDF5Handle& source) {
 PHDF5Handle::PHDF5Handle(PHDF5Handle&& source, MPI_Comm comm) noexcept : PHDF5Handle{comm} {
   *this = std::forward<PHDF5Handle>(source);
 }
-PHDF5Handle::PHDF5Handle(PHDF5Handle&& source) noexcept : PHDF5Handle{source, source.m_comm} {}
+PHDF5Handle::PHDF5Handle(PHDF5Handle&& source) noexcept : PHDF5Handle{std::move(source), source.m_comm} {}
 PHDF5Handle& PHDF5Handle::operator=(PHDF5Handle&& source) noexcept {
   if (file_is_open())
     close_file();
