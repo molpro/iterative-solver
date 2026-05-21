@@ -174,6 +174,8 @@ public:
   void set_logger(std::shared_ptr<Logger> logger) override {
     assert(logger);
     m_logger = std::move(logger);
+    m_xspace->set_logger(m_logger);
+    m_subspace_solver->set_logger(m_logger);
   }
 
   Logger &logger() override { return *m_logger; }

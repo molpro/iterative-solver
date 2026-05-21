@@ -9,6 +9,7 @@
 #include <molpro/linalg/itsolv/subspace/QSpace.h>
 
 #include <cassert>
+#include <memory>
 
 namespace molpro::linalg::itsolv::subspace {
 namespace xspace {
@@ -268,6 +269,8 @@ public:
   CVecRef<Q> cactionsq() const override { return qspace.cactions(); }
   CVecRef<Q> cparamsd() const override { return dspace.cparams(); }
   CVecRef<Q> cactionsd() const override { return dspace.cactions(); }
+
+  void set_logger(std::shared_ptr<Logger> logger) override { m_logger = std::move(logger); }
 
   //! Set Hermiticity of the subspace. P space can only be used with Hermitian problems
   void set_hermiticity(bool hermitian) { m_hermitian = hermitian; }

@@ -6,6 +6,8 @@
 #include <molpro/linalg/itsolv/Logger.h>
 #include <molpro/linalg/itsolv/helper.h>
 
+#include <memory>
+
 namespace molpro::linalg::itsolv::subspace {
 
 /*!
@@ -91,6 +93,8 @@ public:
 
   //! Number of solutions
   size_t size() const override { return m_solutions.rows(); }
+
+  void set_logger(std::shared_ptr<Logger> logger) override { m_logger = std::move(logger); }
 
   // FIXME What difference does it make?
   //! Set Hermiticity of the subspace.
