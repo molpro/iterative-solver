@@ -3,7 +3,13 @@
 #include <molpro/linalg/array/ArrayHandler.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 
-namespace molpro::linalg::itsolv::subspace {
+#include <memory>
+
+namespace molpro::linalg::itsolv {
+
+class Logger;
+
+namespace subspace {
 
 /*!
  * @brief Manages solution of the subspace problem and storage of those solutions
@@ -47,7 +53,10 @@ struct ISubspaceSolver {
   virtual const std::vector<value_type_abs>& errors() const = 0;
   //! Number of solutions stored in this object
   virtual size_t size() const = 0;
+
+  virtual void set_logger(std::shared_ptr<Logger> logger) = 0;
 };
 
-} // namespace molpro::linalg::itsolv::subspace
+} // namespace subspace
+} // namespace molpro::linalg::itsolv
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_ISUBSPACESOLVER_H
