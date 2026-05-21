@@ -34,6 +34,21 @@ public:
   }
 
 protected:
+  int convert_verbosity(log::Verbosity verbosity) {
+    switch (verbosity) {
+      case log::Verbosity::Trace:
+        return 3;
+      case log::Verbosity::Debug:
+        return 2;
+      case log::Verbosity::Info:
+        return 1;
+      case log::Verbosity::None:
+        return 0;
+    }
+
+    return 0;
+  }
+
   void solve_eigenvalue(IXSpace<R, Q, P>& xspace, const size_t nroots_max) {
     m_logger->trace("SubspaceSolverLinEig::solve_eigenvalue");
     auto h = xspace.data[EqnData::H];
@@ -42,7 +57,7 @@ protected:
     m_logger->data_dump<15>("H = ", h);
     auto dim = h.rows();
     auto evec = std::vector<value_type>{};
-    int verbosity = m_logger->verbosity() == log::Verbosity::Info ? 3 : 0;
+    int verbosity = convert_verbosity(m_logger->verbosity());
     itsolv::eigenproblem(evec, m_eigenvalues, h.data(), s.data(), dim, m_hermitian, m_svd_solver_threshold, verbosity,
                          true);
     size_t n_solutions = 0;
@@ -70,7 +85,7 @@ protected:
     const auto n_solutions = rhs.cols();
     auto solution = std::vector<value_type>{};
     m_eigenvalues.assign(n_solutions, 0);
-    int verbosity = m_logger->verbosity() == log::Verbosity::Info ? 3 : 0;
+    int verbosity = convert_verbosity(m_logger->verbosity());
     itsolv::solve_LinearEquations(solution, m_eigenvalues, h.data(), s.data(), rhs.data(), dim, n_solutions,
                                   m_augmented_hessian, m_svd_solver_threshold, verbosity);
     m_solutions = Matrix<value_type>{std::move(solution), {n_solutions, dim}};
