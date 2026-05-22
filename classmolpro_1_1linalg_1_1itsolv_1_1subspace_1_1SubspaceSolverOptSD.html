@@ -177,6 +177,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab3594645f031a4c20f80f532e303773b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#ab3594645f031a4c20f80f532e303773b">size</a> () const override</td></tr>
 <tr class="memdesc:ab3594645f031a4c20f80f532e303773b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of solutions.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#ab3594645f031a4c20f80f532e303773b">More...</a><br /></td></tr>
 <tr class="separator:ab3594645f031a4c20f80f532e303773b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a480a993bf67616bc78062ecb4f4722"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a1a480a993bf67616bc78062ecb4f4722">set_logger</a> (std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt; logger) override</td></tr>
+<tr class="separator:a1a480a993bf67616bc78062ecb4f4722"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html">molpro::linalg::itsolv::subspace::ISubspaceSolver&lt; RT, QT, PT &gt;</a></td></tr>
 <tr class="memitem:ad7cfefb4b20a24f38099ae54e43d7fbe inherit pub_methods_structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#ad7cfefb4b20a24f38099ae54e43d7fbe">~ISubspaceSolver</a> ()=default</td></tr>
 <tr class="separator:ad7cfefb4b20a24f38099ae54e43d7fbe inherit pub_methods_structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +203,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aac76eee68ef881c8f3e5da00321a9ce2 inherit pub_methods_structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#aac76eee68ef881c8f3e5da00321a9ce2">size</a> () const =0</td></tr>
 <tr class="memdesc:aac76eee68ef881c8f3e5da00321a9ce2 inherit pub_methods_structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of solutions stored in this object.  <a href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#aac76eee68ef881c8f3e5da00321a9ce2">More...</a><br /></td></tr>
 <tr class="separator:aac76eee68ef881c8f3e5da00321a9ce2 inherit pub_methods_structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dac83911e1152462e1bfffe6f0a432a inherit pub_methods_structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a7dac83911e1152462e1bfffe6f0a432a">set_logger</a> (std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt; logger)=0</td></tr>
+<tr class="separator:a7dac83911e1152462e1bfffe6f0a432a inherit pub_methods_structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -480,6 +484,36 @@ template&lt;class RT , class QT , class PT &gt; </div>
 <p>Set error value for solution <em>root</em> </p>
 
 <p>Implements <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a1a5b52ec31a14cc17015f51855c1121e">molpro::linalg::itsolv::subspace::ISubspaceSolver&lt; RT, QT, PT &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a1a480a993bf67616bc78062ecb4f4722" name="a1a480a993bf67616bc78062ecb4f4722"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a480a993bf67616bc78062ecb4f4722">&#9670;&nbsp;</a></span>set_logger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class RT , class QT , class PT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD</a>&lt; RT, QT, PT &gt;::set_logger </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt;&#160;</td>
+          <td class="paramname"><em>logger</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a7dac83911e1152462e1bfffe6f0a432a">molpro::linalg::itsolv::subspace::ISubspaceSolver&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>

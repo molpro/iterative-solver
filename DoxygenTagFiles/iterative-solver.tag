@@ -4617,6 +4617,13 @@
       <anchor>aac76eee68ef881c8f3e5da00321a9ce2</anchor>
       <arglist>() const =0</arglist>
     </member>
+    <member kind="function" virtualness="pure">
+      <type>virtual void</type>
+      <name>set_logger</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html</anchorfile>
+      <anchor>a7dac83911e1152462e1bfffe6f0a432a</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger)=0</arglist>
+    </member>
   </compound>
   <compound kind="struct">
     <name>molpro::linalg::itsolv::log::IterationReport</name>
@@ -5921,6 +5928,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html</anchorfile>
       <anchor>add51951e8630f1389adc79e56bb7a633</anchor>
       <arglist>() const =0</arglist>
+    </member>
+    <member kind="function" virtualness="pure">
+      <type>virtual void</type>
+      <name>set_logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html</anchorfile>
+      <anchor>a2c418e0c5749074700b06101f478ec04</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger)=0</arglist>
     </member>
     <member kind="variable">
       <type>SubspaceData</type>
@@ -10114,6 +10128,13 @@
       <anchor>aef5512aecc5060caf3bd3f64cbc94dd9</anchor>
       <arglist>() const override</arglist>
     </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html</anchorfile>
+      <anchor>a6a293f9109a557f8a10d03021f5e2cd7</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger) override</arglist>
+    </member>
     <member kind="variable">
       <type>value_type_abs</type>
       <name>m_svd_solver_threshold</name>
@@ -10243,6 +10264,13 @@
     </member>
     <member kind="function">
       <type>void</type>
+      <name>set_logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
+      <anchor>a38edf986712014c3891484062da3f355</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
       <name>set_hermiticity</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
       <anchor>abcb40eebed55e1c2c61a3d27a06e1885</anchor>
@@ -10275,6 +10303,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
       <anchor>a4e7db02c63a673f14f1b6e6a9dbd3697</anchor>
       <arglist></arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>int</type>
+      <name>convert_verbosity</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
+      <anchor>acdf681da569254a8f2a12dfa0bcb3125</anchor>
+      <arglist>(log::Verbosity verbosity)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -10431,6 +10466,13 @@
       <anchor>aba323c67f984e9bcb6ebd507812fffa3</anchor>
       <arglist>() const override</arglist>
     </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html</anchorfile>
+      <anchor>a3319e46ae90d20a56005798002635cbe</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger) override</arglist>
+    </member>
     <member kind="variable" protection="protected">
       <type>Matrix&lt; value_type &gt;</type>
       <name>m_solutions</name>
@@ -10550,6 +10592,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html</anchorfile>
       <anchor>ab3594645f031a4c20f80f532e303773b</anchor>
       <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html</anchorfile>
+      <anchor>a1a480a993bf67616bc78062ecb4f4722</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger) override</arglist>
     </member>
     <member kind="variable">
       <type>value_type_abs</type>
@@ -10943,6 +10992,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html</anchorfile>
       <anchor>ae378fcf056b142b82dc6e6decd34e14a</anchor>
       <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html</anchorfile>
+      <anchor>ad99657d1bb050c231ac2c15ba01761e3</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>

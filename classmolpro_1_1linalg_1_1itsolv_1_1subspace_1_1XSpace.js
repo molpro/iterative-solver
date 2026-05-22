@@ -28,6 +28,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace =
     [ "rhs_norm", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#abedea55ea62cd8eae63d25b9900deed9", null ],
     [ "set_action_action", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#add12bae4b2859ac50a3f56e35b8b1272", null ],
     [ "set_hermiticity", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#af9ba904dede4be6bb48b35329c85fb4a", null ],
+    [ "set_logger", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ad99657d1bb050c231ac2c15ba01761e3", null ],
     [ "update_dimensions", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a1960d0b465eb5313667fcdd66f6a2a58", null ],
     [ "update_dspace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a40c82457423bf5663ed83a213484e955", null ],
     [ "update_pspace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a64639a8ee6c512fcc860875eb76cede7", null ],

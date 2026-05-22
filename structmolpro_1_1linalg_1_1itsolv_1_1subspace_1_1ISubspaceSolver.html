@@ -159,6 +159,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aac76eee68ef881c8f3e5da00321a9ce2"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#aac76eee68ef881c8f3e5da00321a9ce2">size</a> () const =0</td></tr>
 <tr class="memdesc:aac76eee68ef881c8f3e5da00321a9ce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of solutions stored in this object.  <a href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#aac76eee68ef881c8f3e5da00321a9ce2">More...</a><br /></td></tr>
 <tr class="separator:aac76eee68ef881c8f3e5da00321a9ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dac83911e1152462e1bfffe6f0a432a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a7dac83911e1152462e1bfffe6f0a432a">set_logger</a> (std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt; logger)=0</td></tr>
+<tr class="separator:a7dac83911e1152462e1bfffe6f0a432a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a6473328a2313c2b24bc7cb238c486ef2" name="a6473328a2313c2b24bc7cb238c486ef2"></a>
@@ -427,6 +429,36 @@ template&lt;class RT , class QT , class PT &gt; </div>
 </dl>
 
 <p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#aad046791abc9a149aee485d2e3c9f1bf">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a44a9305e4ee7ff74a2b2378b9e5d755e">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#ac2ebdf74d36a67d1c028e7d7879e2f6a">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a58cb600cd3b90195ac9092fb71af1acc">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a7dac83911e1152462e1bfffe6f0a432a" name="a7dac83911e1152462e1bfffe6f0a432a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dac83911e1152462e1bfffe6f0a432a">&#9670;&nbsp;</a></span>set_logger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class RT , class QT , class PT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html">molpro::linalg::itsolv::subspace::ISubspaceSolver</a>&lt; RT, QT, PT &gt;::set_logger </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt;&#160;</td>
+          <td class="paramname"><em>logger</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#a6a293f9109a557f8a10d03021f5e2cd7">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a38edf986712014c3891484062da3f355">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a3319e46ae90d20a56005798002635cbe">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a1a480a993bf67616bc78062ecb4f4722">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>

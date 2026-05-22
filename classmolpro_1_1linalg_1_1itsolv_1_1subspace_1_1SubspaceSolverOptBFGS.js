@@ -10,6 +10,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS =
     [ "errors", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#aee72fc161a9d35754814919a8a4c5cca", null ],
     [ "set_error", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a719c5da3aff3309e03b01d31c03269b4", null ],
     [ "set_error", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#ac2ebdf74d36a67d1c028e7d7879e2f6a", null ],
+    [ "set_logger", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a3319e46ae90d20a56005798002635cbe", null ],
     [ "size", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#aba323c67f984e9bcb6ebd507812fffa3", null ],
     [ "solutions", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#ac6dbde31d4bce2d0d8326dfc99bce997", null ],
     [ "solve", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#a5e1e046e765127193cf71b1bb45093f2", null ],
