@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <list>
 #include <numeric>
+#include <complex>
 
 namespace molpro::linalg::itsolv {
 
@@ -336,21 +337,28 @@ template <typename value_type, typename std::enable_if_t<!is_complex<value_type>
 void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>& eigenvalues,
                   const std::vector<value_type>& matrix, const std::vector<value_type>& metric, size_t dimension,
                   bool hermitian, double svdThreshold, int verbosity, bool condone_complex) {
+  using MatrixT = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
+  using ComplexMatrixT = Eigen::Matrix<std::complex<value_type>, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
+  using MatrixRowMajT = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  using ComplexMatrixRowMajT = Eigen::Matrix<std::complex<value_type>, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  using VectorT = Eigen::Vector<value_type, Eigen::Dynamic>;
+  using ComplexVectorT = Eigen::Vector<std::complex<value_type>, Eigen::Dynamic>;
+
   auto prof = molpro::Profiler::single();
   prof->start("itsolv::eigenproblem");
-  Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> HrowMajor(
+  Eigen::Map<const MatrixRowMajT> HrowMajor(
       matrix.data(), dimension, dimension);
-  Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic> H(dimension, dimension);
+  MatrixT H(dimension, dimension);
   H = HrowMajor;
-  Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> S(metric.data(), dimension, dimension);
-  Eigen::MatrixXcd subspaceEigenvectors; // FIXME templating
-  Eigen::VectorXcd subspaceEigenvalues;  // FIXME templating
+  Eigen::Map<const MatrixT> S(metric.data(), dimension, dimension);
+  ComplexMatrixT subspaceEigenvectors;
+  ComplexVectorT subspaceEigenvalues;
   // Eigen::GeneralizedEigenSolver<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> s(H, S);
 
   // initialisation of variables
-  Eigen::VectorXd singularValues;
-  Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> matrixV;
-  Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> matrixU;
+  VectorT singularValues;
+  MatrixRowMajT matrixV;
+  MatrixRowMajT matrixU;
   std::vector<double> eigvecs;
   std::vector<double> eigvals;
   int rank;
@@ -363,14 +371,12 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     if (success != 0) {
       throw std::runtime_error("Eigensolver did not converge");
     }
-    singularValues = Eigen::Map<Eigen::VectorXd>(eigvals.data(), dimension);
-    matrixV = Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>>(
-        eigvecs.data(), dimension, dimension);
-    matrixU = Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>>(
-        eigvecs.data(), dimension, dimension);
+    singularValues = Eigen::Map<VectorT>(eigvals.data(), dimension);
+    matrixV = Eigen::Map<MatrixT>(eigvecs.data(), dimension, dimension);
+    matrixU = Eigen::Map<MatrixT>(eigvecs.data(), dimension, dimension);
     rank = get_rank(eigvals, svdThreshold);
   } else {
-    Eigen::JacobiSVD<Eigen::MatrixXd> svd(S, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    Eigen::JacobiSVD<MatrixT> svd(S, Eigen::ComputeThinU | Eigen::ComputeThinV);
     singularValues = svd.singularValues();
     matrixV = svd.matrixV();
     matrixU = svd.matrixU();
@@ -466,7 +472,7 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   //   molpro::cout << "sorted eigenvectors\n"<<subspaceEigenvectors<<std::endl;
   //  molpro::cout << "hermitian="<<hermitian<<std::endl;
   if (!hermitian) {
-    Eigen::MatrixXcd ovlTimesVec(subspaceEigenvectors.cols(), subspaceEigenvectors.rows()); // FIXME templating
+    ComplexMatrixT ovlTimesVec(subspaceEigenvectors.cols(), subspaceEigenvectors.rows());
     for (auto repeat = 0; repeat < 3; ++repeat)
       for (Eigen::Index k = 0; k < subspaceEigenvectors.cols(); k++) {
         if (std::abs(subspaceEigenvalues(k)) <
@@ -546,9 +552,9 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   eigenvectors.resize(dimension * Hbar.cols());
   eigenvalues.resize(Hbar.cols());
   //    if constexpr (std::is_class<value_type>::value) {
-  Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(eigenvectors.data(), dimension, Hbar.cols()) =
+  Eigen::Map<MatrixT>(eigenvectors.data(), dimension, Hbar.cols()) =
       subspaceEigenvectors.real();
-  Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, 1>> ev(eigenvalues.data(), Hbar.cols());
+  Eigen::Map<VectorT> ev(eigenvalues.data(), Hbar.cols());
   ev = subspaceEigenvalues.real();
 
   //    } else {
