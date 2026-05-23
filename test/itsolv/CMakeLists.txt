@@ -5,6 +5,7 @@ add_executable(test-${PROJECT_NAME}-itsolv.exe
     test_Options.cpp
     test_RSPT.cpp
     test_SolverFactory.cpp
+    test_helper-implementation.cpp
     test_options_map.cpp
     test_profiler.cpp
     test_rayleigh_quotient.cpp

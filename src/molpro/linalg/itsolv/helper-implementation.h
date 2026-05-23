@@ -500,7 +500,7 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
         auto ovl =
             //          (subspaceEigenvectors.col(k).adjoint() * subspaceOverlap *
             //          subspaceEigenvectors.col(k))(0,0);
-            subspaceEigenvectors.col(k).adjoint().dot(S * subspaceEigenvectors.col(k));
+            subspaceEigenvectors.col(k).dot(S * subspaceEigenvectors.col(k));
         subspaceEigenvectors.col(k) /= std::sqrt(ovl.real());
         ovlTimesVec.row(k) = subspaceEigenvectors.col(k).adjoint() * S;
         //      for (Eigen::Index l = 0; l < k; l++)
