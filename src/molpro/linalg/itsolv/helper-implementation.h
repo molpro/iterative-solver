@@ -339,43 +339,38 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   ComplexVectorT subspaceEigenvalues;
 
   // initialisation of variables
-  VectorT singularValues;
-  MatrixRowMajT matrixV;
-  MatrixRowMajT matrixU;
-  std::vector<double> eigvecs;
-  std::vector<double> eigvals;
-  int rank;
+  VectorT metricEvals(dimension);
+  MatrixT metricEvecs(dimension, dimension);
+  int rank = 0;
 
-  // if the matrix is hermitian, we can use lapacke_dsyev
-  if (hermitian) {
-    eigvecs.resize(dimension * dimension);
-    eigvals.resize(dimension);
-    int success = eigensolver_lapacke_dsyev(metric, eigvecs, eigvals, dimension);
-    if (success != 0) {
-      throw std::runtime_error("Eigensolver did not converge");
-    }
-    singularValues = Eigen::Map<VectorT>(eigvals.data(), dimension);
-    matrixV = Eigen::Map<MatrixT>(eigvecs.data(), dimension, dimension);
-    matrixU = Eigen::Map<MatrixT>(eigvecs.data(), dimension, dimension);
-    rank = get_rank(eigvals, svdThreshold);
-  } else {
-    Eigen::JacobiSVD<MatrixT> svd(S, Eigen::ComputeThinU | Eigen::ComputeThinV);
-    singularValues = svd.singularValues();
-    matrixV = svd.matrixV();
-    matrixU = svd.matrixU();
-    rank = svd.rank();
+  // Perform an eigenvalue decomposition of the metric
+  // Note: Since the metric must necessarily be hermitian, we can use lapacke_dsyev for this
+  int success = eigensolver_lapacke_dsyev(metric, { metricEvecs.data(), dimension * dimension },
+          { metricEvals.data(), dimension }, dimension);
+  if (success != 0) {
+    throw std::runtime_error("Eigensolver did not converge");
   }
+  rank = get_rank(std::span(metricEvals.data(), dimension), svdThreshold);
 
   if (verbosity > 1 && rank < S.cols())
     molpro::cout << "SVD rank " << rank << " in subspace of dimension " << S.cols() << std::endl;
   if (verbosity > 2 && rank < S.cols())
-    molpro::cout << "singular values " << singularValues.transpose() << std::endl;
-  auto svmh = singularValues.head(rank);
-  for (auto k = 0; k < rank; k++)
+    molpro::cout << "singular values " << metricEvals.transpose() << std::endl;
+
+  // Transform H into a symmetrically orthogonalized basis via (S^{-1/2})^\dagger H S^{-1/2}
+  // taking into account the possibility of rank-deficiency of S (aka: zero SV)
+  // Note that since S is hermitian and positive (semi-)definite, its SVD is equal to its
+  // eigendecomposition
+  auto svmh = metricEvals.head(rank);
+  for (auto k = 0; k < rank; k++) {
+    assert(std::abs(svmh(k)) <= 1e-14 || svmh(k) >= 0); // metric is supposed to be positive (semi-)definite
     svmh(k) = svmh(k) > 1e-14 ? 1 / std::sqrt(svmh(k)) : 0;
+  }
   auto Hbar =
-      (svmh.asDiagonal()) * (matrixU.leftCols(rank).adjoint()) * H * matrixV.leftCols(rank) * (svmh.asDiagonal());
-  Eigen::EigenSolver<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> s(Hbar);
+      svmh.asDiagonal() * metricEvecs.leftCols(rank).adjoint() * H * metricEvecs.leftCols(rank) * svmh.asDiagonal();
+
+  // Perform an eigendecomposition of the transformed matrix
+  Eigen::EigenSolver<MatrixT> s(Hbar);
   subspaceEigenvalues = s.eigenvalues();
   if (s.eigenvalues().imag().norm() < 1e-10) {
     // real eigenvalues
@@ -383,26 +378,36 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     subspaceEigenvectors = s.eigenvectors();
     // complex eigenvectors need to be rotated
     // assume that they come in consecutive pairs
-    for (int i = 0; i < subspaceEigenvectors.cols(); i++) {
-      if (subspaceEigenvectors.col(i).imag().norm() > 1e-10) {
-        int j = i + 1;
-        if (std::abs(subspaceEigenvalues(i) - subspaceEigenvalues(j)) < 1e-10 and
-            subspaceEigenvectors.col(j).imag().norm() > 1e-10) {
-          subspaceEigenvectors.col(j) = subspaceEigenvectors.col(i).imag() / subspaceEigenvectors.col(i).imag().norm();
-          subspaceEigenvectors.col(i) = subspaceEigenvectors.col(i).real() / subspaceEigenvectors.col(i).real().norm();
-        }
+    for (int i = 0; i < subspaceEigenvectors.cols() - 1; i++) {
+      if (subspaceEigenvectors.col(i).imag().norm() <= 1e-10) {
+          continue;
       }
+
+      const int j = i + 1;
+      if (std::abs(subspaceEigenvalues(i) - subspaceEigenvalues(j)) >= 1e-10 or
+          subspaceEigenvectors.col(j).imag().norm() <= 1e-10) {
+          continue;
+      }
+
+      // For a real-valued matrix, eigenvectors can always be chosen to be real. If we have a complex eigenvector,
+      // it's complex conjugate must also be an eigenvector with the same eigenvalue. We can combine these two
+      // vectors as either u + u^* = 2 Re(u) or i*(u - u^*) = -2 Im(u).
+      // In other words, the real and imaginary part of u are the corresponding real-valued eigenvectors.
+      subspaceEigenvectors.col(j) = subspaceEigenvectors.col(i).imag() / subspaceEigenvectors.col(i).imag().norm();
+      subspaceEigenvectors.col(i) = subspaceEigenvectors.col(i).real() / subspaceEigenvectors.col(i).real().norm();
     }
-    subspaceEigenvectors = matrixV.leftCols(rank) * svmh.asDiagonal() * subspaceEigenvectors;
+
+    subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * subspaceEigenvectors;
   } else {
-    // complex eigenvectors
+    // complex eigenvalues
 #ifdef __INTEL_COMPILER
     molpro::cout << "Hbar\n" << Hbar << std::endl;
     molpro::cout << "Eigenvalues\n" << s.eigenvalues() << std::endl;
     molpro::cout << "Eigenvectors\n" << s.eigenvectors() << std::endl;
     throw std::runtime_error("Intel compiler does not support working with complex eigen3 entities properly");
 #endif
-    subspaceEigenvectors = matrixV.leftCols(rank) * svmh.asDiagonal() * s.eigenvectors();
+
+    subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * s.eigenvectors();
   }
 
   {
