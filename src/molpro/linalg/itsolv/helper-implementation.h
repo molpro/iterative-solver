@@ -344,7 +344,8 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   int rank = 0;
 
   // Perform an eigenvalue decomposition of the metric
-  // Note: Since the metric must necessarily be hermitian, we can use lapacke_dsyev for this
+  // Note: Since the metric must necessarily be hermitian (and due to its real-valuedness in this
+  // function therefore symmetric), we can use lapacke_dsyev for this
   int success = eigensolver_lapacke_dsyev(metric, { metricEvecs.data(), dimension * dimension },
           { metricEvals.data(), dimension }, dimension);
   if (success != 0) {
