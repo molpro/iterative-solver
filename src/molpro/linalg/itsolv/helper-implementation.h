@@ -427,9 +427,10 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     auto eigvec = subspaceEigenvectors;
     std::vector<Eigen::Index> map;
     for (Eigen::Index k = 0; k < Hbar.cols(); k++) {
-      Eigen::Index ll;
-      for (ll = 0; std::count(map.begin(), map.end(), ll) != 0; ll++)
-        ;
+      Eigen::Index ll = 0;
+      while (std::ranges::find(map, ll) != map.end()) {
+        ++ll;
+      }
       for (Eigen::Index l = 0; l < Hbar.cols(); l++) {
         if (std::count(map.begin(), map.end(), l) == 0) {
           if (eigval(l).real() < eigval(ll).real())
