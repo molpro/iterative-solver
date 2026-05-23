@@ -353,7 +353,6 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   Eigen::Map<const MatrixT> S(metric.data(), dimension, dimension);
   ComplexMatrixT subspaceEigenvectors;
   ComplexVectorT subspaceEigenvalues;
-  // Eigen::GeneralizedEigenSolver<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> s(H, S);
 
   // initialisation of variables
   VectorT singularValues;
@@ -383,9 +382,6 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     rank = svd.rank();
   }
 
-  // svd.setThreshold(svdThreshold);
-  //     molpro::cout << "singular values of overlap " << svd.singularValues().transpose() << std::endl;
-  //    auto Hbar = svd.solve(H);
   if (verbosity > 1 && rank < S.cols())
     molpro::cout << "SVD rank " << rank << " in subspace of dimension " << S.cols() << std::endl;
   if (verbosity > 2 && rank < S.cols())
@@ -395,18 +391,10 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     svmh(k) = svmh(k) > 1e-14 ? 1 / std::sqrt(svmh(k)) : 0;
   auto Hbar =
       (svmh.asDiagonal()) * (matrixU.leftCols(rank).adjoint()) * H * matrixV.leftCols(rank) * (svmh.asDiagonal());
-  // std::cout << "\n\nHbar: \n" << Hbar << "\n\n";
-  //    molpro::cout << "S\n"<<S<<std::endl;
-  //    molpro::cout << "S singular values"<<(Eigen::DiagonalMatrix<value_type, Eigen::Dynamic,
-  //    Eigen::Dynamic>(svd.singularValues().head(svd.rank())))<<std::endl; molpro::cout << "S inverse singular
-  //    values"<<Eigen::DiagonalMatrix<value_type,
-  //    Eigen::Dynamic>(svd.singularValues().head(svd.rank())).inverse()<<std::endl; molpro::cout << "S singular
-  //    values"<<sv<<std::endl; molpro::cout << "H\n"<<H<<std::endl; molpro::cout << "Hbar\n"<<Hbar<<std::endl;
   Eigen::EigenSolver<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> s(Hbar);
-  //      molpro::cout << "s.eigenvectors()\n"<<s.eigenvectors()<<std::endl;
   subspaceEigenvalues = s.eigenvalues();
-  if (s.eigenvalues().imag().norm() < 1e-10) { // real eigenvalues
-                                               //    molpro::cout << "eigenvalues near-enough real" << std::endl;
+  if (s.eigenvalues().imag().norm() < 1e-10) {
+    // real eigenvalues
     subspaceEigenvalues = subspaceEigenvalues.real();
     subspaceEigenvectors = s.eigenvectors();
     // complex eigenvectors need to be rotated
@@ -422,9 +410,8 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
       }
     }
     subspaceEigenvectors = matrixV.leftCols(rank) * svmh.asDiagonal() * subspaceEigenvectors;
-  } else { // complex eigenvectors
-//    molpro::cout << "eigenvalues not near-enough real"<<std::endl;
-//    molpro::cout << "s.eigenvalues() "<< s.eigenvalues().transpose()<<std::endl;
+  } else {
+    // complex eigenvectors
 #ifdef __INTEL_COMPILER
     molpro::cout << "Hbar\n" << Hbar << std::endl;
     molpro::cout << "Eigenvalues\n" << s.eigenvalues() << std::endl;
@@ -432,7 +419,6 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     throw std::runtime_error("Intel compiler does not support working with complex eigen3 entities properly");
 #endif
     subspaceEigenvectors = matrixV.leftCols(rank) * svmh.asDiagonal() * s.eigenvectors();
-    //    std::cout << "subspaceEigenvectors\n" << subspaceEigenvectors << std::endl;
   }
 
   {
@@ -452,8 +438,6 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
       }
       map.push_back(ll);
       subspaceEigenvalues(k) = eigval(ll);
-      //    molpro::cout << "new sorted eigenvalue "<<k<<", "<<ll<<", "<<eigval(ll)<<std::endl;
-      //    molpro::cout << eigvec.col(ll)<<std::endl;
       subspaceEigenvectors.col(k) = eigvec.col(ll);
       double maxcomp =0;
       for (Eigen::Index l = 0; l < Hbar.cols(); l++) {
@@ -468,9 +452,6 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   // TODO: Need to address the case of near-zero eigenvalues (as below for non-hermitian case) and clean-up
   //  non-hermitian case
 
-  //   molpro::cout << "sorted eigenvalues\n"<<subspaceEigenvalues<<std::endl;
-  //   molpro::cout << "sorted eigenvectors\n"<<subspaceEigenvectors<<std::endl;
-  //  molpro::cout << "hermitian="<<hermitian<<std::endl;
   if (!hermitian) {
     ComplexMatrixT ovlTimesVec(subspaceEigenvectors.cols(), subspaceEigenvectors.rows());
     for (auto repeat = 0; repeat < 3; ++repeat)
@@ -482,27 +463,9 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
         }
         if (hermitian)
           for (Eigen::Index l = 0; l < k; l++) {
-            //        auto ovl =
-            //            (subspaceEigenvectors.col(l).adjoint() * m_subspaceOverlap * subspaceEigenvectors.col(k))(
-            //            0, 0); (ovlTimesVec.row(l) * subspaceEigenvectors.col(k))(0,0);
-            //            ovlTimesVec.row(l).dot(subspaceEigenvectors.col(k));
-            //        auto norm =
-            //            (subspaceEigenvectors.col(l).adjoint() * subspaceOverlap * subspaceEigenvectors.col(l))(
-            //                0,
-            //                0);
-            //      molpro::cout << "k="<<k<<", l="<<l<<", ovl="<<ovl<<" norm="<<norm<<std::endl;
-            //      molpro::cout << subspaceEigenvectors.col(k).transpose()<<std::endl;
-            //      molpro::cout << subspaceEigenvectors.col(l).transpose()<<std::endl;
             subspaceEigenvectors.col(k) -= subspaceEigenvectors.col(l) * // ovl;// / norm;
                                            ovlTimesVec.row(l).dot(subspaceEigenvectors.col(k));
-            //        molpro::cout<<"immediately after projection " << k<<l<<" "<<
-            //        (subspaceEigenvectors.col(l).adjoint() * subspaceOverlap * subspaceEigenvectors.col(k))( 0,
-            //        0)<<std::endl;
           }
-        //      for (Eigen::Index l = 0; l < k; l++) molpro::cout<<"after projection loop " << k<<l<<" "<<
-        //      (subspaceEigenvectors.col(l).adjoint() * subspaceOverlap * subspaceEigenvectors.col(k))( 0,
-        //      0)<<std::endl; molpro::cout <<
-        //      "eigenvector"<<std::endl<<subspaceEigenvectors.col(k).adjoint()<<std::endl;
         auto ovl =
             subspaceEigenvectors.col(k).dot(S * subspaceEigenvectors.col(k));
         // S is supposed to be positive (semi-)definite implying that ovl must be a non-negative real number
@@ -510,10 +473,6 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
         assert(ovl.real() >= 0);
         subspaceEigenvectors.col(k) /= std::sqrt(ovl.real());
         ovlTimesVec.row(k) = subspaceEigenvectors.col(k).adjoint() * S;
-        //      for (Eigen::Index l = 0; l < k; l++)
-        //      molpro::cout<<"after normalisation " << k<<l<<" "<< (subspaceEigenvectors.col(l).adjoint() *
-        //      subspaceOverlap * subspaceEigenvectors.col(k))( 0, 0)<<std::endl; molpro::cout <<
-        //      "eigenvector"<<std::endl<<subspaceEigenvectors.col(k).adjoint()<<std::endl;
         // phase
         Eigen::Index lmax = 0;
         for (Eigen::Index l = 0; l < subspaceEigenvectors.rows(); l++) {
@@ -522,22 +481,11 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
         }
         if (subspaceEigenvectors(lmax, k).real() < 0)
           subspaceEigenvectors.col(k) = -subspaceEigenvectors.col(k);
-        //      for (Eigen::Index l = 0; l < k; l++)
-        //      molpro::cout << k<<l<<" "<<
-        //                       (subspaceEigenvectors.col(l).adjoint() * subspaceOverlap *
-        //                       subspaceEigenvectors.col(k))( 0, 0)<<std::endl;
       }
   }
-  //   if (!hermitian) {
-  //     molpro::cout << "eigenvalues"<<std::endl<<subspaceEigenvalues<<std::endl;
-  //     molpro::cout << "eigenvectors" << std::endl << subspaceEigenvectors << std::endl;
-  //   }
   if (condone_complex) {
     for (Eigen::Index root = 0; root < Hbar.cols(); ++root) {
       if (subspaceEigenvalues(root).imag() != 0) {
-        //         molpro::cout << "complex eigenvalues: " << subspaceEigenvalues(root) << ", " <<
-        //         subspaceEigenvalues(root + 1)
-        //                      << std::endl;
         subspaceEigenvalues(root) = subspaceEigenvalues(root + 1) = subspaceEigenvalues(root).real();
         subspaceEigenvectors.col(root) = subspaceEigenvectors.col(root).real();
         subspaceEigenvectors.col(root + 1) = subspaceEigenvectors.col(root + 1).imag();
@@ -551,18 +499,12 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   }
   eigenvectors.resize(dimension * Hbar.cols());
   eigenvalues.resize(Hbar.cols());
-  //    if constexpr (std::is_class<value_type>::value) {
+
   Eigen::Map<MatrixT>(eigenvectors.data(), dimension, Hbar.cols()) =
       subspaceEigenvectors.real();
   Eigen::Map<VectorT> ev(eigenvalues.data(), Hbar.cols());
   ev = subspaceEigenvalues.real();
 
-  //    } else {
-  //      Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(m_evec_xx.data(), dimension, dimension)
-  //      =
-  //          subspaceEigenvectors;
-  //      Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, 1>>(eigenvalues.data(), dimension) = subspaceEigenvalues;
-  //    }
   prof->stop();
 }
 
