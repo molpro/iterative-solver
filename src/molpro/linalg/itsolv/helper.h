@@ -6,6 +6,7 @@
 #include <molpro/iostream.h>
 #include <molpro/linalg/array/Span.h>
 #include <vector>
+#include <span>
 
 namespace molpro::linalg::itsolv {
 template <typename T>
@@ -23,13 +24,10 @@ struct SVD {
   std::vector<value_type> v; //!< right singular vector
 };
 
-int eigensolver_lapacke_dsyev(const std::vector<double>& matrix, std::vector<double>& eigenvectors,
-                              std::vector<double>& eigenvalues, const size_t dimension);
+int eigensolver_lapacke_dsyev(std::span<const double> matrix, std::span<double> eigenvectors,
+                              std::span<double> eigenvalues, const size_t dimension);
 
-std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::vector<double>& matrix);
-
-std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension,
-                                                 const molpro::linalg::array::span::Span<double>& matrix);
+std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::span<const double> matrix);
 
 template <typename value_type>
 size_t get_rank(std::vector<value_type> eigenvalues, value_type threshold);

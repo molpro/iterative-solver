@@ -16,6 +16,7 @@
 #include <list>
 #include <numeric>
 #include <complex>
+#include <span>
 
 namespace molpro::linalg::itsolv {
 
@@ -137,8 +138,8 @@ extern "C" int dsyev_c(char, char, int, double*, int, double*);
  * \returns status. If 0, successful exit. If -i, the ith argument had an illegal value. If i, the algorithm failed to
  * converge.
  */
-inline int eigensolver_lapacke_dsyev(const std::vector<double>& matrix, std::vector<double>& eigenvectors,
-                              std::vector<double>& eigenvalues, const size_t dimension) {
+inline int eigensolver_lapacke_dsyev(std::span<const double> matrix, std::span<double> eigenvectors,
+                              std::span<double> eigenvalues, const size_t dimension) {
 
   // validate input
   if (eigenvectors.size() != matrix.size()) {
@@ -182,7 +183,7 @@ inline int eigensolver_lapacke_dsyev(const std::vector<double>& matrix, std::vec
  * \returns a std::list of instances of SVD, a struct containing one eigenvalue and one eigenvector. For a real,
  * symmetric matrix, these are equivalent to singular values, and S/D (which are both the same).
  */
-inline std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::vector<double>& matrix) {
+inline std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::span<const double> matrix) {
   std::vector<double> eigvecs(dimension * dimension);
   std::vector<double> eigvals(dimension);
 
@@ -213,23 +214,6 @@ inline std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::v
 }
 
 /**
- * A wrapper function for lapacke_dsyev (linear eigensystem solver) from the lapack C interface (lapacke.h).
- * @param[in] dimension length of one axis of the matrix.
- * @param[in] matrix a span wrapping some data structure containing the elements of the matrix. Should be
- * dimension*dimension in length.
- * \returns a std::list of instances of SVD, a struct containing one eigenvalue and one eigenvector. For a real,
- * symmetric matrix, these are equivalent to singular values, and S/D (which are both the same).
- */
-inline std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension,
-                                                 const molpro::linalg::array::span::Span<double>& matrix) {
-  // TODO: this should be the other way around, eigensolver_lapacke_dsyev should take a span by default and this should
-  // wrap it with a vector
-  std::vector<double> v;
-  v.insert(v.begin(), matrix.begin(), matrix.end());
-  return eigensolver_lapacke_dsyev(dimension, v);
-}
-
-/**
  * Get the rank of some matrix, given a threshold.
  * @param[in] eigenvalues the matrix, as a vector.
  * @param[in] threshold the threshold. Note that this is the normalised threshold, a value between 0 and 1, relative to
@@ -237,7 +221,7 @@ inline std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension,
  * \returns the rank. For an empty matrix, returns 0.
  */
 template <typename value_type>
-size_t get_rank(std::vector<value_type> eigenvalues, value_type threshold) {
+size_t get_rank(std::span<value_type> eigenvalues, value_type threshold) {
   if (eigenvalues.size() == 0) {
     return 0;
   }
