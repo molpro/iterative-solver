@@ -1,11 +1,17 @@
-add_executable(test-${PROJECT_NAME}-itsolv.exe test_wrap.cpp test_util.cpp testDSpaceResetter.cpp test_SolverFactory.cpp
-        test_options_map.cpp test_Options.cpp SolverFactory_implementation.cpp
-        test_Interpolate.cpp
-        test_RSPT.cpp
-        test_simplified.cpp
-        test_profiler.cpp
-        test_rayleigh_quotient.cpp
-        )
+add_executable(test-${PROJECT_NAME}-itsolv.exe
+    SolverFactory_implementation.cpp
+    testDSpaceResetter.cpp
+    test_Interpolate.cpp
+    test_Options.cpp
+    test_RSPT.cpp
+    test_SolverFactory.cpp
+    test_options_map.cpp
+    test_profiler.cpp
+    test_rayleigh_quotient.cpp
+    test_simplified.cpp
+    test_util.cpp
+    test_wrap.cpp
+)
 target_link_libraries(test-${PROJECT_NAME}-itsolv.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)
 gtest_discover_tests(test-${PROJECT_NAME}-itsolv.exe)
 
