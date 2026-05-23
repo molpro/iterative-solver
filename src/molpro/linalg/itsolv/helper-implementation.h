@@ -498,9 +498,10 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
         //      0)<<std::endl; molpro::cout <<
         //      "eigenvector"<<std::endl<<subspaceEigenvectors.col(k).adjoint()<<std::endl;
         auto ovl =
-            //          (subspaceEigenvectors.col(k).adjoint() * subspaceOverlap *
-            //          subspaceEigenvectors.col(k))(0,0);
             subspaceEigenvectors.col(k).dot(S * subspaceEigenvectors.col(k));
+        // S is supposed to be positive (semi-)definite implying that ovl must be a non-negative real number
+        assert(std::abs(ovl.imag()) < 1e-10);
+        assert(ovl.real() >= 0);
         subspaceEigenvectors.col(k) /= std::sqrt(ovl.real());
         ovlTimesVec.row(k) = subspaceEigenvectors.col(k).adjoint() * S;
         //      for (Eigen::Index l = 0; l < k; l++)
