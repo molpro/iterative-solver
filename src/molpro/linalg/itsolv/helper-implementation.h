@@ -422,7 +422,28 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
 
   // Apply determined order to eigenvalues and -vectors
   subspaceEigenvectors = subspaceEigenvectors * perm;
-   subspaceEigenvalues = perm.transpose() * subspaceEigenvalues;
+  subspaceEigenvalues = perm.transpose() * subspaceEigenvalues;
+
+
+  // TODO: Need to address the case of near-zero eigenvalues (as below for non-hermitian case) and clean-up
+  //  non-hermitian case
+
+  if (!hermitian) {
+    for (auto repeat = 0; repeat < 1; ++repeat)
+      for (Eigen::Index k = 0; k < subspaceEigenvectors.cols(); k++) {
+        if (std::abs(subspaceEigenvalues(k)) < 1e-12) {
+          // special case of zero eigenvalue -- make some real non-zero vector definitely in the null space
+          subspaceEigenvectors.col(k).real() += double(0.3256897) * subspaceEigenvectors.col(k).imag();
+          subspaceEigenvectors.col(k).imag().setZero();
+        }
+
+        auto ovl = subspaceEigenvectors.col(k).dot(S * subspaceEigenvectors.col(k));
+        // S is supposed to be positive (semi-)definite implying that ovl must be a non-negative real number
+        assert(std::abs(ovl.imag()) < 1e-10);
+        assert(ovl.real() >= 0);
+        subspaceEigenvectors.col(k) /= std::sqrt(ovl.real());
+      }
+  }
 
   // Fix indeterminate phase of eigenvectors by requiring the max component to be positive
   for (std::size_t i = 0; i < subspaceEigenvectors.cols(); ++i) {
@@ -434,39 +455,10 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     }
   }
 
-
-  // TODO: Need to address the case of near-zero eigenvalues (as below for non-hermitian case) and clean-up
-  //  non-hermitian case
-
-  if (!hermitian) {
-    ComplexMatrixT ovlTimesVec(subspaceEigenvectors.cols(), subspaceEigenvectors.rows());
-    for (auto repeat = 0; repeat < 3; ++repeat)
-      for (Eigen::Index k = 0; k < subspaceEigenvectors.cols(); k++) {
-        if (std::abs(subspaceEigenvalues(k)) <
-            1e-12) { // special case of zero eigenvalue -- make some real non-zero vector definitely in the null space
-          subspaceEigenvectors.col(k).real() += double(0.3256897) * subspaceEigenvectors.col(k).imag();
-          subspaceEigenvectors.col(k).imag().setZero();
-        }
-        auto ovl =
-            subspaceEigenvectors.col(k).dot(S * subspaceEigenvectors.col(k));
-        // S is supposed to be positive (semi-)definite implying that ovl must be a non-negative real number
-        assert(std::abs(ovl.imag()) < 1e-10);
-        assert(ovl.real() >= 0);
-        subspaceEigenvectors.col(k) /= std::sqrt(ovl.real());
-        ovlTimesVec.row(k) = subspaceEigenvectors.col(k).adjoint() * S;
-        // phase
-        Eigen::Index lmax = 0;
-        for (Eigen::Index l = 0; l < subspaceEigenvectors.rows(); l++) {
-          if (std::abs(subspaceEigenvectors(l, k)) > std::abs(subspaceEigenvectors(lmax, k)))
-            lmax = l;
-        }
-        if (subspaceEigenvectors(lmax, k).real() < 0)
-          subspaceEigenvectors.col(k) = -subspaceEigenvectors.col(k);
-      }
-  }
   if (condone_complex) {
     for (Eigen::Index root = 0; root < Hbar.cols(); ++root) {
       if (subspaceEigenvalues(root).imag() != 0) {
+        // Same procedure as we did for the metric's eigenvectors further up
         subspaceEigenvalues(root) = subspaceEigenvalues(root + 1) = subspaceEigenvalues(root).real();
         subspaceEigenvectors.col(root) = subspaceEigenvectors.col(root).real();
         subspaceEigenvectors.col(root + 1) = subspaceEigenvectors.col(root + 1).imag();
@@ -474,10 +466,12 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
       }
     }
   }
+
   if ((subspaceEigenvectors - subspaceEigenvectors.real()).norm() > 1e-10 or
       (subspaceEigenvalues - subspaceEigenvalues.real()).norm() > 1e-10) {
     throw std::runtime_error("unexpected complex solution found");
   }
+
   eigenvectors.resize(dimension * Hbar.cols());
   eigenvalues.resize(Hbar.cols());
 
