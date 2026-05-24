@@ -451,11 +451,6 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
           subspaceEigenvectors.col(k).real() += double(0.3256897) * subspaceEigenvectors.col(k).imag();
           subspaceEigenvectors.col(k).imag().setZero();
         }
-        if (hermitian)
-          for (Eigen::Index l = 0; l < k; l++) {
-            subspaceEigenvectors.col(k) -= subspaceEigenvectors.col(l) * // ovl;// / norm;
-                                           ovlTimesVec.row(l).dot(subspaceEigenvectors.col(k));
-          }
         auto ovl =
             subspaceEigenvectors.col(k).dot(S * subspaceEigenvectors.col(k));
         // S is supposed to be positive (semi-)definite implying that ovl must be a non-negative real number
