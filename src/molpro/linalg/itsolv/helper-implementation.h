@@ -418,18 +418,14 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   // Determine order of eigenvalues such that they come in non-descending order of their real part
   Eigen::PermutationMatrix<Eigen::Dynamic, Eigen::Dynamic> perm(subspaceEigenvalues.size());
   perm.setIdentity();
-  std::ranges::sort(perm.indices(), std::less<>{}, [&subspaceEigenvalues](Eigen::Index idx) { return subspaceEigenvalues[idx].real(); });
+  std::ranges::sort(perm.indices(), std::less<>{}, [&subspaceEigenvalues](auto idx) { return subspaceEigenvalues[idx].real(); });
 
   // Apply determined order to eigenvalues and -vectors
   subspaceEigenvectors = subspaceEigenvectors * perm;
-  // Note: Eigen has a bug where ppermutation matrices don't work on vctors
-  // see https://gitlab.com/libeigen/eigen/-/work_items/3087
-  // subspaceEigenvectors = perm * subspaceEigenvectors;
-  std::ranges::sort(subspaceEigenvalues, std::less<>{}, [](auto val) { return val.real(); });
-
+   subspaceEigenvalues = perm.transpose() * subspaceEigenvalues;
 
   // Fix indeterminate phase of eigenvectors by requiring the max component to be positive
-  for (std::size_t i = 0; i < subspaceEigenvalues.size(); ++i) {
+  for (std::size_t i = 0; i < subspaceEigenvectors.cols(); ++i) {
     const auto &col = subspaceEigenvectors.col(i);
     auto it = std::ranges::max_element(col, std::less<>{}, [](auto val) { return std::abs(val); });
     auto idx = std::distance(col.begin(), it);
