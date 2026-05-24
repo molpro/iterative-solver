@@ -9,14 +9,16 @@
 #include "Logger.h"
 #include "subspace/Matrix.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <complex>
 #include <cstddef>
 #include <iomanip>
 #include <list>
 #include <numeric>
-#include <complex>
 #include <span>
+#include <type_traits>
 
 namespace molpro::linalg::itsolv {
 
@@ -398,6 +400,7 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
       subspaceEigenvectors.col(i) = subspaceEigenvectors.col(i).real() / subspaceEigenvectors.col(i).real().norm();
     }
 
+    // Convert eigenvectors back into original basis (minus singular dimensions)
     subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * subspaceEigenvectors;
   } else {
     // complex eigenvalues
@@ -408,37 +411,33 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     throw std::runtime_error("Intel compiler does not support working with complex eigen3 entities properly");
 #endif
 
+    // Convert eigenvectors back into original basis (minus singular dimensions)
     subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * s.eigenvectors();
   }
 
-  {
-    // sort
-    auto eigval = subspaceEigenvalues;
-    auto eigvec = subspaceEigenvectors;
-    std::vector<Eigen::Index> map;
-    for (Eigen::Index k = 0; k < Hbar.cols(); k++) {
-      Eigen::Index ll = 0;
-      while (std::ranges::find(map, ll) != map.end()) {
-        ++ll;
-      }
-      for (Eigen::Index l = 0; l < Hbar.cols(); l++) {
-        if (std::count(map.begin(), map.end(), l) == 0) {
-          if (eigval(l).real() < eigval(ll).real())
-            ll = l;
-        }
-      }
-      map.push_back(ll);
-      subspaceEigenvalues(k) = eigval(ll);
-      subspaceEigenvectors.col(k) = eigvec.col(ll);
-      double maxcomp =0;
-      for (Eigen::Index l = 0; l < Hbar.cols(); l++) {
-          if (std::abs(subspaceEigenvectors.col(k)[l].real()) > std::abs(subspaceEigenvectors.col(k)[maxcomp].real()))
-              maxcomp = l;
-      }
-      if (subspaceEigenvectors.col(k)[maxcomp].real() < 0)
-          subspaceEigenvectors.col(k) = - subspaceEigenvectors.col(k);
+  // Determine order of eigenvalues such that they come in non-descending order of their real part
+  Eigen::PermutationMatrix<Eigen::Dynamic, Eigen::Dynamic> perm(subspaceEigenvalues.size());
+  perm.setIdentity();
+  std::ranges::sort(perm.indices(), std::less<>{}, [&subspaceEigenvalues](Eigen::Index idx) { return subspaceEigenvalues[idx].real(); });
+
+  // Apply determined order to eigenvalues and -vectors
+  subspaceEigenvectors = subspaceEigenvectors * perm;
+  // Note: Eigen has a bug where ppermutation matrices don't work on vctors
+  // see https://gitlab.com/libeigen/eigen/-/work_items/3087
+  // subspaceEigenvectors = perm * subspaceEigenvectors;
+  std::ranges::sort(subspaceEigenvalues, std::less<>{}, [](auto val) { return val.real(); });
+
+
+  // Fix indeterminate phase of eigenvectors by requiring the max component to be positive
+  for (std::size_t i = 0; i < subspaceEigenvalues.size(); ++i) {
+    const auto &col = subspaceEigenvectors.col(i);
+    auto it = std::ranges::max_element(col, std::less<>{}, [](auto val) { return std::abs(val); });
+    auto idx = std::distance(col.begin(), it);
+    if (subspaceEigenvectors.col(i)[idx].real() < 0) {
+      subspaceEigenvectors.col(i) *= -1;
     }
   }
+
 
   // TODO: Need to address the case of near-zero eigenvalues (as below for non-hermitian case) and clean-up
   //  non-hermitian case
