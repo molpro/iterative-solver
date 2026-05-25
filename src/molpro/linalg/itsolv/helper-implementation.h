@@ -326,7 +326,6 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   using MatrixT = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
   using ComplexMatrixT = Eigen::Matrix<std::complex<value_type>, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
   using MatrixRowMajT = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
-  using ComplexMatrixRowMajT = Eigen::Matrix<std::complex<value_type>, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
   using VectorT = Eigen::Vector<value_type, Eigen::Dynamic>;
   using ComplexVectorT = Eigen::Vector<std::complex<value_type>, Eigen::Dynamic>;
 
