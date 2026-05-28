@@ -246,12 +246,10 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac08926114067c3eafad9a758df73dabc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ac08926114067c3eafad9a758df73dabc">eigensolver_lapacke_dsyev</a> (const std::vector&lt; double &gt; &amp;matrix, std::vector&lt; double &gt; &amp;eigenvectors, std::vector&lt; double &gt; &amp;eigenvalues, const size_t dimension)</td></tr>
-<tr class="separator:ac08926114067c3eafad9a758df73dabc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bdd3fd38d1ba9aa765db3684fb866ff"><td class="memItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a3bdd3fd38d1ba9aa765db3684fb866ff">eigensolver_lapacke_dsyev</a> (size_t dimension, std::vector&lt; double &gt; &amp;matrix)</td></tr>
-<tr class="separator:a3bdd3fd38d1ba9aa765db3684fb866ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a516f42ae956054880e6649b626657478"><td class="memItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a516f42ae956054880e6649b626657478">eigensolver_lapacke_dsyev</a> (size_t dimension, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">molpro::linalg::array::span::Span</a>&lt; double &gt; &amp;matrix)</td></tr>
-<tr class="separator:a516f42ae956054880e6649b626657478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7004fcfd7dc7522336f1166185df6775"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7004fcfd7dc7522336f1166185df6775">eigensolver_lapacke_dsyev</a> (std::span&lt; const double &gt; matrix, std::span&lt; double &gt; eigenvectors, std::span&lt; double &gt; eigenvalues, const size_t dimension)</td></tr>
+<tr class="separator:a7004fcfd7dc7522336f1166185df6775"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01a226724a579e6c811d3dc030fc6f52"><td class="memItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a01a226724a579e6c811d3dc030fc6f52">eigensolver_lapacke_dsyev</a> (size_t dimension, std::span&lt; const double &gt; matrix)</td></tr>
+<tr class="separator:a01a226724a579e6c811d3dc030fc6f52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f4b69d5700c5c0199c7424183b6641f"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
 <tr class="memitem:a9f4b69d5700c5c0199c7424183b6641f"><td class="memTemplItemLeft" align="right" valign="top">size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a9f4b69d5700c5c0199c7424183b6641f">get_rank</a> (std::vector&lt; value_type &gt; eigenvalues, value_type threshold)</td></tr>
 <tr class="separator:a9f4b69d5700c5c0199c7424183b6641f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -300,6 +298,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a30d21b580f20c0e56221dfc117418b6a"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
 <tr class="memitem:a30d21b580f20c0e56221dfc117418b6a"><td class="memTemplItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; value_type &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a30d21b580f20c0e56221dfc117418b6a">svd_eigen_bdcsvd</a> (size_t nrows, size_t ncols, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; value_type &gt; &amp;m, double threshold)</td></tr>
 <tr class="separator:a30d21b580f20c0e56221dfc117418b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76425378528f8a5c2e1374ecfb37d06b"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
+<tr class="memitem:a76425378528f8a5c2e1374ecfb37d06b"><td class="memTemplItemLeft" align="right" valign="top">size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a76425378528f8a5c2e1374ecfb37d06b">get_rank</a> (std::span&lt; value_type &gt; eigenvalues, value_type threshold)</td></tr>
+<tr class="separator:a76425378528f8a5c2e1374ecfb37d06b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff594b07a52dd297a4fc83b5a4cca785"><td class="memTemplParams" colspan="2">template&lt;typename R , typename Q , typename P &gt; </td></tr>
 <tr class="memitem:aff594b07a52dd297a4fc83b5a4cca785"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aff594b07a52dd297a4fc83b5a4cca785">read_handler_counts</a> (std::shared_ptr&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html">Statistics</a> &gt; stats, std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &gt; handlers)</td></tr>
 <tr class="separator:aff594b07a52dd297a4fc83b5a4cca785"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -403,8 +404,8 @@ Functions</h2></td></tr>
 <tr class="separator:a165abd9e57fd61f69482f77d58c8940f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae03ed5424809a945ea8755ea935e65a3"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ae03ed5424809a945ea8755ea935e65a3">printMatrix&lt; value_type &gt;</a> (const std::vector&lt; value_type &gt; &amp;, size_t rows, size_t cols, std::string title, std::ostream &amp;s)</td></tr>
 <tr class="separator:ae03ed5424809a945ea8755ea935e65a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ee90b05dcbb6a130dd3a37de50dabce"><td class="memItemLeft" align="right" valign="top">template size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7ee90b05dcbb6a130dd3a37de50dabce">get_rank&lt; value_type &gt;</a> (std::vector&lt; value_type &gt; eigenvalues, value_type threshold)</td></tr>
-<tr class="separator:a7ee90b05dcbb6a130dd3a37de50dabce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9ee725ba3564c386c9abda47fe3700b"><td class="memItemLeft" align="right" valign="top">template size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab9ee725ba3564c386c9abda47fe3700b">get_rank&lt; value_type &gt;</a> (std::span&lt; value_type &gt; eigenvalues, value_type threshold)</td></tr>
+<tr class="separator:ab9ee725ba3564c386c9abda47fe3700b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7117e36c19daa3142245f1493a5fb8f"><td class="memItemLeft" align="right" valign="top">template std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; value_type &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab7117e36c19daa3142245f1493a5fb8f">svd_system&lt; value_type &gt;</a> (size_t nrows, size_t ncols, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; value_type &gt; &amp;m, double threshold, bool hermitian, bool reduce_to_rank)</td></tr>
 <tr class="separator:ab7117e36c19daa3142245f1493a5fb8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a4c7295faf87794ff06f76866fbe3ca"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a6a4c7295faf87794ff06f76866fbe3ca">eigenproblem&lt; value_type &gt;</a> (std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity, bool condone_complex)</td></tr>
@@ -1229,8 +1230,52 @@ template&lt;typename value_type , typename std::enable_if_t&lt; <a class="el" hr
 
 </div>
 </div>
-<a id="ac08926114067c3eafad9a758df73dabc" name="ac08926114067c3eafad9a758df73dabc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac08926114067c3eafad9a758df73dabc">&#9670;&nbsp;</a></span>eigensolver_lapacke_dsyev() <span class="overload">[1/3]</span></h2>
+<a id="a01a226724a579e6c811d3dc030fc6f52" name="a01a226724a579e6c811d3dc030fc6f52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01a226724a579e6c811d3dc030fc6f52">&#9670;&nbsp;</a></span>eigensolver_lapacke_dsyev() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; double &gt; &gt; molpro::linalg::itsolv::eigensolver_lapacke_dsyev </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const double &gt;&#160;</td>
+          <td class="paramname"><em>matrix</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A wrapper function for lapacke_dsyev (linear eigensystem solver) from the lapack C interface (lapacke.h). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">matrix</td><td>the input matrix (will not be altered!). Must be square. Must be dimension*dimension elements long. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dimension</td><td>length of one axis of the matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a std::list of instances of <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html" title="Stores a singular value and corresponding left and right singular vectors.">SVD</a>, a struct containing one eigenvalue and one eigenvector. For a real, symmetric matrix, these are equivalent to singular values, and S/D (which are both the same). </dd></dl>
+
+</div>
+</div>
+<a id="a7004fcfd7dc7522336f1166185df6775" name="a7004fcfd7dc7522336f1166185df6775"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7004fcfd7dc7522336f1166185df6775">&#9670;&nbsp;</a></span>eigensolver_lapacke_dsyev() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1241,19 +1286,19 @@ template&lt;typename value_type , typename std::enable_if_t&lt; <a class="el" hr
         <tr>
           <td class="memname">int molpro::linalg::itsolv::eigensolver_lapacke_dsyev </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">std::span&lt; const double &gt;&#160;</td>
           <td class="paramname"><em>matrix</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">std::span&lt; double &gt;&#160;</td>
           <td class="paramname"><em>eigenvectors</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">std::span&lt; double &gt;&#160;</td>
           <td class="paramname"><em>eigenvalues</em>, </td>
         </tr>
         <tr>
@@ -1284,94 +1329,6 @@ template&lt;typename value_type , typename std::enable_if_t&lt; <a class="el" hr
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>status. If 0, successful exit. If -i, the ith argument had an illegal value. If i, the algorithm failed to converge. </dd></dl>
-
-</div>
-</div>
-<a id="a516f42ae956054880e6649b626657478" name="a516f42ae956054880e6649b626657478"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a516f42ae956054880e6649b626657478">&#9670;&nbsp;</a></span>eigensolver_lapacke_dsyev() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; double &gt; &gt; molpro::linalg::itsolv::eigensolver_lapacke_dsyev </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dimension</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">molpro::linalg::array::span::Span</a>&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>matrix</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p >A wrapper function for lapacke_dsyev (linear eigensystem solver) from the lapack C interface (lapacke.h). </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">dimension</td><td>length of one axis of the matrix. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">matrix</td><td>a span wrapping some data structure containing the elements of the matrix. Should be dimension*dimension in length. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a std::list of instances of <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html" title="Stores a singular value and corresponding left and right singular vectors.">SVD</a>, a struct containing one eigenvalue and one eigenvector. For a real, symmetric matrix, these are equivalent to singular values, and S/D (which are both the same). </dd></dl>
-
-</div>
-</div>
-<a id="a3bdd3fd38d1ba9aa765db3684fb866ff" name="a3bdd3fd38d1ba9aa765db3684fb866ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3bdd3fd38d1ba9aa765db3684fb866ff">&#9670;&nbsp;</a></span>eigensolver_lapacke_dsyev() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; double &gt; &gt; molpro::linalg::itsolv::eigensolver_lapacke_dsyev </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dimension</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>matrix</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p >A wrapper function for lapacke_dsyev (linear eigensystem solver) from the lapack C interface (lapacke.h). </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">matrix</td><td>the input matrix (will not be altered!). Must be square. Must be dimension*dimension elements long. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dimension</td><td>length of one axis of the matrix. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a std::list of instances of <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html" title="Stores a singular value and corresponding left and right singular vectors.">SVD</a>, a struct containing one eigenvalue and one eigenvector. For a real, symmetric matrix, these are equivalent to singular values, and S/D (which are both the same). </dd></dl>
 
 </div>
 </div>
@@ -1461,7 +1418,7 @@ template&lt;typename R , typename ForwardIt &gt; </div>
 </div>
 </div>
 <a id="a3e088fb3da611068c3c17c6335712499" name="a3e088fb3da611068c3c17c6335712499"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e088fb3da611068c3c17c6335712499">&#9670;&nbsp;</a></span>get_rank() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e088fb3da611068c3c17c6335712499">&#9670;&nbsp;</a></span>get_rank() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1498,8 +1455,8 @@ template&lt;typename value_type &gt; </div>
 
 </div>
 </div>
-<a id="a9f4b69d5700c5c0199c7424183b6641f" name="a9f4b69d5700c5c0199c7424183b6641f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f4b69d5700c5c0199c7424183b6641f">&#9670;&nbsp;</a></span>get_rank() <span class="overload">[2/2]</span></h2>
+<a id="a76425378528f8a5c2e1374ecfb37d06b" name="a76425378528f8a5c2e1374ecfb37d06b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76425378528f8a5c2e1374ecfb37d06b">&#9670;&nbsp;</a></span>get_rank() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1509,7 +1466,7 @@ template&lt;typename value_type &gt; </div>
         <tr>
           <td class="memname">size_t molpro::linalg::itsolv::get_rank </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; value_type &gt;&#160;</td>
+          <td class="paramtype">std::span&lt; value_type &gt;&#160;</td>
           <td class="paramname"><em>eigenvalues</em>, </td>
         </tr>
         <tr>
@@ -1536,8 +1493,38 @@ template&lt;typename value_type &gt; </div>
 
 </div>
 </div>
-<a id="a7ee90b05dcbb6a130dd3a37de50dabce" name="a7ee90b05dcbb6a130dd3a37de50dabce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ee90b05dcbb6a130dd3a37de50dabce">&#9670;&nbsp;</a></span>get_rank&lt; value_type &gt;()</h2>
+<a id="a9f4b69d5700c5c0199c7424183b6641f" name="a9f4b69d5700c5c0199c7424183b6641f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f4b69d5700c5c0199c7424183b6641f">&#9670;&nbsp;</a></span>get_rank() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t molpro::linalg::itsolv::get_rank </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; value_type &gt;&#160;</td>
+          <td class="paramname"><em>eigenvalues</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">value_type&#160;</td>
+          <td class="paramname"><em>threshold</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab9ee725ba3564c386c9abda47fe3700b" name="ab9ee725ba3564c386c9abda47fe3700b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9ee725ba3564c386c9abda47fe3700b">&#9670;&nbsp;</a></span>get_rank&lt; value_type &gt;()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1545,7 +1532,7 @@ template&lt;typename value_type &gt; </div>
         <tr>
           <td class="memname">template size_t <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a9f4b69d5700c5c0199c7424183b6641f">molpro::linalg::itsolv::get_rank</a>&lt; value_type &gt; </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; value_type &gt;&#160;</td>
+          <td class="paramtype">std::span&lt; value_type &gt;&#160;</td>
           <td class="paramname"><em>eigenvalues</em>, </td>
         </tr>
         <tr>

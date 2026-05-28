@@ -11950,22 +11950,15 @@
       <type>int</type>
       <name>eigensolver_lapacke_dsyev</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>ac08926114067c3eafad9a758df73dabc</anchor>
-      <arglist>(const std::vector&lt; double &gt; &amp;matrix, std::vector&lt; double &gt; &amp;eigenvectors, std::vector&lt; double &gt; &amp;eigenvalues, const size_t dimension)</arglist>
+      <anchor>a7004fcfd7dc7522336f1166185df6775</anchor>
+      <arglist>(std::span&lt; const double &gt; matrix, std::span&lt; double &gt; eigenvectors, std::span&lt; double &gt; eigenvalues, const size_t dimension)</arglist>
     </member>
     <member kind="function">
       <type>std::list&lt; SVD&lt; double &gt; &gt;</type>
       <name>eigensolver_lapacke_dsyev</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a3bdd3fd38d1ba9aa765db3684fb866ff</anchor>
-      <arglist>(size_t dimension, std::vector&lt; double &gt; &amp;matrix)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::list&lt; SVD&lt; double &gt; &gt;</type>
-      <name>eigensolver_lapacke_dsyev</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a516f42ae956054880e6649b626657478</anchor>
-      <arglist>(size_t dimension, const molpro::linalg::array::span::Span&lt; double &gt; &amp;matrix)</arglist>
+      <anchor>a01a226724a579e6c811d3dc030fc6f52</anchor>
+      <arglist>(size_t dimension, std::span&lt; const double &gt; matrix)</arglist>
     </member>
     <member kind="function">
       <type>size_t</type>
@@ -12099,6 +12092,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>a30d21b580f20c0e56221dfc117418b6a</anchor>
       <arglist>(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, double threshold)</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>get_rank</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a76425378528f8a5c2e1374ecfb37d06b</anchor>
+      <arglist>(std::span&lt; value_type &gt; eigenvalues, value_type threshold)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -12328,8 +12328,8 @@
       <type>template size_t</type>
       <name>get_rank&lt; value_type &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a7ee90b05dcbb6a130dd3a37de50dabce</anchor>
-      <arglist>(std::vector&lt; value_type &gt; eigenvalues, value_type threshold)</arglist>
+      <anchor>ab9ee725ba3564c386c9abda47fe3700b</anchor>
+      <arglist>(std::span&lt; value_type &gt; eigenvalues, value_type threshold)</arglist>
     </member>
     <member kind="function">
       <type>template std::list&lt; SVD&lt; value_type &gt; &gt;</type>
