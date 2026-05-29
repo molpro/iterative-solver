@@ -42,7 +42,7 @@ namespace dspace {
  */
 template <typename value_type>
 auto construct_projected_solution(const subspace::Matrix<value_type>& solutions, const subspace::Dimensions& dims,
-                                  const std::vector<int>& remove_qspace, Logger& logger) {
+                                  const std::vector<std::size_t>& remove_qspace, Logger& logger) {
   logger.trace("construct_projected_solution()");
   const auto nQd = remove_qspace.size();
   const auto nSol = solutions.rows();
@@ -76,8 +76,8 @@ auto construct_projected_solution(const subspace::Matrix<value_type>& solutions,
 template <typename value_type>
 auto construct_projected_solutions_overlap(const subspace::Matrix<value_type>& solutions_proj,
                                            const subspace::Matrix<value_type>& overlap,
-                                           const subspace::Dimensions& dims, const std::vector<int>& remove_qspace,
-                                           Logger& logger) {
+                                           const subspace::Dimensions& dims,
+                                           const std::vector<std::size_t>& remove_qspace, Logger& logger) {
   logger.trace("construct_projected_solution_overlap()");
   const auto nSol = solutions_proj.rows();
   const auto nQd = remove_qspace.size();
@@ -190,7 +190,7 @@ auto remove_null_projected_solutions(const subspace::Matrix<value_type>& solutio
  */
 template <typename value_type>
 auto construct_full_subspace_overlap(const subspace::Matrix<value_type>& solutions_proj,
-                                     const subspace::Dimensions& dims, const std::vector<int>& remove_qspace,
+                                     const subspace::Dimensions& dims, const std::vector<std::size_t>& remove_qspace,
                                      const subspace::Matrix<value_type>& overlap, const size_t nR) {
   const auto nDnew = solutions_proj.rows();
   const auto nQd = remove_qspace.size();
@@ -307,12 +307,12 @@ auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CV
  * @return q parameters marked for deletions
  */
 template <typename value_type>
-auto limit_qspace_size(const subspace::Dimensions& dims, const QSpaceOptions& opts,
-                       const subspace::Matrix<value_type>& solutions, Logger& logger) {
+std::vector<std::size_t> limit_qspace_size(const subspace::Dimensions& dims, const QSpaceOptions& opts,
+                                           const subspace::Matrix<value_type>& solutions, Logger& logger) {
   logger.trace("limit_qspace_size()");
   using value_type_abs = decltype(std::abs(solutions(0, 0)));
-  auto q_delete = std::vector<int>{};
-  auto q_indices = std::vector<int>(dims.nQ);
+  auto q_delete = std::vector<std::size_t>{};
+  auto q_indices = std::vector<std::size_t>(dims.nQ);
   std::iota(begin(q_indices), end(q_indices), 0);
   const auto nSol = solutions.rows();
   while (q_indices.size() > opts.max_size) {
@@ -346,7 +346,7 @@ auto limit_qspace_size(const subspace::Dimensions& dims, const QSpaceOptions& op
  */
 template <class R, class Q, class P, typename value_type, typename value_type_abs>
 auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subspace::IXSpace<R, Q, P>& xspace,
-                      const std::vector<int>& q_delete, const value_type_abs norm_thresh,
+                      const std::vector<std::size_t>& q_delete, const value_type_abs norm_thresh,
                       const value_type_abs svd_thresh, array::ArrayHandler<Q, Q>& handler, Logger& logger) {
   const auto dims = xspace.dimensions();
   const auto overlap = xspace.data.at(subspace::EqnData::S);

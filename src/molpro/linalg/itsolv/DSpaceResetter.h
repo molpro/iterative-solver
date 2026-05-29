@@ -105,7 +105,7 @@ public:
       logger.debug("constructing solutions");
       const auto dims = xspace.dimensions();
       const auto overlap = xspace.data.at(subspace::EqnData::S);
-      auto q_indices = std::vector<int>(xspace.dimensions().nQ);
+      auto q_indices = std::vector<std::size_t>(xspace.dimensions().nQ);
       std::iota(q_indices.begin(), q_indices.end(), 0);
       solutions_proj = dspace::construct_projected_solution(solutions, dims, q_indices, logger);
       auto overlap_proj =
