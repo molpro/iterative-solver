@@ -2,6 +2,7 @@
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_PROPOSE_RSPACE_H
 #include <molpro/linalg/itsolv/IterativeSolver.h>
 #include <molpro/linalg/itsolv/helper.h>
+#include <molpro/linalg/itsolv/qspace_options.h>
 #include <molpro/linalg/itsolv/rspace_options.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/ISubspaceSolver.h>
@@ -306,7 +307,7 @@ auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CV
  * @return q parameters marked for deletions
  */
 template <typename value_type>
-auto limit_qspace_size(const subspace::Dimensions& dims, const size_t max_size_qspace,
+auto limit_qspace_size(const subspace::Dimensions& dims, const QSpaceOptions& opts,
                        const subspace::Matrix<value_type>& solutions, Logger& logger) {
   logger.trace("limit_qspace_size()");
   using value_type_abs = decltype(std::abs(solutions(0, 0)));
@@ -314,7 +315,7 @@ auto limit_qspace_size(const subspace::Dimensions& dims, const size_t max_size_q
   auto q_indices = std::vector<int>(dims.nQ);
   std::iota(begin(q_indices), end(q_indices), 0);
   const auto nSol = solutions.rows();
-  while (q_indices.size() > max_size_qspace) {
+  while (q_indices.size() > opts.max_size) {
     auto max_contrib_to_solution = std::vector<value_type_abs>{};
     for (auto i : q_indices) {
       auto contrib = std::vector<value_type_abs>(nSol);
@@ -509,8 +510,8 @@ auto get_new_working_set(const std::vector<int>& working_set, const CVecRef<R>& 
 template <class R, class Q, class P>
 auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameters, const VecRef<R>& residuals,
                     subspace::IXSpace<R, Q, P>& xspace, subspace::ISubspaceSolver<R, Q, P>& subspace_solver,
-                    ArrayHandlers<R, Q, P>& handlers, Logger& logger, const RSpaceOptions& opts, int max_size_qspace,
-                    molpro::profiler::Profiler& profiler) {
+                    ArrayHandlers<R, Q, P>& handlers, Logger& logger, const RSpaceOptions& r_opts,
+                    const QSpaceOptions& q_opts, molpro::profiler::Profiler& profiler) {
   // auto prof = profiler.push("itsolv::propose_rspace"); // FIXME two separate profilers
   auto prof = molpro::Profiler::single();
   logger.trace("itsolv::detail::propose_rspace");
@@ -519,12 +520,12 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   profiler.start("itsolv::ISubspaceSolver::solutions");
   auto solutions = subspace_solver.solutions();
   profiler.stop();
-  auto q_delete = limit_qspace_size(xspace.dimensions(), max_size_qspace, solutions, logger);
+  auto q_delete = limit_qspace_size(xspace.dimensions(), q_opts, solutions, logger);
   logger.debug("delete Q parameter indices = ", q_delete);
   if (!q_delete.empty()) {
     auto prof = profiler.push("construct_dspace");
     auto [dparams, dactions] =
-        construct_dspace(solutions, xspace, q_delete, opts.norm_thresh, opts.svd_thresh, handlers.qq(), logger);
+        construct_dspace(solutions, xspace, q_delete, r_opts.norm_thresh, r_opts.svd_thresh, handlers.qq(), logger);
     std::sort(begin(q_delete), end(q_delete), std::greater<int>());
     for (auto iq : q_delete)
       xspace.eraseq(iq);
@@ -553,7 +554,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   prof->stop();
   prof->start("redundant_indices");
   auto redundant_indices =
-      redundant_parameters(full_overlap, xspace.dimensions().nX, wresidual.size(), opts.svd_thresh, logger);
+      redundant_parameters(full_overlap, xspace.dimensions().nX, wresidual.size(), r_opts.svd_thresh, logger);
   prof->stop();
   logger.debug("redundant indices = ", redundant_indices);
   util::delete_parameters(redundant_indices, wresidual);
@@ -561,7 +562,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   prof->start("modified_gram_schmidt");
   auto null_param_indices =
       modified_gram_schmidt(wresidual, xspace.data.at(subspace::EqnData::S), xspace.dimensions(), xspace.cparamsp(),
-                            xspace.cparamsq(), xspace.cparamsd(), opts.norm_thresh, handlers, logger);
+                            xspace.cparamsq(), xspace.cparamsd(), r_opts.norm_thresh, handlers, logger);
   profiler.stop();
   prof->stop();
   // Now that there is SVD null_param_indices should always be empty

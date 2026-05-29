@@ -2,6 +2,7 @@
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_DSPACERESETTER_H
 #include <molpro/linalg/itsolv/IterativeSolver.h>
 #include <molpro/linalg/itsolv/propose_rspace.h>
+#include <molpro/linalg/itsolv/qspace_options.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 #include <molpro/linalg/itsolv/subspace/QSpace.h>
@@ -18,7 +19,7 @@ template <class R, class Q, class P, typename value_type>
 void resize_qspace(subspace::IXSpace<R, Q, P>& xspace, const subspace::Matrix<value_type>& solutions,
                    std::size_t max_size, Logger& logger) {
   logger.trace("resize_qspace()");
-  auto q_delete = limit_qspace_size(xspace.dimensions(), max_size, solutions, logger);
+  auto q_delete = limit_qspace_size(xspace.dimensions(), QSpaceOptions{.max_size = max_size}, solutions, logger);
   logger.debug("delete Q parameter indices = ", q_delete);
   std::sort(begin(q_delete), end(q_delete), std::greater<int>());
   for (auto iq : q_delete)

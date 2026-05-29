@@ -4,6 +4,7 @@
 #include <molpro/linalg/itsolv/DSpaceResetter.h>
 #include <molpro/linalg/itsolv/IterativeSolverTemplate.h>
 #include <molpro/linalg/itsolv/propose_rspace.h>
+#include <molpro/linalg/itsolv/qspace_options.h>
 #include <molpro/linalg/itsolv/rspace_options.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceSolverLinEig.h>
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
@@ -64,9 +65,9 @@ public:
           m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
                                 rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
     } else {
-      this->m_working_set = detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
-                                                   *this->m_handlers, *this->m_logger, rspace_opts,
-                                                   m_max_size_qspace, *this->profiler());
+      this->m_working_set =
+          detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
+                                 *this->m_handlers, *this->m_logger, rspace_opts, qspace_opts, *this->profiler());
     }
     this->m_stats->iterations++;
     this->m_end_iteration_needed = false;
@@ -113,12 +114,12 @@ public:
   int get_reset_D_maxQ_size() const { return m_dspace_resetter.get_max_Qsize(); }
   //! Set a limit on the maximum size of Q space. This does not include the size of the working space (R) and the D
   //! space
-  void set_max_size_qspace(int n) {
-    m_max_size_qspace = n;
-    if (m_dspace_resetter.get_max_Qsize() > m_max_size_qspace)
-      m_dspace_resetter.set_max_Qsize(m_max_size_qspace);
+  void set_max_size_qspace(std::size_t n) {
+    qspace_opts.max_size = n;
+    if (m_dspace_resetter.get_max_Qsize() > qspace_opts.max_size)
+      m_dspace_resetter.set_max_Qsize(qspace_opts.max_size);
   }
-  int get_max_size_qspace() const { return m_max_size_qspace; }
+  std::size_t get_max_size_qspace() const { return qspace_opts.max_size; }
   void set_hermiticity(bool hermitian) override {
     m_hermiticity = hermitian;
     auto xspace = std::dynamic_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace);
@@ -196,10 +197,10 @@ protected:
     }
   }
 
-  RSpaceOptions rspace_opts;                               //!< Options concerning R-space handling
-  int m_max_size_qspace = std::numeric_limits<int>::max(); //!< maximum size of Q space
-  detail::DSpaceResetter<Q> m_dspace_resetter;             //!< resets D space
-  bool m_hermiticity = true;                               //!< whether the problem is hermitian or not
+  RSpaceOptions rspace_opts;                   //!< Options concerning R-space handling
+  QSpaceOptions qspace_opts;                   //!< Options concerning Q-space handling
+  detail::DSpaceResetter<Q> m_dspace_resetter; //!< resets D space
+  bool m_hermiticity = true;                   //!< whether the problem is hermitian or not
 };
 
 } // namespace molpro::linalg::itsolv
