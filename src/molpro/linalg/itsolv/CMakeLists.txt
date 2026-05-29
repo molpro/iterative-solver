@@ -1,5 +1,6 @@
 LibraryManager_Append(${PROJECT_NAME}
     SOURCES
+        DavidsonOptions.cpp
         LinearEigensystemDavidsonOptions.cpp
         LinearEigensystemRSPTOptions.cpp
         LinearEquationsDavidsonOptions.cpp
@@ -11,6 +12,7 @@ LibraryManager_Append(${PROJECT_NAME}
         NonLinearEquationsDIISOptions.cpp
     PUBLIC_HEADER
         CastOptions.h
+        DavidsonOptions.h
         DSpaceResetter.h
         IterativeSolverTemplate.h
         LinearEigensystemDavidson.h
