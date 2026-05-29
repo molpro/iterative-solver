@@ -9,13 +9,16 @@
 #include <molpro/linalg/itsolv/subspace/util.h>
 #include <molpro/linalg/itsolv/util.h>
 
+#include <cstddef>
+#include <limits>
+
 namespace molpro::linalg::itsolv::detail {
 //! Removes Q parameters that have smallest contribution to any solution until Q space size is within limit
 template <class R, class Q, class P, typename value_type>
 void resize_qspace(subspace::IXSpace<R, Q, P>& xspace, const subspace::Matrix<value_type>& solutions,
-                   int m_max_Qsize_after_reset, Logger& logger) {
+                   std::size_t max_size, Logger& logger) {
   logger.trace("resize_qspace()");
-  auto q_delete = limit_qspace_size(xspace.dimensions(), m_max_Qsize_after_reset, solutions, logger);
+  auto q_delete = limit_qspace_size(xspace.dimensions(), max_size, solutions, logger);
   logger.debug("delete Q parameter indices = ", q_delete);
   std::sort(begin(q_delete), end(q_delete), std::greater<int>());
   for (auto iq : q_delete)
@@ -69,13 +72,14 @@ auto max_overlap_with_R(const CVecRef<R>& rparams, const CVecRef<Q>& qparams, ar
 template <class Q>
 class DSpaceResetter {
 protected:
-  int m_nreset = std::numeric_limits<int>::max();                //!< reset D space every n iterations
-  int m_max_Qsize_after_reset = std::numeric_limits<int>::max(); //!< maximum size of Q space after reset
-  std::list<Q> solution_params; //!< all current solutions that will be moved to the Q space
+  std::size_t m_nreset = std::numeric_limits<std::size_t>::max(); //!< reset D space every n iterations
+  std::size_t m_max_Qsize_after_reset =
+      std::numeric_limits<std::size_t>::max(); //!< maximum size of Q space after reset
+  std::list<Q> solution_params;                //!< all current solutions that will be moved to the Q space
 
 public:
   DSpaceResetter() = default;
-  DSpaceResetter(int nreset, int max_Qsize) : m_nreset{nreset}, m_max_Qsize_after_reset{max_Qsize} {}
+  DSpaceResetter(std::size_t nreset, std::size_t max_Qsize) : m_nreset{nreset}, m_max_Qsize_after_reset{max_Qsize} {}
 
   //! Whether reset operation should be run
   bool do_reset(size_t iter, const subspace::Dimensions& dims) {
@@ -135,8 +139,8 @@ public:
     auto q_delete = max_overlap_with_R(wparams, xspace.cparamsq(), handlers.rq(), logger);
     for (auto i : q_delete)
       xspace.eraseq(i);
-    if (xspace.dimensions().nQ + nR > size_t(m_max_Qsize_after_reset))
-      resize_qspace(xspace, solutions, size_t(m_max_Qsize_after_reset) > nR ? m_max_Qsize_after_reset - nR : 0, logger);
+    if (xspace.dimensions().nQ + nR > m_max_Qsize_after_reset)
+      resize_qspace(xspace, solutions, m_max_Qsize_after_reset > nR ? m_max_Qsize_after_reset - nR : 0, logger);
     auto new_working_set = std::vector<int>(nR);
     std::iota(begin(new_working_set), end(new_working_set), 0);
     return new_working_set;
