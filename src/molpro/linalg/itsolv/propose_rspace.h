@@ -393,8 +393,8 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
   for (size_t i = 0; i < nD; ++i) {
     auto norm = std::sqrt(std::abs(handler.dot(dparams_new.at(i), dparams_new.at(i))));
     if (norm < norm_thresh) {
-      logger.warn(std::format("construct_dspace: skipping normalisation of D vector {} with near-zero norm = {:.2e}",
-                              i, norm));
+      logger.warn(
+          std::format("construct_dspace: skipping normalisation of D vector {} with near-zero norm = {:.2e}", i, norm));
       continue;
     }
     handler.scal(1. / norm, dparams_new[i]);
@@ -513,8 +513,8 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   // auto prof = profiler.push("itsolv::propose_rspace"); // FIXME two separate profilers
   auto prof = molpro::Profiler::single();
   logger.trace("itsolv::detail::propose_rspace");
-  logger.trace("dimensions {nP, nQ, nD, nW} = ", xspace.dimensions().nP, xspace.dimensions().nQ,
-		  xspace.dimensions().nD, solver.working_set().size());
+  logger.trace("dimensions {nP, nQ, nD, nW} = ", xspace.dimensions().nP, xspace.dimensions().nQ, xspace.dimensions().nD,
+               solver.working_set().size());
   profiler.start("itsolv::ISubspaceSolver::solutions");
   auto solutions = subspace_solver.solutions();
   profiler.stop();

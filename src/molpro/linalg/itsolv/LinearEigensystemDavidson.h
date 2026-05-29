@@ -31,7 +31,8 @@ public:
   using typename SolverTemplate::scalar_type;
   using IterativeSolverTemplate<LinearEigensystem, R, Q, P>::report;
 
-  explicit LinearEigensystemDavidson(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers=std::make_shared<molpro::linalg::itsolv::ArrayHandlers<R, Q, P>>(),
+  explicit LinearEigensystemDavidson(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers =
+                                         std::make_shared<molpro::linalg::itsolv::ArrayHandlers<R, Q, P>>(),
                                      const std::shared_ptr<Logger>& logger_ = std::make_shared<Logger>())
       : SolverTemplate(std::make_shared<subspace::XSpace<R, Q, P>>(handlers, logger_),
                        std::static_pointer_cast<subspace::ISubspaceSolver<R, Q, P>>(
@@ -98,7 +99,8 @@ public:
   virtual std::vector<scalar_type> working_set_eigenvalues() const override {
     auto eval = std::vector<scalar_type>{};
     for (auto i : this->working_set()) {
-      eval.push_back(i < this->m_subspace_solver->eigenvalues().size() ? this->m_subspace_solver->eigenvalues().at(i) : 0);
+      eval.push_back(i < this->m_subspace_solver->eigenvalues().size() ? this->m_subspace_solver->eigenvalues().at(i)
+                                                                       : 0);
     }
     return eval;
   }
