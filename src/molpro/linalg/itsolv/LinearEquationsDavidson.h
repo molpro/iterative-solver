@@ -60,8 +60,9 @@ public:
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
     auto prof = this->profiler()->push("itsolv::end_iteration");
     if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
-      this->m_working_set = m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
-                                                  rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
+      this->m_working_set =
+          m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
+                                rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
     } else {
       this->m_working_set = detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
                                                    *this->m_handlers, *this->m_logger, rspace_opts,
