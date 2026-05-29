@@ -1,7 +1,9 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LINEAREIGENSYSTEMDAVIDSONOPTIONS_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LINEAREIGENSYSTEMDAVIDSONOPTIONS_H
 #include <molpro/linalg/itsolv/Options.h>
+#include <molpro/linalg/itsolv/DavidsonOptions.h>
 #include <molpro/linalg/itsolv/options_map.h>
+
 
 namespace molpro::linalg::itsolv {
 /*!
@@ -33,16 +35,9 @@ namespace molpro::linalg::itsolv {
  * options_p->svd_threshold.get() << std::endl;
  * @endcode
  */
-struct LinearEigensystemDavidsonOptions : public LinearEigensystemOptions {
+struct LinearEigensystemDavidsonOptions : public LinearEigensystemOptions, public DavidsonOptions {
   LinearEigensystemDavidsonOptions() = default;
   LinearEigensystemDavidsonOptions(const options_map& opt);
-
-  std::optional<int> reset_D;
-  std::optional<int> reset_D_max_Q_size;
-  std::optional<int> max_size_qspace;
-  std::optional<double> norm_thresh;
-  std::optional<double> svd_thresh;
-  std::optional<bool> hermiticity;
 };
 
 } // namespace molpro::linalg::itsolv
