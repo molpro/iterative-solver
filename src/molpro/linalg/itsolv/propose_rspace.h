@@ -14,7 +14,13 @@
 #include <molpro/linalg/itsolv/wrap_util.h>
 #include <molpro/profiler/Profiler.h>
 
+#include <algorithm>
+#include <cstddef>
 #include <format>
+#include <functional>
+#include <ranges>
+#include <utility>
+#include <vector>
 
 namespace molpro::linalg::itsolv::detail {
 
@@ -309,27 +315,47 @@ auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CV
 template <typename value_type>
 std::vector<std::size_t> limit_qspace_size(const subspace::Dimensions& dims, const QSpaceOptions& opts,
                                            const subspace::Matrix<value_type>& solutions, Logger& logger) {
-  logger.trace("limit_qspace_size()");
   using value_type_abs = decltype(std::abs(solutions(0, 0)));
-  auto q_delete = std::vector<std::size_t>{};
-  auto q_indices = std::vector<std::size_t>(dims.nQ);
-  std::iota(begin(q_indices), end(q_indices), 0);
-  const auto nSol = solutions.rows();
-  while (q_indices.size() > opts.max_size) {
-    auto max_contrib_to_solution = std::vector<value_type_abs>{};
-    for (auto i : q_indices) {
-      auto contrib = std::vector<value_type_abs>(nSol);
-      for (size_t j = 0; j < nSol; ++j)
-        contrib[j] = std::abs(solutions(j, dims.oQ + i));
-      max_contrib_to_solution.emplace_back(*std::max_element(begin(contrib), end(contrib)));
-    }
-    auto it_min = std::min_element(begin(max_contrib_to_solution), end(max_contrib_to_solution));
-    auto i = std::distance(begin(max_contrib_to_solution), it_min);
-    q_delete.push_back(q_indices.at(i));
-    q_indices.erase(begin(q_indices) + i);
-    logger.debug("contribution to solutions =", max_contrib_to_solution);
-    logger.debug("delete Q i = ", i);
+  using contrib_pair = std::pair<std::size_t, value_type_abs>;
+  using std::begin;
+  using std::end;
+
+  logger.trace("limit_qspace_size()");
+
+  if (dims.nQ <= opts.max_size) {
+    return {};
   }
+
+  std::vector<std::size_t> q_delete;
+  q_delete.reserve(dims.nQ - opts.max_size);
+
+  const std::size_t nSol = solutions.rows();
+
+  std::vector<contrib_pair> max_contrib_to_solution;
+  max_contrib_to_solution.reserve(nSol);
+
+  for (std::size_t idx : std::ranges::views::iota(std::size_t(0), dims.nQ)) {
+    max_contrib_to_solution.emplace_back(std::make_pair(idx, value_type_abs(0)));
+
+    for (size_t j = 0; j < nSol; ++j) {
+      const value_type_abs current = std::abs(solutions(j, dims.oQ + idx));
+      max_contrib_to_solution.back().second = std::max(max_contrib_to_solution.back().second, current);
+    }
+  }
+
+  std::ranges::sort(max_contrib_to_solution, std::less<>{}, &contrib_pair::second);
+
+  logger.trace("contribution to solutions =",
+               max_contrib_to_solution | std::ranges::views::transform([](const contrib_pair& p) { return p.second; }));
+
+  for (std::size_t i = 0; i < dims.nQ - opts.max_size; ++i) {
+    auto [idx, contrib] = max_contrib_to_solution.at(i);
+
+    logger.debug("deleted Q vector idx, contribution = ", idx, contrib);
+
+    q_delete.emplace_back(idx);
+  }
+
   return q_delete;
 }
 
