@@ -44,7 +44,8 @@ auto max_overlap_with_R(const CVecRef<R>& rparams, const CVecRef<Q>& qparams, ar
       ov.push_back(std::abs(overlap(i, j)));
     auto it_max = std::max_element(ov.begin(), ov.end());
     auto i_max = std::distance(ov.begin(), it_max);
-    logger.debug("removed q index = " + std::to_string(q_indices[i_max]) + ", with overlap = " + std::to_string(*it_max));
+    logger.debug("removed q index = " + std::to_string(q_indices[i_max]) +
+                 ", with overlap = " + std::to_string(*it_max));
     q_max_overlap.push_back(q_indices[i_max]);
     q_indices.erase(q_indices.begin() + i_max);
   }
@@ -99,7 +100,7 @@ public:
                        const value_type_abs svd_thresh, ArrayHandlers<R, Q, P>& handlers, Logger& logger) {
     logger.trace("DSpaceResetter::run()");
     logger.trace("dimensions {nP, nQ, nD, nR} = ", xspace.dimensions().nP, xspace.dimensions().nQ,
-			xspace.dimensions().nD, rparams.size());
+                 xspace.dimensions().nD, rparams.size());
     auto solutions_proj = solutions;
     if (solution_params.empty() && !rparams.empty()) {
       logger.debug("constructing solutions");
