@@ -143,6 +143,8 @@ public:
     if (m_dspace_resetter.get_max_Qsize() > qspace_opts.max_size)
       m_dspace_resetter.set_max_Qsize(qspace_opts.max_size);
   }
+  std::size_t get_min_size_qspace() const { return qspace_opts.min_size; }
+  void set_min_size_qspace(std::size_t n) { qspace_opts.min_size = n; }
   void set_hermiticity(bool hermitian) override {
     m_hermiticity = hermitian;
     auto xspace = std::dynamic_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace);
@@ -161,6 +163,10 @@ public:
       set_reset_D_maxQ_size(opt.reset_D_max_Q_size.value());
     if (opt.max_size_qspace)
       set_max_size_qspace(opt.max_size_qspace.value());
+    if (opt.min_size_qspace)
+      set_min_size_qspace(opt.min_size_qspace.value());
+    if (opt.contrib_thresh)
+      qspace_opts.contrib_thresh = opt.contrib_thresh.value();
     if (opt.norm_thresh)
       rspace_opts.norm_thresh = opt.norm_thresh.value();
     if (opt.svd_thresh)
@@ -175,6 +181,8 @@ public:
     opt->reset_D = get_reset_D();
     opt->reset_D_max_Q_size = get_reset_D_maxQ_size();
     opt->max_size_qspace = get_max_size_qspace();
+    opt->min_size_qspace = get_min_size_qspace();
+    opt->contrib_thresh = qspace_opts.contrib_thresh;
     opt->norm_thresh = rspace_opts.norm_thresh;
     opt->svd_thresh = rspace_opts.svd_thresh;
     opt->hermiticity = get_hermiticity();
