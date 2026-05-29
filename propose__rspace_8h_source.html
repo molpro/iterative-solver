@@ -351,8 +351,8 @@ $(document).ready(function(){initNavTree('propose__rspace_8h_source.html',''); i
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    <span class="keyword">auto</span> i = std::distance(begin(max_contrib_to_solution), it_min);</div>
 <div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    q_delete.push_back(q_indices.at(i));</div>
 <div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>    q_indices.erase(begin(q_indices) + i);</div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    logger.<a class="code hl_function" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a165cbf0829ddd542abd540b276598095">info</a>(<span class="stringliteral">&quot;contribution to solutions =&quot;</span>, max_contrib_to_solution);</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    logger.<a class="code hl_function" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a165cbf0829ddd542abd540b276598095">info</a>(<span class="stringliteral">&quot;delete Q i = &quot;</span>, i);</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    logger.<a class="code hl_function" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a31c65c1f5ba802102ec8a132a99d8ad8">debug</a>(<span class="stringliteral">&quot;contribution to solutions =&quot;</span>, max_contrib_to_solution);</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    logger.<a class="code hl_function" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a31c65c1f5ba802102ec8a132a99d8ad8">debug</a>(<span class="stringliteral">&quot;delete Q i = &quot;</span>, i);</div>
 <div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>  }</div>
 <div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>  <span class="keywordflow">return</span> q_delete;</div>
 <div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>}</div>
