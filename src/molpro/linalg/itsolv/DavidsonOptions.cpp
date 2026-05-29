@@ -14,6 +14,12 @@ DavidsonOptions::DavidsonOptions(const std::map<std::string, std::string>& opt) 
   if (auto key = facet.toupper("max_size_qspace"); opt_upper.count(key)) {
     max_size_qspace = std::stoi(opt_upper.at(key));
   }
+  if (auto key = facet.toupper("min_size_qspace"); opt_upper.count(key)) {
+    min_size_qspace = std::stoi(opt_upper.at(key));
+  }
+  if (auto key = facet.toupper("contrib_thresh"); opt_upper.count(key)) {
+    contrib_thresh = std::stod(opt_upper.at(key));
+  }
   if (auto key = facet.toupper("norm_thresh"); opt_upper.count(key)) {
     norm_thresh = std::stod(opt_upper.at(key));
   }

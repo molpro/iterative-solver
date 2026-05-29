@@ -15,6 +15,7 @@
 #include <molpro/profiler/Profiler.h>
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <format>
 #include <functional>
@@ -322,12 +323,20 @@ std::vector<std::size_t> limit_qspace_size(const subspace::Dimensions& dims, con
 
   logger.trace("limit_qspace_size()");
 
-  if (dims.nQ <= opts.max_size) {
+  assert(opts.max_size >= opts.min_size);
+
+  const bool must_trim_size = dims.nQ > opts.max_size;
+  const bool may_trim_size = dims.nQ > opts.min_size && opts.contrib_thresh > 0;
+
+  if (!must_trim_size && !may_trim_size) {
     return {};
   }
 
+  const std::size_t min_deletions = must_trim_size ? dims.nQ - opts.max_size : 0;
+  const std::size_t max_deletions = dims.nQ - opts.min_size;
+
   std::vector<std::size_t> q_delete;
-  q_delete.reserve(dims.nQ - opts.max_size);
+  q_delete.reserve(min_deletions);
 
   const std::size_t nSol = solutions.rows();
 
@@ -348,10 +357,16 @@ std::vector<std::size_t> limit_qspace_size(const subspace::Dimensions& dims, con
   logger.trace("contribution to solutions =",
                max_contrib_to_solution | std::ranges::views::transform([](const contrib_pair& p) { return p.second; }));
 
-  for (std::size_t i = 0; i < dims.nQ - opts.max_size; ++i) {
-    auto [idx, contrib] = max_contrib_to_solution.at(i);
+  for (auto [idx, contrib] : max_contrib_to_solution) {
+    if (q_delete.size() == max_deletions || (q_delete.size() >= min_deletions && contrib >= opts.contrib_thresh)) {
+      break;
+    }
 
-    logger.debug("deleted Q vector idx, contribution = ", idx, contrib);
+    if (opts.contrib_thresh != 0 && contrib >= opts.contrib_thresh) {
+      logger.warn("deleted Q vector with max. contribution = ", contrib);
+    } else {
+      logger.debug("deleted Q vector with max. contribution = ", contrib);
+    }
 
     q_delete.emplace_back(idx);
   }
