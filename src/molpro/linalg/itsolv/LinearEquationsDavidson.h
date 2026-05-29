@@ -4,6 +4,7 @@
 #include <molpro/linalg/itsolv/DSpaceResetter.h>
 #include <molpro/linalg/itsolv/IterativeSolverTemplate.h>
 #include <molpro/linalg/itsolv/propose_rspace.h>
+#include <molpro/linalg/itsolv/rspace_options.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceSolverLinEig.h>
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
 
@@ -60,10 +61,10 @@ public:
     auto prof = this->profiler()->push("itsolv::end_iteration");
     if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
       this->m_working_set = m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
-                                                  m_norm_thresh, m_svd_thresh, *this->m_handlers, *this->m_logger);
+                                                  rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
     } else {
       this->m_working_set = detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
-                                                   *this->m_handlers, *this->m_logger, m_svd_thresh, m_norm_thresh,
+                                                   *this->m_handlers, *this->m_logger, rspace_opts,
                                                    m_max_size_qspace, *this->profiler());
     }
     this->m_stats->iterations++;
@@ -97,12 +98,12 @@ public:
   }
 
   //! Set threshold on the norm of parameters that should be considered null
-  void set_norm_thresh(double thresh) { m_norm_thresh = thresh; }
-  double get_norm_thresh() const { return m_norm_thresh; }
+  void set_norm_thresh(double thresh) { rspace_opts.norm_thresh = thresh; }
+  double get_norm_thresh() const { return rspace_opts.norm_thresh; }
   //! Set the smallest singular value in the subspace that can be allowed when
   //! constructing the working set. Smaller singular values will lead to deletion of parameters
-  void set_svd_thresh(double thresh) { m_svd_thresh = thresh; }
-  double get_svd_thresh() const { return m_svd_thresh; }
+  void set_svd_thresh(double thresh) { rspace_opts.svd_thresh = thresh; }
+  double get_svd_thresh() const { return rspace_opts.svd_thresh; }
   //! Set the period in iterations for resetting the D space
   void set_reset_D(size_t n) { m_dspace_resetter.set_nreset(n); }
   size_t get_reset_D() const { return m_dspace_resetter.get_nreset(); }
@@ -194,8 +195,7 @@ protected:
     }
   }
 
-  double m_norm_thresh = 1e-10; //!< vectors with norm less than threshold can be considered null.
-  double m_svd_thresh = 1e-12;  //!< svd values smaller than this mark the null space
+  RSpaceOptions rspace_opts;                               //!< Options concerning R-space handling
   int m_max_size_qspace = std::numeric_limits<int>::max(); //!< maximum size of Q space
   detail::DSpaceResetter<Q> m_dspace_resetter;             //!< resets D space
   bool m_hermiticity = true;                               //!< whether the problem is hermitian or not

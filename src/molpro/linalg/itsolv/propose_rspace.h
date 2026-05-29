@@ -2,6 +2,7 @@
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_PROPOSE_RSPACE_H
 #include <molpro/linalg/itsolv/IterativeSolver.h>
 #include <molpro/linalg/itsolv/helper.h>
+#include <molpro/linalg/itsolv/rspace_options.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/ISubspaceSolver.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
@@ -505,11 +506,11 @@ auto get_new_working_set(const std::vector<int>& working_set, const CVecRef<R>& 
  * @param residual preconditioned residuals.
  * @return number of significant parameters to calculate the action for
  */
-template <class R, class Q, class P, typename value_type_abs>
+template <class R, class Q, class P>
 auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameters, const VecRef<R>& residuals,
                     subspace::IXSpace<R, Q, P>& xspace, subspace::ISubspaceSolver<R, Q, P>& subspace_solver,
-                    ArrayHandlers<R, Q, P>& handlers, Logger& logger, value_type_abs svd_thresh,
-                    value_type_abs res_norm_thresh, int max_size_qspace, molpro::profiler::Profiler& profiler) {
+                    ArrayHandlers<R, Q, P>& handlers, Logger& logger, const RSpaceOptions& opts, int max_size_qspace,
+                    molpro::profiler::Profiler& profiler) {
   // auto prof = profiler.push("itsolv::propose_rspace"); // FIXME two separate profilers
   auto prof = molpro::Profiler::single();
   logger.trace("itsolv::detail::propose_rspace");
@@ -523,7 +524,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   if (!q_delete.empty()) {
     auto prof = profiler.push("construct_dspace");
     auto [dparams, dactions] =
-        construct_dspace(solutions, xspace, q_delete, res_norm_thresh, svd_thresh, handlers.qq(), logger);
+        construct_dspace(solutions, xspace, q_delete, opts.norm_thresh, opts.svd_thresh, handlers.qq(), logger);
     std::sort(begin(q_delete), end(q_delete), std::greater<int>());
     for (auto iq : q_delete)
       xspace.eraseq(iq);
@@ -552,7 +553,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   prof->stop();
   prof->start("redundant_indices");
   auto redundant_indices =
-      redundant_parameters(full_overlap, xspace.dimensions().nX, wresidual.size(), svd_thresh, logger);
+      redundant_parameters(full_overlap, xspace.dimensions().nX, wresidual.size(), opts.svd_thresh, logger);
   prof->stop();
   logger.debug("redundant indices = ", redundant_indices);
   util::delete_parameters(redundant_indices, wresidual);
@@ -560,7 +561,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   prof->start("modified_gram_schmidt");
   auto null_param_indices =
       modified_gram_schmidt(wresidual, xspace.data.at(subspace::EqnData::S), xspace.dimensions(), xspace.cparamsp(),
-                            xspace.cparamsq(), xspace.cparamsd(), res_norm_thresh, handlers, logger);
+                            xspace.cparamsq(), xspace.cparamsd(), opts.norm_thresh, handlers, logger);
   profiler.stop();
   prof->stop();
   // Now that there is SVD null_param_indices should always be empty

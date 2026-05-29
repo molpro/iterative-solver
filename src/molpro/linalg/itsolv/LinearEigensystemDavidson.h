@@ -8,6 +8,7 @@
 #include <molpro/linalg/itsolv/IterativeSolverTemplate.h>
 #include <molpro/linalg/itsolv/Logger.h>
 #include <molpro/linalg/itsolv/propose_rspace.h>
+#include <molpro/linalg/itsolv/rspace_options.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceSolverLinEig.h>
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
 
@@ -66,15 +67,15 @@ public:
     auto m_prof = prof->push("itsolv::end_iteration");
     if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
       m_resetting_in_progress = true;
-      this->m_working_set = m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
-                                                  propose_rspace_norm_thresh, propose_rspace_svd_thresh,
-                                                  *this->m_handlers, *this->m_logger);
+      this->m_working_set =
+          m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
+                                rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
     } else {
       m_resetting_in_progress = false;
       prof->start("end_iteration (propose_rspace)");
-      this->m_working_set = detail::propose_rspace(
-          *this, parameters, action, *this->m_xspace, *this->m_subspace_solver, *this->m_handlers, *this->m_logger,
-          propose_rspace_svd_thresh, propose_rspace_norm_thresh, m_max_size_qspace, *this->profiler().get());
+      this->m_working_set = detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
+                                                   *this->m_handlers, *this->m_logger, rspace_opts, m_max_size_qspace,
+                                                   *this->profiler().get());
       prof->stop();
     }
     this->m_stats->iterations++;
@@ -160,9 +161,9 @@ public:
     if (opt.max_size_qspace)
       set_max_size_qspace(opt.max_size_qspace.value());
     if (opt.norm_thresh)
-      propose_rspace_norm_thresh = opt.norm_thresh.value();
+      rspace_opts.norm_thresh = opt.norm_thresh.value();
     if (opt.svd_thresh)
-      propose_rspace_svd_thresh = opt.svd_thresh.value();
+      rspace_opts.svd_thresh = opt.svd_thresh.value();
     if (opt.hermiticity)
       set_hermiticity(opt.hermiticity.value());
   }
@@ -173,17 +174,14 @@ public:
     opt->reset_D = get_reset_D();
     opt->reset_D_max_Q_size = get_reset_D_maxQ_size();
     opt->max_size_qspace = get_max_size_qspace();
-    opt->norm_thresh = propose_rspace_norm_thresh;
-    opt->svd_thresh = propose_rspace_svd_thresh;
+    opt->norm_thresh = rspace_opts.norm_thresh;
+    opt->svd_thresh = rspace_opts.svd_thresh;
     opt->hermiticity = get_hermiticity();
     return opt;
   }
 
   std::shared_ptr<Logger> logger;
-  double propose_rspace_norm_thresh = 1e-10; //!< vectors with norm less than threshold can be considered null.
-  double propose_rspace_svd_thresh = 1e-12;  //!< the smallest singular value in the subspace that can be allowed when
-                                             //!< constructing the working set. Smaller singular values will lead to
-                                             //!< deletion of parameters from the Q space
+
 protected:
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
     auto prof = this->profiler()->push("itsolv::construct_residual");
@@ -198,6 +196,7 @@ protected:
   bool m_hermiticity = false;                              //!< whether the problem is hermitian or not
   std::vector<double> m_last_values;                       //!< The values from the previous iteration
   bool m_resetting_in_progress = false;                    //!< whether D space resetting is in progress
+  RSpaceOptions rspace_opts;                               //!< Options concerning R-space handling
 };
 
 } // namespace molpro::linalg::itsolv
