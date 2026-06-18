@@ -137,6 +137,7 @@ var annotated =
           ] ],
           [ "ArrayHandlers", "classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html", "classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers" ],
           [ "CastOptions", "structmolpro_1_1linalg_1_1itsolv_1_1CastOptions.html", null ],
+          [ "DavidsonOptions", "structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions" ],
           [ "decay", "structmolpro_1_1linalg_1_1itsolv_1_1decay.html", "structmolpro_1_1linalg_1_1itsolv_1_1decay" ],
           [ "decay< std::reference_wrapper< T > >", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4.html", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4" ],
           [ "has_iterator", "structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html", null ],

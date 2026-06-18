@@ -133,12 +133,12 @@ Collaboration diagram for molpro::linalg::itsolv::LinearEquationsDavidson&lt; R,
 <div class="textblock"><div class="compoundTemplParams">template&lt;class R, class Q = R, class P = std::map&lt;size_t, typename R::value_type&gt;&gt;<br />
 class molpro::linalg::itsolv::LinearEquationsDavidson&lt; R, Q, P &gt;</div><p >Solves a system of linear equation, A x = b. </p>
 <p >The equations are solved using a Krylov subspace projection method with the P and D space. This is the same approach as LinearEigenvalue.</p>
-<h2><a class="anchor" id="autotoc_md0"></a>
+<h2><a class="anchor" id="autotoc_md1"></a>
 Residual</h2>
 <p >The residual is scaled down by the norm of the RHS vector so that thresholds are consistent.</p>
-<h2><a class="anchor" id="autotoc_md1"></a>
-Preconditioner</h2>
 <h2><a class="anchor" id="autotoc_md2"></a>
+Preconditioner</h2>
+<h2><a class="anchor" id="autotoc_md3"></a>
 Augmented Hessian</h2>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
@@ -202,10 +202,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad70a9b4f851fc510bdf189a107ab68e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64c70aa7cafca66228994805f913fa91"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a64c70aa7cafca66228994805f913fa91">get_reset_D_maxQ_size</a> () const</td></tr>
 <tr class="separator:a64c70aa7cafca66228994805f913fa91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8393b6f0edfedf8331fb2bd0f88a1ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#af8393b6f0edfedf8331fb2bd0f88a1ed">set_max_size_qspace</a> (int n)</td></tr>
-<tr class="separator:af8393b6f0edfedf8331fb2bd0f88a1ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef031425d38100193d223466f7741cf8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#aef031425d38100193d223466f7741cf8">get_max_size_qspace</a> () const</td></tr>
-<tr class="separator:aef031425d38100193d223466f7741cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bb03d5e134072d7f6c1a3e838894919"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a6bb03d5e134072d7f6c1a3e838894919">set_max_size_qspace</a> (std::size_t n)</td></tr>
+<tr class="separator:a6bb03d5e134072d7f6c1a3e838894919"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36c15d7a9a568f2eb6604679accd345a"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a36c15d7a9a568f2eb6604679accd345a">get_max_size_qspace</a> () const</td></tr>
+<tr class="separator:a36c15d7a9a568f2eb6604679accd345a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a04313066e00ac6d298adc71a06bde5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a4a04313066e00ac6d298adc71a06bde5">set_min_size_qspace</a> (std::size_t n)</td></tr>
+<tr class="separator:a4a04313066e00ac6d298adc71a06bde5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a250ca63ddbad14ccb559aaa76d26e4c6"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a250ca63ddbad14ccb559aaa76d26e4c6">get_min_size_qspace</a> () const</td></tr>
+<tr class="separator:a250ca63ddbad14ccb559aaa76d26e4c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a13c94801544066f87353fb5ec6e692"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a1a13c94801544066f87353fb5ec6e692">set_hermiticity</a> (bool hermitian) override</td></tr>
 <tr class="memdesc:a1a13c94801544066f87353fb5ec6e692"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets hermiticity of kernel.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a1a13c94801544066f87353fb5ec6e692">More...</a><br /></td></tr>
 <tr class="separator:a1a13c94801544066f87353fb5ec6e692"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -515,15 +519,12 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a168f12c22e8776185aa8d003d867d064"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a168f12c22e8776185aa8d003d867d064">m_norm_thresh</a> = 1e-10</td></tr>
-<tr class="memdesc:a168f12c22e8776185aa8d003d867d064"><td class="mdescLeft">&#160;</td><td class="mdescRight">vectors with norm less than threshold can be considered null.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a168f12c22e8776185aa8d003d867d064">More...</a><br /></td></tr>
-<tr class="separator:a168f12c22e8776185aa8d003d867d064"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41b9acd15e5e3b0b93f1fbcd3b826c48"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a41b9acd15e5e3b0b93f1fbcd3b826c48">m_svd_thresh</a> = 1e-12</td></tr>
-<tr class="memdesc:a41b9acd15e5e3b0b93f1fbcd3b826c48"><td class="mdescLeft">&#160;</td><td class="mdescRight">svd values smaller than this mark the null space  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a41b9acd15e5e3b0b93f1fbcd3b826c48">More...</a><br /></td></tr>
-<tr class="separator:a41b9acd15e5e3b0b93f1fbcd3b826c48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d15c6e7572aacd3572efb85b21ed4fd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a7d15c6e7572aacd3572efb85b21ed4fd">m_max_size_qspace</a> = std::numeric_limits&lt;int&gt;::max()</td></tr>
-<tr class="memdesc:a7d15c6e7572aacd3572efb85b21ed4fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum size of Q space  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a7d15c6e7572aacd3572efb85b21ed4fd">More...</a><br /></td></tr>
-<tr class="separator:a7d15c6e7572aacd3572efb85b21ed4fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1b3c00c18cc6da1d0260a5ea640fc3d"><td class="memItemLeft" align="right" valign="top">RSpaceOptions&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ab1b3c00c18cc6da1d0260a5ea640fc3d">rspace_opts</a></td></tr>
+<tr class="memdesc:ab1b3c00c18cc6da1d0260a5ea640fc3d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning R-space handling.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ab1b3c00c18cc6da1d0260a5ea640fc3d">More...</a><br /></td></tr>
+<tr class="separator:ab1b3c00c18cc6da1d0260a5ea640fc3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a663a6f57bded1e6c8a78f0123262d112"><td class="memItemLeft" align="right" valign="top">QSpaceOptions&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a663a6f57bded1e6c8a78f0123262d112">qspace_opts</a></td></tr>
+<tr class="memdesc:a663a6f57bded1e6c8a78f0123262d112"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning Q-space handling.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a663a6f57bded1e6c8a78f0123262d112">More...</a><br /></td></tr>
+<tr class="separator:a663a6f57bded1e6c8a78f0123262d112"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0472ab791f0ddb7074cec65c3dbbca0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html">detail::DSpaceResetter</a>&lt; Q &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a0472ab791f0ddb7074cec65c3dbbca0e">m_dspace_resetter</a></td></tr>
 <tr class="memdesc:a0472ab791f0ddb7074cec65c3dbbca0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">resets D space  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a0472ab791f0ddb7074cec65c3dbbca0e">More...</a><br /></td></tr>
 <tr class="separator:a0472ab791f0ddb7074cec65c3dbbca0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -963,8 +964,8 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 
 </div>
 </div>
-<a id="aef031425d38100193d223466f7741cf8" name="aef031425d38100193d223466f7741cf8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef031425d38100193d223466f7741cf8">&#9670;&nbsp;</a></span>get_max_size_qspace()</h2>
+<a id="a36c15d7a9a568f2eb6604679accd345a" name="a36c15d7a9a568f2eb6604679accd345a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36c15d7a9a568f2eb6604679accd345a">&#9670;&nbsp;</a></span>get_max_size_qspace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -975,7 +976,34 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::get_max_size_qspace </td>
+          <td class="memname">std::size_t <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::get_max_size_qspace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a250ca63ddbad14ccb559aaa76d26e4c6" name="a250ca63ddbad14ccb559aaa76d26e4c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a250ca63ddbad14ccb559aaa76d26e4c6">&#9670;&nbsp;</a></span>get_min_size_qspace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::get_min_size_qspace </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1366,8 +1394,8 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 
 </div>
 </div>
-<a id="af8393b6f0edfedf8331fb2bd0f88a1ed" name="af8393b6f0edfedf8331fb2bd0f88a1ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8393b6f0edfedf8331fb2bd0f88a1ed">&#9670;&nbsp;</a></span>set_max_size_qspace()</h2>
+<a id="a6bb03d5e134072d7f6c1a3e838894919" name="a6bb03d5e134072d7f6c1a3e838894919"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bb03d5e134072d7f6c1a3e838894919">&#9670;&nbsp;</a></span>set_max_size_qspace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1380,7 +1408,7 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
         <tr>
           <td class="memname">void <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::set_max_size_qspace </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>n</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1392,6 +1420,34 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 </table>
 </div><div class="memdoc">
 <p >Set a limit on the maximum size of Q space. This does not include the size of the working space (R) and the D space </p>
+
+</div>
+</div>
+<a id="a4a04313066e00ac6d298adc71a06bde5" name="a4a04313066e00ac6d298adc71a06bde5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a04313066e00ac6d298adc71a06bde5">&#9670;&nbsp;</a></span>set_min_size_qspace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::set_min_size_qspace </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1678,8 +1734,8 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 
 </div>
 </div>
-<a id="a7d15c6e7572aacd3572efb85b21ed4fd" name="a7d15c6e7572aacd3572efb85b21ed4fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d15c6e7572aacd3572efb85b21ed4fd">&#9670;&nbsp;</a></span>m_max_size_qspace</h2>
+<a id="a663a6f57bded1e6c8a78f0123262d112" name="a663a6f57bded1e6c8a78f0123262d112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a663a6f57bded1e6c8a78f0123262d112">&#9670;&nbsp;</a></span>qspace_opts</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1690,7 +1746,7 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::m_max_size_qspace = std::numeric_limits&lt;int&gt;::max()</td>
+          <td class="memname">QSpaceOptions <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::qspace_opts</td>
         </tr>
       </table>
   </td>
@@ -1700,12 +1756,12 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 </table>
 </div><div class="memdoc">
 
-<p>maximum size of Q space </p>
+<p><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning Q-space handling. </p>
 
 </div>
 </div>
-<a id="a168f12c22e8776185aa8d003d867d064" name="a168f12c22e8776185aa8d003d867d064"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a168f12c22e8776185aa8d003d867d064">&#9670;&nbsp;</a></span>m_norm_thresh</h2>
+<a id="ab1b3c00c18cc6da1d0260a5ea640fc3d" name="ab1b3c00c18cc6da1d0260a5ea640fc3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1b3c00c18cc6da1d0260a5ea640fc3d">&#9670;&nbsp;</a></span>rspace_opts</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1716,7 +1772,7 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::m_norm_thresh = 1e-10</td>
+          <td class="memname">RSpaceOptions <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::rspace_opts</td>
         </tr>
       </table>
   </td>
@@ -1726,33 +1782,7 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 </table>
 </div><div class="memdoc">
 
-<p>vectors with norm less than threshold can be considered null. </p>
-
-</div>
-</div>
-<a id="a41b9acd15e5e3b0b93f1fbcd3b826c48" name="a41b9acd15e5e3b0b93f1fbcd3b826c48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41b9acd15e5e3b0b93f1fbcd3b826c48">&#9670;&nbsp;</a></span>m_svd_thresh</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::m_svd_thresh = 1e-12</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>svd values smaller than this mark the null space </p>
+<p><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning R-space handling. </p>
 
 </div>
 </div>

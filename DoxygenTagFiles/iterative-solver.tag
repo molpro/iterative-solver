@@ -1924,6 +1924,80 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>molpro::linalg::itsolv::DavidsonOptions</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>DavidsonOptions</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>a9f257f9eac3ef4643ba53815687ae45b</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>DavidsonOptions</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>aac1c98bfab9bbb4dd899b60f89d58690</anchor>
+      <arglist>(const options_map &amp;opt)</arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; std::size_t &gt;</type>
+      <name>reset_D</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>ab1c523fa8fb4c967aad15321687d0e38</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; std::size_t &gt;</type>
+      <name>reset_D_max_Q_size</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>a3f5559d2847d2741bd5defb453b1a438</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; std::size_t &gt;</type>
+      <name>max_size_qspace</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>a6b2e784b2329f66a9b371bbc496f89af</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; std::size_t &gt;</type>
+      <name>min_size_qspace</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>ae6b7d3a2682d86bca18d4acad9cc417c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; double &gt;</type>
+      <name>contrib_thresh</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>af09d47ab2f9a554290edbaa5f4948b14</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; double &gt;</type>
+      <name>norm_thresh</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>a2a891d068a6c63554c4a0e12087f670b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; double &gt;</type>
+      <name>svd_thresh</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>aade65611b4489a90f76b3a82f423dcc2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; bool &gt;</type>
+      <name>hermiticity</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</anchorfile>
+      <anchor>a521a7db340a0a9241725c1e62012b9c1</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>molpro::linalg::itsolv::decay</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1decay.html</filename>
     <templarg>class T</templarg>
@@ -4183,8 +4257,8 @@
       <type></type>
       <name>DSpaceResetter</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html</anchorfile>
-      <anchor>afaa739aa1f6ffb031c2be25c611ef109</anchor>
-      <arglist>(int nreset, int max_Qsize)</arglist>
+      <anchor>a14e7139a1bcc53b3a381f613b55d98af</anchor>
+      <arglist>(std::size_t nreset, std::size_t max_Qsize)</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -4229,17 +4303,17 @@
       <arglist>(const VecRef&lt; R &gt; &amp;rparams, subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, const subspace::Matrix&lt; value_type &gt; &amp;solutions, const value_type_abs norm_thresh, const value_type_abs svd_thresh, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers, Logger &amp;logger)</arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>int</type>
+      <type>std::size_t</type>
       <name>m_nreset</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html</anchorfile>
-      <anchor>af9bdc742d7628ba3eddbefbac2e75a45</anchor>
+      <anchor>ad67746d55c68662ec41b1cf38983d642</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>int</type>
+      <type>std::size_t</type>
       <name>m_max_Qsize_after_reset</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html</anchorfile>
-      <anchor>a4dcb1c408145f9dc7d6494afefa7eeed</anchor>
+      <anchor>a08799e579c0d5103bd23289d493e1da3</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -6209,18 +6283,32 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
-      <type>int</type>
+      <type>std::size_t</type>
       <name>get_max_size_qspace</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a053621c2fdae8dcf9c4542ee97888ff7</anchor>
+      <anchor>a5c9ea163e72cf27e597ab9bba12da0d6</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>set_max_size_qspace</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a5b363a8031dc1b31e0d70783428a5ab9</anchor>
-      <arglist>(int n)</arglist>
+      <anchor>a8556c5df53eadb5802ade2ad7da9993a</anchor>
+      <arglist>(std::size_t n)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>get_min_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a9b56a6d2619c42b602f47a141b0d5278</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_min_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a202691a5613686bafcdbb41b95c055dd</anchor>
+      <arglist>(std::size_t n)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -6257,33 +6345,12 @@
       <anchor>a3928db7987c24bda78d24e2f18e6c1d5</anchor>
       <arglist></arglist>
     </member>
-    <member kind="variable">
-      <type>double</type>
-      <name>propose_rspace_norm_thresh</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>abc0bdc92047dafddad208549048eef54</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>double</type>
-      <name>propose_rspace_svd_thresh</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a3b96209972872ffece08f78a2c747c5a</anchor>
-      <arglist></arglist>
-    </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>construct_residual</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>accbb21b9dc3c611e7bddd25d0750f972</anchor>
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions) override</arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>int</type>
-      <name>m_max_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a482db55c4914b82cedcbbb3190c519f8</anchor>
-      <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>detail::DSpaceResetter&lt; Q &gt;</type>
@@ -6313,11 +6380,26 @@
       <anchor>a4f8b13cbdbd2dc723312d0d640c31917</anchor>
       <arglist></arglist>
     </member>
+    <member kind="variable" protection="protected">
+      <type>RSpaceOptions</type>
+      <name>rspace_opts</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>aca741a01442f803203a66ae12303fc85</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>QSpaceOptions</type>
+      <name>qspace_opts</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a2de5adb607fb5300a2f30c41f4ae297b</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="struct">
     <name>molpro::linalg::itsolv::LinearEigensystemDavidsonOptions</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html</filename>
     <base>molpro::linalg::itsolv::LinearEigensystemOptions</base>
+    <base>molpro::linalg::itsolv::DavidsonOptions</base>
     <member kind="function">
       <type></type>
       <name>LinearEigensystemDavidsonOptions</name>
@@ -6331,48 +6413,6 @@
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html</anchorfile>
       <anchor>a93f23fc3a0766404a5171037b65d35eb</anchor>
       <arglist>(const options_map &amp;opt)</arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; int &gt;</type>
-      <name>reset_D</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html</anchorfile>
-      <anchor>a0e53552bc93ee59f12f4b4ee39ee7af6</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; int &gt;</type>
-      <name>reset_D_max_Q_size</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html</anchorfile>
-      <anchor>a6ba88cdc8e7725a25ed7534119666303</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; int &gt;</type>
-      <name>max_size_qspace</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html</anchorfile>
-      <anchor>aa70d4f86a39f178faf148d005c84f7e5</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; double &gt;</type>
-      <name>norm_thresh</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html</anchorfile>
-      <anchor>aba4aedaad0f569c5f36c4c315db03b30</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; double &gt;</type>
-      <name>svd_thresh</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html</anchorfile>
-      <anchor>a3afdce34fafd036d3f5a13ef3f5f0b60</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; bool &gt;</type>
-      <name>hermiticity</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html</anchorfile>
-      <anchor>af2b7bf0db9fec526a2f0c46be9462f06</anchor>
-      <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -6776,14 +6816,28 @@
       <type>void</type>
       <name>set_max_size_qspace</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>af8393b6f0edfedf8331fb2bd0f88a1ed</anchor>
-      <arglist>(int n)</arglist>
+      <anchor>a6bb03d5e134072d7f6c1a3e838894919</anchor>
+      <arglist>(std::size_t n)</arglist>
     </member>
     <member kind="function">
-      <type>int</type>
+      <type>std::size_t</type>
       <name>get_max_size_qspace</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>aef031425d38100193d223466f7741cf8</anchor>
+      <anchor>a36c15d7a9a568f2eb6604679accd345a</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_min_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
+      <anchor>a4a04313066e00ac6d298adc71a06bde5</anchor>
+      <arglist>(std::size_t n)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>get_min_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
+      <anchor>a250ca63ddbad14ccb559aaa76d26e4c6</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -6864,24 +6918,17 @@
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions) override</arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
-      <name>m_norm_thresh</name>
+      <type>RSpaceOptions</type>
+      <name>rspace_opts</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a168f12c22e8776185aa8d003d867d064</anchor>
+      <anchor>ab1b3c00c18cc6da1d0260a5ea640fc3d</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
-      <name>m_svd_thresh</name>
+      <type>QSpaceOptions</type>
+      <name>qspace_opts</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a41b9acd15e5e3b0b93f1fbcd3b826c48</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>int</type>
-      <name>m_max_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a7d15c6e7572aacd3572efb85b21ed4fd</anchor>
+      <anchor>a663a6f57bded1e6c8a78f0123262d112</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -6903,6 +6950,7 @@
     <name>molpro::linalg::itsolv::LinearEquationsDavidsonOptions</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html</filename>
     <base>molpro::linalg::itsolv::LinearEquationsOptions</base>
+    <base>molpro::linalg::itsolv::DavidsonOptions</base>
     <member kind="function">
       <type></type>
       <name>LinearEquationsDavidsonOptions</name>
@@ -6916,48 +6964,6 @@
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html</anchorfile>
       <anchor>a5680e30e9e9017c91a7529169ab27b3c</anchor>
       <arglist>(const options_map &amp;opt)</arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; int &gt;</type>
-      <name>reset_D</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html</anchorfile>
-      <anchor>a784889dc74ddb5e060ba0eb1bd17639d</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; int &gt;</type>
-      <name>reset_D_max_Q_size</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html</anchorfile>
-      <anchor>a7cdccd25b63d7fe1e9226707fb0eeb96</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; int &gt;</type>
-      <name>max_size_qspace</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html</anchorfile>
-      <anchor>a838b66d55b31aa54a0169efaf9ac4078</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; double &gt;</type>
-      <name>norm_thresh</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html</anchorfile>
-      <anchor>a9c8b17c0dae35fd92e056883c2f2f806</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; double &gt;</type>
-      <name>svd_thresh</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html</anchorfile>
-      <anchor>a85531ec998e6148927a2d4b7d79094b1</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::optional&lt; bool &gt;</type>
-      <name>hermiticity</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html</anchorfile>
-      <anchor>a0e488fb88aeca271776e7fd9dbd548cb</anchor>
-      <arglist></arglist>
     </member>
     <member kind="variable">
       <type>std::optional&lt; double &gt;</type>
@@ -11873,6 +11879,7 @@
     <namespace>molpro::linalg::itsolv::util</namespace>
     <class kind="class">molpro::linalg::itsolv::ArrayHandlers</class>
     <class kind="struct">molpro::linalg::itsolv::CastOptions</class>
+    <class kind="struct">molpro::linalg::itsolv::DavidsonOptions</class>
     <class kind="struct">molpro::linalg::itsolv::decay</class>
     <class kind="struct">molpro::linalg::itsolv::decay&lt; std::reference_wrapper&lt; T &gt; &gt;</class>
     <class kind="struct">molpro::linalg::itsolv::has_iterator</class>
@@ -11908,6 +11915,13 @@
     <class kind="struct">molpro::linalg::itsolv::Statistics</class>
     <class kind="struct">molpro::linalg::itsolv::SVD</class>
     <member kind="typedef">
+      <type>std::map&lt; std::string, std::string &gt;</type>
+      <name>options_map</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a784351a2599ca33773a9809818edb5a1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
       <type>std::vector&lt; std::reference_wrapper&lt; A &gt; &gt;</type>
       <name>VecRef</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
@@ -11926,13 +11940,6 @@
       <name>decay_t</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>a2541a0dfd2575a25a8d4976899b63e1d</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="typedef">
-      <type>std::map&lt; std::string, std::string &gt;</type>
-      <name>options_map</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a784351a2599ca33773a9809818edb5a1</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
@@ -12115,27 +12122,6 @@
       <arglist>(std::ostream &amp;o, const Statistics &amp;statistics)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>precondition_default</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a8229dae1b2c144af940193d4aae8a460</anchor>
-      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>precondition_default</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>aa196d0f83c9368c7afbb70fec5609c84</anchor>
-      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename T::iterator *=nullptr)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>precondition_default</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a87291e93a2c4e59b1af5b46cdb7d2db6</anchor>
-      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename std::enable_if&lt;!has_iterator&lt; T &gt;::value, void * &gt;::type=nullptr)</arglist>
-    </member>
-    <member kind="function">
       <type>auto</type>
       <name>wrap</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
@@ -12220,6 +12206,48 @@
       <arglist>(std::vector&lt; T &gt; params, const std::vector&lt; U &gt; &amp;indices)</arglist>
     </member>
     <member kind="function">
+      <type>void</type>
+      <name>precondition_default</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a8229dae1b2c144af940193d4aae8a460</anchor>
+      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>precondition_default</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>aa196d0f83c9368c7afbb70fec5609c84</anchor>
+      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename T::iterator *=nullptr)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>precondition_default</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a87291e93a2c4e59b1af5b46cdb7d2db6</anchor>
+      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename std::enable_if&lt;!has_iterator&lt; T &gt;::value, void * &gt;::type=nullptr)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>operator==</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>ad845d8e72c3518d938b7c0250c70de87</anchor>
+      <arglist>(const Interpolate::point &amp;lhs, const Interpolate::point &amp;rhs)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::ostream &amp;</type>
+      <name>operator&lt;&lt;</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a32fc8c3fc3217ba8e8c4abb2c7de9f2e</anchor>
+      <arglist>(std::ostream &amp;os, const Interpolate &amp;interpolant)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::ostream &amp;</type>
+      <name>operator&lt;&lt;</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a165abd9e57fd61f69482f77d58c8940f</anchor>
+      <arglist>(std::ostream &amp;os, const Interpolate::point &amp;p)</arglist>
+    </member>
+    <member kind="function">
       <type>std::unique_ptr&lt; LinearEigensystem&lt; R, Q, P &gt; &gt;</type>
       <name>create_LinearEigensystem</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
@@ -12297,27 +12325,6 @@
       <arglist>(const std::string &amp;method=&quot;BFGS&quot;, const std::string &amp;options=&quot;&quot;, const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers=std::make_shared&lt; molpro::linalg::itsolv::ArrayHandlers&lt; R, Q, P &gt; &gt;())</arglist>
     </member>
     <member kind="function">
-      <type>bool</type>
-      <name>operator==</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>ad845d8e72c3518d938b7c0250c70de87</anchor>
-      <arglist>(const Interpolate::point &amp;lhs, const Interpolate::point &amp;rhs)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::ostream &amp;</type>
-      <name>operator&lt;&lt;</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a32fc8c3fc3217ba8e8c4abb2c7de9f2e</anchor>
-      <arglist>(std::ostream &amp;os, const Interpolate &amp;interpolant)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::ostream &amp;</type>
-      <name>operator&lt;&lt;</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a165abd9e57fd61f69482f77d58c8940f</anchor>
-      <arglist>(std::ostream &amp;os, const Interpolate::point &amp;p)</arglist>
-    </member>
-    <member kind="function">
       <type>template void</type>
       <name>printMatrix&lt; value_type &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
@@ -12371,6 +12378,20 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
       <anchor>af6f410b0781a5f1d5b8c88afece5d4b1</anchor>
       <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t oR, const size_t nR, const value_type_abs svd_thresh, Logger &amp;logger)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>resize_qspace</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>a85109fc09ea33ce7704ba6a8860178fb</anchor>
+      <arglist>(subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, const subspace::Matrix&lt; value_type &gt; &amp;solutions, std::size_t max_size, Logger &amp;logger)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>max_overlap_with_R</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>a7e59cce18c2d88b4a7f69312b4736043</anchor>
+      <arglist>(const CVecRef&lt; R &gt; &amp;rparams, const CVecRef&lt; Q &gt; &amp;qparams, array::ArrayHandler&lt; R, Q &gt; &amp;handler, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; std::pair&lt; size_t, size_t &gt; &gt;</type>
@@ -12429,18 +12450,18 @@
       <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;overlap, const CVecRef&lt; R &gt; &amp;params, const CVecRef&lt; P &gt; &amp;pparams, const CVecRef&lt; Q &gt; &amp;qparams, const CVecRef&lt; Q &gt; &amp;dparams, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
-      <type>auto</type>
+      <type>std::vector&lt; std::size_t &gt;</type>
       <name>limit_qspace_size</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a0112d8e773c6ee2070808a2c4453220c</anchor>
-      <arglist>(const subspace::Dimensions &amp;dims, const size_t max_size_qspace, const subspace::Matrix&lt; value_type &gt; &amp;solutions, Logger &amp;logger)</arglist>
+      <anchor>ae0698882c0bfc722096198ab20683b20</anchor>
+      <arglist>(const subspace::Dimensions &amp;dims, const QSpaceOptions &amp;opts, const subspace::Matrix&lt; value_type &gt; &amp;solutions, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
       <name>construct_dspace</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>ae45dadab3ea0843302f59275c8654e50</anchor>
-      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions, const subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, const std::vector&lt; int &gt; &amp;q_delete, const value_type_abs norm_thresh, const value_type_abs svd_thresh, array::ArrayHandler&lt; Q, Q &gt; &amp;handler, Logger &amp;logger)</arglist>
+      <anchor>aaf70adb15e11786f878400d6a794df3e</anchor>
+      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions, const subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, const std::vector&lt; std::size_t &gt; &amp;q_delete, const value_type_abs norm_thresh, const value_type_abs svd_thresh, array::ArrayHandler&lt; Q, Q &gt; &amp;handler, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
@@ -12460,22 +12481,8 @@
       <type>auto</type>
       <name>propose_rspace</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a712059d4e879816d87991146c30a9166</anchor>
-      <arglist>(IterativeSolver&lt; R, Q, P &gt; &amp;solver, const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residuals, subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, subspace::ISubspaceSolver&lt; R, Q, P &gt; &amp;subspace_solver, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers, Logger &amp;logger, value_type_abs svd_thresh, value_type_abs res_norm_thresh, int max_size_qspace, molpro::profiler::Profiler &amp;profiler)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>resize_qspace</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a051628c377dc11c2eabb3beec9900242</anchor>
-      <arglist>(subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, const subspace::Matrix&lt; value_type &gt; &amp;solutions, int m_max_Qsize_after_reset, Logger &amp;logger)</arglist>
-    </member>
-    <member kind="function">
-      <type>auto</type>
-      <name>max_overlap_with_R</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a7e59cce18c2d88b4a7f69312b4736043</anchor>
-      <arglist>(const CVecRef&lt; R &gt; &amp;rparams, const CVecRef&lt; Q &gt; &amp;qparams, array::ArrayHandler&lt; R, Q &gt; &amp;handler, Logger &amp;logger)</arglist>
+      <anchor>a5dd923703929d07cbe3f637e40f5171f</anchor>
+      <arglist>(IterativeSolver&lt; R, Q, P &gt; &amp;solver, const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residuals, subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, subspace::ISubspaceSolver&lt; R, Q, P &gt; &amp;subspace_solver, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers, Logger &amp;logger, const RSpaceOptions &amp;r_opts, const QSpaceOptions &amp;q_opts, molpro::profiler::Profiler &amp;profiler)</arglist>
     </member>
   </compound>
   <compound kind="namespace">
@@ -12485,15 +12492,15 @@
       <type>auto</type>
       <name>construct_projected_solution</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
-      <anchor>a7e1b57ecc524a7a58cec557606ed4e79</anchor>
-      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions, const subspace::Dimensions &amp;dims, const std::vector&lt; int &gt; &amp;remove_qspace, Logger &amp;logger)</arglist>
+      <anchor>a16f370809219435b563f0c3a6cd8633a</anchor>
+      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions, const subspace::Dimensions &amp;dims, const std::vector&lt; std::size_t &gt; &amp;remove_qspace, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
       <name>construct_projected_solutions_overlap</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
-      <anchor>a34cb0567313603e0ded6be29155b9d4e</anchor>
-      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions_proj, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const subspace::Dimensions &amp;dims, const std::vector&lt; int &gt; &amp;remove_qspace, Logger &amp;logger)</arglist>
+      <anchor>a2fc3062e290bc1a825a62f15e8589fa3</anchor>
+      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions_proj, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const subspace::Dimensions &amp;dims, const std::vector&lt; std::size_t &gt; &amp;remove_qspace, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -12513,8 +12520,8 @@
       <type>auto</type>
       <name>construct_full_subspace_overlap</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
-      <anchor>a7cce8d93e8628a08f5fe029ba5a71dff</anchor>
-      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions_proj, const subspace::Dimensions &amp;dims, const std::vector&lt; int &gt; &amp;remove_qspace, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t nR)</arglist>
+      <anchor>aa54b741cc5ba39406b0457b446ee8033</anchor>
+      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions_proj, const subspace::Dimensions &amp;dims, const std::vector&lt; std::size_t &gt; &amp;remove_qspace, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t nR)</arglist>
     </member>
   </compound>
   <compound kind="namespace">
@@ -12767,6 +12774,13 @@
     <class kind="struct">molpro::linalg::itsolv::util::ArrayHandlersError</class>
     <class kind="class">molpro::linalg::itsolv::util::StringFacet</class>
     <member kind="function">
+      <type>std::map&lt; std::string, std::string &gt;</type>
+      <name>capitalize_keys</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</anchorfile>
+      <anchor>a7c7ffb21f5167c22282fa2e82c2c83cc</anchor>
+      <arglist>(const options_map &amp;options, const SFacet &amp;facet)</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>remove_null_vectors</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</anchorfile>
@@ -12800,13 +12814,6 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</anchorfile>
       <anchor>aacd4867e14db45ec690217f59c7cff99</anchor>
       <arglist>(std::vector&lt; int &gt; indices, Container &amp;params)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::map&lt; std::string, std::string &gt;</type>
-      <name>capitalize_keys</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</anchorfile>
-      <anchor>a7c7ffb21f5167c22282fa2e82c2c83cc</anchor>
-      <arglist>(const options_map &amp;options, const SFacet &amp;facet)</arglist>
     </member>
   </compound>
   <compound kind="namespace">

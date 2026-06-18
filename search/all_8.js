@@ -9,5 +9,5 @@ var searchData=
   ['has_5fmapped_5ftype_3c_20a_2c_20void_5ft_3c_20typename_20a_3a_3amapped_5ftype_20_3e_20_3e_6',['has_mapped_type&lt; A, void_t&lt; typename A::mapped_type &gt; &gt;',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type_3_01A_00_01void__t_3_01typename_01A_1_1mapped__type_01_4_01_4.html',1,'molpro::linalg::array']]],
   ['has_5fmapped_5ftype_5fv_7',['has_mapped_type_v',['../namespacemolpro_1_1linalg_1_1array.html#a13f02b59213de0924418fca64e40acf3',1,'molpro::linalg::array']]],
   ['has_5fparent_8',['has_parent',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1dotgraph.html#a3642a4c9eb27db3c082b371b3edfed75',1,'molpro::profiler::dotgraph']]],
-  ['hermiticity_9',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html#af2b7bf0db9fec526a2f0c46be9462f06',1,'molpro::linalg::itsolv::LinearEigensystemDavidsonOptions::hermiticity()'],['../structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html#a0e488fb88aeca271776e7fd9dbd548cb',1,'molpro::linalg::itsolv::LinearEquationsDavidsonOptions::hermiticity()']]]
+  ['hermiticity_9',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a521a7db340a0a9241725c1e62012b9c1',1,'molpro::linalg::itsolv::DavidsonOptions']]]
 ];
