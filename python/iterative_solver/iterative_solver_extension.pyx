@@ -38,6 +38,22 @@ class IterativeSolver:
         '''
         self.n = n
         self.nroot = nroot
+        self._initialized = False
+
+    def __del__(self):
+        # The concrete subclass constructor pushes an entry onto the C-side
+        # `instances` stack via IterativeSolver*Initialize. Pop it here so we
+        # don't leak. Note: Python finalisation order is not guaranteed to
+        # match the LIFO push order — if the user keeps multiple solver
+        # instances alive simultaneously and they are destroyed out of order,
+        # the wrong entry will be popped. The common single-solver-at-a-time
+        # case works.
+        if getattr(self, '_initialized', False):
+            try:
+                IterativeSolverFinalize()
+            except Exception:
+                pass
+            self._initialized = False
 
     def mpicomm_compute(self):
         global m_mpicomm_compute
@@ -108,7 +124,6 @@ class IterativeSolver:
     @property
     def converged(self):
         return IterativeSolverConverged() != 0
-        pass
 
     def solve(self, parameters, actions, problem, generate_initial_guess=False, max_iter=None, max_p=0):
         '''
@@ -136,7 +151,7 @@ class IterativeSolver:
         cdef double[::1] actions_ = actions.reshape([parameters.shape[-1]*nbuffer])
         ev = np.zeros([self.nroot],dtype=float)
         cdef double[::1] ev_ = ev
-        errors = np.array([self.nroot],dtype=float)
+        errors = np.zeros(self.nroot, dtype=float)
         cdef double[::1] errors_ = errors
         verbosity = IterativeSolverVerbosity()
         use_diagonals = problem.diagonals(actions.reshape([actions.size]))
@@ -234,6 +249,7 @@ class Optimize(IterativeSolver):
         IterativeSolverOptimizeInitialize(n_, rb, re, thresh_, thresh_value_, verbosity_,
                                           1 if minimize else 0, pname_, mpicomm_, algorithm_,
                                           options_)
+        self._initialized = True
         if range is not None:
             range[0] = rb[0]
             range[1] = re[0]
@@ -262,6 +278,7 @@ class NonLinearEquations(IterativeSolver):
         IterativeSolverNonLinearEquationsInitialize(n_, rb, re, thresh_, verbosity_,
                                           pname_, mpicomm_, algorithm_,
                                           options_)
+        self._initialized = True
         if range is not None:
             range[0] = rb[0]
             range[1] = re[0]
@@ -297,6 +314,7 @@ class LinearEquations(IterativeSolver):
                                                    1 if hermitian else 0, verbosity_,
                                                    pname_, mpicomm_, algorithm_,
                                                    options_)
+        self._initialized = True
         if range is not None:
             range[0] = rb[0]
             range[1] = re[0]
@@ -328,6 +346,7 @@ class LinearEigensystem(IterativeSolver):
                                                  1 if hermitian else 0, verbosity_,
                                                  pname_, mpicomm_, algorithm_,
                                                  options_)
+        self._initialized = True
         if range is not None:
             range[0] = rb[0]
             range[1] = re[0]
