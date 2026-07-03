@@ -365,7 +365,7 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   // eigendecomposition
   auto svmh = metricEvals.head(rank);
   for (auto k = 0; k < rank; k++) {
-    assert(std::abs(svmh(k)) <= 1e-14 || svmh(k) >= 0); // metric is supposed to be positive (semi-)definite
+    assert(std::abs(svmh(k)) <= svdThreshold || svmh(k) >= 0); // metric is supposed to be positive (semi-)definite
     svmh(k) = svmh(k) > 1e-14 ? 1 / std::sqrt(svmh(k)) : 0;
   }
   auto Hbar =
