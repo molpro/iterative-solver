@@ -363,13 +363,13 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   // taking into account the possibility of rank-deficiency of S (aka: zero SV)
   // Note that since S is hermitian and positive (semi-)definite, its SVD is equal to its
   // eigendecomposition
-  auto svmh = metricEvals.head(rank);
+  auto svmh = metricEvals.tail(rank);
   for (auto k = 0; k < rank; k++) {
     assert(std::abs(svmh(k)) <= svdThreshold || svmh(k) >= 0); // metric is supposed to be positive (semi-)definite
     svmh(k) = svmh(k) > 1e-14 ? 1 / std::sqrt(svmh(k)) : 0;
   }
   auto Hbar =
-      svmh.asDiagonal() * metricEvecs.leftCols(rank).adjoint() * H * metricEvecs.leftCols(rank) * svmh.asDiagonal();
+      svmh.asDiagonal() * metricEvecs.rightCols(rank).adjoint() * H * metricEvecs.rightCols(rank) * svmh.asDiagonal();
 
   // Perform an eigendecomposition of the transformed matrix
   Eigen::EigenSolver<MatrixT> s(Hbar);
