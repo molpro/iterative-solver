@@ -7,14 +7,50 @@
 #include <memory>
 #include <molpro/mpi.h>
 #include <vector>
+#include <type_traits>
 
 #include <molpro/linalg/array/Span.h>
 #include <molpro/linalg/array/util/Distribution.h>
 
 namespace molpro::linalg::array {
 namespace util {
-// template <typename Ind>
-// class Distribution;
+  /*!
+   * Proxy class for APIs that may be used to get or set a single value
+   * on the associated array. Depending on whether it is used as a getter
+   * or a setter, this wrapper will delegate to the get() and set()
+   * functions of the array accordingly.
+   * This class is designed to only ever appear as a temporary value that
+   * gets immediately converted to the value type or to get destroyed
+   * after having written to the value. It is not possible to store
+   * instances of this type.
+   */
+  template<typename Array>
+  class ValueProxy {
+  public:
+    ValueProxy(const ValueProxy &) = delete;
+    ValueProxy(ValueProxy &&) = delete;
+
+    ValueProxy &operator=(const ValueProxy &) = delete;
+    ValueProxy &operator=(ValueProxy &&) = delete;
+
+    ValueProxy &operator=(Array::value_type val) {
+      m_arr.set(m_idx, std::move(val));
+
+      return *this;
+    }
+
+    operator typename Array::value_type() const {
+      return m_arr.at(m_idx);
+    }
+
+  private:
+    std::add_lvalue_reference_t<Array> m_arr;
+    Array::index_type m_idx;
+
+    friend std::remove_const_t<Array>;
+
+    ValueProxy(std::add_lvalue_reference_t<Array> arr, Array::index_type idx) : m_arr(arr), m_idx(idx) {}
+  };
 }
 /*!
  * @brief Array distributed across many processes supporting remote-memory-access, access to process local buffer, and
@@ -149,6 +185,8 @@ public:
   //! @{
   //! get element at the offset. Blocking.
   [[nodiscard]] virtual value_type at(index_type ind) const = 0;
+  [[nodiscard]] value_type operator[](index_type ind) const;
+  [[nodiscard]] util::ValueProxy<DistrArray> operator[](index_type ind);
   //! Set one element to a scalar. Global operation. @todo rename to put
   virtual void set(index_type ind, value_type val) = 0;
   //! Gets buffer[lo:hi) from global array (hi is past-the-end). Blocking.
@@ -293,8 +331,6 @@ public:
 
   //! stops application with an error
   virtual void error(const std::string &message) const;
-
-  value_type operator[](size_t index) { return (*this->local_buffer())[index]; };
 
 protected:
   virtual void _divide(const DistrArray &y, const DistrArray &z, value_type shift, bool append, bool negative);

@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
-#include <chrono>
+#include <type_traits>
 #include <functional>
 #include <numeric>
 #include <thread>
@@ -304,6 +304,11 @@ TYPED_TEST_P(DistrArrayRangeRMAF, at) {
   auto from_ga_buffer = std::vector<double>();
   for (int i = 0; i < this->dim; ++i) {
     from_ga_buffer.push_back(TypeParam::at(i));
+
+    // Access via operator[], both const and non-const
+    static_assert(!std::is_const_v<decltype(*this)>);
+    ASSERT_THAT(TypeParam::at(i), DoubleEq(TypeParam::operator[](i)));
+    ASSERT_THAT(TypeParam::at(i), DoubleEq(std::as_const(*this)[i]));
   }
   {
     auto proxy = this->lock.scope();
@@ -323,6 +328,15 @@ TYPED_TEST_P(DistrArrayRangeRMAF, set) {
     TypeParam::set(i, modified1);
 
     ASSERT_THAT(TypeParam::at(i), DoubleEq(modified1));
+
+    const double modified2 = modified1 * 5.4321;
+    ASSERT_THAT(modified1, Not(DoubleEq(modified2)));
+    ASSERT_THAT(orig, Not(DoubleEq(modified2)));
+
+    // Assignment via operator[]
+    (*this)[i] = modified2;
+
+    ASSERT_THAT(TypeParam::at(i), DoubleEq(modified2));
   }
   TypeParam::sync();
 }
