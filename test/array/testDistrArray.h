@@ -341,6 +341,62 @@ TYPED_TEST_P(DistrArrayRangeRMAF, set) {
   TypeParam::sync();
 }
 
+TYPED_TEST_P(DistrArrayRangeRMAF, iteration) {
+  TypeParam::sync();
+
+  ASSERT_GT(TypeParam::size(), 0);
+
+  TypeParam &self = *this;
+
+  EXPECT_NE(begin(self), end(self));
+  EXPECT_NE(begin(std::as_const((self))), end(std::as_const(self)));
+  EXPECT_NE(cbegin(self), cend(self));
+
+  EXPECT_LT(begin(self), end(self));
+  EXPECT_GT(end(self), begin(self));
+  EXPECT_EQ(end(self) - begin(self), TypeParam::size());
+  EXPECT_EQ(std::ranges::distance(begin(self), end(self)), TypeParam::size());
+  EXPECT_LT(begin(std::as_const(self)), end(std::as_const(self)));
+  EXPECT_GT(end(std::as_const(self)), begin(std::as_const(self)));
+  EXPECT_EQ(end(std::as_const(self)) - begin(std::as_const(self)), TypeParam::size());
+  EXPECT_EQ(std::ranges::distance(begin(std::as_const(self)), end(std::as_const(self))), TypeParam::size());
+  EXPECT_LT(cbegin(self), cend(self));
+  EXPECT_GT(cend(self), cbegin(self));
+  EXPECT_EQ(cend(self) - cbegin(self), TypeParam::size());
+  EXPECT_EQ(std::ranges::distance(cbegin(self), cend(self)), TypeParam::size());
+
+  EXPECT_EQ(cbegin(self), begin(std::as_const(self)));
+  EXPECT_EQ(cend(self), end(std::as_const(self)));
+
+  EXPECT_EQ(begin(self)++, begin(self));
+  EXPECT_EQ(++begin(self), begin(self) + 1);
+  EXPECT_EQ(cbegin(self)++, cbegin(self));
+  EXPECT_EQ(++cbegin(self), cbegin(self) + 1);
+
+  EXPECT_EQ(begin(self) + 1, 1 + begin(self));
+  EXPECT_EQ(cbegin(self) + 1, 1 + cbegin(self));
+
+  EXPECT_EQ(end(self)--, end(self));
+  EXPECT_EQ(--end(self), end(self) - 1);
+  EXPECT_EQ(cend(self)--, cend(self));
+  EXPECT_EQ(--cend(self), cend(self) - 1);
+
+  EXPECT_EQ(*begin(self), self.at(0));
+  EXPECT_EQ(*(begin(self) + 1), self.at(1));
+  EXPECT_EQ(*cbegin(self), self.at(0));
+  EXPECT_EQ(*(cbegin(self) + 1), self.at(1));
+  EXPECT_EQ(*(end(self) - 1), self.at(self.size() - 1));
+  EXPECT_EQ(*(cend(self) - 1), self.at(self.size() - 1));
+
+  double orig = *begin(self);
+  double modified = orig * 0.12345;
+  ASSERT_THAT(orig, Not(DoubleEq(modified)));
+  *begin(self) = modified;
+  EXPECT_THAT(*cbegin(self), DoubleEq(modified));
+
+  TypeParam::sync();
+}
+
 template <typename Array>
 class DistrArrayRangeMinMaxF : public DistrArrayRangeF<Array>, public ::testing::Test {};
 
@@ -709,7 +765,7 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, divide_overwrite_positive) {
 
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicF, size, zero, fill);
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicRMAF, vec, get, put);
-REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at, set);
+REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at, set, iteration);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeMinMaxF, min_loc_n, min_loc_n_reverse, max_n, min_abs_n, max_abs_n);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeLinAlgF, scal_double, add_double, sub_double, recip);
 REGISTER_TYPED_TEST_SUITE_P(TestDistrArray, constructor, constructor_copy, constructor_copy_allocated,

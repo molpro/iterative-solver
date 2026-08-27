@@ -8,6 +8,9 @@
 #include <molpro/mpi.h>
 #include <vector>
 #include <type_traits>
+#include <compare>
+#include <iterator>
+#include <ranges>
 
 #include <molpro/linalg/array/Span.h>
 #include <molpro/linalg/array/util/Distribution.h>
@@ -345,7 +348,86 @@ template <class Compare>
 [[nodiscard]] std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(const DistrArray &x, int n);
 std::map<size_t, double> select_max_dot_broadcast(size_t n, std::map<size_t, double> &local_selection,
                                                   MPI_Comm communicator);
+
+template<bool is_const>
+class DistrArrayIteratorImpl {
+  public:
+    using value_type = std::conditional_t<
+      is_const, DistrArray::value_type, ValueProxy<DistrArray>>;
+    using reference = value_type;
+    using const_reference = reference;
+    using difference_type = std::ptrdiff_t;
+
+    DistrArrayIteratorImpl() = default;
+    DistrArrayIteratorImpl(std::conditional_t<is_const, const DistrArray, DistrArray> &array,
+        DistrArray::index_type pos) : m_arr(&array), m_pos(pos) {}
+
+    DistrArrayIteratorImpl &operator+=(difference_type val) {
+      m_pos += val;
+      return *this;
+    }
+    friend DistrArrayIteratorImpl operator+(const DistrArrayIteratorImpl &it, difference_type val) {
+      return DistrArrayIteratorImpl(*it.m_arr, it.m_pos + val);
+    }
+    friend DistrArrayIteratorImpl operator+(difference_type val, const DistrArrayIteratorImpl &it) {
+      return it + val;
+    }
+    DistrArrayIteratorImpl &operator++() {
+      ++m_pos;
+      return *this;
+    }
+    DistrArrayIteratorImpl operator++(int) {
+      DistrArrayIteratorImpl copy(*this);
+      ++m_pos;
+      return copy;
+    }
+
+    DistrArrayIteratorImpl &operator-=(difference_type val) {
+      m_pos -= val;
+      return *this;
+    }
+    friend DistrArrayIteratorImpl operator-(const DistrArrayIteratorImpl &it, difference_type val) {
+      return DistrArrayIteratorImpl(*it.m_arr, it.m_pos - val);
+    }
+    DistrArrayIteratorImpl &operator--() {
+      --m_pos;
+      return *this;
+    }
+    DistrArrayIteratorImpl operator--(int) {
+      DistrArrayIteratorImpl copy(*this);
+      --m_pos;
+      return copy;
+    }
+
+    reference operator*() const { return (*m_arr)[m_pos]; }
+
+    reference operator[](difference_type offset) const { (*m_arr)[m_pos + offset]; }
+
+    difference_type operator-(const DistrArrayIteratorImpl &other) const { return m_pos - other.m_pos; }
+
+    bool operator==(const DistrArrayIteratorImpl &) const = default;
+    std::strong_ordering operator<=>(const DistrArrayIteratorImpl &) const = default;
+
+  private:
+    std::conditional_t<is_const, const DistrArray, DistrArray> *m_arr = nullptr;
+    DistrArray::index_type m_pos = 0;
+};
+
+static_assert(std::random_access_iterator<DistrArrayIteratorImpl<true>>);
+static_assert(std::random_access_iterator<DistrArrayIteratorImpl<false>>);
+
 } // namespace util
+
+using DistrArrayIterator = util::DistrArrayIteratorImpl<false>;
+using DistrArrayConstIterator = util::DistrArrayIteratorImpl<true>;
+
+inline DistrArrayIterator begin(DistrArray &array) { return DistrArrayIterator(array, 0); }
+inline DistrArrayIterator end(DistrArray &array) { return DistrArrayIterator(array, array.size()); }
+inline DistrArrayConstIterator begin(const DistrArray &array) { return DistrArrayConstIterator(array, 0); }
+inline DistrArrayConstIterator end(const DistrArray &array) { return DistrArrayConstIterator(array, array.size()); }
+inline DistrArrayConstIterator cbegin(const DistrArray &array) { return begin(array); }
+inline DistrArrayConstIterator cend(const DistrArray &array) { return end(array); }
+
 } // namespace molpro::linalg::array
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ARRAY_DISTRARRAY_H
