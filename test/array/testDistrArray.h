@@ -16,6 +16,7 @@ using ::testing::ContainerEq;
 using ::testing::DoubleEq;
 using ::testing::Each;
 using ::testing::Pointwise;
+using ::testing::Not;
 
 using molpro::linalg::array::util::LockMPI3;
 using molpro::linalg::test::mpi_comm;
@@ -307,6 +308,21 @@ TYPED_TEST_P(DistrArrayRangeRMAF, at) {
   {
     auto proxy = this->lock.scope();
     ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->values));
+  }
+  TypeParam::sync();
+}
+
+TYPED_TEST_P(DistrArrayRangeRMAF, set) {
+  TypeParam::sync();
+  for (size_t i = 0; i < this->dim; ++i) {
+    const double orig = TypeParam::at(i);
+    const double modified1 = orig * 0.12345;
+
+    ASSERT_THAT(orig, Not(DoubleEq(modified1)));
+
+    TypeParam::set(i, modified1);
+
+    ASSERT_THAT(TypeParam::at(i), DoubleEq(modified1));
   }
   TypeParam::sync();
 }
@@ -679,7 +695,7 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, divide_overwrite_positive) {
 
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicF, size, zero, fill);
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicRMAF, vec, get, put);
-REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at);
+REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at, set);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeMinMaxF, min_loc_n, min_loc_n_reverse, max_n, min_abs_n, max_abs_n);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeLinAlgF, scal_double, add_double, sub_double, recip);
 REGISTER_TYPED_TEST_SUITE_P(TestDistrArray, constructor, constructor_copy, constructor_copy_allocated,
