@@ -5,6 +5,7 @@ namespace linalg {
 namespace test {
 
 std::tuple<std::vector<molpro::linalg::array::DistrArraySpan>, std::vector<molpro::linalg::array::DistrArraySpan>, std::vector<molpro::linalg::array::DistrArrayFile>> get_contiguous(size_t n, size_t dim) {
+  using molpro::mpi::comm_global;
 
   //size_t n = 250;
   //size_t dim = 250;
