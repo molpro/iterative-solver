@@ -401,7 +401,7 @@ class DistrArrayIteratorImpl {
 
     reference operator*() const { return (*m_arr)[m_pos]; }
 
-    reference operator[](difference_type offset) const { (*m_arr)[m_pos + offset]; }
+    reference operator[](difference_type offset) const { return (*m_arr)[m_pos + offset]; }
 
     difference_type operator-(const DistrArrayIteratorImpl &other) const { return m_pos - other.m_pos; }
 
