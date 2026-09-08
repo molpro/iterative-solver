@@ -265,9 +265,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ae7c8c4790146512e2ce34c7c45432411"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
 <tr class="memitem:ae7c8c4790146512e2ce34c7c45432411"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ae7c8c4790146512e2ce34c7c45432411">printMatrix</a> (const std::vector&lt; value_type &gt; &amp;, size_t rows, size_t cols, std::string title=&quot;&quot;, std::ostream &amp;s=molpro::cout)</td></tr>
 <tr class="separator:ae7c8c4790146512e2ce34c7c45432411"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab208f9a750c62cbce299278984d87118"><td class="memTemplParams" colspan="2">template&lt;typename value_type , typename std::enable_if_t&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1is__complex.html">is_complex</a>&lt; value_type &gt;{}, int &gt;  = 0&gt; </td></tr>
-<tr class="memitem:ab208f9a750c62cbce299278984d87118"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab208f9a750c62cbce299278984d87118">eigenproblem</a> (std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity, bool condone_complex)</td></tr>
-<tr class="separator:ab208f9a750c62cbce299278984d87118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea423e48e8d97f970d45ab59696a096a"><td class="memTemplParams" colspan="2">template&lt;typename value_type , typename std::enable_if_t&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1is__complex.html">is_complex</a>&lt; value_type &gt;{}, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:aea423e48e8d97f970d45ab59696a096a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aea423e48e8d97f970d45ab59696a096a">eigenproblem</a> (std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity)</td></tr>
+<tr class="separator:aea423e48e8d97f970d45ab59696a096a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7126513b748bc94a83336588b060de23"><td class="memTemplParams" colspan="2">template&lt;typename value_type , typename std::enable_if_t&lt;!<a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1is__complex.html">is_complex</a>&lt; value_type &gt;{}, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:a7126513b748bc94a83336588b060de23"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7126513b748bc94a83336588b060de23">eigenproblem</a> (std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *imag_eval_parts=nullptr)</td></tr>
+<tr class="separator:a7126513b748bc94a83336588b060de23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ef28cdc50441ca2668d749086a6805d"><td class="memTemplParams" colspan="2">template&lt;typename value_type , typename std::enable_if_t&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1is__complex.html">is_complex</a>&lt; value_type &gt;{}, int &gt;  = 0&gt; </td></tr>
 <tr class="memitem:a8ef28cdc50441ca2668d749086a6805d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a8ef28cdc50441ca2668d749086a6805d">solve_LinearEquations</a> (std::vector&lt; value_type &gt; &amp;solution, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, const std::vector&lt; value_type &gt; &amp;rhs, size_t dimension, size_t nroot, double augmented_hessian, double svdThreshold, int verbosity)</td></tr>
 <tr class="separator:a8ef28cdc50441ca2668d749086a6805d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -278,8 +281,8 @@ Functions</h2></td></tr>
 <tr class="separator:a42ef971868a57bfead245c92f65cd675"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad801a9669a2152c41425d26643c2ef95"><td class="memItemLeft" align="right" valign="top">template std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad801a9669a2152c41425d26643c2ef95">svd_system</a> (size_t nrows, size_t ncols, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; double &gt; &amp;m, double threshold, bool hermitian, bool reduce_to_rank)</td></tr>
 <tr class="separator:ad801a9669a2152c41425d26643c2ef95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d40717e8aef489ee43e450fa06ee04b"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a4d40717e8aef489ee43e450fa06ee04b">eigenproblem&lt; double &gt;</a> (std::vector&lt; double &gt; &amp;eigenvectors, std::vector&lt; double &gt; &amp;eigenvalues, const std::vector&lt; double &gt; &amp;matrix, const std::vector&lt; double &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, bool condone_complex)</td></tr>
-<tr class="separator:a4d40717e8aef489ee43e450fa06ee04b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a194854413e2c3c0d9aece23bb6a136"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a3a194854413e2c3c0d9aece23bb6a136">eigenproblem&lt; double &gt;</a> (std::vector&lt; double &gt; &amp;eigenvectors, std::vector&lt; double &gt; &amp;eigenvalues, const std::vector&lt; double &gt; &amp;matrix, const std::vector&lt; double &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, double &gt; &gt; *imag_eval_parts)</td></tr>
+<tr class="separator:a3a194854413e2c3c0d9aece23bb6a136"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa62cc2cf48964869a1ef3a69c067d23d"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aa62cc2cf48964869a1ef3a69c067d23d">solve_LinearEquations&lt; double &gt;</a> (std::vector&lt; double &gt; &amp;solution, std::vector&lt; double &gt; &amp;eigenvalues, const std::vector&lt; double &gt; &amp;matrix, const std::vector&lt; double &gt; &amp;metric, const std::vector&lt; double &gt; &amp;rhs, size_t dimension, size_t nroot, double augmented_hessian, double svdThreshold, int verbosity)</td></tr>
 <tr class="separator:aa62cc2cf48964869a1ef3a69c067d23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e048db156aa54f2ee42f5cd169f154f"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a6e048db156aa54f2ee42f5cd169f154f">solve_DIIS&lt; double &gt;</a> (std::vector&lt; double &gt; &amp;solution, const std::vector&lt; double &gt; &amp;matrix, const size_t dimension, double svdThreshold, int verbosity)</td></tr>
@@ -288,8 +291,8 @@ Functions</h2></td></tr>
 <tr class="separator:a07c7f45b484582e6b6b1e6544aadbc2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6eeb8097d5224e6cca0ff9947dc8af5"><td class="memItemLeft" align="right" valign="top">template std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; std::complex&lt; double &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ae6eeb8097d5224e6cca0ff9947dc8af5">svd_system</a> (size_t nrows, size_t ncols, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; std::complex&lt; double &gt; &gt; &amp;m, double threshold, bool hermitian, bool reduce_to_rank)</td></tr>
 <tr class="separator:ae6eeb8097d5224e6cca0ff9947dc8af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae626e7849fb722b8333eb05abf8b9e3"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aae626e7849fb722b8333eb05abf8b9e3">eigenproblem&lt; std::complex&lt; double &gt; &gt;</a> (std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvectors, std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvalues, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, bool condone_complex)</td></tr>
-<tr class="separator:aae626e7849fb722b8333eb05abf8b9e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaba9d2803e3b5444b7517abe4d89476"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#acaba9d2803e3b5444b7517abe4d89476">eigenproblem&lt; std::complex&lt; double &gt; &gt;</a> (std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvectors, std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvalues, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity)</td></tr>
+<tr class="separator:acaba9d2803e3b5444b7517abe4d89476"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f89d13c96f8c037fb2af906e612b5ec"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7f89d13c96f8c037fb2af906e612b5ec">solve_LinearEquations&lt; std::complex&lt; double &gt; &gt;</a> (std::vector&lt; std::complex&lt; double &gt; &gt; &amp;solution, std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvalues, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;metric, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;rhs, size_t dimension, size_t nroot, double augmented_hessian, double svdThreshold, int verbosity)</td></tr>
 <tr class="separator:a7f89d13c96f8c037fb2af906e612b5ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af57298c8ffb7301296ceb75fb179eab6"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#af57298c8ffb7301296ceb75fb179eab6">solve_DIIS&lt; std::complex&lt; double &gt; &gt;</a> (std::vector&lt; std::complex&lt; double &gt; &gt; &amp;solution, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const size_t dimension, double svdThreshold, int verbosity)</td></tr>
@@ -410,12 +413,14 @@ Functions</h2></td></tr>
 <tr class="separator:ab9ee725ba3564c386c9abda47fe3700b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7117e36c19daa3142245f1493a5fb8f"><td class="memItemLeft" align="right" valign="top">template std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; value_type &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab7117e36c19daa3142245f1493a5fb8f">svd_system&lt; value_type &gt;</a> (size_t nrows, size_t ncols, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; value_type &gt; &amp;m, double threshold, bool hermitian, bool reduce_to_rank)</td></tr>
 <tr class="separator:ab7117e36c19daa3142245f1493a5fb8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a4c7295faf87794ff06f76866fbe3ca"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a6a4c7295faf87794ff06f76866fbe3ca">eigenproblem&lt; value_type &gt;</a> (std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity, bool condone_complex)</td></tr>
-<tr class="separator:a6a4c7295faf87794ff06f76866fbe3ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a335c97972aa3c9065a9716618101aac1"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a335c97972aa3c9065a9716618101aac1">eigenproblem&lt; value_type &gt;</a> (std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *imag_eval_parts)</td></tr>
+<tr class="separator:a335c97972aa3c9065a9716618101aac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5346e25e508bbda87664acdfd3b029f"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad5346e25e508bbda87664acdfd3b029f">solve_LinearEquations&lt; value_type &gt;</a> (std::vector&lt; value_type &gt; &amp;solution, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, const std::vector&lt; value_type &gt; &amp;rhs, size_t dimension, size_t nroot, double augmented_hessian, double svdThreshold, int verbosity)</td></tr>
 <tr class="separator:ad5346e25e508bbda87664acdfd3b029f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdf2f13f0106989d610fa4b05ce05eee"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#abdf2f13f0106989d610fa4b05ce05eee">solve_DIIS&lt; value_type &gt;</a> (std::vector&lt; value_type &gt; &amp;solution, const std::vector&lt; value_type &gt; &amp;matrix, size_t dimension, double svdThreshold, int verbosity)</td></tr>
 <tr class="separator:abdf2f13f0106989d610fa4b05ce05eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b4dd1840621519d1e2ca2df0caffb0a"><td class="memItemLeft" align="right" valign="top">template void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a2b4dd1840621519d1e2ca2df0caffb0a">eigenproblem&lt; value_type &gt;</a> (std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity)</td></tr>
+<tr class="separator:a2b4dd1840621519d1e2ca2df0caffb0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >4-parameter interpolation of a 1-dimensional function given two points for which function values and first derivatives are known. </p>
@@ -950,8 +955,8 @@ template&lt;typename T , typename... S&gt; </div>
 
 </div>
 </div>
-<a id="ab208f9a750c62cbce299278984d87118" name="ab208f9a750c62cbce299278984d87118"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab208f9a750c62cbce299278984d87118">&#9670;&nbsp;</a></span>eigenproblem()</h2>
+<a id="aea423e48e8d97f970d45ab59696a096a" name="aea423e48e8d97f970d45ab59696a096a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea423e48e8d97f970d45ab59696a096a">&#9670;&nbsp;</a></span>eigenproblem() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1004,13 +1009,7 @@ template&lt;typename value_type , typename std::enable_if_t&lt; <a class="el" hr
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>verbosity</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>condone_complex</em>&#160;</td>
+          <td class="paramname"><em>verbosity</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1022,154 +1021,16 @@ template&lt;typename value_type , typename std::enable_if_t&lt; <a class="el" hr
 
 </div>
 </div>
-<a id="a4d40717e8aef489ee43e450fa06ee04b" name="a4d40717e8aef489ee43e450fa06ee04b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d40717e8aef489ee43e450fa06ee04b">&#9670;&nbsp;</a></span>eigenproblem&lt; double &gt;()</h2>
+<a id="a7126513b748bc94a83336588b060de23" name="a7126513b748bc94a83336588b060de23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7126513b748bc94a83336588b060de23">&#9670;&nbsp;</a></span>eigenproblem() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_type , typename std::enable_if_t&lt;!<a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1is__complex.html">is_complex</a>&lt; value_type &gt;{}, std::nullptr_t &gt;  = nullptr&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">template void <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab208f9a750c62cbce299278984d87118">molpro::linalg::itsolv::eigenproblem</a>&lt; double &gt; </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>eigenvectors</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>eigenvalues</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>matrix</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>metric</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const size_t&#160;</td>
-          <td class="paramname"><em>dimension</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>hermitian</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>svdThreshold</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>verbosity</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>condone_complex</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aae626e7849fb722b8333eb05abf8b9e3" name="aae626e7849fb722b8333eb05abf8b9e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae626e7849fb722b8333eb05abf8b9e3">&#9670;&nbsp;</a></span>eigenproblem&lt; std::complex&lt; double &gt; &gt;()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">template void <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab208f9a750c62cbce299278984d87118">molpro::linalg::itsolv::eigenproblem</a>&lt; std::complex&lt; double &gt; &gt; </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; std::complex&lt; double &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>eigenvectors</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::complex&lt; double &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>eigenvalues</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>matrix</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>metric</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const size_t&#160;</td>
-          <td class="paramname"><em>dimension</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>hermitian</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>svdThreshold</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>verbosity</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>condone_complex</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6a4c7295faf87794ff06f76866fbe3ca" name="a6a4c7295faf87794ff06f76866fbe3ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a4c7295faf87794ff06f76866fbe3ca">&#9670;&nbsp;</a></span>eigenproblem&lt; value_type &gt;()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">template void <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab208f9a750c62cbce299278984d87118">molpro::linalg::itsolv::eigenproblem</a>&lt; value_type &gt; </td>
+          <td class="memname">void molpro::linalg::itsolv::eigenproblem </td>
           <td>(</td>
           <td class="paramtype">std::vector&lt; value_type &gt; &amp;&#160;</td>
           <td class="paramname"><em>eigenvectors</em>, </td>
@@ -1219,8 +1080,276 @@ template&lt;typename value_type , typename std::enable_if_t&lt; <a class="el" hr
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>imag_eval_parts</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3a194854413e2c3c0d9aece23bb6a136" name="a3a194854413e2c3c0d9aece23bb6a136"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a194854413e2c3c0d9aece23bb6a136">&#9670;&nbsp;</a></span>eigenproblem&lt; double &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aea423e48e8d97f970d45ab59696a096a">molpro::linalg::itsolv::eigenproblem</a>&lt; double &gt; </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eigenvectors</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eigenvalues</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>condone_complex</em>&#160;</td>
+          <td class="paramname"><em>hermitian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>svdThreshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::pair&lt; std::size_t, double &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>imag_eval_parts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acaba9d2803e3b5444b7517abe4d89476" name="acaba9d2803e3b5444b7517abe4d89476"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acaba9d2803e3b5444b7517abe4d89476">&#9670;&nbsp;</a></span>eigenproblem&lt; std::complex&lt; double &gt; &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aea423e48e8d97f970d45ab59696a096a">molpro::linalg::itsolv::eigenproblem</a>&lt; std::complex&lt; double &gt; &gt; </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::complex&lt; double &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eigenvectors</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::complex&lt; double &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eigenvalues</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>hermitian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>svdThreshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2b4dd1840621519d1e2ca2df0caffb0a" name="a2b4dd1840621519d1e2ca2df0caffb0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b4dd1840621519d1e2ca2df0caffb0a">&#9670;&nbsp;</a></span>eigenproblem&lt; value_type &gt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aea423e48e8d97f970d45ab59696a096a">molpro::linalg::itsolv::eigenproblem</a>&lt; value_type &gt; </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eigenvectors</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eigenvalues</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>hermitian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>svdThreshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a335c97972aa3c9065a9716618101aac1" name="a335c97972aa3c9065a9716618101aac1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a335c97972aa3c9065a9716618101aac1">&#9670;&nbsp;</a></span>eigenproblem&lt; value_type &gt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aea423e48e8d97f970d45ab59696a096a">molpro::linalg::itsolv::eigenproblem</a>&lt; value_type &gt; </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eigenvectors</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eigenvalues</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>hermitian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>svdThreshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>imag_eval_parts</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

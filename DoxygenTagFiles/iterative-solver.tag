@@ -1674,6 +1674,19 @@
       <arglist>(const T &amp;lhs, const T &amp;rhs) const</arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::ComplexRootsDavidson</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html</filename>
+    <templarg>typename value_type</templarg>
+    <base>ContextBase&lt; ComplexRootsDavidson&lt; value_type &gt;, true, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; &gt;</base>
+    <member kind="variable" static="yes">
+      <type>static const char *</type>
+      <name>name</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html</anchorfile>
+      <anchor>a319ac42946ba86635eda7408de2f77ed</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
   <compound kind="class">
     <name>molpro::linalg::itsolv::log::ConstexprString</name>
     <filename>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</filename>
@@ -4872,6 +4885,13 @@
       <arglist>(const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residual)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
+      <type>virtual void</type>
+      <name>finalize</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
+      <anchor>a13e942983b6d0b4e445f94d359d60c5e</anchor>
+      <arglist>()=0</arglist>
+    </member>
+    <member kind="function" virtualness="pure">
       <type>virtual bool</type>
       <name>end_iteration_needed</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
@@ -5565,6 +5585,13 @@
       <anchor>aaabdae7c67ee909b5e7ddfc40fb46e0e</anchor>
       <arglist>() override</arglist>
     </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>finalize</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>ad3c0c1a97d015e8548b02a5376df233f</anchor>
+      <arglist>() override</arglist>
+    </member>
     <member kind="variable" protection="protected">
       <type>std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt;</type>
       <name>m_handlers</name>
@@ -6221,6 +6248,13 @@
     </member>
     <member kind="function">
       <type>void</type>
+      <name>finalize</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a0f5529dc43728aec055ba927acadd064</anchor>
+      <arglist>() override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
       <name>precondition</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>a66a707d2bc8900f8b0478c881ef99cf4</anchor>
@@ -6337,13 +6371,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>aea95c0b3b85e393fac9d39c931463c03</anchor>
       <arglist>() const override</arglist>
-    </member>
-    <member kind="variable">
-      <type>std::shared_ptr&lt; Logger &gt;</type>
-      <name>logger</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a3928db7987c24bda78d24e2f18e6c1d5</anchor>
-      <arglist></arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -6545,13 +6572,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html</anchorfile>
       <anchor>a1038595f7fc1605192f20e866a1e6be6</anchor>
       <arglist>() const override</arglist>
-    </member>
-    <member kind="variable">
-      <type>std::shared_ptr&lt; Logger &gt;</type>
-      <name>logger</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html</anchorfile>
-      <anchor>ae1ad76f5444d668ecca13b4c16abe3ee</anchor>
-      <arglist></arglist>
     </member>
     <member kind="variable">
       <type>double</type>
@@ -6902,13 +6922,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
       <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
       <arglist>() const override</arglist>
-    </member>
-    <member kind="variable">
-      <type>std::shared_ptr&lt; Logger &gt;</type>
-      <name>logger</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a07c643a999d2eb1e02fe312d120dc94e</anchor>
-      <arglist></arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -7945,13 +7958,6 @@
       <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
       <arglist>() const override</arglist>
     </member>
-    <member kind="variable">
-      <type>std::shared_ptr&lt; Logger &gt;</type>
-      <name>logger</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>acaaf45cdf09db7a3645931e5dc9466f3</anchor>
-      <arglist></arglist>
-    </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>construct_residual</name>
@@ -8227,13 +8233,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
       <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
       <arglist>() const override</arglist>
-    </member>
-    <member kind="variable">
-      <type>std::shared_ptr&lt; Logger &gt;</type>
-      <name>logger</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a44fbe5b4ca9b11639e77170bf7c4ba9a</anchor>
-      <arglist></arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -8518,13 +8517,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html</anchorfile>
       <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
       <arglist>() const override</arglist>
-    </member>
-    <member kind="variable">
-      <type>std::shared_ptr&lt; Logger &gt;</type>
-      <name>logger</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html</anchorfile>
-      <anchor>a62a4f2dc5d5fc2d3cc93d8d562612c3a</anchor>
-      <arglist></arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -10255,6 +10247,13 @@
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
+      <type>const std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; &amp;</type>
+      <name>imag_eigval_components</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
+      <anchor>ab99fc6aa6e8963b0903c4df3aae6d4eb</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>const std::vector&lt; value_type_abs &gt; &amp;</type>
       <name>errors</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
@@ -10343,6 +10342,13 @@
       <name>m_eigenvalues</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
       <anchor>a61ec965600868429b84817938e838106</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt;</type>
+      <name>m_imag_eigval_comps</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
+      <anchor>a8ac4785a5efc3e3cb88403f102c7d3d7</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -11142,6 +11148,10 @@
   <compound kind="concept">
     <name>molpro::linalg::itsolv::log::name_tagged</name>
     <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1name__tagged.html</filename>
+  </compound>
+  <compound kind="concept">
+    <name>molpro::linalg::itsolv::log::pair_like</name>
+    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1pair__like.html</filename>
   </compound>
   <compound kind="concept">
     <name>molpro::linalg::itsolv::log::static_handler_exists</name>
@@ -11999,8 +12009,15 @@
       <type>void</type>
       <name>eigenproblem</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>ab208f9a750c62cbce299278984d87118</anchor>
-      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity, bool condone_complex)</arglist>
+      <anchor>aea423e48e8d97f970d45ab59696a096a</anchor>
+      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>eigenproblem</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a7126513b748bc94a83336588b060de23</anchor>
+      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *imag_eval_parts=nullptr)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -12034,8 +12051,8 @@
       <type>template void</type>
       <name>eigenproblem&lt; double &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a4d40717e8aef489ee43e450fa06ee04b</anchor>
-      <arglist>(std::vector&lt; double &gt; &amp;eigenvectors, std::vector&lt; double &gt; &amp;eigenvalues, const std::vector&lt; double &gt; &amp;matrix, const std::vector&lt; double &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, bool condone_complex)</arglist>
+      <anchor>a3a194854413e2c3c0d9aece23bb6a136</anchor>
+      <arglist>(std::vector&lt; double &gt; &amp;eigenvectors, std::vector&lt; double &gt; &amp;eigenvalues, const std::vector&lt; double &gt; &amp;matrix, const std::vector&lt; double &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, double &gt; &gt; *imag_eval_parts)</arglist>
     </member>
     <member kind="function">
       <type>template void</type>
@@ -12069,8 +12086,8 @@
       <type>template void</type>
       <name>eigenproblem&lt; std::complex&lt; double &gt; &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>aae626e7849fb722b8333eb05abf8b9e3</anchor>
-      <arglist>(std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvectors, std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvalues, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, bool condone_complex)</arglist>
+      <anchor>acaba9d2803e3b5444b7517abe4d89476</anchor>
+      <arglist>(std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvectors, std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvalues, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity)</arglist>
     </member>
     <member kind="function">
       <type>template void</type>
@@ -12349,8 +12366,8 @@
       <type>template void</type>
       <name>eigenproblem&lt; value_type &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a6a4c7295faf87794ff06f76866fbe3ca</anchor>
-      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity, bool condone_complex)</arglist>
+      <anchor>a335c97972aa3c9065a9716618101aac1</anchor>
+      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *imag_eval_parts)</arglist>
     </member>
     <member kind="function">
       <type>template void</type>
@@ -12365,6 +12382,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>abdf2f13f0106989d610fa4b05ce05eee</anchor>
       <arglist>(std::vector&lt; value_type &gt; &amp;solution, const std::vector&lt; value_type &gt; &amp;matrix, size_t dimension, double svdThreshold, int verbosity)</arglist>
+    </member>
+    <member kind="function">
+      <type>template void</type>
+      <name>eigenproblem&lt; value_type &gt;</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a2b4dd1840621519d1e2ca2df0caffb0a</anchor>
+      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity)</arglist>
     </member>
   </compound>
   <compound kind="namespace">
@@ -12527,6 +12551,7 @@
   <compound kind="namespace">
     <name>molpro::linalg::itsolv::log</name>
     <filename>namespacemolpro_1_1linalg_1_1itsolv_1_1log.html</filename>
+    <class kind="struct">molpro::linalg::itsolv::log::ComplexRootsDavidson</class>
     <class kind="class">molpro::linalg::itsolv::log::ConstexprString</class>
     <class kind="struct">molpro::linalg::itsolv::log::ContextBase</class>
     <class kind="struct">molpro::linalg::itsolv::log::DataDump</class>

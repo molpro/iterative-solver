@@ -1,5 +1,6 @@
 var namespacemolpro_1_1linalg_1_1itsolv_1_1log =
 [
+    [ "ComplexRootsDavidson", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html", null ],
     [ "ConstexprString", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString" ],
     [ "ContextBase", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase" ],
     [ "DataDump", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump.html", null ],
@@ -12,6 +13,7 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1log =
     [ "name_tagged", "conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1name__tagged.html", null ],
     [ "context", "conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1context.html", null ],
     [ "context_uses_correct_arg_types", "conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1context__uses__correct__arg__types.html", null ],
+    [ "pair_like", "conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1pair__like.html", null ],
     [ "streamable", "conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1streamable.html", null ],
     [ "formattable", "conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1formattable.html", null ],
     [ "string_convertible_range", "conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1string__convertible__range.html", null ],

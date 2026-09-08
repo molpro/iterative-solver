@@ -11,6 +11,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig =
     [ "errors", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ac7350d5d571c9286f9a0f09f05c622ec", null ],
     [ "get_augmented_hessian", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a2ad9fe0b4687a1c69443847939afbe23", null ],
     [ "get_hermiticity", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a661fad2b5b4e05358e6e5983b96b80e1", null ],
+    [ "imag_eigval_components", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ab99fc6aa6e8963b0903c4df3aae6d4eb", null ],
     [ "set_augmented_hessian", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#aa19b812b2c9f2acf9e7fcc67d8842faa", null ],
     [ "set_error", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a28c48233a52096fc6185017555ae22ed", null ],
     [ "set_error", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a44a9305e4ee7ff74a2b2378b9e5d755e", null ],
@@ -25,6 +26,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig =
     [ "m_eigenvalues", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a61ec965600868429b84817938e838106", null ],
     [ "m_errors", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a07d481f0c6b7e113268edb9a41a772b5", null ],
     [ "m_hermitian", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#af8c2e3336ad3e1a73a1e378d453f870f", null ],
+    [ "m_imag_eigval_comps", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a8ac4785a5efc3e3cb88403f102c7d3d7", null ],
     [ "m_logger", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a7be7cf20dad5492ad492d4741ee92f1d", null ],
     [ "m_solutions", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a7a7b63e625561fcd2a4b84a7404681e3", null ],
     [ "m_svd_solver_threshold", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a4e7db02c63a673f14f1b6e6a9dbd3697", null ]

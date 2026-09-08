@@ -19,7 +19,6 @@ var classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS =
     [ "set_max_size_qspace", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a99fca8a245026032ba0f92784883df1e", null ],
     [ "set_options", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a6e35691eacd5524090e51113a4965520", null ],
     [ "set_value_errors", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a811aacdf75f1e83e8b1ab9c95cd01a66", null ],
-    [ "logger", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a44fbe5b4ca9b11639e77170bf7c4ba9a", null ],
     [ "m_BFGS_update_alpha", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a706ec8e6979add2a97617a91fd85e6c1", null ],
     [ "m_last_iteration_linesearching", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#aba57f96b3db491cbc5a9b5470ad1067c", null ],
     [ "m_linesearch", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a415a0fa132884a5a0e1b7d06f51a635f", null ],

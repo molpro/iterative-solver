@@ -94,7 +94,6 @@ $(document).ready(function(){initNavTree('classmolpro_1_1linalg_1_1itsolv_1_1Lin
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson-members.html">List of all members</a>  </div>
@@ -405,6 +404,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af866452579638ebfa72eb5aa4e79cb97 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e6b71a13a52437b18b22ace59fcc489 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a1e6b71a13a52437b18b22ace59fcc489">end_iteration</a> (R &amp;parameters, R &amp;action)=0</td></tr>
 <tr class="separator:a1e6b71a13a52437b18b22ace59fcc489 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13e942983b6d0b4e445f94d359d60c5e inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a13e942983b6d0b4e445f94d359d60c5e">finalize</a> ()=0</td></tr>
+<tr class="separator:a13e942983b6d0b4e445f94d359d60c5e inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc90c71218893490dbf3ef515c1a9b14 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acc90c71218893490dbf3ef515c1a9b14">end_iteration_needed</a> ()=0</td></tr>
 <tr class="memdesc:acc90c71218893490dbf3ef515c1a9b14 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="mdescLeft">&#160;</td><td class="mdescRight">signal whether end_iteration should be called  <a href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acc90c71218893490dbf3ef515c1a9b14">More...</a><br /></td></tr>
 <tr class="separator:acc90c71218893490dbf3ef515c1a9b14 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -486,11 +487,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a25e573d21d3d8eea3aa66f5cb8606aff inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test a supplied problem class.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a25e573d21d3d8eea3aa66f5cb8606aff">More...</a><br /></td></tr>
 <tr class="separator:a25e573d21d3d8eea3aa66f5cb8606aff inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a07c643a999d2eb1e02fe312d120dc94e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a07c643a999d2eb1e02fe312d120dc94e">logger</a></td></tr>
-<tr class="separator:a07c643a999d2eb1e02fe312d120dc94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a85d020e1e7abe04d905564573885a93a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a85d020e1e7abe04d905564573885a93a">construct_residual</a> (const std::vector&lt; int &gt; &amp;roots, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions) override</td></tr>
@@ -516,6 +512,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a54c5badcc785eede77893bfe2c8c8cb9 inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaabdae7c67ee909b5e7ddfc40fb46e0e inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aaabdae7c67ee909b5e7ddfc40fb46e0e">end_iteration_needed</a> () override</td></tr>
 <tr class="separator:aaabdae7c67ee909b5e7ddfc40fb46e0e inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3c0c1a97d015e8548b02a5376df233f inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad3c0c1a97d015e8548b02a5376df233f">finalize</a> () override</td></tr>
+<tr class="separator:ad3c0c1a97d015e8548b02a5376df233f inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -1666,22 +1664,6 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a07c643a999d2eb1e02fe312d120dc94e" name="a07c643a999d2eb1e02fe312d120dc94e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07c643a999d2eb1e02fe312d120dc94e">&#9670;&nbsp;</a></span>logger</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a>&gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::logger</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a0472ab791f0ddb7074cec65c3dbbca0e" name="a0472ab791f0ddb7074cec65c3dbbca0e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0472ab791f0ddb7074cec65c3dbbca0e">&#9670;&nbsp;</a></span>m_dspace_resetter</h2>
 

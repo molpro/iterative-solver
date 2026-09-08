@@ -184,6 +184,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acfce319e750a3e3a925c489b91dbf7e2"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acfce319e750a3e3a925c489b91dbf7e2">end_iteration</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;residual)=0</td></tr>
 <tr class="memdesc:acfce319e750a3e3a925c489b91dbf7e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Behaviour depends on the solver.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acfce319e750a3e3a925c489b91dbf7e2">More...</a><br /></td></tr>
 <tr class="separator:acfce319e750a3e3a925c489b91dbf7e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13e942983b6d0b4e445f94d359d60c5e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a13e942983b6d0b4e445f94d359d60c5e">finalize</a> ()=0</td></tr>
+<tr class="separator:a13e942983b6d0b4e445f94d359d60c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc90c71218893490dbf3ef515c1a9b14"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acc90c71218893490dbf3ef515c1a9b14">end_iteration_needed</a> ()=0</td></tr>
 <tr class="memdesc:acc90c71218893490dbf3ef515c1a9b14"><td class="mdescLeft">&#160;</td><td class="mdescRight">signal whether end_iteration should be called  <a href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acc90c71218893490dbf3ef515c1a9b14">More...</a><br /></td></tr>
 <tr class="separator:acc90c71218893490dbf3ef515c1a9b14"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -983,6 +985,36 @@ template&lt;class R , class Q , class P &gt; </div>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ab105433d45a262ddf9adbd4cb36e9628">molpro::linalg::itsolv::IterativeSolverTemplate&lt; LinearEigensystem, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ab105433d45a262ddf9adbd4cb36e9628">molpro::linalg::itsolv::IterativeSolverTemplate&lt; LinearEquations, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ab105433d45a262ddf9adbd4cb36e9628">molpro::linalg::itsolv::IterativeSolverTemplate&lt; NonLinearEquations, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ab105433d45a262ddf9adbd4cb36e9628">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Optimize, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a13e942983b6d0b4e445f94d359d60c5e" name="a13e942983b6d0b4e445f94d359d60c5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13e942983b6d0b4e445f94d359d60c5e">&#9670;&nbsp;</a></span>finalize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class Q , class P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::finalize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Callback invoked once the solver iterations are done but before the solve function returns to the caller. Behaviour depends on the solver. </p>
+
+<p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad3c0c1a97d015e8548b02a5376df233f">molpro::linalg::itsolv::IterativeSolverTemplate&lt; LinearEigensystem, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad3c0c1a97d015e8548b02a5376df233f">molpro::linalg::itsolv::IterativeSolverTemplate&lt; LinearEquations, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad3c0c1a97d015e8548b02a5376df233f">molpro::linalg::itsolv::IterativeSolverTemplate&lt; NonLinearEquations, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad3c0c1a97d015e8548b02a5376df233f">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Optimize, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a0f5529dc43728aec055ba927acadd064">molpro::linalg::itsolv::LinearEigensystemDavidson&lt; R, Q, P &gt;</a>.</p>
 
 </div>
 </div>

@@ -16,7 +16,6 @@ var classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT =
     [ "set_hermiticity", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a066e58ea525e6af0b301f219c99ce8bc", null ],
     [ "set_options", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a340cd13fa9e2d978e896595086001e52", null ],
     [ "working_set_eigenvalues", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#ab66f2816ddfbdcaa81f5987a449222da", null ],
-    [ "logger", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#ae1ad76f5444d668ecca13b4c16abe3ee", null ],
     [ "m_rspt_values", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a88aa99b67080273a156f748f346ebe6f", null ],
     [ "propose_rspace_norm_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a5884a9bbbfc0101fd01fc528de91e544", null ],
     [ "propose_rspace_svd_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a48ea5dfd740161c89349f6bddeda3ea3", null ]

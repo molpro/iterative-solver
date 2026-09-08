@@ -14,6 +14,5 @@ var classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD =
     [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a2586061786c83f40ee932189f6a59353", null ],
     [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a3a45ba4bb4649f7d4c5036b288e8060b", null ],
     [ "set_options", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#ad55d168c0b41759afc65e772fb28f88d", null ],
-    [ "set_value_errors", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a59cfae007796b412274f8a6b1761ce28", null ],
-    [ "logger", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a62a4f2dc5d5fc2d3cc93d8d562612c3a", null ]
+    [ "set_value_errors", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a59cfae007796b412274f8a6b1761ce28", null ]
 ];

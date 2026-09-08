@@ -19,7 +19,6 @@ var classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS =
     [ "set_norm_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html#a1c933107106d7a92bdf2cdea0ef8fc43", null ],
     [ "set_options", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html#af82daf87496a92fc451955e46862ee72", null ],
     [ "set_svd_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html#aa1fd6cca7b816e4ef8763b321357a16c", null ],
-    [ "logger", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html#acaaf45cdf09db7a3645931e5dc9466f3", null ],
     [ "m_max_size_qspace", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html#abe54cdd1558eb286be62b0eede38ef4c", null ],
     [ "m_norm_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html#a7573b12084903d8c20be149c7b178779", null ],
     [ "m_svd_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html#a152f10b0a4c038df6a9fa74b0aceb387", null ]

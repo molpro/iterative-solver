@@ -91,6 +91,7 @@ var annotated =
             [ "DSpaceResetter", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter" ]
           ] ],
           [ "log", "namespacemolpro_1_1linalg_1_1itsolv_1_1log.html", [
+            [ "ComplexRootsDavidson", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html", null ],
             [ "ConstexprString", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString" ],
             [ "ContextBase", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase" ],
             [ "DataDump", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump.html", null ],
