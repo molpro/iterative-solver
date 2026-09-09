@@ -7857,8 +7857,8 @@
       <type>int</type>
       <name>add_vector</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>aa8edc564a0368a4f004267f0178a98aa</anchor>
-      <arglist>(R &amp;parameters, R &amp;residual, value_type value) override</arglist>
+      <anchor>aa3bdf886d7c22404c31f81aa32ca0604</anchor>
+      <arglist>(const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;actions) override</arglist>
     </member>
     <member kind="function">
       <type>size_t</type>
