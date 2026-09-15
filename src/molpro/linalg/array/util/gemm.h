@@ -49,9 +49,10 @@ Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const 
 template <class AL, typename = std::enable_if_t<!std::is_same_v<std::decay_t<AL>, DistrArrayFile>>>
 Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const CVecRef<DistrArrayFile>& xx,
                                                                           const CVecRef<AL>& yy) {
+  // gemm_inner is the hermitian inner product, so the two orders are conjugate transposes
   auto result_transpose = gemm_inner_distr_distr(yy, xx);
   Matrix<typename array::mapped_or_value_type_t<AL>> result({result_transpose.cols(), result_transpose.rows()});
-  molpro::linalg::itsolv::subspace::transpose_copy(result, result_transpose);
+  molpro::linalg::itsolv::subspace::conjugate_transpose_copy(result, result_transpose);
   return result;
 }
 

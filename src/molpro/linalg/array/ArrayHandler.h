@@ -13,6 +13,7 @@
 
 #include <molpro/linalg/array/type_traits.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
+#include <molpro/linalg/scalar_traits.h>
 #include <molpro/linalg/itsolv/wrap_util.h>
 
 namespace molpro::linalg::array {
@@ -187,6 +188,13 @@ public:
   virtual void scal(value_type alpha, AL &x) = 0;
   virtual void fill(value_type alpha, AL &x) = 0;
   virtual void axpy(value_type alpha, const AR &x, AL &y) = 0;
+  /*!
+   * @brief The hermitian inner product <x|y>: conjugate-linear in @p x, linear in @p y.
+   *
+   * For a real element type this is the ordinary dot product; for a complex one the left argument is
+   * conjugated, so that dot(x, x) is real and non-negative and an overlap matrix built from it is
+   * hermitian rather than complex symmetric.
+   */
   virtual value_type dot(const AL &x, const AR &y) = 0;
 
   /*!

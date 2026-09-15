@@ -113,12 +113,28 @@ public:
     prof->stop();
   };
 
+  /*!
+   * @brief The hermitian inner product <x|y>, i.e. conjugate-linear in x and linear in y.
+   *
+   * The real case is selected at compile time and is the plain product this function computed before
+   * conjugation was introduced. A release build optimises the conjugating lambda away entirely -- the
+   * two are within noise of each other at -O3 on both GCC and clang -- but at -O0 nothing is inlined
+   * and the extra call per element costs slightly over a factor of two on this loop, so the branch is
+   * worth the four lines.
+   */
   value_type dot(const AL &x, const AR &y) override {
     if (x.size() > y.size())
       error("ArrayHandlerIterable::dot() incompatible x and y arrays, x.size() > y.size()");
     using std::begin;
     using std::end;
-    return std::inner_product(begin(x), end(x), begin(y), (value_type)0);
+    if constexpr (molpro::linalg::is_complex<value_type>{})
+      return std::inner_product(begin(x), end(x), begin(y), value_type{}, std::plus<value_type>{},
+                                [](const auto &elx, const auto &ely) {
+                                  return molpro::linalg::conjugate(static_cast<value_type>(elx)) *
+                                         static_cast<value_type>(ely);
+                                });
+    else
+      return std::inner_product(begin(x), end(x), begin(y), value_type{});
   };
 
   void gemm_outer(const Matrix<value_type> alphas, const CVecRef<AR> &xx, const VecRef<AL> &yy) override {
