@@ -75,8 +75,9 @@ struct QSpace {
    * @param dims current dimensions
    * @param old_data current data
    */
-  void update(const CVecRef<R>& params, const CVecRef<R>& actions, const SubspaceData& qq, const SubspaceData& qx,
-              const SubspaceData& xq, const Dimensions& dims, SubspaceData& old_data) {
+  template <typename T>
+  void update(const CVecRef<R>& params, const CVecRef<R>& actions, const SubspaceData<T>& qq, const SubspaceData<T>& qx,
+              const SubspaceData<T>& xq, const Dimensions& dims, SubspaceData<T>& old_data) {
     m_logger->trace("QSpace::update");
     auto it_begin = m_params.begin();
     for (size_t i = 0; i < params.size(); ++i) {
@@ -86,10 +87,10 @@ struct QSpace {
     }
     size_t nQnew = params.size();
     if (nQnew>1) {
-      auto s = Matrix<double>({nQnew,nQnew});
+      auto s = Matrix<T>({nQnew, nQnew});
       s.slice() = qq.at(EqnData::S).slice({0,0},{nQnew,nQnew});
-      auto rp = molpro::linalg::itsolv::detail::redundant_parameters(s, 0, nQnew,
-                                                                     1e-8, *m_logger);
+      auto rp = molpro::linalg::itsolv::detail::redundant_parameters(
+          s, 0, nQnew, precision_scaled<T>(1e-8), *m_logger);
       nQnew -= rp.size();
       for (auto& p : rp) {m_params.pop_back();}
     }

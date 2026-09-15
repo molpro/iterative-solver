@@ -73,7 +73,8 @@ protected:
   std::shared_ptr<Logger> m_logger{};
 
 public:
-  value_type_abs m_svd_solver_threshold = 1.0e-14; //!< threshold to select null space during SVD in eigenproblem
+  //! threshold to select null space during SVD in eigenproblem, rescaled from double to the working precision
+  value_type_abs m_svd_solver_threshold = precision_scaled<value_type_abs>(1e-14);
 };
 
 } // namespace molpro::linalg::itsolv::subspace

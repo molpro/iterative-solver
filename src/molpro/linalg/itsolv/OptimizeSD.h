@@ -54,7 +54,7 @@ public:
 
   void set_value_errors() override {
     auto& Value = this->m_xspace->data[subspace::EqnData::value];
-    this->m_value_errors.assign(1, std::numeric_limits<double>::max());
+    this->m_value_errors.assign(1, std::numeric_limits<value_type_abs>::max());
     if (this->m_xspace->size() > 1 and Value(0, 0) < Value(1, 0))
       this->m_value_errors.front() = Value(1, 0) - Value(0, 0);
   }

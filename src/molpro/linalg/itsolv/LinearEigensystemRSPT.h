@@ -34,6 +34,7 @@ class LinearEigensystemRSPT : public IterativeSolverTemplate<LinearEigensystem, 
 public:
   using SolverTemplate = IterativeSolverTemplate<LinearEigensystem, R, Q, P>;
   using typename SolverTemplate::scalar_type;
+  using typename SolverTemplate::value_type_abs;
   using IterativeSolverTemplate<LinearEigensystem, R, Q, P>::report;
 
   explicit LinearEigensystemRSPT(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers,
@@ -143,8 +144,10 @@ public:
     return opt;
   }
 
-  double propose_rspace_norm_thresh = 1e-10; //!< vectors with norm less than threshold can be considered null.
-  double propose_rspace_svd_thresh = 1e-12;  //!< the smallest singular value in the subspace that can be allowed when
+  //! vectors with norm less than threshold can be considered null (rescaled to the working precision)
+  value_type_abs propose_rspace_norm_thresh = precision_scaled<value_type_abs>(1e-10);
+  value_type_abs propose_rspace_svd_thresh =
+      precision_scaled<value_type_abs>(1e-12); //!< the smallest singular value in the subspace that can be allowed when
   //!< constructing the working set. Smaller singular values will lead to
   //!< deletion of parameters from the Q space
 protected:
@@ -153,7 +156,7 @@ protected:
   //    a.get(0, a.size(), v.data());
   //    return str(v);
   //  }
-  static std::string str(const std::vector<double>& a) {
+  static std::string str(const std::vector<scalar_type>& a) {
     std::string result;
     for (const auto& e : a)
       result += std::to_string(e) + " ";
@@ -188,7 +191,7 @@ protected:
     }
   }
 
-  std::vector<double> m_rspt_values; //!< perturbation series for the eigenvalue
+  std::vector<scalar_type> m_rspt_values; //!< perturbation series for the eigenvalue
 };
 
 } // namespace molpro::linalg::itsolv

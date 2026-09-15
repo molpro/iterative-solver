@@ -34,9 +34,9 @@ inline std::vector<std::pair<size_t, size_t>> parameter_batches(const size_t nso
   return batches;
 }
 
-template <class R, class Q, class P>
+template <class R, class Q, class P, typename value_type>
 void construct_solution(const VecRef<R>& params, const std::vector<int>& roots,
-                        const subspace::Matrix<double>& solutions,
+                        const subspace::Matrix<value_type>& solutions,
                         const std::vector<std::reference_wrapper<P>>& pparams,
                         const std::vector<std::reference_wrapper<Q>>& qparams,
                         const std::vector<std::reference_wrapper<Q>>& dparams, size_t oP, size_t oQ, size_t oD,
@@ -49,7 +49,7 @@ void construct_solution(const VecRef<R>& params, const std::vector<int>& roots,
   for (size_t i = 0; i < roots.size(); ++i) {
     handlers.rr().fill(0, params.at(i));
   }
-  subspace::Matrix<double> rp_mat(std::make_pair(pparams.size(), roots.size())),
+  subspace::Matrix<value_type> rp_mat(std::make_pair(pparams.size(), roots.size())),
       rq_mat(std::make_pair(qparams.size(), roots.size())), rd_mat(std::make_pair(dparams.size(), roots.size()));
   for (size_t i = 0; i < roots.size(); ++i) {
     for (size_t j = 0; j < pparams.size(); ++j) {
@@ -84,14 +84,16 @@ template <class R>
 void normalise(const size_t n_roots, const VecRef<R>& params, const VecRef<R>& actions,
                array::ArrayHandler<R, R>& handler, Logger& logger) {
   assert(params.size() >= n_roots && actions.size() >= n_roots);
+  // a solution shorter than this is taken to be null; the threshold follows the working precision
+  const auto norm_thresh = precision_scaled<typename array::ArrayHandler<R, R>::value_type_abs>(1e-14);
   for (size_t i = 0; i < n_roots; ++i) {
     auto dot = handler.dot(params.at(i), params.at(i));
     dot = std::sqrt(std::abs(dot));
-    if (dot > 1.0e-14) {
+    if (dot > norm_thresh) {
       handler.scal(1. / dot, params.at(i));
       handler.scal(1. / dot, actions.at(i));
     } else {
-      logger.warn("solution parameter's length is too small, dot = " + std::format("{:.2e}", dot));
+      logger.warn("solution parameter's length is too small, dot = " + std::format("{:.2e}", double(dot)));
     }
   }
 }
@@ -163,6 +165,7 @@ public:
   using typename Solver<R, Q, P>::fapply_on_p_type;
   using typename Solver<R, Q, P>::scalar_type;
   using typename Solver<R, Q, P>::value_type;
+  using typename Solver<R, Q, P>::value_type_abs;
   using typename Solver<R, Q, P>::VectorP;
 
   IterativeSolverTemplate() = delete;
@@ -276,7 +279,7 @@ public:
 
   // TODO Implement this
   std::vector<size_t> suggest_p(const CVecRef<R>& solution, const CVecRef<R>& residual, size_t max_number,
-                                double threshold) override {
+                                value_type_abs threshold) override {
     return {};
   }
 
@@ -351,10 +354,10 @@ public:
     summary_report();
   }
 
-  void set_convergence_threshold(double thresh) override { m_convergence_threshold = thresh; }
-  double convergence_threshold() const override { return m_convergence_threshold; }
-  void set_convergence_threshold_value(double thresh) override { m_convergence_threshold_value = thresh; }
-  double convergence_threshold_value() const override { return m_convergence_threshold_value; }
+  void set_convergence_threshold(value_type_abs thresh) override { m_convergence_threshold = thresh; }
+  value_type_abs convergence_threshold() const override { return m_convergence_threshold; }
+  void set_convergence_threshold_value(value_type_abs thresh) override { m_convergence_threshold_value = thresh; }
+  value_type_abs convergence_threshold_value() const override { return m_convergence_threshold_value; }
   void set_verbosity(Verbosity v) override { m_verbosity = v; }
   void set_verbosity(int v) override {
     if (v == 0) {
@@ -379,8 +382,8 @@ public:
   int get_max_iter() const override { return m_max_iter; }
   void set_max_p(int n) override { m_max_p = n; }
   int get_max_p() const override { return m_max_p; }
-  void set_p_threshold(double threshold) override { m_p_threshold = threshold; }
-  double get_p_threshold() const override { return m_p_threshold; }
+  void set_p_threshold(value_type_abs threshold) override { m_p_threshold = threshold; }
+  value_type_abs get_p_threshold() const override { return m_p_threshold; }
   //! Access dimensions of the subspace
   const subspace::Dimensions& dimensions() const override { return m_xspace->dimensions(); }
   scalar_type value() const override {
@@ -450,7 +453,7 @@ public:
       }
       if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Detailed) {
         for (const auto& s : selectp) {
-          this->m_logger->debug(std::format("P space element {}: {}", s.first, s.second));
+          this->m_logger->debug(std::format("P space element {}: {:.6e}", s.first, double(s.second)));
         }
       }
       for (const auto& s : selectp)
@@ -464,7 +467,9 @@ public:
                     actions, apply_on_p);
     }
     for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
-      m_logger->info<log::NewIteration>("Iteration, Current errors", iter, m_errors);
+      // the logging context carries the errors as doubles: a log line only needs their magnitude
+      m_logger->info<log::NewIteration>("Iteration, Current errors", iter,
+                                        std::vector<double>(m_errors.begin(), m_errors.end()));
       value_type value;
       if (this->nonlinear()) {
         value = problem.residual(*parameters.begin(), *actions.begin());
@@ -516,9 +521,9 @@ public:
     return solve(wrap(parameters), wrap(actions), problem, generate_initial_guess);
   }
 
-  bool test_problem(const Problem<R>& problem, R& v0, R& v1, int verbosity, double threshold) const override {
+  bool test_problem(const Problem<R>& problem, R& v0, R& v1, int verbosity, value_type_abs threshold) const override {
     bool success = true;
-    double step=1e-4;
+    value_type_abs step = 1e-4;
     if (this->nonlinear()) {
       if (!problem.test_parameters(0, v0))
         return true;
@@ -557,7 +562,7 @@ public:
         problem.action({v0}, {v1});
         Q residual = m_handlers->qr().copy(v1);
         auto norm2_residual = std::sqrt(m_handlers->rr().dot(v1, v1));
-        constexpr double scale_factor{10.0};
+        const value_type_abs scale_factor{10.0};
         m_handlers->rr().scal(scale_factor, v0);
         problem.action({v0}, {v1});
         m_handlers->rq().axpy(-scale_factor, residual, v1);
@@ -676,13 +681,13 @@ protected:
   std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;                    //!< Array handlers
   std::shared_ptr<subspace::IXSpace<R, Q, P>> m_xspace;                  //!< manages the subspace and associated data
   std::shared_ptr<subspace::ISubspaceSolver<R, Q, P>> m_subspace_solver; //!< solves the subspace problem
-  std::vector<double> m_errors;                                          //!< errors from the most recent solution
-  std::vector<double> m_value_errors;                                    //!< value errors from the most recent solution
-  std::vector<int> m_working_set;                                        //!< indices of roots in the working set
-  size_t m_nroots{0};                     //!< number of roots the solver is searching for
-  double m_convergence_threshold{1.0e-8}; //!< residual norms less than this mark a converged solution
-  double m_convergence_threshold_value{
-      std::numeric_limits<double>::max()};      //!< value changes less than this mark a converged solution
+  std::vector<value_type_abs> m_errors;       //!< errors from the most recent solution
+  std::vector<value_type_abs> m_value_errors; //!< value errors from the most recent solution
+  std::vector<int> m_working_set;             //!< indices of roots in the working set
+  size_t m_nroots{0};                         //!< number of roots the solver is searching for
+  value_type_abs m_convergence_threshold{1.0e-8}; //!< residual norms less than this mark a converged solution
+  value_type_abs m_convergence_threshold_value{
+      std::numeric_limits<value_type_abs>::max()}; //!< value changes less than this mark a converged solution
   std::shared_ptr<Statistics> m_stats;          //!< accumulates statistics of operations performed by the solver
   std::shared_ptr<Logger> m_logger;             //!< logger
   bool m_normalise_solution = false;            //!< whether to normalise the solutions
@@ -690,7 +695,7 @@ protected:
   std::optional<Verbosity> m_verbosity = {};    //!< how much output to print in solve()
   int m_max_iter = 100;                         //!< maximum number of iterations in solve()
   size_t m_max_p = 0;                           //!< maximum size of P space
-  double m_p_threshold = std::numeric_limits<double>::max(); //!< threshold for selecting P space
+  value_type_abs m_p_threshold = std::numeric_limits<value_type_abs>::max(); //!< threshold for selecting P space
 private:
   mutable std::shared_ptr<molpro::profiler::Profiler> m_profiler;
   int m_profiler_saved_depth; //!< max_depth of molpro::Profiler::single() before this object changed it

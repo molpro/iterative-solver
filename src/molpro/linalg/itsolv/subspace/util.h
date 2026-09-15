@@ -25,16 +25,18 @@ struct Overlap {};
 
 template <class R, class Q, class Z, class W>
 struct Overlap<R, Q, Z, W, true, true, true> {
-  static Matrix<double> _(const CVecRef<R>& left, const CVecRef<Q>& right, array::ArrayHandler<Z, W>& handler) {
+  using value_type = typename array::ArrayHandler<Z, W>::value_type;
+  static Matrix<value_type> _(const CVecRef<R>& left, const CVecRef<Q>& right, array::ArrayHandler<Z, W>& handler) {
     return handler.gemm_inner(left, right);
   }
 };
 
 template <class R, class Q, class Z, class W>
 struct Overlap<R, Q, Z, W, true, false, false> {
-  static Matrix<double> _(const CVecRef<R>& left, const CVecRef<Q>& right, array::ArrayHandler<Z, W>& handler) {
+  using value_type = typename array::ArrayHandler<Z, W>::value_type;
+  static Matrix<value_type> _(const CVecRef<R>& left, const CVecRef<Q>& right, array::ArrayHandler<Z, W>& handler) {
     auto mat = handler.gemm_inner(right, left);
-    auto m = Matrix<double>({left.size(), right.size()});
+    auto m = Matrix<value_type>({left.size(), right.size()});
     transpose_copy(m, mat);
     return m;
   }
@@ -47,14 +49,16 @@ constexpr bool Z_and_W_are_one_of_R_and_Q = detail::is_one_of<Z, R, Q>::value&& 
 //! Calculates overlap matrix between left and right vectors
 template <class R, class Q, class Z, class W>
 auto overlap(const CVecRef<R>& left, const CVecRef<Q>& right, array::ArrayHandler<Z, W>& handler)
-    -> std::enable_if_t<detail::Z_and_W_are_one_of_R_and_Q<R, Q, Z, W>, Matrix<double>> {
+    -> std::enable_if_t<detail::Z_and_W_are_one_of_R_and_Q<R, Q, Z, W>,
+                        Matrix<typename array::ArrayHandler<Z, W>::value_type>> {
   return detail::Overlap<R, Q, Z, W>::_(left, right, handler);
 }
 
 //! Calculates overlap matrix for a parameter set. Matrix is symmetric by construction.
 template <class R>
-Matrix<double> overlap(const CVecRef<R>& params, array::ArrayHandler<R, R>& handler) {
-  auto m = Matrix<double>({params.size(), params.size()});
+Matrix<typename array::ArrayHandler<R, R>::value_type> overlap(const CVecRef<R>& params,
+                                                               array::ArrayHandler<R, R>& handler) {
+  auto m = Matrix<typename array::ArrayHandler<R, R>::value_type>({params.size(), params.size()});
   for (size_t i = 0; i < m.rows(); ++i)
     for (size_t j = 0; j <= i; ++j)
       m(i, j) = m(j, i) = handler.dot(params[i], params[j]);
@@ -66,7 +70,7 @@ void matrix_symmetrize(Matrix<T>& mat) {
   assert(mat.rows() == mat.cols() && "must be a square matrix");
   for (size_t i = 0; i < mat.rows(); ++i)
     for (size_t j = 0; j < i; ++j)
-      mat(i, j) = mat(j, i) = 0.5 * (mat(i, j) + mat(j, i));
+      mat(i, j) = mat(j, i) = T(0.5) * (mat(i, j) + mat(j, i));
 }
 
 //! Return maximum element in a matrix along specified rows and columns

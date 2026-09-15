@@ -26,14 +26,16 @@
 namespace molpro::linalg::itsolv::detail {
 
 template <class R>
-void normalise(VecRef<R>& params, array::ArrayHandler<R, R>& handler, Logger& logger, double thresh = 1.0e-14) {
+void normalise(VecRef<R>& params, array::ArrayHandler<R, R>& handler, Logger& logger,
+               typename array::ArrayHandler<R, R>::value_type_abs thresh =
+                   precision_scaled<typename array::ArrayHandler<R, R>::value_type_abs>(1e-14)) {
   for (auto& p : params) {
     auto dot = handler.dot(p, p);
     dot = std::sqrt(std::abs(dot));
     if (dot > thresh) {
       handler.scal(1. / dot, p);
     } else {
-      logger.warn("parameter's length is too small for normalisation, dot = " + std::format("{:.2e}", dot));
+      logger.warn("parameter's length is too small for normalisation, dot = " + std::format("{:.2e}", double(dot)));
     }
   }
 }
@@ -477,7 +479,7 @@ auto modified_gram_schmidt(const VecRef<R>& rparams, const subspace::Matrix<valu
       if (nR > 0) {
         auto dot_mat = handler.gemm_inner(cwrap(rparams), cwrap_arg(xparams.at(i).get()));
         std::pair<size_t, size_t> mcoeff_dim = std::make_pair(1, nR);
-        subspace::Matrix<double> mcoeff(dot_mat.data(), mcoeff_dim);
+        subspace::Matrix<typename std::decay_t<decltype(dot_mat)>::value_type> mcoeff(dot_mat.data(), mcoeff_dim);
         for (size_t j = 0; j < nR; ++j) {
           mcoeff(0, j) = -mcoeff(0, j) / norm;
         }
@@ -551,7 +553,8 @@ auto get_new_working_set(const std::vector<int>& working_set, const CVecRef<R>& 
 template <class R, class Q, class P>
 auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameters, const VecRef<R>& residuals,
                     subspace::IXSpace<R, Q, P>& xspace, subspace::ISubspaceSolver<R, Q, P>& subspace_solver,
-                    ArrayHandlers<R, Q, P>& handlers, Logger& logger, const RSpaceOptions& r_opts,
+                    ArrayHandlers<R, Q, P>& handlers, Logger& logger,
+                    const RSpaceOptions<typename array::ArrayHandler<R, R>::value_type_abs>& r_opts,
                     const QSpaceOptions& q_opts, molpro::profiler::Profiler& profiler) {
   // auto prof = profiler.push("itsolv::propose_rspace"); // FIXME two separate profilers
   auto prof = molpro::Profiler::single();
