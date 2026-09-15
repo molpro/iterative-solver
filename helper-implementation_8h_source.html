@@ -297,7 +297,7 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>}</div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> value_type&gt;</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#a76425378528f8a5c2e1374ecfb37d06b">  227</a></span><span class="keywordtype">size_t</span> <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a9f4b69d5700c5c0199c7424183b6641f">get_rank</a>(std::span&lt;value_type&gt; eigenvalues, value_type threshold) {</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad0d90216536d8a1b628d615998392673">  227</a></span><span class="keywordtype">size_t</span> <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad0d90216536d8a1b628d615998392673">get_rank</a>(std::span&lt;const value_type&gt; eigenvalues, value_type threshold) {</div>
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>  <span class="keywordflow">if</span> (eigenvalues.size() == 0) {</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>  }</div>
@@ -309,10 +309,10 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>}</div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> value_type&gt;</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#a3e088fb3da611068c3c17c6335712499">  246</a></span><span class="keywordtype">size_t</span> <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a9f4b69d5700c5c0199c7424183b6641f">get_rank</a>(std::list&lt;<a class="code hl_struct" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD&lt;value_type&gt;</a>&gt; <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7fcb72d6b1c715ed5d87f93aabf65581">svd_system</a>, value_type threshold) {</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#a3e088fb3da611068c3c17c6335712499">  246</a></span><span class="keywordtype">size_t</span> <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad0d90216536d8a1b628d615998392673">get_rank</a>(std::list&lt;<a class="code hl_struct" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD&lt;value_type&gt;</a>&gt; <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7fcb72d6b1c715ed5d87f93aabf65581">svd_system</a>, value_type threshold) {</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>  <span class="comment">// compute max</span></div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>  value_type max_value = 0;</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>  std::list&lt;SVD&lt;double&gt;&gt;::iterator it;</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>  <span class="keyword">typename</span> std::list&lt;SVD&lt;value_type&gt;&gt;::iterator it;</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>  <span class="keywordflow">for</span> (it = <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7fcb72d6b1c715ed5d87f93aabf65581">svd_system</a>.begin(); it != <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7fcb72d6b1c715ed5d87f93aabf65581">svd_system</a>.end(); it++) {</div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    <span class="keywordflow">if</span> (it-&gt;value &gt; max_value) {</div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>      max_value = it-&gt;value;</div>
@@ -358,7 +358,7 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span> </div>
 <div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>  <span class="comment">// reduce to rank</span></div>
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>  <span class="keywordflow">if</span> (reduce_to_rank) {</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <span class="keywordtype">int</span> rank = <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a9f4b69d5700c5c0199c7424183b6641f">get_rank</a>(svds, threshold);</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <span class="keywordtype">int</span> rank = <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad0d90216536d8a1b628d615998392673">get_rank</a>(svds, threshold);</div>
 <div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = ncols; i &gt; rank; i--) {</div>
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>      svds.pop_back();</div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    }</div>
@@ -420,7 +420,7 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>  <span class="keywordflow">if</span> (success != 0) {</div>
 <div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Eigensolver did not converge&quot;</span>);</div>
 <div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>  }</div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>  rank = <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a9f4b69d5700c5c0199c7424183b6641f">get_rank</a>(std::span(metricEvals.data(), dimension), svdThreshold);</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>  rank = <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7e0e794235aa1f66c87e6f7ca273331e">get_rank&lt;value_type&gt;</a>(std::span&lt;const value_type&gt;{metricEvals.data(), dimension}, svdThreshold);</div>
 <div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
 <div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>  <span class="keywordflow">if</span> (verbosity &gt; 1 &amp;&amp; rank &lt; S.cols())</div>
 <div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    molpro::cout &lt;&lt; <span class="stringliteral">&quot;SVD rank &quot;</span> &lt;&lt; rank &lt;&lt; <span class="stringliteral">&quot; in subspace of dimension &quot;</span> &lt;&lt; S.cols() &lt;&lt; std::endl;</div>
@@ -468,7 +468,7 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>    }</div>
 <div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span> </div>
 <div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>    <span class="comment">// Convert eigenvectors back into original basis (minus singular dimensions)</span></div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>    subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * subspaceEigenvectors;</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>    subspaceEigenvectors = metricEvecs.rightCols(rank) * svmh.asDiagonal() * subspaceEigenvectors;</div>
 <div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>  } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>    <span class="comment">// complex eigenvalues</span></div>
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span><span class="preprocessor">#ifdef __INTEL_COMPILER</span></div>
@@ -479,7 +479,7 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span> </div>
 <div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>    <span class="comment">// Convert eigenvectors back into original basis (minus singular dimensions)</span></div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>    subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * s.eigenvectors();</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>    subspaceEigenvectors = metricEvecs.rightCols(rank) * svmh.asDiagonal() * s.eigenvectors();</div>
 <div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>  }</div>
 <div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span> </div>
 <div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>  <span class="comment">// Determine order of eigenvalues such that they come in non-descending order of their real part</span></div>
@@ -609,151 +609,152 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="line"><a id="l00543" name="l00543"></a><span class="lineno">  543</span>    Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt; subspaceOverlap;</div>
 <div class="line"><a id="l00544" name="l00544"></a><span class="lineno">  544</span>    subspaceMatrix.conservativeResize(nX + 1, nX + 1);</div>
 <div class="line"><a id="l00545" name="l00545"></a><span class="lineno">  545</span>    subspaceOverlap.conservativeResize(nX + 1, nX + 1);</div>
-<div class="line"><a id="l00546" name="l00546"></a><span class="lineno">  546</span>    subspaceMatrix.block(0, 0, nX, nX) =</div>
-<div class="line"><a id="l00547" name="l00547"></a><span class="lineno">  547</span>        Eigen::Map&lt;const Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt;&gt;(matrix.data(), nX, nX);</div>
-<div class="line"><a id="l00548" name="l00548"></a><span class="lineno">  548</span>    subspaceOverlap.block(0, 0, nX, nX) =</div>
-<div class="line"><a id="l00549" name="l00549"></a><span class="lineno">  549</span>        Eigen::Map&lt;const Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt;&gt;(metric.data(), nX, nX);</div>
-<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span>    eigenvalues.resize(nroot);</div>
-<div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> root = 0; root &lt; nroot; root++) {</div>
-<div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span>      <span class="keywordflow">for</span> (Eigen::Index i = 0; i &lt; nX; i++) {</div>
-<div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>        subspaceMatrix(i, nX) = subspaceMatrix(nX, i) = -augmented_hessian * rhs[i + nX * root];</div>
-<div class="line"><a id="l00554" name="l00554"></a><span class="lineno">  554</span>        subspaceOverlap(i, nX) = subspaceOverlap(nX, i) = 0;</div>
-<div class="line"><a id="l00555" name="l00555"></a><span class="lineno">  555</span>      }</div>
-<div class="line"><a id="l00556" name="l00556"></a><span class="lineno">  556</span>      subspaceMatrix(nX, nX) = 0;</div>
-<div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span>      subspaceOverlap(nX, nX) = 1;</div>
-<div class="line"><a id="l00558" name="l00558"></a><span class="lineno">  558</span>      <span class="comment">//      std::cout &lt;&lt; &quot;subspace augmented hessian subspaceMatrix\n&quot;&lt;&lt;subspaceMatrix&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span>      <span class="comment">//      std::cout &lt;&lt; &quot;subspace augmented hessian subspaceOverlap\n&quot;&lt;&lt;subspaceOverlap&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span> </div>
-<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>      Eigen::GeneralizedEigenSolver&lt;Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt;&gt; s(subspaceMatrix,</div>
-<div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span>                                                                                                 subspaceOverlap);</div>
-<div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span>      <span class="keyword">auto</span> eval = s.eigenvalues();</div>
-<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>      <span class="keyword">auto</span> evec = s.eigenvectors();</div>
-<div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>      Eigen::Index imax = 0;</div>
-<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>      <span class="keywordflow">for</span> (Eigen::Index i = 0; i &lt; nX + 1; i++)</div>
-<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>        <span class="keywordflow">if</span> (eval(i).real() &lt; eval(imax).real())</div>
-<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>          imax = i;</div>
-<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>      eigenvalues[root] = eval(imax).real();</div>
-<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>      <span class="keyword">auto</span> Solution = evec.col(imax).real().head(nX) / (augmented_hessian * evec.real()(nX, imax));</div>
-<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>      <span class="keywordflow">for</span> (<span class="keyword">auto</span> k = 0; k &lt; nX; k++)</div>
-<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>        solution[k + nX * root] = Solution(k);</div>
-<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>      <span class="comment">//      std::cout &lt;&lt; &quot;subspace augmented hessian solution\n&quot;&lt;&lt;Solution&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>    }</div>
-<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>  } <span class="keywordflow">else</span> { <span class="comment">// straight solution of linear equations</span></div>
-<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>    Eigen::Map&lt;const Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor&gt;&gt; subspaceMatrixR(</div>
-<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>        matrix.data(), nX, nX);</div>
-<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>    Eigen::Map&lt;const Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor&gt;&gt; RHS_R(rhs.data(), nX,</div>
-<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>                                                                                                       nroot);</div>
-<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>    Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt; subspaceMatrix = subspaceMatrixR;</div>
-<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>    Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt; RHS = RHS_R;</div>
-<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>    Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt; Solution;</div>
-<div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span><span class="comment">//    std::cout &lt;&lt; &quot;solve_LinearEquations RHS_R\n&quot;&lt;&lt;RHS_R&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span><span class="comment">//    for (size_t i=0; i&lt;RHS_R.cols()*RHS_R.rows(); ++i)</span></div>
-<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span><span class="comment">//      std::cout &lt;&lt; &quot; &quot;&lt;&lt;RHS_R.data()[i];</span></div>
-<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span><span class="comment">//    std::cout &lt;&lt; std::endl;</span></div>
-<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span><span class="comment">//    std::cout &lt;&lt; &quot;solve_LinearEquations RHS\n&quot;&lt;&lt;RHS&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span><span class="comment">//    for (size_t i=0; i&lt;RHS.cols()*RHS.rows(); ++i)</span></div>
-<div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span><span class="comment">//      std::cout &lt;&lt; &quot; &quot;&lt;&lt;RHS.data()[i];</span></div>
-<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span><span class="comment">//    std::cout &lt;&lt; std::endl;</span></div>
-<div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span>    Solution = subspaceMatrix.householderQr().solve(RHS);</div>
-<div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span>    <span class="comment">//    std::cout &lt;&lt; &quot;subspace linear equations solution\n&quot;&lt;&lt;Solution&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00593" name="l00593"></a><span class="lineno">  593</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> root = 0; root &lt; nroot; root++)</div>
-<div class="line"><a id="l00594" name="l00594"></a><span class="lineno">  594</span>      <span class="keywordflow">for</span> (<span class="keyword">auto</span> k = 0; k &lt; nX; k++)</div>
-<div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span>        solution[k + nX * root] = Solution(k, root);</div>
-<div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span>  }</div>
-<div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>}</div>
-<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span> </div>
-<div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> value_type, <span class="keyword">typename</span> std::enable_if_t&lt;!is_complex&lt;value_type&gt;{}, std::<span class="keywordtype">nullptr</span>_t&gt;&gt;</div>
-<div class="line"><a id="l00600" name="l00600"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#aa96fd396113d6611510fc4d99c26d706">  600</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#aa96fd396113d6611510fc4d99c26d706">solve_DIIS</a>(std::vector&lt;value_type&gt;&amp; solution, <span class="keyword">const</span> std::vector&lt;value_type&gt;&amp; matrix, <span class="keyword">const</span> <span class="keywordtype">size_t</span> dimension,</div>
-<div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>                <span class="keywordtype">double</span> svdThreshold, <span class="keywordtype">int</span> verbosity) {</div>
-<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>  <span class="keyword">auto</span> nAug = dimension + 1;</div>
-<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span>  <span class="comment">//  auto nQ = dimension - 1;</span></div>
-<div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span>  solution.resize(dimension);</div>
-<div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span>  <span class="comment">//  if (nQ &gt; 0) {</span></div>
-<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>  Eigen::VectorXd Rhs(nAug), Coeffs(nAug);</div>
-<div class="line"><a id="l00607" name="l00607"></a><span class="lineno">  607</span>  Eigen::MatrixXd BAug(nAug, nAug);</div>
-<div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span>  <span class="comment">//    Eigen::Matrix&lt;value_type, Eigen::Dynamic, 1&gt; Rhs(nQ), Coeffs(nQ);</span></div>
-<div class="line"><a id="l00609" name="l00609"></a><span class="lineno">  609</span>  <span class="comment">//    Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt; B(nQ, nQ);</span></div>
-<div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>  <span class="comment">//</span></div>
-<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span>  Eigen::Map&lt;const Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt;&gt; subspaceMatrix(matrix.data(), dimension,</div>
-<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>                                                                                             dimension);</div>
-<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span>  BAug.block(0, 0, dimension, dimension) = subspaceMatrix;</div>
-<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; dimension; ++i) {</div>
-<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>    BAug(dimension, i) = BAug(i, dimension) = -1;</div>
-<div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span>    Rhs(i) = 0;</div>
-<div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>  }</div>
-<div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span>  BAug(dimension, dimension) = 0;</div>
-<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>  Rhs(dimension) = -1;</div>
-<div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span>  <span class="comment">//</span></div>
-<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>  <span class="comment">//        molpro::cout &lt;&lt; &quot;BAug:&quot; &lt;&lt; std::endl &lt;&lt; BAug &lt;&lt; std::endl;</span></div>
-<div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>  <span class="comment">//        molpro::cout &lt;&lt; &quot;Rhs:&quot; &lt;&lt; std::endl &lt;&lt; Rhs &lt;&lt; std::endl;</span></div>
-<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span> </div>
-<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>  <span class="comment">// invert the system, determine extrapolation coefficients.</span></div>
-<div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>  Eigen::JacobiSVD&lt;Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt;&gt; svd(BAug, Eigen::ComputeThinU |</div>
-<div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span>                                                                                            Eigen::ComputeThinV);</div>
-<div class="line"><a id="l00627" name="l00627"></a><span class="lineno">  627</span> </div>
-<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>  <span class="comment">//  std::cout &lt;&lt; &quot;svd thresholds &quot; &lt;&lt; svdThreshold &lt;&lt; &quot;,&quot; &lt;&lt; svd.singularValues().maxCoeff() &lt;&lt; std::endl;</span></div>
-<div class="line"><a id="l00629" name="l00629"></a><span class="lineno">  629</span>  <span class="comment">//  std::cout &lt;&lt; &quot;singular values &quot; &lt;&lt; svd.singularValues().transpose() &lt;&lt; std::endl;</span></div>
-<div class="line"><a id="l00630" name="l00630"></a><span class="lineno">  630</span>  svd.setThreshold(svdThreshold * svd.singularValues().maxCoeff() * 0);</div>
-<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span>  <span class="comment">//    molpro::cout &lt;&lt; &quot;svdThreshold &quot;&lt;&lt;svdThreshold&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00632" name="l00632"></a><span class="lineno">  632</span>  <span class="comment">//    molpro::cout &lt;&lt; &quot;U\n&quot;&lt;&lt;svd.matrixU()&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00633" name="l00633"></a><span class="lineno">  633</span>  <span class="comment">//    molpro::cout &lt;&lt; &quot;V\n&quot;&lt;&lt;svd.matrixV()&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00634" name="l00634"></a><span class="lineno">  634</span>  <span class="comment">//    molpro::cout &lt;&lt; &quot;singularValues\n&quot;&lt;&lt;svd.singularValues()&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00635" name="l00635"></a><span class="lineno">  635</span>  Coeffs = svd.solve(Rhs).head(dimension);</div>
-<div class="line"><a id="l00636" name="l00636"></a><span class="lineno">  636</span>  <span class="comment">//  Coeffs = BAug.fullPivHouseholderQr().solve(Rhs);</span></div>
-<div class="line"><a id="l00637" name="l00637"></a><span class="lineno">  637</span>  <span class="comment">//  molpro::cout &lt;&lt; &quot;Coeffs &quot;&lt;&lt;Coeffs.transpose()&lt;&lt;std::endl;</span></div>
-<div class="line"><a id="l00638" name="l00638"></a><span class="lineno">  638</span>  <span class="keywordflow">if</span> (verbosity &gt; 1)</div>
-<div class="line"><a id="l00639" name="l00639"></a><span class="lineno">  639</span>    molpro::cout &lt;&lt; <span class="stringliteral">&quot;Combination of iteration vectors: &quot;</span> &lt;&lt; Coeffs.transpose() &lt;&lt; std::endl;</div>
-<div class="line"><a id="l00640" name="l00640"></a><span class="lineno">  640</span>  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> k = 0; k &lt; (size_t)Coeffs.rows(); k++) {</div>
-<div class="line"><a id="l00641" name="l00641"></a><span class="lineno">  641</span>    <span class="keywordflow">if</span> (std::isnan(std::abs(Coeffs(k)))) {</div>
-<div class="line"><a id="l00642" name="l00642"></a><span class="lineno">  642</span>      molpro::cout &lt;&lt; <span class="stringliteral">&quot;B:&quot;</span> &lt;&lt; std::endl &lt;&lt; BAug &lt;&lt; std::endl;</div>
-<div class="line"><a id="l00643" name="l00643"></a><span class="lineno">  643</span>      molpro::cout &lt;&lt; <span class="stringliteral">&quot;Rhs:&quot;</span> &lt;&lt; std::endl &lt;&lt; Rhs &lt;&lt; std::endl;</div>
-<div class="line"><a id="l00644" name="l00644"></a><span class="lineno">  644</span>      molpro::cout &lt;&lt; <span class="stringliteral">&quot;Combination of iteration vectors: &quot;</span> &lt;&lt; Coeffs.transpose() &lt;&lt; std::endl;</div>
-<div class="line"><a id="l00645" name="l00645"></a><span class="lineno">  645</span>      <span class="keywordflow">throw</span> std::overflow_error(<span class="stringliteral">&quot;NaN detected in DIIS submatrix solution&quot;</span>);</div>
-<div class="line"><a id="l00646" name="l00646"></a><span class="lineno">  646</span>    }</div>
-<div class="line"><a id="l00647" name="l00647"></a><span class="lineno">  647</span>    solution[k] = Coeffs(k);</div>
-<div class="line"><a id="l00648" name="l00648"></a><span class="lineno">  648</span>  }</div>
-<div class="line"><a id="l00649" name="l00649"></a><span class="lineno">  649</span>}</div>
-<div class="line"><a id="l00650" name="l00650"></a><span class="lineno">  650</span>} <span class="comment">// namespace molpro::linalg::itsolv</span></div>
-<div class="line"><a id="l00651" name="l00651"></a><span class="lineno">  651</span> </div>
+<div class="line"><a id="l00546" name="l00546"></a><span class="lineno">  546</span>    <span class="comment">// both arrive row-major, as subspace::Matrix stores them and as the straight-solve</span></div>
+<div class="line"><a id="l00547" name="l00547"></a><span class="lineno">  547</span>    <span class="comment">// branch below already reads them</span></div>
+<div class="line"><a id="l00548" name="l00548"></a><span class="lineno">  548</span>    <span class="keyword">using </span>row_major_type = Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor&gt;;</div>
+<div class="line"><a id="l00549" name="l00549"></a><span class="lineno">  549</span>    subspaceMatrix.block(0, 0, nX, nX) = Eigen::Map&lt;const row_major_type&gt;(matrix.data(), nX, nX);</div>
+<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span>    subspaceOverlap.block(0, 0, nX, nX) = Eigen::Map&lt;const row_major_type&gt;(metric.data(), nX, nX);</div>
+<div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span>    eigenvalues.resize(nroot);</div>
+<div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> root = 0; root &lt; nroot; root++) {</div>
+<div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>      <span class="keywordflow">for</span> (Eigen::Index i = 0; i &lt; nX; i++) {</div>
+<div class="line"><a id="l00554" name="l00554"></a><span class="lineno">  554</span>        subspaceMatrix(i, nX) = subspaceMatrix(nX, i) = -augmented_hessian * rhs[i * nroot + root];</div>
+<div class="line"><a id="l00555" name="l00555"></a><span class="lineno">  555</span>        subspaceOverlap(i, nX) = subspaceOverlap(nX, i) = 0;</div>
+<div class="line"><a id="l00556" name="l00556"></a><span class="lineno">  556</span>      }</div>
+<div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span>      subspaceMatrix(nX, nX) = 0;</div>
+<div class="line"><a id="l00558" name="l00558"></a><span class="lineno">  558</span>      subspaceOverlap(nX, nX) = 1;</div>
+<div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span>      <span class="comment">//      std::cout &lt;&lt; &quot;subspace augmented hessian subspaceMatrix\n&quot;&lt;&lt;subspaceMatrix&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span>      <span class="comment">//      std::cout &lt;&lt; &quot;subspace augmented hessian subspaceOverlap\n&quot;&lt;&lt;subspaceOverlap&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span> </div>
+<div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span>      Eigen::GeneralizedEigenSolver&lt;Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt;&gt; s(subspaceMatrix,</div>
+<div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span>                                                                                                 subspaceOverlap);</div>
+<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>      <span class="keyword">auto</span> eval = s.eigenvalues();</div>
+<div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>      <span class="keyword">auto</span> evec = s.eigenvectors();</div>
+<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>      Eigen::Index imax = 0;</div>
+<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>      <span class="keywordflow">for</span> (Eigen::Index i = 0; i &lt; nX + 1; i++)</div>
+<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>        <span class="keywordflow">if</span> (eval(i).real() &lt; eval(imax).real())</div>
+<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>          imax = i;</div>
+<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>      eigenvalues[root] = eval(imax).real();</div>
+<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>      <span class="keyword">auto</span> Solution = evec.col(imax).real().head(nX) / (augmented_hessian * evec.real()(nX, imax));</div>
+<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>      <span class="keywordflow">for</span> (<span class="keyword">auto</span> k = 0; k &lt; nX; k++)</div>
+<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>        solution[k + nX * root] = Solution(k);</div>
+<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>      <span class="comment">//      std::cout &lt;&lt; &quot;subspace augmented hessian solution\n&quot;&lt;&lt;Solution&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>    }</div>
+<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>  } <span class="keywordflow">else</span> { <span class="comment">// straight solution of linear equations</span></div>
+<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>    Eigen::Map&lt;const Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor&gt;&gt; subspaceMatrixR(</div>
+<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>        matrix.data(), nX, nX);</div>
+<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>    Eigen::Map&lt;const Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor&gt;&gt; RHS_R(rhs.data(), nX,</div>
+<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>                                                                                                       nroot);</div>
+<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>    Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt; subspaceMatrix = subspaceMatrixR;</div>
+<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>    Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt; RHS = RHS_R;</div>
+<div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span>    Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt; Solution;</div>
+<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span><span class="comment">//    std::cout &lt;&lt; &quot;solve_LinearEquations RHS_R\n&quot;&lt;&lt;RHS_R&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span><span class="comment">//    for (size_t i=0; i&lt;RHS_R.cols()*RHS_R.rows(); ++i)</span></div>
+<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span><span class="comment">//      std::cout &lt;&lt; &quot; &quot;&lt;&lt;RHS_R.data()[i];</span></div>
+<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span><span class="comment">//    std::cout &lt;&lt; std::endl;</span></div>
+<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span><span class="comment">//    std::cout &lt;&lt; &quot;solve_LinearEquations RHS\n&quot;&lt;&lt;RHS&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span><span class="comment">//    for (size_t i=0; i&lt;RHS.cols()*RHS.rows(); ++i)</span></div>
+<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span><span class="comment">//      std::cout &lt;&lt; &quot; &quot;&lt;&lt;RHS.data()[i];</span></div>
+<div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span><span class="comment">//    std::cout &lt;&lt; std::endl;</span></div>
+<div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span>    Solution = subspaceMatrix.householderQr().solve(RHS);</div>
+<div class="line"><a id="l00593" name="l00593"></a><span class="lineno">  593</span>    <span class="comment">//    std::cout &lt;&lt; &quot;subspace linear equations solution\n&quot;&lt;&lt;Solution&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00594" name="l00594"></a><span class="lineno">  594</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> root = 0; root &lt; nroot; root++)</div>
+<div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span>      <span class="keywordflow">for</span> (<span class="keyword">auto</span> k = 0; k &lt; nX; k++)</div>
+<div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span>        solution[k + nX * root] = Solution(k, root);</div>
+<div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>  }</div>
+<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>}</div>
+<div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span> </div>
+<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> value_type, <span class="keyword">typename</span> std::enable_if_t&lt;!is_complex&lt;value_type&gt;{}, std::<span class="keywordtype">nullptr</span>_t&gt;&gt;</div>
+<div class="line"><a id="l00601" name="l00601"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv.html#aa96fd396113d6611510fc4d99c26d706">  601</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#aa96fd396113d6611510fc4d99c26d706">solve_DIIS</a>(std::vector&lt;value_type&gt;&amp; solution, <span class="keyword">const</span> std::vector&lt;value_type&gt;&amp; matrix, <span class="keyword">const</span> <span class="keywordtype">size_t</span> dimension,</div>
+<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>                <span class="keywordtype">double</span> svdThreshold, <span class="keywordtype">int</span> verbosity) {</div>
+<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span>  <span class="keyword">auto</span> nAug = dimension + 1;</div>
+<div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span>  <span class="comment">//  auto nQ = dimension - 1;</span></div>
+<div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span>  solution.resize(dimension);</div>
+<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>  <span class="comment">//  if (nQ &gt; 0) {</span></div>
+<div class="line"><a id="l00607" name="l00607"></a><span class="lineno">  607</span>  Eigen::VectorXd Rhs(nAug), Coeffs(nAug);</div>
+<div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span>  Eigen::MatrixXd BAug(nAug, nAug);</div>
+<div class="line"><a id="l00609" name="l00609"></a><span class="lineno">  609</span>  <span class="comment">//    Eigen::Matrix&lt;value_type, Eigen::Dynamic, 1&gt; Rhs(nQ), Coeffs(nQ);</span></div>
+<div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>  <span class="comment">//    Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt; B(nQ, nQ);</span></div>
+<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span>  <span class="comment">//</span></div>
+<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>  Eigen::Map&lt;const Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt;&gt; subspaceMatrix(matrix.data(), dimension,</div>
+<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span>                                                                                             dimension);</div>
+<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>  BAug.block(0, 0, dimension, dimension) = subspaceMatrix;</div>
+<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; dimension; ++i) {</div>
+<div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span>    BAug(dimension, i) = BAug(i, dimension) = -1;</div>
+<div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>    Rhs(i) = 0;</div>
+<div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span>  }</div>
+<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>  BAug(dimension, dimension) = 0;</div>
+<div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span>  Rhs(dimension) = -1;</div>
+<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>  <span class="comment">//</span></div>
+<div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>  <span class="comment">//        molpro::cout &lt;&lt; &quot;BAug:&quot; &lt;&lt; std::endl &lt;&lt; BAug &lt;&lt; std::endl;</span></div>
+<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span>  <span class="comment">//        molpro::cout &lt;&lt; &quot;Rhs:&quot; &lt;&lt; std::endl &lt;&lt; Rhs &lt;&lt; std::endl;</span></div>
+<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span> </div>
+<div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>  <span class="comment">// invert the system, determine extrapolation coefficients.</span></div>
+<div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span>  Eigen::JacobiSVD&lt;Eigen::Matrix&lt;value_type, Eigen::Dynamic, Eigen::Dynamic&gt;&gt; svd(BAug, Eigen::ComputeThinU |</div>
+<div class="line"><a id="l00627" name="l00627"></a><span class="lineno">  627</span>                                                                                            Eigen::ComputeThinV);</div>
+<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span> </div>
+<div class="line"><a id="l00629" name="l00629"></a><span class="lineno">  629</span>  <span class="comment">//  std::cout &lt;&lt; &quot;svd thresholds &quot; &lt;&lt; svdThreshold &lt;&lt; &quot;,&quot; &lt;&lt; svd.singularValues().maxCoeff() &lt;&lt; std::endl;</span></div>
+<div class="line"><a id="l00630" name="l00630"></a><span class="lineno">  630</span>  <span class="comment">//  std::cout &lt;&lt; &quot;singular values &quot; &lt;&lt; svd.singularValues().transpose() &lt;&lt; std::endl;</span></div>
+<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span>  svd.setThreshold(svdThreshold * svd.singularValues().maxCoeff() * 0);</div>
+<div class="line"><a id="l00632" name="l00632"></a><span class="lineno">  632</span>  <span class="comment">//    molpro::cout &lt;&lt; &quot;svdThreshold &quot;&lt;&lt;svdThreshold&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00633" name="l00633"></a><span class="lineno">  633</span>  <span class="comment">//    molpro::cout &lt;&lt; &quot;U\n&quot;&lt;&lt;svd.matrixU()&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00634" name="l00634"></a><span class="lineno">  634</span>  <span class="comment">//    molpro::cout &lt;&lt; &quot;V\n&quot;&lt;&lt;svd.matrixV()&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00635" name="l00635"></a><span class="lineno">  635</span>  <span class="comment">//    molpro::cout &lt;&lt; &quot;singularValues\n&quot;&lt;&lt;svd.singularValues()&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00636" name="l00636"></a><span class="lineno">  636</span>  Coeffs = svd.solve(Rhs).head(dimension);</div>
+<div class="line"><a id="l00637" name="l00637"></a><span class="lineno">  637</span>  <span class="comment">//  Coeffs = BAug.fullPivHouseholderQr().solve(Rhs);</span></div>
+<div class="line"><a id="l00638" name="l00638"></a><span class="lineno">  638</span>  <span class="comment">//  molpro::cout &lt;&lt; &quot;Coeffs &quot;&lt;&lt;Coeffs.transpose()&lt;&lt;std::endl;</span></div>
+<div class="line"><a id="l00639" name="l00639"></a><span class="lineno">  639</span>  <span class="keywordflow">if</span> (verbosity &gt; 1)</div>
+<div class="line"><a id="l00640" name="l00640"></a><span class="lineno">  640</span>    molpro::cout &lt;&lt; <span class="stringliteral">&quot;Combination of iteration vectors: &quot;</span> &lt;&lt; Coeffs.transpose() &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00641" name="l00641"></a><span class="lineno">  641</span>  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> k = 0; k &lt; (size_t)Coeffs.rows(); k++) {</div>
+<div class="line"><a id="l00642" name="l00642"></a><span class="lineno">  642</span>    <span class="keywordflow">if</span> (std::isnan(std::abs(Coeffs(k)))) {</div>
+<div class="line"><a id="l00643" name="l00643"></a><span class="lineno">  643</span>      molpro::cout &lt;&lt; <span class="stringliteral">&quot;B:&quot;</span> &lt;&lt; std::endl &lt;&lt; BAug &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00644" name="l00644"></a><span class="lineno">  644</span>      molpro::cout &lt;&lt; <span class="stringliteral">&quot;Rhs:&quot;</span> &lt;&lt; std::endl &lt;&lt; Rhs &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00645" name="l00645"></a><span class="lineno">  645</span>      molpro::cout &lt;&lt; <span class="stringliteral">&quot;Combination of iteration vectors: &quot;</span> &lt;&lt; Coeffs.transpose() &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00646" name="l00646"></a><span class="lineno">  646</span>      <span class="keywordflow">throw</span> std::overflow_error(<span class="stringliteral">&quot;NaN detected in DIIS submatrix solution&quot;</span>);</div>
+<div class="line"><a id="l00647" name="l00647"></a><span class="lineno">  647</span>    }</div>
+<div class="line"><a id="l00648" name="l00648"></a><span class="lineno">  648</span>    solution[k] = Coeffs(k);</div>
+<div class="line"><a id="l00649" name="l00649"></a><span class="lineno">  649</span>  }</div>
+<div class="line"><a id="l00650" name="l00650"></a><span class="lineno">  650</span>}</div>
+<div class="line"><a id="l00651" name="l00651"></a><span class="lineno">  651</span>} <span class="comment">// namespace molpro::linalg::itsolv</span></div>
 <div class="line"><a id="l00652" name="l00652"></a><span class="lineno">  652</span> </div>
-<div class="line"><a id="l00653" name="l00653"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html">  653</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html">molpro::linalg::itsolv::detail</a> {</div>
-<div class="line"><a id="l00654" name="l00654"></a><span class="lineno">  654</span> </div>
-<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> value_type, <span class="keyword">typename</span> value_type_abs&gt;</div>
-<div class="line"><a id="l00669" name="l00669"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#af6f410b0781a5f1d5b8c88afece5d4b1">  669</a></span><span class="keyword">auto</span> <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#af6f410b0781a5f1d5b8c88afece5d4b1">redundant_parameters</a>(<span class="keyword">const</span> <a class="code hl_class" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix&lt;value_type&gt;</a>&amp; overlap, <span class="keyword">const</span> <span class="keywordtype">size_t</span> oR, <span class="keyword">const</span> <span class="keywordtype">size_t</span> nR,</div>
-<div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span>                          <span class="keyword">const</span> value_type_abs svd_thresh, <a class="code hl_class" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a>&amp; logger) {</div>
-<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>  <span class="keyword">auto</span> prof = <a class="code hl_functionRef" href="https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Profiler.html#aea6108170dddaa5caafb2df4ec42db5d">molpro::Profiler::single</a>();</div>
-<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span>  prof-&gt;start(<span class="stringliteral">&quot;itsolv::svd_system&quot;</span>);</div>
-<div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>  logger.<a class="code hl_function" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#ae8eff4a439b5d86e7fe9ebd299ece821">trace</a>(<span class="stringliteral">&quot;redundant_parameters()&quot;</span>);</div>
-<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>  <span class="keyword">auto</span> redundant_params = std::vector&lt;int&gt;{};</div>
-<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span>  <span class="keyword">auto</span> rspace_indices = std::vector&lt;int&gt;(nR);</div>
-<div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>  std::iota(std::begin(rspace_indices), std::end(rspace_indices), 0);</div>
-<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>  <span class="keyword">auto</span> svd = <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7fcb72d6b1c715ed5d87f93aabf65581">svd_system</a>(overlap.rows(), overlap.cols(),</div>
-<div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span>                        <a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>(<span class="keyword">const_cast&lt;</span>value_type*<span class="keyword">&gt;</span>(overlap.data().data()), overlap.size()), svd_thresh, <span class="keyword">true</span>);</div>
-<div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>  prof-&gt;stop();</div>
-<div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span>  prof-&gt;start(<span class="stringliteral">&quot;find redundant parameters&quot;</span>);</div>
-<div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span>  <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; singular_system : svd) {</div>
-<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>    <span class="keywordflow">if</span> (!rspace_indices.empty()) {</div>
-<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>      <span class="keyword">auto</span> rspace_contribution = std::vector&lt;value_type_abs&gt;{};</div>
-<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>      <span class="keywordflow">for</span> (<span class="keyword">auto</span> i : rspace_indices)</div>
-<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>        rspace_contribution.push_back(std::abs(singular_system.v.at(oR + i)));</div>
-<div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>      <span class="keyword">auto</span> it_min = std::max_element(std::begin(rspace_contribution), std::end(rspace_contribution));</div>
-<div class="line"><a id="l00687" name="l00687"></a><span class="lineno">  687</span>      <span class="keyword">auto</span> imin = std::distance(std::begin(rspace_contribution), it_min);</div>
-<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span>      redundant_params.push_back(rspace_indices[imin]);</div>
-<div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>      rspace_indices.erase(std::begin(rspace_indices) + imin);</div>
-<div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span>      std::stringstream ss;</div>
-<div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span>      ss &lt;&lt; std::setprecision(3) &lt;&lt; <span class="stringliteral">&quot;redundant parameter found, i = &quot;</span> &lt;&lt; redundant_params.back()</div>
-<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>         &lt;&lt; <span class="stringliteral">&quot;, svd.value = &quot;</span> &lt;&lt; singular_system.value</div>
-<div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span>         &lt;&lt; <span class="stringliteral">&quot;, svd.v[i] = &quot;</span> &lt;&lt; singular_system.v[oR + redundant_params.back()];</div>
-<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>      logger.<a class="code hl_function" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a165cbf0829ddd542abd540b276598095">info</a>(ss.str());</div>
-<div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span>    }</div>
-<div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span>  }</div>
-<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>  prof-&gt;stop();</div>
-<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span>  <span class="keywordflow">return</span> redundant_params;</div>
-<div class="line"><a id="l00699" name="l00699"></a><span class="lineno">  699</span>}</div>
-<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span> </div>
-<div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span>}</div>
-<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span> </div>
-<div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span><span class="preprocessor">#endif </span><span class="comment">// LINEARALGEBRA_SRC_MOLPRO_LINALG_ITERATIVESOLVER_HELPER_IMPLEMENTATION_H_</span></div>
+<div class="line"><a id="l00653" name="l00653"></a><span class="lineno">  653</span> </div>
+<div class="line"><a id="l00654" name="l00654"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html">  654</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html">molpro::linalg::itsolv::detail</a> {</div>
+<div class="line"><a id="l00655" name="l00655"></a><span class="lineno">  655</span> </div>
+<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> value_type, <span class="keyword">typename</span> value_type_abs&gt;</div>
+<div class="line"><a id="l00670" name="l00670"></a><span class="lineno"><a class="line" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#af6f410b0781a5f1d5b8c88afece5d4b1">  670</a></span><span class="keyword">auto</span> <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#af6f410b0781a5f1d5b8c88afece5d4b1">redundant_parameters</a>(<span class="keyword">const</span> <a class="code hl_class" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix&lt;value_type&gt;</a>&amp; overlap, <span class="keyword">const</span> <span class="keywordtype">size_t</span> oR, <span class="keyword">const</span> <span class="keywordtype">size_t</span> nR,</div>
+<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>                          <span class="keyword">const</span> value_type_abs svd_thresh, <a class="code hl_class" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a>&amp; logger) {</div>
+<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span>  <span class="keyword">auto</span> prof = <a class="code hl_functionRef" href="https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Profiler.html#aea6108170dddaa5caafb2df4ec42db5d">molpro::Profiler::single</a>();</div>
+<div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>  prof-&gt;start(<span class="stringliteral">&quot;itsolv::svd_system&quot;</span>);</div>
+<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>  logger.<a class="code hl_function" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#ae8eff4a439b5d86e7fe9ebd299ece821">trace</a>(<span class="stringliteral">&quot;redundant_parameters()&quot;</span>);</div>
+<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span>  <span class="keyword">auto</span> redundant_params = std::vector&lt;int&gt;{};</div>
+<div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>  <span class="keyword">auto</span> rspace_indices = std::vector&lt;int&gt;(nR);</div>
+<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>  std::iota(std::begin(rspace_indices), std::end(rspace_indices), 0);</div>
+<div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span>  <span class="keyword">auto</span> svd = <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a7fcb72d6b1c715ed5d87f93aabf65581">svd_system</a>(overlap.rows(), overlap.cols(),</div>
+<div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>                        <a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>(<span class="keyword">const_cast&lt;</span>value_type*<span class="keyword">&gt;</span>(overlap.data().data()), overlap.size()), svd_thresh, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span>  prof-&gt;stop();</div>
+<div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span>  prof-&gt;start(<span class="stringliteral">&quot;find redundant parameters&quot;</span>);</div>
+<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>  <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; singular_system : svd) {</div>
+<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>    <span class="keywordflow">if</span> (!rspace_indices.empty()) {</div>
+<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>      <span class="keyword">auto</span> rspace_contribution = std::vector&lt;value_type_abs&gt;{};</div>
+<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>      <span class="keywordflow">for</span> (<span class="keyword">auto</span> i : rspace_indices)</div>
+<div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>        rspace_contribution.push_back(std::abs(singular_system.v.at(oR + i)));</div>
+<div class="line"><a id="l00687" name="l00687"></a><span class="lineno">  687</span>      <span class="keyword">auto</span> it_min = std::max_element(std::begin(rspace_contribution), std::end(rspace_contribution));</div>
+<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span>      <span class="keyword">auto</span> imin = std::distance(std::begin(rspace_contribution), it_min);</div>
+<div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>      redundant_params.push_back(rspace_indices[imin]);</div>
+<div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span>      rspace_indices.erase(std::begin(rspace_indices) + imin);</div>
+<div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span>      std::stringstream ss;</div>
+<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>      ss &lt;&lt; std::setprecision(3) &lt;&lt; <span class="stringliteral">&quot;redundant parameter found, i = &quot;</span> &lt;&lt; redundant_params.back()</div>
+<div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span>         &lt;&lt; <span class="stringliteral">&quot;, svd.value = &quot;</span> &lt;&lt; singular_system.value</div>
+<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>         &lt;&lt; <span class="stringliteral">&quot;, svd.v[i] = &quot;</span> &lt;&lt; singular_system.v[oR + redundant_params.back()];</div>
+<div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span>      logger.<a class="code hl_function" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a165cbf0829ddd542abd540b276598095">info</a>(ss.str());</div>
+<div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span>    }</div>
+<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>  }</div>
+<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span>  prof-&gt;stop();</div>
+<div class="line"><a id="l00699" name="l00699"></a><span class="lineno">  699</span>  <span class="keywordflow">return</span> redundant_params;</div>
+<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span>}</div>
+<div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span> </div>
+<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>}</div>
+<div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span> </div>
+<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span><span class="preprocessor">#endif </span><span class="comment">// LINEARALGEBRA_SRC_MOLPRO_LINALG_ITERATIVESOLVER_HELPER_IMPLEMENTATION_H_</span></div>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1span_1_1Span_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">molpro::linalg::array::Span</a></div><div class="ttdoc">Non-owning container taking a pointer to the data buffer and its size and exposing routines for itera...</div><div class="ttdef"><b>Definition:</b> Span.h:31</div></div>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1span_1_1Span_html_abfee585dea165b08f8f6a6ede9705eaf"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#abfee585dea165b08f8f6a6ede9705eaf">molpro::linalg::array::span::Span::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdef"><b>Definition:</b> Span.h:79</div></div>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1span_1_1Span_html_ac971fd9e588c9f3ae1f946918e435b64"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#ac971fd9e588c9f3ae1f946918e435b64">molpro::linalg::array::span::Span::size</a></div><div class="ttdeci">size_type size() const</div><div class="ttdef"><b>Definition:</b> Span.h:77</div></div>
@@ -763,15 +764,16 @@ $(document).ready(function(){initNavTree('helper-implementation_8h_source.html',
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1Logger_html_ae8eff4a439b5d86e7fe9ebd299ece821"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#ae8eff4a439b5d86e7fe9ebd299ece821">molpro::linalg::itsolv::Logger::trace</a></div><div class="ttdeci">void trace(std::string_view message, Ts &amp;&amp;...args) const</div><div class="ttdef"><b>Definition:</b> Logger.h:495</div></div>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">molpro::linalg::itsolv::subspace::Matrix&lt; value_type &gt;</a></div></div>
 <div class="ttc" id="aclassmolpro_1_1profiler_1_1Profiler_html_aea6108170dddaa5caafb2df4ec42db5d"><div class="ttname"><a href="https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Profiler.html#aea6108170dddaa5caafb2df4ec42db5d">molpro::profiler::Profiler::single</a></div><div class="ttdeci">static std::shared_ptr&lt; Profiler &gt; single()</div></div>
-<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_1_1detail_html"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html">molpro::linalg::itsolv::detail</a></div><div class="ttdef"><b>Definition:</b> helper-implementation.h:653</div></div>
-<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_1_1detail_html_af6f410b0781a5f1d5b8c88afece5d4b1"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#af6f410b0781a5f1d5b8c88afece5d4b1">molpro::linalg::itsolv::detail::redundant_parameters</a></div><div class="ttdeci">auto redundant_parameters(const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t oR, const size_t nR, const value_type_abs svd_thresh, Logger &amp;logger)</div><div class="ttdoc">Deduces a set of parameters that are redundant due to linear dependencies.</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:669</div></div>
+<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_1_1detail_html"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html">molpro::linalg::itsolv::detail</a></div><div class="ttdef"><b>Definition:</b> helper-implementation.h:654</div></div>
+<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_1_1detail_html_af6f410b0781a5f1d5b8c88afece5d4b1"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#af6f410b0781a5f1d5b8c88afece5d4b1">molpro::linalg::itsolv::detail::redundant_parameters</a></div><div class="ttdeci">auto redundant_parameters(const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t oR, const size_t nR, const value_type_abs svd_thresh, Logger &amp;logger)</div><div class="ttdoc">Deduces a set of parameters that are redundant due to linear dependencies.</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:670</div></div>
 <div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html">molpro::linalg::itsolv</a></div><div class="ttdoc">4-parameter interpolation of a 1-dimensional function given two points for which function values and ...</div><div class="ttdef"><b>Definition:</b> helper.h:11</div></div>
 <div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_a30d21b580f20c0e56221dfc117418b6a"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#a30d21b580f20c0e56221dfc117418b6a">molpro::linalg::itsolv::svd_eigen_bdcsvd</a></div><div class="ttdeci">std::list&lt; SVD&lt; value_type &gt; &gt; svd_eigen_bdcsvd(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, double threshold)</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:56</div></div>
 <div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_a7004fcfd7dc7522336f1166185df6775"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#a7004fcfd7dc7522336f1166185df6775">molpro::linalg::itsolv::eigensolver_lapacke_dsyev</a></div><div class="ttdeci">int eigensolver_lapacke_dsyev(std::span&lt; const double &gt; matrix, std::span&lt; double &gt; eigenvectors, std::span&lt; double &gt; eigenvalues, const size_t dimension)</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:143</div></div>
+<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_a7e0e794235aa1f66c87e6f7ca273331e"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#a7e0e794235aa1f66c87e6f7ca273331e">molpro::linalg::itsolv::get_rank&lt; value_type &gt;</a></div><div class="ttdeci">template size_t get_rank&lt; value_type &gt;(std::span&lt; const value_type &gt; eigenvalues, value_type threshold)</div></div>
 <div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_a7fcb72d6b1c715ed5d87f93aabf65581"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#a7fcb72d6b1c715ed5d87f93aabf65581">molpro::linalg::itsolv::svd_system</a></div><div class="ttdeci">std::list&lt; SVD&lt; value_type &gt; &gt; svd_system(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, double threshold, bool hermitian=false, bool reduce_to_rank=false)</div><div class="ttdoc">Performs singular value decomposition and returns SVD objects for singular values less than threshold...</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:269</div></div>
 <div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_a8ef28cdc50441ca2668d749086a6805d"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#a8ef28cdc50441ca2668d749086a6805d">molpro::linalg::itsolv::solve_LinearEquations</a></div><div class="ttdeci">void solve_LinearEquations(std::vector&lt; value_type &gt; &amp;solution, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, const std::vector&lt; value_type &gt; &amp;rhs, size_t dimension, size_t nroot, double augmented_hessian, double svdThreshold, int verbosity)</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:526</div></div>
-<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_a9f4b69d5700c5c0199c7424183b6641f"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#a9f4b69d5700c5c0199c7424183b6641f">molpro::linalg::itsolv::get_rank</a></div><div class="ttdeci">size_t get_rank(std::vector&lt; value_type &gt; eigenvalues, value_type threshold)</div></div>
-<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_aa96fd396113d6611510fc4d99c26d706"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#aa96fd396113d6611510fc4d99c26d706">molpro::linalg::itsolv::solve_DIIS</a></div><div class="ttdeci">void solve_DIIS(std::vector&lt; value_type &gt; &amp;solution, const std::vector&lt; value_type &gt; &amp;matrix, size_t dimension, double svdThreshold, int verbosity=0)</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:600</div></div>
+<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_aa96fd396113d6611510fc4d99c26d706"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#aa96fd396113d6611510fc4d99c26d706">molpro::linalg::itsolv::solve_DIIS</a></div><div class="ttdeci">void solve_DIIS(std::vector&lt; value_type &gt; &amp;solution, const std::vector&lt; value_type &gt; &amp;matrix, size_t dimension, double svdThreshold, int verbosity=0)</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:601</div></div>
+<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_ad0d90216536d8a1b628d615998392673"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#ad0d90216536d8a1b628d615998392673">molpro::linalg::itsolv::get_rank</a></div><div class="ttdeci">size_t get_rank(std::span&lt; const value_type &gt; eigenvalues, value_type threshold)</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:227</div></div>
 <div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_ae7c8c4790146512e2ce34c7c45432411"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#ae7c8c4790146512e2ce34c7c45432411">molpro::linalg::itsolv::printMatrix</a></div><div class="ttdeci">void printMatrix(const std::vector&lt; value_type &gt; &amp;, size_t rows, size_t cols, std::string title=&quot;&quot;, std::ostream &amp;s=molpro::cout)</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:311</div></div>
 <div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_aea423e48e8d97f970d45ab59696a096a"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#aea423e48e8d97f970d45ab59696a096a">molpro::linalg::itsolv::eigenproblem</a></div><div class="ttdeci">void eigenproblem(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, double svdThreshold, int verbosity)</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:317</div></div>
 <div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_aed5f5152ca0039709fc9f29a60595f68"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#aed5f5152ca0039709fc9f29a60595f68">molpro::linalg::itsolv::svd_eigen_jacobi</a></div><div class="ttdeci">std::list&lt; SVD&lt; value_type &gt; &gt; svd_eigen_jacobi(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, double threshold)</div><div class="ttdef"><b>Definition:</b> helper-implementation.h:26</div></div>

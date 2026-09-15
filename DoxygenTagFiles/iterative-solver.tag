@@ -11981,8 +11981,8 @@
       <type>size_t</type>
       <name>get_rank</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a9f4b69d5700c5c0199c7424183b6641f</anchor>
-      <arglist>(std::vector&lt; value_type &gt; eigenvalues, value_type threshold)</arglist>
+      <anchor>ad0d90216536d8a1b628d615998392673</anchor>
+      <arglist>(std::span&lt; const value_type &gt; eigenvalues, value_type threshold)</arglist>
     </member>
     <member kind="function">
       <type>size_t</type>
@@ -11990,6 +11990,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>a3e088fb3da611068c3c17c6335712499</anchor>
       <arglist>(std::list&lt; SVD&lt; value_type &gt; &gt; svd_system, value_type threshold)</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>get_rank</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a38363ebbea6e61a39ebe2bb4473fc17a</anchor>
+      <arglist>(const std::vector&lt; value_type &gt; &amp;eigenvalues, value_type threshold)</arglist>
     </member>
     <member kind="function">
       <type>std::list&lt; SVD&lt; value_type &gt; &gt;</type>
@@ -12039,6 +12046,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>a42ef971868a57bfead245c92f65cd675</anchor>
       <arglist>(const std::vector&lt; double &gt; &amp;, size_t rows, size_t cols, std::string title, std::ostream &amp;s)</arglist>
+    </member>
+    <member kind="function">
+      <type>template size_t</type>
+      <name>get_rank&lt; double &gt;</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>af6f332d9cdd597cd52f9d5d75ae0508b</anchor>
+      <arglist>(std::span&lt; const double &gt; eigenvalues, double threshold)</arglist>
     </member>
     <member kind="function">
       <type>template std::list&lt; SVD&lt; double &gt; &gt;</type>
@@ -12116,13 +12130,6 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>a30d21b580f20c0e56221dfc117418b6a</anchor>
       <arglist>(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, double threshold)</arglist>
-    </member>
-    <member kind="function">
-      <type>size_t</type>
-      <name>get_rank</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a76425378528f8a5c2e1374ecfb37d06b</anchor>
-      <arglist>(std::span&lt; value_type &gt; eigenvalues, value_type threshold)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -12352,8 +12359,8 @@
       <type>template size_t</type>
       <name>get_rank&lt; value_type &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>ab9ee725ba3564c386c9abda47fe3700b</anchor>
-      <arglist>(std::span&lt; value_type &gt; eigenvalues, value_type threshold)</arglist>
+      <anchor>a7e0e794235aa1f66c87e6f7ca273331e</anchor>
+      <arglist>(std::span&lt; const value_type &gt; eigenvalues, value_type threshold)</arglist>
     </member>
     <member kind="function">
       <type>template std::list&lt; SVD&lt; value_type &gt; &gt;</type>
