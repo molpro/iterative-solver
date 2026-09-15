@@ -30,8 +30,8 @@ void normalise(VecRef<R>& params, array::ArrayHandler<R, R>& handler, Logger& lo
                typename array::ArrayHandler<R, R>::value_type_abs thresh =
                    precision_scaled<typename array::ArrayHandler<R, R>::value_type_abs>(1e-14)) {
   for (auto& p : params) {
-    auto dot = handler.dot(p, p);
-    dot = std::sqrt(std::abs(dot));
+    // the length of a vector is a magnitude, real even when the elements are complex
+    const typename array::ArrayHandler<R, R>::value_type_abs dot = std::sqrt(std::abs(handler.dot(p, p)));
     if (dot > thresh) {
       handler.scal(1. / dot, p);
     } else {
@@ -174,8 +174,8 @@ auto remove_null_projected_solutions(const subspace::Matrix<value_type>& solutio
   value_type* m = const_cast<std::vector<value_type>&>(overlap_proj.data()).data();
   auto svd_vecs = svd_system(overlap_proj.rows(), overlap_proj.cols(), array::Span(m, overlap_proj.size()),
                              std::numeric_limits<value_type_abs>::max(), true);
-  svd_vecs.remove_if([&svd_thresh](const auto& el) { return el.value < svd_thresh; });
-  svd_vecs.sort([](const auto& lt, const auto& rt) { return lt.value < rt.value; });
+  svd_vecs.remove_if([&svd_thresh](const auto& el) { return real_part(el.value) < svd_thresh; });
+  svd_vecs.sort([](const auto& lt, const auto& rt) { return real_part(lt.value) < real_part(rt.value); });
   const auto nD = svd_vecs.size();
   const auto nX = solutions_proj.cols();
   auto solutions_stable = subspace::Matrix<value_type>({nD, nX});
