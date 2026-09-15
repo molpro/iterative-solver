@@ -1,9 +1,11 @@
 /*!
  * @file
- * @brief Tests for a complex scalar type.
+ * @brief Tests of the subspace solvers for a complex scalar type.
  *
  * The library uses the hermitian inner product, so the subspace overlap and a hermitian operator are
- * hermitian matrices rather than complex symmetric ones.
+ * hermitian matrices rather than complex symmetric ones. Each test below therefore checks the defining
+ * equation directly -- H c = lambda S c, H x = b -- rather than comparing against a transcribed
+ * reference, so that a wrong conjugation cannot pass unnoticed.
  */
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
