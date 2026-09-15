@@ -10,7 +10,7 @@ namespace molpro::linalg::itsolv {
 template void printMatrix<value_type>(const std::vector<value_type>&, size_t rows, size_t cols, std::string title,
                                       std::ostream& s);
 
-template size_t get_rank<value_type>(std::span<value_type> eigenvalues, value_type threshold);
+template size_t get_rank<value_type>(std::span<const value_type> eigenvalues, value_type threshold);
 
 template std::list<SVD<value_type>> svd_system<value_type>(size_t nrows, size_t ncols, const array::Span<value_type>& m,
                                                            double threshold, bool hermitian,
