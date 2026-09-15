@@ -14,8 +14,11 @@
 namespace molpro::linalg::itsolv {
 
 // Scalar traits shared with molpro::linalg::array, re-exported here for backwards compatibility
+using molpro::linalg::conjugate;
 using molpro::linalg::is_complex;
+using molpro::linalg::imaginary_part;
 using molpro::linalg::precision_scaled;
+using molpro::linalg::real_part;
 using molpro::linalg::real_type;
 using molpro::linalg::real_type_t;
 
@@ -135,7 +138,8 @@ extern template void solve_DIIS<double>(std::vector<double>& solution, const std
 /*
  * Explicit instantiation of long double type
  *
- * LAPACK has no kernels for this precision, so these exercise the Eigen branch of the dispatch.
+ * The dense kernels fall back on Eigen for this precision, as they do for any other scalar type for
+ * which LAPACK provides no kernel.
  */
 
 extern template void printMatrix<long double>(const std::vector<long double>&, size_t rows, size_t cols,

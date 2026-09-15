@@ -1,5 +1,7 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_MATRIX_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_MATRIX_H
+#include <molpro/linalg/scalar_traits.h>
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -285,6 +287,20 @@ void transpose_copy(ML&& ml, const MR& mr) {
   for (size_t i = 0; i < ml.rows(); ++i)
     for (size_t j = 0; j < ml.cols(); ++j)
       ml(i, j) = mr(j, i);
+}
+
+/*!
+ * @brief Copies the conjugate transpose of @p mr into @p ml.
+ *
+ * This is what relates the two off-diagonal blocks of a hermitian matrix; for a real element type it
+ * is the same as transpose_copy().
+ */
+template <class ML, class MR>
+void conjugate_transpose_copy(ML&& ml, const MR& mr) {
+  assert(ml.rows() == mr.cols() && ml.cols() == mr.rows());
+  for (size_t i = 0; i < ml.rows(); ++i)
+    for (size_t j = 0; j < ml.cols(); ++j)
+      ml(i, j) = molpro::linalg::conjugate(mr(j, i));
 }
 
 template <class Mat>

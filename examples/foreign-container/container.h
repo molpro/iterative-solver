@@ -1,5 +1,6 @@
 #ifndef LINEARALGEBRA_CONTAINER_H
 #define LINEARALGEBRA_CONTAINER_H
+#include <molpro/linalg/scalar_traits.h>
 #include <algorithm>
 #include <iostream>
 #include <map>
@@ -43,8 +44,12 @@ public:
                    [a](const value_type &xx, const value_type &yy) { return yy + a * xx; });
   }
 
+  //! The hermitian inner product <this|x>, i.e. conjugate-linear in the left operand
   value_type dot(const container &x) const {
-    return std::inner_product(m_data.begin(), m_data.end(), x.m_data.begin(), static_cast<value_type>(0));
+    return std::inner_product(m_data.begin(), m_data.end(), x.m_data.begin(), static_cast<value_type>(0),
+                              std::plus<value_type>{}, [](const value_type &a, const value_type &b) {
+                                return molpro::linalg::conjugate(a) * b;
+                              });
   }
 
   std::map<size_t, value_type> select_max_dot(size_t n, const container &y) const {

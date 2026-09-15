@@ -1,3 +1,4 @@
+#include <molpro/linalg/scalar_traits.h>
 #include "DistrArray.h"
 #include "util/select.h"
 #include "util/select_max_dot.h"
@@ -130,7 +131,10 @@ DistrArray::value_type DistrArray::dot(const DistrArray& y) const {
   auto loc_y = y.local_buffer();
   if (!loc_x->compatible(*loc_y))
     error(name + " incompatible local buffers");
-  auto a = std::inner_product(begin(*loc_x), end(*loc_x), begin(*loc_y), (value_type)0);
+  auto a = std::inner_product(begin(*loc_x), end(*loc_x), begin(*loc_y), (value_type)0, std::plus<value_type>{},
+                              [](const auto &elx, const auto &ely) {
+                                return molpro::linalg::conjugate(value_type(elx)) * value_type(ely);
+                              });
 #ifdef HAVE_MPI_H
   MPI_Allreduce(MPI_IN_PLACE, &a, 1, MPI_DOUBLE, MPI_SUM, communicator());
 #endif
