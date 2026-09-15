@@ -43,7 +43,7 @@ public:
     }
     m_solutions.slice().fill(0);
     m_solutions(0, 0) = 1;
-    m_errors.assign(1, kH(0, 0)); // FIXME
+    m_errors.assign(1, std::abs(kH(0, 0))); // FIXME
     m_logger->data_dump("solution = ", m_solutions);
   }
 

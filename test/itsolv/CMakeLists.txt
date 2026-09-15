@@ -7,6 +7,7 @@ add_executable(test-${PROJECT_NAME}-itsolv.exe
     test_SolverFactory.cpp
     test_helper-implementation.cpp
     test_helper-complex.cpp
+    test_complex_e2e.cpp
     test_helper-precision.cpp
     test_precision_e2e.cpp
     test_options_map.cpp
