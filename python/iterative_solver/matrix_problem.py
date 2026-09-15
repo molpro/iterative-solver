@@ -1,6 +1,5 @@
 import numpy as np
 from iterative_solver import Problem
-import copy
 import sys
 
 
