@@ -34,7 +34,7 @@ contains
     integer :: n_coeff
     call this%ensure()
     n_coeff = size(this%coefficients)
-    this%simple = this%simple .and. n_coeff.le.1
+    this%simple = this%simple .and. size(coefficients).le.1
     allocate(tempi(0:this%size))
     tempi(0:this%size) = this%offsets(0:this%size)
     deallocate(this%offsets)

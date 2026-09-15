@@ -128,7 +128,7 @@ void DistrArrayGA::get(index_type lo, index_type hi, value_type *buf) const {
     return;
   check_ga_ind_overlow(lo);
   check_ga_ind_overlow(hi);
-  int ld, ilo = lo, ihi = int(hi) - 1;
+  int ld = 1, ilo = lo, ihi = int(hi) - 1;
   NGA_Get(m_ga_handle, &ilo, &ihi, buf, &ld);
 }
 
@@ -145,7 +145,7 @@ void DistrArrayGA::put(index_type lo, index_type hi, const value_type *data) {
     return;
   check_ga_ind_overlow(lo);
   check_ga_ind_overlow(hi);
-  int ld, ilo = lo, ihi = int(hi) - 1;
+  int ld = 1, ilo = lo, ihi = int(hi) - 1;
   NGA_Put(m_ga_handle, &ilo, &ihi, const_cast<value_type *>(data), &ld);
 }
 
@@ -155,11 +155,10 @@ std::vector<DistrArrayGA::value_type> DistrArrayGA::gather(const std::vector<ind
   int n = indices.size();
   auto data = std::vector<double>(n);
   auto iind = std::vector<int>(indices.begin(), indices.end());
-  int **subsarray = new int *[n];
+  auto subsarray = std::vector<int *>(n);
   for (int i = 0; i < n; ++i)
     subsarray[i] = &(iind.at(i));
-  NGA_Gather(m_ga_handle, data.data(), subsarray, n);
-  delete[] subsarray;
+  NGA_Gather(m_ga_handle, data.data(), subsarray.data(), n);
   return data;
 }
 
@@ -168,11 +167,10 @@ void DistrArrayGA::scatter(const std::vector<index_type> &indices, const std::ve
     check_ga_ind_overlow(el);
   int n = indices.size();
   auto iind = std::vector<int>(indices.begin(), indices.end());
-  int **subsarray = new int *[n];
+  auto subsarray = std::vector<int *>(n);
   for (int i = 0; i < n; ++i)
     subsarray[i] = &(iind.at(i));
-  NGA_Scatter(m_ga_handle, const_cast<double *>(data.data()), subsarray, n);
-  delete[] subsarray;
+  NGA_Scatter(m_ga_handle, const_cast<double *>(data.data()), subsarray.data(), n);
 }
 
 void DistrArrayGA::scatter_acc(std::vector<index_type> &indices, const std::vector<value_type> &data) {
@@ -180,29 +178,30 @@ void DistrArrayGA::scatter_acc(std::vector<index_type> &indices, const std::vect
     check_ga_ind_overlow(el);
   int n = indices.size();
   auto iind = std::vector<int>(indices.begin(), indices.end());
-  int **subsarray = new int *[n];
+  auto subsarray = std::vector<int *>(n);
   for (int i = 0; i < n; ++i) {
     subsarray[i] = &(iind.at(i));
   }
   value_type alpha = 1;
-  NGA_Scatter_acc(m_ga_handle, const_cast<double *>(data.data()), subsarray, n, &alpha);
-  delete[] subsarray;
+  NGA_Scatter_acc(m_ga_handle, const_cast<double *>(data.data()), subsarray.data(), n, &alpha);
 }
 
 std::vector<DistrArrayGA::value_type> DistrArrayGA::vec() const {
   check_ga_ind_overlow(m_dimension);
   std::vector<double> vec(m_dimension);
   double *buffer = vec.data();
-  int lo = 0, hi = int(m_dimension) - 1, ld;
+  int lo = 0, hi = int(m_dimension) - 1, ld = 1;
   NGA_Get(m_ga_handle, &lo, &hi, buffer, &ld);
   return vec;
 }
 
 void DistrArrayGA::acc(index_type lo, index_type hi, const value_type *data) {
+  if (lo >= hi)
+    return;
   check_ga_ind_overlow(lo);
   check_ga_ind_overlow(hi);
   double scaling_constant = 1;
-  int ld, ilo = lo, ihi = hi;
+  int ld = 1, ilo = lo, ihi = int(hi) - 1;
   NGA_Acc(m_ga_handle, &ilo, &ihi, const_cast<double *>(data), &ld, &scaling_constant);
 }
 

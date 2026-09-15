@@ -11,20 +11,12 @@ std::tuple<std::vector<molpro::linalg::array::DistrArraySpan>, std::vector<molpr
   //std::vector<std::vector<double>> vx(n, std::vector<double>(dim)), vy(n, std::vector<double>(dim)),
   //    vz(n, std::vector<double>(dim));
 
+  // NOTE: these buffers are deliberately leaked. The returned DistrArraySpan
+  // objects hold non-owning views into vx_mem/vy_mem; we cannot delete[] them
+  // here without dangling those views. Test utility only.
   double* vx_mem = new double[n*dim];
   double* vy_mem = new double[n*dim];
   double* vz_mem = new double[n*dim];
-
-//  std::vector<Span<double>> vx, vy, vz;
-std::vector<molpro::linalg::array::span::Span<double>> vz;
-//  vx.reserve(n);
-//  vy.reserve(n);
-  vz.reserve(n);
-  for (size_t i=0; i<n; i++){
-//    vx.emplace_back( Span(vx_mem+(i*n), dim) );
-//    vy.emplace_back( Span(vy_mem+(i*n), dim) );
-    vz.emplace_back( molpro::linalg::array::span::Span(vz_mem+(i*n), dim) );
-  }
 
   std::vector<molpro::linalg::array::DistrArraySpan> cx;
   std::vector<molpro::linalg::array::DistrArraySpan> cy;

@@ -247,6 +247,8 @@ std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, co
 
 std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, const DistrArray::SparseArray& y) const {
   auto name = std::string("DistrArray::select_max_dot:");
+  if (y.empty())
+    return {};
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is too large");
   if (n > size() || n > y.size())
@@ -418,6 +420,8 @@ void DistrArray::copy_patch(const DistrArray& y, DistrArray::index_type start, D
 
 DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
   auto name = std::string{"Array::dot SparseArray "};
+  if (y.empty())
+    return 0;
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is incompatible");
   auto loc_x = local_buffer();
@@ -438,7 +442,7 @@ DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
 
 void DistrArray::axpy(value_type a, const SparseArray& y) {
   auto name = std::string{"Array::axpy SparseArray"};
-  if (a == 0)
+  if (a == 0 || y.empty())
     return;
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is incompatible");

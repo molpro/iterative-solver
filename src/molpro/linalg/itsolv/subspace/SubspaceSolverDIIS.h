@@ -5,6 +5,8 @@
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/Logger.h>
 
+#include <memory>
+
 namespace molpro::linalg::itsolv::subspace {
 
 /*!
@@ -33,6 +35,10 @@ public:
     m_logger->data_dump<15>("H = ", kH);
     auto kDim = kH.rows();
     m_solutions.resize({1, kDim});
+    if (kDim == 0) {
+      m_errors.clear();
+      return;
+    }
     if (m_converged) {
       m_solutions.fill(0);
       m_solutions(0, 0) = 1;
@@ -77,6 +83,8 @@ public:
 
   //! Number of solutions
   size_t size() const override { return m_solutions.rows(); }
+
+  void set_logger(std::shared_ptr<Logger> logger) override { m_logger = std::move(logger); }
 
 protected:
   Matrix<value_type> m_solutions;       //!< solution matrix with row vectors

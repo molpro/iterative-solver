@@ -6,6 +6,7 @@
 #include <molpro/iostream.h>
 #include <molpro/linalg/array/Span.h>
 #include <vector>
+#include <span>
 
 namespace molpro::linalg::itsolv {
 template <typename T>
@@ -23,19 +24,22 @@ struct SVD {
   std::vector<value_type> v; //!< right singular vector
 };
 
-int eigensolver_lapacke_dsyev(const std::vector<double>& matrix, std::vector<double>& eigenvectors,
-                              std::vector<double>& eigenvalues, const size_t dimension);
+int eigensolver_lapacke_dsyev(std::span<const double> matrix, std::span<double> eigenvectors,
+                              std::span<double> eigenvalues, const size_t dimension);
 
-std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::vector<double>& matrix);
-
-std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension,
-                                                 const molpro::linalg::array::span::Span<double>& matrix);
+std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::span<const double> matrix);
 
 template <typename value_type>
-size_t get_rank(std::vector<value_type> eigenvalues, value_type threshold);
+size_t get_rank(std::span<const value_type> eigenvalues, value_type threshold);
 
 template <typename value_type>
 size_t get_rank(std::list<SVD<value_type>> svd_system, value_type threshold);
+
+//! @copydoc get_rank
+template <typename value_type>
+size_t get_rank(const std::vector<value_type>& eigenvalues, value_type threshold) {
+  return get_rank<value_type>(std::span<const value_type>{eigenvalues.data(), eigenvalues.size()}, threshold);
+}
 
 /*!
  * @brief Performs singular value decomposition and returns SVD objects for singular values less than threshold, sorted
@@ -60,12 +64,13 @@ void printMatrix(const std::vector<value_type>&, size_t rows, size_t cols, std::
 template <typename value_type, typename std::enable_if_t<is_complex<value_type>{}, int> = 0>
 void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>& eigenvalues,
                   const std::vector<value_type>& matrix, const std::vector<value_type>& metric, size_t dimension,
-                  bool hermitian, double svdThreshold, int verbosity, bool condone_complex);
+                  bool hermitian, double svdThreshold, int verbosity);
 
 template <typename value_type, typename std::enable_if_t<!is_complex<value_type>{}, std::nullptr_t> = nullptr>
 void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>& eigenvalues,
                   const std::vector<value_type>& matrix, const std::vector<value_type>& metric, size_t dimension,
-                  bool hermitian, double svdThreshold, int verbosity, bool condone_complex);
+                  bool hermitian, double svdThreshold, int verbosity,
+				  std::vector<std::pair<std::size_t, value_type>> *imag_eval_parts = nullptr);
 
 template <typename value_type, typename std::enable_if_t<is_complex<value_type>{}, int> = 0>
 void solve_LinearEquations(std::vector<value_type>& solution, std::vector<value_type>& eigenvalues,
@@ -93,13 +98,15 @@ void solve_DIIS(std::vector<value_type>& solution, const std::vector<value_type>
 extern template void printMatrix<double>(const std::vector<double>&, size_t rows, size_t cols, std::string title,
                                          std::ostream& s);
 
+extern template size_t get_rank<double>(std::span<const double> eigenvalues, double threshold);
+
 extern template std::list<SVD<double>> svd_system(size_t nrows, size_t ncols, const array::Span<double>& m,
                                                   double threshold, bool hermitian, bool reduce_to_rank);
 
 extern template void eigenproblem<double>(std::vector<double>& eigenvectors, std::vector<double>& eigenvalues,
                                           const std::vector<double>& matrix, const std::vector<double>& metric,
                                           const size_t dimension, bool hermitian, double svdThreshold, int verbosity,
-                                          bool condone_complex);
+                                          std::vector<std::pair<std::size_t, double>> *imag_eval_parts);
 
 extern template void solve_LinearEquations<double>(std::vector<double>& solution, std::vector<double>& eigenvalues,
                                                    const std::vector<double>& matrix, const std::vector<double>& metric,
@@ -124,7 +131,7 @@ extern template void eigenproblem<std::complex<double>>(std::vector<std::complex
                                                         const std::vector<std::complex<double>>& matrix,
                                                         const std::vector<std::complex<double>>& metric,
                                                         const size_t dimension, bool hermitian, double svdThreshold,
-                                                        int verbosity, bool condone_complex);
+                                                        int verbosity);
 
 extern template void solve_LinearEquations<std::complex<double>>(
     std::vector<std::complex<double>>& solution, std::vector<std::complex<double>>& eigenvalues,

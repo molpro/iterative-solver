@@ -74,7 +74,13 @@ public:
     return {std::async(std::launch::async, std::forward<Func>(f), std::forward<Args>(args)...)};
   }
 
-  ~Task() { wait(); }
+  ~Task() {
+    // Don't call wait() here: a moved-from Task has an invalid future, and
+    // wait() throws future_error in that case. A throwing destructor in a
+    // non-noexcept context would terminate the program.
+    if (m_task.valid())
+      m_task.wait();
+  }
 
   //! Returns true if the task has completed
   bool test() { return m_task.wait_for(std::chrono::microseconds{1}) == std::future_status::ready; }

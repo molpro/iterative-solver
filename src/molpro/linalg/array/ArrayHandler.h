@@ -233,7 +233,7 @@ public:
       output.append(std::to_string(m_counter->dot) + " dot product operations between the " + L + " and " + R +
                     " vectors, ");
     if (m_counter->axpy > 0)
-      output.append(std::to_string(m_counter->axpy) + " axpy (" + R + " = a*" + L + " + " + R + ") operations, ");
+      output.append(std::to_string(m_counter->axpy) + " axpy (" + L + " = a*" + R + " + " + L + ") operations, ");
     if (m_counter->gemm_inner > 0)
       output.append(std::to_string(m_counter->gemm_inner) + " gemm_inner operations between the " + L + " and " + R +
                     " vectors, ");

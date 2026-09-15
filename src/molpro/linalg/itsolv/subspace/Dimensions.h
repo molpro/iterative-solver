@@ -1,5 +1,8 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_DIMENSIONS_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_DIMENSIONS_H
+
+#include <cstddef>
+
 namespace molpro::linalg::itsolv::subspace {
 //! Stores partitioning of XSpace into P, Q and R blocks with sizes and offsets for each one
 struct Dimensions {

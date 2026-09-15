@@ -12,7 +12,8 @@ namespace molpro::linalg::array {
 
 #if defined(USE_STD_SPAN) && __cplusplus >= 202002L
 //! For those who moved on to c++20
-using Span = std::span;
+template <typename T>
+using Span = std::span<T>;
 
 #endif
 
@@ -32,7 +33,7 @@ public:
   using element_type = T;
   using value_type = std::remove_cv_t<T>;
   using reference = T&;
-  using const_reference = T&;
+  using const_reference = const T&;
   using size_type = size_t;
   using difference_type = std::ptrdiff_t;
   using iterator = T*;

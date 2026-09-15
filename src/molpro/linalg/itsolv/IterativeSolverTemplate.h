@@ -174,12 +174,14 @@ public:
   void set_logger(std::shared_ptr<Logger> logger) override {
     assert(logger);
     m_logger = std::move(logger);
+    m_xspace->set_logger(m_logger);
+    m_subspace_solver->set_logger(m_logger);
   }
 
   Logger &logger() override { return *m_logger; }
 
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
-    profiler()->push("itsolv::add_vector");
+    auto outer = profiler()->push("itsolv::add_vector");
     auto prof = molpro::Profiler::single();
     m_logger->trace("IterativeSolverTemplate::add_vector  iteration = ", m_stats->iterations);
     m_logger->debug("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = ",
@@ -295,12 +297,22 @@ public:
       set_convergence_threshold(options.convergence_threshold.value());
     if (options.verbosity)
       set_verbosity(options.verbosity.value());
+    if (options.max_iter)
+      set_max_iter(options.max_iter.value());
+    if (options.max_p)
+      set_max_p(options.max_p.value());
+    if (options.p_threshold)
+      set_p_threshold(options.p_threshold.value());
   }
 
   std::shared_ptr<Options> get_options() const override {
     auto options = std::make_shared<Options>();
     options->n_roots = n_roots();
     options->convergence_threshold = convergence_threshold();
+    options->verbosity = get_verbosity();
+    options->max_iter = get_max_iter();
+    options->max_p = get_max_p();
+    options->p_threshold = get_p_threshold();
     return options;
   }
 
@@ -420,11 +432,19 @@ public:
     std::vector<P> pspace;
     if (use_diagonals and m_max_p > 0) {
       auto selectp = m_handlers->qq().select(m_max_p, *diagonals);
-      for (auto s = selectp.begin(); s != selectp.end(); s++)
-        if (s->second > selectp.begin()->second + m_p_threshold) {
-          selectp.erase(s, selectp.end());
-          break;
+      if (!selectp.empty()) {
+        // selectp is keyed by index, not value; find the smallest selected
+        // diagonal explicitly before applying the threshold.
+        auto min_val = std::min_element(selectp.begin(), selectp.end(),
+                                        [](const auto& a, const auto& b) { return a.second < b.second; })
+                           ->second;
+        for (auto s = selectp.begin(); s != selectp.end();) {
+          if (s->second > min_val + m_p_threshold)
+            s = selectp.erase(s);
+          else
+            ++s;
         }
+      }
       if (!selectp.empty() && (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary)) {
         this->m_logger->info("P-space dimension, threshold and limit", selectp.size(), m_p_threshold, m_max_p);
       }
@@ -470,6 +490,9 @@ public:
         iteration_report();
       }
     }
+
+    this->finalize();
+
     if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Summary) {
       summary_report();
     }
@@ -508,7 +531,6 @@ public:
       Q parameters0 = m_handlers->qr().copy(v0);
       Q residual0 = m_handlers->qr().copy(v1);
       for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
-        Q parameters1 = m_handlers->qr().copy(v0);
         m_handlers->rq().axpy(-1.0, parameters0, v0);
         m_handlers->rr().scal(1 / std::sqrt(m_handlers->rr().dot(v0, v0)), v0);
         Q step1 = m_handlers->qr().copy(v0);
@@ -647,6 +669,8 @@ protected:
   }
 
   bool end_iteration_needed() override { return m_end_iteration_needed; }
+
+  void finalize() override {}
 
 
   std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;                    //!< Array handlers

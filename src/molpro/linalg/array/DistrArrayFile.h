@@ -7,8 +7,6 @@
 #include <fstream>
 #include <memory>
 
-using molpro::mpi::comm_global;
-
 namespace molpro::linalg::array {
 /*!
  * @brief Distributed array storing the buffer on disk using temporary local files.
@@ -34,8 +32,10 @@ public:
   DistrArrayFile() = delete;
   DistrArrayFile(const DistrArrayFile& source);
   DistrArrayFile(DistrArrayFile&& source);
-  explicit DistrArrayFile(size_t dimension, MPI_Comm comm = comm_global(), const std::string& directory = ".");
-  explicit DistrArrayFile(std::unique_ptr<Distribution> distribution, MPI_Comm comm = comm_global(),
+  explicit DistrArrayFile(size_t dimension, MPI_Comm comm = molpro::mpi::comm_global(),
+                          const std::string& directory = ".");
+  explicit DistrArrayFile(std::unique_ptr<Distribution> distribution,
+                          MPI_Comm comm = molpro::mpi::comm_global(),
                           const std::string& directory = ".");
   explicit DistrArrayFile(const DistrArray& source);
 

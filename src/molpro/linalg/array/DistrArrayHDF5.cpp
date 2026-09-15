@@ -145,6 +145,9 @@ void DistrArrayHDF5::get(index_type lo, index_type hi, value_type *buf) const {
   auto plist_id = H5Pcreate(H5P_DATASET_XFER);
   H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
   auto ierr = H5Dread(m_dataset, H5T_NATIVE_DOUBLE, memspace, fspace, plist_id, buf);
+  H5Sclose(memspace);
+  H5Sclose(fspace);
+  H5Pclose(plist_id);
   if (ierr < 0)
     error("read failed");
 }
@@ -159,6 +162,8 @@ std::vector<DistrArrayHDF5::value_type> DistrArrayHDF5::get(DistrArray::index_ty
 }
 
 void DistrArrayHDF5::put(DistrArray::index_type lo, DistrArray::index_type hi, const DistrArray::value_type *data) {
+  if (lo >= hi)
+    return;
   if (!dataset_is_open())
     error("call open_access() before RMA operations");
   hsize_t count[1] = {hi - lo};
@@ -169,11 +174,16 @@ void DistrArrayHDF5::put(DistrArray::index_type lo, DistrArray::index_type hi, c
   auto plist_id = H5Pcreate(H5P_DATASET_XFER);
   H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
   auto ierr = H5Dwrite(m_dataset, H5T_NATIVE_DOUBLE, memspace, fspace, plist_id, data);
+  H5Sclose(memspace);
+  H5Sclose(fspace);
+  H5Pclose(plist_id);
   if (ierr < 0)
-    error("read failed");
+    error("write failed");
 }
 
 void DistrArrayHDF5::acc(index_type lo, index_type hi, const value_type *data) {
+  if (lo >= hi)
+    return;
   auto disk_copy = get(lo, hi);
   std::transform(begin(disk_copy), end(disk_copy), data, begin(disk_copy), [](auto &l, auto &r) { return l + r; });
   put(lo, hi, &disk_copy[0]);
@@ -184,6 +194,8 @@ std::vector<DistrArrayHDF5::value_type> DistrArrayHDF5::gather(const std::vector
     error("call open_access() before RMA operations");
   auto sz = indices.size();
   auto data = std::vector<value_type>(sz);
+  if (sz == 0)
+    return data;
   hsize_t count[] = {sz};
   auto memspace = H5Screate_simple(1, count, nullptr);
   auto fspace = H5Dget_space(m_dataset);
@@ -193,6 +205,9 @@ std::vector<DistrArrayHDF5::value_type> DistrArrayHDF5::gather(const std::vector
   auto plist_id = H5Pcreate(H5P_DATASET_XFER);
   H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
   auto ierr = H5Dread(m_dataset, H5T_NATIVE_DOUBLE, memspace, fspace, plist_id, &data[0]);
+  H5Sclose(memspace);
+  H5Sclose(fspace);
+  H5Pclose(plist_id);
   if (ierr < 0)
     error("read failed");
   return data;
@@ -202,6 +217,8 @@ void DistrArrayHDF5::scatter(const std::vector<index_type> &indices, const std::
   if (!dataset_is_open())
     error("call open_access() before RMA operations");
   auto sz = indices.size();
+  if (sz == 0)
+    return;
   hsize_t count[] = {sz};
   auto memspace = H5Screate_simple(1, count, nullptr);
   auto fspace = H5Dget_space(m_dataset);
@@ -211,8 +228,11 @@ void DistrArrayHDF5::scatter(const std::vector<index_type> &indices, const std::
   auto plist_id = H5Pcreate(H5P_DATASET_XFER);
   H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
   auto ierr = H5Dwrite(m_dataset, H5T_NATIVE_DOUBLE, memspace, fspace, plist_id, &data[0]);
+  H5Sclose(memspace);
+  H5Sclose(fspace);
+  H5Pclose(plist_id);
   if (ierr < 0)
-    error("read failed");
+    error("write failed");
 }
 
 void DistrArrayHDF5::scatter_acc(std::vector<index_type> &indices, const std::vector<value_type> &data) {

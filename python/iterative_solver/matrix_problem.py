@@ -1,6 +1,5 @@
 import numpy as np
 from iterative_solver import Problem
-import copy
 import sys
 
 
@@ -19,7 +18,7 @@ class MatrixProblem(Problem):
             self.m_RHS = RHS
 
     def RHS(self, vector, instance):
-        if instance < 0 or instance >= self.m_RHS.shape[1]:
+        if instance < 0 or instance >= self.m_RHS.shape[0]:
             return False
         np.copyto(vector, self.m_RHS[instance, :])
         return True

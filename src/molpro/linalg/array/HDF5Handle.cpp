@@ -250,18 +250,22 @@ bool hdf5_file_is_open(hid_t file_id) { return H5Fget_obj_count(file_id, H5F_OBJ
 
 std::string hdf5_get_object_name(hid_t id) {
   auto size = H5Iget_name(id, nullptr, 0);
+  if (size < 0)
+    return {};
   std::string result;
-  result.resize(size + 1);
+  result.resize(static_cast<size_t>(size) + 1);
   H5Iget_name(id, &result[0], size + 1);
-  result.resize(size);
+  result.resize(static_cast<size_t>(size));
   return result;
 }
 std::string hdf5_get_file_name(hid_t id) {
   auto size = H5Fget_name(id, nullptr, 0);
+  if (size < 0)
+    return {};
   std::string result;
-  result.resize(size + 1);
+  result.resize(static_cast<size_t>(size) + 1);
   H5Fget_name(id, &result[0], size + 1);
-  result.resize(size); // get rid of the null terminator
+  result.resize(static_cast<size_t>(size)); // get rid of the null terminator
   return result;
 }
 //  "/group1/group2/dataset/does_not_exist"

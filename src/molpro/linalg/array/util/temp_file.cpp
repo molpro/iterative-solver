@@ -27,11 +27,13 @@ fs::path temp_file_name(const fs::path& base_name, const std::string& suffix, MP
 }
 #endif
 
+namespace {
 int s_temp_file_name_count = 0;
 std::mutex s_mutex;
+} // namespace
 fs::path temp_file_name(const fs::path& base_name, const std::string& suffix) {
   auto lock = std::lock_guard(s_mutex);
-  const std::string chars = "01234566789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const std::string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const int length = 32;
   std::hash<std::thread::id> hasher;
   auto time = std::chrono::high_resolution_clock().now().time_since_epoch().count();

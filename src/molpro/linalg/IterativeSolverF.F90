@@ -65,16 +65,6 @@ MODULE Iterative_Solver
   END INTERFACE
 
 CONTAINS
-  subroutine test_select
-    i = 1
-    select case(4)
-    case(0)
-      print*, 0
-    case(1)
-      print*, 1
-    end select
-  end subroutine test_select
-
   FUNCTION mpicomm_compute()
     INTEGER(KIND = mpicomm_kind) :: mpicomm_compute
     if (s_mpicomm_compute .EQ. -9999999) s_mpicomm_compute = mpicomm_global()
@@ -786,7 +776,6 @@ end select
 
   SUBROUTINE Iterative_Solver_Add_Equations(rhs)
     USE iso_c_binding
-    INTEGER :: Iterative_Solver_Add_Vector
     DOUBLE PRECISION, DIMENSION(..), INTENT(in), target :: rhs
     INTERFACE
       SUBROUTINE Add_Equation_C(rhs) &
@@ -858,7 +847,7 @@ end select
   !> \return The size of the working set
   FUNCTION Iterative_Solver_End_Iteration(solution, residual, synchronize)
     USE iso_c_binding
-    INTEGER :: Iterative_Solver_End_Iteration1
+    INTEGER :: Iterative_Solver_End_Iteration
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), TARGET :: solution
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), TARGET :: residual
     LOGICAL, INTENT(in), OPTIONAL :: synchronize

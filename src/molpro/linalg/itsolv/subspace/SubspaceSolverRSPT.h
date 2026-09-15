@@ -1,6 +1,10 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_SUBSPACESOLVERRSPT_H_
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_SUBSPACESOLVERRSPT_H_
 #include "SubspaceSolverLinEig.h"
+#include "molpro/linalg/itsolv/Logger.h"
+
+#include <memory>
+
 namespace molpro::linalg::itsolv::subspace {
 template <class RT, class QT, class PT>
 class SubspaceSolverRSPT : public SubspaceSolverLinEig<RT, QT, PT> {

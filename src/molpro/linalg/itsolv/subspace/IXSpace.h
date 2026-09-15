@@ -6,7 +6,13 @@
 #include <molpro/linalg/itsolv/subspace/SubspaceData.h>
 #include <molpro/linalg/itsolv/wrap.h>
 
-namespace molpro::linalg::itsolv::subspace {
+#include <memory>
+
+namespace molpro::linalg::itsolv {
+
+class Logger;
+
+namespace subspace {
 
 //! Full subspace
 template <class RT, class QT, class PT>
@@ -61,8 +67,11 @@ public:
   virtual CVecRef<Q> cactionsd() const = 0;
 
   virtual const Dimensions& dimensions() const = 0;
+
+  virtual void set_logger(std::shared_ptr<Logger> logger) = 0;
 };
 
-} // namespace molpro::linalg::itsolv::subspace
+} // namespace subspace
+} // namespace molpro::linalg::itsolv
 
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_IXSPACE_H

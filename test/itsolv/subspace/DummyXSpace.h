@@ -3,8 +3,12 @@
 
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
+#include <molpro/linalg/itsolv/Logger.h>
+
+#include <memory>
 
 using molpro::linalg::itsolv::CVecRef;
+using molpro::linalg::itsolv::Logger;
 using molpro::linalg::itsolv::VecRef;
 using molpro::linalg::itsolv::subspace::Matrix;
 
@@ -51,6 +55,8 @@ struct DummyXSpace : public molpro::linalg::itsolv::subspace::IXSpace<R, Q, P> {
   CVecRef<Q> cactionsd() const override { return CVecRef<Q>{}; }
 
   const molpro::linalg::itsolv::subspace::Dimensions& dimensions() const override { return dims; }
+
+  void set_logger(std::shared_ptr<Logger>) override {}
 
   molpro::linalg::itsolv::subspace::Dimensions dims;
 };

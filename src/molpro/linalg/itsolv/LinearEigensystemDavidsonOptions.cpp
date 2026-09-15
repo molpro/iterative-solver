@@ -1,29 +1,9 @@
 #include "LinearEigensystemDavidsonOptions.h"
-#include "util.h"
+#include "DavidsonOptions.h"
+#include "Options.h"
 
 namespace molpro::linalg::itsolv {
 LinearEigensystemDavidsonOptions::LinearEigensystemDavidsonOptions(const std::map<std::string, std::string>& opt)
-    : LinearEigensystemOptions(opt) {
-  auto facet = util::StringFacet{};
-  auto opt_upper = util::capitalize_keys(opt, facet);
-  if (auto key = facet.toupper("reset_D"); opt_upper.count(key)) {
-    reset_D = std::stoi(opt_upper.at(key));
-  };
-  if (auto key = facet.toupper("reset_D_max_Q_size"); opt_upper.count(key)) {
-    reset_D_max_Q_size = std::stoi(opt_upper.at(key));
-  }
-  if (auto key = facet.toupper("max_size_qspace"); opt_upper.count(key)) {
-    max_size_qspace = std::stoi(opt_upper.at(key));
-  }
-  if (auto key = facet.toupper("norm_thresh"); opt_upper.count(key)) {
-    norm_thresh = std::stod(opt_upper.at(key));
-  }
-  if (auto key = facet.toupper("svd_thresh"); opt_upper.count(key)) {
-    svd_thresh = std::stod(opt_upper.at(key));
-  }
-  if (auto key = facet.toupper("hermiticity"); opt_upper.count(key)) {
-    hermiticity = facet.tobool(opt_upper.at(key));
-  }
-}
+    : LinearEigensystemOptions(opt), DavidsonOptions(opt) {}
 
 } // namespace molpro::linalg::itsolv

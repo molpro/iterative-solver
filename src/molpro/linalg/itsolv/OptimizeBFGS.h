@@ -36,8 +36,7 @@ public:
       : SolverTemplate(std::make_shared<subspace::XSpace<R, Q, P>>(handlers, logger_),
                        std::static_pointer_cast<subspace::ISubspaceSolver<R, Q, P>>(
                            std::make_shared<subspace::SubspaceSolverOptBFGS<R, Q, P>>(logger_)),
-                       handlers, std::make_shared<Statistics>(), logger_),
-        logger(logger_) {}
+                       handlers, std::make_shared<Statistics>(), logger_) {}
 
   bool nonlinear() const override { return true; }
 
@@ -244,7 +243,7 @@ public:
     opt->copy(*SolverTemplate::get_options());
     opt->max_size_qspace = get_max_size_qspace();
     opt->strong_Wolfe = m_strong_Wolfe;
-    opt->Wolfe_1 = m_strong_Wolfe;
+    opt->Wolfe_1 = m_Wolfe_1;
     opt->Wolfe_2 = m_Wolfe_2;
     opt->linesearch_tolerance = m_linesearch_tolerance;
     opt->linesearch_grow_factor = m_linesearch_grow_factor;
@@ -258,7 +257,6 @@ public:
     if (endl)
       cout << std::endl;
   }
-  std::shared_ptr<Logger> logger;
 
 protected:
   std::vector<double> m_BFGS_update_alpha;

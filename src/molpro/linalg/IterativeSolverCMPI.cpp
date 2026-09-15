@@ -190,12 +190,12 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
     //    solver_cast->propose_rspace_norm_thresh = 1.0e-14;
     //    solver_cast->set_max_size_qspace(10);
     //    solver_cast->set_reset_D(50);
-    solver->logger->set_verbosity(
+    solver->logger().set_verbosity(
         verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Trace
                       : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Debug : molpro::linalg::itsolv::log::Verbosity::Info));
-    solver->logger->set_min_severity(
+    solver->logger().set_min_severity(
         verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
-    solver->logger->enable_data_dumps(verbosity > 0);
+    solver->logger().enable_data_dumps(verbosity > 0);
   }
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
@@ -217,18 +217,21 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
   auto& instance = instances.top();
   auto rr = CreateDistrArray(nroot, rhs);
   auto solver = dynamic_cast<LinearEquationsDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get());
+  if (!solver)
+    throw std::runtime_error("IterativeSolverLinearEquationsInitialize: solver factory returned an unexpected type for algorithm \"" +
+                             std::string(algorithm ? algorithm : "") + "\"");
   solver->set_augmented_hessian(aughes);
   solver->set_hermiticity(hermitian);
   solver->set_n_roots(nroot);
   solver->add_equations(rr);
   solver->set_convergence_threshold(thresh);
   solver->set_convergence_threshold_value(thresh_value);
-  solver->logger->set_verbosity(
+  solver->logger().set_verbosity(
       verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Trace
                     : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Debug : molpro::linalg::itsolv::log::Verbosity::Info));
-  solver->logger->set_min_severity(
+  solver->logger().set_min_severity(
       verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
-  solver->logger->enable_data_dumps(verbosity > 0);
+  solver->logger().enable_data_dumps(verbosity > 0);
   // instance.solver->m_verbosity = verbosity;
   instance.solver->set_verbosity(verbosity);
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
@@ -253,12 +256,16 @@ extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* ra
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
   molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>*>(instance.solver.get());
-  solver->logger->set_verbosity(
+  if (!solver)
+    throw std::runtime_error(
+        "IterativeSolverNonLinearEquationsInitialize: solver factory returned an unexpected type for algorithm \"" +
+        std::string(algorithm ? algorithm : "") + "\"");
+  solver->logger().set_verbosity(
      verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Trace
                    : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Debug : molpro::linalg::itsolv::log::Verbosity::Info));
-  solver->logger->set_min_severity(
+  solver->logger().set_min_severity(
       verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
-  solver->logger->enable_data_dumps(verbosity > 0);
+  solver->logger().enable_data_dumps(verbosity > 0);
 }
 
 extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin, size_t* range_end, double thresh,
@@ -279,12 +286,16 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   instance.solver->set_verbosity(verbosity);
   molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>*>(instance.solver.get());
-  solver->logger->set_verbosity(
+  if (!solver)
+    throw std::runtime_error(
+        "IterativeSolverOptimizeInitialize: BFGS-specific configuration requested but the factory returned a different algorithm for \"" +
+        std::string(algorithm ? algorithm : "") + "\"");
+  solver->logger().set_verbosity(
      verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Trace
                    : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Debug : molpro::linalg::itsolv::log::Verbosity::Info));
-  solver->logger->set_min_severity(
+  solver->logger().set_min_severity(
       verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
-  solver->logger->enable_data_dumps(verbosity > 0);
+  solver->logger().enable_data_dumps(verbosity > 0);
 
   instance.has_values = true;
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
@@ -301,8 +312,11 @@ extern "C" void IterativeSolverAddEquation(double* rhs) {
   if (instance.prof != nullptr)
     instance.prof->start("AddEquation");
   auto ccc = CreateDistrArray(1, rhs);
-  dynamic_cast<molpro::linalg::itsolv::LinearEquationsDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get())
-      ->add_equations(ccc[0]);
+  auto* solver =
+      dynamic_cast<molpro::linalg::itsolv::LinearEquationsDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get());
+  if (!solver)
+    throw std::runtime_error("IterativeSolverAddEquation: current solver is not LinearEquationsDavidson");
+  solver->add_equations(ccc[0]);
   if (instance.prof != nullptr) {
     instance.prof->stop();
   }
@@ -318,11 +332,10 @@ extern "C" size_t IterativeSolverAddValue(double value, double* parameters, doub
   auto ggg = CreateDistrArray(1, action);
   if (instance.prof != nullptr)
     instance.prof->start("AddValue:Call");
-  size_t working_set_size =
-      dynamic_cast<molpro::linalg::itsolv::Optimize<Rvector, Qvector, Pvector>*>(instance.solver.get())
-              ->add_vector(ccc[0], ggg[0], value) > 0
-          ? 1
-          : 0;
+  auto* solver = dynamic_cast<molpro::linalg::itsolv::Optimize<Rvector, Qvector, Pvector>*>(instance.solver.get());
+  if (!solver)
+    throw std::runtime_error("IterativeSolverAddValue: current solver is not an Optimize solver");
+  size_t working_set_size = solver->add_vector(ccc[0], ggg[0], value) > 0 ? 1 : 0;
   if (instance.prof != nullptr) {
     instance.prof->stop();
     instance.prof->start("AddValue:Sync");
@@ -406,7 +419,7 @@ extern "C" size_t IterativeSolverEndIteration(size_t buffer_size, double* soluti
   auto result = instance.solver->end_iteration(cc, gg);
   if (instance.prof != nullptr) {
     instance.prof->stop();
-    instance.prof->start("AddVector:Sync");
+    instance.prof->start("EndIter:Sync");
   }
   if (sync) {
     DistrArraySynchronize(instance.solver->working_set().size(), cc, solution);
@@ -420,6 +433,8 @@ extern "C" size_t IterativeSolverEndIteration(size_t buffer_size, double* soluti
 }
 
 extern "C" int IterativeSolverEndIterationNeeded(){
+  if (instances.empty())
+    throw std::runtime_error("IterativeSolver not initialised properly");
   auto& instance = instances.top();
   return instance.solver->end_iteration_needed() ? 1:0;
 }
@@ -427,6 +442,8 @@ extern "C" int IterativeSolverEndIterationNeeded(){
 extern "C" size_t IterativeSolverAddP(size_t buffer_size, size_t nP, const size_t* offsets, const size_t* indices,
                                       const double* coefficients, const double* pp, double* parameters, double* action,
                                       int sync, apply_on_p_t func) {
+  if (instances.empty())
+    throw std::runtime_error("IterativeSolver not initialised properly");
   auto& instance = instances.top();
   instance.apply_on_p_fort = func;
   if (instance.prof != nullptr)
@@ -467,7 +484,15 @@ extern "C" size_t IterativeSolverAddP(size_t buffer_size, size_t nP, const size_
   return working_set_size;
 }
 
+namespace {
+void require_instance() {
+  if (instances.empty())
+    throw std::runtime_error("IterativeSolver not initialised properly");
+}
+} // namespace
+
 extern "C" void IterativeSolverErrors(double* errors) {
+  require_instance();
   auto& instance = instances.top();
   size_t k = 0;
   for (const auto& e : instance.solver.get()->errors())
@@ -476,6 +501,7 @@ extern "C" void IterativeSolverErrors(double* errors) {
 }
 
 extern "C" void IterativeSolverEigenvalues(double* eigenvalues) {
+  require_instance();
   auto& instance = instances.top();
   size_t k = 0;
   LinearEigensystem<Rvector, Qvector, Pvector>* solver_cast =
@@ -487,6 +513,7 @@ extern "C" void IterativeSolverEigenvalues(double* eigenvalues) {
 }
 
 extern "C" void IterativeSolverWorkingSetEigenvalues(double* eigenvalues) {
+  require_instance();
   auto& instance = instances.top();
   size_t k = 0;
   LinearEigensystemDavidson<Rvector, Qvector, Pvector>* solver_cast =
@@ -499,6 +526,7 @@ extern "C" void IterativeSolverWorkingSetEigenvalues(double* eigenvalues) {
 
 extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* residual, size_t maximumNumber,
                                           double threshold, size_t* indices) {
+  require_instance();
   auto& instance = instances.top();
   if (instance.prof != nullptr)
     instance.prof->start("SuggestP");
@@ -513,25 +541,45 @@ extern "C" size_t IterativeSolverSuggestP(const double* solution, const double* 
   return result.size();
 }
 
-extern "C" void IterativeSolverPrintStatistics() { molpro::cout << instances.top().solver->statistics() << std::endl; }
+extern "C" void IterativeSolverPrintStatistics() {
+  require_instance();
+  molpro::cout << instances.top().solver->statistics() << std::endl;
+}
 
-extern "C" int IterativeSolverConverged() { return instances.top().solver->working_set().empty() ? 1 : 0; }
+extern "C" int IterativeSolverConverged() {
+  require_instance();
+  return instances.top().solver->working_set().empty() ? 1 : 0;
+}
 
-int IterativeSolverNonLinear() { return instances.top().solver->nonlinear() ? 1 : 0; }
-int IterativeSolverHasValues() { return instances.top().has_values ? 1 : 0; }
-int IterativeSolverHasEigenvalues() { return instances.top().has_eigenvalues ? 1 : 0; }
+int IterativeSolverNonLinear() {
+  require_instance();
+  return instances.top().solver->nonlinear() ? 1 : 0;
+}
+int IterativeSolverHasValues() {
+  require_instance();
+  return instances.top().has_values ? 1 : 0;
+}
+int IterativeSolverHasEigenvalues() {
+  require_instance();
+  return instances.top().has_eigenvalues ? 1 : 0;
+}
 
 void IterativeSolverSetDiagonals(const double* diagonals) {
+  require_instance();
   instances.top().diagonals.reset(new Qvector(CreateDistrArray(1, diagonals).front()));
 }
 void IterativeSolverDiagonals(double* diagonals) {
+  require_instance();
   CreateDistrArray(1, diagonals).front().copy(*instances.top().diagonals);
 }
-double IterativeSolverValue() { return instances.top().solver->value(); }
+double IterativeSolverValue() {
+  require_instance();
+  return instances.top().solver->value();
+}
 int IterativeSolverVerbosity() {
+  require_instance();
   auto verbosity = instances.top().solver->logger().verbosity();
   auto min_severity = instances.top().solver->logger().min_severity();
-
   switch (verbosity) {
     using namespace molpro::linalg::itsolv;
     case log::Verbosity::None:
@@ -546,8 +594,14 @@ int IterativeSolverVerbosity() {
 
   return -1;
 }
-int IterativeSolverMaxIter() { return instances.top().solver->get_max_iter(); }
-void IterativeSolverSetMaxIter(int max_iter) { instances.top().solver->set_max_iter(max_iter); }
+int IterativeSolverMaxIter() {
+  require_instance();
+  return instances.top().solver->get_max_iter();
+}
+void IterativeSolverSetMaxIter(int max_iter) {
+  require_instance();
+  instances.top().solver->set_max_iter(max_iter);
+}
 /*!
  * @brief C binding of mpi::comm_global(), suitable for calling from Fortran
  */

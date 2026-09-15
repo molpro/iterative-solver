@@ -16,6 +16,7 @@ module Iterative_Solver_Problem
     procedure, pass :: report
     procedure, pass :: p_action
     procedure, pass :: pp_action_matrix
+    procedure, pass :: test_parameters
   end type Problem
 contains
 
@@ -185,7 +186,8 @@ contains
   !> @param instance
   !> @param parameters
   !> @return true if a vector has been provided
-  logical function test_parameters(instance, parameters)
+  logical function test_parameters(this, instance, parameters)
+    class(Problem), intent(in) :: this
     integer, intent(in) :: instance
     double precision, dimension(:), intent(inout) :: parameters
     test_parameters = .false.

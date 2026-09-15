@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     if (!success)
       std::cout << "failed" << std::endl;
     else
-      std::cout << "converged in " << solver->statistics().iterations << " iterations" << std::endl;
+      std::cout << "converged in " << solver2->statistics().iterations << " iterations" << std::endl;
     std::cout << solver2->statistics() << std::endl;
     std::cout << "solution";
     for (const auto& e : c)

@@ -67,7 +67,10 @@ public:
 
 protected:
   using value_type = typename T::value_type;
-  const CVecRef& m_arrays; // reference to the DistrArray objects data is being accessed from
+  // Stored by value, not reference: the convenience constructors below
+  // delegate using temporaries (cwrap(arrays), CVecRef{std::cref(array)})
+  // that would dangle once the delegating call returns.
+  const CVecRef m_arrays; // the DistrArray objects data is being accessed from
   const size_t m_buffer_size = 8192;
   const int m_number_of_buffers = 2;
   size_t m_current_buffer_size;
