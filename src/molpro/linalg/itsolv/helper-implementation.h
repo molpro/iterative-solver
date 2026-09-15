@@ -224,7 +224,7 @@ inline std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::s
  * \returns the rank. For an empty matrix, returns 0.
  */
 template <typename value_type>
-size_t get_rank(std::span<value_type> eigenvalues, value_type threshold) {
+size_t get_rank(std::span<const value_type> eigenvalues, value_type threshold) {
   if (eigenvalues.size() == 0) {
     return 0;
   }
@@ -246,7 +246,7 @@ template <typename value_type>
 size_t get_rank(std::list<SVD<value_type>> svd_system, value_type threshold) {
   // compute max
   value_type max_value = 0;
-  std::list<SVD<double>>::iterator it;
+  typename std::list<SVD<value_type>>::iterator it;
   for (it = svd_system.begin(); it != svd_system.end(); it++) {
     if (it->value > max_value) {
       max_value = it->value;
@@ -354,7 +354,7 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   if (success != 0) {
     throw std::runtime_error("Eigensolver did not converge");
   }
-  rank = get_rank(std::span(metricEvals.data(), dimension), svdThreshold);
+  rank = get_rank<value_type>(std::span<const value_type>{metricEvals.data(), dimension}, svdThreshold);
 
   if (verbosity > 1 && rank < S.cols())
     molpro::cout << "SVD rank " << rank << " in subspace of dimension " << S.cols() << std::endl;
@@ -402,7 +402,7 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     }
 
     // Convert eigenvectors back into original basis (minus singular dimensions)
-    subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * subspaceEigenvectors;
+    subspaceEigenvectors = metricEvecs.rightCols(rank) * svmh.asDiagonal() * subspaceEigenvectors;
   } else {
     // complex eigenvalues
 #ifdef __INTEL_COMPILER
@@ -413,7 +413,7 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
 #endif
 
     // Convert eigenvectors back into original basis (minus singular dimensions)
-    subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * s.eigenvectors();
+    subspaceEigenvectors = metricEvecs.rightCols(rank) * svmh.asDiagonal() * s.eigenvectors();
   }
 
   // Determine order of eigenvalues such that they come in non-descending order of their real part
@@ -543,14 +543,15 @@ void solve_LinearEquations(std::vector<value_type>& solution, std::vector<value_
     Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic> subspaceOverlap;
     subspaceMatrix.conservativeResize(nX + 1, nX + 1);
     subspaceOverlap.conservativeResize(nX + 1, nX + 1);
-    subspaceMatrix.block(0, 0, nX, nX) =
-        Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(matrix.data(), nX, nX);
-    subspaceOverlap.block(0, 0, nX, nX) =
-        Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(metric.data(), nX, nX);
+    // both arrive row-major, as subspace::Matrix stores them and as the straight-solve
+    // branch below already reads them
+    using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+    subspaceMatrix.block(0, 0, nX, nX) = Eigen::Map<const row_major_type>(matrix.data(), nX, nX);
+    subspaceOverlap.block(0, 0, nX, nX) = Eigen::Map<const row_major_type>(metric.data(), nX, nX);
     eigenvalues.resize(nroot);
     for (size_t root = 0; root < nroot; root++) {
       for (Eigen::Index i = 0; i < nX; i++) {
-        subspaceMatrix(i, nX) = subspaceMatrix(nX, i) = -augmented_hessian * rhs[i + nX * root];
+        subspaceMatrix(i, nX) = subspaceMatrix(nX, i) = -augmented_hessian * rhs[i * nroot + root];
         subspaceOverlap(i, nX) = subspaceOverlap(nX, i) = 0;
       }
       subspaceMatrix(nX, nX) = 0;

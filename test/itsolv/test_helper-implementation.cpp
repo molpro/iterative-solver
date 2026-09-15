@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <list>
 #include <vector>
 
 TEST(helper_implementation, eigenproblem) {
@@ -301,4 +302,138 @@ TEST(helper_implementation, eigenproblem_complex) {
   const double tol = 1e-10;
   ASSERT_THAT(imag_evals, (::testing::ElementsAre(testing::Pair(1, testing::DoubleNear(-0.000072204230, tol)),
                                                   testing::Pair(2, testing::DoubleNear(0.000072204230, tol)))));
+}
+
+namespace {
+
+//! A deterministic orthogonal matrix, from the QR decomposition of a fixed matrix
+Eigen::MatrixXd orthogonal_matrix(int n) {
+  Eigen::MatrixXd a(n, n);
+  for (int i = 0; i < n; ++i)
+    for (int j = 0; j < n; ++j)
+      a(i, j) = 1.0 / (1 + i + j) + ((i * 7 + j * 3) % 5) / 11.0;
+  return Eigen::HouseholderQR<Eigen::MatrixXd>(a).householderQ();
+}
+
+//! Row-major flattening, the layout subspace::Matrix uses and the subspace solvers expect
+std::vector<double> row_major(const Eigen::MatrixXd& m) {
+  std::vector<double> buffer(m.size());
+  for (Eigen::Index i = 0; i < m.rows(); ++i)
+    for (Eigen::Index j = 0; j < m.cols(); ++j)
+      buffer[i * m.cols() + j] = m(i, j);
+  return buffer;
+}
+
+} // namespace
+
+/*!
+ * @brief The eigenvectors of a rank-deficient hermitian problem must be S-orthonormal.
+ *
+ * Hbar is built from the metric eigenvectors of the *largest* eigenvalues, because the eigenvalues
+ * come out ascending and svmh is their tail. The back-transformation has to use the same columns; if
+ * it uses the leading ones instead, the eigenvalues still come out right -- they are a property of
+ * Hbar alone -- but the eigenvectors are scaled by a mismatched set of metric eigenvalues, which
+ * shows up here as a violation of S-orthonormality.
+ */
+TEST(helper_implementation, eigenproblem_rank_deficient_eigenvectors_are_S_orthonormal) {
+  constexpr int n = 5;
+  const auto V = orthogonal_matrix(n);
+  Eigen::VectorXd s(n);
+  s << 0.0, 1.0, 2.0, 3.0, 4.0; // exactly one null direction
+  const Eigen::MatrixXd S = V * s.asDiagonal() * V.transpose();
+
+  const auto W = orthogonal_matrix(n);
+  Eigen::VectorXd d(n);
+  d << 1.0, 2.0, 3.0, 4.0, 5.0;
+  const Eigen::MatrixXd H = W * d.asDiagonal() * W.transpose();
+
+  std::vector<double> evecs, evals;
+  molpro::linalg::itsolv::eigenproblem(evecs, evals, row_major(H), row_major(S), n, true, 1e-10, 0);
+  ASSERT_EQ(evals.size(), size_t(n - 1)) << "the null direction of the metric should have been dropped";
+  ASSERT_EQ(evecs.size(), size_t(n * (n - 1)));
+
+  // eigenvector k occupies elements [k*n, (k+1)*n) of the column-major buffer
+  auto column = [&](int k) {
+    Eigen::VectorXd c(n);
+    for (int i = 0; i < n; ++i)
+      c(i) = evecs[k * n + i];
+    return c;
+  };
+  for (int k = 0; k + 1 < n; ++k) {
+    EXPECT_NEAR(column(k).dot(S * column(k)), 1.0, 1e-9) << "normalisation of root " << k;
+    for (int l = 0; l < k; ++l)
+      EXPECT_NEAR(column(k).dot(S * column(l)), 0.0, 1e-9) << "overlap of roots " << k << " and " << l;
+  }
+}
+
+/*!
+ * @brief The augmented-Hessian branch must read the right-hand sides the way its caller stores them.
+ *
+ * rhs is a row-major dimension x nroot matrix, which is how the straight-solve branch reads it and
+ * how subspace::Matrix stores it. Indexing it column-major gives the wrong vector for every root
+ * after the first, so this only shows up with more than one right-hand side.
+ */
+TEST(helper_implementation, augmented_hessian_multiple_right_hand_sides) {
+  constexpr int n = 4, nroot = 2;
+  const auto W = orthogonal_matrix(n);
+  Eigen::VectorXd d(n);
+  d << 1.0, 2.0, 3.0, 4.0;
+  const Eigen::MatrixXd H = W * d.asDiagonal() * W.transpose(); // symmetric, to isolate the indexing
+  const Eigen::MatrixXd S = Eigen::MatrixXd::Identity(n, n);
+  Eigen::MatrixXd b(n, nroot);
+  b << 1.0, -2.0, 0.5, 3.0, -1.5, 0.25, 2.0, 1.0; // the two columns are quite different
+
+  std::vector<double> solution, eigenvalues;
+  const double alpha = 0.1;
+  molpro::linalg::itsolv::solve_LinearEquations(solution, eigenvalues, row_major(H), row_major(S), row_major(b), n,
+                                                nroot, alpha, 1e-14, 0);
+  ASSERT_EQ(solution.size(), size_t(n * nroot));
+  ASSERT_EQ(eigenvalues.size(), size_t(nroot));
+  for (int r = 0; r < nroot; ++r) {
+    Eigen::VectorXd x(n);
+    for (int k = 0; k < n; ++k)
+      x(k) = solution[k + n * r];
+    // the augmented Hessian solves the shifted equation (H - lambda S) x = b
+    EXPECT_LT(((H - eigenvalues[r] * S) * x - b.col(r)).norm(), 1e-8) << "right-hand side " << r;
+  }
+}
+
+/*!
+ * @brief The augmented-Hessian branch must not transpose its matrices.
+ *
+ * Reading a row-major buffer column-major transposes it, which is invisible when the matrix is
+ * symmetric and wrong when it is not.
+ */
+TEST(helper_implementation, augmented_hessian_non_symmetric_matrix) {
+  constexpr int n = 4, nroot = 1;
+  Eigen::MatrixXd H(n, n);
+  for (int i = 0; i < n; ++i)
+    for (int j = 0; j < n; ++j)
+      H(i, j) = i == j ? double(i + 1) : 0.1 * (i + 1) + 0.03 * (j + 1); // deliberately not symmetric
+  const Eigen::MatrixXd S = Eigen::MatrixXd::Identity(n, n);
+  Eigen::MatrixXd b(n, nroot);
+  b << 1.0, -2.0, 0.5, 3.0;
+
+  std::vector<double> solution, eigenvalues;
+  molpro::linalg::itsolv::solve_LinearEquations(solution, eigenvalues, row_major(H), row_major(S), row_major(b), n,
+                                                nroot, 0.1, 1e-14, 0);
+  ASSERT_EQ(solution.size(), size_t(n));
+  Eigen::VectorXd x(n);
+  for (int k = 0; k < n; ++k)
+    x(k) = solution[k];
+  EXPECT_LT(((H - eigenvalues[0] * S) * x - b.col(0)).norm(), 1e-8);
+}
+
+//! get_rank over a plain array was declared for std::vector but only ever defined for std::span
+TEST(helper_implementation, get_rank_of_vector_links) {
+  const std::vector<double> eigenvalues{1e-14, 1e-3, 0.5, 1.0};
+  EXPECT_EQ(molpro::linalg::itsolv::get_rank(eigenvalues, 1e-2), 2u);
+}
+
+//! get_rank over an SVD list hardcoded a std::list<SVD<double>> iterator, so it only compiled for double
+TEST(helper_implementation, get_rank_of_svd_list_is_generic) {
+  std::list<molpro::linalg::itsolv::SVD<float>> svds;
+  for (float v : {1.0f, 0.5f, 1e-4f})
+    svds.push_back(molpro::linalg::itsolv::SVD<float>{v, {}, {}});
+  EXPECT_EQ(molpro::linalg::itsolv::get_rank(svds, 1e-2f), 2u);
 }
