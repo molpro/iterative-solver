@@ -95,7 +95,9 @@ public:
           (Wolfe_1 && Wolfe_2))
         goto accept;
       //      molpro::cout << "evaluating line search" << std::endl;
-      Interpolate inter({-1, fprev, gprev}, {0, fcurrent, gcurrent});
+      using interpolator = Interpolator<value_type_abs>;
+      interpolator inter(typename interpolator::point{-1, fprev, gprev},
+                         typename interpolator::point{0, fcurrent, gcurrent});
       auto [x, f, g, h] = inter.minimize(-1 - this->m_linesearch_grow_factor, this->m_linesearch_grow_factor);
       //      molpro::cout << "interpolation" << x << " f=" << f << " g=" << g << " h=" << h << std::endl;
       if (std::isnan(x))
@@ -127,7 +129,8 @@ public:
     //    this->m_errors.front() = std::sqrt(this->m_handlers->rr().dot(residual,residual));
     for (size_t a = 0; a < xspace->size() - 1; a++) {
       if (std::abs(H(a, a) - H(a, a + 1) - H(a + 1, a) + H(a + 1, a + 1)) <
-          std::max(5e-14 * std::abs(H(a, a)), 1e-15)) {
+          std::max(precision_scaled<value_type_abs>(5e-14) * std::abs(H(a, a)),
+                   precision_scaled<value_type_abs>(1e-15))) {
         xspace->eraseq(a + 1);
         this->m_logger->info("Erase redundant Q");
         goto accept;
@@ -138,7 +141,7 @@ public:
   }
 
   void BFGS_update_1(R& residual, std::shared_ptr<const subspace::IXSpace<R, Q, P>> xspace,
-                     const subspace::Matrix<double>& H) {
+                     const subspace::Matrix<value_type>& H) {
     m_BFGS_update_alpha.resize(xspace->size() - 1);
     const auto& q = xspace->paramsq();
     const auto& u = xspace->actionsq();
@@ -152,7 +155,7 @@ public:
   }
 
   void BFGS_update_2(R& z, std::shared_ptr<const subspace::IXSpace<R, Q, P>> xspace,
-                     const subspace::Matrix<double>& H) {
+                     const subspace::Matrix<value_type>& H) {
     const auto& q = xspace->paramsq();
     const auto& u = xspace->actionsq();
     for (int a = m_BFGS_update_alpha.size() - 1; a >= 0; a--) {
@@ -180,7 +183,7 @@ public:
       auto& xdata = xspace->data;
       const auto& H = xdata[subspace::EqnData::H];
       BFGS_update_2(z, xspace, H);
-      auto len_z = std::sqrt(this->m_handlers->rr().dot(z,z));
+      auto len_z = std::sqrt(this->m_handlers->rr().dot(z, z));
       if (len_z > this->m_quasinewton_maximum_step)
         this->m_handlers->rr().scal(this->m_quasinewton_maximum_step / len_z, z);
       this->m_handlers->rr().axpy(-1, z, parameters.front());
@@ -207,7 +210,7 @@ public:
 
   void set_value_errors() override {
     auto& Value = this->m_xspace->data[subspace::EqnData::value];
-    this->m_value_errors.assign(1, std::numeric_limits<double>::max());
+    this->m_value_errors.assign(1, std::numeric_limits<value_type_abs>::max());
     if (this->m_xspace->size() > 1 and Value(0, 0) < Value(1, 0))
       this->m_value_errors.front() = Value(1, 0) - Value(0, 0);
   }
@@ -259,7 +262,7 @@ public:
   }
 
 protected:
-  std::vector<double> m_BFGS_update_alpha;
+  std::vector<value_type> m_BFGS_update_alpha;
   bool m_linesearch;
   bool m_last_iteration_linesearching = false;
 
@@ -269,13 +272,14 @@ protected:
 
   int m_max_size_qspace = std::numeric_limits<int>::max(); //!< maximum size of Q space
   bool m_strong_Wolfe = true;                              //!< Whether to use strong or weak Wolfe conditions
-  double m_Wolfe_1 = 1e-4; //!< Acceptance parameter for function value; recommended value Nocedal and Wright p142
-  double m_Wolfe_2 = 0.9;  //!< Acceptance parameter for function gradient; recommended value Nocedal and Wright p142
-  double m_linesearch_tolerance = .2; //!< If the predicted line search is within tolerance of the recently-evaluated
-                                      //!< point, don't bother taking it, but proceed to Quasi-Newton instead
-  double m_linesearch_grow_factor =
+  value_type_abs m_Wolfe_1 = 1e-4; //!< Acceptance parameter for function value; recommended value Nocedal and Wright p142
+  value_type_abs m_Wolfe_2 = 0.9;  //!< Acceptance parameter for function gradient; recommended value Nocedal and Wright p142
+  value_type_abs m_linesearch_tolerance = .2; //!< If the predicted line search is within tolerance of the
+                                              //!< recently-evaluated point, don't bother taking it, but proceed to
+                                              //!< Quasi-Newton instead
+  value_type_abs m_linesearch_grow_factor =
       2; //!< If the predicted line search step is extrapolation, limit the step to this factor times the current step
-  double m_quasinewton_maximum_step = std::numeric_limits<double>::max();
+  value_type_abs m_quasinewton_maximum_step = std::numeric_limits<value_type_abs>::max();
 };
 
 } // namespace molpro::linalg::itsolv

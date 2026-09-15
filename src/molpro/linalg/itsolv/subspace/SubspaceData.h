@@ -6,11 +6,13 @@
 namespace molpro::linalg::itsolv::subspace {
 enum class EqnData { H, S, rhs, value };
 
-using SubspaceData = std::map<EqnData, Matrix<double>>;
+//! Equation data blocks of the subspace, in the scalar type of the problem
+template <typename T = double>
+using SubspaceData = std::map<EqnData, Matrix<T>>;
 
-template <EqnData... DataTypes>
+template <typename T = double, EqnData... DataTypes>
 auto null_data() {
-  return SubspaceData{std::make_pair<EqnData, Matrix<double>>(DataTypes, {})...};
+  return SubspaceData<T>{std::make_pair<EqnData, Matrix<T>>(DataTypes, {})...};
 }
 } // namespace molpro::linalg::itsolv::subspace
 

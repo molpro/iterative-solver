@@ -49,11 +49,12 @@ public:
 
 private:
   std::pair<size_t, value_type> least_important_vector(const subspace::Matrix<value_type>& H) {
-    const auto He = Eigen::Map<const Eigen::MatrixXd>(H.data().data(), H.rows(), H.cols());
+    using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
+    const auto He = Eigen::Map<const matrix_type>(H.data().data(), H.rows(), H.cols());
     std::pair<size_t, value_type> result{0, std::numeric_limits<value_type>::max()};
     if (He.cols() < 2)
       return result;
-    auto evs = Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd>();
+    auto evs = Eigen::SelfAdjointEigenSolver<matrix_type>();
     evs.compute(He);
     //    std::cout << "Eigenvalues: "<<evs.eigenvalues().transpose()<<std::endl;
     //    std::cout << "Eigenvectors:\n"<<evs.eigenvectors()<<std::endl;
@@ -131,12 +132,12 @@ public:
   }
 
   //! Set threshold on the norm of parameters that should be considered null
-  void set_norm_thresh(double thresh) { m_norm_thresh = thresh; }
-  double get_norm_thresh() const { return m_norm_thresh; }
+  void set_norm_thresh(value_type_abs thresh) { m_norm_thresh = thresh; }
+  value_type_abs get_norm_thresh() const { return m_norm_thresh; }
   //! Set the smallest singular value in the subspace that can be allowed when
   //! constructing the working set. Smaller singular values will lead to deletion of parameters
-  void set_svd_thresh(double thresh) { m_svd_thresh = thresh; }
-  double get_svd_thresh() const { return m_svd_thresh; }
+  void set_svd_thresh(value_type_abs thresh) { m_svd_thresh = thresh; }
+  value_type_abs get_svd_thresh() const { return m_svd_thresh; }
   //! Set a limit on the maximum size of Q space. This does not include the size of the working space (R) and the D
   //! space
   void set_max_size_qspace(int n) { m_max_size_qspace = n; }
@@ -182,8 +183,10 @@ protected:
   // for non-linear problems, actions already contains the residual
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {}
 
-  double m_norm_thresh = 1e-10; //!< vectors with norm less than threshold can be considered null.
-  double m_svd_thresh = 1e-12;  //!< svd values smaller than this mark the null space
+  //! vectors with norm less than threshold can be considered null (rescaled to the working precision)
+  value_type_abs m_norm_thresh = precision_scaled<value_type_abs>(1e-10);
+  //! svd values smaller than this mark the null space (rescaled to the working precision)
+  value_type_abs m_svd_thresh = precision_scaled<value_type_abs>(1e-12);
   int m_max_size_qspace = std::numeric_limits<int>::max(); //!< maximum size of Q space
 };
 

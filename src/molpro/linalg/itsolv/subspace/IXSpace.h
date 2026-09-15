@@ -25,7 +25,7 @@ public:
   using value_type_abs = typename array::ArrayHandler<R, R>::value_type_abs;
   IXSpace() = default;
   virtual ~IXSpace() = default;
-  SubspaceData data; //!< Equation data in the subspace
+  SubspaceData<value_type> data; //!< Equation data in the subspace
 
   //! Number of vectors forming the subspace
   size_t size() const { return dimensions().nX; }

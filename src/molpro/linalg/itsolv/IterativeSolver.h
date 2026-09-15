@@ -4,6 +4,7 @@
 #include <molpro/linalg/array/Span.h>
 #include <molpro/linalg/itsolv/Options.h>
 #include <molpro/linalg/itsolv/Statistics.h>
+#include <molpro/linalg/itsolv/helper.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/wrap.h>
 #include <molpro/linalg/itsolv/Logger.h>
@@ -32,32 +33,38 @@ struct has_iterator {
       std::is_same<std::true_type, decltype(test<typename std::remove_reference<T>::type>(0))>::value;
 };
 
-template <typename T, typename = std::enable_if_t<std::is_base_of<molpro::linalg::array::DistrArray, T>::value>>
-void precondition_default(const VecRef<T>& action, const std::vector<double>& shift, const T& diagonals) {
+template <typename T, typename S,
+          typename = std::enable_if_t<std::is_base_of<molpro::linalg::array::DistrArray, T>::value>>
+void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals) {
+  // regularisation of the denominator, calibrated for double precision and rescaled to the working precision
+  const auto regulariser = precision_scaled<S>(1e-15);
   auto diagonals_local_buffer = diagonals.local_buffer();
   for (size_t k = 0; k < action.size(); k++) {
     auto action_local_buffer = action[k].get().local_buffer();
     auto& distribution = action[k].get().distribution();
     auto range = distribution.range(molpro::mpi::rank_global());
     for (auto i = range.first; i < range.second; i++)
-      (*action_local_buffer)[i - range.first] /= ((*diagonals_local_buffer)[i - range.first] - shift[k] + 1e-15);
+      (*action_local_buffer)[i - range.first] /= ((*diagonals_local_buffer)[i - range.first] - shift[k] + regulariser);
   }
 }
 
-template <class T>
-void precondition_default(const VecRef<T>& action, const std::vector<double>& shift, const T& diagonals,
+template <class T, typename S>
+void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
                           typename T::iterator* = nullptr // SFINAE
 ) {
+  const auto regulariser = precision_scaled<S>(1e-15);
   for (size_t k = 0; k < action.size(); k++) {
     auto& a = action[k].get();
     std::transform(diagonals.begin(), diagonals.end(), a.begin(), a.begin(),
-                   [shift, k](const auto& first, const auto& second) { return second / (first - shift[k] + 1e-15); });
+                   [shift, k, regulariser](const auto& first, const auto& second) {
+                     return second / (first - shift[k] + regulariser);
+                   });
   }
 }
 
-template <typename T, typename = std::enable_if_t<!std::is_base_of<molpro::linalg::array::DistrArray, T>::value>,
-          class = void>
-void precondition_default(const VecRef<T>& action, const std::vector<double>& shift, const T& diagonals,
+template <typename T, typename S,
+          typename = std::enable_if_t<!std::is_base_of<molpro::linalg::array::DistrArray, T>::value>, class = void>
+void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
                           typename std::enable_if<!has_iterator<T>::value, void*>::type = nullptr // SFINAE
 ) {
   throw std::logic_error("Unimplemented preconditioner");
@@ -152,10 +159,10 @@ public:
    * @param pparams Specification of the P space
    * @return
    */
-  virtual std::vector<double> pp_action_matrix(const std::vector<P>& pparams) const {
+  virtual std::vector<value_t> pp_action_matrix(const std::vector<P>& pparams) const {
     if (not pparams.empty())
       throw std::logic_error("P-space unavailable: unimplemented pp_action_matrix() in Problem class");
-    return std::vector<double>(0);
+    return std::vector<value_t>(0);
   }
 
   /*!
@@ -319,7 +326,7 @@ public:
    * \return
    */
   virtual std::vector<size_t> suggest_p(const CVecRef<R>& solution, const CVecRef<R>& residual, size_t max_number,
-                                        double threshold) = 0;
+                                        value_type_abs threshold) = 0;
 
   virtual void solution(const std::vector<int>& roots, std::vector<R>& parameters, std::vector<R>& residual) = 0;
   virtual void solution(R& parameters, R& residual) = 0;
@@ -349,13 +356,13 @@ public:
   virtual void report() const = 0;
 
   //! Sets the convergence threshold
-  virtual void set_convergence_threshold(double thresh) = 0;
+  virtual void set_convergence_threshold(value_type_abs thresh) = 0;
   //! Reports the convergence threshold
-  virtual double convergence_threshold() const = 0;
+  virtual value_type_abs convergence_threshold() const = 0;
   //! Sets the value convergence threshold
-  virtual void set_convergence_threshold_value(double thresh) = 0;
+  virtual void set_convergence_threshold_value(value_type_abs thresh) = 0;
   //! Reports the value convergence threshold
-  virtual double convergence_threshold_value() const = 0;
+  virtual value_type_abs convergence_threshold_value() const = 0;
   [[deprecated("Set the verbosity on the logger directly")]]
   virtual void set_verbosity(Verbosity v) = 0;
   virtual void set_verbosity(int v) = 0;
@@ -365,8 +372,8 @@ public:
   virtual int get_max_iter() const = 0;
   virtual void set_max_p(int n) = 0;
   virtual int get_max_p() const = 0;
-  virtual void set_p_threshold(double thresh) = 0;
-  virtual double get_p_threshold() const = 0;
+  virtual void set_p_threshold(value_type_abs thresh) = 0;
+  virtual value_type_abs get_p_threshold() const = 0;
   virtual const subspace::Dimensions& dimensions() const = 0;
   // FIXME Missing parameters: SVD threshold
   //! Set all spcecified options. This is no different than using setters, but can be used
@@ -407,7 +414,7 @@ public:
    * @return false if errors were found, otherwise true
    */
   virtual bool test_problem(const Problem<R>& problem, R& v0, R& v1, int verbosity = 0,
-                            double threshold = 1e-5) const = 0;
+                            value_type_abs threshold = 1e-5) const = 0;
 };
 
 /*!

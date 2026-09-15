@@ -99,12 +99,12 @@ public:
   }
 
   //! Set threshold on the norm of parameters that should be considered null
-  void set_norm_thresh(double thresh) { rspace_opts.norm_thresh = thresh; }
-  double get_norm_thresh() const { return rspace_opts.norm_thresh; }
+  void set_norm_thresh(value_type_abs thresh) { rspace_opts.norm_thresh = thresh; }
+  value_type_abs get_norm_thresh() const { return rspace_opts.norm_thresh; }
   //! Set the smallest singular value in the subspace that can be allowed when
   //! constructing the working set. Smaller singular values will lead to deletion of parameters
-  void set_svd_thresh(double thresh) { rspace_opts.svd_thresh = thresh; }
-  double get_svd_thresh() const { return rspace_opts.svd_thresh; }
+  void set_svd_thresh(value_type_abs thresh) { rspace_opts.svd_thresh = thresh; }
+  value_type_abs get_svd_thresh() const { return rspace_opts.svd_thresh; }
   //! Set the period in iterations for resetting the D space
   void set_reset_D(size_t n) { m_dspace_resetter.set_nreset(n); }
   size_t get_reset_D() const { return m_dspace_resetter.get_nreset(); }
@@ -132,12 +132,12 @@ public:
   }
   bool get_hermiticity() const override { return m_hermiticity; }
   //!@copydoc subspace::SubspaceSolverLinEig::set_augmented_hessian()
-  void set_augmented_hessian(const double parameter) {
+  void set_augmented_hessian(const value_type_abs parameter) {
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
     subspace_solver->set_augmented_hessian(parameter);
   }
   //!@copydoc subspace::SubspaceSolverLinEig::get_augmented_hessian()
-  double get_augmented_hessian() const {
+  value_type_abs get_augmented_hessian() const {
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
     return subspace_solver->get_augmented_hessian();
   }
@@ -205,7 +205,7 @@ protected:
     }
   }
 
-  RSpaceOptions rspace_opts;                   //!< Options concerning R-space handling
+  RSpaceOptions<value_type_abs> rspace_opts;   //!< Options concerning R-space handling
   QSpaceOptions qspace_opts;                   //!< Options concerning Q-space handling
   detail::DSpaceResetter<Q> m_dspace_resetter; //!< resets D space
   bool m_hermiticity = true;                   //!< whether the problem is hermitian or not

@@ -111,6 +111,7 @@ inline std::ostream& operator<<(std::ostream& os, const Interpolate::point& p) {
 }
 
 extern template class Interpolator<double>;
+extern template class Interpolator<long double>;
 
 } // namespace molpro::linalg::itsolv
 #endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_INTERPOLATE_H_

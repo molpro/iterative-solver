@@ -47,6 +47,7 @@ class LinearEigensystemDavidson : public IterativeSolverTemplate<LinearEigensyst
 public:
   using SolverTemplate = IterativeSolverTemplate<LinearEigensystem, R, Q, P>;
   using typename SolverTemplate::scalar_type;
+  using typename SolverTemplate::value_type_abs;
   using IterativeSolverTemplate<LinearEigensystem, R, Q, P>::report;
 
   explicit LinearEigensystemDavidson(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers =
@@ -147,7 +148,7 @@ public:
 
   void set_value_errors() override {
     auto current_values = this->m_subspace_solver->eigenvalues();
-    this->m_value_errors.assign(current_values.size(), std::numeric_limits<scalar_type>::max());
+    this->m_value_errors.assign(current_values.size(), std::numeric_limits<value_type_abs>::max());
     for (size_t i = 0; i < std::min(m_last_values.size(), current_values.size()); i++)
       this->m_value_errors[i] = std::abs(current_values[i] - m_last_values[i]);
     if (!m_resetting_in_progress)
@@ -284,9 +285,9 @@ protected:
 
   detail::DSpaceResetter<Q> m_dspace_resetter; //!< resets D space
   bool m_hermiticity = false;                  //!< whether the problem is hermitian or not
-  std::vector<double> m_last_values;           //!< The values from the previous iteration
+  std::vector<scalar_type> m_last_values;      //!< The values from the previous iteration
   bool m_resetting_in_progress = false;        //!< whether D space resetting is in progress
-  RSpaceOptions rspace_opts;                   //!< Options concerning R-space handling
+  RSpaceOptions<value_type_abs> rspace_opts;   //!< Options concerning R-space handling
   QSpaceOptions qspace_opts;                   //!< Options concerning Q-space handling
 };
 

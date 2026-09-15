@@ -135,8 +135,8 @@ public:
   void set_hermiticity(bool hermitian) { m_hermitian = hermitian; }
   bool get_hermiticity() { return m_hermitian; }
   //! Set value of augmented hessian parameter. If 0, than augmented Hessian is not used.
-  void set_augmented_hessian(double parameter) { m_augmented_hessian = parameter; }
-  double get_augmented_hessian() { return m_augmented_hessian; }
+  void set_augmented_hessian(value_type_abs parameter) { m_augmented_hessian = parameter; }
+  value_type_abs get_augmented_hessian() { return m_augmented_hessian; }
 
 protected:
   Matrix<value_type> m_solutions;                                      //!< solution matrix with row vectors
@@ -146,10 +146,12 @@ protected:
   std::shared_ptr<Logger> m_logger{};
 
 public:
-  value_type_abs m_svd_solver_threshold = 1.0e-14; //!< threshold to select null space during SVD in eigenproblem
+  //! threshold to select null space during SVD in eigenproblem, rescaled from double to the working precision
+  value_type_abs m_svd_solver_threshold = precision_scaled<value_type_abs>(1e-14);
 protected:
   bool m_hermitian = false;       //!< flags the matrix as Hermitian
-  double m_augmented_hessian = 0; //!< value of augmented hessian parameter. If 0, than augmented Hessian is not used
+  //! value of augmented hessian parameter. If 0, than augmented Hessian is not used
+  value_type_abs m_augmented_hessian = 0;
 };
 
 } // namespace molpro::linalg::itsolv::subspace
