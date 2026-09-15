@@ -87,8 +87,8 @@ void normalise(const size_t n_roots, const VecRef<R>& params, const VecRef<R>& a
   // a solution shorter than this is taken to be null; the threshold follows the working precision
   const auto norm_thresh = precision_scaled<typename array::ArrayHandler<R, R>::value_type_abs>(1e-14);
   for (size_t i = 0; i < n_roots; ++i) {
-    auto dot = handler.dot(params.at(i), params.at(i));
-    dot = std::sqrt(std::abs(dot));
+    const typename array::ArrayHandler<R, R>::value_type_abs dot =
+        std::sqrt(std::abs(handler.dot(params.at(i), params.at(i))));
     if (dot > norm_thresh) {
       handler.scal(1. / dot, params.at(i));
       handler.scal(1. / dot, actions.at(i));
@@ -319,7 +319,7 @@ public:
     return options;
   }
 
-  const std::vector<scalar_type>& errors() const override { return m_errors; }
+  const std::vector<value_type_abs>& errors() const override { return m_errors; }
 
   const Statistics& statistics() const override { return *m_stats; }
 
@@ -438,11 +438,14 @@ public:
       if (!selectp.empty()) {
         // selectp is keyed by index, not value; find the smallest selected
         // diagonal explicitly before applying the threshold.
-        auto min_val = std::min_element(selectp.begin(), selectp.end(),
-                                        [](const auto& a, const auto& b) { return a.second < b.second; })
-                           ->second;
+        // the diagonal of a hermitian operator is real, so it is orderable
+        auto min_val = real_part(std::min_element(selectp.begin(), selectp.end(),
+                                                  [](const auto& a, const auto& b) {
+                                                    return real_part(a.second) < real_part(b.second);
+                                                  })
+                                     ->second);
         for (auto s = selectp.begin(); s != selectp.end();) {
-          if (s->second > min_val + m_p_threshold)
+          if (real_part(s->second) > min_val + m_p_threshold)
             s = selectp.erase(s);
           else
             ++s;
@@ -453,7 +456,7 @@ public:
       }
       if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Detailed) {
         for (const auto& s : selectp) {
-          this->m_logger->debug(std::format("P space element {}: {:.6e}", s.first, double(s.second)));
+          this->m_logger->debug(std::format("P space element {}: {:.6e}", s.first, double(real_part(s.second))));
         }
       }
       for (const auto& s : selectp)
@@ -537,7 +540,7 @@ public:
       Q residual0 = m_handlers->qr().copy(v1);
       for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
         m_handlers->rq().axpy(-1.0, parameters0, v0);
-        m_handlers->rr().scal(1 / std::sqrt(m_handlers->rr().dot(v0, v0)), v0);
+        m_handlers->rr().scal(1 / std::sqrt(std::abs(m_handlers->rr().dot(v0, v0))), v0);
         Q step1 = m_handlers->qr().copy(v0);
         auto residual_analytic = m_handlers->rq().dot(v0, residual0);
         m_handlers->rq().copy(v0, parameters0);
@@ -552,7 +555,8 @@ public:
         m_handlers->rq().copy(v0, parameters0);
         m_handlers->rq().axpy(+2*step, step1, v0);
         auto valuep2 = problem.residual(v0, v1);
-        auto residual_numerical = (valuem2 - 8*valuem1 + 8*valuep1 - valuep2) / (12*step);
+        auto residual_numerical = (valuem2 - value_type(8) * valuem1 + value_type(8) * valuep1 - valuep2) /
+                                  value_type(12 * step);
         if (verbosity > 1)
           std::cout << "testing problem class, instance: " << instance << ", numerical: " << residual_numerical <<", analytical: "<<residual_analytic <<", difference: "<<residual_numerical-residual_analytic << std::endl;
         success = success && std::abs(residual_numerical - residual_analytic) < threshold;
@@ -632,7 +636,7 @@ protected:
       auto roots = std::vector<int>(end_sol - start_sol);
       std::iota(begin(roots), end(roots), start_sol);
       solution(roots, parameters, action);
-      auto errors = std::vector<scalar_type>(roots.size(), 0);
+      auto errors = std::vector<value_type_abs>(roots.size(), 0);
       detail::update_errors(errors, cwrap(action), m_handlers->rr());
       if (batches.size() > 1) {
         for (size_t i = 0; i < roots.size(); ++i)
