@@ -5,7 +5,7 @@ var searchData=
   ['matrix_2',['Matrix',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html',1,'molpro::linalg::itsolv::subspace']]],
   ['matrix_3c_20value_5ftype_20_3e_3',['Matrix&lt; value_type &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html',1,'molpro::linalg::itsolv::subspace']]],
   ['matrix_5fproblem_4',['matrix_problem',['../structiterative__solver__matrix__problem_1_1matrix__problem.html',1,'iterative_solver_matrix_problem']]],
-  ['morse_5fproblem_5',['Morse_problem',['../classMorse__problem.html',1,'']]],
+  ['morse_5fproblem_5',['Morse_problem',['../classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem.html',1,'molpro::linalg::itsolv::interpolate_detail']]],
   ['mpi_5finit_6',['mpi_init',['../interfaceiterative__solver_1_1mpi__init.html',1,'iterative_solver']]],
   ['mpi_5frank_5fglobal_7',['mpi_rank_global',['../interfaceiterative__solver_1_1mpi__rank__global.html',1,'iterative_solver']]]
 ];

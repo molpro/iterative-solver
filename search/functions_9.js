@@ -2,8 +2,8 @@ var searchData=
 [
   ['imag_5feigval_5fcomponents_0',['imag_eigval_components',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ab99fc6aa6e8963b0903c4df3aae6d4eb',1,'molpro::linalg::itsolv::subspace::SubspaceSolverLinEig']]],
   ['info_1',['info',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a165cbf0829ddd542abd540b276598095',1,'molpro::linalg::itsolv::Logger']]],
-  ['interpolants_2',['interpolants',['../classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html#a3568bfb5d55a1de2b4aeb21b67ce6646',1,'molpro::linalg::itsolv::Interpolate']]],
-  ['interpolate_3',['Interpolate',['../classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html#ab833e4c02392a88c0cfdd9129b964fe0',1,'molpro::linalg::itsolv::Interpolate']]],
+  ['interpolants_2',['interpolants',['../classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html#afd3fee7efd28fd4d95d527f50376cf44',1,'molpro::linalg::itsolv::Interpolator']]],
+  ['interpolator_3',['Interpolator',['../classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html#ad79b4d5f576399f8a261a0b68b37dc76',1,'molpro::linalg::itsolv::Interpolator']]],
   ['invalid_4',['invalid',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1LazyHandle.html#adc2f8a1d13761b128c1e1ed6adc08ba2',1,'molpro::linalg::array::ArrayHandler::LazyHandle::invalid()'],['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1ProxyHandle.html#a94ae88f7320b91c880474a5ecae16d94',1,'molpro::linalg::array::ArrayHandler::ProxyHandle::invalid()']]],
   ['invalidate_5',['invalidate',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1LazyHandle.html#a3b0ae2897bbda5ae8b074fa06e762b0e',1,'molpro::linalg::array::ArrayHandler::LazyHandle::invalidate()'],['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1ProxyHandle.html#a7666eaa8bcf4a9a1997e1f86dc76a24e',1,'molpro::linalg::array::ArrayHandler::ProxyHandle::invalidate()']]],
   ['is_5fiota_6',['is_iota',['../namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#a5a4f2c1ef2abe57c4594e20de21736ba',1,'molpro::linalg::itsolv::util']]],

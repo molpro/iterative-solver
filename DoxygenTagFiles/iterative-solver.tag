@@ -4467,57 +4467,58 @@
     <templarg>class A</templarg>
   </compound>
   <compound kind="class">
-    <name>molpro::linalg::itsolv::Interpolate</name>
-    <filename>classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html</filename>
-    <class kind="struct">molpro::linalg::itsolv::Interpolate::point</class>
+    <name>molpro::linalg::itsolv::Interpolator</name>
+    <filename>classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html</filename>
+    <templarg>typename value_type</templarg>
+    <class kind="struct">molpro::linalg::itsolv::Interpolator::point</class>
+    <member kind="typedef">
+      <type>value_type</type>
+      <name>value_t</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html</anchorfile>
+      <anchor>aefadaa2fe8c18a39d53bc7f0d571cd0a</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function">
       <type></type>
-      <name>Interpolate</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html</anchorfile>
-      <anchor>ab833e4c02392a88c0cfdd9129b964fe0</anchor>
+      <name>Interpolator</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html</anchorfile>
+      <anchor>ad79b4d5f576399f8a261a0b68b37dc76</anchor>
       <arglist>(point p0, point p1, std::string interpolant=&quot;cubic&quot;, int verbosity=0)</arglist>
     </member>
     <member kind="function">
       <type>point</type>
       <name>operator()</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html</anchorfile>
-      <anchor>aa9fe4e3831c40accb585c871627a0838</anchor>
-      <arglist>(double x) const</arglist>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html</anchorfile>
+      <anchor>a86d06bd7c15d790737417d356c054c33</anchor>
+      <arglist>(value_type x) const</arglist>
     </member>
     <member kind="function">
-      <type>Interpolate::point</type>
+      <type>point</type>
       <name>minimize</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html</anchorfile>
-      <anchor>affbc076b85dae30880c9f0aca5f72354</anchor>
-      <arglist>(double xa, double xb, size_t bracket_grid=100, size_t max_bracket_grid=100000, bool analytic=true) const</arglist>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html</anchorfile>
+      <anchor>a744d1a39e8f05c693a55cf4b004e92bc</anchor>
+      <arglist>(value_type xa, value_type xb, size_t bracket_grid=100, size_t max_bracket_grid=100000, bool analytic=true) const</arglist>
     </member>
     <member kind="function">
-      <type>Interpolate::point</type>
+      <type>point</type>
       <name>minimize_cubic</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html</anchorfile>
-      <anchor>ae3403a7c5ea1be1d34b51549b29737aa</anchor>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html</anchorfile>
+      <anchor>ace26db532cf0006c824996e0836e8ffd</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
-      <type>const std::vector&lt; double &gt; &amp;</type>
+      <type>const std::vector&lt; value_type &gt; &amp;</type>
       <name>parameters</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html</anchorfile>
-      <anchor>a489d1024ad31db058d7c12a7ccac230f</anchor>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html</anchorfile>
+      <anchor>a635e0c219f4b2204688f0aa9d7df383f</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static std::vector&lt; std::string &gt;</type>
       <name>interpolants</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html</anchorfile>
-      <anchor>a3568bfb5d55a1de2b4aeb21b67ce6646</anchor>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html</anchorfile>
+      <anchor>afd3fee7efd28fd4d95d527f50376cf44</anchor>
       <arglist>()</arglist>
-    </member>
-    <member kind="friend">
-      <type>friend std::ostream &amp;</type>
-      <name>operator&lt;&lt;</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html</anchorfile>
-      <anchor>a99e796dd3705718bb375477d04e4fa28</anchor>
-      <arglist>(std::ostream &amp;os, const Interpolate &amp;interpolant)</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -7738,21 +7739,22 @@
     </member>
   </compound>
   <compound kind="class">
-    <name>Morse_problem</name>
-    <filename>classMorse__problem.html</filename>
-    <base>molpro::linalg::itsolv::Problem</base>
+    <name>molpro::linalg::itsolv::interpolate_detail::Morse_problem</name>
+    <filename>classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem.html</filename>
+    <templarg>typename value_type</templarg>
+    <base>Problem&lt; std::vector&lt; value_type &gt; &gt;</base>
     <member kind="function">
       <type></type>
       <name>Morse_problem</name>
-      <anchorfile>classMorse__problem.html</anchorfile>
-      <anchor>abfeeb8c897c7b1eed654f65e1bb7337e</anchor>
-      <arglist>(Interpolate::point p0, Interpolate::point p1)</arglist>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem.html</anchorfile>
+      <anchor>a11a196ebae77239443c0c9748032046b</anchor>
+      <arglist>(point p0, point p1)</arglist>
     </member>
     <member kind="function">
-      <type>value_t</type>
+      <type>Problem&lt; R &gt;::value_t</type>
       <name>residual</name>
-      <anchorfile>classMorse__problem.html</anchorfile>
-      <anchor>abdd1b24df0694f03976f384ec57b4bbf</anchor>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem.html</anchorfile>
+      <anchor>a19c128a0075f9352ab83d9a5d9ae34d8</anchor>
       <arglist>(const R &amp;parameters, R &amp;residual) const override</arglist>
     </member>
   </compound>
@@ -8666,42 +8668,35 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>molpro::linalg::itsolv::Interpolate::point</name>
-    <filename>structmolpro_1_1linalg_1_1itsolv_1_1Interpolate_1_1point.html</filename>
+    <name>molpro::linalg::itsolv::Interpolator::point</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1Interpolator_1_1point.html</filename>
     <member kind="variable">
-      <type>double</type>
+      <type>value_type</type>
       <name>x</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Interpolate_1_1point.html</anchorfile>
-      <anchor>a095f7815af290da3e6fe2e6f5d66b3a4</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Interpolator_1_1point.html</anchorfile>
+      <anchor>aa514d1b7983f558a29c75e74b1c9f64e</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>double</type>
+      <type>value_type</type>
       <name>f</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Interpolate_1_1point.html</anchorfile>
-      <anchor>a2371f9b68ceea55396112011591b53e9</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Interpolator_1_1point.html</anchorfile>
+      <anchor>a1068fbe07b211495b8953ddb0b58d299</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>double</type>
+      <type>value_type</type>
       <name>f1</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Interpolate_1_1point.html</anchorfile>
-      <anchor>a348638e433f5410f2f9b92a7237888c2</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Interpolator_1_1point.html</anchorfile>
+      <anchor>a86a689ff421afc453c71ae39a0f8e692</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>double</type>
+      <type>value_type</type>
       <name>f2</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Interpolate_1_1point.html</anchorfile>
-      <anchor>a236f1245ef8db0d33fa9221a34e4a279</anchor>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Interpolator_1_1point.html</anchorfile>
+      <anchor>a155c117fc621bc869271a6a570fbccb9</anchor>
       <arglist></arglist>
-    </member>
-    <member kind="friend">
-      <type>friend std::ostream &amp;</type>
-      <name>operator&lt;&lt;</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1Interpolate_1_1point.html</anchorfile>
-      <anchor>ad3e691710c53fd3bc3cdbed8850e3d51</anchor>
-      <arglist>(std::ostream &amp;os, const point &amp;p)</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -11931,6 +11926,7 @@
     <name>molpro::linalg::itsolv</name>
     <filename>namespacemolpro_1_1linalg_1_1itsolv.html</filename>
     <namespace>molpro::linalg::itsolv::detail</namespace>
+    <namespace>molpro::linalg::itsolv::interpolate_detail</namespace>
     <namespace>molpro::linalg::itsolv::log</namespace>
     <namespace>molpro::linalg::itsolv::subspace</namespace>
     <namespace>molpro::linalg::itsolv::util</namespace>
@@ -11941,7 +11937,7 @@
     <class kind="struct">molpro::linalg::itsolv::decay&lt; std::reference_wrapper&lt; T &gt; &gt;</class>
     <class kind="struct">molpro::linalg::itsolv::has_iterator</class>
     <class kind="struct">molpro::linalg::itsolv::has_lapack_kernel</class>
-    <class kind="class">molpro::linalg::itsolv::Interpolate</class>
+    <class kind="class">molpro::linalg::itsolv::Interpolator</class>
     <class kind="class">molpro::linalg::itsolv::IterativeSolver</class>
     <class kind="class">molpro::linalg::itsolv::IterativeSolverTemplate</class>
     <class kind="class">molpro::linalg::itsolv::LinearEigensystem</class>
@@ -11996,6 +11992,13 @@
       <name>decay_t</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>a2541a0dfd2575a25a8d4976899b63e1d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>Interpolator&lt; double &gt;</type>
+      <name>Interpolate</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>ab03401c5cf0d0e3494964e960b960a7d</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
@@ -12356,6 +12359,13 @@
       <type>bool</type>
       <name>operator==</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>abb5e82e092066d4c7ff6124bb7664b58</anchor>
+      <arglist>(const typename Interpolator&lt; value_type &gt;::point &amp;lhs, const typename Interpolator&lt; value_type &gt;::point &amp;rhs)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>operator==</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>ad845d8e72c3518d938b7c0250c70de87</anchor>
       <arglist>(const Interpolate::point &amp;lhs, const Interpolate::point &amp;rhs)</arglist>
     </member>
@@ -12363,8 +12373,15 @@
       <type>std::ostream &amp;</type>
       <name>operator&lt;&lt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a32fc8c3fc3217ba8e8c4abb2c7de9f2e</anchor>
-      <arglist>(std::ostream &amp;os, const Interpolate &amp;interpolant)</arglist>
+      <anchor>a38ab2e24559d49f605a89132b89220a2</anchor>
+      <arglist>(std::ostream &amp;os, const Interpolator&lt; value_type &gt; &amp;interpolant)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::ostream &amp;</type>
+      <name>operator&lt;&lt;</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>ae523c6ae5b58ddbf94d495325572c024</anchor>
+      <arglist>(std::ostream &amp;os, const typename Interpolator&lt; value_type &gt;::point &amp;p)</arglist>
     </member>
     <member kind="function">
       <type>std::ostream &amp;</type>
@@ -12669,6 +12686,18 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
       <anchor>aa54b741cc5ba39406b0457b446ee8033</anchor>
       <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions_proj, const subspace::Dimensions &amp;dims, const std::vector&lt; std::size_t &gt; &amp;remove_qspace, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const size_t nR)</arglist>
+    </member>
+  </compound>
+  <compound kind="namespace">
+    <name>molpro::linalg::itsolv::interpolate_detail</name>
+    <filename>namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail.html</filename>
+    <class kind="class">molpro::linalg::itsolv::interpolate_detail::Morse_problem</class>
+    <member kind="function">
+      <type>Interpolator&lt; value_type &gt;::point</type>
+      <name>Morse</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail.html</anchorfile>
+      <anchor>a0efd48e0270cf34547fab72be6e90388</anchor>
+      <arglist>(value_type y, const std::vector&lt; value_type &gt; &amp;parameters)</arglist>
     </member>
   </compound>
   <compound kind="namespace">

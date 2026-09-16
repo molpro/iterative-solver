@@ -1,6 +1,7 @@
 var namespacemolpro_1_1linalg_1_1itsolv =
 [
     [ "detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail" ],
+    [ "interpolate_detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail.html", "namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail" ],
     [ "log", "namespacemolpro_1_1linalg_1_1itsolv_1_1log.html", "namespacemolpro_1_1linalg_1_1itsolv_1_1log" ],
     [ "subspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace" ],
     [ "util", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html", "namespacemolpro_1_1linalg_1_1itsolv_1_1util" ],
@@ -11,7 +12,7 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "decay< std::reference_wrapper< T > >", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4.html", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4" ],
     [ "has_iterator", "structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html", null ],
     [ "has_lapack_kernel", "structmolpro_1_1linalg_1_1itsolv_1_1has__lapack__kernel.html", null ],
-    [ "Interpolate", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolate" ],
+    [ "Interpolator", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolator" ],
     [ "IterativeSolver", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver" ],
     [ "IterativeSolverTemplate", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" ],
     [ "LinearEigensystem", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem.html", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem" ],
@@ -42,6 +43,7 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "SVD", "structmolpro_1_1linalg_1_1itsolv_1_1SVD.html", "structmolpro_1_1linalg_1_1itsolv_1_1SVD" ],
     [ "CVecRef", "namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89", null ],
     [ "decay_t", "namespacemolpro_1_1linalg_1_1itsolv.html#a2541a0dfd2575a25a8d4976899b63e1d", null ],
+    [ "Interpolate", "namespacemolpro_1_1linalg_1_1itsolv.html#ab03401c5cf0d0e3494964e960b960a7d", null ],
     [ "options_map", "namespacemolpro_1_1linalg_1_1itsolv.html#a784351a2599ca33773a9809818edb5a1", null ],
     [ "VecRef", "namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab", null ],
     [ "Verbosity", "namespacemolpro_1_1linalg_1_1itsolv.html#ac8246e59286ac3630c4c80231d6ed172", [
@@ -83,9 +85,11 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "get_rank< long double >", "namespacemolpro_1_1linalg_1_1itsolv.html#a9cd52c0c082968e31d67f6cbbb9ba44d", null ],
     [ "get_rank< value_type >", "namespacemolpro_1_1linalg_1_1itsolv.html#a7e0e794235aa1f66c87e6f7ca273331e", null ],
     [ "operator<<", "namespacemolpro_1_1linalg_1_1itsolv.html#a2ddf9d9d9e8eb84510e54c64d86dad16", null ],
-    [ "operator<<", "namespacemolpro_1_1linalg_1_1itsolv.html#a32fc8c3fc3217ba8e8c4abb2c7de9f2e", null ],
     [ "operator<<", "namespacemolpro_1_1linalg_1_1itsolv.html#a165abd9e57fd61f69482f77d58c8940f", null ],
+    [ "operator<<", "namespacemolpro_1_1linalg_1_1itsolv.html#a38ab2e24559d49f605a89132b89220a2", null ],
+    [ "operator<<", "namespacemolpro_1_1linalg_1_1itsolv.html#ae523c6ae5b58ddbf94d495325572c024", null ],
     [ "operator==", "namespacemolpro_1_1linalg_1_1itsolv.html#ad845d8e72c3518d938b7c0250c70de87", null ],
+    [ "operator==", "namespacemolpro_1_1linalg_1_1itsolv.html#abb5e82e092066d4c7ff6124bb7664b58", null ],
     [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#a8229dae1b2c144af940193d4aae8a460", null ],
     [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#a87291e93a2c4e59b1af5b46cdb7d2db6", null ],
     [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#aa196d0f83c9368c7afbb70fec5609c84", null ],

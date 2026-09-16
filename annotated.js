@@ -90,6 +90,9 @@ var annotated =
           [ "detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html", [
             [ "DSpaceResetter", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter" ]
           ] ],
+          [ "interpolate_detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail.html", [
+            [ "Morse_problem", "classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem.html", "classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem" ]
+          ] ],
           [ "log", "namespacemolpro_1_1linalg_1_1itsolv_1_1log.html", [
             [ "ComplexRootsDavidson", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html", null ],
             [ "ConstexprString", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString" ],
@@ -143,7 +146,7 @@ var annotated =
           [ "decay< std::reference_wrapper< T > >", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4.html", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4" ],
           [ "has_iterator", "structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html", null ],
           [ "has_lapack_kernel", "structmolpro_1_1linalg_1_1itsolv_1_1has__lapack__kernel.html", null ],
-          [ "Interpolate", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolate" ],
+          [ "Interpolator", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolator" ],
           [ "IterativeSolver", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver" ],
           [ "IterativeSolverTemplate", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" ],
           [ "LinearEigensystem", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem.html", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem" ],
@@ -181,6 +184,5 @@ var annotated =
     ] ],
     [ "std", null, [
       [ "formatter< molpro::linalg::itsolv::subspace::Matrix< T > >", "structstd_1_1formatter_3_01molpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_3_01T_01_4_01_4.html", "structstd_1_1formatter_3_01molpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_3_01T_01_4_01_4" ]
-    ] ],
-    [ "Morse_problem", "classMorse__problem.html", "classMorse__problem" ]
+    ] ]
 ];
