@@ -142,9 +142,8 @@ var annotated =
           [ "decay", "structmolpro_1_1linalg_1_1itsolv_1_1decay.html", "structmolpro_1_1linalg_1_1itsolv_1_1decay" ],
           [ "decay< std::reference_wrapper< T > >", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4.html", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4" ],
           [ "has_iterator", "structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html", null ],
+          [ "has_lapack_kernel", "structmolpro_1_1linalg_1_1itsolv_1_1has__lapack__kernel.html", null ],
           [ "Interpolate", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolate.html", "classmolpro_1_1linalg_1_1itsolv_1_1Interpolate" ],
-          [ "is_complex", "structmolpro_1_1linalg_1_1itsolv_1_1is__complex.html", null ],
-          [ "is_complex< std::complex< T > >", "structmolpro_1_1linalg_1_1itsolv_1_1is__complex_3_01std_1_1complex_3_01T_01_4_01_4.html", null ],
           [ "IterativeSolver", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver" ],
           [ "IterativeSolverTemplate", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" ],
           [ "LinearEigensystem", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem.html", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem" ],
@@ -173,7 +172,11 @@ var annotated =
           [ "SolverFactory", "classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html", "classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory" ],
           [ "Statistics", "structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html", "structmolpro_1_1linalg_1_1itsolv_1_1Statistics" ],
           [ "SVD", "structmolpro_1_1linalg_1_1itsolv_1_1SVD.html", "structmolpro_1_1linalg_1_1itsolv_1_1SVD" ]
-        ] ]
+        ] ],
+        [ "is_complex", "structmolpro_1_1linalg_1_1is__complex.html", null ],
+        [ "is_complex< std::complex< T > >", "structmolpro_1_1linalg_1_1is__complex_3_01std_1_1complex_3_01T_01_4_01_4.html", null ],
+        [ "real_type", "structmolpro_1_1linalg_1_1real__type.html", "structmolpro_1_1linalg_1_1real__type" ],
+        [ "real_type< std::complex< T > >", "structmolpro_1_1linalg_1_1real__type_3_01std_1_1complex_3_01T_01_4_01_4.html", "structmolpro_1_1linalg_1_1real__type_3_01std_1_1complex_3_01T_01_4_01_4" ]
       ] ]
     ] ],
     [ "std", null, [

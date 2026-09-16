@@ -93,6 +93,8 @@ $(document).ready(function(){initNavTree('namespacemolpro_1_1linalg.html',''); i
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">molpro::linalg Namespace Reference</div></div>
 </div><!--header-->
@@ -108,6 +110,25 @@ Namespaces</h2></td></tr>
 <tr class="memdesc:namespacemolpro_1_1linalg_1_1itsolv"><td class="mdescLeft">&#160;</td><td class="mdescRight">4-parameter interpolation of a 1-dimensional function given two points for which function values and first derivatives are known. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1is__complex.html">is_complex</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1is__complex_3_01std_1_1complex_3_01T_01_4_01_4.html">is_complex&lt; std::complex&lt; T &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1real__type.html">real_type</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The real type underlying a (possibly complex) scalar type.  <a href="structmolpro_1_1linalg_1_1real__type.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1real__type_3_01std_1_1complex_3_01T_01_4_01_4.html">real_type&lt; std::complex&lt; T &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a6435c6192962881e9d676f1f5312e532"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a6435c6192962881e9d676f1f5312e532"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a> = typename <a class="el" href="structmolpro_1_1linalg_1_1real__type.html">real_type</a>&lt; T &gt;::type</td></tr>
+<tr class="memdesc:a6435c6192962881e9d676f1f5312e532"><td class="mdescLeft">&#160;</td><td class="mdescRight">The real type underlying <code>T</code>, i.e. <code>T</code> itself for a real type and <code>U</code> for <code>std::complex&lt;U&gt;</code>.  <a href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">More...</a><br /></td></tr>
+<tr class="separator:a6435c6192962881e9d676f1f5312e532"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:abd04a7feed3604605815d55678fc2369"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; const molpro::Options &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg.html#abd04a7feed3604605815d55678fc2369">options</a> ()</td></tr>
@@ -116,7 +137,31 @@ Functions</h2></td></tr>
 <tr class="memitem:ab848133292d7af277eab1375edea6692"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg.html#ab848133292d7af277eab1375edea6692">set_options</a> (const molpro::Options &amp;<a class="el" href="namespacemolpro_1_1linalg.html#abd04a7feed3604605815d55678fc2369">options</a>)</td></tr>
 <tr class="memdesc:ab848133292d7af277eab1375edea6692"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the options for iterative-solver.  <a href="namespacemolpro_1_1linalg.html#ab848133292d7af277eab1375edea6692">More...</a><br /></td></tr>
 <tr class="separator:ab848133292d7af277eab1375edea6692"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afeba78fae9932a4ff14f13ab529edba6"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
+<tr class="memitem:afeba78fae9932a4ff14f13ab529edba6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg.html#afeba78fae9932a4ff14f13ab529edba6">precision_scaled</a> (double tolerance_for_double)</td></tr>
+<tr class="memdesc:afeba78fae9932a4ff14f13ab529edba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rescale a tolerance that was calibrated for IEEE double precision to the working precision.  <a href="namespacemolpro_1_1linalg.html#afeba78fae9932a4ff14f13ab529edba6">More...</a><br /></td></tr>
+<tr class="separator:afeba78fae9932a4ff14f13ab529edba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a6435c6192962881e9d676f1f5312e532" name="a6435c6192962881e9d676f1f5312e532"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6435c6192962881e9d676f1f5312e532">&#9670;&nbsp;</a></span>real_type_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">molpro::linalg::real_type_t</a> = typedef typename <a class="el" href="structmolpro_1_1linalg_1_1real__type.html">real_type</a>&lt;T&gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The real type underlying <code>T</code>, i.e. <code>T</code> itself for a real type and <code>U</code> for <code>std::complex&lt;U&gt;</code>. </p>
+<p >Quantities that are real by construction &ndash; eigenvalues of a hermitian matrix, singular values, norms and the thresholds they are compared against &ndash; are expressed in this type rather than in the scalar type of the problem. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="abd04a7feed3604605815d55678fc2369" name="abd04a7feed3604605815d55678fc2369"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd04a7feed3604605815d55678fc2369">&#9670;&nbsp;</a></span>options()</h2>
@@ -135,6 +180,29 @@ Functions</h2></td></tr>
 
 <p>Get the Options object associated with iterative-solver. </p>
 <dl class="section return"><dt>Returns</dt><dd>The current option set. If none has been assigned, in the Molpro context the "ITERATIVE-SOLVER" option set is used, otherwise empty. </dd></dl>
+
+</div>
+</div>
+<a id="afeba78fae9932a4ff14f13ab529edba6" name="afeba78fae9932a4ff14f13ab529edba6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afeba78fae9932a4ff14f13ab529edba6">&#9670;&nbsp;</a></span>precision_scaled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt; molpro::linalg::precision_scaled </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance_for_double</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Rescale a tolerance that was calibrated for IEEE double precision to the working precision. </p>
+<p >A tolerance of the form "this quantity vanishes to within rounding error" is a fixed multiple of the machine epsilon of the arithmetic used. The constants in this library were chosen for double precision; this function preserves their safety margin, measured in machine epsilons, at any other precision, and returns the constant unchanged when the working precision is double. </p>
 
 </div>
 </div>

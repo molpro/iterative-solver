@@ -5,9 +5,11 @@ var searchData=
   ['handler_2',['handler',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html#ad3c2a9e4ce0b39b68faf7c96c11ec1b1',1,'molpro::linalg::itsolv::ArrayHandlers::Builder::Proxy']]],
   ['handles_3',['handles',['../structmolpro_1_1linalg_1_1array_1_1util_1_1TempHandle.html#a63da5f203df8218f905857e3f1eb4916',1,'molpro::linalg::array::util::TempHandle']]],
   ['has_5fiterator_4',['has_iterator',['../structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html',1,'molpro::linalg::itsolv']]],
-  ['has_5fmapped_5ftype_5',['has_mapped_type',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type.html',1,'molpro::linalg::array']]],
-  ['has_5fmapped_5ftype_3c_20a_2c_20void_5ft_3c_20typename_20a_3a_3amapped_5ftype_20_3e_20_3e_6',['has_mapped_type&lt; A, void_t&lt; typename A::mapped_type &gt; &gt;',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type_3_01A_00_01void__t_3_01typename_01A_1_1mapped__type_01_4_01_4.html',1,'molpro::linalg::array']]],
-  ['has_5fmapped_5ftype_5fv_7',['has_mapped_type_v',['../namespacemolpro_1_1linalg_1_1array.html#a13f02b59213de0924418fca64e40acf3',1,'molpro::linalg::array']]],
-  ['has_5fparent_8',['has_parent',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1dotgraph.html#a3642a4c9eb27db3c082b371b3edfed75',1,'molpro::profiler::dotgraph']]],
-  ['hermiticity_9',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a521a7db340a0a9241725c1e62012b9c1',1,'molpro::linalg::itsolv::DavidsonOptions']]]
+  ['has_5flapack_5fkernel_5',['has_lapack_kernel',['../structmolpro_1_1linalg_1_1itsolv_1_1has__lapack__kernel.html',1,'molpro::linalg::itsolv']]],
+  ['has_5flapack_5fkernel_5fv_6',['has_lapack_kernel_v',['../namespacemolpro_1_1linalg_1_1itsolv.html#a43a917ac5c9b4d26e795a437be1a6807',1,'molpro::linalg::itsolv']]],
+  ['has_5fmapped_5ftype_7',['has_mapped_type',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type.html',1,'molpro::linalg::array']]],
+  ['has_5fmapped_5ftype_3c_20a_2c_20void_5ft_3c_20typename_20a_3a_3amapped_5ftype_20_3e_20_3e_8',['has_mapped_type&lt; A, void_t&lt; typename A::mapped_type &gt; &gt;',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type_3_01A_00_01void__t_3_01typename_01A_1_1mapped__type_01_4_01_4.html',1,'molpro::linalg::array']]],
+  ['has_5fmapped_5ftype_5fv_9',['has_mapped_type_v',['../namespacemolpro_1_1linalg_1_1array.html#a13f02b59213de0924418fca64e40acf3',1,'molpro::linalg::array']]],
+  ['has_5fparent_10',['has_parent',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1dotgraph.html#a3642a4c9eb27db3c082b371b3edfed75',1,'molpro::profiler::dotgraph']]],
+  ['hermiticity_11',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a521a7db340a0a9241725c1e62012b9c1',1,'molpro::linalg::itsolv::DavidsonOptions']]]
 ];

@@ -12,6 +12,7 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1detail =
     [ "construct_dspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aaf70adb15e11786f878400d6a794df3e", null ],
     [ "construct_solution", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a4d779275bdb5444c9ed12bfa01ca58ea", null ],
     [ "construct_vectorP", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a3af95639074feb491b36180e8c6ef36c", null ],
+    [ "eigensolver_hermitian_kernel", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a02c4aabef5937a3c16d034c2efd976b3", null ],
     [ "get_new_working_set", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad3c2afce975327f0d495ef8f7d2eff86", null ],
     [ "limit_qspace_size", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ae0698882c0bfc722096198ab20683b20", null ],
     [ "max_overlap_with_R", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a7e59cce18c2d88b4a7f69312b4736043", null ],
