@@ -10,6 +10,6 @@ var searchData=
   ['rq_5fops_7',['rq_ops',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#aa8b840a9a2de9f7c11a72811f71a8b6a',1,'molpro::linalg::itsolv::Statistics']]],
   ['rr_8',['rr',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#a9ccab0aa513fb9d0b4653015fe5e4a64',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
   ['rr_5fops_9',['rr_ops',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#a77ff925049612a22bbd87cde3c834dfd',1,'molpro::linalg::itsolv::Statistics']]],
-  ['rspace_5fopts_10',['rspace_opts',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aca741a01442f803203a66ae12303fc85',1,'molpro::linalg::itsolv::LinearEigensystemDavidson::rspace_opts()'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ab1b3c00c18cc6da1d0260a5ea640fc3d',1,'molpro::linalg::itsolv::LinearEquationsDavidson::rspace_opts()']]],
+  ['rspace_5fopts_10',['rspace_opts',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aa8013c9d242b144c46886f8d16a02457',1,'molpro::linalg::itsolv::LinearEigensystemDavidson::rspace_opts()'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a328f0a5f6fb9acbe5995e32432b37a32',1,'molpro::linalg::itsolv::LinearEquationsDavidson::rspace_opts()']]],
   ['runtime_11',['runtime',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1dotgraph_1_1GraphEntry.html#a6d8caabf8b7aca287bcbb40169d25b27',1,'molpro::profiler::dotgraph::GraphEntry']]]
 ];

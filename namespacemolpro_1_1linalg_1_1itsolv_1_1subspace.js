@@ -16,7 +16,7 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1subspace =
     [ "SubspaceSolverOptSD", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD" ],
     [ "SubspaceSolverRSPT", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT" ],
     [ "XSpace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace" ],
-    [ "SubspaceData", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a307dbd210d2a4c973cc1d902e153f038", null ],
+    [ "SubspaceData", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a81f7a321ccd3db70e79e8e3e14fd50df", null ],
     [ "EqnData", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195", [
       [ "H", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195ac1d9f50f86825a1a2302ec2449c17196", null ],
       [ "S", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195a5dbc98dcc983a70728bd082d1a47546e", null ],
@@ -24,6 +24,6 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1subspace =
       [ "value", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195a2063c1608d6e0baf80249c42e2be5804", null ]
     ] ],
     [ "as_string", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30dacede15a934f3b97b759ae1d2a7e3", null ],
-    [ "null_data", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a4055315e6c87ae26a04be5f58e066c9d", null ],
+    [ "null_data", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#adb021336569d672f0bdb3fb44f10e6af", null ],
     [ "transpose_copy", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a48f71d3d15b8de9d41b31ed27a679f6f", null ]
 ];

@@ -27,8 +27,8 @@ var classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson =
     [ "working_set_eigenvalues", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ad0cc61ce681e6c9f07a4a869d1caf33d", null ],
     [ "m_dspace_resetter", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a54f58e57011e81a3649959d5bf900b59", null ],
     [ "m_hermiticity", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a9bf051b5bc298da49a9046af0feb0104", null ],
-    [ "m_last_values", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a26f7dd1a80e4fdda081a2353d3cabb9e", null ],
+    [ "m_last_values", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ac197a4ae4b4e7280c98688d01bff3526", null ],
     [ "m_resetting_in_progress", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a4f8b13cbdbd2dc723312d0d640c31917", null ],
     [ "qspace_opts", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a2de5adb607fb5300a2f30c41f4ae297b", null ],
-    [ "rspace_opts", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aca741a01442f803203a66ae12303fc85", null ]
+    [ "rspace_opts", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aa8013c9d242b144c46886f8d16a02457", null ]
 ];

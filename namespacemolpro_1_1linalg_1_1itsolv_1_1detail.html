@@ -130,9 +130,9 @@ Functions</h2></td></tr>
 <tr class="separator:a7e59cce18c2d88b4a7f69312b4736043"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d3d8c381bac1eb7fa2ff0752e0c6cea"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair&lt; size_t, size_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a6d3d8c381bac1eb7fa2ff0752e0c6cea">parameter_batches</a> (const size_t nsol, const size_t nparam)</td></tr>
 <tr class="separator:a6d3d8c381bac1eb7fa2ff0752e0c6cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d779275bdb5444c9ed12bfa01ca58ea"><td class="memTemplParams" colspan="2">template&lt;class R , class Q , class P &gt; </td></tr>
-<tr class="memitem:a4d779275bdb5444c9ed12bfa01ca58ea"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a4d779275bdb5444c9ed12bfa01ca58ea">construct_solution</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;params, const std::vector&lt; int &gt; &amp;roots, const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; double &gt; &amp;solutions, const std::vector&lt; std::reference_wrapper&lt; P &gt; &gt; &amp;pparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;qparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;dparams, size_t oP, size_t oQ, size_t oD, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &amp;handlers)</td></tr>
-<tr class="separator:a4d779275bdb5444c9ed12bfa01ca58ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cccc7d2dde83ef8809e836a62064e27"><td class="memTemplParams" colspan="2">template&lt;class R , class Q , class P , typename value_type &gt; </td></tr>
+<tr class="memitem:a2cccc7d2dde83ef8809e836a62064e27"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a2cccc7d2dde83ef8809e836a62064e27">construct_solution</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;params, const std::vector&lt; int &gt; &amp;roots, const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;solutions, const std::vector&lt; std::reference_wrapper&lt; P &gt; &gt; &amp;pparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;qparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;dparams, size_t oP, size_t oQ, size_t oD, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &amp;handlers)</td></tr>
+<tr class="separator:a2cccc7d2dde83ef8809e836a62064e27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3af95639074feb491b36180e8c6ef36c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3af95639074feb491b36180e8c6ef36c"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a3af95639074feb491b36180e8c6ef36c">construct_vectorP</a> (const std::vector&lt; int &gt; &amp;roots, const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; T &gt; &amp;solutions, const size_t oP, const size_t nP)</td></tr>
 <tr class="separator:a3af95639074feb491b36180e8c6ef36c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,9 +145,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a6edb428467caf65c2df6d4f0d34a85b8"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a6edb428467caf65c2df6d4f0d34a85b8"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a6edb428467caf65c2df6d4f0d34a85b8">select_working_set</a> (const size_t nw, const std::vector&lt; T &gt; &amp;errors, const T threshold, const std::vector&lt; T &gt; &amp;value_errors, const T value_threshold)</td></tr>
 <tr class="separator:a6edb428467caf65c2df6d4f0d34a85b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b5b8edb5325e4d909f7dac0a1d2541d"><td class="memTemplParams" colspan="2">template&lt;class R &gt; </td></tr>
-<tr class="memitem:a3b5b8edb5325e4d909f7dac0a1d2541d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a3b5b8edb5325e4d909f7dac0a1d2541d">normalise</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;params, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt; &amp;handler, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger, double thresh=1.0e-14)</td></tr>
-<tr class="separator:a3b5b8edb5325e4d909f7dac0a1d2541d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a410e557c1407524363361004d522b4ba"><td class="memTemplParams" colspan="2">template&lt;class R &gt; </td></tr>
+<tr class="memitem:a410e557c1407524363361004d522b4ba"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a410e557c1407524363361004d522b4ba">normalise</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;params, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt; &amp;handler, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger, typename <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt;::value_type_abs thresh=<a class="el" href="namespacemolpro_1_1linalg.html#afeba78fae9932a4ff14f13ab529edba6">precision_scaled</a>&lt; typename <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt;::value_type_abs &gt;(1e-14))</td></tr>
+<tr class="separator:a410e557c1407524363361004d522b4ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad63c6172e8baa3a325c27a4e5314c203"><td class="memTemplParams" colspan="2">template&lt;class R , class Q , class P , typename value_type &gt; </td></tr>
 <tr class="memitem:ad63c6172e8baa3a325c27a4e5314c203"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad63c6172e8baa3a325c27a4e5314c203">append_overlap_with_r</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;overlap, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; P &gt; &amp;pparams, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; Q &gt; &amp;qparams, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; Q &gt; &amp;dparams, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &amp;handlers, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger)</td></tr>
 <tr class="memdesc:ad63c6172e8baa3a325c27a4e5314c203"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs overlap of the full subspace by appending overlap with new parameters to the overlap of previous subspace.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad63c6172e8baa3a325c27a4e5314c203">More...</a><br /></td></tr>
@@ -168,10 +168,10 @@ Functions</h2></td></tr>
 <tr class="memitem:ad3c2afce975327f0d495ef8f7d2eff86"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad3c2afce975327f0d495ef8f7d2eff86">get_new_working_set</a> (const std::vector&lt; int &gt; &amp;working_set, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;wparams)</td></tr>
 <tr class="memdesc:ad3c2afce975327f0d495ef8f7d2eff86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns new working set based on parameters included in wparams.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad3c2afce975327f0d495ef8f7d2eff86">More...</a><br /></td></tr>
 <tr class="separator:ad3c2afce975327f0d495ef8f7d2eff86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dd923703929d07cbe3f637e40f5171f"><td class="memTemplParams" colspan="2">template&lt;class R , class Q , class P &gt; </td></tr>
-<tr class="memitem:a5dd923703929d07cbe3f637e40f5171f"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a5dd923703929d07cbe3f637e40f5171f">propose_rspace</a> (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">IterativeSolver</a>&lt; R, Q, P &gt; &amp;solver, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;residuals, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html">subspace::IXSpace</a>&lt; R, Q, P &gt; &amp;xspace, <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html">subspace::ISubspaceSolver</a>&lt; R, Q, P &gt; &amp;subspace_solver, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &amp;handlers, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger, const RSpaceOptions &amp;r_opts, const QSpaceOptions &amp;q_opts, <a class="elRef" href="https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Profiler.html">molpro::profiler::Profiler</a> &amp;profiler)</td></tr>
-<tr class="memdesc:a5dd923703929d07cbe3f637e40f5171f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proposes new parameters for the subspace from the preconditioned residuals.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a5dd923703929d07cbe3f637e40f5171f">More...</a><br /></td></tr>
-<tr class="separator:a5dd923703929d07cbe3f637e40f5171f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac72611a8065b403ca5a5c83511e2e92"><td class="memTemplParams" colspan="2">template&lt;class R , class Q , class P &gt; </td></tr>
+<tr class="memitem:aac72611a8065b403ca5a5c83511e2e92"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aac72611a8065b403ca5a5c83511e2e92">propose_rspace</a> (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">IterativeSolver</a>&lt; R, Q, P &gt; &amp;solver, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;residuals, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html">subspace::IXSpace</a>&lt; R, Q, P &gt; &amp;xspace, <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html">subspace::ISubspaceSolver</a>&lt; R, Q, P &gt; &amp;subspace_solver, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &amp;handlers, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger, const RSpaceOptions&lt; typename <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt;::value_type_abs &gt; &amp;r_opts, const QSpaceOptions &amp;q_opts, <a class="elRef" href="https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Profiler.html">molpro::profiler::Profiler</a> &amp;profiler)</td></tr>
+<tr class="memdesc:aac72611a8065b403ca5a5c83511e2e92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proposes new parameters for the subspace from the preconditioned residuals.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aac72611a8065b403ca5a5c83511e2e92">More...</a><br /></td></tr>
+<tr class="separator:aac72611a8065b403ca5a5c83511e2e92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ad63c6172e8baa3a325c27a4e5314c203" name="ad63c6172e8baa3a325c27a4e5314c203"></a>
@@ -322,13 +322,13 @@ template&lt;class R , class Q , class P , typename value_type , typename value_t
 
 </div>
 </div>
-<a id="a4d779275bdb5444c9ed12bfa01ca58ea" name="a4d779275bdb5444c9ed12bfa01ca58ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d779275bdb5444c9ed12bfa01ca58ea">&#9670;&nbsp;</a></span>construct_solution()</h2>
+<a id="a2cccc7d2dde83ef8809e836a62064e27" name="a2cccc7d2dde83ef8809e836a62064e27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cccc7d2dde83ef8809e836a62064e27">&#9670;&nbsp;</a></span>construct_solution()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class R , class Q , class P &gt; </div>
+template&lt;class R , class Q , class P , typename value_type &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void molpro::linalg::itsolv::detail::construct_solution </td>
@@ -345,7 +345,7 @@ template&lt;class R , class Q , class P &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;&#160;</td>
           <td class="paramname"><em>solutions</em>, </td>
         </tr>
         <tr>
@@ -777,8 +777,8 @@ template&lt;class R &gt; </div>
 
 </div>
 </div>
-<a id="a3b5b8edb5325e4d909f7dac0a1d2541d" name="a3b5b8edb5325e4d909f7dac0a1d2541d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b5b8edb5325e4d909f7dac0a1d2541d">&#9670;&nbsp;</a></span>normalise() <span class="overload">[2/2]</span></h2>
+<a id="a410e557c1407524363361004d522b4ba" name="a410e557c1407524363361004d522b4ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a410e557c1407524363361004d522b4ba">&#9670;&nbsp;</a></span>normalise() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -806,8 +806,8 @@ template&lt;class R &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>thresh</em> = <code>1.0e-14</code>&#160;</td>
+          <td class="paramtype">typename <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt;::value_type_abs&#160;</td>
+          <td class="paramname"><em>thresh</em> = <code><a class="el" href="namespacemolpro_1_1linalg.html#afeba78fae9932a4ff14f13ab529edba6">precision_scaled</a>&lt;typename&#160;<a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt;R,&#160;R&gt;::value_type_abs&gt;(1e-14)</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -855,8 +855,8 @@ template&lt;class R &gt; </div>
 
 </div>
 </div>
-<a id="a5dd923703929d07cbe3f637e40f5171f" name="a5dd923703929d07cbe3f637e40f5171f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5dd923703929d07cbe3f637e40f5171f">&#9670;&nbsp;</a></span>propose_rspace()</h2>
+<a id="aac72611a8065b403ca5a5c83511e2e92" name="aac72611a8065b403ca5a5c83511e2e92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac72611a8065b403ca5a5c83511e2e92">&#9670;&nbsp;</a></span>propose_rspace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -908,7 +908,7 @@ template&lt;class R , class Q , class P &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const RSpaceOptions &amp;&#160;</td>
+          <td class="paramtype">const RSpaceOptions&lt; typename <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt;::value_type_abs &gt; &amp;&#160;</td>
           <td class="paramname"><em>r_opts</em>, </td>
         </tr>
         <tr>

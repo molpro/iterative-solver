@@ -32,5 +32,5 @@ var classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace =
     [ "update_dspace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#afb897ccb015c8d42dbe57a6f0c92ae62", null ],
     [ "update_pspace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a90ffba67ffb0262cf996e73d0cd95354", null ],
     [ "update_qspace", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aea25a4672a5baaeba2fcb36ad9b09b2e", null ],
-    [ "data", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a62b5c65e6258f13b670057780bd5ea3a", null ]
+    [ "data", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a0972903f5ee14f9881aacc0f8ebbc9de", null ]
 ];

@@ -389,15 +389,15 @@ Functions</h2></td></tr>
 <tr class="memitem:aa2245800026088096803c477ba48f674"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aa2245800026088096803c477ba48f674">remove_elements</a> (std::vector&lt; T &gt; params, const std::vector&lt; U &gt; &amp;indices)</td></tr>
 <tr class="memdesc:aa2245800026088096803c477ba48f674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes indices from a vector.  <a href="namespacemolpro_1_1linalg_1_1itsolv.html#aa2245800026088096803c477ba48f674">More...</a><br /></td></tr>
 <tr class="separator:aa2245800026088096803c477ba48f674"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8229dae1b2c144af940193d4aae8a460"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;&gt; </td></tr>
-<tr class="memitem:a8229dae1b2c144af940193d4aae8a460"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a8229dae1b2c144af940193d4aae8a460">precondition_default</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals)</td></tr>
-<tr class="separator:a8229dae1b2c144af940193d4aae8a460"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa196d0f83c9368c7afbb70fec5609c84"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:aa196d0f83c9368c7afbb70fec5609c84"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aa196d0f83c9368c7afbb70fec5609c84">precondition_default</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename T::iterator *=nullptr)</td></tr>
-<tr class="separator:aa196d0f83c9368c7afbb70fec5609c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87291e93a2c4e59b1af5b46cdb7d2db6"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;, class  = void&gt; </td></tr>
-<tr class="memitem:a87291e93a2c4e59b1af5b46cdb7d2db6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a87291e93a2c4e59b1af5b46cdb7d2db6">precondition_default</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename std::enable_if&lt;!<a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html">has_iterator</a>&lt; T &gt;::value, void * &gt;::type=nullptr)</td></tr>
-<tr class="separator:a87291e93a2c4e59b1af5b46cdb7d2db6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2793bd32c0d81903b49d00c2c7421f6f"><td class="memTemplParams" colspan="2">template&lt;typename T , typename S , typename  = std::enable_if_t&lt;std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;&gt; </td></tr>
+<tr class="memitem:a2793bd32c0d81903b49d00c2c7421f6f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a2793bd32c0d81903b49d00c2c7421f6f">precondition_default</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; T &gt; &amp;action, const std::vector&lt; S &gt; &amp;shift, const T &amp;diagonals)</td></tr>
+<tr class="separator:a2793bd32c0d81903b49d00c2c7421f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a559c1a0864d054c8d288f3fefb1b55e6"><td class="memTemplParams" colspan="2">template&lt;class T , typename S &gt; </td></tr>
+<tr class="memitem:a559c1a0864d054c8d288f3fefb1b55e6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a559c1a0864d054c8d288f3fefb1b55e6">precondition_default</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; T &gt; &amp;action, const std::vector&lt; S &gt; &amp;shift, const T &amp;diagonals, typename T::iterator *=nullptr)</td></tr>
+<tr class="separator:a559c1a0864d054c8d288f3fefb1b55e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abad4c61deaadee8b5f2b60e73a670d5e"><td class="memTemplParams" colspan="2">template&lt;typename T , typename S , typename  = std::enable_if_t&lt;!std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;, class  = void&gt; </td></tr>
+<tr class="memitem:abad4c61deaadee8b5f2b60e73a670d5e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#abad4c61deaadee8b5f2b60e73a670d5e">precondition_default</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; T &gt; &amp;action, const std::vector&lt; S &gt; &amp;shift, const T &amp;diagonals, typename std::enable_if&lt;!<a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html">has_iterator</a>&lt; T &gt;::value, void * &gt;::type=nullptr)</td></tr>
+<tr class="separator:abad4c61deaadee8b5f2b60e73a670d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb5e82e092066d4c7ff6124bb7664b58"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
 <tr class="memitem:abb5e82e092066d4c7ff6124bb7664b58"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#abb5e82e092066d4c7ff6124bb7664b58">operator==</a> (const typename <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html">Interpolator</a>&lt; value_type &gt;::point &amp;lhs, const typename <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html">Interpolator</a>&lt; value_type &gt;::point &amp;rhs)</td></tr>
 <tr class="separator:abb5e82e092066d4c7ff6124bb7664b58"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2161,13 +2161,13 @@ template&lt;typename value_type &gt; </div>
 
 </div>
 </div>
-<a id="a8229dae1b2c144af940193d4aae8a460" name="a8229dae1b2c144af940193d4aae8a460"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8229dae1b2c144af940193d4aae8a460">&#9670;&nbsp;</a></span>precondition_default() <span class="overload">[1/3]</span></h2>
+<a id="a2793bd32c0d81903b49d00c2c7421f6f" name="a2793bd32c0d81903b49d00c2c7421f6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2793bd32c0d81903b49d00c2c7421f6f">&#9670;&nbsp;</a></span>precondition_default() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;&gt; </div>
+template&lt;typename T , typename S , typename  = std::enable_if_t&lt;std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void molpro::linalg::itsolv::precondition_default </td>
@@ -2178,7 +2178,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;std::is_base_of&lt;molp
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; S &gt; &amp;&#160;</td>
           <td class="paramname"><em>shift</em>, </td>
         </tr>
         <tr>
@@ -2197,13 +2197,13 @@ template&lt;typename T , typename  = std::enable_if_t&lt;std::is_base_of&lt;molp
 
 </div>
 </div>
-<a id="a87291e93a2c4e59b1af5b46cdb7d2db6" name="a87291e93a2c4e59b1af5b46cdb7d2db6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87291e93a2c4e59b1af5b46cdb7d2db6">&#9670;&nbsp;</a></span>precondition_default() <span class="overload">[2/3]</span></h2>
+<a id="abad4c61deaadee8b5f2b60e73a670d5e" name="abad4c61deaadee8b5f2b60e73a670d5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abad4c61deaadee8b5f2b60e73a670d5e">&#9670;&nbsp;</a></span>precondition_default() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename  = std::enable_if_t&lt;!std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;, class  = void&gt; </div>
+template&lt;typename T , typename S , typename  = std::enable_if_t&lt;!std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;, class  = void&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void molpro::linalg::itsolv::precondition_default </td>
@@ -2214,7 +2214,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!std::is_base_of&lt;mol
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; S &gt; &amp;&#160;</td>
           <td class="paramname"><em>shift</em>, </td>
         </tr>
         <tr>
@@ -2239,13 +2239,13 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!std::is_base_of&lt;mol
 
 </div>
 </div>
-<a id="aa196d0f83c9368c7afbb70fec5609c84" name="aa196d0f83c9368c7afbb70fec5609c84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa196d0f83c9368c7afbb70fec5609c84">&#9670;&nbsp;</a></span>precondition_default() <span class="overload">[3/3]</span></h2>
+<a id="a559c1a0864d054c8d288f3fefb1b55e6" name="a559c1a0864d054c8d288f3fefb1b55e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a559c1a0864d054c8d288f3fefb1b55e6">&#9670;&nbsp;</a></span>precondition_default() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T &gt; </div>
+template&lt;class T , typename S &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void molpro::linalg::itsolv::precondition_default </td>
@@ -2256,7 +2256,7 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; S &gt; &amp;&#160;</td>
           <td class="paramname"><em>shift</em>, </td>
         </tr>
         <tr>

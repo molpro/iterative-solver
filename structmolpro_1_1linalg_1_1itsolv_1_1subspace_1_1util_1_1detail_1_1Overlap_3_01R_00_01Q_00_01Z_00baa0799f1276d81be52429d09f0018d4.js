@@ -1,0 +1,4 @@
+var structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail_1_1Overlap_3_01R_00_01Q_00_01Z_00baa0799f1276d81be52429d09f0018d4 =
+[
+    [ "value_type", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail_1_1Overlap_3_01R_00_01Q_00_01Z_00baa0799f1276d81be52429d09f0018d4.html#a8277d22024b1b3861da6599751290a98", null ]
+];

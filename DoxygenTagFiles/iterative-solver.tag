@@ -4908,8 +4908,8 @@
       <type>virtual std::vector&lt; size_t &gt;</type>
       <name>suggest_p</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
-      <anchor>afa96ff75d67276bc116c0c13eeb2de29</anchor>
-      <arglist>(const CVecRef&lt; R &gt; &amp;solution, const CVecRef&lt; R &gt; &amp;residual, size_t max_number, double threshold)=0</arglist>
+      <anchor>a380dcd2801bf60ac478e4f9eb6e171dc</anchor>
+      <arglist>(const CVecRef&lt; R &gt; &amp;solution, const CVecRef&lt; R &gt; &amp;residual, size_t max_number, value_type_abs threshold)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
@@ -5013,28 +5013,28 @@
       <type>virtual void</type>
       <name>set_convergence_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
-      <anchor>af28ce838454c794908965639d9425b75</anchor>
-      <arglist>(double thresh)=0</arglist>
+      <anchor>a60e0c4b8bc55a1c746aecbc04aaec2f1</anchor>
+      <arglist>(value_type_abs thresh)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
-      <type>virtual double</type>
+      <type>virtual value_type_abs</type>
       <name>convergence_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
-      <anchor>aae54969171361e0982c8336dbf087dc4</anchor>
+      <anchor>a73d2b2adac27eceb16a4f6e0feed93d9</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
       <name>set_convergence_threshold_value</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
-      <anchor>ae5674166e14c2db01d9c9dcac437831f</anchor>
-      <arglist>(double thresh)=0</arglist>
+      <anchor>a2fe9cc1b0bcbaea94721acc810e8c5b1</anchor>
+      <arglist>(value_type_abs thresh)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
-      <type>virtual double</type>
+      <type>virtual value_type_abs</type>
       <name>convergence_threshold_value</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
-      <anchor>a35298af04d9f0436ba2d41fd16d62cd2</anchor>
+      <anchor>ae497c8b3645281a14e1f33a7f3f99d98</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="pure">
@@ -5090,14 +5090,14 @@
       <type>virtual void</type>
       <name>set_p_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
-      <anchor>a42a08eb4824d0037887dd95167249088</anchor>
-      <arglist>(double thresh)=0</arglist>
+      <anchor>a67fc83dd1aee2b28ad30cd79e82f29d9</anchor>
+      <arglist>(value_type_abs thresh)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
-      <type>virtual double</type>
+      <type>virtual value_type_abs</type>
       <name>get_p_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
-      <anchor>a36c67d3ad35534b41b49fc7bf931ebd3</anchor>
+      <anchor>a774cefd1de2b9fbb696ee550ac2a577c</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="pure">
@@ -5167,8 +5167,8 @@
       <type>virtual bool</type>
       <name>test_problem</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
-      <anchor>a25e573d21d3d8eea3aa66f5cb8606aff</anchor>
-      <arglist>(const Problem&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity=0, double threshold=1e-5) const =0</arglist>
+      <anchor>a61bef6701d26a46fc551457392aff3d8</anchor>
+      <arglist>(const Problem&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity=0, value_type_abs threshold=1e-5) const =0</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -5308,8 +5308,8 @@
       <type>std::vector&lt; size_t &gt;</type>
       <name>suggest_p</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>aba447f125747f4a70c8cabafc6c9143a</anchor>
-      <arglist>(const CVecRef&lt; R &gt; &amp;solution, const CVecRef&lt; R &gt; &amp;residual, size_t max_number, double threshold) override</arglist>
+      <anchor>a62284eb9632aa8ff827ed4683c9c61c6</anchor>
+      <arglist>(const CVecRef&lt; R &gt; &amp;solution, const CVecRef&lt; R &gt; &amp;residual, size_t max_number, value_type_abs threshold) override</arglist>
     </member>
     <member kind="function">
       <type>const std::vector&lt; int &gt; &amp;</type>
@@ -5392,28 +5392,28 @@
       <type>void</type>
       <name>set_convergence_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>a215df7cdb4fd2d07f3c7f4acb7c58f34</anchor>
-      <arglist>(double thresh) override</arglist>
+      <anchor>a04014bf8a4101226b7c94eb3e12c0358</anchor>
+      <arglist>(value_type_abs thresh) override</arglist>
     </member>
     <member kind="function">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>convergence_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>a6d42e5e1955b041a57e421a4439d53c0</anchor>
+      <anchor>a29558ab5af09c348c9526de338b0b77d</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>set_convergence_threshold_value</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>aa13ca336fed0aea5f331e023f3d626b1</anchor>
-      <arglist>(double thresh) override</arglist>
+      <anchor>abf87cdde1e925f36065183db08eeb341</anchor>
+      <arglist>(value_type_abs thresh) override</arglist>
     </member>
     <member kind="function">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>convergence_threshold_value</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>a76b475dca1b9e715b5aefd549acc48dc</anchor>
+      <anchor>a1f7ebfff7316bcfe85ff5a8e2d62e40d</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
@@ -5469,14 +5469,14 @@
       <type>void</type>
       <name>set_p_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>a8f49c4695490cbd7107eddda0a5bc7b3</anchor>
-      <arglist>(double threshold) override</arglist>
+      <anchor>a6201f13979f3d033dc1588d0f056fc64</anchor>
+      <arglist>(value_type_abs threshold) override</arglist>
     </member>
     <member kind="function">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>get_p_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>a261ed5e2536b16ce500022eac143b541</anchor>
+      <anchor>ae7246f41780294d36f7bc2bdae28b5da</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
@@ -5532,8 +5532,8 @@
       <type>bool</type>
       <name>test_problem</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>a5d2794b425152880052b48e64116f295</anchor>
-      <arglist>(const Problem&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity, double threshold) const override</arglist>
+      <anchor>a91e5457545fca0268ceaf48cb88937ad</anchor>
+      <arglist>(const Problem&lt; R &gt; &amp;problem, R &amp;v0, R &amp;v1, int verbosity, value_type_abs threshold) const override</arglist>
     </member>
     <member kind="function" protection="protected">
       <type></type>
@@ -5620,17 +5620,17 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>std::vector&lt; double &gt;</type>
+      <type>std::vector&lt; value_type_abs &gt;</type>
       <name>m_errors</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>ac50fb7b6de5f3cfa26e703337060a0da</anchor>
+      <anchor>a6dfbbcab8e5430b437929f8abd2b3e2c</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>std::vector&lt; double &gt;</type>
+      <type>std::vector&lt; value_type_abs &gt;</type>
       <name>m_value_errors</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>af75da06fcb4b67cbed43a74142eebb56</anchor>
+      <anchor>a003a067365d989bca5aa008668a8c8b1</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -5648,17 +5648,17 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_convergence_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>ab88aa2f7710140556b2e670a54730784</anchor>
+      <anchor>af0ac12de8379b8d5f79e7efccf3331a9</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_convergence_threshold_value</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>ae91c0ec6524d77c5a789f61995a01c43</anchor>
+      <anchor>aca5ad5567c7ab0cf3459e15dd1db4af4</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -5711,10 +5711,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_p_threshold</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>a9cd1557340c1bdd64cf98ffdd3e6287a</anchor>
+      <anchor>a1bb9539f81b481c6ca77884c6cd1074f</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -6044,10 +6044,10 @@
       <arglist>(std::shared_ptr&lt; Logger &gt; logger)=0</arglist>
     </member>
     <member kind="variable">
-      <type>SubspaceData</type>
+      <type>SubspaceData&lt; value_type &gt;</type>
       <name>data</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html</anchorfile>
-      <anchor>a62b5c65e6258f13b670057780bd5ea3a</anchor>
+      <anchor>a0972903f5ee14f9881aacc0f8ebbc9de</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -6400,10 +6400,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>std::vector&lt; double &gt;</type>
+      <type>std::vector&lt; scalar_type &gt;</type>
       <name>m_last_values</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a26f7dd1a80e4fdda081a2353d3cabb9e</anchor>
+      <anchor>ac197a4ae4b4e7280c98688d01bff3526</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -6414,10 +6414,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>RSpaceOptions</type>
+      <type>RSpaceOptions&lt; value_type_abs &gt;</type>
       <name>rspace_opts</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>aca741a01442f803203a66ae12303fc85</anchor>
+      <anchor>aa8013c9d242b144c46886f8d16a02457</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -6580,17 +6580,17 @@
       <arglist>() const override</arglist>
     </member>
     <member kind="variable">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>propose_rspace_norm_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html</anchorfile>
-      <anchor>a5884a9bbbfc0101fd01fc528de91e544</anchor>
+      <anchor>aa51e64a078f65b8e0da3b41b780ecc9e</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>propose_rspace_svd_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html</anchorfile>
-      <anchor>a48ea5dfd740161c89349f6bddeda3ea3</anchor>
+      <anchor>a42f2b7ab450d859463093a04931ccb21</anchor>
       <arglist></arglist>
     </member>
     <member kind="function" protection="protected">
@@ -6604,14 +6604,14 @@
       <type>static std::string</type>
       <name>str</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html</anchorfile>
-      <anchor>ab7fdd8d63e9974bd2b474c02ffa2ef1c</anchor>
-      <arglist>(const std::vector&lt; double &gt; &amp;a)</arglist>
+      <anchor>a950c9b75a2dcec5add26a4921187ba57</anchor>
+      <arglist>(const std::vector&lt; scalar_type &gt; &amp;a)</arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>std::vector&lt; double &gt;</type>
+      <type>std::vector&lt; scalar_type &gt;</type>
       <name>m_rspt_values</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html</anchorfile>
-      <anchor>a88aa99b67080273a156f748f346ebe6f</anchor>
+      <anchor>ae47f22840e94a04a406cbb2af319b7ee</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -6786,28 +6786,28 @@
       <type>void</type>
       <name>set_norm_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a59fd7897a1d2b405623fbcbe31d3c7a3</anchor>
-      <arglist>(double thresh)</arglist>
+      <anchor>a4863602c2a6566461a4c92ab45f8ce2f</anchor>
+      <arglist>(value_type_abs thresh)</arglist>
     </member>
     <member kind="function">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>get_norm_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a2393848822b65c218f6d425e89bfd9e2</anchor>
+      <anchor>a913906c3d2ef808a309592d0e88a271c</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>set_svd_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a211a4e48e4723b609af546dcc90c72e4</anchor>
-      <arglist>(double thresh)</arglist>
+      <anchor>a4b5fcf951900e328afc7ad971cdc6d3f</anchor>
+      <arglist>(value_type_abs thresh)</arglist>
     </member>
     <member kind="function">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>get_svd_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>ad4c8f30e7653281e580044176b7579b0</anchor>
+      <anchor>a0708628024a4d58bb5e5e237656f1422</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -6884,14 +6884,14 @@
       <type>void</type>
       <name>set_augmented_hessian</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a1cb407598df11ffef8877bb72a5815c9</anchor>
-      <arglist>(const double parameter)</arglist>
+      <anchor>abf49d778d621611c8d8e5dbf59280b5e</anchor>
+      <arglist>(const value_type_abs parameter)</arglist>
     </member>
     <member kind="function">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>get_augmented_hessian</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a8a7ff1023a3dbc00675d862a6417021f</anchor>
+      <anchor>aec419c159689d78943be0e65e3a5ce58</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -6937,10 +6937,10 @@
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions) override</arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>RSpaceOptions</type>
+      <type>RSpaceOptions&lt; value_type_abs &gt;</type>
       <name>rspace_opts</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>ab1b3c00c18cc6da1d0260a5ea640fc3d</anchor>
+      <anchor>a328f0a5f6fb9acbe5995e32432b37a32</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -7769,32 +7769,33 @@
   <compound kind="struct">
     <name>molpro::linalg::itsolv::subspace::xspace::NewData</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html</filename>
+    <templarg>typename T</templarg>
     <member kind="function">
       <type></type>
       <name>NewData</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html</anchorfile>
-      <anchor>ac3fb0fc2845c5ff018049ab157034433</anchor>
+      <anchor>a49558395c2b953b806f26c135b45d2cc</anchor>
       <arglist>(size_t nQnew, size_t nX, size_t nRHS)</arglist>
     </member>
     <member kind="variable">
-      <type>SubspaceData</type>
+      <type>SubspaceData&lt; T &gt;</type>
       <name>qq</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html</anchorfile>
-      <anchor>a66a2d505fb37b57b65c72bcee085677e</anchor>
+      <anchor>ab1a42602d93a684c43706a5f40b37c1a</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>SubspaceData</type>
+      <type>SubspaceData&lt; T &gt;</type>
       <name>qx</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html</anchorfile>
-      <anchor>a789820bcb8ea398dbdd20ac3857b7de5</anchor>
+      <anchor>a4a13a9dc9bebad72fe07dfcae3b25e97</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>SubspaceData</type>
+      <type>SubspaceData&lt; T &gt;</type>
       <name>xq</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html</anchorfile>
-      <anchor>af2d362a7c1d45b75a57d790a06be77ed</anchor>
+      <anchor>a0b9e87203a92667c931b728b25748bb8</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -7885,28 +7886,28 @@
       <type>void</type>
       <name>set_norm_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>a1c933107106d7a92bdf2cdea0ef8fc43</anchor>
-      <arglist>(double thresh)</arglist>
+      <anchor>ac18142b6ba9fbea6d03678c14a0bb630</anchor>
+      <arglist>(value_type_abs thresh)</arglist>
     </member>
     <member kind="function">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>get_norm_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>afab0054fac243503999e6c3d634c5f36</anchor>
+      <anchor>aee80d5122d2e0b6db413cb9c28f1615d</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>set_svd_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>aa1fd6cca7b816e4ef8763b321357a16c</anchor>
-      <arglist>(double thresh)</arglist>
+      <anchor>a7f0213fdab0a9951cafcf7176e1d2e2f</anchor>
+      <arglist>(value_type_abs thresh)</arglist>
     </member>
     <member kind="function">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>get_svd_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>a57a307bb2d036098e1b400deb3669b56</anchor>
+      <anchor>a0f69ecbde3ddeb2977d686b2a2970984</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function">
@@ -7973,17 +7974,17 @@
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions) override</arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_norm_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>a7573b12084903d8c20be149c7b178779</anchor>
+      <anchor>a79737b3e1a3d13314d22d6d12934487c</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_svd_thresh</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>a152f10b0a4c038df6a9fa74b0aceb387</anchor>
+      <anchor>a6db2bd0bfd7ff9640e6fbb51a26e72c6</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -8154,15 +8155,15 @@
       <type>void</type>
       <name>BFGS_update_1</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a6b488ffdcaafee0fb390c198cd58fa34</anchor>
-      <arglist>(R &amp;residual, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const subspace::Matrix&lt; double &gt; &amp;H)</arglist>
+      <anchor>a3ef9a1f4fffae9f8af48b3fef2e3aa70</anchor>
+      <arglist>(R &amp;residual, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const subspace::Matrix&lt; value_type &gt; &amp;H)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>BFGS_update_2</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>acc3dff99c4ced8568fb55d69481571da</anchor>
-      <arglist>(R &amp;z, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const subspace::Matrix&lt; double &gt; &amp;H)</arglist>
+      <anchor>aa5742f7d0b8086265ee5259ffade5a10</anchor>
+      <arglist>(R &amp;z, std::shared_ptr&lt; const subspace::IXSpace&lt; R, Q, P &gt; &gt; xspace, const subspace::Matrix&lt; value_type &gt; &amp;H)</arglist>
     </member>
     <member kind="function">
       <type>size_t</type>
@@ -8249,10 +8250,10 @@
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions) override</arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>std::vector&lt; double &gt;</type>
+      <type>std::vector&lt; value_type &gt;</type>
       <name>m_BFGS_update_alpha</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a706ec8e6979add2a97617a91fd85e6c1</anchor>
+      <anchor>a731300799a7e13caf3a48c06970ec5a0</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -8284,38 +8285,38 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_Wolfe_1</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a20ec1c340efd4c780f38320896acf8cb</anchor>
+      <anchor>a7f6c0ddc77a00f3dfe5cac87c3ac49d5</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_Wolfe_2</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a19014fc6fc3451bfa09960ae2b905ffd</anchor>
+      <anchor>a8978362de54ae1231ebf8c28e000acdf</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_linesearch_tolerance</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a2f6898258c8fcd943a4779b8eb8e740c</anchor>
+      <anchor>a7cbab984d488df493f0b07dd8f7be5db</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_linesearch_grow_factor</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>af4fc19800b03d96ce7185daafe8c84a1</anchor>
+      <anchor>a82b024ed9841a1d2ac43f30e7f188c0d</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_quasinewton_maximum_step</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a4ea11459f591fea9ce30b9ac3d3dab66</anchor>
+      <anchor>adb7f845e72e2e3ff3a586afbfc7b2aae</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -8644,11 +8645,18 @@
     <templarg>class Q</templarg>
     <templarg>class Z</templarg>
     <templarg>class W</templarg>
+    <member kind="typedef">
+      <type>typename array::ArrayHandler&lt; Z, W &gt;::value_type</type>
+      <name>value_type</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail_1_1Overlap_3_01R_00_01Q_00_01Z_00baa0799f1276d81be52429d09f0018d4.html</anchorfile>
+      <anchor>a8277d22024b1b3861da6599751290a98</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function" static="yes">
-      <type>static Matrix&lt; double &gt;</type>
+      <type>static Matrix&lt; value_type &gt;</type>
       <name>_</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail_1_1Overlap_3_01R_00_01Q_00_01Z_00baa0799f1276d81be52429d09f0018d4.html</anchorfile>
-      <anchor>a3153134216283283858a9114d49c0ea4</anchor>
+      <anchor>acf39083d4252a3a9e81518a3dfaf7db0</anchor>
       <arglist>(const CVecRef&lt; R &gt; &amp;left, const CVecRef&lt; Q &gt; &amp;right, array::ArrayHandler&lt; Z, W &gt; &amp;handler)</arglist>
     </member>
   </compound>
@@ -8659,11 +8667,18 @@
     <templarg>class Q</templarg>
     <templarg>class Z</templarg>
     <templarg>class W</templarg>
+    <member kind="typedef">
+      <type>typename array::ArrayHandler&lt; Z, W &gt;::value_type</type>
+      <name>value_type</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail_1_1Overlap_3_01R_00_01Q_00_01Z_009b17c8d430e8f336e99dfcdf84344305.html</anchorfile>
+      <anchor>a0904489d58ac8272894faa2da27c2435</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function" static="yes">
-      <type>static Matrix&lt; double &gt;</type>
+      <type>static Matrix&lt; value_type &gt;</type>
       <name>_</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail_1_1Overlap_3_01R_00_01Q_00_01Z_009b17c8d430e8f336e99dfcdf84344305.html</anchorfile>
-      <anchor>ac61631682766de14efe854a9c090a1d9</anchor>
+      <anchor>a2fbd76156da9cf2f736a4ea50f203dc6</anchor>
       <arglist>(const CVecRef&lt; R &gt; &amp;left, const CVecRef&lt; Q &gt; &amp;right, array::ArrayHandler&lt; Z, W &gt; &amp;handler)</arglist>
     </member>
   </compound>
@@ -8856,10 +8871,10 @@
       <arglist>(R &amp;RHS, unsigned int instance) const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
-      <type>virtual std::vector&lt; double &gt;</type>
+      <type>virtual std::vector&lt; value_t &gt;</type>
       <name>pp_action_matrix</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Problem.html</anchorfile>
-      <anchor>a3cc421a58afcaceb42a0631828221cdd</anchor>
+      <anchor>aa627b0eac3c495fa4038afe67c796403</anchor>
       <arglist>(const std::vector&lt; P &gt; &amp;pparams) const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
@@ -9319,8 +9334,8 @@
       <type>void</type>
       <name>update</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html</anchorfile>
-      <anchor>a2e4f93b4f458e9e7ebea7cfa257e142f</anchor>
-      <arglist>(const CVecRef&lt; R &gt; &amp;params, const CVecRef&lt; R &gt; &amp;actions, const SubspaceData &amp;qq, const SubspaceData &amp;qx, const SubspaceData &amp;xq, const Dimensions &amp;dims, SubspaceData &amp;old_data)</arglist>
+      <anchor>a4b5da3bf29cdcf69d4ab6b988e60844f</anchor>
+      <arglist>(const CVecRef&lt; R &gt; &amp;params, const CVecRef&lt; R &gt; &amp;actions, const SubspaceData&lt; T &gt; &amp;qq, const SubspaceData&lt; T &gt; &amp;qx, const SubspaceData&lt; T &gt; &amp;xq, const Dimensions &amp;dims, SubspaceData&lt; T &gt; &amp;old_data)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -10316,14 +10331,14 @@
       <type>void</type>
       <name>set_augmented_hessian</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
-      <anchor>aa19b812b2c9f2acf9e7fcc67d8842faa</anchor>
-      <arglist>(double parameter)</arglist>
+      <anchor>a8fe1bb6ca951ae533c53601e24792b2e</anchor>
+      <arglist>(value_type_abs parameter)</arglist>
     </member>
     <member kind="function">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>get_augmented_hessian</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
-      <anchor>a2ad9fe0b4687a1c69443847939afbe23</anchor>
+      <anchor>a04168653530754e469c22ff9cab443a0</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="variable">
@@ -10397,10 +10412,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>double</type>
+      <type>value_type_abs</type>
       <name>m_augmented_hessian</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
-      <anchor>ade5874a5d05f57487f8c1baa2f0b321f</anchor>
+      <anchor>a0714c68878d88bb5670ade646946c04a</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -12338,22 +12353,22 @@
       <type>void</type>
       <name>precondition_default</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a8229dae1b2c144af940193d4aae8a460</anchor>
-      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals)</arglist>
+      <anchor>a2793bd32c0d81903b49d00c2c7421f6f</anchor>
+      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; S &gt; &amp;shift, const T &amp;diagonals)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>precondition_default</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>aa196d0f83c9368c7afbb70fec5609c84</anchor>
-      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename T::iterator *=nullptr)</arglist>
+      <anchor>a559c1a0864d054c8d288f3fefb1b55e6</anchor>
+      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; S &gt; &amp;shift, const T &amp;diagonals, typename T::iterator *=nullptr)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>precondition_default</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a87291e93a2c4e59b1af5b46cdb7d2db6</anchor>
-      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; double &gt; &amp;shift, const T &amp;diagonals, typename std::enable_if&lt;!has_iterator&lt; T &gt;::value, void * &gt;::type=nullptr)</arglist>
+      <anchor>abad4c61deaadee8b5f2b60e73a670d5e</anchor>
+      <arglist>(const VecRef&lt; T &gt; &amp;action, const std::vector&lt; S &gt; &amp;shift, const T &amp;diagonals, typename std::enable_if&lt;!has_iterator&lt; T &gt;::value, void * &gt;::type=nullptr)</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -12568,8 +12583,8 @@
       <type>void</type>
       <name>construct_solution</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a4d779275bdb5444c9ed12bfa01ca58ea</anchor>
-      <arglist>(const VecRef&lt; R &gt; &amp;params, const std::vector&lt; int &gt; &amp;roots, const subspace::Matrix&lt; double &gt; &amp;solutions, const std::vector&lt; std::reference_wrapper&lt; P &gt; &gt; &amp;pparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;qparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;dparams, size_t oP, size_t oQ, size_t oD, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers)</arglist>
+      <anchor>a2cccc7d2dde83ef8809e836a62064e27</anchor>
+      <arglist>(const VecRef&lt; R &gt; &amp;params, const std::vector&lt; int &gt; &amp;roots, const subspace::Matrix&lt; value_type &gt; &amp;solutions, const std::vector&lt; std::reference_wrapper&lt; P &gt; &gt; &amp;pparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;qparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;dparams, size_t oP, size_t oQ, size_t oD, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; std::vector&lt; T &gt; &gt;</type>
@@ -12603,8 +12618,8 @@
       <type>void</type>
       <name>normalise</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a3b5b8edb5325e4d909f7dac0a1d2541d</anchor>
-      <arglist>(VecRef&lt; R &gt; &amp;params, array::ArrayHandler&lt; R, R &gt; &amp;handler, Logger &amp;logger, double thresh=1.0e-14)</arglist>
+      <anchor>a410e557c1407524363361004d522b4ba</anchor>
+      <arglist>(VecRef&lt; R &gt; &amp;params, array::ArrayHandler&lt; R, R &gt; &amp;handler, Logger &amp;logger, typename array::ArrayHandler&lt; R, R &gt;::value_type_abs thresh=precision_scaled&lt; typename array::ArrayHandler&lt; R, R &gt;::value_type_abs &gt;(1e-14))</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
@@ -12645,8 +12660,8 @@
       <type>auto</type>
       <name>propose_rspace</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a5dd923703929d07cbe3f637e40f5171f</anchor>
-      <arglist>(IterativeSolver&lt; R, Q, P &gt; &amp;solver, const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residuals, subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, subspace::ISubspaceSolver&lt; R, Q, P &gt; &amp;subspace_solver, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers, Logger &amp;logger, const RSpaceOptions &amp;r_opts, const QSpaceOptions &amp;q_opts, molpro::profiler::Profiler &amp;profiler)</arglist>
+      <anchor>aac72611a8065b403ca5a5c83511e2e92</anchor>
+      <arglist>(IterativeSolver&lt; R, Q, P &gt; &amp;solver, const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residuals, subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, subspace::ISubspaceSolver&lt; R, Q, P &gt; &amp;subspace_solver, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers, Logger &amp;logger, const RSpaceOptions&lt; typename array::ArrayHandler&lt; R, R &gt;::value_type_abs &gt; &amp;r_opts, const QSpaceOptions &amp;q_opts, molpro::profiler::Profiler &amp;profiler)</arglist>
     </member>
   </compound>
   <compound kind="namespace">
@@ -12777,10 +12792,10 @@
     <class kind="class">molpro::linalg::itsolv::subspace::SubspaceSolverRSPT</class>
     <class kind="class">molpro::linalg::itsolv::subspace::XSpace</class>
     <member kind="typedef">
-      <type>std::map&lt; EqnData, Matrix&lt; double &gt; &gt;</type>
+      <type>std::map&lt; EqnData, Matrix&lt; T &gt; &gt;</type>
       <name>SubspaceData</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html</anchorfile>
-      <anchor>a307dbd210d2a4c973cc1d902e153f038</anchor>
+      <anchor>a81f7a321ccd3db70e79e8e3e14fd50df</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
@@ -12812,7 +12827,7 @@
       <type>auto</type>
       <name>null_data</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html</anchorfile>
-      <anchor>a4055315e6c87ae26a04be5f58e066c9d</anchor>
+      <anchor>adb021336569d672f0bdb3fb44f10e6af</anchor>
       <arglist>()</arglist>
     </member>
   </compound>
@@ -12843,8 +12858,8 @@
       <type>std::vector&lt; T &gt;</type>
       <name>gram_schmidt</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html</anchorfile>
-      <anchor>a2dbc0c6797e895338e7d3a64df942f3c</anchor>
-      <arglist>(const Matrix&lt; T &gt; &amp;s, Matrix&lt; T &gt; &amp;l, double norm_thresh=1.0e-14)</arglist>
+      <anchor>a37e1147faeacf80d2c9f8647e0b6f35c</anchor>
+      <arglist>(const Matrix&lt; T &gt; &amp;s, Matrix&lt; T &gt; &amp;l, T norm_thresh=precision_scaled&lt; T &gt;(1e-14))</arglist>
     </member>
     <member kind="function">
       <type>Matrix&lt; value_type &gt;</type>
@@ -12864,14 +12879,14 @@
       <type>auto</type>
       <name>overlap</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html</anchorfile>
-      <anchor>a04cae2d6f7418d21ced0a813444fb7a0</anchor>
-      <arglist>(const CVecRef&lt; R &gt; &amp;left, const CVecRef&lt; Q &gt; &amp;right, array::ArrayHandler&lt; Z, W &gt; &amp;handler) -&gt; std::enable_if_t&lt; detail::Z_and_W_are_one_of_R_and_Q&lt; R, Q, Z, W &gt;, Matrix&lt; double &gt; &gt;</arglist>
+      <anchor>ac0dd4d58842e4944c982bed2cf3816ce</anchor>
+      <arglist>(const CVecRef&lt; R &gt; &amp;left, const CVecRef&lt; Q &gt; &amp;right, array::ArrayHandler&lt; Z, W &gt; &amp;handler) -&gt; std::enable_if_t&lt; detail::Z_and_W_are_one_of_R_and_Q&lt; R, Q, Z, W &gt;, Matrix&lt; typename array::ArrayHandler&lt; Z, W &gt;::value_type &gt; &gt;</arglist>
     </member>
     <member kind="function">
-      <type>Matrix&lt; double &gt;</type>
+      <type>Matrix&lt; typename array::ArrayHandler&lt; R, R &gt;::value_type &gt;</type>
       <name>overlap</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html</anchorfile>
-      <anchor>a7df435b5a278253a9a995488599d622a</anchor>
+      <anchor>a46075f91ae876b661a01a219963a317d</anchor>
       <arglist>(const CVecRef&lt; R &gt; &amp;params, array::ArrayHandler&lt; R, R &gt; &amp;handler)</arglist>
     </member>
     <member kind="function">
@@ -12941,8 +12956,8 @@
       <type>void</type>
       <name>copy_dspace_eqn_data</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace.html</anchorfile>
-      <anchor>ae9ce0412f1ae9bf22ee40f809b30904c</anchor>
-      <arglist>(const NewData &amp;new_data, SubspaceData &amp;data, const subspace::EqnData e, const Dimensions &amp;dims)</arglist>
+      <anchor>a8f36b6926d9eb929408efcc11255141b</anchor>
+      <arglist>(const NewData&lt; T &gt; &amp;new_data, SubspaceData&lt; T &gt; &amp;data, const subspace::EqnData e, const Dimensions &amp;dims)</arglist>
     </member>
   </compound>
   <compound kind="namespace">
@@ -12982,8 +12997,8 @@
       <type>void</type>
       <name>construct_solutions</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</anchorfile>
-      <anchor>a3ece0e5317f702e7935f70d04887803c</anchor>
-      <arglist>(const VecRef&lt; R &gt; &amp;params, const std::vector&lt; int &gt; &amp;roots, const subspace::Matrix&lt; double &gt; &amp;solutions, const CVecRef&lt; P &gt; &amp;pparams, const CVecRef&lt; Q &gt; &amp;qparams, const CVecRef&lt; Q &gt; &amp;dparams, size_t oP, size_t oQ, size_t oD, array::ArrayHandler&lt; R, R &gt; &amp;handler_rr, array::ArrayHandler&lt; R, P &gt; &amp;handler_rp, array::ArrayHandler&lt; R, Q &gt; &amp;handler_rq)</arglist>
+      <anchor>a9fbbecfaf738a7d9e82dcc95d35ac082</anchor>
+      <arglist>(const VecRef&lt; R &gt; &amp;params, const std::vector&lt; int &gt; &amp;roots, const subspace::Matrix&lt; value_type &gt; &amp;solutions, const CVecRef&lt; P &gt; &amp;pparams, const CVecRef&lt; Q &gt; &amp;qparams, const CVecRef&lt; Q &gt; &amp;dparams, size_t oP, size_t oQ, size_t oD, array::ArrayHandler&lt; R, R &gt; &amp;handler_rr, array::ArrayHandler&lt; R, P &gt; &amp;handler_rp, array::ArrayHandler&lt; R, Q &gt; &amp;handler_rq)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
