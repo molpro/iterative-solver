@@ -48,12 +48,14 @@ public:
     }
   };
 
+  //! The hermitian inner product <x|y>, i.e. conjugate-linear in x and linear in y
   value_type dot(const AL &x, const AR &y) override {
     auto tot = value_type{};
     for (const auto &ix : x) {
       const auto iy = y.find(ix.first);
       if (iy != y.end())
-        tot += iy->second * ix.second;
+        tot += molpro::linalg::conjugate(static_cast<value_type>(ix.second)) *
+               static_cast<value_type>(iy->second);
     }
     return tot;
   };

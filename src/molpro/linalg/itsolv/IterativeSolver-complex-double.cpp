@@ -1,5 +1,7 @@
 #include <complex>
 #include <molpro/linalg/itsolv/helper-implementation.h>
+
+#include <span>
 namespace {
 using value_type = std::complex<double>;
 }
@@ -15,7 +17,8 @@ template std::list<SVD<value_type>> svd_system<value_type>(size_t nrows, size_t 
 template void eigenproblem<value_type>(std::vector<value_type>& eigenvectors, std::vector<value_type>& eigenvalues,
                                        const std::vector<value_type>& matrix, const std::vector<value_type>& metric,
                                        size_t dimension, bool hermitian, real_type_t<value_type> svdThreshold,
-                                       int verbosity);
+                                       int verbosity,
+                                       std::vector<std::pair<std::size_t, value_type>>* imag_eval_parts);
 
 template void solve_LinearEquations<value_type>(std::vector<value_type>& solution, std::vector<value_type>& eigenvalues,
                                                 const std::vector<value_type>& matrix,
@@ -24,6 +27,9 @@ template void solve_LinearEquations<value_type>(std::vector<value_type>& solutio
                                                 real_type_t<value_type> augmented_hessian,
                                                 real_type_t<value_type> svdThreshold, int verbosity);
 
-//template void solve_DIIS<value_type>(std::vector<value_type>& solution, const std::vector<value_type>& matrix,
-//                                     size_t dimension, double svdThreshold, int verbosity);
+template void solve_DIIS<value_type>(std::vector<value_type>& solution, const std::vector<value_type>& matrix,
+                                     size_t dimension, real_type_t<value_type> svdThreshold, int verbosity);
+
+template size_t get_rank<real_type_t<value_type>>(std::span<const real_type_t<value_type>> eigenvalues,
+                                                 real_type_t<value_type> threshold);
 } // namespace molpro::linalg::itsolv
