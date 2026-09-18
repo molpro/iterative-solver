@@ -48,11 +48,13 @@ public:
         y[el_x.first] += alpha * el_x.second;
   };
 
+  //! The hermitian inner product <x|y>, i.e. conjugate-linear in x and linear in y
   value_type dot(const AL &x, const AR &y) override {
     value_type tot = 0;
     for (const auto &el_y : y)
       if (el_y.first < x.size())
-        tot += x[el_y.first] * el_y.second;
+        tot += molpro::linalg::conjugate(static_cast<value_type>(x[el_y.first])) *
+               static_cast<value_type>(el_y.second);
     return tot;
   };
 
