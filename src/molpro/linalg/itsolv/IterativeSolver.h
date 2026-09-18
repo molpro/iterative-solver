@@ -348,7 +348,8 @@ public:
   //! converged
   virtual size_t n_roots() const = 0;
   virtual void set_n_roots(size_t nroots) = 0;
-  virtual const std::vector<scalar_type>& errors() const = 0;
+  //! Errors are norms of the residuals, so they are real even when the problem is complex
+  virtual const std::vector<value_type_abs>& errors() const = 0;
   virtual const Statistics& statistics() const = 0;
   //! Writes a report to cout output stream
   virtual void report(std::ostream& cout, bool endl = true) const = 0;

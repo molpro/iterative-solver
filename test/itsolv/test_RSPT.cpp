@@ -58,9 +58,11 @@ struct RSPT : ::testing::Test {
     r = hmat * x;
   }
 
+  //! The hermitian inner product <a|b>, matching the convention of the array handlers
   template <class scalar>
   scalar dot(const std::vector<scalar> &a, const std::vector<scalar> &b) {
-    return std::inner_product(std::begin(a), std::end(a), std::begin(b), scalar(0));
+    return std::inner_product(std::begin(a), std::end(a), std::begin(b), scalar(0), std::plus<scalar>{},
+                              [](const scalar &x, const scalar &y) { return molpro::linalg::conjugate(x) * y; });
   }
 
   void update(Rvector &psg) {

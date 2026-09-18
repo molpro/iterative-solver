@@ -70,13 +70,15 @@ public:
     //    std::cout << "Value after add_vector "<<as_string(Value)<<std::endl;
 
     if (xspace->size() > 1) {      // see whether a line search is needed
-      auto fprev = Value(1, 0);    // the previous point
-      auto fcurrent = Value(0, 0); // the current point
-      auto gprev = H(0, 1) - H(1, 1);
-      auto gcurrent = H(0, 0) - H(1, 0);
+      // the objective and its directional gradients are real; a complex element type carries them
+      // with a vanishing imaginary part
+      const value_type_abs fprev = real_part(Value(1, 0));    // the previous point
+      const value_type_abs fcurrent = real_part(Value(0, 0)); // the current point
+      const value_type_abs gprev = real_part(H(0, 1) - H(1, 1));
+      const value_type_abs gcurrent = real_part(H(0, 0) - H(1, 0));
       bool Wolfe_1 = fcurrent <= fprev + m_Wolfe_1 * gprev;
       bool Wolfe_2 = m_strong_Wolfe ? gcurrent >= m_Wolfe_2 * gprev : std::abs(gcurrent) <= m_Wolfe_2 * std::abs(gprev);
-      auto step = S(0, 0) - S(1, 0) - S(0, 1) + S(1, 1);
+      const value_type_abs step = real_part(S(0, 0) - S(1, 0) - S(0, 1) + S(1, 1));
       if (false) {
         molpro::cout << "Size of Q=" << xspace->size() << std::endl;
         molpro::cout << "step=" << step << std::endl;
@@ -183,7 +185,7 @@ public:
       auto& xdata = xspace->data;
       const auto& H = xdata[subspace::EqnData::H];
       BFGS_update_2(z, xspace, H);
-      auto len_z = std::sqrt(this->m_handlers->rr().dot(z, z));
+      const value_type_abs len_z = std::sqrt(std::abs(this->m_handlers->rr().dot(z, z)));
       if (len_z > this->m_quasinewton_maximum_step)
         this->m_handlers->rr().scal(this->m_quasinewton_maximum_step / len_z, z);
       this->m_handlers->rr().axpy(-1, z, parameters.front());
@@ -211,8 +213,8 @@ public:
   void set_value_errors() override {
     auto& Value = this->m_xspace->data[subspace::EqnData::value];
     this->m_value_errors.assign(1, std::numeric_limits<value_type_abs>::max());
-    if (this->m_xspace->size() > 1 and Value(0, 0) < Value(1, 0))
-      this->m_value_errors.front() = Value(1, 0) - Value(0, 0);
+    if (this->m_xspace->size() > 1 and real_part(Value(0, 0)) < real_part(Value(1, 0)))
+      this->m_value_errors.front() = real_part(Value(1, 0)) - real_part(Value(0, 0));
   }
 
   //! Set a limit on the maximum size of Q space. This does not include the size of the working space (R) and the D

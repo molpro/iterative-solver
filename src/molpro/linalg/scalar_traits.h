@@ -42,6 +42,37 @@ struct real_type<std::complex<T>> {
 template <typename T>
 using real_type_t = typename real_type<T>::type;
 
+//! Complex conjugate, staying within the scalar type; the identity for a real type
+template <typename T>
+T conjugate(const T& x) {
+  if constexpr (is_complex<T>{}) {
+    using std::conj;
+    return conj(x);
+  } else {
+    return x;
+  }
+}
+
+//! The real part of a scalar; the value itself for a real type
+template <typename T>
+real_type_t<T> real_part(const T& x) {
+  if constexpr (is_complex<T>{}) {
+    return x.real();
+  } else {
+    return x;
+  }
+}
+
+//! The imaginary part of a scalar; zero for a real type
+template <typename T>
+real_type_t<T> imaginary_part(const T& x) {
+  if constexpr (is_complex<T>{}) {
+    return x.imag();
+  } else {
+    return real_type_t<T>{};
+  }
+}
+
 /*!
  * @brief Rescale a tolerance that was calibrated for IEEE double precision to the working precision.
  *

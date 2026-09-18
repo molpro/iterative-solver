@@ -14,8 +14,11 @@
 namespace molpro::linalg::itsolv {
 
 // Scalar traits shared with molpro::linalg::array, re-exported here for backwards compatibility
+using molpro::linalg::conjugate;
 using molpro::linalg::is_complex;
+using molpro::linalg::imaginary_part;
 using molpro::linalg::precision_scaled;
+using molpro::linalg::real_part;
 using molpro::linalg::real_type;
 using molpro::linalg::real_type_t;
 
@@ -45,7 +48,7 @@ template <typename value_type>
 size_t get_rank(std::span<const value_type> eigenvalues, value_type threshold);
 
 template <typename value_type>
-size_t get_rank(std::list<SVD<value_type>> svd_system, value_type threshold);
+size_t get_rank(std::list<SVD<value_type>> svd_system, real_type_t<value_type> threshold);
 
 //! @copydoc get_rank
 template <typename value_type>
@@ -78,7 +81,8 @@ void printMatrix(const std::vector<value_type>&, size_t rows, size_t cols, std::
 template <typename value_type, typename std::enable_if_t<is_complex<value_type>{}, int> = 0>
 void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>& eigenvalues,
                   const std::vector<value_type>& matrix, const std::vector<value_type>& metric, size_t dimension,
-                  bool hermitian, real_type_t<value_type> svdThreshold, int verbosity);
+                  bool hermitian, real_type_t<value_type> svdThreshold, int verbosity,
+                  std::vector<std::pair<std::size_t, value_type>>* imag_eval_parts = nullptr);
 
 template <typename value_type, typename std::enable_if_t<!is_complex<value_type>{}, std::nullptr_t> = nullptr>
 void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>& eigenvalues,
@@ -135,7 +139,8 @@ extern template void solve_DIIS<double>(std::vector<double>& solution, const std
 /*
  * Explicit instantiation of long double type
  *
- * LAPACK has no kernels for this precision, so these exercise the Eigen branch of the dispatch.
+ * The dense kernels fall back on Eigen for this precision, as they do for any other scalar type for
+ * which LAPACK provides no kernel.
  */
 
 extern template void printMatrix<long double>(const std::vector<long double>&, size_t rows, size_t cols,
@@ -171,12 +176,11 @@ extern template std::list<SVD<std::complex<double>>> svd_system(size_t nrows, si
                                                                 const array::Span<std::complex<double>>& m,
                                                                 double threshold, bool hermitian, bool reduce_to_rank);
 
-extern template void eigenproblem<std::complex<double>>(std::vector<std::complex<double>>& eigenvectors,
-                                                        std::vector<std::complex<double>>& eigenvalues,
-                                                        const std::vector<std::complex<double>>& matrix,
-                                                        const std::vector<std::complex<double>>& metric,
-                                                        const size_t dimension, bool hermitian, double svdThreshold,
-                                                        int verbosity);
+extern template void eigenproblem<std::complex<double>>(
+    std::vector<std::complex<double>>& eigenvectors, std::vector<std::complex<double>>& eigenvalues,
+    const std::vector<std::complex<double>>& matrix, const std::vector<std::complex<double>>& metric,
+    const size_t dimension, bool hermitian, double svdThreshold, int verbosity,
+    std::vector<std::pair<std::size_t, std::complex<double>>>* imag_eval_parts);
 
 extern template void solve_LinearEquations<std::complex<double>>(
     std::vector<std::complex<double>>& solution, std::vector<std::complex<double>>& eigenvalues,
