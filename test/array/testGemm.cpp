@@ -605,7 +605,7 @@ TEST_P(BufferedDistrArrayFileTest, GEMM) {
 
     for (size_t i = 0; i < cx_selection.size(); i++) {
       for (size_t j = range.first; j < range.second; j++) {
-        expected_result(i, j) = cx_selection[i][j - range.first];
+        expected_result(i, j) = cx_selection[i][j];
       }
     }
     for (size_t i = 0; i < n; i++) {
@@ -636,7 +636,7 @@ TEST_P(BufferedDistrArrayFileTest, GEMM) {
     Matrix<double> actual_result({cx_selection.size(), dim});
     for (size_t i = 0; i < cx_selection.size(); i++) {
       for (size_t j = range.first; j < range.second; j++)
-        actual_result(i, j) = cx_selection[i][j - range.first];
+        actual_result(i, j) = cx_selection[i][j];
 #ifdef HAVE_MPI_H
      for (int rank = 0; rank < mpi_size; ++rank)
        MPI_Bcast(&(actual_result(i, distribution.range(rank).first)),
@@ -660,8 +660,8 @@ TEST_P(BufferedDistrArrayFileTest, GEMM) {
         cz[k].get(range.first, range.second, czbuf.data());
         for (size_t j = range.first; j < range.second; j++) {
           //                        std::cout << i<<" "<<j<<" "<<k<<" "<<czbuf[j-range.first]<<"
-          //                        "<<cx_selection[i][j-range.first]<<std::endl;
-          alpha_selection_expected(i, k) += czbuf[j - range.first] * cx_selection[i][j - range.first];
+          //                        "<<cx_selection[i][j]<<std::endl;
+          alpha_selection_expected(i, k) += czbuf[j - range.first] * cx_selection[i][j];
         }
       }
     }
