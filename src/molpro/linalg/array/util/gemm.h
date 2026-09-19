@@ -99,9 +99,11 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
 
   auto options = molpro::linalg::options();
   auto number_of_buffers = options->parameter("GEMM_BUFFERS", 2);
+  // BufferManager's buffer_size parameter is the size of ONE chunk (it already multiplies
+  // by number_of_buffers internally to size the total pool) -- do not multiply by
+  // number_of_buffers again here, or each chunk silently grows number_of_buffers-fold.
   const int buf_size =
-      std::min(int(yy.front().get().local_buffer()->size()), options->parameter("GEMM_PAGESIZE", 8192)) *
-      number_of_buffers;
+      std::min(int(yy.front().get().local_buffer()->size()), options->parameter("GEMM_PAGESIZE", 8192));
 //      std::cout << "buf_size=" << buf_size << " number_of_buffers=" << number_of_buffers << std::endl;
 
   molpro::Profiler::single()->start("gemm: buffer setup");
