@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
-#include <chrono>
+#include <type_traits>
 #include <functional>
 #include <numeric>
 #include <thread>
@@ -16,6 +16,7 @@ using ::testing::ContainerEq;
 using ::testing::DoubleEq;
 using ::testing::Each;
 using ::testing::Pointwise;
+using ::testing::Not;
 
 using molpro::linalg::array::util::LockMPI3;
 using molpro::linalg::test::mpi_comm;
@@ -290,7 +291,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, scatter_acc) {
     auto ref_values = this->sub_values;
     for (auto &el : ref_values)
       el *= 2;
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), ref_values));
+    EXPECT_THAT(from_ga_buffer, Pointwise(DoubleEq(), ref_values));
     for (auto &el : this->sub_values)
       el *= -1;
     TypeParam::scatter_acc(this->sub_indices, this->sub_values);
@@ -303,11 +304,104 @@ TYPED_TEST_P(DistrArrayRangeRMAF, at) {
   auto from_ga_buffer = std::vector<double>();
   for (int i = 0; i < this->dim; ++i) {
     from_ga_buffer.push_back(TypeParam::at(i));
+
+    // Access via operator[], both const and non-const
+    static_assert(!std::is_const_v<decltype(*this)>);
+    EXPECT_THAT(TypeParam::at(i), DoubleEq(TypeParam::operator[](i)));
+    EXPECT_THAT(TypeParam::at(i), DoubleEq(std::as_const(*this)[i]));
   }
   {
     auto proxy = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->values));
+    EXPECT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->values));
   }
+  TypeParam::sync();
+}
+
+TYPED_TEST_P(DistrArrayRangeRMAF, set) {
+  TypeParam::sync();
+  for (size_t i = 0; i < this->dim; ++i) {
+    TypeParam::sync();
+    const double orig = TypeParam::at(i);
+    const double modified1 = orig * 0.12345;
+
+    EXPECT_THAT(orig, Not(DoubleEq(modified1)));
+
+    if (this->p_rank == 0)
+      TypeParam::set(i, modified1);
+    TypeParam::sync();
+
+    EXPECT_THAT(TypeParam::at(i), DoubleEq(modified1));
+    TypeParam::sync();
+
+    const double modified2 = modified1 * 5.4321;
+    EXPECT_THAT(modified1, Not(DoubleEq(modified2)));
+    EXPECT_THAT(orig, Not(DoubleEq(modified2)));
+
+    // Assignment via operator[]
+    if (this->p_rank == 0)
+      (*this)[i] = modified2;
+    TypeParam::sync();
+
+    EXPECT_THAT(TypeParam::at(i), DoubleEq(modified2));
+  }
+  TypeParam::sync();
+}
+
+TYPED_TEST_P(DistrArrayRangeRMAF, iteration) {
+  TypeParam::sync();
+
+  EXPECT_GT(TypeParam::size(), 0);
+
+  TypeParam &self = *this;
+
+  EXPECT_NE(begin(self), end(self));
+  EXPECT_NE(begin(std::as_const((self))), end(std::as_const(self)));
+  EXPECT_NE(cbegin(self), cend(self));
+
+  EXPECT_LT(begin(self), end(self));
+  EXPECT_GT(end(self), begin(self));
+  EXPECT_EQ(end(self) - begin(self), TypeParam::size());
+  EXPECT_EQ(std::ranges::distance(begin(self), end(self)), TypeParam::size());
+  EXPECT_LT(begin(std::as_const(self)), end(std::as_const(self)));
+  EXPECT_GT(end(std::as_const(self)), begin(std::as_const(self)));
+  EXPECT_EQ(end(std::as_const(self)) - begin(std::as_const(self)), TypeParam::size());
+  EXPECT_EQ(std::ranges::distance(begin(std::as_const(self)), end(std::as_const(self))), TypeParam::size());
+  EXPECT_LT(cbegin(self), cend(self));
+  EXPECT_GT(cend(self), cbegin(self));
+  EXPECT_EQ(cend(self) - cbegin(self), TypeParam::size());
+  EXPECT_EQ(std::ranges::distance(cbegin(self), cend(self)), TypeParam::size());
+
+  EXPECT_EQ(cbegin(self), begin(std::as_const(self)));
+  EXPECT_EQ(cend(self), end(std::as_const(self)));
+
+  EXPECT_EQ(begin(self)++, begin(self));
+  EXPECT_EQ(++begin(self), begin(self) + 1);
+  EXPECT_EQ(cbegin(self)++, cbegin(self));
+  EXPECT_EQ(++cbegin(self), cbegin(self) + 1);
+
+  EXPECT_EQ(begin(self) + 1, 1 + begin(self));
+  EXPECT_EQ(cbegin(self) + 1, 1 + cbegin(self));
+
+  EXPECT_EQ(end(self)--, end(self));
+  EXPECT_EQ(--end(self), end(self) - 1);
+  EXPECT_EQ(cend(self)--, cend(self));
+  EXPECT_EQ(--cend(self), cend(self) - 1);
+
+  EXPECT_EQ(*begin(self), self.at(0));
+  EXPECT_EQ(*(begin(self) + 1), self.at(1));
+  EXPECT_EQ(*cbegin(self), self.at(0));
+  EXPECT_EQ(*(cbegin(self) + 1), self.at(1));
+  EXPECT_EQ(*(end(self) - 1), self.at(self.size() - 1));
+  EXPECT_EQ(*(cend(self) - 1), self.at(self.size() - 1));
+
+  double orig = *begin(self);
+  double modified = orig * 0.12345;
+  EXPECT_THAT(orig, Not(DoubleEq(modified)));
+  if (this->p_rank == 0)
+    *begin(self) = modified;
+  TypeParam::sync();
+  EXPECT_THAT(*cbegin(self), DoubleEq(modified));
+
   TypeParam::sync();
 }
 
@@ -679,7 +773,7 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, divide_overwrite_positive) {
 
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicF, size, zero, fill);
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicRMAF, vec, get, put);
-REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at);
+REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at, set, iteration);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeMinMaxF, min_loc_n, min_loc_n_reverse, max_n, min_abs_n, max_abs_n);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeLinAlgF, scal_double, add_double, sub_double, recip);
 REGISTER_TYPED_TEST_SUITE_P(TestDistrArray, constructor, constructor_copy, constructor_copy_allocated,

@@ -100,6 +100,8 @@ TEST(DistrArrayFile, constructor_copy_from_distr_array) {
 #endif
 
 TEST_F(DistrArrayFile_Fixture, handler_copies) {
+  using molpro::mpi::comm_global;
+
   auto handler = ArrayHandlerDDiskDistr<DistrArrayFile, DistrArraySpan>{};
   size_t n = 3, dim = size;
   std::vector<std::vector<double>> vx(n, std::vector<double>(dim)), vy(n, std::vector<double>(dim));

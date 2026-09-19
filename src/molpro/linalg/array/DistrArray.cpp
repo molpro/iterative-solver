@@ -38,6 +38,14 @@ bool DistrArray::compatible(const DistrArray& other) const {
   return result;
 }
 
+DistrArray::value_type DistrArray::operator[](index_type ind) const {
+  return at(ind);
+}
+
+util::ValueProxy<DistrArray> DistrArray::operator[](index_type ind) {
+  return {*this, std::move(ind)};
+}
+
 void DistrArray::zero() { fill(0); }
 
 void DistrArray::fill(DistrArray::value_type val) {
