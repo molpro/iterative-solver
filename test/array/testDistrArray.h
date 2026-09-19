@@ -330,6 +330,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, set) {
     TypeParam::sync();
 
     ASSERT_THAT(TypeParam::at(i), DoubleEq(modified1));
+    TypeParam::sync();
 
     const double modified2 = modified1 * 5.4321;
     ASSERT_THAT(modified1, Not(DoubleEq(modified2)));
