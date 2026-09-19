@@ -291,7 +291,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, scatter_acc) {
     auto ref_values = this->sub_values;
     for (auto &el : ref_values)
       el *= 2;
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), ref_values));
+    EXPECT_THAT(from_ga_buffer, Pointwise(DoubleEq(), ref_values));
     for (auto &el : this->sub_values)
       el *= -1;
     TypeParam::scatter_acc(this->sub_indices, this->sub_values);
@@ -307,12 +307,12 @@ TYPED_TEST_P(DistrArrayRangeRMAF, at) {
 
     // Access via operator[], both const and non-const
     static_assert(!std::is_const_v<decltype(*this)>);
-    ASSERT_THAT(TypeParam::at(i), DoubleEq(TypeParam::operator[](i)));
-    ASSERT_THAT(TypeParam::at(i), DoubleEq(std::as_const(*this)[i]));
+    EXPECT_THAT(TypeParam::at(i), DoubleEq(TypeParam::operator[](i)));
+    EXPECT_THAT(TypeParam::at(i), DoubleEq(std::as_const(*this)[i]));
   }
   {
     auto proxy = this->lock.scope();
-    ASSERT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->values));
+    EXPECT_THAT(from_ga_buffer, Pointwise(DoubleEq(), this->values));
   }
   TypeParam::sync();
 }
@@ -323,25 +323,25 @@ TYPED_TEST_P(DistrArrayRangeRMAF, set) {
     const double orig = TypeParam::at(i);
     const double modified1 = orig * 0.12345;
 
-    ASSERT_THAT(orig, Not(DoubleEq(modified1)));
+    EXPECT_THAT(orig, Not(DoubleEq(modified1)));
 
     if (this->p_rank == 0)
       TypeParam::set(i, modified1);
     TypeParam::sync();
 
-    ASSERT_THAT(TypeParam::at(i), DoubleEq(modified1));
+    EXPECT_THAT(TypeParam::at(i), DoubleEq(modified1));
     TypeParam::sync();
 
     const double modified2 = modified1 * 5.4321;
-    ASSERT_THAT(modified1, Not(DoubleEq(modified2)));
-    ASSERT_THAT(orig, Not(DoubleEq(modified2)));
+    EXPECT_THAT(modified1, Not(DoubleEq(modified2)));
+    EXPECT_THAT(orig, Not(DoubleEq(modified2)));
 
     // Assignment via operator[]
     if (this->p_rank == 0)
       (*this)[i] = modified2;
     TypeParam::sync();
 
-    ASSERT_THAT(TypeParam::at(i), DoubleEq(modified2));
+    EXPECT_THAT(TypeParam::at(i), DoubleEq(modified2));
   }
   TypeParam::sync();
 }
@@ -349,7 +349,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, set) {
 TYPED_TEST_P(DistrArrayRangeRMAF, iteration) {
   TypeParam::sync();
 
-  ASSERT_GT(TypeParam::size(), 0);
+  EXPECT_GT(TypeParam::size(), 0);
 
   TypeParam &self = *this;
 
@@ -395,7 +395,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, iteration) {
 
   double orig = *begin(self);
   double modified = orig * 0.12345;
-  ASSERT_THAT(orig, Not(DoubleEq(modified)));
+  EXPECT_THAT(orig, Not(DoubleEq(modified)));
   if (this->p_rank == 0)
     *begin(self) = modified;
   TypeParam::sync();
