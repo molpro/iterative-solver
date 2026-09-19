@@ -570,18 +570,11 @@ TEST_P(BufferedDistrArrayFileTest, GEMM) {
 
   const size_t n = GetParam();
 
-  if (n == 5) {
-    // TODO
-    GTEST_SKIP() << "For an as of yet unknown reason the test fails for n=5 -> needs to be investigated at some point";
-  }
-
   auto handler = ArrayHandlerDistrDDisk<DistrArraySpan, DistrArrayFile>{};
   size_t dim = 10000; // height
   int mpi_rank, mpi_size;
   MPI_Comm_rank(comm_global(), &mpi_rank);
   MPI_Comm_size(comm_global(), &mpi_size);
-
-  auto [cx, cy, cz] = molpro::linalg::test::get_contiguous(n, dim);
 
   std::vector<double> coeff(n * n);
   std::iota(coeff.begin(), coeff.end(), 1);
@@ -589,6 +582,7 @@ TEST_P(BufferedDistrArrayFileTest, GEMM) {
   Matrix<double> alpha(coeff, mat_dim);
 
   for (size_t stride_multiplier = 0; stride_multiplier < 2; ++stride_multiplier) {
+    auto [cx, cy, cz] = molpro::linalg::test::get_contiguous(n, dim);
     decltype(cx) cx_selection;
     for (size_t i = 0; i < n; i += stride_multiplier * i + 1)
       cx_selection.emplace_back(cx[i]);
