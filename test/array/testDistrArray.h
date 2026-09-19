@@ -325,7 +325,9 @@ TYPED_TEST_P(DistrArrayRangeRMAF, set) {
 
     ASSERT_THAT(orig, Not(DoubleEq(modified1)));
 
-    TypeParam::set(i, modified1);
+    if (this->p_rank == 0)
+      TypeParam::set(i, modified1);
+    TypeParam::sync();
 
     ASSERT_THAT(TypeParam::at(i), DoubleEq(modified1));
 
@@ -334,7 +336,9 @@ TYPED_TEST_P(DistrArrayRangeRMAF, set) {
     ASSERT_THAT(orig, Not(DoubleEq(modified2)));
 
     // Assignment via operator[]
-    (*this)[i] = modified2;
+    if (this->p_rank == 0)
+      (*this)[i] = modified2;
+    TypeParam::sync();
 
     ASSERT_THAT(TypeParam::at(i), DoubleEq(modified2));
   }
@@ -391,7 +395,9 @@ TYPED_TEST_P(DistrArrayRangeRMAF, iteration) {
   double orig = *begin(self);
   double modified = orig * 0.12345;
   ASSERT_THAT(orig, Not(DoubleEq(modified)));
-  *begin(self) = modified;
+  if (this->p_rank == 0)
+    *begin(self) = modified;
+  TypeParam::sync();
   EXPECT_THAT(*cbegin(self), DoubleEq(modified));
 
   TypeParam::sync();
