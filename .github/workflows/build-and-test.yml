@@ -56,7 +56,6 @@ jobs:
 
     - name: Test
       if: steps.check_configuration.outputs.files_exists == 'true'
-      run: cd ${{github.workspace}}/build && ctest -C ${{env.CMAKE_BUILD_TYPE}} -VV || ctest -C ${{env.CMAKE_BUILD_TYPE}} --rerun-failed --output-on-failure -VV
-
+      run: cd ${{github.workspace}}/build && ctest -C ${{env.CMAKE_BUILD_TYPE}} --output-on-failure
     - name: Build doxygen
       run: cmake --build ${{github.workspace}}/build --target DependencyManagerDocs
