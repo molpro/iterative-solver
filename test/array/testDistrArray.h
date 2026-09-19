@@ -320,6 +320,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, at) {
 TYPED_TEST_P(DistrArrayRangeRMAF, set) {
   TypeParam::sync();
   for (size_t i = 0; i < this->dim; ++i) {
+    TypeParam::sync();
     const double orig = TypeParam::at(i);
     const double modified1 = orig * 0.12345;
 
