@@ -405,6 +405,81 @@ TYPED_TEST_P(DistrArrayRangeRMAF, iteration) {
   TypeParam::sync();
 }
 
+TYPED_TEST_P(DistrArrayRangeRMAF, stl_algorithms) {
+  TypeParam::sync();
+
+  TypeParam &self = *this;
+  const TypeParam &const_self = *this;
+
+  // std::accumulate over the const iterator range, read-only so safe to run on every process
+  double sum = std::accumulate(cbegin(const_self), cend(const_self), 0.0);
+  double ref_sum = std::accumulate(this->values.begin(), this->values.end(), 0.0);
+  {
+    auto proxy = this->lock.scope();
+    EXPECT_THAT(sum, DoubleEq(ref_sum));
+  }
+
+  // std::copy out of the array into a plain vector via the const iterators
+  auto copied = std::vector<double>(this->dim);
+  std::copy(cbegin(const_self), cend(const_self), copied.begin());
+  {
+    auto proxy = this->lock.scope();
+    EXPECT_THAT(copied, Pointwise(DoubleEq(), this->values));
+  }
+
+  // std::equal comparing the array directly against the reference values
+  {
+    auto proxy = this->lock.scope();
+    EXPECT_TRUE(std::equal(cbegin(const_self), cend(const_self), this->values.begin()));
+  }
+
+  // All processes must finish reading before rank 0 starts overwriting the array below, otherwise
+  // a slower process's read above can race against the write.
+  TypeParam::sync();
+
+  // std::copy into the array via the mutable iterator and ValueProxy assignment
+  auto new_values = std::vector<double>(this->dim);
+  std::iota(new_values.begin(), new_values.end(), 100.0);
+  if (this->p_rank == 0)
+    std::copy(new_values.begin(), new_values.end(), begin(self));
+  TypeParam::sync();
+
+  auto after_copy = std::vector<double>(this->dim);
+  std::copy(cbegin(const_self), cend(const_self), after_copy.begin());
+  {
+    auto proxy = this->lock.scope();
+    EXPECT_THAT(after_copy, Pointwise(DoubleEq(), new_values));
+  }
+  TypeParam::sync();
+
+  // std::transform in place through the mutable iterator, and std::fill
+  if (this->p_rank == 0) {
+    std::transform(begin(self), end(self), begin(self), [](double v) { return v * 2; });
+  }
+  TypeParam::sync();
+  auto doubled = std::vector<double>(this->dim);
+  std::transform(new_values.begin(), new_values.end(), doubled.begin(), [](double v) { return v * 2; });
+  auto after_transform = std::vector<double>(this->dim);
+  std::copy(cbegin(const_self), cend(const_self), after_transform.begin());
+  {
+    auto proxy = this->lock.scope();
+    EXPECT_THAT(after_transform, Pointwise(DoubleEq(), doubled));
+  }
+  TypeParam::sync();
+
+  if (this->p_rank == 0) {
+    std::fill(begin(self), end(self), 7.0);
+  }
+  TypeParam::sync();
+  auto after_fill = std::vector<double>(this->dim);
+  std::copy(cbegin(const_self), cend(const_self), after_fill.begin());
+  {
+    auto proxy = this->lock.scope();
+    EXPECT_THAT(after_fill, Each(DoubleEq(7.0)));
+  }
+  TypeParam::sync();
+}
+
 template <typename Array>
 class DistrArrayRangeMinMaxF : public DistrArrayRangeF<Array>, public ::testing::Test {};
 
@@ -773,7 +848,7 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, divide_overwrite_positive) {
 
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicF, size, zero, fill);
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicRMAF, vec, get, put);
-REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at, set, iteration);
+REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at, set, iteration, stl_algorithms);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeMinMaxF, min_loc_n, min_loc_n_reverse, max_n, min_abs_n, max_abs_n);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeLinAlgF, scal_double, add_double, sub_double, recip);
 REGISTER_TYPED_TEST_SUITE_P(TestDistrArray, constructor, constructor_copy, constructor_copy_allocated,
