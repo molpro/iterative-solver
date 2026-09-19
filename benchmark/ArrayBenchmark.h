@@ -24,7 +24,10 @@
 #endif
 #include "molpro/linalg/array/ArrayHandlerDDiskDistr.h"
 #include "molpro/linalg/array/ArrayHandlerDistrDDisk.h"
+#include <algorithm>
+#include <cmath>
 #include <iostream>
+#include <numeric>
 #include <ostream>
 #include <vector>
 namespace molpro {
@@ -310,6 +313,77 @@ ArrayBenchmark<Slow> ArrayBenchmarkDDisk(std::string title, size_t n = 10000000,
   return ArrayBenchmark<Slow>(title, std::make_unique<array::ArrayHandlerDistrDDisk<Fast, Slow>>(),
                               std::make_unique<array::ArrayHandlerDDiskDistr<Slow, Fast>>(), n, n_Slow, n_Fast,
                               profile_individual, target_seconds);
+}
+
+/*!
+ * @brief Compares the cost of visiting every element of a DistrArray through the generic,
+ * STL-compatible iterator interface (begin()/end(), one remote-memory-access call per element)
+ * against DistrArray's own native interface (local_buffer() and fill(), which touch only
+ * process-local memory and use a single collective call to combine results across processes).
+ *
+ * Reading is compared via std::accumulate, writing via std::fill/std::transform equivalents.
+ * The iterator has no notion of "this process's share of the array", so a write through it has
+ * to be done by a single process to stay race-free, whereas the native fill() operates on every
+ * process's local share in parallel.
+ */
+template <class Array>
+void benchmarkIteratorVsNative(const std::string& title, size_t n, double target_seconds = 1) {
+  auto profiler = molpro::Profiler::single();
+  profiler->reset(title);
+  profiler->set_max_depth(10);
+  auto arr = allocate<Array>(n);
+  const auto mpi_size = molpro::mpi::size_global();
+  // Per-element remote-memory-access through the iterator is dominated by fixed per-call
+  // latency rather than element count, so (unlike the other benchmarks in this file) repeats
+  // are small, fixed constants rather than scaled from an assumed throughput: at even a few
+  // hundred repeats of a per-element RMA loop, runtime is already dominated by that latency.
+  const size_t iterator_repeat = 3;
+  const size_t native_repeat = std::min(size_t(200), std::max(size_t(10), size_t(200 * target_seconds)));
+
+  double sum_iterator = 0;
+  {
+    auto prof = profiler->push("read: std::accumulate(begin, end) [iterator]");
+    for (size_t i = 0; i < iterator_repeat; ++i)
+      sum_iterator = std::accumulate(cbegin(*arr), cend(*arr), 0.0);
+    prof += n * iterator_repeat / mpi_size;
+  }
+
+  double sum_native = 0;
+  {
+    auto prof = profiler->push("read: local_buffer() + MPI_Allreduce [native]");
+    for (size_t i = 0; i < native_repeat; ++i) {
+      auto buffer = arr->local_buffer();
+      sum_native = std::accumulate(buffer->begin(), buffer->end(), 0.0);
+#ifdef HAVE_MPI_H
+      MPI_Allreduce(MPI_IN_PLACE, &sum_native, 1, MPI_DOUBLE, MPI_SUM, arr->communicator());
+#endif
+    }
+    prof += n * native_repeat / mpi_size;
+  }
+
+  if (molpro::mpi::rank_global() == 0 && std::abs(sum_iterator - sum_native) > 1.0e-6 * double(n))
+    std::cerr << title << ": iterator sum " << sum_iterator << " disagrees with native sum " << sum_native
+              << std::endl;
+
+  {
+    auto prof = profiler->push("write: std::fill(begin, end) [iterator]");
+    for (size_t i = 0; i < iterator_repeat; ++i) {
+      if (molpro::mpi::rank_global() == 0)
+        std::fill(begin(*arr), end(*arr), 2.0);
+      arr->sync();
+    }
+    prof += n * iterator_repeat / mpi_size;
+  }
+
+  {
+    auto prof = profiler->push("write: fill() [native]");
+    for (size_t i = 0; i < native_repeat; ++i)
+      arr->fill(3.0);
+    prof += n * native_repeat / mpi_size;
+  }
+
+  if (molpro::mpi::rank_global() == 0)
+    std::cout << *profiler;
 }
 
 } // namespace linalg
