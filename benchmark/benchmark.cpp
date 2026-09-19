@@ -61,6 +61,22 @@ int main(int argc, char* argv[]) {
     }
 #endif
   }
+
+  // Compare accessing a DistrArray through the generic STL iterator interface against its own
+  // native, optimized interface (local_buffer()/fill()). Kept to modest lengths since the
+  // iterator does one remote-memory-access call per element.
+  for (const auto& length : std::vector<size_t>{100, 1000, 10000}) {
+    if (rank == 0)
+      std::cout << "STL iterator vs. native access, vector length = " << length << std::endl;
+#ifdef LINEARALGEBRA_ARRAY_MPI3
+    molpro::linalg::benchmarkIteratorVsNative<molpro::linalg::array::DistrArrayMPI3>(
+        "DistrArrayMPI3.iterator_vs_native." + std::to_string(length), length, 0.2);
+#endif
+#ifdef LINEARALGEBRA_ARRAY_GA
+    molpro::linalg::benchmarkIteratorVsNative<molpro::linalg::array::DistrArrayGA>(
+        "DistrArrayGA.iterator_vs_native." + std::to_string(length), length, 0.2);
+#endif
+  }
 #ifdef LINEARALGEBRA_ARRAY_GA
   GA_Terminate();
 #endif
