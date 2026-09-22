@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <format>
+#include <molpro/linalg/format.h>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
@@ -314,13 +314,19 @@ std::string as_string(const Mat& m, int precision = 6) {
 
 } // namespace molpro::linalg::itsolv::subspace
 
+/*!
+ * parse() and format() are templates on their context types rather than naming format_parse_context
+ * and format_context, because that is the one spelling both <format> and {fmt} accept.
+ */
 template<typename T>
-struct std::formatter<molpro::linalg::itsolv::subspace::Matrix<T>> : std::formatter<std::string_view> {
-  using Base = std::formatter<std::string_view>;
+struct MOLPRO_LINALG_FORMAT_NAMESPACE::formatter<molpro::linalg::itsolv::subspace::Matrix<T>>
+    : MOLPRO_LINALG_FORMAT_NAMESPACE::formatter<std::string_view> {
+  using Base = MOLPRO_LINALG_FORMAT_NAMESPACE::formatter<std::string_view>;
 
   std::size_t precision = 6;
 
-  constexpr auto parse(std::format_parse_context &ctx) {
+  template <typename ParseContext>
+  constexpr auto parse(ParseContext &ctx) {
     auto it = ctx.begin();
 
     if (it == ctx.end()) {
@@ -334,7 +340,8 @@ struct std::formatter<molpro::linalg::itsolv::subspace::Matrix<T>> : std::format
     ++it;
 
     if (it == ctx.end() || ( *it < '0' && *it > '9' )) {
-      throw std::format_error("Format string uses precision quantifier '.' without giving a (numeric) precision");
+      throw molpro::linalg::fmtlib::format_error(
+          "Format string uses precision quantifier '.' without giving a (numeric) precision");
     }
 
     // Parse specified precision
@@ -351,7 +358,8 @@ struct std::formatter<molpro::linalg::itsolv::subspace::Matrix<T>> : std::format
     return Base::parse(ctx);
   }
 
-  auto format(const molpro::linalg::itsolv::subspace::Matrix<T> &mat, std::format_context &ctx) const {
+  template <typename FormatContext>
+  auto format(const molpro::linalg::itsolv::subspace::Matrix<T> &mat, FormatContext &ctx) const {
     std::string tmp = molpro::linalg::itsolv::subspace::as_string(mat, precision);
 
     return Base::format(tmp, ctx);

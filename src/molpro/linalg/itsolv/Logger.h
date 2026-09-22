@@ -1,7 +1,7 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LOGGER_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LOGGER_H
 #include <array>
-#include <format>
+#include <molpro/linalg/format.h>
 #include <iomanip>
 #include <iterator>
 #include <limits>
@@ -149,16 +149,16 @@ concept streamable = requires (std::ostream &stream, const std::remove_cvref_t<T
 };
 
 /*!
- * Concept checking that a given type can be formatted via std::format
+ * Concept checking that a given type can be formatted via the formatting backend
  */
 template<typename T>
-concept formattable = requires (const std::remove_cvref_t<T> &t, std::format_context ctx) {
-  std::formatter<std::remove_cvref_t<T>>().format(t, ctx);
+concept formattable = requires (const std::remove_cvref_t<T> &t, molpro::linalg::fmtlib::format_context ctx) {
+  molpro::linalg::fmtlib::formatter<std::remove_cvref_t<T>>().format(t, ctx);
 };
 
 /*!
  * Concept checking that the provided range can be converted into a string by either
- * using std::format or operator<<
+ * using the formatting backend or operator<<
  */
 template <typename T>
 concept string_convertible_range =
@@ -294,7 +294,7 @@ constexpr const std::size_t default_precision = std::numeric_limits<std::size_t>
 template<context Context, typename T, std::size_t precision = default_precision>
 struct FormatOption {
   /*!
-   * Yields the format string to be used with std::format
+   * Yields the format string to be used with the formatting backend
    */
   static constexpr auto format_string() {
     if constexpr (precision != default_precision) {
@@ -334,8 +334,9 @@ static std::string stringify(T &&t) {
   using FOpts = FormatOption<Context, std::remove_cvref_t<T>, precision>;
 
   if constexpr (formattable<T>) {
-    static constexpr auto fmt = FOpts::format_string();
-    return std::format(fmt.as_view(), t);
+    // not named `fmt`, which is the namespace of the {fmt} backend
+    static constexpr auto format_spec = FOpts::format_string();
+    return molpro::linalg::fmtlib::format(format_spec.as_view(), t);
   } else if constexpr (streamable<T>) {
     std::stringstream sstream;
     FOpts::prepare_stream(sstream);

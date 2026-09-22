@@ -17,7 +17,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <format>
+#include <molpro/linalg/format.h>
 #include <functional>
 #include <ranges>
 #include <utility>
@@ -35,7 +35,7 @@ void normalise(VecRef<R>& params, array::ArrayHandler<R, R>& handler, Logger& lo
     if (dot > thresh) {
       handler.scal(1. / dot, p);
     } else {
-      logger.warn("parameter's length is too small for normalisation, dot = " + std::format("{:.2e}", double(dot)));
+      logger.warn("parameter's length is too small for normalisation, dot = " + molpro::linalg::fmtlib::format("{:.2e}", double(dot)));
     }
   }
 }
@@ -439,7 +439,7 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
     auto norm = std::sqrt(std::abs(handler.dot(dparams_new.at(i), dparams_new.at(i))));
     if (norm < norm_thresh) {
       logger.warn(
-          std::format("construct_dspace: skipping normalisation of D vector {} with near-zero norm = {:.2e}", i, norm));
+          molpro::linalg::fmtlib::format("construct_dspace: skipping normalisation of D vector {} with near-zero norm = {:.2e}", i, norm));
       continue;
     }
     handler.scal(1. / norm, dparams_new[i]);

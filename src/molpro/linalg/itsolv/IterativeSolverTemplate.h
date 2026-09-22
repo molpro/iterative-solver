@@ -14,7 +14,7 @@
 
 #include <cassert>
 #include <cmath>
-#include <format>
+#include <molpro/linalg/format.h>
 #include <iostream>
 #include <optional>
 #include <sstream>
@@ -93,7 +93,7 @@ void normalise(const size_t n_roots, const VecRef<R>& params, const VecRef<R>& a
       handler.scal(1. / dot, params.at(i));
       handler.scal(1. / dot, actions.at(i));
     } else {
-      logger.warn("solution parameter's length is too small, dot = " + std::format("{:.2e}", double(dot)));
+      logger.warn("solution parameter's length is too small, dot = " + molpro::linalg::fmtlib::format("{:.2e}", double(dot)));
     }
   }
 }
@@ -453,7 +453,7 @@ public:
       }
       if (!this->m_verbosity.has_value() || this->m_verbosity >= Verbosity::Detailed) {
         for (const auto& s : selectp) {
-          this->m_logger->debug(std::format("P space element {}: {:.6e}", s.first, double(s.second)));
+          this->m_logger->debug(molpro::linalg::fmtlib::format("P space element {}: {:.6e}", s.first, double(s.second)));
         }
       }
       for (const auto& s : selectp)
