@@ -4338,6 +4338,18 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>molpro::linalg::itsolv::detail::eigenvalue_order</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html</filename>
+    <templarg>typename real_type</templarg>
+    <member kind="function">
+      <type>bool</type>
+      <name>operator()</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html</anchorfile>
+      <anchor>af85e540cc3d0b841d654aa0ecdbfdb54</anchor>
+      <arglist>(const std::complex&lt; real_type &gt; &amp;lhs, const std::complex&lt; real_type &gt; &amp;rhs) const</arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>molpro::linalg::itsolv::log::FormatOption</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1FormatOption.html</filename>
     <templarg>context Context</templarg>
@@ -8628,6 +8640,46 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>molpro::linalg::itsolv::detail::orthogonalised_subspace</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html</filename>
+    <templarg>typename value_type</templarg>
+    <member kind="typedef">
+      <type>Eigen::Matrix&lt; value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor &gt;</type>
+      <name>matrix_type</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html</anchorfile>
+      <anchor>a472891b774200604f564d1bbbb215431</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>matrix_type</type>
+      <name>S</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html</anchorfile>
+      <anchor>a615b8a8d10359646cd01d177847f4d11</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>matrix_type</type>
+      <name>transformation</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html</anchorfile>
+      <anchor>abe70fa42847652d3af0dd982142396fc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>matrix_type</type>
+      <name>Hbar</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html</anchorfile>
+      <anchor>ac9438db8a90e07537c654fd1d5ee2d5d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>rank</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html</anchorfile>
+      <anchor>a8a85726fa7749db0735133a0824bb768</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>molpro::linalg::itsolv::subspace::util::detail::Overlap</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail_1_1Overlap.html</filename>
     <templarg>class R</templarg>
@@ -12087,8 +12139,8 @@
       <type>size_t</type>
       <name>get_rank</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a3e088fb3da611068c3c17c6335712499</anchor>
-      <arglist>(std::list&lt; SVD&lt; value_type &gt; &gt; svd_system, value_type threshold)</arglist>
+      <anchor>a30df5470faf7f21f7d19ea3375454230</anchor>
+      <arglist>(std::list&lt; SVD&lt; value_type &gt; &gt; svd_system, real_type_t&lt; value_type &gt; threshold)</arglist>
     </member>
     <member kind="function">
       <type>size_t</type>
@@ -12110,13 +12162,6 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>ae7c8c4790146512e2ce34c7c45432411</anchor>
       <arglist>(const std::vector&lt; value_type &gt; &amp;, size_t rows, size_t cols, std::string title=&quot;&quot;, std::ostream &amp;s=molpro::cout)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>eigenproblem</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a6a6c4efa51137555350e862206d6477f</anchor>
-      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, real_type_t&lt; value_type &gt; svdThreshold, int verbosity)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -12241,8 +12286,8 @@
       <type>template void</type>
       <name>eigenproblem&lt; std::complex&lt; double &gt; &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>acaba9d2803e3b5444b7517abe4d89476</anchor>
-      <arglist>(std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvectors, std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvalues, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity)</arglist>
+      <anchor>ab7cef904906252b2eac9acf00f9f30a3</anchor>
+      <arglist>(std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvectors, std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvalues, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, std::complex&lt; double &gt; &gt; &gt; *imag_eval_parts)</arglist>
     </member>
     <member kind="function">
       <type>template void</type>
@@ -12560,11 +12605,11 @@
       <arglist>(std::vector&lt; value_type &gt; &amp;solution, const std::vector&lt; value_type &gt; &amp;matrix, size_t dimension, real_type_t&lt; value_type &gt; svdThreshold, int verbosity)</arglist>
     </member>
     <member kind="function">
-      <type>template void</type>
-      <name>eigenproblem&lt; value_type &gt;</name>
+      <type>template size_t</type>
+      <name>get_rank&lt; real_type_t&lt; value_type &gt; &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a10a32c684009f9946a0161cc57aaf3e1</anchor>
-      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, real_type_t&lt; value_type &gt; svdThreshold, int verbosity)</arglist>
+      <anchor>a779cd1c94add0aeb695593bd979a905a</anchor>
+      <arglist>(std::span&lt; const real_type_t&lt; value_type &gt; &gt; eigenvalues, real_type_t&lt; value_type &gt; threshold)</arglist>
     </member>
     <member kind="variable">
       <type>constexpr bool</type>
@@ -12579,12 +12624,42 @@
     <filename>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</filename>
     <namespace>molpro::linalg::itsolv::detail::dspace</namespace>
     <class kind="class">molpro::linalg::itsolv::detail::DSpaceResetter</class>
+    <class kind="struct">molpro::linalg::itsolv::detail::eigenvalue_order</class>
+    <class kind="struct">molpro::linalg::itsolv::detail::orthogonalised_subspace</class>
     <member kind="function">
       <type>int</type>
       <name>eigensolver_hermitian_kernel</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
       <anchor>a02c4aabef5937a3c16d034c2efd976b3</anchor>
       <arglist>(std::false_type, std::span&lt; value_type &gt; a, std::span&lt; real_type_t&lt; value_type &gt; &gt; w, size_t dimension)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::list&lt; SVD&lt; value_type &gt; &gt;</type>
+      <name>svd_system_impl</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>a7948ad2d2e2f697346b7f78cba3bf514</anchor>
+      <arglist>(size_t nrows, size_t ncols, const array::Span&lt; value_type &gt; &amp;m, real_type_t&lt; value_type &gt; threshold, bool hermitian, bool reduce_to_rank)</arglist>
+    </member>
+    <member kind="function">
+      <type>orthogonalised_subspace&lt; value_type &gt;</type>
+      <name>orthogonalise_subspace</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>aeefde5321c2241da42bb5f1dda879a2b</anchor>
+      <arglist>(const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, real_type_t&lt; value_type &gt; svdThreshold, int verbosity)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>solve_LinearEquations_impl</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>ad192d3769b2e85fe8572980dec433b9a</anchor>
+      <arglist>(std::vector&lt; value_type &gt; &amp;solution, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, const std::vector&lt; value_type &gt; &amp;rhs, const size_t dimension, size_t nroot, real_type_t&lt; value_type &gt; augmented_hessian, real_type_t&lt; value_type &gt; svdThreshold, int verbosity)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>solve_DIIS_impl</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>a6b4dc1f6c8ee20989b73852acce5022a</anchor>
+      <arglist>(std::vector&lt; value_type &gt; &amp;solution, const std::vector&lt; value_type &gt; &amp;matrix, const size_t dimension, real_type_t&lt; value_type &gt; svdThreshold, int verbosity)</arglist>
     </member>
     <member kind="function">
       <type>auto</type>

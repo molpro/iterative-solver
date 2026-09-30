@@ -109,6 +109,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html">DSpaceResetter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets D space constructing full solutions as the new working set, removing instabilities from Q space, and clearing D space.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html">eigenvalue_order</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Orders eigenvalues by non-descending real part, then by imaginary part.  <a href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html">orthogonalised_subspace</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A generalised eigenproblem reduced to a standard one by symmetric orthogonalisation of the metric.  <a href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -116,6 +122,22 @@ Functions</h2></td></tr>
 <tr class="memitem:a02c4aabef5937a3c16d034c2efd976b3"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a02c4aabef5937a3c16d034c2efd976b3">eigensolver_hermitian_kernel</a> (std::false_type, std::span&lt; value_type &gt; a, std::span&lt; <a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt; &gt; w, size_t dimension)</td></tr>
 <tr class="memdesc:a02c4aabef5937a3c16d034c2efd976b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen implementation of the hermitian eigenproblem, used for every scalar type LAPACK does not cover.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a02c4aabef5937a3c16d034c2efd976b3">More...</a><br /></td></tr>
 <tr class="separator:a02c4aabef5937a3c16d034c2efd976b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7948ad2d2e2f697346b7f78cba3bf514"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
+<tr class="memitem:a7948ad2d2e2f697346b7f78cba3bf514"><td class="memTemplItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; value_type &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a7948ad2d2e2f697346b7f78cba3bf514">svd_system_impl</a> (size_t nrows, size_t ncols, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; value_type &gt; &amp;m, <a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt; threshold, bool hermitian, bool reduce_to_rank)</td></tr>
+<tr class="memdesc:a7948ad2d2e2f697346b7f78cba3bf514"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab3ec63329fae114435836814df28e717" title="Performs singular value decomposition and returns SVD objects for singular values less than threshold...">svd_system()</a>, shared by its real and complex overloads.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a7948ad2d2e2f697346b7f78cba3bf514">More...</a><br /></td></tr>
+<tr class="separator:a7948ad2d2e2f697346b7f78cba3bf514"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeefde5321c2241da42bb5f1dda879a2b"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
+<tr class="memitem:aeefde5321c2241da42bb5f1dda879a2b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html">orthogonalised_subspace</a>&lt; value_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aeefde5321c2241da42bb5f1dda879a2b">orthogonalise_subspace</a> (const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, <a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt; svdThreshold, int verbosity)</td></tr>
+<tr class="memdesc:aeefde5321c2241da42bb5f1dda879a2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduce H C = S C E to the standard eigenproblem Hbar U = U E, whose solution is C = X U.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aeefde5321c2241da42bb5f1dda879a2b">More...</a><br /></td></tr>
+<tr class="separator:aeefde5321c2241da42bb5f1dda879a2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad192d3769b2e85fe8572980dec433b9a"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
+<tr class="memitem:ad192d3769b2e85fe8572980dec433b9a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad192d3769b2e85fe8572980dec433b9a">solve_LinearEquations_impl</a> (std::vector&lt; value_type &gt; &amp;solution, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, const std::vector&lt; value_type &gt; &amp;rhs, const size_t dimension, size_t nroot, <a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt; augmented_hessian, <a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt; svdThreshold, int verbosity)</td></tr>
+<tr class="memdesc:ad192d3769b2e85fe8572980dec433b9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a6823cb52ddf7a7b02c07ec01ac708da8">solve_LinearEquations()</a>, shared by its real and complex overloads.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad192d3769b2e85fe8572980dec433b9a">More...</a><br /></td></tr>
+<tr class="separator:ad192d3769b2e85fe8572980dec433b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b4dc1f6c8ee20989b73852acce5022a"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
+<tr class="memitem:a6b4dc1f6c8ee20989b73852acce5022a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a6b4dc1f6c8ee20989b73852acce5022a">solve_DIIS_impl</a> (std::vector&lt; value_type &gt; &amp;solution, const std::vector&lt; value_type &gt; &amp;matrix, const size_t dimension, <a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt; svdThreshold, int verbosity)</td></tr>
+<tr class="memdesc:a6b4dc1f6c8ee20989b73852acce5022a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a870c01bfaa1bc00958e14fccd1040246">solve_DIIS()</a>, shared by its real and complex overloads.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a6b4dc1f6c8ee20989b73852acce5022a">More...</a><br /></td></tr>
+<tr class="separator:a6b4dc1f6c8ee20989b73852acce5022a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6f410b0781a5f1d5b8c88afece5d4b1"><td class="memTemplParams" colspan="2">template&lt;typename value_type , typename value_type_abs &gt; </td></tr>
 <tr class="memitem:af6f410b0781a5f1d5b8c88afece5d4b1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#af6f410b0781a5f1d5b8c88afece5d4b1">redundant_parameters</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;overlap, const size_t oR, const size_t nR, const value_type_abs svd_thresh, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger)</td></tr>
 <tr class="memdesc:af6f410b0781a5f1d5b8c88afece5d4b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deduces a set of parameters that are redundant due to linear dependencies.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#af6f410b0781a5f1d5b8c88afece5d4b1">More...</a><br /></td></tr>
@@ -819,6 +841,64 @@ template&lt;class R &gt; </div>
 
 </div>
 </div>
+<a id="aeefde5321c2241da42bb5f1dda879a2b" name="aeefde5321c2241da42bb5f1dda879a2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeefde5321c2241da42bb5f1dda879a2b">&#9670;&nbsp;</a></span>orthogonalise_subspace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html">orthogonalised_subspace</a>&lt; value_type &gt; molpro::linalg::itsolv::detail::orthogonalise_subspace </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt;&#160;</td>
+          <td class="paramname"><em>svdThreshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reduce H C = S C E to the standard eigenproblem Hbar U = U E, whose solution is C = X U. </p>
+<p >The metric is hermitian and positive semi-definite, so its eigendecomposition is also its <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html" title="Stores a singular value and corresponding left and right singular vectors.">SVD</a>. Directions whose singular value falls below <code>svdThreshold</code> relative to the largest are discarded; that is how a rank-deficient metric is handled, and it is why the reduced problem can be smaller than the subspace.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrix</td><td>H, row-major, as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html" title="Matrix container that allows simple data access, slicing, copying and resizing without loosing data.">subspace::Matrix</a> stores it </td></tr>
+    <tr><td class="paramname">metric</td><td>S, row-major, as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html" title="Matrix container that allows simple data access, slicing, copying and resizing without loosing data.">subspace::Matrix</a> stores it </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a6d3d8c381bac1eb7fa2ff0752e0c6cea" name="a6d3d8c381bac1eb7fa2ff0752e0c6cea"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6d3d8c381bac1eb7fa2ff0752e0c6cea">&#9670;&nbsp;</a></span>parameter_batches()</h2>
 
@@ -1109,6 +1189,195 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6b4dc1f6c8ee20989b73852acce5022a" name="a6b4dc1f6c8ee20989b73852acce5022a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b4dc1f6c8ee20989b73852acce5022a">&#9670;&nbsp;</a></span>solve_DIIS_impl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::itsolv::detail::solve_DIIS_impl </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>solution</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt;&#160;</td>
+          <td class="paramname"><em>svdThreshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implementation of <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a870c01bfaa1bc00958e14fccd1040246">solve_DIIS()</a>, shared by its real and complex overloads. </p>
+<p >The extrapolation coefficients solve the DIIS equations augmented with the Lagrange multiplier that constrains them to sum to one; the algebra is the same whatever the scalar type. </p>
+
+</div>
+</div>
+<a id="ad192d3769b2e85fe8572980dec433b9a" name="ad192d3769b2e85fe8572980dec433b9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad192d3769b2e85fe8572980dec433b9a">&#9670;&nbsp;</a></span>solve_LinearEquations_impl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::itsolv::detail::solve_LinearEquations_impl </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>solution</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eigenvalues</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>nroot</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt;&#160;</td>
+          <td class="paramname"><em>augmented_hessian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt;&#160;</td>
+          <td class="paramname"><em>svdThreshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implementation of <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a6823cb52ddf7a7b02c07ec01ac708da8">solve_LinearEquations()</a>, shared by its real and complex overloads. </p>
+<p >Only the augmented-Hessian branch differs between them, and only because Eigen's GeneralizedEigenSolver handles real matrices alone. </p>
+
+</div>
+</div>
+<a id="a7948ad2d2e2f697346b7f78cba3bf514" name="a7948ad2d2e2f697346b7f78cba3bf514"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7948ad2d2e2f697346b7f78cba3bf514">&#9670;&nbsp;</a></span>svd_system_impl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename value_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; value_type &gt; &gt; molpro::linalg::itsolv::detail::svd_system_impl </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>nrows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>ncols</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt;&#160;</td>
+          <td class="paramname"><em>threshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>hermitian</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>reduce_to_rank</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implementation of <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab3ec63329fae114435836814df28e717" title="Performs singular value decomposition and returns SVD objects for singular values less than threshold...">svd_system()</a>, shared by its real and complex overloads. </p>
+<p >The two overloads exist only to give the public declarations distinct signatures; the algorithm is the same for both, and the hermitian branch dispatches to ?syev/?heev or to Eigen depending on the scalar type. </p>
 
 </div>
 </div>

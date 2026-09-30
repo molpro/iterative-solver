@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['z_5fand_5fw_5fare_5fone_5fof_5fr_5fand_5fq_0',['Z_and_W_are_one_of_R_and_Q',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail.html#aa9cf8a8c6babfd9f59a717f58fd74b85',1,'molpro::linalg::itsolv::subspace::util::detail']]]
+  ['x_0',['x',['../structmolpro_1_1linalg_1_1itsolv_1_1Interpolator_1_1point.html#aa514d1b7983f558a29c75e74b1c9f64e',1,'molpro::linalg::itsolv::Interpolator::point']]],
+  ['xq_1',['xq',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#a0b9e87203a92667c931b728b25748bb8',1,'molpro::linalg::itsolv::subspace::xspace::NewData']]]
 ];

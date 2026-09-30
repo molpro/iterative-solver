@@ -8,6 +8,8 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1detail =
       [ "remove_null_projected_solutions", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html#a4864b4a60dab5a5e7e3821fb31b7aeb8", null ]
     ] ],
     [ "DSpaceResetter", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter" ],
+    [ "eigenvalue_order", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order" ],
+    [ "orthogonalised_subspace", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace" ],
     [ "append_overlap_with_r", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad63c6172e8baa3a325c27a4e5314c203", null ],
     [ "construct_dspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aaf70adb15e11786f878400d6a794df3e", null ],
     [ "construct_solution", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a2cccc7d2dde83ef8809e836a62064e27", null ],
@@ -19,10 +21,14 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1detail =
     [ "modified_gram_schmidt", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ae5d64fe02b3f3b416bb9b172f77f1bf5", null ],
     [ "normalise", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a61eb49b7dfb7acbac0b882e500c0e742", null ],
     [ "normalise", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a410e557c1407524363361004d522b4ba", null ],
+    [ "orthogonalise_subspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aeefde5321c2241da42bb5f1dda879a2b", null ],
     [ "parameter_batches", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a6d3d8c381bac1eb7fa2ff0752e0c6cea", null ],
     [ "propose_rspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aac72611a8065b403ca5a5c83511e2e92", null ],
     [ "redundant_parameters", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#af6f410b0781a5f1d5b8c88afece5d4b1", null ],
     [ "resize_qspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a85109fc09ea33ce7704ba6a8860178fb", null ],
     [ "select_working_set", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a6edb428467caf65c2df6d4f0d34a85b8", null ],
+    [ "solve_DIIS_impl", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a6b4dc1f6c8ee20989b73852acce5022a", null ],
+    [ "solve_LinearEquations_impl", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad192d3769b2e85fe8572980dec433b9a", null ],
+    [ "svd_system_impl", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a7948ad2d2e2f697346b7f78cba3bf514", null ],
     [ "update_errors", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a83f1c4849c0c4a40c4adad952fee9da7", null ]
 ];

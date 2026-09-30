@@ -11,5 +11,6 @@ var searchData=
   ['has_5fmapped_5ftype_3c_20a_2c_20void_5ft_3c_20typename_20a_3a_3amapped_5ftype_20_3e_20_3e_8',['has_mapped_type&lt; A, void_t&lt; typename A::mapped_type &gt; &gt;',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type_3_01A_00_01void__t_3_01typename_01A_1_1mapped__type_01_4_01_4.html',1,'molpro::linalg::array']]],
   ['has_5fmapped_5ftype_5fv_9',['has_mapped_type_v',['../namespacemolpro_1_1linalg_1_1array.html#a13f02b59213de0924418fca64e40acf3',1,'molpro::linalg::array']]],
   ['has_5fparent_10',['has_parent',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1dotgraph.html#a3642a4c9eb27db3c082b371b3edfed75',1,'molpro::profiler::dotgraph']]],
-  ['hermiticity_11',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a521a7db340a0a9241725c1e62012b9c1',1,'molpro::linalg::itsolv::DavidsonOptions']]]
+  ['hbar_11',['Hbar',['../structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#ac9438db8a90e07537c654fd1d5ee2d5d',1,'molpro::linalg::itsolv::detail::orthogonalised_subspace']]],
+  ['hermiticity_12',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a521a7db340a0a9241725c1e62012b9c1',1,'molpro::linalg::itsolv::DavidsonOptions']]]
 ];

@@ -88,7 +88,9 @@ var annotated =
         ] ],
         [ "itsolv", "namespacemolpro_1_1linalg_1_1itsolv.html", [
           [ "detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html", [
-            [ "DSpaceResetter", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter" ]
+            [ "DSpaceResetter", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter" ],
+            [ "eigenvalue_order", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order" ],
+            [ "orthogonalised_subspace", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace" ]
           ] ],
           [ "interpolate_detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail.html", [
             [ "Morse_problem", "classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem.html", "classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem" ]
