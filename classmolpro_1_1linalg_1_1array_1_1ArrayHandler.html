@@ -135,7 +135,7 @@ Use cases</h2>
 <div class="line">  <span class="keywordflow">for</span> (<span class="keyword">auto</span> j = 0; j &lt; a2.size(); ++j)</div>
 <div class="line">    h.axpy(alpha[i,j], a2[i], a1[j]);</div>
 <div class="line">h.eval(); <span class="comment">// or let destructor handle it</span></div>
-<div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">molpro::linalg::itsolv::subspace::Matrix</a></div><div class="ttdoc">Matrix container that allows simple data access, slicing, copying and resizing without loosing data.</div><div class="ttdef"><b>Definition:</b> Matrix.h:30</div></div>
+<div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">molpro::linalg::itsolv::subspace::Matrix</a></div><div class="ttdoc">Matrix container that allows simple data access, slicing, copying and resizing without loosing data.</div><div class="ttdef"><b>Definition:</b> Matrix.h:32</div></div>
 </div><!-- fragment --><p >Lazy evaluation of dot </p><div class="fragment"><div class="line">std::vector&lt;AL&gt; a1;</div>
 <div class="line">std::vector&lt;AR&gt; a2;</div>
 <div class="line"><a class="code hl_class" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a> overlap;</div>
@@ -182,6 +182,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6e145dd6a76d8ddea588f2104a9c140e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a6e145dd6a76d8ddea588f2104a9c140e">axpy</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a439d2213a07466b54e366f4fa45b02de">value_type</a> alpha, const AR &amp;x, AL &amp;y)=0</td></tr>
 <tr class="separator:a6e145dd6a76d8ddea588f2104a9c140e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05ed79049a10cf88164895aa2da8c6c6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a439d2213a07466b54e366f4fa45b02de">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a05ed79049a10cf88164895aa2da8c6c6">dot</a> (const AL &amp;x, const AR &amp;y)=0</td></tr>
+<tr class="memdesc:a05ed79049a10cf88164895aa2da8c6c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The hermitian inner product &lt;x|y&gt;: conjugate-linear in <code>x</code>, linear in <code>y</code>.  <a href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a05ed79049a10cf88164895aa2da8c6c6">More...</a><br /></td></tr>
 <tr class="separator:a05ed79049a10cf88164895aa2da8c6c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a425ca68c78689a5eba39acdba92f364c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a425ca68c78689a5eba39acdba92f364c">gemm_outer</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a439d2213a07466b54e366f4fa45b02de">value_type</a> &gt; alphas, const CVecRef&lt; AR &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy)=0</td></tr>
 <tr class="separator:a425ca68c78689a5eba39acdba92f364c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -632,6 +633,9 @@ template&lt;class AL , class AR  = AL&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>The hermitian inner product &lt;x|y&gt;: conjugate-linear in <code>x</code>, linear in <code>y</code>. </p>
+<p >For a real element type this is the ordinary dot product; for a complex one the left argument is conjugated, so that dot(x, x) is real and non-negative and an overlap matrix built from it is hermitian rather than complex symmetric. </p>
+
 <p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskSparse_3_01AL_00_01AR_00_01true_01_4.html#ac0fcd9e78299fe6195723d5b52c5e416">molpro::linalg::array::ArrayHandlerDDiskSparse&lt; AL, AR, true &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrSparse_3_01AL_00_01AR_00_01true_01_4.html#a716230e8181659417de7abaf8f2be1c9">molpro::linalg::array::ArrayHandlerDistrSparse&lt; AL, AR, true &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableSparse_3_01AL_00_01AR_00_01true_01_4.html#aac419790200495724fad84d6d61bb471">molpro::linalg::array::ArrayHandlerIterableSparse&lt; AL, AR, true &gt;</a>.</p>
 
 </div>
@@ -851,7 +855,7 @@ template&lt;class AL , class AR  = AL&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Perform <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a05ed79049a10cf88164895aa2da8c6c6">dot()</a> on multiple pairs of containers in an efficient manner </p>
+<p >Perform <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a05ed79049a10cf88164895aa2da8c6c6" title="The hermitian inner product &lt;x|y&gt;: conjugate-linear in x, linear in y.">dot()</a> on multiple pairs of containers in an efficient manner </p>
 
 <p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskSparse_3_01AL_00_01AR_00_01true_01_4.html#af62513e6d6ae0c8f490bbe3f6d28cbeb">molpro::linalg::array::ArrayHandlerDDiskSparse&lt; AL, AR, true &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrSparse_3_01AL_00_01AR_00_01true_01_4.html#aae8ca880817562a32b11937fe2b6528b">molpro::linalg::array::ArrayHandlerDistrSparse&lt; AL, AR, true &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableSparse_3_01AL_00_01AR_00_01true_01_4.html#addf241c8a7c0a7e35dd92bbb9c5040ca">molpro::linalg::array::ArrayHandlerIterableSparse&lt; AL, AR, true &gt;</a>.</p>
 

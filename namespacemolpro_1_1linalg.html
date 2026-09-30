@@ -137,6 +137,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ab848133292d7af277eab1375edea6692"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg.html#ab848133292d7af277eab1375edea6692">set_options</a> (const molpro::Options &amp;<a class="el" href="namespacemolpro_1_1linalg.html#abd04a7feed3604605815d55678fc2369">options</a>)</td></tr>
 <tr class="memdesc:ab848133292d7af277eab1375edea6692"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the options for iterative-solver.  <a href="namespacemolpro_1_1linalg.html#ab848133292d7af277eab1375edea6692">More...</a><br /></td></tr>
 <tr class="separator:ab848133292d7af277eab1375edea6692"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4eb15f7c348276f371504e5613f3e0a2"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a4eb15f7c348276f371504e5613f3e0a2"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg.html#a4eb15f7c348276f371504e5613f3e0a2">conjugate</a> (const T &amp;x)</td></tr>
+<tr class="memdesc:a4eb15f7c348276f371504e5613f3e0a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Complex conjugate, staying within the scalar type; the identity for a real type.  <a href="namespacemolpro_1_1linalg.html#a4eb15f7c348276f371504e5613f3e0a2">More...</a><br /></td></tr>
+<tr class="separator:a4eb15f7c348276f371504e5613f3e0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a638c567dad6444423c60dc6c9a32c4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a4a638c567dad6444423c60dc6c9a32c4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg.html#a4a638c567dad6444423c60dc6c9a32c4">real_part</a> (const T &amp;x)</td></tr>
+<tr class="memdesc:a4a638c567dad6444423c60dc6c9a32c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The real part of a scalar; the value itself for a real type.  <a href="namespacemolpro_1_1linalg.html#a4a638c567dad6444423c60dc6c9a32c4">More...</a><br /></td></tr>
+<tr class="separator:a4a638c567dad6444423c60dc6c9a32c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfbef7c59c123da6b3e77a9949510b8b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:acfbef7c59c123da6b3e77a9949510b8b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg.html#acfbef7c59c123da6b3e77a9949510b8b">imaginary_part</a> (const T &amp;x)</td></tr>
+<tr class="memdesc:acfbef7c59c123da6b3e77a9949510b8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The imaginary part of a scalar; zero for a real type.  <a href="namespacemolpro_1_1linalg.html#acfbef7c59c123da6b3e77a9949510b8b">More...</a><br /></td></tr>
+<tr class="separator:acfbef7c59c123da6b3e77a9949510b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afeba78fae9932a4ff14f13ab529edba6"><td class="memTemplParams" colspan="2">template&lt;typename value_type &gt; </td></tr>
 <tr class="memitem:afeba78fae9932a4ff14f13ab529edba6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; value_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg.html#afeba78fae9932a4ff14f13ab529edba6">precision_scaled</a> (double tolerance_for_double)</td></tr>
 <tr class="memdesc:afeba78fae9932a4ff14f13ab529edba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rescale a tolerance that was calibrated for IEEE double precision to the working precision.  <a href="namespacemolpro_1_1linalg.html#afeba78fae9932a4ff14f13ab529edba6">More...</a><br /></td></tr>
@@ -163,6 +175,50 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a4eb15f7c348276f371504e5613f3e0a2" name="a4eb15f7c348276f371504e5613f3e0a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eb15f7c348276f371504e5613f3e0a2">&#9670;&nbsp;</a></span>conjugate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T molpro::linalg::conjugate </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Complex conjugate, staying within the scalar type; the identity for a real type. </p>
+
+</div>
+</div>
+<a id="acfbef7c59c123da6b3e77a9949510b8b" name="acfbef7c59c123da6b3e77a9949510b8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfbef7c59c123da6b3e77a9949510b8b">&#9670;&nbsp;</a></span>imaginary_part()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; T &gt; molpro::linalg::imaginary_part </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The imaginary part of a scalar; zero for a real type. </p>
+
+</div>
+</div>
 <a id="abd04a7feed3604605815d55678fc2369" name="abd04a7feed3604605815d55678fc2369"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd04a7feed3604605815d55678fc2369">&#9670;&nbsp;</a></span>options()</h2>
 
@@ -203,6 +259,28 @@ template&lt;typename value_type &gt; </div>
 
 <p>Rescale a tolerance that was calibrated for IEEE double precision to the working precision. </p>
 <p >A tolerance of the form "this quantity vanishes to within rounding error" is a fixed multiple of the machine epsilon of the arithmetic used. The constants in this library were chosen for double precision; this function preserves their safety margin, measured in machine epsilons, at any other precision, and returns the constant unchanged when the working precision is double. </p>
+
+</div>
+</div>
+<a id="a4a638c567dad6444423c60dc6c9a32c4" name="a4a638c567dad6444423c60dc6c9a32c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a638c567dad6444423c60dc6c9a32c4">&#9670;&nbsp;</a></span>real_part()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg.html#a6435c6192962881e9d676f1f5312e532">real_type_t</a>&lt; T &gt; molpro::linalg::real_part </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The real part of a scalar; the value itself for a real type. </p>
 
 </div>
 </div>

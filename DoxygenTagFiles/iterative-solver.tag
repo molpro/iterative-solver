@@ -11484,6 +11484,27 @@
       <arglist>(const molpro::Options &amp;options)</arglist>
     </member>
     <member kind="function">
+      <type>T</type>
+      <name>conjugate</name>
+      <anchorfile>namespacemolpro_1_1linalg.html</anchorfile>
+      <anchor>a4eb15f7c348276f371504e5613f3e0a2</anchor>
+      <arglist>(const T &amp;x)</arglist>
+    </member>
+    <member kind="function">
+      <type>real_type_t&lt; T &gt;</type>
+      <name>real_part</name>
+      <anchorfile>namespacemolpro_1_1linalg.html</anchorfile>
+      <anchor>a4a638c567dad6444423c60dc6c9a32c4</anchor>
+      <arglist>(const T &amp;x)</arglist>
+    </member>
+    <member kind="function">
+      <type>real_type_t&lt; T &gt;</type>
+      <name>imaginary_part</name>
+      <anchorfile>namespacemolpro_1_1linalg.html</anchorfile>
+      <anchor>acfbef7c59c123da6b3e77a9949510b8b</anchor>
+      <arglist>(const T &amp;x)</arglist>
+    </member>
+    <member kind="function">
       <type>real_type_t&lt; value_type &gt;</type>
       <name>precision_scaled</name>
       <anchorfile>namespacemolpro_1_1linalg.html</anchorfile>
@@ -11786,6 +11807,13 @@
       <arglist>(size_t dimension, int n_chunks)</arglist>
     </member>
     <member kind="function">
+      <type>std::map&lt; size_t, value_type &gt;</type>
+      <name>select</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a6ac9e3ee7cc084965065211c4f490786</anchor>
+      <arglist>(size_t n, const X &amp;x, bool max=false, bool ignore_sign=false)</arglist>
+    </member>
+    <member kind="function">
       <type>auto</type>
       <name>select</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
@@ -11793,10 +11821,17 @@
       <arglist>(size_t n, const X &amp;x, bool max=false, bool ignore_sign=false)</arglist>
     </member>
     <member kind="function">
+      <type>std::map&lt; size_t, value_type &gt;</type>
+      <name>select_sparse</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a22cafcd9c841a03f6d0ef57de63cf261</anchor>
+      <arglist>(size_t n, const X &amp;x, bool max=false, bool ignore_sign=false)</arglist>
+    </member>
+    <member kind="function">
       <type>auto</type>
       <name>select_sparse</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>ae3dc31f768fbb5d9b57dea62785f3317</anchor>
+      <anchor>a9b97e3f6d844f137d876ffe905f4e858</anchor>
       <arglist>(size_t n, const X &amp;x, bool max=false, bool ignore_sign=false)</arglist>
     </member>
     <member kind="function">
@@ -12814,6 +12849,13 @@
       <name>transpose_copy</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html</anchorfile>
       <anchor>a48f71d3d15b8de9d41b31ed27a679f6f</anchor>
+      <arglist>(ML &amp;&amp;ml, const MR &amp;mr)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>conjugate_transpose_copy</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html</anchorfile>
+      <anchor>a6c39133f62bc149f9fe265657f208fb9</anchor>
       <arglist>(ML &amp;&amp;ml, const MR &amp;mr)</arglist>
     </member>
     <member kind="function">

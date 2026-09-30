@@ -175,6 +175,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a48f71d3d15b8de9d41b31ed27a679f6f"><td class="memTemplParams" colspan="2">template&lt;class ML , class MR &gt; </td></tr>
 <tr class="memitem:a48f71d3d15b8de9d41b31ed27a679f6f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a48f71d3d15b8de9d41b31ed27a679f6f">transpose_copy</a> (ML &amp;&amp;ml, const MR &amp;mr)</td></tr>
 <tr class="separator:a48f71d3d15b8de9d41b31ed27a679f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c39133f62bc149f9fe265657f208fb9"><td class="memTemplParams" colspan="2">template&lt;class ML , class MR &gt; </td></tr>
+<tr class="memitem:a6c39133f62bc149f9fe265657f208fb9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a6c39133f62bc149f9fe265657f208fb9">conjugate_transpose_copy</a> (ML &amp;&amp;ml, const MR &amp;mr)</td></tr>
+<tr class="memdesc:a6c39133f62bc149f9fe265657f208fb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the conjugate transpose of <code>mr</code> into <code>ml</code>.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a6c39133f62bc149f9fe265657f208fb9">More...</a><br /></td></tr>
+<tr class="separator:a6c39133f62bc149f9fe265657f208fb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30dacede15a934f3b97b759ae1d2a7e3"><td class="memTemplParams" colspan="2">template&lt;class Mat &gt; </td></tr>
 <tr class="memitem:a30dacede15a934f3b97b759ae1d2a7e3"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30dacede15a934f3b97b759ae1d2a7e3">as_string</a> (const Mat &amp;m, int precision=6)</td></tr>
 <tr class="separator:a30dacede15a934f3b97b759ae1d2a7e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,6 +262,39 @@ template&lt;class Mat &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6c39133f62bc149f9fe265657f208fb9" name="a6c39133f62bc149f9fe265657f208fb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c39133f62bc149f9fe265657f208fb9">&#9670;&nbsp;</a></span>conjugate_transpose_copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ML , class MR &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::itsolv::subspace::conjugate_transpose_copy </td>
+          <td>(</td>
+          <td class="paramtype">ML &amp;&amp;&#160;</td>
+          <td class="paramname"><em>ml</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const MR &amp;&#160;</td>
+          <td class="paramname"><em>mr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies the conjugate transpose of <code>mr</code> into <code>ml</code>. </p>
+<p >This is what relates the two off-diagonal blocks of a hermitian matrix; for a real element type it is the same as <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a48f71d3d15b8de9d41b31ed27a679f6f">transpose_copy()</a>. </p>
 
 </div>
 </div>
