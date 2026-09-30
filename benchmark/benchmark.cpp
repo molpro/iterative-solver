@@ -61,5 +61,8 @@ int main(int argc, char* argv[]) {
     }
 #endif
   }
+#ifdef LINEARALGEBRA_ARRAY_GA
+  GA_Terminate();
+#endif
   molpro::mpi::finalize();
 }
