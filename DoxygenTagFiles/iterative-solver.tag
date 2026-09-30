@@ -2328,13 +2328,6 @@
       <anchor>abea8eec2c55f186b7ae9fbc3ffd2f8f5</anchor>
       <arglist>(const std::string &amp;message) const</arglist>
     </member>
-    <member kind="function">
-      <type>value_type</type>
-      <name>operator[]</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
-      <anchor>abe2b8d71f06ec792bef8887f28cc6c80</anchor>
-      <arglist>(size_t index)</arglist>
-    </member>
     <member kind="function" virtualness="pure">
       <type>virtual std::unique_ptr&lt; LocalBuffer &gt;</type>
       <name>local_buffer</name>
@@ -2362,6 +2355,20 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
       <anchor>ad22625b1ebc1d8b3b9b608503f722228</anchor>
       <arglist>(index_type ind) const =0</arglist>
+    </member>
+    <member kind="function">
+      <type>value_type</type>
+      <name>operator[]</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>ac41c30eb54ca313a848ec0ba195ad6e9</anchor>
+      <arglist>(index_type ind) const</arglist>
+    </member>
+    <member kind="function">
+      <type>util::ValueProxy&lt; DistrArray &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>afd708634fca623af9e7bcb57f93be4a8</anchor>
+      <arglist>(index_type ind)</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
@@ -2656,6 +2663,20 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
       <anchor>ad22625b1ebc1d8b3b9b608503f722228</anchor>
       <arglist>(index_type ind) const =0</arglist>
+    </member>
+    <member kind="function">
+      <type>value_type</type>
+      <name>operator[]</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>ac41c30eb54ca313a848ec0ba195ad6e9</anchor>
+      <arglist>(index_type ind) const</arglist>
+    </member>
+    <member kind="function">
+      <type>util::ValueProxy&lt; DistrArray &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>afd708634fca623af9e7bcb57f93be4a8</anchor>
+      <arglist>(index_type ind)</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
@@ -3457,6 +3478,165 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayGA.html</anchorfile>
       <anchor>a488bfdce763604fa19334cf819607b8e</anchor>
       <arglist>(DistrArrayGA &amp;a1, DistrArrayGA &amp;a2) noexcept</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>molpro::linalg::array::util::DistrArrayIteratorImpl</name>
+    <filename>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</filename>
+    <templarg>bool is_const</templarg>
+    <member kind="typedef">
+      <type>std::conditional_t&lt; is_const, DistrArray::value_type, ValueProxy&lt; DistrArray &gt; &gt;</type>
+      <name>value_type</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a9f31b9ceab130f2f8fdaebedc362df0a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>value_type</type>
+      <name>reference</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a85e7d73a52f436b375698039e05cca82</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>reference</type>
+      <name>const_reference</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>ab0854090ee737a8fd49cb470ef2394fe</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::ptrdiff_t</type>
+      <name>difference_type</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>af3dab7e85db4a7b39f1dc49da563a18f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>void</type>
+      <name>pointer</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>ab6ec84d566e7236787a1d2907ee8b941</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::random_access_iterator_tag</type>
+      <name>iterator_category</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a6d1d8ddb62360db414d050c946252a39</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>DistrArrayIteratorImpl</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a1569b152a585cdccc81e1ab84508d1b8</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>DistrArrayIteratorImpl</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a8cf37d1f33f1d219f9204767d3532b01</anchor>
+      <arglist>(std::conditional_t&lt; is_const, const DistrArray, DistrArray &gt; &amp;array, DistrArray::index_type pos)</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayIteratorImpl &amp;</type>
+      <name>operator+=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a1e56e71ed1a4c551fd35db1836064c0a</anchor>
+      <arglist>(difference_type val)</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayIteratorImpl &amp;</type>
+      <name>operator++</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a0962990f29280cedd97d9dc62b344060</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayIteratorImpl</type>
+      <name>operator++</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a9897434253efc8bb826d347c2971b859</anchor>
+      <arglist>(int)</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayIteratorImpl &amp;</type>
+      <name>operator-=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a285740f7426c93cb30e74392b82b224d</anchor>
+      <arglist>(difference_type val)</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayIteratorImpl &amp;</type>
+      <name>operator--</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>afc91a24d71aca3935de09755247c23bd</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayIteratorImpl</type>
+      <name>operator--</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>ac286be2e1a3d898a4c3f6052d4fb3c52</anchor>
+      <arglist>(int)</arglist>
+    </member>
+    <member kind="function">
+      <type>reference</type>
+      <name>operator*</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a271f8a97e18b8646889f05a2dfb7ed55</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>reference</type>
+      <name>operator[]</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>ad5926f066b01402eb61033e550984013</anchor>
+      <arglist>(difference_type offset) const</arglist>
+    </member>
+    <member kind="function">
+      <type>difference_type</type>
+      <name>operator-</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a77d05aab8f03806089aec39fb9475bd1</anchor>
+      <arglist>(const DistrArrayIteratorImpl &amp;other) const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>operator==</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a8fc483447704d85e7e63de95a7580aec</anchor>
+      <arglist>(const DistrArrayIteratorImpl &amp;) const =default</arglist>
+    </member>
+    <member kind="function">
+      <type>std::strong_ordering</type>
+      <name>operator&lt;=&gt;</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a4192ebf869c8a35325ff0e8eaa363e39</anchor>
+      <arglist>(const DistrArrayIteratorImpl &amp;) const =default</arglist>
+    </member>
+    <member kind="friend">
+      <type>friend DistrArrayIteratorImpl</type>
+      <name>operator+</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a7546718e92ef13ed93c01e9ce1178f10</anchor>
+      <arglist>(const DistrArrayIteratorImpl &amp;it, difference_type val)</arglist>
+    </member>
+    <member kind="friend">
+      <type>friend DistrArrayIteratorImpl</type>
+      <name>operator+</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>abfdd8334619af0f1a5015d1cf31ebfca</anchor>
+      <arglist>(difference_type val, const DistrArrayIteratorImpl &amp;it)</arglist>
+    </member>
+    <member kind="friend">
+      <type>friend DistrArrayIteratorImpl</type>
+      <name>operator-</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html</anchorfile>
+      <anchor>a7d020bc837909770e1f55e5c0fa61acb</anchor>
+      <arglist>(const DistrArrayIteratorImpl &amp;it, difference_type val)</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -10901,6 +11081,60 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>molpro::linalg::array::util::ValueProxy</name>
+    <filename>classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html</filename>
+    <templarg>typename Array</templarg>
+    <member kind="function">
+      <type></type>
+      <name>ValueProxy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html</anchorfile>
+      <anchor>a78180b2cadd66dda2a97f01e75b01c20</anchor>
+      <arglist>(const ValueProxy &amp;)=delete</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>ValueProxy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html</anchorfile>
+      <anchor>a12fb2605ad419f5deb155a1b69233ab8</anchor>
+      <arglist>(ValueProxy &amp;&amp;)=delete</arglist>
+    </member>
+    <member kind="function">
+      <type>ValueProxy &amp;</type>
+      <name>operator=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html</anchorfile>
+      <anchor>a92941a5c0c342e6b132a1f1df33b0b2d</anchor>
+      <arglist>(const ValueProxy &amp;other)</arglist>
+    </member>
+    <member kind="function">
+      <type>ValueProxy &amp;</type>
+      <name>operator=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html</anchorfile>
+      <anchor>a99004114d67bc545fce28fd9c69e15f9</anchor>
+      <arglist>(ValueProxy &amp;&amp;other)</arglist>
+    </member>
+    <member kind="function">
+      <type>ValueProxy &amp;</type>
+      <name>operator=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html</anchorfile>
+      <anchor>acee270c5fbcc94f23129ef5a650f9712</anchor>
+      <arglist>(const ValueProxy&lt; OtherArray &gt; &amp;other)</arglist>
+    </member>
+    <member kind="function">
+      <type>ValueProxy &amp;</type>
+      <name>operator=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html</anchorfile>
+      <anchor>ae33b3b50cdceaed9a8655d48d7b94cbf</anchor>
+      <arglist>(Array::value_type val)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>operator typename Array::value_type</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html</anchorfile>
+      <anchor>a00f273a056f3ba48321e059a06a59acc</anchor>
+      <arglist>() const</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>molpro::linalg::itsolv::subspace::XSpace</name>
     <filename>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html</filename>
     <templarg>class R</templarg>
@@ -11637,6 +11871,20 @@
       <anchor>a80c986e4a5d6be516962254af8ddb585</anchor>
       <arglist></arglist>
     </member>
+    <member kind="typedef">
+      <type>util::DistrArrayIteratorImpl&lt; false &gt;</type>
+      <name>DistrArrayIterator</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>af5edebff1c079cf834e719032a8c2ea2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>util::DistrArrayIteratorImpl&lt; true &gt;</type>
+      <name>DistrArrayConstIterator</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>a68ea531ea69cb728234add16dca49e92</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="enumeration">
       <type></type>
       <name>ArrayFamily</name>
@@ -11669,6 +11917,48 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
       <anchor>a5890c9a2aa072e5acc1690cb1f1ee95f</anchor>
       <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayIterator</type>
+      <name>begin</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>afb96652d1382fddf201ce3e630d70c1b</anchor>
+      <arglist>(DistrArray &amp;array)</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayIterator</type>
+      <name>end</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>a8e582f3f4a1dae417eb5532f151cddff</anchor>
+      <arglist>(DistrArray &amp;array)</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayConstIterator</type>
+      <name>begin</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>afbe4a119a5c18b9f5556c06e0338e10d</anchor>
+      <arglist>(const DistrArray &amp;array)</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayConstIterator</type>
+      <name>end</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>aafbcfe011ad2f12fd5c9b2e5d624b038</anchor>
+      <arglist>(const DistrArray &amp;array)</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayConstIterator</type>
+      <name>cbegin</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>a0f71465eff7cdd35affeca4ddd851fbd</anchor>
+      <arglist>(const DistrArray &amp;array)</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArrayConstIterator</type>
+      <name>cend</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>ab004097c50a5d98ed7b000431c5761a5</anchor>
+      <arglist>(const DistrArray &amp;array)</arglist>
     </member>
     <member kind="function">
       <type>double</type>
@@ -11799,6 +12089,7 @@
     <class kind="struct">molpro::linalg::array::util::ArrayHandlerError</class>
     <class kind="class">molpro::linalg::array::util::BufferManager</class>
     <class kind="struct">molpro::linalg::array::util::CompareAbs</class>
+    <class kind="class">molpro::linalg::array::util::DistrArrayIteratorImpl</class>
     <class kind="class">molpro::linalg::array::util::DistrFlags</class>
     <class kind="class">molpro::linalg::array::util::Distribution</class>
     <class kind="struct">molpro::linalg::array::util::is_allocatable</class>
@@ -11811,6 +12102,7 @@
     <class kind="class">molpro::linalg::array::util::ScopeLock</class>
     <class kind="class">molpro::linalg::array::util::Task</class>
     <class kind="struct">molpro::linalg::array::util::TempHandle</class>
+    <class kind="class">molpro::linalg::array::util::ValueProxy</class>
     <member kind="enumeration">
       <type></type>
       <name>gemm_type</name>

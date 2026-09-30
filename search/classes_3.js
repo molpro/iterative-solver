@@ -19,12 +19,13 @@ var searchData=
   ['distrarraydisk_16',['DistrArrayDisk',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html',1,'molpro::linalg::array']]],
   ['distrarrayfile_17',['DistrArrayFile',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html',1,'molpro::linalg::array']]],
   ['distrarrayga_18',['DistrArrayGA',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayGA.html',1,'molpro::linalg::array']]],
-  ['distrarraympi3_19',['DistrArrayMPI3',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html',1,'molpro::linalg::array']]],
-  ['distrarrayspan_20',['DistrArraySpan',['../classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html',1,'molpro::linalg::array']]],
-  ['distrflags_21',['DistrFlags',['../classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags.html',1,'molpro::linalg::array::util']]],
-  ['distribution_22',['Distribution',['../classmolpro_1_1linalg_1_1array_1_1util_1_1Distribution.html',1,'molpro::linalg::array::util']]],
-  ['dspace_23',['DSpace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html',1,'molpro::linalg::itsolv::subspace']]],
-  ['dspace_3c_20q_20_3e_24',['DSpace&lt; Q &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html',1,'molpro::linalg::itsolv::subspace']]],
-  ['dspaceresetter_25',['DSpaceResetter',['../classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html',1,'molpro::linalg::itsolv::detail']]],
-  ['dspaceresetter_3c_20r_20_3e_26',['DSpaceResetter&lt; R &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html',1,'molpro::linalg::itsolv::detail']]]
+  ['distrarrayiteratorimpl_19',['DistrArrayIteratorImpl',['../classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html',1,'molpro::linalg::array::util']]],
+  ['distrarraympi3_20',['DistrArrayMPI3',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html',1,'molpro::linalg::array']]],
+  ['distrarrayspan_21',['DistrArraySpan',['../classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html',1,'molpro::linalg::array']]],
+  ['distrflags_22',['DistrFlags',['../classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags.html',1,'molpro::linalg::array::util']]],
+  ['distribution_23',['Distribution',['../classmolpro_1_1linalg_1_1array_1_1util_1_1Distribution.html',1,'molpro::linalg::array::util']]],
+  ['dspace_24',['DSpace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html',1,'molpro::linalg::itsolv::subspace']]],
+  ['dspace_3c_20q_20_3e_25',['DSpace&lt; Q &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html',1,'molpro::linalg::itsolv::subspace']]],
+  ['dspaceresetter_26',['DSpaceResetter',['../classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html',1,'molpro::linalg::itsolv::detail']]],
+  ['dspaceresetter_3c_20r_20_3e_27',['DSpaceResetter&lt; R &gt;',['../classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html',1,'molpro::linalg::itsolv::detail']]]
 ];

@@ -26,6 +26,7 @@ var annotated =
             [ "ArrayHandlerError", "structmolpro_1_1linalg_1_1array_1_1util_1_1ArrayHandlerError.html", null ],
             [ "BufferManager", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager" ],
             [ "CompareAbs", "structmolpro_1_1linalg_1_1array_1_1util_1_1CompareAbs.html", "structmolpro_1_1linalg_1_1array_1_1util_1_1CompareAbs" ],
+            [ "DistrArrayIteratorImpl", "classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl" ],
             [ "DistrFlags", "classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags" ],
             [ "Distribution", "classmolpro_1_1linalg_1_1array_1_1util_1_1Distribution.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1Distribution" ],
             [ "is_allocatable", "structmolpro_1_1linalg_1_1array_1_1util_1_1is__allocatable.html", null ],
@@ -37,7 +38,8 @@ var annotated =
             [ "RefEqual", "structmolpro_1_1linalg_1_1array_1_1util_1_1RefEqual.html", "structmolpro_1_1linalg_1_1array_1_1util_1_1RefEqual" ],
             [ "ScopeLock", "classmolpro_1_1linalg_1_1array_1_1util_1_1ScopeLock.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1ScopeLock" ],
             [ "Task", "classmolpro_1_1linalg_1_1array_1_1util_1_1Task.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1Task" ],
-            [ "TempHandle", "structmolpro_1_1linalg_1_1array_1_1util_1_1TempHandle.html", null ]
+            [ "TempHandle", "structmolpro_1_1linalg_1_1array_1_1util_1_1TempHandle.html", null ],
+            [ "ValueProxy", "classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html", "classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy" ]
           ] ],
           [ "array_family", "structmolpro_1_1linalg_1_1array_1_1array__family.html", "structmolpro_1_1linalg_1_1array_1_1array__family" ],
           [ "array_family< T, false, false, true, false >", "structmolpro_1_1linalg_1_1array_1_1array__family_3_01T_00_01false_00_01false_00_01true_00_01false_01_4.html", "structmolpro_1_1linalg_1_1array_1_1array__family_3_01T_00_01false_00_01false_00_01true_00_01false_01_4" ],

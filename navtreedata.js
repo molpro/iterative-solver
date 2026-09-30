@@ -54,7 +54,7 @@ var NAVTREE =
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", "namespacemembers_dup" ],
-        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Functions", "namespacemembers_func.html", "namespacemembers_func" ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
         [ "Enumerations", "namespacemembers_enum.html", null ],
@@ -70,18 +70,18 @@ var NAVTREEINDEX =
 "ExampleProblemDistrArray_8h-example.html",
 "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrSparse_3_01AL_00_01AR_00_01true_01_4.html#aabd1dc42a41f54d0a3bf81ce90004671",
 "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ad22625b1ebc1d8b3b9b608503f722228",
-"classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html#a9c33c96152c5b1e54be688dfbd672d3a",
-"classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags.html#a0de5d27bd6d413ffaa144a3f8c26c655",
-"classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a3becd034ba0358533dda8362a1283a01",
-"classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem.html",
-"classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html#a6db2bd0bfd7ff9640e6fbb51a26e72c6",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html#a9ccb71e2aa6afca0ef7c9b1719a70bef",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#a53a284cad70f77135bec50f189b9d4be",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ad99657d1bb050c231ac2c15ba01761e3",
-"namespacemolpro_1_1linalg_1_1array_1_1util.html#a2f6b37985b8983863b5ff745040ba076",
-"structiterative__solver__pspace_1_1pspace.html#a0d239e70d6b9d6cbc8618859b4f91952",
-"structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemOptions.html",
-"structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#ad7cfefb4b20a24f38099ae54e43d7fbe"
+"classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html#a9bb945b979cf395bedb717404eae3c77",
+"classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html",
+"classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#ae2bfc2e0ce3f1abeea46cfb576577d50",
+"classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a9ee1b0fd61900d12fcaa7ba7663c55e1",
+"classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a913906c3d2ef808a309592d0e88a271c",
+"classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#aa99c75dd44f4e6947199bb2bd1c8decf",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html#a3c43277facb126e13505bd932435c523",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a15bc8a50173852d4d6276602266454ab",
+"namespacemembers_func_d.html",
+"namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30dacede15a934f3b97b759ae1d2a7e3",
+"structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#af5cafdf8da25bebb7fd82e8112e024b8",
+"structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html#af85e540cc3d0b841d654aa0ecdbfdb54"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

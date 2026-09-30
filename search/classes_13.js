@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xspace_0',['XSpace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html',1,'molpro::linalg::itsolv::subspace']]]
+  ['weaksingleton_0',['WeakSingleton',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1WeakSingleton.html',1,'molpro::profiler']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['weaksingleton_0',['WeakSingleton',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1WeakSingleton.html',1,'molpro::profiler']]]
+  ['valueproxy_0',['ValueProxy',['../classmolpro_1_1linalg_1_1array_1_1util_1_1ValueProxy.html',1,'molpro::linalg::array::util']]]
 ];
