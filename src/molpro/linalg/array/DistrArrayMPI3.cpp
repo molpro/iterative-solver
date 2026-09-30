@@ -148,7 +148,6 @@ void DistrArrayMPI3::_get_put(index_type lo, index_type hi, const value_type* bu
   index_type p_lo, p_hi;
   std::tie(p_lo, p_hi) = m_distribution->cover(lo, hi);
   auto* curr_buf = const_cast<value_type*>(buf);
-  auto requests = std::vector<MPI_Request>(p_hi - p_lo + 1);
   for (size_t i = p_lo; i < p_hi + 1; ++i) {
     index_type bound_lo, bound_hi;
     std::tie(bound_lo, bound_hi) = m_distribution->range(i);
@@ -156,15 +155,18 @@ void DistrArrayMPI3::_get_put(index_type lo, index_type hi, const value_type* bu
     auto local_hi = std::min(hi, bound_hi);
     MPI_Aint offset = (local_lo - bound_lo);
     int count = (int(local_hi - local_lo));
-    if (option == RMAType::get)
-      MPI_Rget(curr_buf, count, MPI_DOUBLE, i, offset, count, MPI_DOUBLE, m_win, &requests[i - p_lo]);
-    else if (option == RMAType::put)
-      MPI_Rput(curr_buf, count, MPI_DOUBLE, i, offset, count, MPI_DOUBLE, m_win, &requests[i - p_lo]);
-    else if (option == RMAType::acc)
-      MPI_Raccumulate(curr_buf, count, MPI_DOUBLE, i, offset, count, MPI_DOUBLE, MPI_SUM, m_win, &requests[i - p_lo]);
+    if (option == RMAType::get) {
+      MPI_Get(curr_buf, count, MPI_DOUBLE, i, offset, count, MPI_DOUBLE, m_win);
+      MPI_Win_flush(i, m_win);
+    } else if (option == RMAType::put) {
+      MPI_Put(curr_buf, count, MPI_DOUBLE, i, offset, count, MPI_DOUBLE, m_win);
+      MPI_Win_flush(i, m_win);
+    } else if (option == RMAType::acc) {
+      MPI_Accumulate(curr_buf, count, MPI_DOUBLE, i, offset, count, MPI_DOUBLE, MPI_SUM, m_win);
+      MPI_Win_flush(i, m_win);
+    }
     curr_buf += count;
   }
-  MPI_Waitall(requests.size(), requests.data(), MPI_STATUSES_IGNORE);
 }
 
 void DistrArrayMPI3::get(index_type lo, index_type hi, value_type* buf) const {
