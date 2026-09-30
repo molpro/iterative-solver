@@ -1,21 +1,21 @@
-#!/bin/sh
+#!/bin/bash
 set -euo pipefail
 SCRIPTPATH=$( cd -- $(dirname "$0") >/dev/null 2>&1 ; pwd -P)
 
-if [ -z "$CONDA_PREFIX" -o $(basename $CONDA_PREFIX) = "base" ]; then
-  echo $0: must run this script in a non-base Conda environment
-  echo CONDA_PREFIX=$CONDA_PREFIX $(basename $CONDA_PREFIX)
+if [ -z "${CONDA_PREFIX:-}" ] || [ "$(basename "$CONDA_PREFIX")" = "base" ]; then
+  echo "$0: must run this script in a non-base Conda environment"
+  echo "CONDA_PREFIX=${CONDA_PREFIX:-} $(basename "${CONDA_PREFIX:-}")"
   exit 1
 fi
 
 python_dir=$SCRIPTPATH
 root_dir=$SCRIPTPATH/..
-if [ $(uname) = Linux -a $(uname -m) = x86_64 ]; then extra_requirements='mkl mkl-include'; else extra_requirements='';  fi
+if [ "$(uname)" = Linux ] && [ "$(uname -m)" = x86_64 ]; then extra_requirements='mkl mkl-include'; else extra_requirements=''; fi
 conda install -c conda-forge -y --file $python_dir/requirements.txt $extra_requirements
 cmake_build_dir=$python_dir/cmake-build-$(uname)-$(uname -m)
 mkdir -p $cmake_build_dir
 
-if [ $(uname) = Linux -a $(uname -m) = x86_64 ]; then  export CXXFLAGS="-fPIC -fpermissive" ; else export CXXFLAGS=-fPIC; fi
+if [ "$(uname)" = Linux ] && [ "$(uname -m)" = x86_64 ]; then export CXXFLAGS="-fPIC -fpermissive"; else export CXXFLAGS=-fPIC; fi
 cmake \
   -DCMAKE_INSTALL_PREFIX="$CONDA_PREFIX" \
   -DCMAKE_BUILD_TYPE=Release \

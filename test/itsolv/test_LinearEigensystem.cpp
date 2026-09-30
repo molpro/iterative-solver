@@ -73,9 +73,11 @@ struct LinearEigensystemF : ::testing::Test {
     }
   }
 
+  //! The hermitian inner product <a|b>, matching the convention of the array handlers
   template <class scalar>
   scalar dot(const std::vector<scalar> &a, const std::vector<scalar> &b) {
-    return std::inner_product(std::begin(a), std::end(a), std::begin(b), scalar(0));
+    return std::inner_product(std::begin(a), std::end(a), std::begin(b), scalar(0), std::plus<scalar>{},
+                              [](const scalar &x, const scalar &y) { return molpro::linalg::conjugate(x) * y; });
   }
 
   void residual(const std::vector<Rvector> &psx, std::vector<Rvector> &actions, const std::vector<double> &evals) {
@@ -110,8 +112,7 @@ struct LinearEigensystemF : ::testing::Test {
     for (size_t i = 0, ij = 0; i < n; ++i)
       for (size_t j = 0; j < n; ++j, ++ij)
         hmat_row[ij] = hmat(i, j);
-    molpro::linalg::itsolv::eigenproblem(eigenvector, expected_eigenvalues, hmat_row, metric, n, hermitian, 1.0e-14, 0,
-                                         false);
+    molpro::linalg::itsolv::eigenproblem(eigenvector, expected_eigenvalues, hmat_row, metric, n, hermitian, 1.0e-14, 0);
     for (size_t i = 0; i < n; i++)
       for (size_t j = 0; j < n; j++)
         expected_eigensolutions[expected_eigenvalues[i]].push_back(

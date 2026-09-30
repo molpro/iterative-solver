@@ -1,6 +1,7 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_GRAM_SCHMIDT_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_GRAM_SCHMIDT_H
 #include <molpro/linalg/array/ArrayHandler.h>
+#include <molpro/linalg/itsolv/helper.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/wrap.h>
 
@@ -35,13 +36,13 @@ namespace molpro::linalg::itsolv::subspace::util {
  * @returns norms of transformed vectors
  */
 template <typename T>
-std::vector<T> gram_schmidt(const Matrix<T>& s, Matrix<T>& l, double norm_thresh = 1.0e-14) {
+std::vector<T> gram_schmidt(const Matrix<T>& s, Matrix<T>& l, T norm_thresh = precision_scaled<T>(1e-14)) {
   assert(s.rows() == s.cols());
   auto n = s.rows();
   l.fill(0);
   l.resize({n, n});
-  auto norm = std::vector<double>(n, 0);
-  auto w = std::vector<double>{};
+  auto norm = std::vector<T>(n, 0);
+  auto w = std::vector<T>{};
   for (size_t i = 0; i < n; ++i) {
     w.assign(i, 0.);
     for (size_t j = 0; j < i; ++j) {

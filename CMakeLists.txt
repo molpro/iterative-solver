@@ -41,9 +41,12 @@ message(STATUS "iterative-solver: LINEARALGEBRA_ARRAY_HDF5=${LINEARALGEBRA_ARRAY
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
+    # CMAKE_<LANG>_COMPILER_LAUNCHER alone is sufficient for both the Makefiles and
+    # Ninja generators. Also setting RULE_LAUNCH_COMPILE double-wraps every compile
+    # command (ccache ccache <compiler> ...), which confuses ccache's own argument
+    # parsing and can produce spurious "file not found" errors.
     set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
     set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
 endif()
 
 

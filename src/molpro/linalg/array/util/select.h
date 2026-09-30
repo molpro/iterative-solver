@@ -4,6 +4,7 @@
 #include <complex>
 #include <cstdlib>
 #include <queue>
+#include <stdexcept>
 #include <type_traits>
 
 namespace molpro::linalg::array::util {
@@ -22,9 +23,9 @@ namespace molpro::linalg::array::util {
  */
 template <class X, typename value_type,
           typename std::enable_if<std::is_compound<value_type>::value, value_type>::type* = nullptr>
-auto select(size_t n, const X& x, bool max = false, bool ignore_sign = false) {
+std::map<size_t, value_type> select(size_t n, const X& x, bool max = false, bool ignore_sign = false) {
+  // selecting the largest elements presupposes an ordering, which the complex numbers do not have
   throw std::logic_error("select not implemented for complex types");
-  return std::map<size_t, value_type>();
 }
 template <class X, typename value_type,
           typename std::enable_if<!std::is_compound<value_type>::value, value_type>::type* = nullptr>
@@ -108,7 +109,15 @@ auto select(size_t n, const X& x, bool max = false, bool ignore_sign = false) {
  * @param ignore_sign If true, consider std::abs() of elements
  * @return map of indices and corresponding x,y product
  */
-template <class X, typename value_type>
+template <class X, typename value_type,
+          typename std::enable_if<std::is_compound<value_type>::value, value_type>::type* = nullptr>
+std::map<size_t, value_type> select_sparse(size_t n, const X& x, bool max = false, bool ignore_sign = false) {
+  // selecting the largest elements presupposes an ordering, which the complex numbers do not have
+  throw std::logic_error("select_sparse not implemented for complex types");
+}
+
+template <class X, typename value_type,
+          typename std::enable_if<!std::is_compound<value_type>::value, value_type>::type* = nullptr>
 auto select_sparse(size_t n, const X& x, bool max = false, bool ignore_sign = false) {
   using std::abs;
   using std::begin;

@@ -59,7 +59,7 @@ public:
     for (size_t i = 0; i < kDim; ++i)
       for (size_t j = 0; j < kDim; ++j)
         matrix.push_back(kH(j, i));
-    solve_DIIS(solution, matrix, kDim, 1e-10, 1);
+    solve_DIIS(solution, matrix, kDim, precision_scaled<value_type>(1e-10), 1);
     //    std::copy(solution.begin(),solution.end(),m_solutions.begin());
     for (size_t i = 0; i < kDim; ++i)
       m_solutions(0, i) = solution[i];
@@ -92,7 +92,8 @@ protected:
   std::shared_ptr<Logger> m_logger{};
 
 public:
-  value_type_abs m_svd_solver_threshold = 1.0e-14; //!< threshold to select null space during SVD in eigenproblem
+  //! threshold to select null space during SVD in eigenproblem, rescaled from double to the working precision
+  value_type_abs m_svd_solver_threshold = precision_scaled<value_type_abs>(1e-14);
 };
 
 } // namespace molpro::linalg::itsolv::subspace

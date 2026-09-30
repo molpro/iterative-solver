@@ -55,16 +55,27 @@ auto allocatev(size_t n, size_t nvec) {
   }
   return result;
 }
+// DistrArraySpan is genuinely distributed (its local buffer must match the
+// same per-rank range that a co-operating Slow array such as DistrArrayMPI3
+// uses), so the caller-supplied span must be sized to this rank's local
+// chunk, not the global dimension.
+size_t fast_local_size(size_t n) {
+  auto distribution = molpro::linalg::array::util::make_distribution_spread_remainder<typename Fast::index_type>(
+      n, molpro::mpi::size_global());
+  auto range = distribution.range(molpro::mpi::rank_global());
+  return range.second - range.first;
+}
 auto allocateFast(std::vector<typename Fast::value_type>& buffer,size_t n) {
-  auto result = std::make_unique<Fast>(n, array::Span<typename Fast::value_type>(buffer.data(),n), molpro::mpi::comm_global());
+  auto result = std::make_unique<Fast>(n, array::Span<typename Fast::value_type>(buffer.data(),fast_local_size(n)), molpro::mpi::comm_global());
   result->fill(1.0);
   return result;
 }
 auto allocatevFast(std::vector<typename Fast::value_type>& buffer, size_t n, size_t nvec) {
 std::vector<Fast> result;
 result.reserve(nvec);
+  const auto local_n = fast_local_size(n);
   for (size_t i = 0; i < nvec; ++i) {
-    result.emplace_back(n, molpro::linalg::array::Span<typename Fast::value_type>(&buffer.at(i*n),n), molpro::mpi::comm_global());
+    result.emplace_back(n, molpro::linalg::array::Span<typename Fast::value_type>(&buffer.at(i*local_n),local_n), molpro::mpi::comm_global());
     result.back().fill(1.0);
   }
   return result;
@@ -163,7 +174,7 @@ public:
                           std::unique_ptr<array::ArrayHandler<Slow, Fast>> slow_fast_handler, size_t n = 10000000,
                           size_t n_Slow = 1, size_t n_Fast = 1, bool profile_individual = false,
                           double target_seconds = 1)
-      : m_title(title), m_size(n), m_target_seconds(target_seconds), m_fast_buffer(n*n_Fast), m_bufferSlow(allocate<Slow>(n)),
+      : m_title(title), m_size(n), m_target_seconds(target_seconds), m_fast_buffer(fast_local_size(n)*n_Fast), m_bufferSlow(allocate<Slow>(n)),
         m_bufferFast(allocateFast(m_fast_buffer, n)),  m_buffervSlow(allocatev<Slow>(n, n_Slow)),
         m_buffervFast(allocatevFast(m_fast_buffer, n, n_Fast)), m_profiler(*molpro::Profiler::single()),
         m_fast_slow_handler(std::move(fast_slow_handler)), m_slow_fast_handler(std::move(slow_fast_handler)),

@@ -39,8 +39,7 @@ public:
       : SolverTemplate(std::make_shared<subspace::XSpace<R, Q, P>>(handlers, logger_),
                        std::static_pointer_cast<subspace::ISubspaceSolver<R, Q, P>>(
                            std::make_shared<subspace::SubspaceSolverDIIS<R, Q, P>>(logger_, m_converged)),
-                       handlers, std::make_shared<Statistics>(), logger_),
-        logger(logger_), m_converged(false) {
+                       handlers, std::make_shared<Statistics>(), logger_), m_converged(false) {
     auto xspace = std::dynamic_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace);
     xspace->set_hermiticity(true);
     xspace->set_action_action();
@@ -50,11 +49,12 @@ public:
 
 private:
   std::pair<size_t, value_type> least_important_vector(const subspace::Matrix<value_type>& H) {
-    const auto He = Eigen::Map<const Eigen::MatrixXd>(H.data().data(), H.rows(), H.cols());
+    using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
+    const auto He = Eigen::Map<const matrix_type>(H.data().data(), H.rows(), H.cols());
     std::pair<size_t, value_type> result{0, std::numeric_limits<value_type>::max()};
     if (He.cols() < 2)
       return result;
-    auto evs = Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd>();
+    auto evs = Eigen::SelfAdjointEigenSolver<matrix_type>();
     evs.compute(He);
     //    std::cout << "Eigenvalues: "<<evs.eigenvalues().transpose()<<std::endl;
     //    std::cout << "Eigenvectors:\n"<<evs.eigenvectors()<<std::endl;
@@ -80,8 +80,15 @@ private:
   }
 
 public:
-  int add_vector(R& parameters, R& residual, value_type value) override {
+  // NB: this overrides the VecRef<R> overload of add_vector, not the single-R& overload, because that
+  // is the one actually reached from IterativeSolverAddVector (via the std::vector<R>& overload, which
+  // forwards to this one). The single-R& and std::vector<R>& overloads are left to their inherited
+  // IterativeSolverTemplate implementations, which forward here through virtual dispatch. Previously the
+  // Q-space pruning below (which enforces max_size_qspace) lived in the single-R& overload only, so it
+  // was never executed and the Q space grew without bound.
+  int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     auto prof = this->profiler()->push("itsolv::add_vector");
+    auto& residual = actions.front().get();
     auto error = std::sqrt(this->m_handlers->rr().dot(residual, residual));
     m_converged = error < this->m_convergence_threshold;
     using namespace subspace;
@@ -96,7 +103,7 @@ public:
     }
     //            std::cout << "H after delete Q "<<as_string(H)<<std::endl;
 
-    int nwork = IterativeSolverTemplate<NonLinearEquations, R, Q, P>::add_vector(parameters, residual);
+    int nwork = IterativeSolverTemplate<NonLinearEquations, R, Q, P>::add_vector(parameters, actions);
     this->m_errors.front() = error;
     return nwork;
   }
@@ -125,12 +132,12 @@ public:
   }
 
   //! Set threshold on the norm of parameters that should be considered null
-  void set_norm_thresh(double thresh) { m_norm_thresh = thresh; }
-  double get_norm_thresh() const { return m_norm_thresh; }
+  void set_norm_thresh(value_type_abs thresh) { m_norm_thresh = thresh; }
+  value_type_abs get_norm_thresh() const { return m_norm_thresh; }
   //! Set the smallest singular value in the subspace that can be allowed when
   //! constructing the working set. Smaller singular values will lead to deletion of parameters
-  void set_svd_thresh(double thresh) { m_svd_thresh = thresh; }
-  double get_svd_thresh() const { return m_svd_thresh; }
+  void set_svd_thresh(value_type_abs thresh) { m_svd_thresh = thresh; }
+  value_type_abs get_svd_thresh() const { return m_svd_thresh; }
   //! Set a limit on the maximum size of Q space. This does not include the size of the working space (R) and the D
   //! space
   void set_max_size_qspace(int n) { m_max_size_qspace = n; }
@@ -165,7 +172,6 @@ public:
     //    if (endl)
     //      cout << std::endl;
   }
-  std::shared_ptr<Logger> logger;
 
   size_t end_iteration(R& parameters, R& actions) override {
     auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
@@ -177,8 +183,10 @@ protected:
   // for non-linear problems, actions already contains the residual
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {}
 
-  double m_norm_thresh = 1e-10; //!< vectors with norm less than threshold can be considered null.
-  double m_svd_thresh = 1e-12;  //!< svd values smaller than this mark the null space
+  //! vectors with norm less than threshold can be considered null (rescaled to the working precision)
+  value_type_abs m_norm_thresh = precision_scaled<value_type_abs>(1e-10);
+  //! svd values smaller than this mark the null space (rescaled to the working precision)
+  value_type_abs m_svd_thresh = precision_scaled<value_type_abs>(1e-12);
   int m_max_size_qspace = std::numeric_limits<int>::max(); //!< maximum size of Q space
 };
 

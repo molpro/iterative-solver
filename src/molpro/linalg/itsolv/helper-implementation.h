@@ -4,6 +4,7 @@
 
 #include <molpro/Profiler.h>
 #include <molpro/lapacke.h>
+#include <molpro/linalg/itsolv/helper-dispatch.h>
 #include <molpro/linalg/itsolv/helper.h>
 
 #include "Logger.h"
@@ -24,7 +25,7 @@ namespace molpro::linalg::itsolv {
 
 template <typename value_type>
 std::list<SVD<value_type>> svd_eigen_jacobi(size_t nrows, size_t ncols, const array::Span<value_type>& m,
-                                            double threshold) {
+                                            real_type_t<value_type> threshold) {
   auto mat = Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(m.data(), nrows, ncols);
 #if EIGEN_VERSION_AT_LEAST(3, 4, 90)
   // Cast to unsigned int to avoid -Wdeprecated-enum-enum-conversion: the two
@@ -54,7 +55,7 @@ std::list<SVD<value_type>> svd_eigen_jacobi(size_t nrows, size_t ncols, const ar
 
 template <typename value_type>
 std::list<SVD<value_type>> svd_eigen_bdcsvd(size_t nrows, size_t ncols, const array::Span<value_type>& m,
-                                            double threshold) {
+                                            real_type_t<value_type> threshold) {
   auto mat = Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(m.data(), nrows, ncols);
   auto svd = Eigen::BDCSVD<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(mat, Eigen::ComputeThinV);
   auto svd_system = std::list<SVD<value_type>>{};
@@ -73,17 +74,27 @@ std::list<SVD<value_type>> svd_eigen_bdcsvd(size_t nrows, size_t ncols, const ar
   return svd_system;
 }
 
-#if defined HAVE_CBLAS
+#ifdef HAVE_LAPACKE
+/*!
+ * @brief Singular value decomposition through LAPACK's divide-and-conquer driver (?gesdd).
+ *
+ * Only instantiable for the scalar types LAPACK provides kernels for; @see has_lapack_kernel. The
+ * precision-generic path is svd_eigen_jacobi(), which svd_system() uses by default.
+ */
 template <typename value_type>
-std::list<SVD<value_type>> svd_lapacke_dgesdd(size_t nrows, size_t ncols, const array::Span<value_type>& mat,
-                                              double threshold) {
-  int info;
-  int m = nrows;
-  int n = ncols;
-  int sdim = std::min(m, n);
-  std::vector<double> sv(sdim), u(nrows * nrows), v(ncols * ncols);
-  info = LAPACKE_dgesdd(LAPACK_ROW_MAJOR, 'A', int(nrows), int(ncols), const_cast<double*>(mat.data()), int(ncols),
-                        sv.data(), u.data(), int(nrows), v.data(), int(ncols));
+std::list<SVD<value_type>> svd_lapacke_gesdd(size_t nrows, size_t ncols, const array::Span<value_type>& mat,
+                                             real_type_t<value_type> threshold) {
+  static_assert(has_lapack_kernel_v<value_type>, "LAPACK has no ?gesdd kernel for this scalar type");
+  const size_t sdim = std::min(nrows, ncols);
+  // ?gesdd destroys its input, so hand it a copy
+  std::vector<value_type> a(mat.begin(), mat.end());
+  std::vector<real_type_t<value_type>> sv(sdim);
+  std::vector<value_type> u(nrows * nrows), v(ncols * ncols);
+  const auto info =
+      lapack::gesdd(LAPACK_ROW_MAJOR, 'A', lapack_int(nrows), lapack_int(ncols), a.data(), lapack_int(ncols), sv.data(),
+                    u.data(), lapack_int(nrows), v.data(), lapack_int(ncols));
+  if (info != 0)
+    throw std::runtime_error("?gesdd (singular value decomposition) failed with info = " + std::to_string(info));
   auto svd_system = std::list<SVD<value_type>>{};
   for (int i = int(ncols) - 1; i >= 0; --i) {
     if (std::abs(sv[i]) < threshold) {
@@ -99,17 +110,22 @@ std::list<SVD<value_type>> svd_lapacke_dgesdd(size_t nrows, size_t ncols, const 
   return svd_system;
 }
 
+//! @copydoc svd_lapacke_gesdd ; this one uses the QR iteration driver (?gesvd)
 template <typename value_type>
-std::list<SVD<value_type>> svd_lapacke_dgesvd(size_t nrows, size_t ncols, const array::Span<value_type>& mat,
-                                              double threshold) {
-  int info;
-  int m = nrows;
-  int n = ncols;
-  int sdim = std::min(m, n);
-  std::vector<double> sv(sdim), u(nrows * nrows), v(ncols * ncols);
-  std::vector<double> superb(sdim - 1);
-  info = LAPACKE_dgesvd(LAPACK_ROW_MAJOR, 'N', 'A', int(nrows), int(ncols), const_cast<double*>(mat.data()), int(ncols),
-                        sv.data(), u.data(), int(nrows), v.data(), int(ncols), superb.data());
+std::list<SVD<value_type>> svd_lapacke_gesvd(size_t nrows, size_t ncols, const array::Span<value_type>& mat,
+                                             real_type_t<value_type> threshold) {
+  static_assert(has_lapack_kernel_v<value_type>, "LAPACK has no ?gesvd kernel for this scalar type");
+  const size_t sdim = std::min(nrows, ncols);
+  // ?gesvd destroys its input, so hand it a copy
+  std::vector<value_type> a(mat.begin(), mat.end());
+  std::vector<real_type_t<value_type>> sv(sdim);
+  std::vector<value_type> u(nrows * nrows), v(ncols * ncols);
+  std::vector<real_type_t<value_type>> superb(sdim > 0 ? sdim - 1 : 0);
+  const auto info = lapack::gesvd(LAPACK_ROW_MAJOR, 'N', 'A', lapack_int(nrows), lapack_int(ncols), a.data(),
+                                  lapack_int(ncols), sv.data(), u.data(), lapack_int(nrows), v.data(),
+                                  lapack_int(ncols), superb.data());
+  if (info != 0)
+    throw std::runtime_error("?gesvd (singular value decomposition) failed with info = " + std::to_string(info));
   auto svd_system = std::list<SVD<value_type>>{};
   for (int i = int(ncols) - 1; i >= 0; --i) {
     if (std::abs(sv[i]) < threshold) {
@@ -127,92 +143,21 @@ std::list<SVD<value_type>> svd_lapacke_dgesvd(size_t nrows, size_t ncols, const 
 
 #endif
 
-#ifdef MOLPRO
-extern "C" int dsyev_c(char, char, int, double*, int, double*);
-#endif
-
-/**
- * A wrapper function for lapacke_dsyev (linear eigensystem solver) from the lapack C interface (lapacke.h).
- * @param[in] matrix the input matrix (will not be altered!). Must be square. Must be dimension*dimension elements long.
- * @param[out] eigenvectors the matrix of eigenvectors, row major ordering. Must be square and the same size as matrix.
- * @param[out] eigenvalues a list of eigenvalues. Must be the length specified by the 'dimension' parameter.
- * @param[in] dimension length of one axis of the matrix.
- * \returns status. If 0, successful exit. If -i, the ith argument had an illegal value. If i, the algorithm failed to
- * converge.
+/*!
+ * @brief Eigen-decomposition of a real symmetric matrix in double precision.
+ *
+ * Retained for backwards compatibility; a thin forwarder to the precision-generic
+ * eigensolver_hermitian(), which dispatches to LAPACK or to Eigen depending on the scalar type and
+ * on what this build found. @see eigensolver_hermitian for the layout contract and return value.
  */
 inline int eigensolver_lapacke_dsyev(std::span<const double> matrix, std::span<double> eigenvectors,
-                              std::span<double> eigenvalues, const size_t dimension) {
-
-  // validate input
-  if (eigenvectors.size() != matrix.size()) {
-    throw std::runtime_error("Matrix of eigenvectors and input matrix are not the same size!");
-  }
-
-  if (eigenvectors.size() != dimension * dimension || eigenvalues.size() != dimension) {
-    throw std::runtime_error("Size of eigenvectors/eigenvlaues do not match dimension!");
-  }
-
-  // magic letters
-  //  static const char compute_eigenvalues = 'N';
-  static const char compute_eigenvalues_eigenvectors = 'V';
-  //  static const char store_upper_triangle = 'U';
-  static const char store_lower_triangle = 'L';
-
-  // copy input matrix (lapack overwrites)
-  std::copy(matrix.begin(), matrix.end(), eigenvectors.begin());
-
-  // set lapack vars
-  lapack_int status;
-  lapack_int leading_dimension = dimension;
-  lapack_int order = dimension;
-
-  // call to lapack
-#ifdef MOLPRO
-  status = dsyev_c(compute_eigenvalues_eigenvectors, store_lower_triangle, order, eigenvectors.data(),
-                   leading_dimension, eigenvalues.data());
-#else
-  status = LAPACKE_dsyev(LAPACK_COL_MAJOR, compute_eigenvalues_eigenvectors, store_lower_triangle, order,
-                         eigenvectors.data(), leading_dimension, eigenvalues.data());
-#endif
-
-  return status;
+                                     std::span<double> eigenvalues, const size_t dimension) {
+  return eigensolver_hermitian<double>(matrix, eigenvectors, eigenvalues, dimension);
 }
 
-/**
- * A wrapper function for lapacke_dsyev (linear eigensystem solver) from the lapack C interface (lapacke.h).
- * @param[in] matrix the input matrix (will not be altered!). Must be square. Must be dimension*dimension elements long.
- * @param[in] dimension length of one axis of the matrix.
- * \returns a std::list of instances of SVD, a struct containing one eigenvalue and one eigenvector. For a real,
- * symmetric matrix, these are equivalent to singular values, and S/D (which are both the same).
- */
+//! @copydoc eigensolver_lapacke_dsyev
 inline std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::span<const double> matrix) {
-  std::vector<double> eigvecs(dimension * dimension);
-  std::vector<double> eigvals(dimension);
-
-  // call to lapack
-  int success = eigensolver_lapacke_dsyev(matrix, eigvecs, eigvals, dimension);
-  if (success < 0) {
-    throw std::invalid_argument("Invalid argument of eigensolver_lapacke_dsyev: ");
-  }
-  if (success > 0) {
-    throw std::runtime_error("Lapacke_dsyev (eigensolver) failed to converge. "
-                             " elements of an intermediate tridiagonal form did not converge to zero.");
-  }
-
-  auto eigensystem = std::list<SVD<double>>{};
-
-  // populate eigensystem
-  for (int i = dimension - 1; i >= 0;
-       i--) { // note: flipping this axis gives parity with results of eigen::jacobiSVD
-    auto temp_eigenproblem = SVD<double>{};
-    temp_eigenproblem.value = eigvals[i];
-    for (size_t j = 0; j < dimension; j++) {
-      temp_eigenproblem.v.emplace_back(eigvecs[j + (dimension * i)]);
-    }
-    eigensystem.emplace_back(temp_eigenproblem);
-  }
-
-  return eigensystem;
+  return eigensolver_hermitian<double>(dimension, matrix);
 }
 
 /**
@@ -223,7 +168,7 @@ inline std::list<SVD<double>> eigensolver_lapacke_dsyev(size_t dimension, std::s
  * \returns the rank. For an empty matrix, returns 0.
  */
 template <typename value_type>
-size_t get_rank(std::span<value_type> eigenvalues, value_type threshold) {
+size_t get_rank(std::span<const value_type> eigenvalues, value_type threshold) {
   if (eigenvalues.size() == 0) {
     return 0;
   }
@@ -242,49 +187,61 @@ size_t get_rank(std::span<value_type> eigenvalues, value_type threshold) {
  * \returns the rank. For an empty matrix, returns 0.
  */
 template <typename value_type>
-size_t get_rank(std::list<SVD<value_type>> svd_system, value_type threshold) {
-  // compute max
-  value_type max_value = 0;
-  std::list<SVD<double>>::iterator it;
+size_t get_rank(std::list<SVD<value_type>> svd_system, real_type_t<value_type> threshold) {
+  // a singular value, and the eigenvalue of a hermitian matrix, is real even for a complex problem
+  real_type_t<value_type> max_value = 0;
+  typename std::list<SVD<value_type>>::iterator it;
   for (it = svd_system.begin(); it != svd_system.end(); it++) {
-    if (it->value > max_value) {
-      max_value = it->value;
+    if (real_part(it->value) > max_value) {
+      max_value = real_part(it->value);
     }
   }
   // scale threshold
-  value_type threshold_scaled = threshold * max_value;
+  const real_type_t<value_type> threshold_scaled = threshold * max_value;
 
   size_t rank = 0;
   // get rank
   for (it = svd_system.begin(); it != svd_system.end(); it++) {
-    if (it->value > threshold_scaled) {
+    if (real_part(it->value) > threshold_scaled) {
       rank += 1;
     }
   }
   return rank;
 }
 
-template <typename value_type, typename std::enable_if_t<!is_complex<value_type>{}, std::nullptr_t>>
-std::list<SVD<value_type>> svd_system(size_t nrows, size_t ncols, const array::Span<value_type>& m, double threshold,
-                                      bool hermitian, bool reduce_to_rank) {
+namespace detail {
+
+/*!
+ * @brief Implementation of svd_system(), shared by its real and complex overloads.
+ *
+ * The two overloads exist only to give the public declarations distinct signatures; the algorithm is
+ * the same for both, and the hermitian branch dispatches to ?syev/?heev or to Eigen depending on the
+ * scalar type.
+ */
+template <typename value_type>
+std::list<SVD<value_type>> svd_system_impl(size_t nrows, size_t ncols, const array::Span<value_type>& m,
+                                           real_type_t<value_type> threshold, bool hermitian, bool reduce_to_rank) {
   std::list<SVD<value_type>> svds;
   assert(m.size() == nrows * ncols);
   if (m.empty())
     return {};
   if (hermitian) {
     assert(nrows == ncols);
-    svds = eigensolver_lapacke_dsyev(nrows, m);
+    // m arrives row-major, as subspace::Matrix stores it, while eigensolver_hermitian reads its input
+    // column-major. For a complex hermitian matrix the two differ by a conjugation, so transpose it.
+    using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
+    using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+    const matrix_type a = Eigen::Map<const row_major_type>(m.data(), nrows, ncols);
+    svds = eigensolver_hermitian<value_type>(nrows, std::span<const value_type>{a.data(), size_t(a.size())});
     for (auto s = svds.begin(); s != svds.end();)
-      if (s->value > threshold)
+      if (real_part(s->value) > threshold)
         s = svds.erase(s);
       else
         ++s;
   } else {
-    //#if defined HAVE_LAPACKE
-    //    if (nrows > 16)
-    //      return svd_lapacke_dgesdd<value_type>(nrows, ncols, m, threshold);
-    //    return svd_lapacke_dgesvd<value_type>(nrows, ncols, m, threshold);
-    //#endif
+    // The general (non-hermitian) decomposition goes through Eigen for every scalar type: the
+    // subspace matrices are small, and ?gesdd/?gesvd (svd_lapacke_gesdd/svd_lapacke_gesvd above)
+    // offer nothing here that would justify differing results between precisions.
     svds = svd_eigen_jacobi<value_type>(nrows, ncols, m, threshold);
     // return svd_eigen_bdcsvd<value_type>(nrows, ncols, m, threshold);
   }
@@ -299,11 +256,18 @@ std::list<SVD<value_type>> svd_system(size_t nrows, size_t ncols, const array::S
   return svds;
 }
 
+} // namespace detail
+
+template <typename value_type, typename std::enable_if_t<!is_complex<value_type>{}, std::nullptr_t>>
+std::list<SVD<value_type>> svd_system(size_t nrows, size_t ncols, const array::Span<value_type>& m,
+                                      real_type_t<value_type> threshold, bool hermitian, bool reduce_to_rank) {
+  return detail::svd_system_impl<value_type>(nrows, ncols, m, threshold, hermitian, reduce_to_rank);
+}
+
 template <typename value_type, typename std::enable_if_t<is_complex<value_type>{}, int>>
-std::list<SVD<value_type>> svd_system(size_t nrows, size_t ncols, const array::Span<value_type>& m, double threshold,
-                                      bool hermitian, bool reduce_to_rank) {
-  assert(false); // Complex not implemented here
-  return {};
+std::list<SVD<value_type>> svd_system(size_t nrows, size_t ncols, const array::Span<value_type>& m,
+                                      real_type_t<value_type> threshold, bool hermitian, bool reduce_to_rank) {
+  return detail::svd_system_impl<value_type>(nrows, ncols, m, threshold, hermitian, reduce_to_rank);
 }
 
 template <typename value_type>
@@ -312,82 +276,225 @@ void printMatrix(const std::vector<value_type>& m, size_t rows, size_t cols, std
     << Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(m.data(), rows, cols) << std::endl;
 }
 
+namespace detail {
+
+/*!
+ * @brief Orders eigenvalues by non-descending real part, then by imaginary part.
+ *
+ * The magnitude of the imaginary part is compared before its sign so that distinct complex pairs
+ * sharing a real part stay together, and the two members of a pair come out in a fixed order.
+ */
+template <typename real_type>
+struct eigenvalue_order {
+  bool operator()(const std::complex<real_type>& lhs, const std::complex<real_type>& rhs) const {
+    using std::abs;
+    if (lhs.real() != rhs.real()) {
+      return lhs.real() < rhs.real();
+    }
+    if (abs(lhs.imag()) != abs(rhs.imag())) {
+      // This fixes the order of distinct complex eigenvalue pairs that share the same real part
+      return abs(lhs.imag()) < abs(rhs.imag());
+    }
+    // This fixes the order within a complex eigenvalue pair
+    return lhs.imag() < rhs.imag();
+  }
+};
+
+//! A generalised eigenproblem reduced to a standard one by symmetric orthogonalisation of the metric
+template <typename value_type>
+struct orthogonalised_subspace {
+  using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
+  matrix_type S;              //!< the metric, column-major
+  matrix_type transformation; //!< X, of dimension x rank, with X^dagger S X = I
+  matrix_type Hbar;           //!< X^dagger H X, of rank x rank
+  int rank = 0;               //!< the number of directions of the metric that were kept
+};
+
+/*!
+ * @brief Reduce H C = S C E to the standard eigenproblem Hbar U = U E, whose solution is C = X U.
+ *
+ * The metric is hermitian and positive semi-definite, so its eigendecomposition is also its SVD.
+ * Directions whose singular value falls below @p svdThreshold relative to the largest are discarded;
+ * that is how a rank-deficient metric is handled, and it is why the reduced problem can be smaller
+ * than the subspace.
+ *
+ * @param matrix H, row-major, as subspace::Matrix stores it
+ * @param metric S, row-major, as subspace::Matrix stores it
+ */
+template <typename value_type>
+orthogonalised_subspace<value_type> orthogonalise_subspace(const std::vector<value_type>& matrix,
+                                                           const std::vector<value_type>& metric, size_t dimension,
+                                                           real_type_t<value_type> svdThreshold, int verbosity) {
+  using std::abs;
+  using std::sqrt;
+  using real_t = real_type_t<value_type>;
+  using matrix_type = typename orthogonalised_subspace<value_type>::matrix_type;
+  using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  // a metric eigenvalue below this marks a singular direction; calibrated for double precision
+  const real_t null_metric_eigenvalue_tol = precision_scaled<value_type>(1e-14);
+
+  orthogonalised_subspace<value_type> result;
+  const matrix_type H = Eigen::Map<const row_major_type>(matrix.data(), dimension, dimension);
+  result.S = Eigen::Map<const row_major_type>(metric.data(), dimension, dimension);
+
+  // Perform an eigenvalue decomposition of the metric. The metric is necessarily hermitian, so the
+  // hermitian eigensolver applies; it reads its input column-major, which is why S was materialised
+  // above rather than mapped straight onto the caller's row-major buffer.
+  Eigen::Vector<real_t, Eigen::Dynamic> metricEvals(dimension);
+  matrix_type metricEvecs(dimension, dimension);
+  const int success = eigensolver_hermitian<value_type>(
+      std::span<const value_type>{result.S.data(), size_t(result.S.size())},
+      {metricEvecs.data(), dimension * dimension}, {metricEvals.data(), dimension}, dimension);
+  if (success != 0) {
+    throw std::runtime_error("Eigensolver did not converge");
+  }
+  result.rank = int(get_rank<real_t>(std::span<const real_t>{metricEvals.data(), dimension}, svdThreshold));
+  const int rank = result.rank;
+
+  if (verbosity > 1 && rank < int(dimension))
+    molpro::cout << "SVD rank " << rank << " in subspace of dimension " << dimension << std::endl;
+  if (verbosity > 2 && rank < int(dimension))
+    molpro::cout << "singular values " << metricEvals.transpose() << std::endl;
+
+  // Transform H into a symmetrically orthogonalized basis via (S^{-1/2})^\dagger H S^{-1/2}
+  // taking into account the possibility of rank-deficiency of S (aka: zero SV).
+  // The eigenvalues come out in ascending order, so the retained directions are the trailing block.
+  Eigen::Vector<value_type, Eigen::Dynamic> svmh(rank);
+  for (int k = 0; k < rank; k++) {
+    const real_t lambda = metricEvals(dimension - rank + k);
+    assert(abs(lambda) <= svdThreshold || lambda >= 0); // metric is supposed to be positive (semi-)definite
+    svmh(k) = lambda > null_metric_eigenvalue_tol ? value_type(1 / sqrt(lambda)) : value_type(0);
+  }
+  const auto retained = metricEvecs.rightCols(rank);
+  result.Hbar = svmh.asDiagonal() * retained.adjoint() * H * retained * svmh.asDiagonal();
+  result.transformation = retained * svmh.asDiagonal();
+  return result;
+}
+
+} // namespace detail
+
 template <typename value_type, typename std::enable_if_t<is_complex<value_type>{}, int>>
 void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>& eigenvalues,
                   const std::vector<value_type>& matrix, const std::vector<value_type>& metric, size_t dimension,
-                  bool hermitian, double svdThreshold, int verbosity, bool condone_complex) {
-  assert(false); // Complex not implemented here
+                  bool hermitian, real_type_t<value_type> svdThreshold, int verbosity,
+                  std::vector<std::pair<std::size_t, value_type>>* imag_eval_parts) {
+  using std::abs;
+  using std::sqrt;
+  using real_t = real_type_t<value_type>;
+  using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
+  using vector_type = Eigen::Vector<value_type, Eigen::Dynamic>;
+  // A complex scalar represents a complex eigenvalue directly, so, unlike the real overload, this one
+  // never has to split an eigenvalue into a real part and a separately tracked imaginary part.
+  if (imag_eval_parts)
+    imag_eval_parts->clear();
+  const real_t null_eigenvalue_tol = precision_scaled<value_type>(1e-12);
+
+  auto prof = molpro::Profiler::single();
+  prof->start("itsolv::eigenproblem");
+  const auto subspace = detail::orthogonalise_subspace<value_type>(matrix, metric, dimension, svdThreshold, verbosity);
+  const int rank = subspace.rank;
+  eigenvectors.resize(dimension * rank);
+  eigenvalues.resize(rank);
+  if (rank == 0) {
+    prof->stop();
+    return;
+  }
+
+  // Perform an eigendecomposition of the transformed matrix. Hbar is not self-adjoint in general, so
+  // its spectrum is complex -- which is exactly what the scalar type of this overload can hold.
+  Eigen::ComplexEigenSolver<matrix_type> s(subspace.Hbar);
+  if (s.info() != Eigen::Success) {
+    throw std::runtime_error("Eigensolver of the subspace matrix did not converge");
+  }
+  vector_type subspaceEigenvalues = s.eigenvalues();
+  // Convert eigenvectors back into original basis (minus singular dimensions)
+  matrix_type subspaceEigenvectors = subspace.transformation * s.eigenvectors();
+
+  // Determine order of eigenvalues such that they come in non-descending order of their real part
+  // (and non-descending order of imaginary part, in case of equal real parts)
+  Eigen::PermutationMatrix<Eigen::Dynamic, Eigen::Dynamic> perm(subspaceEigenvalues.size());
+  perm.setIdentity();
+  std::ranges::sort(perm.indices(), detail::eigenvalue_order<real_t>{},
+                    [&subspaceEigenvalues](auto idx) { return subspaceEigenvalues[idx]; });
+  subspaceEigenvectors = subspaceEigenvectors * perm;
+  subspaceEigenvalues = perm.transpose() * subspaceEigenvalues;
+
+  if (!hermitian) {
+    // The eigenvectors of a self-adjoint Hbar are orthonormal, so back-transforming them already
+    // yields an S-orthonormal set; otherwise they have to be normalised explicitly.
+    for (Eigen::Index k = 0; k < subspaceEigenvectors.cols(); k++) {
+      const auto ovl = subspaceEigenvectors.col(k).dot(subspace.S * subspaceEigenvectors.col(k));
+      // S is supposed to be positive (semi-)definite implying that ovl must be a non-negative real number
+      assert(abs(ovl.imag()) < precision_scaled<value_type>(1e-10));
+      if (ovl.real() > null_eigenvalue_tol)
+        subspaceEigenvectors.col(k) /= value_type(sqrt(ovl.real()));
+    }
+  }
+
+  // Fix indeterminate phase of eigenvectors by requiring the max component to be real and positive
+  for (Eigen::Index i = 0; i < subspaceEigenvectors.cols(); ++i) {
+    Eigen::Index pivot = 0;
+    for (Eigen::Index j = 1; j < subspaceEigenvectors.rows(); ++j)
+      if (abs(subspaceEigenvectors(j, i)) > abs(subspaceEigenvectors(pivot, i)))
+        pivot = j;
+    const real_t magnitude = abs(subspaceEigenvectors(pivot, i));
+    if (magnitude > 0)
+      subspaceEigenvectors.col(i) *= conjugate(subspaceEigenvectors(pivot, i)) / value_type(magnitude);
+  }
+
+  Eigen::Map<matrix_type>(eigenvectors.data(), dimension, rank) = subspaceEigenvectors;
+  Eigen::Map<vector_type>(eigenvalues.data(), rank) = subspaceEigenvalues;
+  prof->stop();
 }
 
 template <typename value_type, typename std::enable_if_t<!is_complex<value_type>{}, std::nullptr_t>>
 void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>& eigenvalues,
                   const std::vector<value_type>& matrix, const std::vector<value_type>& metric, size_t dimension,
-                  bool hermitian, double svdThreshold, int verbosity, bool condone_complex) {
+                  bool hermitian, real_type_t<value_type> svdThreshold, int verbosity,
+                  std::vector<std::pair<std::size_t, value_type>>* imag_eval_parts) {
+  // let ADL pick up the overloads of extended- and arbitrary-precision scalar types
+  using std::abs;
+  using std::sqrt;
+  // Tolerances calibrated for double precision, rescaled to the precision actually in use
+  const value_type zero_tol = precision_scaled<value_type>(1e-10);            // a quantity that ought to vanish
+  const value_type null_eigenvalue_tol = precision_scaled<value_type>(1e-12); // an eigenvalue that vanishes
   using MatrixT = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
   using ComplexMatrixT = Eigen::Matrix<std::complex<value_type>, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
-  using MatrixRowMajT = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
   using VectorT = Eigen::Vector<value_type, Eigen::Dynamic>;
   using ComplexVectorT = Eigen::Vector<std::complex<value_type>, Eigen::Dynamic>;
 
   auto prof = molpro::Profiler::single();
   prof->start("itsolv::eigenproblem");
-  Eigen::Map<const MatrixRowMajT> HrowMajor(
-      matrix.data(), dimension, dimension);
-  MatrixT H(dimension, dimension);
-  H = HrowMajor;
-  Eigen::Map<const MatrixT> S(metric.data(), dimension, dimension);
+  const auto subspace = detail::orthogonalise_subspace<value_type>(matrix, metric, dimension, svdThreshold, verbosity);
+  const int rank = subspace.rank;
+  const auto& S = subspace.S;
+  const auto& Hbar = subspace.Hbar;
   ComplexMatrixT subspaceEigenvectors;
   ComplexVectorT subspaceEigenvalues;
-
-  // initialisation of variables
-  VectorT metricEvals(dimension);
-  MatrixT metricEvecs(dimension, dimension);
-  int rank = 0;
-
-  // Perform an eigenvalue decomposition of the metric
-  // Note: Since the metric must necessarily be hermitian (and due to its real-valuedness in this
-  // function therefore symmetric), we can use lapacke_dsyev for this
-  int success = eigensolver_lapacke_dsyev(metric, { metricEvecs.data(), dimension * dimension },
-          { metricEvals.data(), dimension }, dimension);
-  if (success != 0) {
-    throw std::runtime_error("Eigensolver did not converge");
+  if (rank == 0) {
+    eigenvectors.clear();
+    eigenvalues.clear();
+    prof->stop();
+    return;
   }
-  rank = get_rank(std::span(metricEvals.data(), dimension), svdThreshold);
-
-  if (verbosity > 1 && rank < S.cols())
-    molpro::cout << "SVD rank " << rank << " in subspace of dimension " << S.cols() << std::endl;
-  if (verbosity > 2 && rank < S.cols())
-    molpro::cout << "singular values " << metricEvals.transpose() << std::endl;
-
-  // Transform H into a symmetrically orthogonalized basis via (S^{-1/2})^\dagger H S^{-1/2}
-  // taking into account the possibility of rank-deficiency of S (aka: zero SV)
-  // Note that since S is hermitian and positive (semi-)definite, its SVD is equal to its
-  // eigendecomposition
-  auto svmh = metricEvals.tail(rank);
-  for (auto k = 0; k < rank; k++) {
-    assert(std::abs(svmh(k)) <= svdThreshold || svmh(k) >= 0); // metric is supposed to be positive (semi-)definite
-    svmh(k) = svmh(k) > 1e-14 ? 1 / std::sqrt(svmh(k)) : 0;
-  }
-  auto Hbar =
-      svmh.asDiagonal() * metricEvecs.rightCols(rank).adjoint() * H * metricEvecs.rightCols(rank) * svmh.asDiagonal();
 
   // Perform an eigendecomposition of the transformed matrix
   Eigen::EigenSolver<MatrixT> s(Hbar);
   subspaceEigenvalues = s.eigenvalues();
-  if (s.eigenvalues().imag().norm() < 1e-10) {
+  if (s.eigenvalues().imag().norm() < zero_tol) {
     // real eigenvalues
     subspaceEigenvalues = subspaceEigenvalues.real();
     subspaceEigenvectors = s.eigenvectors();
     // complex eigenvectors need to be rotated
     // assume that they come in consecutive pairs
     for (int i = 0; i < subspaceEigenvectors.cols() - 1; i++) {
-      if (subspaceEigenvectors.col(i).imag().norm() <= 1e-10) {
+      if (subspaceEigenvectors.col(i).imag().norm() <= zero_tol) {
           continue;
       }
 
       const int j = i + 1;
-      if (std::abs(subspaceEigenvalues(i) - subspaceEigenvalues(j)) >= 1e-10 or
-          subspaceEigenvectors.col(j).imag().norm() <= 1e-10) {
+      if (abs(subspaceEigenvalues(i) - subspaceEigenvalues(j)) >= zero_tol or
+          subspaceEigenvectors.col(j).imag().norm() <= zero_tol) {
           continue;
       }
 
@@ -400,7 +507,7 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     }
 
     // Convert eigenvectors back into original basis (minus singular dimensions)
-    subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * subspaceEigenvectors;
+    subspaceEigenvectors = subspace.transformation * subspaceEigenvectors;
   } else {
     // complex eigenvalues
 #ifdef __INTEL_COMPILER
@@ -411,13 +518,15 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
 #endif
 
     // Convert eigenvectors back into original basis (minus singular dimensions)
-    subspaceEigenvectors = metricEvecs.leftCols(rank) * svmh.asDiagonal() * s.eigenvectors();
+    subspaceEigenvectors = subspace.transformation * s.eigenvectors();
   }
 
   // Determine order of eigenvalues such that they come in non-descending order of their real part
+  // (and non-descending order of imaginary part, in case of equal real parts)
   Eigen::PermutationMatrix<Eigen::Dynamic, Eigen::Dynamic> perm(subspaceEigenvalues.size());
   perm.setIdentity();
-  std::ranges::sort(perm.indices(), std::less<>{}, [&subspaceEigenvalues](auto idx) { return subspaceEigenvalues[idx].real(); });
+  std::ranges::sort(perm.indices(), detail::eigenvalue_order<real_type_t<value_type>>{},
+                    [&subspaceEigenvalues](auto idx) { return subspaceEigenvalues[idx]; });
 
   // Apply determined order to eigenvalues and -vectors
   subspaceEigenvectors = subspaceEigenvectors * perm;
@@ -430,44 +539,66 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   if (!hermitian) {
     for (auto repeat = 0; repeat < 1; ++repeat)
       for (Eigen::Index k = 0; k < subspaceEigenvectors.cols(); k++) {
-        if (std::abs(subspaceEigenvalues(k)) < 1e-12) {
+        if (abs(subspaceEigenvalues(k)) < null_eigenvalue_tol) {
           // special case of zero eigenvalue -- make some real non-zero vector definitely in the null space
-          subspaceEigenvectors.col(k).real() += double(0.3256897) * subspaceEigenvectors.col(k).imag();
+          subspaceEigenvectors.col(k).real() += value_type(0.3256897) * subspaceEigenvectors.col(k).imag();
           subspaceEigenvectors.col(k).imag().setZero();
         }
 
         auto ovl = subspaceEigenvectors.col(k).dot(S * subspaceEigenvectors.col(k));
         // S is supposed to be positive (semi-)definite implying that ovl must be a non-negative real number
-        assert(std::abs(ovl.imag()) < 1e-10);
+        assert(abs(ovl.imag()) < zero_tol);
         assert(ovl.real() > 0);
-        subspaceEigenvectors.col(k) /= std::sqrt(ovl.real());
+        subspaceEigenvectors.col(k) /= sqrt(ovl.real());
       }
   }
 
   // Fix indeterminate phase of eigenvectors by requiring the max component to be positive
   for (std::size_t i = 0; i < subspaceEigenvectors.cols(); ++i) {
     const auto &col = subspaceEigenvectors.col(i);
-    auto it = std::ranges::max_element(col, std::less<>{}, [](auto val) { return std::abs(val); });
+    auto it = std::ranges::max_element(col, std::less<>{}, [](auto val) { return abs(val); });
     auto idx = std::distance(col.begin(), it);
     if (subspaceEigenvectors.col(i)[idx].real() < 0) {
       subspaceEigenvectors.col(i) *= -1;
     }
   }
 
-  if (condone_complex) {
+  if (imag_eval_parts) {
+    // Complex eigenvalues are tolerable -> process them to be able to represent everything
+    // by real-valued vectors
+    imag_eval_parts->clear();
+
     for (Eigen::Index root = 0; root < Hbar.cols(); ++root) {
-      if (subspaceEigenvalues(root).imag() != 0) {
-        // Same procedure as we did for the metric's eigenvectors further up
-        subspaceEigenvalues(root) = subspaceEigenvalues(root + 1) = subspaceEigenvalues(root).real();
-        subspaceEigenvectors.col(root) = subspaceEigenvectors.col(root).real();
-        subspaceEigenvectors.col(root + 1) = subspaceEigenvectors.col(root + 1).imag();
-        ++root;
+      if (subspaceEigenvalues(root).imag() == 0) {
+        continue;
       }
+
+      // Complex-valued eigenvalues must appear as complex conjugate pairs
+      assert(root + 1 < subspaceEigenvalues.size());
+      assert(abs(std::conj(subspaceEigenvalues(root)) - subspaceEigenvalues(root + 1)) < zero_tol);
+
+      imag_eval_parts->emplace_back(root, subspaceEigenvalues(root).imag());
+      imag_eval_parts->emplace_back(root + 1, -subspaceEigenvalues(root).imag());
+
+      // Set the eigenvalue pair to their real-part only (imaginary part is tracked separately in imag_eval_parts)
+      subspaceEigenvalues(root) = subspaceEigenvalues(root + 1) = subspaceEigenvalues(root).real();
+
+      // Pretend the real and imaginary part were separate eigenvectors (this is required in order
+      // to represent all data without the need for using complex numbers).
+      // However, as the eigenvalues are not degenerate, the real and imaginary parts of the eigenvectors
+      // are in fact NOT eigenvectors themselves.
+      // If the true eigenvectors are required, they can easily be recovered from the real and imaginary
+      // parts we store here.
+      subspaceEigenvectors.col(root + 1) = subspaceEigenvectors.col(root).imag();
+      subspaceEigenvectors.col(root) = subspaceEigenvectors.col(root).real();
+
+      // Skip the second eigenvalue in the pair of complex conjugate eigenvalues
+      ++root;
     }
   }
 
-  if ((subspaceEigenvectors - subspaceEigenvectors.real()).norm() > 1e-10 or
-      (subspaceEigenvalues - subspaceEigenvalues.real()).norm() > 1e-10) {
+  if ((subspaceEigenvectors - subspaceEigenvectors.real()).norm() > zero_tol or
+      (subspaceEigenvalues - subspaceEigenvalues.real()).norm() > zero_tol) {
     throw std::runtime_error("unexpected complex solution found");
   }
 
@@ -482,19 +613,20 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
   prof->stop();
 }
 
-template <typename value_type, typename std::enable_if_t<is_complex<value_type>{}, int>>
-void solve_LinearEquations(std::vector<value_type>& solution, std::vector<value_type>& eigenvalues,
-                           const std::vector<value_type>& matrix, const std::vector<value_type>& metric,
-                           const std::vector<value_type>& rhs, const size_t dimension, size_t nroot,
-                           double augmented_hessian, double svdThreshold, int verbosity) {
-  assert(false); // Complex not implemented here
-}
+namespace detail {
 
-template <typename value_type, typename std::enable_if_t<!is_complex<value_type>{}, std::nullptr_t>>
-void solve_LinearEquations(std::vector<value_type>& solution, std::vector<value_type>& eigenvalues,
-                           const std::vector<value_type>& matrix, const std::vector<value_type>& metric,
-                           const std::vector<value_type>& rhs, const size_t dimension, size_t nroot,
-                           double augmented_hessian, double svdThreshold, int verbosity) {
+/*!
+ * @brief Implementation of solve_LinearEquations(), shared by its real and complex overloads.
+ *
+ * Only the augmented-Hessian branch differs between them, and only because Eigen's
+ * GeneralizedEigenSolver handles real matrices alone.
+ */
+template <typename value_type>
+void solve_LinearEquations_impl(std::vector<value_type>& solution, std::vector<value_type>& eigenvalues,
+                                const std::vector<value_type>& matrix, const std::vector<value_type>& metric,
+                                const std::vector<value_type>& rhs, const size_t dimension, size_t nroot,
+                                real_type_t<value_type> augmented_hessian, real_type_t<value_type> svdThreshold,
+                                int verbosity) {
   const Eigen::Index nX = dimension;
   solution.resize(nX * nroot);
   //  std::cout << "augmented_hessian "<<augmented_hessian<<std::endl;
@@ -503,14 +635,18 @@ void solve_LinearEquations(std::vector<value_type>& solution, std::vector<value_
     Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic> subspaceOverlap;
     subspaceMatrix.conservativeResize(nX + 1, nX + 1);
     subspaceOverlap.conservativeResize(nX + 1, nX + 1);
-    subspaceMatrix.block(0, 0, nX, nX) =
-        Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(matrix.data(), nX, nX);
-    subspaceOverlap.block(0, 0, nX, nX) =
-        Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>>(metric.data(), nX, nX);
+    // both arrive row-major, as subspace::Matrix stores them; reading them column-major would
+    // transpose, which is invisible for a real symmetric matrix but conjugates a hermitian one
+    using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+    subspaceMatrix.block(0, 0, nX, nX) = Eigen::Map<const row_major_type>(matrix.data(), nX, nX);
+    subspaceOverlap.block(0, 0, nX, nX) = Eigen::Map<const row_major_type>(metric.data(), nX, nX);
     eigenvalues.resize(nroot);
     for (size_t root = 0; root < nroot; root++) {
       for (Eigen::Index i = 0; i < nX; i++) {
-        subspaceMatrix(i, nX) = subspaceMatrix(nX, i) = -augmented_hessian * rhs[i + nX * root];
+        // rhs is a row-major dimension x nroot matrix, as the straight-solve branch below also reads it
+        subspaceMatrix(i, nX) = -augmented_hessian * rhs[i * nroot + root];
+        // the augmented matrix is hermitian, which for a real element type means simply symmetric
+        subspaceMatrix(nX, i) = conjugate(subspaceMatrix(i, nX));
         subspaceOverlap(i, nX) = subspaceOverlap(nX, i) = 0;
       }
       subspaceMatrix(nX, nX) = 0;
@@ -518,19 +654,48 @@ void solve_LinearEquations(std::vector<value_type>& solution, std::vector<value_
       //      std::cout << "subspace augmented hessian subspaceMatrix\n"<<subspaceMatrix<<std::endl;
       //      std::cout << "subspace augmented hessian subspaceOverlap\n"<<subspaceOverlap<<std::endl;
 
-      Eigen::GeneralizedEigenSolver<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> s(subspaceMatrix,
-                                                                                                 subspaceOverlap);
-      auto eval = s.eigenvalues();
-      auto evec = s.eigenvectors();
-      Eigen::Index imax = 0;
-      for (Eigen::Index i = 0; i < nX + 1; i++)
-        if (eval(i).real() < eval(imax).real())
-          imax = i;
-      eigenvalues[root] = eval(imax).real();
-      auto Solution = evec.col(imax).real().head(nX) / (augmented_hessian * evec.real()(nX, imax));
-      for (auto k = 0; k < nX; k++)
-        solution[k + nX * root] = Solution(k);
-      //      std::cout << "subspace augmented hessian solution\n"<<Solution<<std::endl;
+      if constexpr (is_complex<value_type>{}) {
+        // Eigen's GeneralizedEigenSolver is real-only, so reduce to a standard problem the same way
+        // eigenproblem() does: the augmented overlap is hermitian and positive semi-definite.
+        using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
+        std::vector<value_type> augmented_matrix(subspaceMatrix.size()), augmented_overlap(subspaceOverlap.size());
+        // orthogonalise_subspace() reads its arguments row-major
+        Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(
+            augmented_matrix.data(), nX + 1, nX + 1) = subspaceMatrix;
+        Eigen::Map<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(
+            augmented_overlap.data(), nX + 1, nX + 1) = subspaceOverlap;
+        const auto augmented = detail::orthogonalise_subspace<value_type>(augmented_matrix, augmented_overlap,
+                                                                          nX + 1, svdThreshold, verbosity);
+        if (augmented.rank == 0)
+          throw std::runtime_error("augmented Hessian: the augmented overlap matrix has no non-singular direction");
+        Eigen::ComplexEigenSolver<matrix_type> s(augmented.Hbar);
+        if (s.info() != Eigen::Success)
+          throw std::runtime_error("augmented Hessian: eigensolver did not converge");
+        auto eval = s.eigenvalues();
+        Eigen::Index imax = 0;
+        for (Eigen::Index i = 0; i < eval.size(); i++)
+          if (eval(i).real() < eval(imax).real())
+            imax = i;
+        eigenvalues[root] = eval(imax);
+        const Eigen::Vector<value_type, Eigen::Dynamic> evec = augmented.transformation * s.eigenvectors().col(imax);
+        const value_type scale = value_type(augmented_hessian) * evec(nX);
+        for (Eigen::Index k = 0; k < nX; k++)
+          solution[k + nX * root] = evec(k) / scale;
+      } else {
+        Eigen::GeneralizedEigenSolver<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> s(subspaceMatrix,
+                                                                                                   subspaceOverlap);
+        auto eval = s.eigenvalues();
+        auto evec = s.eigenvectors();
+        Eigen::Index imax = 0;
+        for (Eigen::Index i = 0; i < nX + 1; i++)
+          if (eval(i).real() < eval(imax).real())
+            imax = i;
+        eigenvalues[root] = eval(imax).real();
+        auto Solution = evec.col(imax).real().head(nX) / (augmented_hessian * evec.real()(nX, imax));
+        for (auto k = 0; k < nX; k++)
+          solution[k + nX * root] = Solution(k);
+        //      std::cout << "subspace augmented hessian solution\n"<<Solution<<std::endl;
+      }
     }
   } else { // straight solution of linear equations
     Eigen::Map<const Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> subspaceMatrixR(
@@ -556,15 +721,50 @@ void solve_LinearEquations(std::vector<value_type>& solution, std::vector<value_
   }
 }
 
+} // namespace detail
+
+template <typename value_type, typename std::enable_if_t<is_complex<value_type>{}, int>>
+void solve_LinearEquations(std::vector<value_type>& solution, std::vector<value_type>& eigenvalues,
+                           const std::vector<value_type>& matrix, const std::vector<value_type>& metric,
+                           const std::vector<value_type>& rhs, const size_t dimension, size_t nroot,
+                           real_type_t<value_type> augmented_hessian, real_type_t<value_type> svdThreshold,
+                           int verbosity) {
+  detail::solve_LinearEquations_impl<value_type>(solution, eigenvalues, matrix, metric, rhs, dimension, nroot,
+                                                 augmented_hessian, svdThreshold, verbosity);
+}
+
 template <typename value_type, typename std::enable_if_t<!is_complex<value_type>{}, std::nullptr_t>>
-void solve_DIIS(std::vector<value_type>& solution, const std::vector<value_type>& matrix, const size_t dimension,
-                double svdThreshold, int verbosity) {
+void solve_LinearEquations(std::vector<value_type>& solution, std::vector<value_type>& eigenvalues,
+                           const std::vector<value_type>& matrix, const std::vector<value_type>& metric,
+                           const std::vector<value_type>& rhs, const size_t dimension, size_t nroot,
+                           real_type_t<value_type> augmented_hessian, real_type_t<value_type> svdThreshold,
+                           int verbosity) {
+  detail::solve_LinearEquations_impl<value_type>(solution, eigenvalues, matrix, metric, rhs, dimension, nroot,
+                                                 augmented_hessian, svdThreshold, verbosity);
+}
+
+namespace detail {
+
+/*!
+ * @brief Implementation of solve_DIIS(), shared by its real and complex overloads.
+ *
+ * The extrapolation coefficients solve the DIIS equations augmented with the Lagrange multiplier that
+ * constrains them to sum to one; the algebra is the same whatever the scalar type.
+ */
+template <typename value_type>
+void solve_DIIS_impl(std::vector<value_type>& solution, const std::vector<value_type>& matrix, const size_t dimension,
+                     real_type_t<value_type> svdThreshold, int verbosity) {
+  // let ADL pick up the overloads of extended- and arbitrary-precision scalar types
+  using std::abs;
+  using std::isnan;
+  using VectorT = Eigen::Vector<value_type, Eigen::Dynamic>;
+  using MatrixT = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
   auto nAug = dimension + 1;
   //  auto nQ = dimension - 1;
   solution.resize(dimension);
   //  if (nQ > 0) {
-  Eigen::VectorXd Rhs(nAug), Coeffs(nAug);
-  Eigen::MatrixXd BAug(nAug, nAug);
+  VectorT Rhs(nAug), Coeffs(nAug);
+  MatrixT BAug(nAug, nAug);
   //    Eigen::Matrix<value_type, Eigen::Dynamic, 1> Rhs(nQ), Coeffs(nQ);
   //    Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic> B(nQ, nQ);
   //
@@ -582,8 +782,7 @@ void solve_DIIS(std::vector<value_type>& solution, const std::vector<value_type>
   //        molpro::cout << "Rhs:" << std::endl << Rhs << std::endl;
 
   // invert the system, determine extrapolation coefficients.
-  Eigen::JacobiSVD<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> svd(BAug, Eigen::ComputeThinU |
-                                                                                            Eigen::ComputeThinV);
+  Eigen::JacobiSVD<MatrixT> svd(BAug, Eigen::ComputeThinU | Eigen::ComputeThinV);
 
   //  std::cout << "svd thresholds " << svdThreshold << "," << svd.singularValues().maxCoeff() << std::endl;
   //  std::cout << "singular values " << svd.singularValues().transpose() << std::endl;
@@ -598,7 +797,7 @@ void solve_DIIS(std::vector<value_type>& solution, const std::vector<value_type>
   if (verbosity > 1)
     molpro::cout << "Combination of iteration vectors: " << Coeffs.transpose() << std::endl;
   for (size_t k = 0; k < (size_t)Coeffs.rows(); k++) {
-    if (std::isnan(std::abs(Coeffs(k)))) {
+    if (isnan(abs(Coeffs(k)))) {
       molpro::cout << "B:" << std::endl << BAug << std::endl;
       molpro::cout << "Rhs:" << std::endl << Rhs << std::endl;
       molpro::cout << "Combination of iteration vectors: " << Coeffs.transpose() << std::endl;
@@ -607,6 +806,21 @@ void solve_DIIS(std::vector<value_type>& solution, const std::vector<value_type>
     solution[k] = Coeffs(k);
   }
 }
+
+} // namespace detail
+
+template <typename value_type, typename std::enable_if_t<is_complex<value_type>{}, int>>
+void solve_DIIS(std::vector<value_type>& solution, const std::vector<value_type>& matrix, const size_t dimension,
+                real_type_t<value_type> svdThreshold, int verbosity) {
+  detail::solve_DIIS_impl<value_type>(solution, matrix, dimension, svdThreshold, verbosity);
+}
+
+template <typename value_type, typename std::enable_if_t<!is_complex<value_type>{}, std::nullptr_t>>
+void solve_DIIS(std::vector<value_type>& solution, const std::vector<value_type>& matrix, const size_t dimension,
+                real_type_t<value_type> svdThreshold, int verbosity) {
+  detail::solve_DIIS_impl<value_type>(solution, matrix, dimension, svdThreshold, verbosity);
+}
+
 } // namespace molpro::linalg::itsolv
 
 

@@ -77,5 +77,8 @@ int main(int argc, char* argv[]) {
         "DistrArrayGA.iterator_vs_native." + std::to_string(length), length, 0.2);
 #endif
   }
+#ifdef LINEARALGEBRA_ARRAY_GA
+  GA_Terminate();
+#endif
   molpro::mpi::finalize();
 }

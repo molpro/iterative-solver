@@ -14,6 +14,7 @@
 namespace molpro::linalg::itsolv::subspace {
 namespace xspace {
 //! New sections of equation data
+template <typename T>
 struct NewData {
   NewData(size_t nQnew, size_t nX, size_t nRHS) {
     for (auto d : {EqnData::H, EqnData::S}) {
@@ -24,9 +25,9 @@ struct NewData {
     qq[EqnData::rhs].resize({nQnew, nRHS});
   }
 
-  SubspaceData qq = null_data<EqnData::H, EqnData::S>(); //!< data block between new paramters
-  SubspaceData qx = null_data<EqnData::H, EqnData::S>(); //!< data block between new parameters and current X space
-  SubspaceData xq = null_data<EqnData::H, EqnData::S>(); //!< data block between current X space and new parameters
+  SubspaceData<T> qq = null_data<T, EqnData::H, EqnData::S>(); //!< data block between new paramters
+  SubspaceData<T> qx = null_data<T, EqnData::H, EqnData::S>(); //!< data block between new parameters and current X space
+  SubspaceData<T> xq = null_data<T, EqnData::H, EqnData::S>(); //!< data block between current X space and new parameters
 };
 
 //! Returns new sections of equation data
@@ -37,7 +38,7 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
                         ArrayHandlers<R, Q, P>& handlers, Logger& logger, bool hermitian = false,
                         bool action_dot_action = false) {
   auto nQnew = params.size();
-  auto data = NewData(nQnew, dims.nX, rhs.size());
+  auto data = NewData<typename array::ArrayHandler<R, R>::value_type>(nQnew, dims.nX, rhs.size());
   auto& qq = data.qq;
   auto& qx = data.qx;
   auto& xq = data.xq;
@@ -55,22 +56,22 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
     xq[EqnData::H].slice({dims.oP, 0}, {dims.oP + dims.nP, nQnew}) = util::overlap(pparams, actions, handlers.rp());
     //    xq[EqnData::H].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}) = util::overlap(action_dot_action ? qactions :
     //    qparams, actions, handlers.qr());
-    transpose_copy(xq[EqnData::H].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}),
+    conjugate_transpose_copy(xq[EqnData::H].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}),
                    qx[EqnData::H].slice({0, dims.oQ}, {nQnew, dims.oQ + dims.nQ}));
-    transpose_copy(xq[EqnData::H].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}),
+    conjugate_transpose_copy(xq[EqnData::H].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}),
                    qx[EqnData::H].slice({0, dims.oD}, {nQnew, dims.oD + dims.nD}));
-    transpose_copy(qx[EqnData::H].slice({0, dims.oP}, {nQnew, dims.oP + dims.nP}),
+    conjugate_transpose_copy(qx[EqnData::H].slice({0, dims.oP}, {nQnew, dims.oP + dims.nP}),
                    xq[EqnData::H].slice({dims.oP, 0}, {dims.oP + dims.nP, nQnew}));
   } else {
     xq[EqnData::H].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}) = util::overlap(qparams, actions, handlers.rq());
     xq[EqnData::H].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}) = util::overlap(dparams, actions, handlers.rq());
   }
   qq[EqnData::rhs] = util::overlap(params, rhs, handlers.rq());
-  transpose_copy(xq[EqnData::S].slice({dims.oP, 0}, {dims.oP + dims.nP, nQnew}),
+  conjugate_transpose_copy(xq[EqnData::S].slice({dims.oP, 0}, {dims.oP + dims.nP, nQnew}),
                  qx[EqnData::S].slice({0, dims.oP}, {nQnew, dims.oP + dims.nP}));
-  transpose_copy(xq[EqnData::S].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}),
+  conjugate_transpose_copy(xq[EqnData::S].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}),
                  qx[EqnData::S].slice({0, dims.oQ}, {nQnew, dims.oQ + dims.nQ}));
-  transpose_copy(xq[EqnData::S].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}),
+  conjugate_transpose_copy(xq[EqnData::S].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}),
                  qx[EqnData::S].slice({0, dims.oD}, {nQnew, dims.oD + dims.nD}));
   logger.data_dump("xspace::update_qspace_data() nQnew = ", nQnew);
   logger.data_dump("Sqq = ", qq[EqnData::S]);
@@ -93,12 +94,12 @@ auto update_dspace_overlap_data(const CVecRef<P>& pparams, const CVecRef<Q>& qpa
   const auto nX = nP + nQ;
   auto nD = dparams.size();
   const auto nRHS = rhs.size();
-  auto data = NewData(nD, nX, nRHS);
+  auto data = NewData<typename array::ArrayHandler<Q, Q>::value_type>(nD, nX, nRHS);
   data.qq[EqnData::S].slice() = util::overlap(dparams, handler_qq);
   data.qx[EqnData::S].slice({0, 0}, {nD, nP}) = util::overlap(dparams, pparams, handler_qp);
   data.qx[EqnData::S].slice({0, nP}, {nD, nX}) = util::overlap(dparams, qparams, handler_qq);
   data.qq[EqnData::rhs].slice() = util::overlap(dparams, rhs, handler_qq);
-  transpose_copy(data.xq[EqnData::S].slice(), data.qx[EqnData::S].slice());
+  conjugate_transpose_copy(data.xq[EqnData::S].slice(), data.qx[EqnData::S].slice());
   logger.data_dump("xspace::update_dspace_overlap_data() nD = ", nD);
   logger.data_dump("Sdd = ", data.qq[EqnData::S]);
   logger.data_dump("Sdx = ", data.qx[EqnData::S]);
@@ -116,13 +117,13 @@ auto update_dspace_action_data(const CVecRef<P>& pparams, const CVecRef<Q>& qpar
   const auto nQ = qparams.size();
   const auto nX = nP + nQ;
   auto nD = dparams.size();
-  auto data = NewData(nD, nX, 0);
+  auto data = NewData<typename array::ArrayHandler<Q, Q>::value_type>(nD, nX, 0);
   const auto e = EqnData::H;
   data.qq[e].slice() = util::overlap(dparams, dactions, handler_qq);
   data.xq[e].slice({0, 0}, {nP, nD}) = util::overlap(pparams, dactions, handler_qp);
   data.xq[e].slice({nP, 0}, {nX, nD}) = util::overlap(qparams, dactions, handler_qq);
   data.qx[e].slice({0, nP}, {nD, nX}) = util::overlap(dparams, qactions, handler_qq);
-  transpose_copy(data.qx[e].slice({0, 0}, {nD, nP}), data.xq[e].slice({0, 0}, {nP, nD}));
+  conjugate_transpose_copy(data.qx[e].slice({0, 0}, {nD, nP}), data.xq[e].slice({0, 0}, {nP, nD}));
   logger.data_dump("xspace::update_dspace_action_data() nD = ", nD);
   logger.data_dump("Hdd = ", data.qq[e]);
   logger.data_dump("Hdx = ", data.qx[e]);
@@ -130,8 +131,9 @@ auto update_dspace_action_data(const CVecRef<P>& pparams, const CVecRef<Q>& qpar
   return data;
 }
 
-inline void copy_dspace_eqn_data(const NewData& new_data, SubspaceData& data, const subspace::EqnData e,
-                                 const Dimensions& dims) {
+template <typename T>
+void copy_dspace_eqn_data(const NewData<T>& new_data, SubspaceData<T>& data, const subspace::EqnData e,
+                          const Dimensions& dims) {
   const auto& dd = new_data.qq.at(e);
   const auto& dx = new_data.qx.at(e);
   const auto& xd = new_data.xq.at(e);
@@ -154,7 +156,7 @@ public:
 
   explicit XSpace(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers, const std::shared_ptr<Logger>& logger)
       : pspace(), qspace(handlers, logger), dspace(logger), m_handlers(handlers), m_logger(logger) {
-    data = null_data<EqnData::H, EqnData::S, EqnData::rhs>();
+    data = null_data<value_type, EqnData::H, EqnData::S, EqnData::rhs>();
   };
 
   //! Update parameters in Q space and corresponding equation data
