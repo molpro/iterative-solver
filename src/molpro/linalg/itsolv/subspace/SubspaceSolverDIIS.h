@@ -63,7 +63,7 @@ public:
     //    std::copy(solution.begin(),solution.end(),m_solutions.begin());
     for (size_t i = 0; i < kDim; ++i)
       m_solutions(0, i) = solution[i];
-    m_errors.assign(1, kH(0, 0)); // TODO fix
+    m_errors.assign(1, std::abs(kH(0, 0))); // TODO fix
     m_logger->data_dump("solution = ", m_solutions);
   }
 

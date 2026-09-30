@@ -48,10 +48,11 @@ public:
   bool nonlinear() const override { return true; }
 
 private:
-  std::pair<size_t, value_type> least_important_vector(const subspace::Matrix<value_type>& H) {
+  //! The eigenvalues of the self-adjoint H are real, so the returned measure is a magnitude
+  std::pair<size_t, value_type_abs> least_important_vector(const subspace::Matrix<value_type>& H) {
     using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
     const auto He = Eigen::Map<const matrix_type>(H.data().data(), H.rows(), H.cols());
-    std::pair<size_t, value_type> result{0, std::numeric_limits<value_type>::max()};
+    std::pair<size_t, value_type_abs> result{0, std::numeric_limits<value_type_abs>::max()};
     if (He.cols() < 2)
       return result;
     auto evs = Eigen::SelfAdjointEigenSolver<matrix_type>();
@@ -60,7 +61,7 @@ private:
     //    std::cout << "Eigenvectors:\n"<<evs.eigenvectors()<<std::endl;
     //    result.first = He.cols() - 1;
     //    return result;
-    value_type evmax = 0;
+    value_type_abs evmax = 0;
     for (Eigen::Index i = 0; i < He.cols(); ++i) {
       evmax = std::max(evmax, evs.eigenvalues()(i));
       if (evs.eigenvalues()(i) < result.second) {
@@ -74,7 +75,7 @@ private:
     }
     result.second /= evmax;
     if (result.second > m_svd_thresh)
-      result = {He.cols() - 1, std::numeric_limits<value_type>::max()};
+      result = {size_t(He.cols() - 1), std::numeric_limits<value_type_abs>::max()};
     //    std::cout << "least important vector " << result.first << " : " << result.second << std::endl;
     return result;
   }
@@ -89,13 +90,13 @@ public:
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     auto prof = this->profiler()->push("itsolv::add_vector");
     auto& residual = actions.front().get();
-    auto error = std::sqrt(this->m_handlers->rr().dot(residual, residual));
+    const value_type_abs error = std::sqrt(std::abs(this->m_handlers->rr().dot(residual, residual)));
     m_converged = error < this->m_convergence_threshold;
     using namespace subspace;
     auto& xspace = this->m_xspace;
     const auto& H = xspace->data[EqnData::H];
     //        std::cout << "H " << as_string(H) << std::endl;
-    for (std::pair<size_t, value_type> deleter = least_important_vector(H);
+    for (std::pair<size_t, value_type_abs> deleter = least_important_vector(H);
          xspace->size() >= size_t(this->m_max_size_qspace) or deleter.second < m_svd_thresh;
          deleter = least_important_vector(H)) {
       //            std::cout << "deleter " << deleter.first << " : " << deleter.second << std::endl;
