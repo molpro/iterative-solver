@@ -364,6 +364,13 @@ class DistrArrayIteratorImpl {
     using reference = value_type;
     using const_reference = reference;
     using difference_type = std::ptrdiff_t;
+    // *this dereferences to a proxy, not an lvalue reference, so there is no meaningful
+    // pointer type. iterator_category is spelled out explicitly because std::iterator_traits'
+    // legacy (pre-C++20) fallback cannot deduce past input_iterator_tag for a proxy iterator,
+    // which would make std::fill/std::copy etc. reject the single-pass-only overloads even
+    // though this iterator satisfies std::random_access_iterator (see the static_assert below).
+    using pointer = void;
+    using iterator_category = std::random_access_iterator_tag;
 
     DistrArrayIteratorImpl() = default;
     DistrArrayIteratorImpl(std::conditional_t<is_const, const DistrArray, DistrArray> &array,
