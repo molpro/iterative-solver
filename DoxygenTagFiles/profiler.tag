@@ -910,13 +910,6 @@
       <anchor>a914ac8e10632f06314f5bf81e4845a58</anchor>
       <arglist></arglist>
     </member>
-    <member kind="function">
-      <type>std::list&lt; WeakSingleton&lt; Profiler &gt;::key_t &gt;</type>
-      <name>m_register</name>
-      <anchorfile>structmolpro_1_1profiler_1_1WeakSingleton.html</anchorfile>
-      <anchor>a4783e755ed855e3d60bdb9033b22b4f3</anchor>
-      <arglist></arglist>
-    </member>
     <member kind="function" static="yes">
       <type>static std::shared_ptr&lt; Object &gt;</type>
       <name>single</name>
@@ -951,13 +944,6 @@
       <anchorfile>structmolpro_1_1profiler_1_1WeakSingleton.html</anchorfile>
       <anchor>af9c671c590eb3c5ab7770618447f7d23</anchor>
       <arglist>()</arglist>
-    </member>
-    <member kind="variable" static="yes">
-      <type>static std::list&lt; key_t &gt;</type>
-      <name>m_register</name>
-      <anchorfile>structmolpro_1_1profiler_1_1WeakSingleton.html</anchorfile>
-      <anchor>a20642aa01b8a73ab3f2ee1457eecbe51</anchor>
-      <arglist></arglist>
     </member>
   </compound>
   <compound kind="namespace">
@@ -1043,13 +1029,6 @@
       <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
       <anchor>a14b9a5bef664e269695fc781a7243194</anchor>
       <arglist>(std::ostream &amp;os, const Profiler &amp;obj)</arglist>
-    </member>
-    <member kind="variable">
-      <type>std::shared_ptr&lt; Profiler &gt;</type>
-      <name>s_saver</name>
-      <anchorfile>namespacemolpro_1_1profiler.html</anchorfile>
-      <anchor>a4e8cf3b4735dcd93da951d038927fb8a</anchor>
-      <arglist></arglist>
     </member>
   </compound>
   <compound kind="namespace">
