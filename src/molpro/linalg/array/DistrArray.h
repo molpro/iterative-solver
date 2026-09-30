@@ -33,8 +33,15 @@ namespace util {
     ValueProxy(const ValueProxy &) = delete;
     ValueProxy(ValueProxy &&) = delete;
 
-    ValueProxy &operator=(const ValueProxy &) = delete;
-    ValueProxy &operator=(ValueProxy &&) = delete;
+    // Assigning a proxy writes the *value* it refers to into this proxy's cell,
+    // rather than rebinding this proxy to a different array/index -- that keeps
+    // *it1 = *it2 (as used by std::copy et al.) working between two DistrArrays.
+    ValueProxy &operator=(const ValueProxy &other) { return *this = static_cast<typename Array::value_type>(other); }
+    ValueProxy &operator=(ValueProxy &&other) { return *this = static_cast<typename Array::value_type>(other); }
+    template <typename OtherArray>
+    ValueProxy &operator=(const ValueProxy<OtherArray> &other) {
+      return *this = static_cast<typename OtherArray::value_type>(other);
+    }
 
     ValueProxy &operator=(Array::value_type val) {
       m_arr.set(m_idx, std::move(val));
