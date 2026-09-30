@@ -16,7 +16,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate =
     [ "convergence_threshold_value", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a1f7ebfff7316bcfe85ff5a8e2d62e40d", null ],
     [ "dimensions", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a7a83306888d70445233f01d4020d111a", null ],
     [ "end_iteration_needed", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aaabdae7c67ee909b5e7ddfc40fb46e0e", null ],
-    [ "errors", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ab105433d45a262ddf9adbd4cb36e9628", null ],
+    [ "errors", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a96d6a4563e9c49c6ba4231d16b8b0007", null ],
     [ "finalize", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad3c0c1a97d015e8548b02a5376df233f", null ],
     [ "get_max_iter", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a227f5b950f220fef378ee86ec7b9da92", null ],
     [ "get_max_p", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a64f2b7857436d5df6cb76a1fa51f4135", null ],

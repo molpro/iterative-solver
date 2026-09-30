@@ -30,18 +30,20 @@ var NAVTREE =
     [ "Usage", "index.html#autotoc_md9", [
       [ "Interfaces", "index.html#autotoc_md10", null ],
       [ "Example", "index.html#autotoc_md11", null ],
-      [ "Containers and array handlers", "index.html#autotoc_md12", null ]
+      [ "Containers and array handlers", "index.html#autotoc_md12", null ],
+      [ "Arbitrary precision", "index.html#autotoc_md13", null ],
+      [ "Complex arithmetic", "index.html#autotoc_md14", null ]
     ] ],
-    [ "Citing", "index.html#autotoc_md13", null ],
-    [ "List of Contributors", "index.html#autotoc_md14", null ],
+    [ "Citing", "index.html#autotoc_md15", null ],
+    [ "List of Contributors", "index.html#autotoc_md16", null ],
     [ "Library Design", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html", [
-      [ "Iterative solvers", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md15", [
-        [ "Solver interfaces and implementations", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md16", null ],
-        [ "Dependency inversion mechanism", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md17", null ],
-        [ "Setting solver Options", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md18", null ],
-        [ "Solver Factory", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md19", null ]
+      [ "Iterative solvers", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md17", [
+        [ "Solver interfaces and implementations", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md18", null ],
+        [ "Dependency inversion mechanism", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md19", null ],
+        [ "Setting solver Options", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md20", null ],
+        [ "Solver Factory", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md21", null ]
       ] ],
-      [ "Distributed Arrays", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md20", null ]
+      [ "Distributed Arrays", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md22", null ]
     ] ],
     [ "Iterative solvers", "TopicIterativeSolver.html", null ],
     [ "Distributed arrays", "TopicDistrArrays.html", null ],
@@ -76,10 +78,10 @@ var NAVTREEINDEX =
 "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html#a9ccb71e2aa6afca0ef7c9b1719a70bef",
 "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#a53a284cad70f77135bec50f189b9d4be",
 "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ad99657d1bb050c231ac2c15ba01761e3",
-"namespacemolpro_1_1linalg_1_1array_1_1util.html#a55169e39683dee9b69ec1a0c0f6f68c0",
-"structiterative__solver__pspace_1_1pspace.html#a0fb398b66fd222ec8ce0e31879d431d9",
-"structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemOptions.html#a53f3e69592b027beede7245d484ecfc9",
-"structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#af48f67e3ba6cac80659e0bb169d79b99"
+"namespacemolpro_1_1linalg_1_1array_1_1util.html#a2f6b37985b8983863b5ff745040ba076",
+"structiterative__solver__pspace_1_1pspace.html#a0d239e70d6b9d6cbc8618859b4f91952",
+"structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemOptions.html",
+"structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#ad7cfefb4b20a24f38099ae54e43d7fbe"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

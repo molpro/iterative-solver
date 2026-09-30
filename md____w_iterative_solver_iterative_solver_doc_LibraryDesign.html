@@ -94,30 +94,30 @@ $(document).ready(function(){initNavTree('md____w_iterative_solver_iterative_sol
   <div class="headertitle"><div class="title">Library Design </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md15"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md17"></a>
 Iterative solvers</h1>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 Solver interfaces and implementations</h2>
 <p >There are 4 types of solvers. They share a very similar functionality and their common interface is expressed in IterativeSolver base class.</p>
 <p >Each type of solver can have multiple implementations.</p>
 <p ><img src="images/solvers.png" alt="SolversHirearchyDiagram" class="inline"/></p>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md19"></a>
 Dependency inversion mechanism</h2>
 <p >Solvers are templated on container type so that the user can choose optimal container for their problem. This requires two sets of dependency inversion.</p>
 <p >Firstly, dense linear algebra operations are wrapped up in <code>DenseLinearAlgebra</code> class, which depends on the type of container elements. This can be time consuming to compile so it is specialised for <code>double</code> and <code>std::complex</code>.</p>
 <p >Secondly, <code>ArrayHandlers</code> defines the interface for operation on containers such as copying, linear algebra, lazy evaluation etc. <code>ArrayHandlers</code> is a collection of <code>ArrayHandler</code> abstract classes. There are implementations of <code>ArrayHandler</code> for common container types, but for more specialised cases the user must provide their own.</p>
 <p ><img src="images/dependency_inversion.png" alt="SolversHirearchyDiagram" class="inline"/></p>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 Setting solver Options</h2>
 <p >There are setters and getters for setting the options, but they require complete type of the object to be known. This might not be possible if the user is working with solver through the interface. Working through the interface can be necessary to reduce compilation time and minimize header bloat.</p>
 <p >Instead options can be set in the <code>Options</code> class and then passed to <code>IterativeSolver::set_options()</code> which will call setters internally. Similarly calling <code>IterativeSolver::get_options()</code> returns a pointer to the <code>Options</code> class and the user can query their values.</p>
 <p >Options classes are organised in a hierarchy that mirrors inheritance structure of iterative solvers (see above). At the lowest level are options for each implementation of a solver and they contain all of the available options that can be set, including for interface classes.</p>
 <p ><img src="images/options.png" alt="SolverOptionsDiagram" class="inline"/></p>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md21"></a>
 Solver Factory</h2>
 <p ><code>SolverFactory</code> allows dynamic creation of a solver. It takes an implementation options object by reference and deduces the corresponding solver with dynamic casts. This is the main reason why the options hierarchy mirrors that of solvers.</p>
 <p ><img src="images/solver_factory.png" alt="SolverFactoryDiagram" class="inline"/></p>
-<h1><a class="anchor" id="autotoc_md20"></a>
+<h1><a class="anchor" id="autotoc_md22"></a>
 Distributed Arrays</h1>
 <p >In parallel computing it is often necessary to distribute an array over multiple processes. Each process stores a small section of the array without overlapping. There are multiple implementations of this approach including Global Arrays, MPI3 windows, parallel HDF5 and others. We provide a simple interface to different implementations of distributed arrays to allow cross-compatibility and simplify their usage.</p>
 <p >There are three aspects to consider:</p><ol type="1">

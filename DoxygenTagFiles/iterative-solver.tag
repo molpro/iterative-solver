@@ -4994,10 +4994,10 @@
       <arglist>(size_t nroots)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
-      <type>virtual const std::vector&lt; scalar_type &gt; &amp;</type>
+      <type>virtual const std::vector&lt; value_type_abs &gt; &amp;</type>
       <name>errors</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
-      <anchor>af7a498d8483214bb9fbbdaabcb469332</anchor>
+      <anchor>af2f89b9231e0127e7ae2431ec178aa59</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="pure">
@@ -5359,10 +5359,10 @@
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
-      <type>const std::vector&lt; scalar_type &gt; &amp;</type>
+      <type>const std::vector&lt; value_type_abs &gt; &amp;</type>
       <name>errors</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>ab105433d45a262ddf9adbd4cb36e9628</anchor>
+      <anchor>a96d6a4563e9c49c6ba4231d16b8b0007</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
