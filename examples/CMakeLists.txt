@@ -33,6 +33,11 @@ foreach (fil ${EXAMPLES})
             PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}
             )
+    if (fil MATCHES "\\.F90$")
+        # The main program is Fortran, so link with the Fortran compiler: Intel ifx, unlike gfortran, provides main()
+        # only through its own driver. CMake adds the C++ runtime for the C++ library.
+        set_target_properties(${test_name} PROPERTIES LINKER_LANGUAGE Fortran)
+    endif ()
     target_link_libraries(${test_name} PUBLIC molpro::${PROJECT_NAME} ${MPI_CXX_LIBRARIES} ${MPI_Fortran_LIBRARIES})
     if (FORTRAN AND CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
         target_link_libraries(${test_name} PUBLIC ifcore)
