@@ -3,6 +3,11 @@
 
 #include "vector_types.h"
 #include <molpro/linalg/itsolv/SolverFactory.h>
+#include <molpro/linalg/itsolv/LinearEigensystemDavidson.h>
+#include <molpro/linalg/itsolv/LinearEquationsDavidson.h>
+#include <molpro/linalg/itsolv/NonLinearEquationsDIIS.h>
+#include <molpro/linalg/itsolv/OptimizeBFGS.h>
+#include <molpro/linalg/itsolv/OptimizeSDOptions.h>
 
 using molpro::linalg::itsolv::Options;
 using molpro::linalg::itsolv::options_map;
@@ -63,4 +68,41 @@ TEST(SolverFactory, string_constructor) {
         EXPECT_EQ(options->max_size_qspace.value(), 73);
       }
   }
+}
+
+// The string-keyed and generic Options overloads must dispatch every solver kind
+TEST(SolverFactory, create_all_kinds) {
+  using namespace molpro::linalg::itsolv;
+  using Factory = SolverFactory<Rvector, Qvector, Pvector>;
+  using EigenDavidson = LinearEigensystemDavidson<Rvector, Qvector, Pvector>;
+  using EquationsDavidson = LinearEquationsDavidson<Rvector, Qvector, Pvector>;
+  using DIIS = NonLinearEquationsDIIS<Rvector, Qvector, Pvector>;
+  using BFGS = OptimizeBFGS<Rvector, Qvector, Pvector>;
+  auto factory = Factory{};
+  auto handlers = std::make_shared<ArrayHandlers<Rvector, Qvector, Pvector>>();
+  const auto opts = options_map{{"convergence_threshold", "1e-3"}};
+  auto generic = [&](const Options& options) { return factory.create(options, handlers); };
+
+  auto eigen = factory.create("LinearEigensystem", opts, handlers);
+  EXPECT_NE(dynamic_cast<EigenDavidson*>(eigen.get()), nullptr);
+  EXPECT_NE(generic(LinearEigensystemDavidsonOptions{opts}), nullptr);
+
+  auto equations = factory.create("LinearEquations", opts, handlers);
+  EXPECT_NE(dynamic_cast<EquationsDavidson*>(equations.get()), nullptr);
+  EXPECT_NE(generic(LinearEquationsDavidsonOptions{opts}), nullptr);
+
+  auto nonlinear = factory.create("NonLinearEquations", opts, handlers);
+  EXPECT_NE(dynamic_cast<DIIS*>(nonlinear.get()), nullptr);
+  ASSERT_NE(nonlinear, nullptr);
+  EXPECT_EQ(nonlinear->get_options()->convergence_threshold.value_or(0), 1e-3);
+  EXPECT_NE(generic(NonLinearEquationsDIISOptions{opts}), nullptr);
+
+  auto optimize = factory.create("Optimize", opts, handlers);
+  EXPECT_NE(dynamic_cast<BFGS*>(optimize.get()), nullptr);
+  ASSERT_NE(optimize, nullptr);
+  EXPECT_EQ(optimize->get_options()->convergence_threshold.value_or(0), 1e-3);
+  EXPECT_NE(generic(OptimizeBFGSOptions{opts}), nullptr);
+  EXPECT_NE(generic(OptimizeSDOptions{opts}), nullptr);
+
+  EXPECT_THROW(factory.create("NoSuchMethod", opts, handlers), std::runtime_error);
 }

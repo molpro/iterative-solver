@@ -22,6 +22,10 @@ SolverFactory<R, Q, P>::create(const Options& options, const std::shared_ptr<Arr
     return create(*options_child, handlers);
   } else if (auto options_child = dynamic_cast<LinearEquationsOptions*>(options_ptr); options_child) {
     return create(*options_child, handlers);
+  } else if (auto options_child = dynamic_cast<NonLinearEquationsOptions*>(options_ptr); options_child) {
+    return create(*options_child, handlers);
+  } else if (auto options_child = dynamic_cast<OptimizeOptions*>(options_ptr); options_child) {
+    return create(*options_child, handlers);
   } else {
     return nullptr;
   }
@@ -93,6 +97,10 @@ SolverFactory<R, Q, P>::create(const std::string& method, const options_map& opt
     return create(LinearEigensystemDavidsonOptions{options}, handlers);
   } else if (method == "LinearEquations") {
     return create(LinearEquationsDavidsonOptions{options}, handlers);
+  } else if (method == "NonLinearEquations") {
+    return create(NonLinearEquationsDIISOptions{options}, handlers);
+  } else if (method == "Optimize") {
+    return create(OptimizeBFGSOptions{options}, handlers);
   } else {
     throw std::runtime_error("Method = " + method + ", is not implemented");
   }
