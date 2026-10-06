@@ -103,3 +103,30 @@ TEST(LinearEquation, symmetric_system) {
     }
   }
 }
+// With the augmented Hessian the solution x of each equation satisfies (M - lambda) x = rhs, where (y, t) is the lowest
+// eigenvector of [[M, -a rhs], [-a rhs^T, 0]] and x = y / (a t)
+TEST(LinearEquation, augmented_hessian) {
+  const int n = 10, nroot = 2;
+  Problem_ problem(n, nroot);
+  for (const double a : {0.01, 0.1, 1.0}) {
+    auto solver = molpro::linalg::itsolv::create_LinearEquations<Rvector, Qvector, Pvector>(
+        "Davidson", "augmented_hessian=" + std::to_string(a));
+    solver->set_convergence_threshold(1e-10);
+    std::vector<Rvector> parameters(nroot, Rvector(n)), actions(nroot, Rvector(n));
+    ASSERT_TRUE(solver->solve(parameters, actions, problem, true)) << "a=" << a;
+    std::vector<int> roots(nroot);
+    std::iota(roots.begin(), roots.end(), 0);
+    solver->solution(roots, parameters, actions);
+    for (int root = 0; root < nroot; ++root) {
+      Eigen::MatrixXd augmented = Eigen::MatrixXd::Zero(n + 1, n + 1);
+      augmented.topLeftCorner(n, n) = problem.matrix;
+      augmented.block(0, n, n, 1) = -a * problem.rhs.col(root);
+      augmented.block(n, 0, 1, n) = -a * problem.rhs.col(root).transpose();
+      Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(augmented);
+      const Eigen::VectorXd lowest = es.eigenvectors().col(0);
+      const Eigen::VectorXd expected = lowest.head(n) / (a * lowest(n));
+      for (int i = 0; i < n; ++i)
+        EXPECT_NEAR(parameters[root][i], expected(i), 1e-6 * expected.norm()) << "a=" << a << ", root=" << root;
+    }
+  }
+}
