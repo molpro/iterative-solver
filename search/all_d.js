@@ -29,5 +29,5 @@ var searchData=
   ['null_5fdata_26',['null_data',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#adb021336569d672f0bdb3fb44f10e6af',1,'molpro::linalg::itsolv::subspace']]],
   ['num_5fargs_27',['num_args',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html#af8e6a9e8c3c20e6572f5c6b52d2f339a',1,'molpro::linalg::itsolv::log::ContextBase']]],
   ['num_5fdigits_28',['num_digits',['../namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#a57ee158b4d2f05f9a8e94b11869c6f42',1,'molpro::linalg::itsolv::log']]],
-  ['nx_29',['nX',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a28e3ec823f95c30ae8d28bab53076a3a',1,'molpro::linalg::itsolv::subspace::Dimensions']]]
+  ['nx_29',['nX',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#ac01441887d80cc7fc051232cc9730af0',1,'molpro::linalg::itsolv::subspace::Dimensions']]]
 ];

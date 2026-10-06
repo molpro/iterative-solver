@@ -2183,6 +2183,34 @@
       <anchor>a0c38435c2de283433116bf47f814361c</anchor>
       <arglist>(size_t np, size_t nq, size_t nc)</arglist>
     </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>nX</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html</anchorfile>
+      <anchor>ac01441887d80cc7fc051232cc9730af0</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>oP</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html</anchorfile>
+      <anchor>a00c99a424be81200068d0cbb265f8c5b</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>oQ</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html</anchorfile>
+      <anchor>a87b109b6aaeec3bbf6d477db491593b6</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>oD</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html</anchorfile>
+      <anchor>abf9a1448afaaaff742e1e06f80cbcd1d</anchor>
+      <arglist>() const</arglist>
+    </member>
     <member kind="variable">
       <type>size_t</type>
       <name>nP</name>
@@ -2202,34 +2230,6 @@
       <name>nD</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html</anchorfile>
       <anchor>a154456f7740b0eb6fa70f2ff8a02d74f</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>size_t</type>
-      <name>nX</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html</anchorfile>
-      <anchor>a28e3ec823f95c30ae8d28bab53076a3a</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>size_t</type>
-      <name>oP</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html</anchorfile>
-      <anchor>a8b2d29e64f9ba7bb0ceddbba9e0e4632</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>size_t</type>
-      <name>oQ</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html</anchorfile>
-      <anchor>a06259f6b0e7d2a7298b78186c869d593</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>size_t</type>
-      <name>oD</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html</anchorfile>
-      <anchor>aa019fa3b705f49ce4e180221bf57398c</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">

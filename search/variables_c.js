@@ -9,6 +9,5 @@ var searchData=
   ['np_6',['nP',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a6f870dc7e7e5f83f02137b6dab4a2060',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
   ['nq_7',['nQ',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a46dc5debc430f86a816804fd92f74083',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
   ['nrhs_8',['nRHS',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a4befc78adaf6a673c6bb6592ac661061',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
-  ['num_5fargs_9',['num_args',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html#af8e6a9e8c3c20e6572f5c6b52d2f339a',1,'molpro::linalg::itsolv::log::ContextBase']]],
-  ['nx_10',['nX',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a28e3ec823f95c30ae8d28bab53076a3a',1,'molpro::linalg::itsolv::subspace::Dimensions']]]
+  ['num_5fargs_9',['num_args',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html#af8e6a9e8c3c20e6572f5c6b52d2f339a',1,'molpro::linalg::itsolv::log::ContextBase']]]
 ];

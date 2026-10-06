@@ -99,12 +99,9 @@ $(document).ready(function(){initNavTree('structmolpro_1_1linalg_1_1itsolv_1_1su
 </div><!--header-->
 <div class="contents">
 
-<p>Stores partitioning of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">XSpace</a> into P, Q and R blocks with sizes and offsets for each one.  
- <a href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#details">More...</a></p>
-
 <p><code>#include &lt;<a class="el" href="Dimensions_8h_source.html">Dimensions.h</a>&gt;</code></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Stores partitioning of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">XSpace</a> into P, Q and R blocks with sizes and offsets for each one. </p>
+<div class="textblock"><p >Stores partitioning of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">XSpace</a> into P, Q and D blocks with sizes and offsets for each one The total size and the offsets are computed from the block sizes, so they cannot go stale when a size changes. </p>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -112,6 +109,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aed2dc5307107fb8833b44e587a101010"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c38435c2de283433116bf47f814361c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a0c38435c2de283433116bf47f814361c">Dimensions</a> (size_t np, size_t nq, size_t nc)</td></tr>
 <tr class="separator:a0c38435c2de283433116bf47f814361c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac01441887d80cc7fc051232cc9730af0"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#ac01441887d80cc7fc051232cc9730af0">nX</a> () const</td></tr>
+<tr class="memdesc:ac01441887d80cc7fc051232cc9730af0"><td class="mdescLeft">&#160;</td><td class="mdescRight">total size of the X space  <a href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#ac01441887d80cc7fc051232cc9730af0">More...</a><br /></td></tr>
+<tr class="separator:ac01441887d80cc7fc051232cc9730af0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00c99a424be81200068d0cbb265f8c5b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a00c99a424be81200068d0cbb265f8c5b">oP</a> () const</td></tr>
+<tr class="memdesc:a00c99a424be81200068d0cbb265f8c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">offset of the P block  <a href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a00c99a424be81200068d0cbb265f8c5b">More...</a><br /></td></tr>
+<tr class="separator:a00c99a424be81200068d0cbb265f8c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87b109b6aaeec3bbf6d477db491593b6"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a87b109b6aaeec3bbf6d477db491593b6">oQ</a> () const</td></tr>
+<tr class="memdesc:a87b109b6aaeec3bbf6d477db491593b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">offset of the Q block  <a href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a87b109b6aaeec3bbf6d477db491593b6">More...</a><br /></td></tr>
+<tr class="separator:a87b109b6aaeec3bbf6d477db491593b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf9a1448afaaaff742e1e06f80cbcd1d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#abf9a1448afaaaff742e1e06f80cbcd1d">oD</a> () const</td></tr>
+<tr class="memdesc:abf9a1448afaaaff742e1e06f80cbcd1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">offset of the D block  <a href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#abf9a1448afaaaff742e1e06f80cbcd1d">More...</a><br /></td></tr>
+<tr class="separator:abf9a1448afaaaff742e1e06f80cbcd1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -121,14 +130,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a46dc5debc430f86a816804fd92f74083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a154456f7740b0eb6fa70f2ff8a02d74f"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a154456f7740b0eb6fa70f2ff8a02d74f">nD</a> = 0</td></tr>
 <tr class="separator:a154456f7740b0eb6fa70f2ff8a02d74f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28e3ec823f95c30ae8d28bab53076a3a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a28e3ec823f95c30ae8d28bab53076a3a">nX</a> = <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a6f870dc7e7e5f83f02137b6dab4a2060">nP</a> + <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a46dc5debc430f86a816804fd92f74083">nQ</a> + <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a154456f7740b0eb6fa70f2ff8a02d74f">nD</a></td></tr>
-<tr class="separator:a28e3ec823f95c30ae8d28bab53076a3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b2d29e64f9ba7bb0ceddbba9e0e4632"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a8b2d29e64f9ba7bb0ceddbba9e0e4632">oP</a> = 0</td></tr>
-<tr class="separator:a8b2d29e64f9ba7bb0ceddbba9e0e4632"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06259f6b0e7d2a7298b78186c869d593"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a06259f6b0e7d2a7298b78186c869d593">oQ</a> = <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a6f870dc7e7e5f83f02137b6dab4a2060">nP</a></td></tr>
-<tr class="separator:a06259f6b0e7d2a7298b78186c869d593"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa019fa3b705f49ce4e180221bf57398c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#aa019fa3b705f49ce4e180221bf57398c">oD</a> = <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a06259f6b0e7d2a7298b78186c869d593">oQ</a> + <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a46dc5debc430f86a816804fd92f74083">nQ</a></td></tr>
-<tr class="separator:aa019fa3b705f49ce4e180221bf57398c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4befc78adaf6a673c6bb6592ac661061"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a4befc78adaf6a673c6bb6592ac661061">nRHS</a> = 0</td></tr>
 <tr class="memdesc:a4befc78adaf6a673c6bb6592ac661061"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of rigt-hand-side vectors in the system of linear equations  <a href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a4befc78adaf6a673c6bb6592ac661061">More...</a><br /></td></tr>
 <tr class="separator:a4befc78adaf6a673c6bb6592ac661061"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +202,115 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac01441887d80cc7fc051232cc9730af0" name="ac01441887d80cc7fc051232cc9730af0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac01441887d80cc7fc051232cc9730af0">&#9670;&nbsp;</a></span>nX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t molpro::linalg::itsolv::subspace::Dimensions::nX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>total size of the X space </p>
+
+</div>
+</div>
+<a id="abf9a1448afaaaff742e1e06f80cbcd1d" name="abf9a1448afaaaff742e1e06f80cbcd1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf9a1448afaaaff742e1e06f80cbcd1d">&#9670;&nbsp;</a></span>oD()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t molpro::linalg::itsolv::subspace::Dimensions::oD </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>offset of the D block </p>
+
+</div>
+</div>
+<a id="a00c99a424be81200068d0cbb265f8c5b" name="a00c99a424be81200068d0cbb265f8c5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00c99a424be81200068d0cbb265f8c5b">&#9670;&nbsp;</a></span>oP()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t molpro::linalg::itsolv::subspace::Dimensions::oP </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>offset of the P block </p>
+
+</div>
+</div>
+<a id="a87b109b6aaeec3bbf6d477db491593b6" name="a87b109b6aaeec3bbf6d477db491593b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87b109b6aaeec3bbf6d477db491593b6">&#9670;&nbsp;</a></span>oQ()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t molpro::linalg::itsolv::subspace::Dimensions::oQ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>offset of the Q block </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a154456f7740b0eb6fa70f2ff8a02d74f" name="a154456f7740b0eb6fa70f2ff8a02d74f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a154456f7740b0eb6fa70f2ff8a02d74f">&#9670;&nbsp;</a></span>nD</h2>
@@ -257,62 +367,6 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>number of rigt-hand-side vectors in the system of linear equations </p>
-
-</div>
-</div>
-<a id="a28e3ec823f95c30ae8d28bab53076a3a" name="a28e3ec823f95c30ae8d28bab53076a3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28e3ec823f95c30ae8d28bab53076a3a">&#9670;&nbsp;</a></span>nX</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t molpro::linalg::itsolv::subspace::Dimensions::nX = <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a6f870dc7e7e5f83f02137b6dab4a2060">nP</a> + <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a46dc5debc430f86a816804fd92f74083">nQ</a> + <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a154456f7740b0eb6fa70f2ff8a02d74f">nD</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa019fa3b705f49ce4e180221bf57398c" name="aa019fa3b705f49ce4e180221bf57398c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa019fa3b705f49ce4e180221bf57398c">&#9670;&nbsp;</a></span>oD</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t molpro::linalg::itsolv::subspace::Dimensions::oD = <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a06259f6b0e7d2a7298b78186c869d593">oQ</a> + <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a46dc5debc430f86a816804fd92f74083">nQ</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8b2d29e64f9ba7bb0ceddbba9e0e4632" name="a8b2d29e64f9ba7bb0ceddbba9e0e4632"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b2d29e64f9ba7bb0ceddbba9e0e4632">&#9670;&nbsp;</a></span>oP</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t molpro::linalg::itsolv::subspace::Dimensions::oP = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a06259f6b0e7d2a7298b78186c869d593" name="a06259f6b0e7d2a7298b78186c869d593"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06259f6b0e7d2a7298b78186c869d593">&#9670;&nbsp;</a></span>oQ</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t molpro::linalg::itsolv::subspace::Dimensions::oQ = <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a6f870dc7e7e5f83f02137b6dab4a2060">nP</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>

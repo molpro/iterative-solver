@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['od_0',['oD',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#aa019fa3b705f49ce4e180221bf57398c',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
+  ['od_0',['oD',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#abf9a1448afaaaff742e1e06f80cbcd1d',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
   ['off_1',['off',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1ProxyHandle.html#ad0091fda4de382bbbe70a45e97a9e4a5',1,'molpro::linalg::array::ArrayHandler::ProxyHandle']]],
   ['offsets_2',['offsets',['../structiterative__solver__pspace_1_1pspace.html#ac73ce551415e7871f146b2ae06aea58e',1,'iterative_solver_pspace::pspace']]],
   ['on_3',['on',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1ProxyHandle.html#ac075222a6329f35419e439a2ccadf36c',1,'molpro::linalg::array::ArrayHandler::ProxyHandle']]],
-  ['op_4',['OP',['../structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html#adec453c471eab2cf48d7c8c43a9e31c2',1,'molpro::linalg::array::util::OperationRegister']]],
-  ['op_5',['oP',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a8b2d29e64f9ba7bb0ceddbba9e0e4632',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
+  ['op_4',['oP',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a00c99a424be81200068d0cbb265f8c5b',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
+  ['op_5',['OP',['../structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html#adec453c471eab2cf48d7c8c43a9e31c2',1,'molpro::linalg::array::util::OperationRegister']]],
   ['operation_5fcount_6',['operation_count',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Counter.html#ae417f08433018267b65ddebe77852719',1,'molpro::profiler::Counter']]],
   ['operationregister_7',['OperationRegister',['../structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html',1,'molpro::linalg::array::util']]],
   ['operationregister_3c_20ref_5fwrap_3c_20const_20al_20_3e_2c_20ref_5fwrap_3c_20const_20ar_20_3e_2c_20ref_5fwrap_3c_20value_5ftype_20_3e_20_3e_8',['OperationRegister&lt; ref_wrap&lt; const AL &gt;, ref_wrap&lt; const AR &gt;, ref_wrap&lt; value_type &gt; &gt;',['../structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html',1,'molpro::linalg::array::util']]],
@@ -36,7 +36,7 @@ var searchData=
   ['options_33',['Options',['../structmolpro_1_1linalg_1_1itsolv_1_1Options.html',1,'molpro::linalg::itsolv::Options'],['../structmolpro_1_1linalg_1_1itsolv_1_1Options.html#adf4361108ecfcb3699596d68b348af59',1,'molpro::linalg::itsolv::Options::Options(const options_map &amp;opt)'],['../structmolpro_1_1linalg_1_1itsolv_1_1Options.html#a37831f7f1c9e8ca25231cf360b9dadc1',1,'molpro::linalg::itsolv::Options::Options()=default']]],
   ['options_34',['options',['../namespacemolpro_1_1linalg.html#abd04a7feed3604605815d55678fc2369',1,'molpro::linalg']]],
   ['options_5fmap_35',['options_map',['../namespacemolpro_1_1linalg_1_1itsolv.html#a784351a2599ca33773a9809818edb5a1',1,'molpro::linalg::itsolv']]],
-  ['oq_36',['oQ',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a06259f6b0e7d2a7298b78186c869d593',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
+  ['oq_36',['oQ',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html#a87b109b6aaeec3bbf6d477db491593b6',1,'molpro::linalg::itsolv::subspace::Dimensions']]],
   ['orthogonalise_5fsubspace_37',['orthogonalise_subspace',['../namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aeefde5321c2241da42bb5f1dda879a2b',1,'molpro::linalg::itsolv::detail']]],
   ['orthogonalised_5fsubspace_38',['orthogonalised_subspace',['../structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html',1,'molpro::linalg::itsolv::detail']]],
   ['outer_39',['outer',['../namespacemolpro_1_1linalg_1_1array_1_1util.html#ac1856c20beb303170f5bbbbf9e08771fa431bd84fcae17203f58b37dec475624e',1,'molpro::linalg::array::util']]],
