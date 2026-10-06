@@ -8,6 +8,10 @@ namespace molpro::linalg::array {
 
 /*!
  * @brief Distributed array which uses Global Arrays for managing the array buffer and RMA calls
+ *
+ * @note Thread safety: construction, copying and allocation are collective over the communicator (they call MPI and
+ * GA collectives) and are not thread safe. Within each process they must be called from one thread at a time, and in
+ * the same order on every process, as for any other GA collective operation.
  */
 class DistrArrayGA : public DistrArray {
 protected:
@@ -17,7 +21,9 @@ protected:
   int m_ga_pgroup = 0;         //!< Global Array processor group handle
   int m_ga_chunk = 1;          //!< GA chunck size
   bool m_ga_allocated = false; //!< Flags that GA has been allocated
-  //! Record every process group created, because GA can only allocate a fixed number of them
+  //! Record every process group created, because GA can only allocate a fixed number of them.
+  //! Not synchronised: a lock here would not make allocation thread safe, because it is surrounded by MPI and GA
+  //! collectives, and holding a lock across collectives could deadlock. See the thread-safety note on the class.
   static std::map<MPI_Comm, int> _ga_pgroups;
   std::unique_ptr<Distribution> m_distribution;
 
