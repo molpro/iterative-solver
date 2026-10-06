@@ -25,6 +25,7 @@ using molpro::linalg::itsolv::LinearEigensystem;
 using molpro::linalg::itsolv::VecRef;
 using molpro::linalg::itsolv::wrap;
 #ifndef NOFORTRAN
+extern "C" int test_nested_finalizef();
 extern "C" int test_lineareigensystemf(double *matrix, size_t n, size_t np, size_t nroot, int hermitian,
                                        double *eigenvalues);
 #endif
@@ -443,3 +444,8 @@ TEST_F(LinearEigensystemF, linearly_dependent_guess) {
       test_eigen(std::to_string(n));
   }
 }
+
+#ifndef NOFORTRAN
+// Finalising a nested solver must restore the enclosing solver's root count in the Fortran interface
+TEST(LinearEigensystemFortran, nested_finalize) { EXPECT_NE(test_nested_finalizef(), 0); }
+#endif
