@@ -84,7 +84,7 @@ public:
     using namespace subspace;
     auto& xspace = this->m_xspace;
     auto& xdata = xspace->data;
-    const auto n = this->m_xspace->dimensions().nX;
+    const auto n = this->m_xspace->dimensions().nX();
     xdata[EqnData::value].resize({n + 1, 1});
     xdata[EqnData::value](0, 0) = value;
     auto nwork = IterativeSolverTemplate<Optimize, R, Q, P>::add_vector(parameters, residual);

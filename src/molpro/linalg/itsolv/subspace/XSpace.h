@@ -38,41 +38,41 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
                         ArrayHandlers<R, Q, P>& handlers, Logger& logger, bool hermitian = false,
                         bool action_dot_action = false) {
   auto nQnew = params.size();
-  auto data = NewData<typename array::ArrayHandler<R, R>::value_type>(nQnew, dims.nX, rhs.size());
+  auto data = NewData<typename array::ArrayHandler<R, R>::value_type>(nQnew, dims.nX(), rhs.size());
   auto& qq = data.qq;
   auto& qx = data.qx;
   auto& xq = data.xq;
   qq[EqnData::S] = util::overlap(params, handlers.rr());
-  qx[EqnData::S].slice({0, dims.oP}, {nQnew, dims.oP + dims.nP}) = util::overlap(params, pparams, handlers.rp());
-  qx[EqnData::S].slice({0, dims.oQ}, {nQnew, dims.oQ + dims.nQ}) = util::overlap(params, qparams, handlers.rq());
-  qx[EqnData::S].slice({0, dims.oD}, {nQnew, dims.oD + dims.nD}) = util::overlap(params, dparams, handlers.rq());
+  qx[EqnData::S].slice({0, dims.oP()}, {nQnew, dims.oP() + dims.nP}) = util::overlap(params, pparams, handlers.rp());
+  qx[EqnData::S].slice({0, dims.oQ()}, {nQnew, dims.oQ() + dims.nQ}) = util::overlap(params, qparams, handlers.rq());
+  qx[EqnData::S].slice({0, dims.oD()}, {nQnew, dims.oD() + dims.nD}) = util::overlap(params, dparams, handlers.rq());
   qq[EqnData::H] =
       action_dot_action ? util::overlap(actions, handlers.rr()) : util::overlap(params, actions, handlers.rr());
-  qx[EqnData::H].slice({0, dims.oQ}, {nQnew, dims.oQ + dims.nQ}) =
+  qx[EqnData::H].slice({0, dims.oQ()}, {nQnew, dims.oQ() + dims.nQ}) =
       util::overlap(action_dot_action ? actions : params, qactions, handlers.rq());
-  qx[EqnData::H].slice({0, dims.oD}, {nQnew, dims.oD + dims.nD}) =
+  qx[EqnData::H].slice({0, dims.oD()}, {nQnew, dims.oD() + dims.nD}) =
       util::overlap(action_dot_action ? actions : params, dactions, handlers.rq());
   if (hermitian) {
-    xq[EqnData::H].slice({dims.oP, 0}, {dims.oP + dims.nP, nQnew}) = util::overlap(pparams, actions, handlers.rp());
-    //    xq[EqnData::H].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}) = util::overlap(action_dot_action ? qactions :
+    xq[EqnData::H].slice({dims.oP(), 0}, {dims.oP() + dims.nP, nQnew}) = util::overlap(pparams, actions, handlers.rp());
+    //    xq[EqnData::H].slice({dims.oQ(), 0}, {dims.oQ() + dims.nQ, nQnew}) = util::overlap(action_dot_action ? qactions :
     //    qparams, actions, handlers.qr());
-    conjugate_transpose_copy(xq[EqnData::H].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}),
-                   qx[EqnData::H].slice({0, dims.oQ}, {nQnew, dims.oQ + dims.nQ}));
-    conjugate_transpose_copy(xq[EqnData::H].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}),
-                   qx[EqnData::H].slice({0, dims.oD}, {nQnew, dims.oD + dims.nD}));
-    conjugate_transpose_copy(qx[EqnData::H].slice({0, dims.oP}, {nQnew, dims.oP + dims.nP}),
-                   xq[EqnData::H].slice({dims.oP, 0}, {dims.oP + dims.nP, nQnew}));
+    conjugate_transpose_copy(xq[EqnData::H].slice({dims.oQ(), 0}, {dims.oQ() + dims.nQ, nQnew}),
+                   qx[EqnData::H].slice({0, dims.oQ()}, {nQnew, dims.oQ() + dims.nQ}));
+    conjugate_transpose_copy(xq[EqnData::H].slice({dims.oD(), 0}, {dims.oD() + dims.nD, nQnew}),
+                   qx[EqnData::H].slice({0, dims.oD()}, {nQnew, dims.oD() + dims.nD}));
+    conjugate_transpose_copy(qx[EqnData::H].slice({0, dims.oP()}, {nQnew, dims.oP() + dims.nP}),
+                   xq[EqnData::H].slice({dims.oP(), 0}, {dims.oP() + dims.nP, nQnew}));
   } else {
-    xq[EqnData::H].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}) = util::overlap(qparams, actions, handlers.rq());
-    xq[EqnData::H].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}) = util::overlap(dparams, actions, handlers.rq());
+    xq[EqnData::H].slice({dims.oQ(), 0}, {dims.oQ() + dims.nQ, nQnew}) = util::overlap(qparams, actions, handlers.rq());
+    xq[EqnData::H].slice({dims.oD(), 0}, {dims.oD() + dims.nD, nQnew}) = util::overlap(dparams, actions, handlers.rq());
   }
   qq[EqnData::rhs] = util::overlap(params, rhs, handlers.rq());
-  conjugate_transpose_copy(xq[EqnData::S].slice({dims.oP, 0}, {dims.oP + dims.nP, nQnew}),
-                 qx[EqnData::S].slice({0, dims.oP}, {nQnew, dims.oP + dims.nP}));
-  conjugate_transpose_copy(xq[EqnData::S].slice({dims.oQ, 0}, {dims.oQ + dims.nQ, nQnew}),
-                 qx[EqnData::S].slice({0, dims.oQ}, {nQnew, dims.oQ + dims.nQ}));
-  conjugate_transpose_copy(xq[EqnData::S].slice({dims.oD, 0}, {dims.oD + dims.nD, nQnew}),
-                 qx[EqnData::S].slice({0, dims.oD}, {nQnew, dims.oD + dims.nD}));
+  conjugate_transpose_copy(xq[EqnData::S].slice({dims.oP(), 0}, {dims.oP() + dims.nP, nQnew}),
+                 qx[EqnData::S].slice({0, dims.oP()}, {nQnew, dims.oP() + dims.nP}));
+  conjugate_transpose_copy(xq[EqnData::S].slice({dims.oQ(), 0}, {dims.oQ() + dims.nQ, nQnew}),
+                 qx[EqnData::S].slice({0, dims.oQ()}, {nQnew, dims.oQ() + dims.nQ}));
+  conjugate_transpose_copy(xq[EqnData::S].slice({dims.oD(), 0}, {dims.oD() + dims.nD, nQnew}),
+                 qx[EqnData::S].slice({0, dims.oD()}, {nQnew, dims.oD() + dims.nD}));
   logger.data_dump("xspace::update_qspace_data() nQnew = ", nQnew);
   logger.data_dump("Sqq = ", qq[EqnData::S]);
   logger.data_dump("Hqq = ", qq[EqnData::H]);
@@ -137,12 +137,14 @@ void copy_dspace_eqn_data(const NewData<T>& new_data, SubspaceData<T>& data, con
   const auto& dd = new_data.qq.at(e);
   const auto& dx = new_data.qx.at(e);
   const auto& xd = new_data.xq.at(e);
-  data[e].slice({dims.oD, dims.oD}, {dims.oD + dims.nD, dims.oD + dims.nD}) = dd;
-  data[e].slice({dims.oD, dims.oP}, {dims.oD + dims.nD, dims.oP + dims.nP}) = dx.slice({0, 0}, {dims.nD, dims.nP});
-  data[e].slice({dims.oD, dims.oQ}, {dims.oD + dims.nD, dims.oQ + dims.nQ}) =
+  data[e].slice({dims.oD(), dims.oD()}, {dims.oD() + dims.nD, dims.oD() + dims.nD}) = dd;
+  data[e].slice({dims.oD(), dims.oP()}, {dims.oD() + dims.nD, dims.oP() + dims.nP}) =
+      dx.slice({0, 0}, {dims.nD, dims.nP});
+  data[e].slice({dims.oD(), dims.oQ()}, {dims.oD() + dims.nD, dims.oQ() + dims.nQ}) =
       dx.slice({0, dims.nP}, {dims.nD, dims.nP + dims.nQ});
-  data[e].slice({dims.oP, dims.oD}, {dims.oP + dims.nP, dims.oD + dims.nD}) = xd.slice({0, 0}, {dims.nP, dims.nD});
-  data[e].slice({dims.oQ, dims.oD}, {dims.oQ + dims.nQ, dims.oD + dims.nD}) =
+  data[e].slice({dims.oP(), dims.oD()}, {dims.oP() + dims.nP, dims.oD() + dims.nD}) =
+      xd.slice({0, 0}, {dims.nP, dims.nD});
+  data[e].slice({dims.oQ(), dims.oD()}, {dims.oQ() + dims.nQ, dims.oD() + dims.nD}) =
       xd.slice({dims.nP, 0}, {dims.nP + dims.nQ, dims.nD});
 }
 } // namespace xspace
@@ -174,21 +176,21 @@ public:
     dspace.update(params, actions);
     update_dimensions();
     for (auto e : {EqnData::H, EqnData::S})
-      data[e].resize({m_dim.nX, m_dim.nX});
+      data[e].resize({m_dim.nX(), m_dim.nX()});
     auto new_data = xspace::update_dspace_overlap_data(cparamsp(), cparamsq(), cparamsd(), cwrap(m_rhs),
                                                        m_handlers->qp(), m_handlers->qq(), *m_logger);
     xspace::copy_dspace_eqn_data(new_data, data, EqnData::S, m_dim);
     auto new_data_action = xspace::update_dspace_action_data(
         cparamsp(), cparamsq(), cactionsq(), cparamsd(), cactionsd(), m_handlers->qp(), m_handlers->qq(), *m_logger);
     xspace::copy_dspace_eqn_data(new_data_action, data, EqnData::H, m_dim);
-    data[EqnData::rhs].resize({m_dim.nX, m_dim.nRHS});
-    data[EqnData::rhs].slice({m_dim.oD, 0}, {m_dim.oD + m_dim.nD, m_dim.nRHS}) = new_data.qq[EqnData::rhs].slice();
+    data[EqnData::rhs].resize({m_dim.nX(), m_dim.nRHS});
+    data[EqnData::rhs].slice({m_dim.oD(), 0}, {m_dim.oD() + m_dim.nD, m_dim.nRHS}) = new_data.qq[EqnData::rhs].slice();
   }
 
   // FIXME this must be called when XSpace is empty
   //! @warning Subspace should be empty
   void update_pspace(const CVecRef<P>& params, const array::Span<value_type>& pp_action_matrix) override {
-    assert(m_dim.nX == 0);
+    assert(m_dim.nX() == 0);
     if (!m_hermitian)
       throw std::runtime_error("P space can only be used with hermitian kernels");
     pspace.update(params, m_handlers->pp());
@@ -227,30 +229,30 @@ public:
   const Dimensions& dimensions() const override { return m_dim; }
 
   void erase(size_t i) override {
-    if (m_dim.oP >= i && i < m_dim.oP + m_dim.nP) {
-      erasep(i - m_dim.oP);
-    } else if (m_dim.oQ >= i && i < m_dim.oQ + m_dim.nQ) {
-      eraseq(i - m_dim.oQ);
-    } else if (m_dim.oD >= i && i < m_dim.oD + m_dim.nD) {
-      erased(i - m_dim.oD);
+    if (m_dim.oP() >= i && i < m_dim.oP() + m_dim.nP) {
+      erasep(i - m_dim.oP());
+    } else if (m_dim.oQ() >= i && i < m_dim.oQ() + m_dim.nQ) {
+      eraseq(i - m_dim.oQ());
+    } else if (m_dim.oD() >= i && i < m_dim.oD() + m_dim.nD) {
+      erased(i - m_dim.oD());
     }
   }
 
   void eraseq(size_t i) override {
     qspace.erase(i);
-    remove_data(m_dim.oQ + i);
+    remove_data(m_dim.oQ() + i);
     update_dimensions();
   }
 
   void erasep(size_t i) override {
     pspace.erase(i);
-    remove_data(m_dim.oP + i);
+    remove_data(m_dim.oP() + i);
     update_dimensions();
   }
 
   void erased(size_t i) override {
     dspace.erase(i);
-    remove_data(m_dim.oD + i);
+    remove_data(m_dim.oD() + i);
     update_dimensions();
   }
 

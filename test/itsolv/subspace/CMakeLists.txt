@@ -1,1 +1,1 @@
-target_sources(test-${PROJECT_NAME}-itsolv.exe PRIVATE testMatrix.cpp test_util.cpp test_QSpace.cpp)
+target_sources(test-${PROJECT_NAME}-itsolv.exe PRIVATE testMatrix.cpp test_util.cpp test_QSpace.cpp test_Dimensions.cpp)

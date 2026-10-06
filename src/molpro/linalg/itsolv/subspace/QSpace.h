@@ -113,29 +113,32 @@ struct QSpace {
       }
       nQnew -= rp.size();
     }
-    const auto nXnew = dims.nX + nQnew;
+    const auto nXnew = dims.nX() + nQnew;
     auto data = old_data;
     for (auto d : {EqnData::H, EqnData::S}) {
-      data[d].resize({dims.nX + nQnew, dims.nX + nQnew});
-      data[d].slice({dims.oQ + nQnew, dims.oQ + nQnew}, {data[d].rows(), data[d].cols()}) =
-          old_data[d].slice({dims.oQ, dims.oQ}, {dims.nX, dims.nX});
-      data[d].slice({dims.oQ, dims.oQ}, {dims.oQ + nQnew, dims.oQ + nQnew}) = qq.at(d).slice({0,0},{nQnew,nQnew});
-      data[d].slice({dims.oQ, 0}, {dims.oQ + nQnew, dims.oQ}) = qx.at(d).slice({0, 0}, {nQnew, dims.oQ});
-      data[d].slice({dims.oQ, dims.oQ + nQnew}, {dims.oQ + nQnew, nXnew}) =
-          qx.at(d).slice({0, dims.oQ}, {nQnew, dims.nX});
-      data[d].slice({0, dims.oQ}, {dims.oQ, dims.oQ + nQnew}) = xq.at(d).slice({0, 0}, {dims.oQ, nQnew});
-      data[d].slice({dims.oQ + nQnew, dims.oQ}, {nXnew, dims.oQ + nQnew}) =
-          xq.at(d).slice({dims.oQ, 0}, {dims.nX, nQnew});
-      data[d].slice({0, 0}, {dims.oQ, dims.oQ}) = old_data[d].slice({0, 0}, {dims.oQ, dims.oQ});
-      data[d].slice({0, dims.oQ + nQnew}, {dims.oQ, nXnew}) = old_data[d].slice({0, dims.oQ}, {dims.oQ, dims.nX});
-      data[d].slice({dims.oQ + nQnew, 0}, {nXnew, dims.oQ}) = old_data[d].slice({dims.oQ, 0}, {dims.nX, dims.oQ});
+      data[d].resize({dims.nX() + nQnew, dims.nX() + nQnew});
+      data[d].slice({dims.oQ() + nQnew, dims.oQ() + nQnew}, {data[d].rows(), data[d].cols()}) =
+          old_data[d].slice({dims.oQ(), dims.oQ()}, {dims.nX(), dims.nX()});
+      data[d].slice({dims.oQ(), dims.oQ()}, {dims.oQ() + nQnew, dims.oQ() + nQnew}) =
+          qq.at(d).slice({0, 0}, {nQnew, nQnew});
+      data[d].slice({dims.oQ(), 0}, {dims.oQ() + nQnew, dims.oQ()}) = qx.at(d).slice({0, 0}, {nQnew, dims.oQ()});
+      data[d].slice({dims.oQ(), dims.oQ() + nQnew}, {dims.oQ() + nQnew, nXnew}) =
+          qx.at(d).slice({0, dims.oQ()}, {nQnew, dims.nX()});
+      data[d].slice({0, dims.oQ()}, {dims.oQ(), dims.oQ() + nQnew}) = xq.at(d).slice({0, 0}, {dims.oQ(), nQnew});
+      data[d].slice({dims.oQ() + nQnew, dims.oQ()}, {nXnew, dims.oQ() + nQnew}) =
+          xq.at(d).slice({dims.oQ(), 0}, {dims.nX(), nQnew});
+      data[d].slice({0, 0}, {dims.oQ(), dims.oQ()}) = old_data[d].slice({0, 0}, {dims.oQ(), dims.oQ()});
+      data[d].slice({0, dims.oQ() + nQnew}, {dims.oQ(), nXnew}) =
+          old_data[d].slice({0, dims.oQ()}, {dims.oQ(), dims.nX()});
+      data[d].slice({dims.oQ() + nQnew, 0}, {nXnew, dims.oQ()}) =
+          old_data[d].slice({dims.oQ(), 0}, {dims.nX(), dims.oQ()});
       old_data[d] = data[d];
     }
     if (!qq.at(EqnData::rhs).empty()) {
-      data[EqnData::rhs].resize({dims.nX + nQnew, dims.nRHS});
-      data[EqnData::rhs].slice({dims.oQ, 0}, {dims.oQ + nQnew, dims.nRHS}) = qq.at(EqnData::rhs).slice();
-      data[EqnData::rhs].slice({dims.oQ + nQnew, 0}, {dims.nX + nQnew, dims.nRHS}) =
-          old_data[EqnData::rhs].slice({dims.oQ, 0}, {dims.nX, dims.nRHS});
+      data[EqnData::rhs].resize({dims.nX() + nQnew, dims.nRHS});
+      data[EqnData::rhs].slice({dims.oQ(), 0}, {dims.oQ() + nQnew, dims.nRHS}) = qq.at(EqnData::rhs).slice();
+      data[EqnData::rhs].slice({dims.oQ() + nQnew, 0}, {dims.nX() + nQnew, dims.nRHS}) =
+          old_data[EqnData::rhs].slice({dims.oQ(), 0}, {dims.nX(), dims.nRHS});
       old_data[EqnData::rhs] = data[EqnData::rhs];
     }
     m_logger->data_dump("S = ", data.at(EqnData::S));
