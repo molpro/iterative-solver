@@ -298,7 +298,10 @@ class NonLinearEquations(IterativeSolver):
 
 class LinearEquations(IterativeSolver):
     def __init__(self, rhs, range=None, aughes=0.0, thresh=1e-10, thresh_value=1e50, hermitian=False, verbosity=0,
-                 pname='', mpicomm=None, algorithm='', options=''):
+                 pname='', mpicomm=None, algorithm='', options='', augmented_hessian=None):
+        # augmented_hessian matches the name used by the C++ and Fortran interfaces; aughes is kept for compatibility
+        if augmented_hessian is not None:
+            aughes = augmented_hessian
         n = rhs.shape[-1]
         nroot = rhs.shape[0] if len(rhs.shape)>1 else 1
         super().__init__(n, nroot)
