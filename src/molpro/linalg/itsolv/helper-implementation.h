@@ -478,47 +478,60 @@ void eigenproblem(std::vector<value_type>& eigenvectors, std::vector<value_type>
     return;
   }
 
-  // Perform an eigendecomposition of the transformed matrix
-  Eigen::EigenSolver<MatrixT> s(Hbar);
-  subspaceEigenvalues = s.eigenvalues();
-  if (s.eigenvalues().imag().norm() < zero_tol) {
-    // real eigenvalues
-    subspaceEigenvalues = subspaceEigenvalues.real();
-    subspaceEigenvectors = s.eigenvectors();
-    // complex eigenvectors need to be rotated
-    // assume that they come in consecutive pairs
-    for (int i = 0; i < subspaceEigenvectors.cols() - 1; i++) {
-      if (subspaceEigenvectors.col(i).imag().norm() <= zero_tol) {
-          continue;
-      }
-
-      const int j = i + 1;
-      if (abs(subspaceEigenvalues(i) - subspaceEigenvalues(j)) >= zero_tol or
-          subspaceEigenvectors.col(j).imag().norm() <= zero_tol) {
-          continue;
-      }
-
-      // For a real-valued matrix, eigenvectors can always be chosen to be real. If we have a complex eigenvector,
-      // it's complex conjugate must also be an eigenvector with the same eigenvalue. We can combine these two
-      // vectors as either u + u^* = 2 Re(u) or i*(u - u^*) = -2 Im(u).
-      // In other words, the real and imaginary part of u are the corresponding real-valued eigenvectors.
-      subspaceEigenvectors.col(j) = subspaceEigenvectors.col(i).imag() / subspaceEigenvectors.col(i).imag().norm();
-      subspaceEigenvectors.col(i) = subspaceEigenvectors.col(i).real() / subspaceEigenvectors.col(i).real().norm();
-    }
-
-    // Convert eigenvectors back into original basis (minus singular dimensions)
-    subspaceEigenvectors = subspace.transformation * subspaceEigenvectors;
+  if (hermitian) {
+    // A hermitian problem has real eigenvalues and eigenvectors. Hbar is then symmetric up to rounding, which
+    // compiler-dependent floating-point contraction can make large enough for the general eigensolver to return a
+    // complex pair for (near-)degenerate eigenvalues. Solving the symmetric part with the self-adjoint solver rules that
+    // out.
+    const MatrixT Hsym = (Hbar + Hbar.transpose()) / value_type(2);
+    Eigen::SelfAdjointEigenSolver<MatrixT> s(Hsym);
+    if (s.info() != Eigen::Success)
+      throw std::runtime_error("Eigensolver of the subspace matrix did not converge");
+    subspaceEigenvalues = s.eigenvalues().template cast<std::complex<value_type>>();
+    subspaceEigenvectors = (subspace.transformation * s.eigenvectors()).template cast<std::complex<value_type>>();
   } else {
-    // complex eigenvalues
-#ifdef __INTEL_COMPILER
-    molpro::cout << "Hbar\n" << Hbar << std::endl;
-    molpro::cout << "Eigenvalues\n" << s.eigenvalues() << std::endl;
-    molpro::cout << "Eigenvectors\n" << s.eigenvectors() << std::endl;
-    throw std::runtime_error("Intel compiler does not support working with complex eigen3 entities properly");
-#endif
+    // Perform an eigendecomposition of the transformed matrix
+    Eigen::EigenSolver<MatrixT> s(Hbar);
+    subspaceEigenvalues = s.eigenvalues();
+    if (s.eigenvalues().imag().norm() < zero_tol) {
+      // real eigenvalues
+      subspaceEigenvalues = subspaceEigenvalues.real();
+      subspaceEigenvectors = s.eigenvectors();
+      // complex eigenvectors need to be rotated
+      // assume that they come in consecutive pairs
+      for (int i = 0; i < subspaceEigenvectors.cols() - 1; i++) {
+        if (subspaceEigenvectors.col(i).imag().norm() <= zero_tol) {
+            continue;
+        }
 
-    // Convert eigenvectors back into original basis (minus singular dimensions)
-    subspaceEigenvectors = subspace.transformation * s.eigenvectors();
+        const int j = i + 1;
+        if (abs(subspaceEigenvalues(i) - subspaceEigenvalues(j)) >= zero_tol or
+            subspaceEigenvectors.col(j).imag().norm() <= zero_tol) {
+            continue;
+        }
+
+        // For a real-valued matrix, eigenvectors can always be chosen to be real. If we have a complex eigenvector,
+        // it's complex conjugate must also be an eigenvector with the same eigenvalue. We can combine these two
+        // vectors as either u + u^* = 2 Re(u) or i*(u - u^*) = -2 Im(u).
+        // In other words, the real and imaginary part of u are the corresponding real-valued eigenvectors.
+        subspaceEigenvectors.col(j) = subspaceEigenvectors.col(i).imag() / subspaceEigenvectors.col(i).imag().norm();
+        subspaceEigenvectors.col(i) = subspaceEigenvectors.col(i).real() / subspaceEigenvectors.col(i).real().norm();
+      }
+
+      // Convert eigenvectors back into original basis (minus singular dimensions)
+      subspaceEigenvectors = subspace.transformation * subspaceEigenvectors;
+    } else {
+      // complex eigenvalues
+  #ifdef __INTEL_COMPILER
+      molpro::cout << "Hbar\n" << Hbar << std::endl;
+      molpro::cout << "Eigenvalues\n" << s.eigenvalues() << std::endl;
+      molpro::cout << "Eigenvectors\n" << s.eigenvectors() << std::endl;
+      throw std::runtime_error("Intel compiler does not support working with complex eigen3 entities properly");
+  #endif
+
+      // Convert eigenvectors back into original basis (minus singular dimensions)
+      subspaceEigenvectors = subspace.transformation * s.eigenvectors();
+    }
   }
 
   // Determine order of eigenvalues such that they come in non-descending order of their real part

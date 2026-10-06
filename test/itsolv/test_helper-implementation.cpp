@@ -437,3 +437,54 @@ TEST(helper_implementation, get_rank_of_svd_list_is_generic) {
     svds.push_back(molpro::linalg::itsolv::SVD<float>{v, {}, {}});
   EXPECT_EQ(molpro::linalg::itsolv::get_rank(svds, 1e-2f), 2u);
 }
+
+// A hermitian problem whose projected matrix has a degenerate eigenvalue pair and a small antisymmetric error, of the
+// kind floating-point contraction can introduce, must still give real eigenvalues and eigenvectors (issue #509)
+TEST(helper_implementation, eigenproblem_hermitian_degenerate_with_rounding_error) {
+  const int n = 6;
+  const std::vector<double> lambda{1, 2, 2, 3, 4, 5};
+  // an orthogonal matrix Q from the Gram-Schmidt orthonormalisation of a fixed non-singular matrix
+  std::vector<std::vector<double>> q(n, std::vector<double>(n));
+  for (int i = 0; i < n; ++i)
+    for (int j = 0; j < n; ++j)
+      q[i][j] = std::sin(1.0 + 3 * i + 7 * j) + (i == j ? 2 : 0);
+  for (int i = 0; i < n; ++i) {
+    for (int k = 0; k < i; ++k) {
+      double d = 0;
+      for (int j = 0; j < n; ++j)
+        d += q[i][j] * q[k][j];
+      for (int j = 0; j < n; ++j)
+        q[i][j] -= d * q[k][j];
+    }
+    double norm = 0;
+    for (int j = 0; j < n; ++j)
+      norm += q[i][j] * q[i][j];
+    for (int j = 0; j < n; ++j)
+      q[i][j] /= std::sqrt(norm);
+  }
+  std::vector<double> H(n * n, 0), S(n * n, 0);
+  for (int i = 0; i < n; ++i) {
+    S[i * n + i] = 1;
+    for (int j = 0; j < n; ++j) {
+      for (int k = 0; k < n; ++k)
+        H[i * n + j] += q[k][i] * lambda[k] * q[k][j];
+      H[i * n + j] += 1e-9 * std::cos(1.0 + i + 2 * j) - 1e-9 * std::cos(1.0 + j + 2 * i); // antisymmetric
+    }
+  }
+  std::vector<double> evecs, evals;
+  std::vector<std::pair<std::size_t, double>> imag_evals;
+  ASSERT_NO_THROW(molpro::linalg::itsolv::eigenproblem(evecs, evals, H, S, n, true, 1e-12, 0, &imag_evals));
+  EXPECT_TRUE(imag_evals.empty());
+  ASSERT_EQ(evals.size(), n);
+  for (int k = 0; k < n; ++k) {
+    EXPECT_NEAR(evals[k], lambda[k], 1e-8);
+    // H_sym v = lambda v
+    for (int i = 0; i < n; ++i) {
+      double hv = 0;
+      for (int j = 0; j < n; ++j)
+        hv += 0.5 * (H[i * n + j] + H[j * n + i]) * evecs[k * n + j];
+      EXPECT_NEAR(hv, evals[k] * evecs[k * n + i], 1e-8);
+    }
+  }
+  ASSERT_NO_THROW(molpro::linalg::itsolv::eigenproblem(evecs, evals, H, S, n, true, 1e-12, 0));
+}
