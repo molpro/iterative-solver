@@ -591,18 +591,26 @@ protected:
     m_profiler->set_max_depth(options()->parameter("PROFILER_DEPTH", 0));
   }
 
+  // The destructor is implicitly noexcept, so any exception from writing the profiler output would terminate the
+  // program. Report such failures and carry on.
   virtual ~IterativeSolverTemplate() {
-    if (molpro::mpi::rank_global() == 0) {
-      auto file = options()->parameter("PROFILER_OUTPUT", "");
-      if (profiler()->get_max_depth() > 0 and
-          std::find_if(file.begin(), file.end(), [](unsigned char ch) { return !std::isspace(ch); }) != file.end())
-        std::ofstream(file) << *profiler() << std::endl;
-    }
-    if (molpro::mpi::rank_global() == 0) {
-      auto file = options()->parameter("PROFILER_DOTGRAPH", "");
-      if (profiler()->get_max_depth() > 0 and
-          std::find_if(file.begin(), file.end(), [](unsigned char ch) { return !std::isspace(ch); }) != file.end())
-        profiler()->dotgraph(file, options()->parameter("PROFILER_THRESHOLD", .01));
+    try {
+      if (molpro::mpi::rank_global() == 0) {
+        auto file = options()->parameter("PROFILER_OUTPUT", "");
+        if (profiler()->get_max_depth() > 0 and
+            std::find_if(file.begin(), file.end(), [](unsigned char ch) { return !std::isspace(ch); }) != file.end())
+          std::ofstream(file) << *profiler() << std::endl;
+      }
+      if (molpro::mpi::rank_global() == 0) {
+        auto file = options()->parameter("PROFILER_DOTGRAPH", "");
+        if (profiler()->get_max_depth() > 0 and
+            std::find_if(file.begin(), file.end(), [](unsigned char ch) { return !std::isspace(ch); }) != file.end())
+          profiler()->dotgraph(file, options()->parameter("PROFILER_THRESHOLD", .01));
+      }
+    } catch (const std::exception& e) {
+      std::cerr << "~IterativeSolverTemplate: failed to write profiler output: " << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "~IterativeSolverTemplate: failed to write profiler output" << std::endl;
     }
     molpro::Profiler::single()->set_max_depth(m_profiler_saved_depth);
   }
