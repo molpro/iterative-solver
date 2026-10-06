@@ -169,19 +169,17 @@ end select
     end select
   END SUBROUTINE Solve_Linear_Equations
 
-  SUBROUTINE Solve_Nonlinear_Equations(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
+  SUBROUTINE Solve_Nonlinear_Equations(parameters, actions, problem, generate_initial_guess, max_iter, &
       thresh, &
-      hermitian, verbosity, pname, mpicomm, algorithm, range, options)
+      verbosity, pname, mpicomm, algorithm, range, options)
     USE Iterative_Solver_Problem, only : problem_class => Problem
     IMPLICIT NONE
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: parameters
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: actions
     CLASS(problem_class), INTENT(inout), TARGET :: problem
-    INTEGER, INTENT(in), OPTIONAL :: nroot !< number of eigensolutions desired
     LOGICAL, OPTIONAL :: generate_initial_guess !< whether to generate an initial guess (default) or use what is passed in parameters
     INTEGER, OPTIONAL :: max_iter !< maximum number of iterations
     DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh !< convergence threshold
-    LOGICAL, INTENT(in), OPTIONAL :: hermitian !< whether the underlying kernel is hermitian
     INTEGER, INTENT(in), OPTIONAL :: verbosity !< how much to print. Default is zero, which prints nothing except errors.
     !< One gives a summary at the end; two gives a single progress-report line each iteration.
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
@@ -203,20 +201,18 @@ end select
     call Iterative_Solver_Solution([1], parameters, actions, .true.)
   END SUBROUTINE Solve_Nonlinear_Equations
 
-  SUBROUTINE Solve_Optimization(parameters, actions, problem, nroot, generate_initial_guess, max_iter, &
+  SUBROUTINE Solve_Optimization(parameters, actions, problem, generate_initial_guess, max_iter, &
       thresh, thresh_value, &
-      hermitian, verbosity, minimize, pname, mpicomm, algorithm, range, options)
+      verbosity, minimize, pname, mpicomm, algorithm, range, options)
     USE Iterative_Solver_Problem, only : problem_class => Problem
     IMPLICIT NONE
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: parameters
     DOUBLE PRECISION, DIMENSION(..), INTENT(inout), target :: actions
     CLASS(problem_class), INTENT(inout), TARGET :: problem
-    INTEGER, INTENT(in), OPTIONAL :: nroot !< number of eigensolutions desired
     LOGICAL, OPTIONAL :: generate_initial_guess !< whether to generate an initial guess (default) or use what is passed in parameters
     INTEGER, OPTIONAL :: max_iter !< maximum number of iterations
     DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh !< convergence threshold
     DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh_value !< value convergence threshold
-    LOGICAL, INTENT(in), OPTIONAL :: hermitian !< whether the underlying kernel is hermitian
     INTEGER, INTENT(in), OPTIONAL :: verbosity !< how much to print. Default is zero, which prints nothing except errors.
     !< One gives a summary at the end; two gives a single progress-report line each iteration.
     LOGICAL, INTENT(in), OPTIONAL :: minimize !< whether to minimize (default) or maximize
