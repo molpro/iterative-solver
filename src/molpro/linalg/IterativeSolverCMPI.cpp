@@ -556,42 +556,42 @@ extern "C" int IterativeSolverConverged() {
   return instances.top().solver->working_set().empty() ? 1 : 0;
 }
 
-int IterativeSolverNonLinear() {
+extern "C" int IterativeSolverNonLinear() {
   require_instance();
   return instances.top().solver->nonlinear() ? 1 : 0;
 }
-int IterativeSolverHasValues() {
+extern "C" int IterativeSolverHasValues() {
   require_instance();
   return instances.top().has_values ? 1 : 0;
 }
-int IterativeSolverHasEigenvalues() {
+extern "C" int IterativeSolverHasEigenvalues() {
   require_instance();
   return instances.top().has_eigenvalues ? 1 : 0;
 }
 
-void IterativeSolverSetDiagonals(const double* diagonals) {
+extern "C" void IterativeSolverSetDiagonals(const double* diagonals) {
   require_instance();
   instances.top().diagonals.reset(new Qvector(CreateDistrArray(1, diagonals).front()));
 }
-void IterativeSolverDiagonals(double* diagonals) {
+extern "C" void IterativeSolverDiagonals(double* diagonals) {
   require_instance();
   CreateDistrArray(1, diagonals).front().copy(*instances.top().diagonals);
 }
-double IterativeSolverValue() {
+extern "C" double IterativeSolverValue() {
   require_instance();
   return instances.top().solver->value();
 }
 // The initialisers set the logger with their own mapping from the requested print level, which cannot be inverted
 // (levels 0 to 2 all give log::Verbosity::Info), so return the level that was requested.
-int IterativeSolverVerbosity() {
+extern "C" int IterativeSolverVerbosity() {
   require_instance();
   return instances.top().verbosity;
 }
-int IterativeSolverMaxIter() {
+extern "C" int IterativeSolverMaxIter() {
   require_instance();
   return instances.top().solver->get_max_iter();
 }
-void IterativeSolverSetMaxIter(int max_iter) {
+extern "C" void IterativeSolverSetMaxIter(int max_iter) {
   require_instance();
   instances.top().solver->set_max_iter(max_iter);
 }
