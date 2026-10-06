@@ -195,9 +195,14 @@ protected:
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
     assert(params.size() >= roots.size());
     const auto& norm = std::dynamic_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace)->rhs_norm();
+    // With the augmented Hessian the subspace solution satisfies (H - lambda) x = rhs, with lambda the subspace
+    // eigenvalue; without it lambda is zero
+    const auto& eigenvalues = this->m_subspace_solver->eigenvalues();
     for (size_t i = 0; i < roots.size(); ++i) {
       const auto ii = roots[i];
       this->m_handlers->rq().axpy(-1, rhs().at(ii), actions.at(i));
+      if (size_t(ii) < eigenvalues.size() and eigenvalues[ii] != value_type(0))
+        this->m_handlers->rr().axpy(-eigenvalues[ii], params.at(i), actions.at(i));
       if (norm.at(ii) != 0) {
         auto scal = 1 / norm[ii];
         this->m_handlers->rr().scal(scal, actions.at(i));
