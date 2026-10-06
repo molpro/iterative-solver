@@ -58,10 +58,10 @@ auto construct_projected_solution(const subspace::Matrix<value_type>& solutions,
   auto solutions_proj = subspace::Matrix<value_type>({nSol, nQd + dims.nD});
   for (size_t i = 0; i < nSol; ++i) {
     for (size_t j = 0; j < nQd; ++j) {
-      solutions_proj(i, j) = solutions(i, dims.oQ + remove_qspace[j]);
+      solutions_proj(i, j) = solutions(i, dims.oQ() + remove_qspace[j]);
     }
     for (size_t j = 0; j < dims.nD; ++j) {
-      solutions_proj(i, nQd + j) = solutions(i, dims.oD + j);
+      solutions_proj(i, nQd + j) = solutions(i, dims.oD() + j);
     }
   }
   logger.debug("nSol, nQd, nD", nSol, nQd, dims.nD);
@@ -96,21 +96,21 @@ auto construct_projected_solutions_overlap(const subspace::Matrix<value_type>& s
       for (size_t j = 0; j < nQd; ++j) {
         for (size_t k = 0; k < nQd; ++k) {
           overlap_proj(i, ii) += solutions_proj(i, j) * solutions_proj(ii, k) *
-                                 overlap(dims.oQ + remove_qspace[j], dims.oQ + remove_qspace[k]);
+                                 overlap(dims.oQ() + remove_qspace[j], dims.oQ() + remove_qspace[k]);
         }
         for (size_t k = 0; k < dims.nD; ++k) {
           overlap_proj(i, ii) +=
-              solutions_proj(i, j) * solutions_proj(ii, nQd + k) * overlap(dims.oQ + remove_qspace[j], dims.oD + k);
+              solutions_proj(i, j) * solutions_proj(ii, nQd + k) * overlap(dims.oQ() + remove_qspace[j], dims.oD() + k);
         }
       }
       for (size_t j = 0; j < dims.nD; ++j) {
         for (size_t k = 0; k < dims.nD; ++k) {
           overlap_proj(i, ii) +=
-              solutions_proj(i, nQd + j) * solutions_proj(ii, nQd + k) * overlap(dims.oD + j, dims.oD + k);
+              solutions_proj(i, nQd + j) * solutions_proj(ii, nQd + k) * overlap(dims.oD() + j, dims.oD() + k);
         }
         for (size_t k = 0; k < nQd; ++k) {
           overlap_proj(i, ii) +=
-              solutions_proj(i, nQd + j) * solutions_proj(ii, k) * overlap(dims.oD + j, dims.oQ + remove_qspace[k]);
+              solutions_proj(i, nQd + j) * solutions_proj(ii, k) * overlap(dims.oD() + j, dims.oQ() + remove_qspace[k]);
         }
       }
       overlap_proj(ii, i) = overlap_proj(i, ii);
@@ -206,14 +206,14 @@ auto construct_full_subspace_overlap(const subspace::Matrix<value_type>& solutio
   const auto nQ = dims.nQ - nQd;
   auto ov = overlap;
   for (size_t i = 0; i < dims.nD; ++i) {
-    ov.remove_row_col(dims.oD, dims.oD);
+    ov.remove_row_col(dims.oD(), dims.oD());
   }
   auto is_Qdelete = [&remove_qspace](size_t i) {
     return std::find(begin(remove_qspace), end(remove_qspace), i) != end(remove_qspace);
   };
   for (size_t i = 0, j = 0; i < dims.nQ; ++i) {
     if (is_Qdelete(i))
-      ov.remove_row_col(dims.oQ + j, dims.oQ + j);
+      ov.remove_row_col(dims.oQ() + j, dims.oQ() + j);
     else
       ++j;
   }
@@ -227,37 +227,37 @@ auto construct_full_subspace_overlap(const subspace::Matrix<value_type>& solutio
    */
   auto accumulate_ov_offdiag = [&](size_t i, size_t j, size_t jj) {
     for (size_t k = 0; k < nQd; ++k)
-      ov(oDnew + i, j) += solutions_proj(i, k) * overlap(jj, dims.oQ + remove_qspace[k]);
+      ov(oDnew + i, j) += solutions_proj(i, k) * overlap(jj, dims.oQ() + remove_qspace[k]);
     for (size_t k = 0; k < dims.nD; ++k)
-      ov(oDnew + i, j) += solutions_proj(i, nQd + k) * overlap(jj, dims.oD + k);
+      ov(oDnew + i, j) += solutions_proj(i, nQd + k) * overlap(jj, dims.oD() + k);
     ov(j, oDnew + i) = ov(oDnew + i, j);
   };
   for (size_t i = 0; i < nDnew; ++i) {
     for (size_t j = 0; j < dims.nP; ++j)
-      accumulate_ov_offdiag(i, j, dims.oP + j);
+      accumulate_ov_offdiag(i, j, dims.oP() + j);
     for (size_t j = 0, jj = 0; j < dims.nQ; ++j)
       if (!is_Qdelete(j))
-        accumulate_ov_offdiag(i, dims.nP + jj++, dims.oQ + j);
+        accumulate_ov_offdiag(i, dims.nP + jj++, dims.oQ() + j);
     for (size_t j = 0; j < nR; ++j)
-      accumulate_ov_offdiag(i, dims.nP + nQ + j, dims.nX + j);
+      accumulate_ov_offdiag(i, dims.nP + nQ + j, dims.nX() + j);
   }
   for (size_t i = 0; i < nDnew; ++i) {
     for (size_t j = 0; j <= i; ++j) {
       for (size_t k = 0; k < nQd; ++k) {
         for (size_t l = 0; l < nQd; ++l)
           ov(oDnew + i, oDnew + j) += solutions_proj(i, k) * solutions_proj(j, l) *
-                                      overlap(dims.oQ + remove_qspace[k], dims.oQ + remove_qspace[l]);
+                                      overlap(dims.oQ() + remove_qspace[k], dims.oQ() + remove_qspace[l]);
         for (size_t l = 0; l < dims.nD; ++l)
           ov(oDnew + i, oDnew + j) +=
-              solutions_proj(i, k) * solutions_proj(j, nQd + l) * overlap(dims.oQ + remove_qspace[k], dims.oD + l);
+              solutions_proj(i, k) * solutions_proj(j, nQd + l) * overlap(dims.oQ() + remove_qspace[k], dims.oD() + l);
       }
       for (size_t k = 0; k < dims.nD; ++k) {
         for (size_t l = 0; l < nQd; ++l)
           ov(oDnew + i, oDnew + j) +=
-              solutions_proj(i, nQd + k) * solutions_proj(j, l) * overlap(dims.oD + k, dims.oQ + remove_qspace[l]);
+              solutions_proj(i, nQd + k) * solutions_proj(j, l) * overlap(dims.oD() + k, dims.oQ() + remove_qspace[l]);
         for (size_t l = 0; l < dims.nD; ++l)
           ov(oDnew + i, oDnew + j) +=
-              solutions_proj(i, nQd + k) * solutions_proj(j, nQd + l) * overlap(dims.oD + k, dims.oD + l);
+              solutions_proj(i, nQd + k) * solutions_proj(j, nQd + l) * overlap(dims.oD() + k, dims.oD() + l);
       }
       ov(oDnew + j, oDnew + i) = ov(oDnew + i, oDnew + j);
     }
@@ -349,7 +349,7 @@ std::vector<std::size_t> limit_qspace_size(const subspace::Dimensions& dims, con
     max_contrib_to_solution.emplace_back(std::make_pair(idx, value_type_abs(0)));
 
     for (size_t j = 0; j < nSol; ++j) {
-      const value_type_abs current = std::abs(solutions(j, dims.oQ + idx));
+      const value_type_abs current = std::abs(solutions(j, dims.oQ() + idx));
       max_contrib_to_solution.back().second = std::max(max_contrib_to_solution.back().second, current);
     }
   }
@@ -489,9 +489,9 @@ auto modified_gram_schmidt(const VecRef<R>& rparams, const subspace::Matrix<valu
   };
   auto prof = molpro::Profiler::single();
   prof->start("orthoganalise");
-  orthogonalise(pparams, handlers.rp(), dims.oP, nP);
-  orthogonalise(qparams, handlers.rq(), dims.oQ, nQ);
-  orthogonalise(dparams, handlers.rq(), dims.oD, nD);
+  orthogonalise(pparams, handlers.rp(), dims.oP(), nP);
+  orthogonalise(qparams, handlers.rq(), dims.oQ(), nQ);
+  orthogonalise(dparams, handlers.rq(), dims.oD(), nD);
   prof->stop();
   prof->start("get null_params");
   auto null_params = std::vector<int>{};
@@ -598,7 +598,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   prof->stop();
   prof->start("redundant_indices");
   auto redundant_indices =
-      redundant_parameters(full_overlap, xspace.dimensions().nX, wresidual.size(), r_opts.svd_thresh, logger);
+      redundant_parameters(full_overlap, xspace.dimensions().nX(), wresidual.size(), r_opts.svd_thresh, logger);
   prof->stop();
   logger.debug("redundant indices = ", redundant_indices);
   util::delete_parameters(redundant_indices, wresidual);

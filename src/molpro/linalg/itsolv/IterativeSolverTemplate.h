@@ -237,16 +237,16 @@ public:
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
     prof->start("construct_solution (parameters)");
     detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP,
-                               m_xspace->dimensions().oQ, m_xspace->dimensions().oD, *m_handlers);
+                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
+                               m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
     prof->stop();
     prof->start("construct_solution (residual)");
     detail::construct_solution(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
-                               m_xspace->actionsd(), m_xspace->dimensions().oP, m_xspace->dimensions().oQ,
-                               m_xspace->dimensions().oD, *m_handlers);
+                               m_xspace->actionsd(), m_xspace->dimensions().oP(), m_xspace->dimensions().oQ(),
+                               m_xspace->dimensions().oD(), *m_handlers);
     prof->stop();
     prof->start("apply");
-    auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP,
+    auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP(),
                                               m_xspace->dimensions().nP);
     if (m_normalise_solution)
       detail::normalise(roots.size(), parameters, residual, m_handlers->rr(), *m_logger);
@@ -271,8 +271,8 @@ public:
   void solution_params(const std::vector<int>& roots, const VecRef<R>& parameters) override {
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
     detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP,
-                               m_xspace->dimensions().oQ, m_xspace->dimensions().oD, *m_handlers);
+                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
+                               m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
   };
 
   void solution_params(R& parameters) override { return solution_params(std::vector<int>(1, 0), wrap_arg(parameters)); }

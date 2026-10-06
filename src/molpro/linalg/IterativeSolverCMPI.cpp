@@ -467,7 +467,7 @@ extern "C" size_t IterativeSolverAddP(size_t buffer_size, size_t nP, const size_
     instance.prof->start("AddP:Call");
   size_t working_set_size = instance.solver->add_p(
       cwrap(Pvectors),
-      Span<Rvector::value_type>(&const_cast<double*>(pp)[0], (instance.solver->dimensions().oP + nP) * nP), wrap(cc),
+      Span<Rvector::value_type>(&const_cast<double*>(pp)[0], (instance.solver->dimensions().oP() + nP) * nP), wrap(cc),
       wrap(gg), apply_on_p);
   if (instance.prof != nullptr) {
     instance.prof->stop();
