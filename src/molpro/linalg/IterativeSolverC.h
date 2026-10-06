@@ -23,7 +23,28 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
                                                   double thresh_value, int verbosity, int minimize, const char* fname,
                                                   int64_t fcomm, const char* algorithm, const char* options);
 
+//! Remove the current solver instance. The most recently created remaining instance becomes current.
 extern "C" void IterativeSolverFinalize();
+
+//! Remove all solver instances
+extern "C" void IterativeSolverFinalizeAll();
+
+//! Handle of the current solver instance, or -1 if there is none. Call immediately after an Initialize function to
+//! obtain the handle of the new instance.
+extern "C" int64_t IterativeSolverCurrentHandle();
+
+//! Make the instance with the given handle current, so that subsequent calls act on it. @return 0 on success, nonzero
+//! if there is no instance with this handle
+extern "C" int IterativeSolverSelect(int64_t handle);
+
+//! Remove the instance with the given handle, whether or not it is current. Does nothing for an unknown handle.
+extern "C" void IterativeSolverFinalizeHandle(int64_t handle);
+
+//! Number of roots (solutions) of the current instance
+extern "C" size_t IterativeSolverNRoots();
+
+//! Dimension of the parameter space of the current instance
+extern "C" size_t IterativeSolverDimension();
 
 extern "C" size_t IterativeSolverAddVector(size_t buffer_size, double* parameters, double* action, int sync);
 

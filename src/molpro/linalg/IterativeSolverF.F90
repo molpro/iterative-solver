@@ -636,8 +636,28 @@ end select
       SUBROUTINE IterativeSolverFinalize() BIND(C, name = 'IterativeSolverFinalize')
         USE iso_c_binding
       END SUBROUTINE IterativeSolverFinalize
+      FUNCTION IterativeSolverCurrentHandle() BIND(C, name = 'IterativeSolverCurrentHandle')
+        USE iso_c_binding
+        INTEGER(c_int64_t) :: IterativeSolverCurrentHandle
+      END FUNCTION IterativeSolverCurrentHandle
+      FUNCTION IterativeSolverNRoots() BIND(C, name = 'IterativeSolverNRoots')
+        USE iso_c_binding
+        INTEGER(c_size_t) :: IterativeSolverNRoots
+      END FUNCTION IterativeSolverNRoots
+      FUNCTION IterativeSolverDimension() BIND(C, name = 'IterativeSolverDimension')
+        USE iso_c_binding
+        INTEGER(c_size_t) :: IterativeSolverDimension
+      END FUNCTION IterativeSolverDimension
     END INTERFACE
     CALL IterativeSolverFinalize
+    ! Restore the cached sizes of the enclosing solver, if any, which is now current
+    IF (IterativeSolverCurrentHandle() .GE. 0) THEN
+      m_nroot = IterativeSolverNRoots()
+      m_nq = IterativeSolverDimension()
+    ELSE
+      m_nroot = 0
+      m_nq = 0
+    END IF
   END SUBROUTINE Iterative_Solver_Finalize
 
   !> \brief Terminate all instances of the iterative solver
@@ -648,6 +668,8 @@ end select
       END SUBROUTINE IterativeSolverFinalizeAll
     END INTERFACE
     CALL IterativeSolverFinalizeAll
+    m_nroot = 0
+    m_nq = 0
   END SUBROUTINE Iterative_Solver_Finalize_All
 
   FUNCTION Iterative_Solver_Range()

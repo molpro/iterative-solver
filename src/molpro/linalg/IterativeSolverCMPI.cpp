@@ -1,8 +1,10 @@
 #include "IterativeSolverC.h"
 #include "molpro/Profiler.h"
+#include <algorithm>
+#include <map>
 #include <memory>
-#include <stack>
 #include <tuple>
+#include <vector>
 #ifdef LINEARALGEBRA_ARRAY_GA
 #include "ga-mpi.h"
 #include "ga.h"
@@ -58,7 +60,10 @@ using vectorP = std::vector<double>;
 using molpro::linalg::itsolv::CVecRef;
 using molpro::linalg::itsolv::VecRef;
 
-// FIXME Only top solver is active at any one time. This should be documented somewhere.
+// Solver instances are identified by integer handles. All C API functions act on the current instance, which is the
+// most recently created one unless another has been chosen with IterativeSolverSelect. IterativeSolverFinalize
+// removes the current instance and makes the most recently created remaining one current, so code that creates and
+// finalizes solvers in last-in-first-out order (the Fortran interface) never needs to select explicitly.
 
 namespace {
 struct Instance {
@@ -75,7 +80,49 @@ struct Instance {
   bool has_eigenvalues = false;
   int verbosity = 0; //!< print level requested by the caller
 };
-std::stack<Instance> instances;
+class InstanceRegistry {
+public:
+  bool empty() const { return m_instances.empty(); }
+  //! The current instance. @warning Undefined if empty()
+  Instance& top() { return m_instances.at(m_current); }
+  int64_t current_handle() const { return empty() ? -1 : m_current; }
+  //! Add an instance, which becomes current
+  void emplace(Instance&& instance) {
+    m_current = m_next_handle++;
+    m_instances.emplace(m_current, std::move(instance));
+    m_creation_order.push_back(m_current);
+  }
+  //! Make an instance current. @return false if there is no instance with this handle
+  bool select(int64_t handle) {
+    if (m_instances.count(handle) == 0)
+      return false;
+    m_current = handle;
+    return true;
+  }
+  //! Remove an instance; if it was current, the most recently created remaining instance becomes current
+  void erase(int64_t handle) {
+    if (m_instances.erase(handle) == 0)
+      return;
+    m_creation_order.erase(std::find(m_creation_order.begin(), m_creation_order.end(), handle));
+    if (m_current == handle)
+      m_current = m_creation_order.empty() ? -1 : m_creation_order.back();
+  }
+  //! Remove the current instance
+  void pop() { erase(m_current); }
+  void clear() {
+    m_instances.clear();
+    m_creation_order.clear();
+    m_current = -1;
+  }
+
+private:
+  std::map<int64_t, Instance> m_instances;
+  std::vector<int64_t> m_creation_order;
+  int64_t m_current = -1;
+  int64_t m_next_handle = 0; //!< handles are never reused, so a stale handle cannot select a different solver
+};
+InstanceRegistry instances;
+void require_instance();
 } // namespace
 
 std::pair<size_t, size_t> DistrArrayDefaultRange() {
@@ -308,7 +355,23 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
 
 extern "C" void IterativeSolverFinalize() { instances.pop(); }
 
-extern "C" void IterativeSolverFinalizeAll() { for (; !instances.empty(); instances.pop()); }
+extern "C" void IterativeSolverFinalizeAll() { instances.clear(); }
+
+extern "C" int64_t IterativeSolverCurrentHandle() { return instances.current_handle(); }
+
+extern "C" int IterativeSolverSelect(int64_t handle) { return instances.select(handle) ? 0 : 1; }
+
+extern "C" void IterativeSolverFinalizeHandle(int64_t handle) { instances.erase(handle); }
+
+extern "C" size_t IterativeSolverNRoots() {
+  require_instance();
+  return instances.top().solver->n_roots();
+}
+
+extern "C" size_t IterativeSolverDimension() {
+  require_instance();
+  return instances.top().dimension;
+}
 
 extern "C" void IterativeSolverAddEquation(double* rhs) {
   if (instances.empty())
