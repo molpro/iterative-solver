@@ -1,5 +1,6 @@
 module Iterative_Solver_Problem
   use Iterative_Solver_Pspace, only : PSpace
+  implicit none
   private
 
   !> @brief Abstract class defining the problem-specific interface for the simplified solver
@@ -52,6 +53,7 @@ contains
     double precision, intent(in), dimension(:), optional :: diagonals
     integer, dimension(2), intent(in) :: range
     double precision, parameter :: small = 1e-14
+    integer :: i, j
     if (present(diagonals)) then
       do i = lbound(action, 2), ubound(action, 2)
         if (present(shift)) then

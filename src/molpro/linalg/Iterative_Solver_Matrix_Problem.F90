@@ -1,5 +1,6 @@
 module Iterative_Solver_Matrix_Problem
   use Iterative_Solver_Problem, only : Problem
+  implicit none
   private
   !> @brief A specialisation of the Problem class for linear problems in which the kernel matrix is stored in full in an existing array
   type, public, extends(Problem) :: Matrix_Problem
@@ -44,6 +45,7 @@ contains
   logical function diagonals(this, d)
     class(Matrix_Problem), intent(in) :: this
     double precision, intent(inout), dimension(:) :: d
+    integer :: i
     d = [(this%matrix(i, i), i = lbound(this%matrix, 1), ubound(this%matrix, 1))]
     diagonals = .true.
   end function diagonals
@@ -60,6 +62,7 @@ contains
   function pp_action_matrix(this) result(matrix)
     class(matrix_problem), intent(in) :: this
     double precision, dimension(:, :), allocatable :: matrix
+    integer :: i, j, ic, jc
     allocate(matrix(this%p_space%size, this%p_space%size))
     do i = 1, this%p_space%size
       do j = 1, this%p_space%size
@@ -84,6 +87,7 @@ contains
     double precision, dimension(:, :), intent(in) :: p_coefficients
     double precision, dimension(:, :), intent(inout) :: actions
     integer, dimension(2), intent(in) :: range
+    integer :: i, j, k, kc
     do i = lbound(actions, 2), ubound(actions, 2)
       do k = 1, this%p_space%size
         do kc = this%p_space%offsets(k - 1) + 1, this%p_space%offsets(k)
