@@ -466,6 +466,12 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Non-owning view of the local buffer of a memory-backed source, which must outlive this object. </p><dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if source is disk-backed (a <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html" title="Distributed array located primarily on disk.">DistrArrayDisk</a>), whose local buffer is not persistent </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
