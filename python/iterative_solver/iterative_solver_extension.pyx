@@ -38,22 +38,24 @@ class IterativeSolver:
         '''
         self.n = n
         self.nroot = nroot
-        self._initialized = False
+        self._handle = None
+
+    def _register(self):
+        # Called by each concrete constructor straight after its IterativeSolver*Initialize call, which creates a
+        # C-side solver instance and makes it current
+        self._handle = IterativeSolverCurrentHandle()
+
+    def _select(self):
+        # All C API functions act on the current C-side instance, so make this solver's instance current before
+        # using them. This allows several solvers to be alive and used in any order.
+        if self._handle is None or IterativeSolverSelect(self._handle) != 0:
+            raise RuntimeError('IterativeSolver has not been initialised, or has been finalised')
 
     def __del__(self):
-        # The concrete subclass constructor pushes an entry onto the C-side
-        # `instances` stack via IterativeSolver*Initialize. Pop it here so we
-        # don't leak. Note: Python finalisation order is not guaranteed to
-        # match the LIFO push order — if the user keeps multiple solver
-        # instances alive simultaneously and they are destroyed out of order,
-        # the wrong entry will be popped. The common single-solver-at-a-time
-        # case works.
-        if getattr(self, '_initialized', False):
-            try:
-                IterativeSolverFinalize()
-            except Exception:
-                pass
-            self._initialized = False
+        # Release this solver's own C-side instance, whatever order solvers are destroyed in
+        if getattr(self, '_handle', None) is not None:
+            IterativeSolverFinalizeHandle(self._handle)
+            self._handle = None
 
     def mpicomm_compute(self):
         global m_mpicomm_compute
@@ -62,6 +64,7 @@ class IterativeSolver:
         return m_mpicomm_compute
 
     def solution(self,roots, parameters, residual, sync=True):
+        self._select()
         cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*len(roots)])
         cdef double[::1] residual_ = residual.reshape([parameters.shape[-1]*len(roots)])
         cdef vector[int] roots_ = roots
@@ -69,6 +72,7 @@ class IterativeSolver:
         return self.value
 
     def add_value(self, value, parameters, action, sync=True):
+        self._select()
         nbuffer = parameters.shape[0] if len(parameters.shape) > 1 else 1
         cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*nbuffer])
         cdef double[::1] action_ = action.reshape([parameters.shape[-1]*nbuffer])
@@ -77,6 +81,7 @@ class IterativeSolver:
         return result
 
     def add_vector(self, parameters, action, sync=True):
+        self._select()
         nbuffer = parameters.shape[0] if len(parameters.shape) > 1 else 1
         cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*nbuffer])
         cdef double[::1] action_ = action.reshape([parameters.shape[-1]*nbuffer])
@@ -85,6 +90,7 @@ class IterativeSolver:
         return result
 
     def add_P(self, pp, parameters, action):
+        self._select()
         nbuffer = parameters.shape[0] if len(parameters.shape) > 1 else 1
         cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*nbuffer])
         cdef double[::1] action_ = action.reshape([parameters.shape[-1]*nbuffer])
@@ -102,6 +108,7 @@ class IterativeSolver:
 
 
     def end_iteration(self, parameters, residual, sync=True):
+        self._select()
         nbuffer = parameters.shape[0] if len(parameters.shape) > 1 else 1
         cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*nbuffer])
         cdef double[::1] residual_ = residual.reshape([parameters.shape[-1]*nbuffer])
@@ -111,11 +118,13 @@ class IterativeSolver:
 
     @property
     def end_iteration_needed(self):
+        self._select()
         result = IterativeSolverEndIterationNeeded()
         return result !=0
 
     @property
     def errors(self):
+        self._select()
         e = np.ndarray(self.nroot)
         cdef double[::1] e_ = e
         IterativeSolverErrors(&e_[0])
@@ -123,6 +132,7 @@ class IterativeSolver:
 
     @property
     def converged(self):
+        self._select()
         return IterativeSolverConverged() != 0
 
     def solve(self, parameters, actions, problem, generate_initial_guess=False, max_iter=None, max_p=0):
@@ -145,6 +155,7 @@ class IterativeSolver:
             parameters_reshape = parameters.reshape([self.nroot, self.n])
             actions_reshape = actions.reshape([self.nroot, self.n])
             return self.solve(parameters_reshape, actions_reshape, problem, generate_initial_guess, max_iter)
+        self._select()
         self.iterations = 0
         nbuffer = parameters.shape[0] if len(parameters.shape) > 1 else 1
         cdef double[::1] parameters_ = parameters.reshape([parameters.shape[-1]*nbuffer])
@@ -155,6 +166,7 @@ class IterativeSolver:
         cdef double[::1] errors_ = errors
         verbosity = IterativeSolverVerbosity()
         use_diagonals = problem.diagonals(actions.reshape([actions.size]))
+        self._select()  # the problem's callbacks may have used another solver
         cdef int max_iter_
         if max_iter is not None:
             max_iter_ = max_iter
@@ -184,6 +196,7 @@ class IterativeSolver:
 
         nwork = nbuffer
         for self.iterations in range(IterativeSolverMaxIter()):
+            self._select()  # the problem's callbacks may have used another solver
             if IterativeSolverNonLinear() > 0:
                 value = problem.residual(parameters.reshape([parameters.shape[-1]]), actions.reshape([parameters.shape[-1]]))
                 if type(self) == Optimize:
@@ -249,7 +262,7 @@ class Optimize(IterativeSolver):
         IterativeSolverOptimizeInitialize(n_, rb, re, thresh_, thresh_value_, verbosity_,
                                           1 if minimize else 0, pname_, mpicomm_, algorithm_,
                                           options_)
-        self._initialized = True
+        self._register()
         if range is not None:
             range[0] = rb[0]
             range[1] = re[0]
@@ -278,7 +291,7 @@ class NonLinearEquations(IterativeSolver):
         IterativeSolverNonLinearEquationsInitialize(n_, rb, re, thresh_, verbosity_,
                                           pname_, mpicomm_, algorithm_,
                                           options_)
-        self._initialized = True
+        self._register()
         if range is not None:
             range[0] = rb[0]
             range[1] = re[0]
@@ -314,7 +327,7 @@ class LinearEquations(IterativeSolver):
                                                    1 if hermitian else 0, verbosity_,
                                                    pname_, mpicomm_, algorithm_,
                                                    options_)
-        self._initialized = True
+        self._register()
         if range is not None:
             range[0] = rb[0]
             range[1] = re[0]
@@ -346,12 +359,13 @@ class LinearEigensystem(IterativeSolver):
                                                  1 if hermitian else 0, verbosity_,
                                                  pname_, mpicomm_, algorithm_,
                                                  options_)
-        self._initialized = True
+        self._register()
         if range is not None:
             range[0] = rb[0]
             range[1] = re[0]
     @property
     def eigenvalues(self):
+        self._select()
         e = np.ndarray(self.nroot)
         cdef double[::1] e_ = e
         IterativeSolverEigenvalues(&e_[0])

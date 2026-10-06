@@ -1,3 +1,5 @@
+from libc.stdint cimport int64_t
+
 cdef extern from "molpro/linalg/IterativeSolverC.h":
     void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nroot, size_t* range_begin,
                                                     size_t* range_end, double thresh, double thresh_value,
@@ -21,6 +23,9 @@ cdef extern from "molpro/linalg/IterativeSolverC.h":
                                            int fcomm, const char* algorithm, const char* options)
 
     void IterativeSolverFinalize()
+    int64_t IterativeSolverCurrentHandle()
+    int IterativeSolverSelect(int64_t handle)
+    void IterativeSolverFinalizeHandle(int64_t handle)
 
     size_t IterativeSolverAddVector(size_t buffer_size, double* parameters, double* action, int sync)
 
