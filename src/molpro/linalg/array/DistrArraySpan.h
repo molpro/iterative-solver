@@ -16,6 +16,8 @@ public:
   DistrArraySpan(std::unique_ptr<Distribution> distribution, Span<value_type> buffer,
                  MPI_Comm commun = molpro::mpi::comm_global());
   DistrArraySpan(const DistrArraySpan &source);
+  //! Non-owning view of the local buffer of a memory-backed source, which must outlive this object.
+  //! @throws std::invalid_argument if source is disk-backed (a DistrArrayDisk), whose local buffer is not persistent
   explicit DistrArraySpan(const DistrArray &source);
   DistrArraySpan(DistrArraySpan &&source) noexcept;
   DistrArraySpan &operator=(const DistrArraySpan &source);

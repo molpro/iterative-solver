@@ -1,7 +1,9 @@
 #include "DistrArraySpan.h"
+#include "DistrArrayDisk.h"
 #include "util/Distribution.h"
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <molpro/mpi.h>
 #include <string>
 #include <molpro/Profiler.h>
@@ -54,8 +56,10 @@ DistrArraySpan::DistrArraySpan(const DistrArray& source)
     : DistrArray(source), m_distribution(std::make_unique<Distribution>(source.distribution())) {
   // NOTE: DistrArraySpan is non-owning. This wraps the source's local buffer,
   // so the source must outlive *this and must use a buffer that survives a
-  // local_buffer() round-trip (memory-backed sources only — disk-backed
-  // sources free their snapshot when the LocalBuffer object is destroyed).
+  // local_buffer() round-trip. A disk-backed source frees its snapshot when the
+  // LocalBuffer object is destroyed, which would leave m_span dangling, so it is refused.
+  if (dynamic_cast<const DistrArrayDisk*>(&source))
+    throw std::invalid_argument("DistrArraySpan cannot be constructed from a disk-backed DistrArray");
   auto local = source.local_buffer();
   // Drop the const acquired from `source` here: a DistrArraySpan is mutable by
   // design and the resulting view will be written through. The caveat above
