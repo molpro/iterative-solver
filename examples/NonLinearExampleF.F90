@@ -76,7 +76,7 @@ PROGRAM QuasiNewton_Example
       ! try one of the following
       Solve_Optimization(&
           !      Solve_Nonlinear_Equations(&
-          c, g, problem, n, thresh = 1d-6, verbosity = verbosity)
+          c, g, problem, thresh = 1d-6, verbosity = verbosity)
   if (verbosity.lt.1) then
     print *, 'Optimized function value ', Iterative_Solver_Value()
     print *, 'Error ', Iterative_Solver_Errors(), Iterative_Solver_Converged()
