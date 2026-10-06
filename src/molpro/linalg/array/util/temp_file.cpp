@@ -42,6 +42,9 @@ fs::path temp_file_name(const fs::path& base_name, const std::string& suffix) {
   s_temp_file_name_count++;
   srand(int((time + tid + pid + s_temp_file_name_count) & std::numeric_limits<int>::max()));
   auto fname = base_name;
+  // The random part alone can repeat across processes started together, and the file is opened with truncation, so
+  // two processes could share a file. The process id and a per-process counter make the name unique.
+  fname += "-" + std::to_string(pid) + "-" + std::to_string(s_temp_file_name_count) + "-";
   for (int i = 0; i < length; i++)
     fname += chars[rand() % chars.size()];
   fname += suffix;
