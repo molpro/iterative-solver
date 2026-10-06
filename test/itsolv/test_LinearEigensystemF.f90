@@ -73,3 +73,19 @@ function test_LinearEigensystemF(matrix, n, np, nroot, hermitian, expected_eigen
   call Iterative_Solver_Finalize
 
 end function test_LinearEigensystemF
+!> A solver created and finalised while another is active must not disturb the sizes the Fortran interface caches
+!> for the enclosing solver
+function test_nested_finalizeF() BIND(C)
+  use iso_c_binding
+  use Iterative_Solver
+  implicit none
+  integer(c_int) :: test_nested_finalizeF
+  integer, parameter :: n_outer = 20, nroot_outer = 3, n_inner = 7
+  test_nested_finalizeF = 1
+  call Iterative_Solver_Linear_Eigensystem_Initialize(n_outer, nroot_outer)
+  call Iterative_Solver_DIIS_Initialize(n_inner)
+  call Iterative_Solver_Finalize
+  if (size(Iterative_Solver_Errors()) .ne. nroot_outer) test_nested_finalizeF = 0
+  if (size(Iterative_Solver_Eigenvalues()) .ne. nroot_outer) test_nested_finalizeF = 0
+  call Iterative_Solver_Finalize
+end function test_nested_finalizeF
