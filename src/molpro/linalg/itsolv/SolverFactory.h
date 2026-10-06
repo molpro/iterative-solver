@@ -96,6 +96,9 @@ public:
          const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers =
              std::make_shared<molpro::linalg::itsolv::ArrayHandlers<R, Q, P>>());
 
+  //! Create a solver of the given kind, using its default algorithm (Davidson, Davidson, DIIS or BFGS respectively).
+  //! @param method one of "LinearEigensystem", "LinearEquations", "NonLinearEquations" or "Optimize"
+  //! @throws std::runtime_error for any other method
   virtual std::unique_ptr<IterativeSolver<R, Q, P>>
   create(const std::string& method, const options_map& options,
          const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers =
