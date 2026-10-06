@@ -9,6 +9,8 @@ var classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk =
     [ "~DistrArrayDisk", "classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a369fdeb6d5caa34edfd36c7ef9160a6f", null ],
     [ "copy", "classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a12eff185b5102d1636287b09f269dadb", null ],
     [ "DistrArray", "classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#aca5fd27c1376c9edf2079a156a58fb87", null ],
+    [ "DistrArray", "classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a848e86d593d795594f29723454c0e2ec", null ],
+    [ "DistrArray", "classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ab643e904aa7d28d920c3a300443f384f", null ],
     [ "DistrArray", "classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a06cddc4939b74533794457dd961d91f9", null ],
     [ "distribution", "classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ad485855dd9584378e097b2048f55c188", null ],
     [ "dot", "classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a7538f5e319160f6431ed995732f2f4bd", null ],

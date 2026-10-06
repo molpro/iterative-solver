@@ -2287,6 +2287,34 @@
       <arglist>()=default</arglist>
     </member>
     <member kind="function">
+      <type></type>
+      <name>DistrArray</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a848e86d593d795594f29723454c0e2ec</anchor>
+      <arglist>(const DistrArray &amp;)=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>DistrArray</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>ab643e904aa7d28d920c3a300443f384f</anchor>
+      <arglist>(DistrArray &amp;&amp;) noexcept=default</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArray &amp;</type>
+      <name>operator=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a5cabef3cc25b2b04b3b6ccf6cf75930b</anchor>
+      <arglist>(const DistrArray &amp;)=default</arglist>
+    </member>
+    <member kind="function">
+      <type>DistrArray &amp;</type>
+      <name>operator=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a4a987bff6372c0a19f3b48fc2505461c</anchor>
+      <arglist>(DistrArray &amp;&amp;) noexcept=default</arglist>
+    </member>
+    <member kind="function">
       <type>MPI_Comm</type>
       <name>communicator</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
@@ -3047,6 +3075,20 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
       <anchor>aca5fd27c1376c9edf2079a156a58fb87</anchor>
       <arglist>()=default</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type></type>
+      <name>DistrArray</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
+      <anchor>a848e86d593d795594f29723454c0e2ec</anchor>
+      <arglist>(const DistrArray &amp;)=default</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type></type>
+      <name>DistrArray</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
+      <anchor>ab643e904aa7d28d920c3a300443f384f</anchor>
+      <arglist>(DistrArray &amp;&amp;) noexcept=default</arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>bool</type>
