@@ -1,7 +1,9 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_QSPACE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_QSPACE_H
 #include <array>
+#include <algorithm>
 #include <cassert>
+#include <functional>
 #include <list>
 
 #include <molpro/linalg/itsolv/ArrayHandlers.h>
@@ -67,17 +69,21 @@ struct QSpace {
 
   /*!
    * @brief Prepends parameters to the start of Q space
+   *
+   * New parameters that are linearly dependent among themselves are discarded, together with the corresponding
+   * rows and columns of the equation data.
    * @param params new parameters
    * @param actions new actions
-   * @param qq Equation data block between new Q parameters
-   * @param qx data block between new Q parameters and current X space
-   * @param xq data block between current X space and the new Q parameters
+   * @param qq_in Equation data block between new Q parameters
+   * @param qx_in data block between new Q parameters and current X space
+   * @param xq_in data block between current X space and the new Q parameters
    * @param dims current dimensions
    * @param old_data current data
    */
   template <typename T>
-  void update(const CVecRef<R>& params, const CVecRef<R>& actions, const SubspaceData<T>& qq, const SubspaceData<T>& qx,
-              const SubspaceData<T>& xq, const Dimensions& dims, SubspaceData<T>& old_data) {
+  void update(const CVecRef<R>& params, const CVecRef<R>& actions, const SubspaceData<T>& qq_in,
+              const SubspaceData<T>& qx_in, const SubspaceData<T>& xq_in, const Dimensions& dims,
+              SubspaceData<T>& old_data) {
     m_logger->trace("QSpace::update");
     auto it_begin = m_params.begin();
     for (size_t i = 0; i < params.size(); ++i) {
@@ -86,13 +92,26 @@ struct QSpace {
                                          std::make_unique<Q>(m_handlers->qr().copy(actions.at(i))), m_unique_id++});
     }
     size_t nQnew = params.size();
-    if (nQnew>1) {
-      auto s = Matrix<T>({nQnew, nQnew});
-      s.slice() = qq.at(EqnData::S).slice({0,0},{nQnew,nQnew});
-      auto rp = molpro::linalg::itsolv::detail::redundant_parameters(
-          s, 0, nQnew, precision_scaled<T>(1e-8), *m_logger);
+    auto qq = qq_in;
+    auto qx = qx_in;
+    auto xq = xq_in;
+    if (nQnew > 1) {
+      auto rp = molpro::linalg::itsolv::detail::redundant_parameters(Matrix<T>(qq.at(EqnData::S)), 0, nQnew,
+                                                                     precision_scaled<T>(1e-8), *m_logger);
+      // New parameters occupy the first nQnew positions of m_params, in the same order as the rows/cols of qq.
+      // Remove the redundant ones from the highest index down so that the remaining indices stay valid.
+      std::sort(rp.begin(), rp.end(), std::greater<>());
+      for (auto i : rp) {
+        m_params.erase(std::next(m_params.begin(), i));
+        for (auto d : {EqnData::H, EqnData::S}) {
+          qq.at(d).remove_row_col(i, i);
+          qx.at(d).remove_row(i);
+          xq.at(d).remove_col(i);
+        }
+        if (!qq.at(EqnData::rhs).empty())
+          qq.at(EqnData::rhs).remove_row(i);
+      }
       nQnew -= rp.size();
-      for (auto& p : rp) {m_params.pop_back();}
     }
     const auto nXnew = dims.nX + nQnew;
     auto data = old_data;
