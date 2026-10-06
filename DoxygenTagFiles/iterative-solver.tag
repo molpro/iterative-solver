@@ -9566,8 +9566,8 @@
       <type>void</type>
       <name>update</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html</anchorfile>
-      <anchor>a4b5da3bf29cdcf69d4ab6b988e60844f</anchor>
-      <arglist>(const CVecRef&lt; R &gt; &amp;params, const CVecRef&lt; R &gt; &amp;actions, const SubspaceData&lt; T &gt; &amp;qq, const SubspaceData&lt; T &gt; &amp;qx, const SubspaceData&lt; T &gt; &amp;xq, const Dimensions &amp;dims, SubspaceData&lt; T &gt; &amp;old_data)</arglist>
+      <anchor>a51314cea7951605c8c9619962217a722</anchor>
+      <arglist>(const CVecRef&lt; R &gt; &amp;params, const CVecRef&lt; R &gt; &amp;actions, const SubspaceData&lt; T &gt; &amp;qq_in, const SubspaceData&lt; T &gt; &amp;qx_in, const SubspaceData&lt; T &gt; &amp;xq_in, const Dimensions &amp;dims, SubspaceData&lt; T &gt; &amp;old_data)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
