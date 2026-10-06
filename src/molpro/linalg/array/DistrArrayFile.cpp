@@ -164,7 +164,10 @@ DistrArray::value_type DistrArrayFile::at(DistrArray::index_type ind) const {
 void DistrArrayFile::set(DistrArray::index_type ind, DistrArray::value_type val) { put(ind, ind + 1, &val); }
 
 void DistrArrayFile::get(DistrArray::index_type lo, DistrArray::index_type hi, DistrArray::value_type* buf) const {
-//  auto lock = std::lock_guard<std::mutex>(m_mutex); // TODO understand why it's at least sometimes a bit faster with this lock
+  // The stream has a single file position shared by reads and writes and must not be used from two threads at once,
+  // e.g. a BufferManager read-ahead and a caller accessing the same array. The uncontended lock costs nothing
+  // measurable compared with the file access.
+  auto lock = std::lock_guard<std::mutex>(m_mutex);
   if (lo >= hi)
     return;
   DistrArray::index_type length = hi - lo;
