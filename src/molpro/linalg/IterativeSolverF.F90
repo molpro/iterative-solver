@@ -97,8 +97,7 @@ CONTAINS
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
-    DOUBLE PRECISION, DIMENSION(1) :: rhs
-    logical :: flag, guess
+    logical :: guess
     integer :: i, nq
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     call Iterative_Solver_Linear_Eigensystem_Initialize(nq, nroot, thresh, thresh_value, &
@@ -144,7 +143,7 @@ end select
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     DOUBLE PRECISION, DIMENSION(1) :: rhs
     DOUBLE PRECISION, POINTER, DIMENSION(:) :: buffer_1
-    logical :: flag, guess
+    logical :: guess
     integer :: i, nq
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     m_nroot = 0
@@ -190,9 +189,8 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
-    DOUBLE PRECISION, DIMENSION(1) :: rhs
-    logical :: flag, guess
-    integer :: i, nq
+    logical :: guess
+    integer :: nq
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     call Iterative_Solver_DIIS_Initialize(nq, thresh, &
         verbosity, pname, mpicomm, algorithm, range, options)
@@ -227,9 +225,8 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
-    DOUBLE PRECISION, DIMENSION(1) :: rhs
-    logical :: flag, guess
-    integer :: i, nq
+    logical :: guess
+    integer :: nq
     nq = ubound(parameters, 1) - lbound(parameters, 1) + 1
     call Iterative_Solver_Optimize_Initialize(nq, thresh, &
         verbosity, minimize, pname, mpicomm, algorithm, range, thresh_value, options)
