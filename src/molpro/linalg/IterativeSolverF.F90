@@ -1153,7 +1153,6 @@ end select
         end if
         nwork = Iterative_Solver_End_Iteration(parameters_, actions_)
       end do
-      if (nwork.le.0) verbosity = verbosity + 1
       if (IterativeSolverHasValues().ne.0) then
         reported = problem%report(Iterative_Solver_Iterations, verbosity, Iterative_Solver_Errors(), &
           value = Iterative_Solver_Value())
@@ -1172,6 +1171,8 @@ end select
     end do
     if (IterativeSolverHasValues().ne.0) then
       reported = problem%report(-nwork, verbosity, Iterative_Solver_Errors(), value = Iterative_Solver_Value())
+    else if (IterativeSolverHasEigenvalues().ne.0) then
+      reported = problem%report(-nwork, verbosity, Iterative_Solver_Errors(), eigenvalues = Iterative_Solver_Eigenvalues())
     else
       reported = problem%report(-nwork, verbosity, Iterative_Solver_Errors())
     end if
