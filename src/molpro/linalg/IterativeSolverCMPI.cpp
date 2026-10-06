@@ -73,6 +73,7 @@ struct Instance {
   std::unique_ptr<Qvector> diagonals;
   bool has_values = false;
   bool has_eigenvalues = false;
+  int verbosity = 0; //!< print level requested by the caller
 };
 std::stack<Instance> instances;
 } // namespace
@@ -180,6 +181,7 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
   auto& instance = instances.top();
   instance.solver->set_n_roots(nroot);
   instance.solver->set_verbosity(verbosity);
+  instance.verbosity = verbosity;
   instance.has_eigenvalues = true;
   LinearEigensystemDavidson<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<LinearEigensystemDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get());
@@ -234,6 +236,7 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
   solver->logger().enable_data_dumps(verbosity > 0);
   // instance.solver->m_verbosity = verbosity;
   instance.solver->set_verbosity(verbosity);
+  instance.verbosity = verbosity;
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
 
@@ -253,6 +256,7 @@ extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* ra
   instance.solver->set_convergence_threshold(thresh);
   // instance.solver->m_verbosity = verbosity;
   instance.solver->set_verbosity(verbosity);
+  instance.verbosity = verbosity;
   std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
   molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>*>(instance.solver.get());
@@ -284,6 +288,7 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   instance.solver->set_convergence_threshold(thresh);
   instance.solver->set_convergence_threshold_value(thresh_value);
   instance.solver->set_verbosity(verbosity);
+  instance.verbosity = verbosity;
   molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::OptimizeBFGS<Rvector, Qvector, Pvector>*>(instance.solver.get());
   if (!solver)
@@ -576,23 +581,11 @@ double IterativeSolverValue() {
   require_instance();
   return instances.top().solver->value();
 }
+// The initialisers set the logger with their own mapping from the requested print level, which cannot be inverted
+// (levels 0 to 2 all give log::Verbosity::Info), so return the level that was requested.
 int IterativeSolverVerbosity() {
   require_instance();
-  auto verbosity = instances.top().solver->logger().verbosity();
-  auto min_severity = instances.top().solver->logger().min_severity();
-  switch (verbosity) {
-    using namespace molpro::linalg::itsolv;
-    case log::Verbosity::None:
-      return min_severity == log::Severity::Error ? 0 : 1;
-    case log::Verbosity::Info:
-      return 2;
-    case log::Verbosity::Debug:
-      return 3;
-    case log::Verbosity::Trace:
-      return 4;
-  }
-
-  return -1;
+  return instances.top().verbosity;
 }
 int IterativeSolverMaxIter() {
   require_instance();
