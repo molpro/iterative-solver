@@ -11573,15 +11573,15 @@
       <type>subroutine, public</type>
       <name>solve_nonlinear_equations</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
-      <anchor>a05c7eeda78e69ee7c484fe069ab0231b</anchor>
-      <arglist>(parameters, actions, problem, nroot, generate_initial_guess, max_iter, thresh, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</arglist>
+      <anchor>a190511a1aa94e02de52d18f1495785ab</anchor>
+      <arglist>(parameters, actions, problem, generate_initial_guess, max_iter, thresh, verbosity, pname, mpicomm, algorithm, range, options)</arglist>
     </member>
     <member kind="function">
       <type>subroutine, public</type>
       <name>solve_optimization</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
-      <anchor>aafc0c445dbb353da38c92aa1ce4640f2</anchor>
-      <arglist>(parameters, actions, problem, nroot, generate_initial_guess, max_iter, thresh, thresh_value, hermitian, verbosity, minimize, pname, mpicomm, algorithm, range, options)</arglist>
+      <anchor>a8066b432fa35db7404e942cda1752992</anchor>
+      <arglist>(parameters, actions, problem, generate_initial_guess, max_iter, thresh, thresh_value, verbosity, minimize, pname, mpicomm, algorithm, range, options)</arglist>
     </member>
     <member kind="function">
       <type>subroutine, public</type>

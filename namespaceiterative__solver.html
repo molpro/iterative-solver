@@ -119,10 +119,10 @@ Functions/Subroutines</h2></td></tr>
 <tr class="separator:a0ec8e7c839d5189981da473f64b78ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ce14b9eca351507039f752494a53349"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a0ce14b9eca351507039f752494a53349">solve_linear_equations</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, generate_initial_guess, max_iter, max_p, augmented_hessian, thresh, thresh_value, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</td></tr>
 <tr class="separator:a0ce14b9eca351507039f752494a53349"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05c7eeda78e69ee7c484fe069ab0231b"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a05c7eeda78e69ee7c484fe069ab0231b">solve_nonlinear_equations</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, nroot, generate_initial_guess, max_iter, thresh, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</td></tr>
-<tr class="separator:a05c7eeda78e69ee7c484fe069ab0231b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafc0c445dbb353da38c92aa1ce4640f2"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#aafc0c445dbb353da38c92aa1ce4640f2">solve_optimization</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, nroot, generate_initial_guess, max_iter, thresh, thresh_value, hermitian, verbosity, minimize, pname, mpicomm, algorithm, range, options)</td></tr>
-<tr class="separator:aafc0c445dbb353da38c92aa1ce4640f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a190511a1aa94e02de52d18f1495785ab"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a190511a1aa94e02de52d18f1495785ab">solve_nonlinear_equations</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, generate_initial_guess, max_iter, thresh, verbosity, pname, mpicomm, algorithm, range, options)</td></tr>
+<tr class="separator:a190511a1aa94e02de52d18f1495785ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8066b432fa35db7404e942cda1752992"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#a8066b432fa35db7404e942cda1752992">solve_optimization</a> (parameters, actions, <a class="el" href="structiterative__solver__problem_1_1problem.html">problem</a>, generate_initial_guess, max_iter, thresh, thresh_value, verbosity, minimize, pname, mpicomm, algorithm, range, options)</td></tr>
+<tr class="separator:a8066b432fa35db7404e942cda1752992"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeeac19cec453d5df15b17ea1b0f157fb"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceiterative__solver.html#aeeac19cec453d5df15b17ea1b0f157fb">iterative_solver_linear_eigensystem_initialize</a> (nq, nroot, thresh, thresh_value, hermitian, verbosity, pname, mpicomm, algorithm, range, options)</td></tr>
 <tr class="memdesc:aeeac19cec453d5df15b17ea1b0f157fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the lowest eigensolutions of a matrix. The default algorithm is Davidson's method, i.e. preconditioned Lanczos. Example of simplest use:  <a href="namespaceiterative__solver.html#aeeac19cec453d5df15b17ea1b0f157fb">More...</a><br /></td></tr>
 <tr class="separator:aeeac19cec453d5df15b17ea1b0f157fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1044,7 +1044,7 @@ Variables</h2></td></tr>
 <div class="line">      <span class="comment">! try one of the following</span></div>
 <div class="line">      solve_optimization(&amp;</div>
 <div class="line">          <span class="comment">!      Solve_Nonlinear_Equations(&amp;</span></div>
-<div class="line">          c, g, problem, n, thresh = 1d-6, verbosity = verbosity)</div>
+<div class="line">          c, g, problem, thresh = 1d-6, verbosity = verbosity)</div>
 <div class="line">  <span class="keywordflow">if</span> (verbosity.lt.1) <span class="keywordflow">then</span></div>
 <div class="line">    print *, <span class="stringliteral">&#39;Optimized function value &#39;</span>, iterative_solver_value()</div>
 <div class="line">    print *, <span class="stringliteral">&#39;Error &#39;</span>, iterative_solver_errors(), iterative_solver_converged()</div>
@@ -1554,8 +1554,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a05c7eeda78e69ee7c484fe069ab0231b" name="a05c7eeda78e69ee7c484fe069ab0231b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05c7eeda78e69ee7c484fe069ab0231b">&#9670;&nbsp;</a></span>solve_nonlinear_equations()</h2>
+<a id="a190511a1aa94e02de52d18f1495785ab" name="a190511a1aa94e02de52d18f1495785ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a190511a1aa94e02de52d18f1495785ab">&#9670;&nbsp;</a></span>solve_nonlinear_equations()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1581,12 +1581,6 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">integer, intent(in), optional&#160;</td>
-          <td class="paramname"><em>nroot</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">logical, optional&#160;</td>
           <td class="paramname"><em>generate_initial_guess</em>, </td>
         </tr>
@@ -1601,12 +1595,6 @@ Variables</h2></td></tr>
           <td></td>
           <td class="paramtype">double precision, intent(in), optional&#160;</td>
           <td class="paramname"><em>thresh</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">logical, intent(in), optional&#160;</td>
-          <td class="paramname"><em>hermitian</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1653,11 +1641,9 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nroot</td><td>number of eigensolutions desired</td></tr>
     <tr><td class="paramdir"></td><td class="paramname">generate_initial_guess</td><td>whether to generate an initial guess (default) or use what is passed in parameters</td></tr>
     <tr><td class="paramdir"></td><td class="paramname">max_iter</td><td>maximum number of iterations</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">thresh</td><td>convergence threshold</td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">hermitian</td><td>whether the underlying kernel is hermitian</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">verbosity</td><td>how much to print. Default is zero, which prints nothing except errors. One gives a summary at the end; two gives a single progress-report line each iteration.</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pname</td><td>Profiler object name</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">mpicomm</td><td>MPI communicator</td></tr>
@@ -1669,8 +1655,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="aafc0c445dbb353da38c92aa1ce4640f2" name="aafc0c445dbb353da38c92aa1ce4640f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafc0c445dbb353da38c92aa1ce4640f2">&#9670;&nbsp;</a></span>solve_optimization()</h2>
+<a id="a8066b432fa35db7404e942cda1752992" name="a8066b432fa35db7404e942cda1752992"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8066b432fa35db7404e942cda1752992">&#9670;&nbsp;</a></span>solve_optimization()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1696,12 +1682,6 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">integer, intent(in), optional&#160;</td>
-          <td class="paramname"><em>nroot</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">logical, optional&#160;</td>
           <td class="paramname"><em>generate_initial_guess</em>, </td>
         </tr>
@@ -1722,12 +1702,6 @@ Variables</h2></td></tr>
           <td></td>
           <td class="paramtype">double precision, intent(in), optional&#160;</td>
           <td class="paramname"><em>thresh_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">logical, intent(in), optional&#160;</td>
-          <td class="paramname"><em>hermitian</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1780,12 +1754,10 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nroot</td><td>number of eigensolutions desired</td></tr>
     <tr><td class="paramdir"></td><td class="paramname">generate_initial_guess</td><td>whether to generate an initial guess (default) or use what is passed in parameters</td></tr>
     <tr><td class="paramdir"></td><td class="paramname">max_iter</td><td>maximum number of iterations</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">thresh</td><td>convergence threshold</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">thresh_value</td><td>value convergence threshold</td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">hermitian</td><td>whether the underlying kernel is hermitian</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">verbosity</td><td>how much to print. Default is zero, which prints nothing except errors. One gives a summary at the end; two gives a single progress-report line each iteration.</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">minimize</td><td>whether to minimize (default) or maximize</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pname</td><td>Profiler object name</td></tr>

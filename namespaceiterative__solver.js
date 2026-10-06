@@ -25,8 +25,8 @@ var namespaceiterative__solver =
     [ "set_mpicomm_compute", "namespaceiterative__solver.html#a508258aa021cc2d872fba06bd1cff849", null ],
     [ "solve_linear_eigensystem", "namespaceiterative__solver.html#a0ec8e7c839d5189981da473f64b78ade", null ],
     [ "solve_linear_equations", "namespaceiterative__solver.html#a0ce14b9eca351507039f752494a53349", null ],
-    [ "solve_nonlinear_equations", "namespaceiterative__solver.html#a05c7eeda78e69ee7c484fe069ab0231b", null ],
-    [ "solve_optimization", "namespaceiterative__solver.html#aafc0c445dbb353da38c92aa1ce4640f2", null ],
+    [ "solve_nonlinear_equations", "namespaceiterative__solver.html#a190511a1aa94e02de52d18f1495785ab", null ],
+    [ "solve_optimization", "namespaceiterative__solver.html#a8066b432fa35db7404e942cda1752992", null ],
     [ "current_problem", "namespaceiterative__solver.html#ad1ae0165bd555ba3fbf8d9c6e55d83c0", null ],
     [ "iterative_solver_iterations", "namespaceiterative__solver.html#a260bebdd67c530e7e08bf211bc44760b", null ],
     [ "mpicomm_kind", "namespaceiterative__solver.html#a8e7b0afa0169579bd571c1aac764d4e8", null ]
