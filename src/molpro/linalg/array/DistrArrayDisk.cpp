@@ -33,7 +33,7 @@ DistrArrayDisk::DistrArrayDisk(const DistrArray& source)
 }
 
 DistrArrayDisk::DistrArrayDisk(DistrArrayDisk&& source) noexcept
-    : DistrArray(source), m_distribution(std::move(source.m_distribution)) {
+    : DistrArray(std::move(source)), m_distribution(std::move(source.m_distribution)) {
   using std::swap;
   if (source.m_allocated) {
     swap(m_allocated, source.m_allocated);
