@@ -128,7 +128,8 @@ TEST(gram_schmidt, s_3x3) {
     for (size_t j = i + 1; j < t.cols(); ++j)
       ASSERT_DOUBLE_EQ(t(i, j), 0.) << " Uppert triangular elements must be zero , i=" << std::to_string(i) << " "
                                     << std::to_string(j);
-  ASSERT_THAT(t.data(), Pointwise(DoubleNear(1.0e-14), tref.data()));
+  // Intel compilers default to value-unsafe floating point (-fp-model=fast), giving errors of a few 1e-14 here
+  ASSERT_THAT(t.data(), Pointwise(DoubleNear(1.0e-12), tref.data()));
   ASSERT_THAT(result, Pointwise(DoubleNear(1.0e-13), norm_ref));
 }
 
