@@ -151,6 +151,11 @@ protected:
 
 public:
   virtual ~DistrArray() = default;
+  // Declared explicitly because the user-declared destructor suppresses the implicit move operations
+  DistrArray(const DistrArray&) = default;
+  DistrArray(DistrArray&&) noexcept = default;
+  DistrArray& operator=(const DistrArray&) = default;
+  DistrArray& operator=(DistrArray&&) noexcept = default;
 
   //! return a copy of the communicator
   MPI_Comm communicator() const { return m_communicator; }
