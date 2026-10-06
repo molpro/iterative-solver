@@ -7,6 +7,7 @@
 #include "parallel_util.h"
 
 #include <molpro/linalg/array/Span.h>
+#include <molpro/linalg/array/DistrArrayFile.h>
 #include <molpro/linalg/array/DistrArraySpan.h>
 #include <molpro/linalg/array/util.h>
 #include <molpro/linalg/array/util/Distribution.h>
@@ -99,6 +100,12 @@ TEST_F(DistrArraySpan_Fixture, span) {
   MPI_Allgatherv(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, w.data(), chunks.data(), displs.data(), MPI_DOUBLE, mpi_comm);
   ScopeLock l{mpi_comm};
   EXPECT_THAT(v, Pointwise(DoubleEq(), w));
+}
+
+// A disk-backed source has no persistent local buffer to view
+TEST(DistrArraySpan, constructor_from_disk_backed_array_throws) {
+  auto a_disk = molpro::linalg::array::DistrArrayFile(100, mpi_comm);
+  EXPECT_THROW(DistrArraySpan{a_disk}, std::invalid_argument);
 }
 
 #ifdef LINEARALGEBRA_ARRAY_MPI3
