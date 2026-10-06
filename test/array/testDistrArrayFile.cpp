@@ -264,10 +264,13 @@ TEST_F(DistrArrayFile_Fixture, dot_DistrArrayFile) {
   a.put(left, right, &(*(v.cbegin() + left)));
   const DistrArraySpan s(size, Span<double>(&(*(v.begin() + left)), right - left));
   const DistrArrayFile f(s);
-  EXPECT_THROW(auto ss = f.dot(f); std::cout << ss, std::invalid_argument);
+  auto ff = f.dot(f);
+  auto ff_base = f.dot(static_cast<const molpro::linalg::array::DistrArray&>(f));
   auto as = a.dot(f);
   auto sa = f.dot(a);
   ScopeLock l{mpi_comm};
+  EXPECT_NEAR(ff, size * (size - 1) * (2 * size - 1) / 6, 1e-13);
+  EXPECT_NEAR(ff_base, size * (size - 1) * (2 * size - 1) / 6, 1e-13);
   EXPECT_NEAR(as, size * (size - 1) * (2 * size - 1) / 6, 1e-13);
   EXPECT_NEAR(sa, size * (size - 1) * (2 * size - 1) / 6, 1e-13);
 }

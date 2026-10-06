@@ -4,6 +4,7 @@
 #include "util/gemm.h"
 #include <future>
 #include <iostream>
+#include <numeric>
 
 namespace molpro::linalg::array {
 using util::Task;
@@ -117,12 +118,20 @@ std::unique_ptr<const DistrArray::LocalBuffer> DistrArrayDisk::local_buffer(cons
 
 DistrArray::value_type DistrArrayDisk::dot(const DistrArrayDisk& y) const {
   if (&y == this) {
-    throw std::invalid_argument("Cannot dot a DistrArrayDisk with itself");
+    // The squared norm. Read the local section once, rather than taking two snapshots of the same file.
+    auto loc = local_buffer();
+    auto a = std::inner_product(begin(*loc), end(*loc), begin(*loc), value_type{0});
+#ifdef HAVE_MPI_H
+    MPI_Allreduce(MPI_IN_PLACE, &a, 1, MPI_DOUBLE, MPI_SUM, communicator());
+#endif
+    return a;
   }
   return DistrArray::dot(y); // TODO: implement buffering in both DistrArrays
 }
 
 DistrArray::value_type DistrArrayDisk::dot(const DistrArray& y) const {
+  if (&y == this)
+    return dot(static_cast<const DistrArrayDisk&>(y));
   auto y_cvec = molpro::linalg::itsolv::CVecRef<DistrArray>{{y}};
   auto this_cvec = molpro::linalg::itsolv::CVecRef<DistrArray>{{*this}};
   auto result = molpro::linalg::array::util::gemm_inner_distr_distr(y_cvec, this_cvec)(0, 0);
