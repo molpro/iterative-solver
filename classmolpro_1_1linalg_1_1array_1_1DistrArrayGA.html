@@ -127,6 +127,7 @@ Collaboration diagram for molpro::linalg::array::DistrArrayGA:</div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Distributed array which uses Global Arrays for managing the array buffer and RMA calls. </p>
+<dl class="section note"><dt>Note</dt><dd>Thread safety: construction, copying and allocation are collective over the communicator (they call MPI and GA collectives) and are not thread safe. Within each process they must be called from one thread at a time, and in the same order on every process, as for any other GA collective operation. </dd></dl>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -343,7 +344,6 @@ Protected Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-static-attribs" name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
 <tr class="memitem:a125b1f34e8bf01edd8b5b93e22592f2c"><td class="memItemLeft" align="right" valign="top">static std::map&lt; MPI_Comm, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayGA.html#a125b1f34e8bf01edd8b5b93e22592f2c">_ga_pgroups</a></td></tr>
-<tr class="memdesc:a125b1f34e8bf01edd8b5b93e22592f2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record every process group created, because GA can only allocate a fixed number of them.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayGA.html#a125b1f34e8bf01edd8b5b93e22592f2c">More...</a><br /></td></tr>
 <tr class="separator:a125b1f34e8bf01edd8b5b93e22592f2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
@@ -1210,8 +1210,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Record every process group created, because GA can only allocate a fixed number of them. </p>
+<p >Record every process group created, because GA can only allocate a fixed number of them. Not synchronised: a lock here would not make allocation thread safe, because it is surrounded by MPI and GA collectives, and holding a lock across collectives could deadlock. See the thread-safety note on the class. </p>
 
 </div>
 </div>
