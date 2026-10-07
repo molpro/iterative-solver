@@ -247,8 +247,11 @@ void apply_on_p_c(const std::vector<vectorP>& pvectors, const CVecRef<Pvector>& 
       pvecs_to_send.push_back(j);
     }
   }
-  instance.apply_on_p_fort(pvecs_to_send.data(), &(*action.front().get().local_buffer())[0], update_size,
-                           ranges.data());
+  // The callback indexes the actions as full-length arrays and fills only this process's range, so it needs the
+  // address of the first element of the full array, not of this process's local section
+  auto local = action.front().get().local_buffer();
+  double* full_action = local->data() - ranges.front();
+  instance.apply_on_p_fort(pvecs_to_send.data(), full_action, update_size, ranges.data());
 }
 
 extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nroot, size_t* range_begin,
