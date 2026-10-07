@@ -154,17 +154,30 @@ $(document).ready(function(){initNavTree('LinearEquationsExampleF_8F90-example.h
 <div class="line"><span class="lineno">   58</span>  <span class="keywordtype">INTEGER</span>, <span class="keywordtype">PARAMETER</span> :: n = 30, nroot = 2</div>
 <div class="line"><span class="lineno">   59</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, nroot)</span> :: c, g</div>
 <div class="line"><span class="lineno">   60</span>  <span class="keywordtype">TYPE</span>(linear_problem) :: problem</div>
-<div class="line"><span class="lineno">   61</span>  <span class="keyword">call </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a></div>
-<div class="line"><span class="lineno">   62</span>  <span class="keywordflow">IF</span> (<a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__rank__global.html">mpi_rank_global</a>() .gt. 0) <span class="keyword">close</span>(6)</div>
-<div class="line"><span class="lineno">   63</span>  print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver&#39;</span></div>
-<div class="line"><span class="lineno">   64</span>  problem%n = n</div>
-<div class="line"><span class="lineno">   65</span>  problem%nroot = nroot</div>
-<div class="line"><span class="lineno">   66</span>  <span class="keyword">CALL </span>solve_linear_equations(c, g, problem, thresh = 1d-11, verbosity = 2)</div>
-<div class="line"><span class="lineno">   67</span>  print*, <span class="stringliteral">&#39;convergence?&#39;</span>, iterative_solver_converged(), <span class="stringliteral">&#39;, residual length: &#39;</span>, norm2(g)</div>
-<div class="line"><span class="lineno">   68</span>  <span class="keyword">CALL </span>iterative_solver_print_statistics</div>
-<div class="line"><span class="lineno">   69</span>  <span class="keyword">CALL </span>iterative_solver_finalize</div>
-<div class="line"><span class="lineno">   70</span>  <span class="keyword">CALL </span>mpi_finalize</div>
-<div class="line"><span class="lineno">   71</span><span class="keyword">END PROGRAM </span>linear_equations_example</div>
+<div class="line"><span class="lineno">   61</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n, nroot)</span> :: ax</div>
+<div class="line"><span class="lineno">   62</span>  <span class="keywordtype">DOUBLE PRECISION</span>, <span class="keywordtype">DIMENSION (n)</span> :: b</div>
+<div class="line"><span class="lineno">   63</span>  <span class="keywordtype">DOUBLE PRECISION</span> :: error</div>
+<div class="line"><span class="lineno">   64</span>  <span class="keywordtype">INTEGER</span> :: k</div>
+<div class="line"><span class="lineno">   65</span>  <span class="keyword">call </span><a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__init.html">mpi_init</a></div>
+<div class="line"><span class="lineno">   66</span>  <span class="keywordflow">IF</span> (<a class="code hl_interface" href="interfaceiterative__solver_1_1mpi__rank__global.html">mpi_rank_global</a>() .gt. 0) <span class="keyword">close</span>(6)</div>
+<div class="line"><span class="lineno">   67</span>  print *, <span class="stringliteral">&#39;Fortran binding of IterativeSolver&#39;</span></div>
+<div class="line"><span class="lineno">   68</span>  problem%n = n</div>
+<div class="line"><span class="lineno">   69</span>  problem%nroot = nroot</div>
+<div class="line"><span class="lineno">   70</span>  <span class="keyword">CALL </span>solve_linear_equations(c, g, problem, thresh = 1d-11, verbosity = 2)</div>
+<div class="line"><span class="lineno">   71</span>  print*, <span class="stringliteral">&#39;convergence?&#39;</span>, iterative_solver_converged(), <span class="stringliteral">&#39;, residual length: &#39;</span>, norm2(g)</div>
+<div class="line"><span class="lineno">   72</span>  <span class="comment">! check the solution independently of the solver: relative residual of A x = b</span></div>
+<div class="line"><span class="lineno">   73</span>  <span class="keyword">CALL </span>problem%action(c, ax, [0, n])</div>
+<div class="line"><span class="lineno">   74</span>  error = 0</div>
+<div class="line"><span class="lineno">   75</span>  <span class="keywordflow">DO</span> k = 1, nroot</div>
+<div class="line"><span class="lineno">   76</span>    <span class="keywordflow">IF</span> (.NOT. problem%RHS(b, k, [0, n])) error stop <span class="stringliteral">&#39;LinearEquationsExampleF: missing right-hand side&#39;</span></div>
+<div class="line"><span class="lineno">   77</span>    error = max(error, norm2(ax(:, k) - b) / norm2(b))</div>
+<div class="line"><span class="lineno">   78</span><span class="keywordflow">  END DO</span></div>
+<div class="line"><span class="lineno">   79</span>  print *, <span class="stringliteral">&#39;relative residual &#39;</span>, error</div>
+<div class="line"><span class="lineno">   80</span>  <span class="keywordflow">IF</span> (.NOT. iterative_solver_converged() .OR. error .GT. 1d-8) error stop <span class="stringliteral">&#39;LinearEquationsExampleF: wrong solution&#39;</span></div>
+<div class="line"><span class="lineno">   81</span>  <span class="keyword">CALL </span>iterative_solver_print_statistics</div>
+<div class="line"><span class="lineno">   82</span>  <span class="keyword">CALL </span>iterative_solver_finalize</div>
+<div class="line"><span class="lineno">   83</span>  <span class="keyword">CALL </span>mpi_finalize</div>
+<div class="line"><span class="lineno">   84</span><span class="keyword">END PROGRAM </span>linear_equations_example</div>
 <div class="ttc" id="ainterfaceiterative__solver_1_1mpi__init_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__init.html">iterative_solver::mpi_init</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:53</div></div>
 <div class="ttc" id="ainterfaceiterative__solver_1_1mpi__rank__global_html"><div class="ttname"><a href="interfaceiterative__solver_1_1mpi__rank__global.html">iterative_solver::mpi_rank_global</a></div><div class="ttdef"><b>Definition:</b> IterativeSolverF.F90:61</div></div>
 <div class="ttc" id="anamespaceiterative__solver__problem_html"><div class="ttname"><a href="namespaceiterative__solver__problem.html">iterative_solver_problem</a></div><div class="ttdef"><b>Definition:</b> Iterative_Solver_Problem.F90:1</div></div>
