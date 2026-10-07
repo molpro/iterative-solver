@@ -41,7 +41,9 @@ Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const 
   auto alphadata = const_cast<value_type*>(alphas.data().data());
   gemm_distr_distr(alphadata, xx, non_const_yy, gemm_type::inner);
 #ifdef HAVE_MPI_H
-  MPI_Allreduce(MPI_IN_PLACE, alphadata, alphas.size(), MPI_DOUBLE, MPI_SUM, molpro::mpi::comm_global());
+  // reduce over the arrays' own communicator, which need not be the global one
+  if (alphas.size() > 0)
+    MPI_Allreduce(MPI_IN_PLACE, alphadata, alphas.size(), MPI_DOUBLE, MPI_SUM, xx.front().get().communicator());
 #endif
   return alphas;
 }

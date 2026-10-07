@@ -39,9 +39,20 @@ public:
   BufferManager(const CVecRef& arrays, size_t buffer_size = 8192, int number_of_buffers = 2)
       : m_arrays(arrays), m_buffer_size(buffer_size), m_number_of_buffers(number_of_buffers),
         m_range(arrays.empty() ? std::pair<typename T::index_type, typename T::index_type>{0, 0}
-                               : arrays.front().get().distribution().range(molpro::mpi::rank_global())),
+                               : arrays.front().get().distribution().range(rank_in(arrays.front().get()))),
         m_buffer(arrays.size() * number_of_buffers * buffer_size) {
     assert(number_of_buffers > 0 && number_of_buffers < 3);
+  }
+
+  //! This process's rank in the array's own communicator, which need not be the global one
+  static int rank_in(const T& array) {
+    if (array.communicator() == molpro::mpi::comm_global())
+      return molpro::mpi::rank_global();
+    int rank = 0;
+#ifdef HAVE_MPI_H
+    MPI_Comm_rank(array.communicator(), &rank);
+#endif
+    return rank;
   }
 
   BufferManager(const std::vector<T>& arrays, size_t buffer_size = 8192, int number_of_buffers = 2)
