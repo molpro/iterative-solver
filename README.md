@@ -173,6 +173,11 @@ objective is taken to be real: the line search orders function values, so only t
 value returned by `Problem::residual()` is used. Selecting a P space also needs an ordering and so
 throws for a complex element type, as it did before.
 
+## Contributing
+
+[doc/contributing/ConsistencyAudit.md](doc/contributing/ConsistencyAudit.md) records the playbook
+used for the consistency-audit series, for anyone wanting to redo or extend that work.
+
 ## Citing
 
 Any publications resulting from this work should cite relevant papers in CITE.txt
