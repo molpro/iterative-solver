@@ -188,7 +188,7 @@ protected:
   value_type_abs m_norm_thresh = precision_scaled<value_type_abs>(1e-10);
   //! svd values smaller than this mark the null space (rescaled to the working precision)
   value_type_abs m_svd_thresh = precision_scaled<value_type_abs>(1e-12);
-  int m_max_size_qspace = std::numeric_limits<int>::max(); //!< maximum size of Q space
+  int m_max_size_qspace = 20; //!< maximum size of Q space
 };
 
 } // namespace molpro::linalg::itsolv

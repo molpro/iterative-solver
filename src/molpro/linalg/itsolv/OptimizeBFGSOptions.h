@@ -9,6 +9,7 @@ namespace molpro::linalg::itsolv {
 struct OptimizeBFGSOptions : public OptimizeOptions {
   OptimizeBFGSOptions() = default;
   OptimizeBFGSOptions(const options_map& opt);
+  //! Maximum number of previous iterations kept in the subspace. Default: 20.
   std::optional<int> max_size_qspace;
   std::optional<double> norm_thresh;
   std::optional<double> svd_thresh;
