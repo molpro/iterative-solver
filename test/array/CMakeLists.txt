@@ -13,7 +13,7 @@ add_executable(test-${PROJECT_NAME}-Span.exe testSpan.cpp)
 target_link_libraries(test-${PROJECT_NAME}-Span.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)
 gtest_discover_tests(test-${PROJECT_NAME}-Span.exe)
 
-add_executable(test-${PROJECT_NAME}-ArrayHandler.exe testArrayHandler.cpp testArrayHandlerIterable.cpp
+add_executable(test-${PROJECT_NAME}-ArrayHandler.exe testArrayHandler.cpp testArrayHandlerBase.cpp testArrayHandlerIterable.cpp
         testArrayHandlerSparse.cpp
         testArrayHandlerIterableSparse.cpp
         testArrayHandlerDefault.cpp
