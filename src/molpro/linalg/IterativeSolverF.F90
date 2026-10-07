@@ -97,7 +97,7 @@ CONTAINS
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
     !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
     !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
-    !> rank order. On exit, the range in use.
+    !> rank order. To obtain the range in use without requesting one, pass range = -1. On exit, the range in use.
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     logical :: guess
@@ -144,7 +144,7 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
     !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
     !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
-    !> rank order. On exit, the range in use.
+    !> rank order. To obtain the range in use without requesting one, pass range = -1. On exit, the range in use.
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     DOUBLE PRECISION, DIMENSION(1) :: rhs
@@ -193,7 +193,7 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
     !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
     !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
-    !> rank order. On exit, the range in use.
+    !> rank order. To obtain the range in use without requesting one, pass range = -1. On exit, the range in use.
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     logical :: guess
@@ -230,7 +230,7 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
     !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
     !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
-    !> rank order. On exit, the range in use.
+    !> rank order. To obtain the range in use without requesting one, pass range = -1. On exit, the range in use.
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     logical :: guess
@@ -264,7 +264,7 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm, eg Davidson
     !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
     !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
-    !> rank order. On exit, the range in use.
+    !> rank order. To obtain the range in use without requesting one, pass range = -1. On exit, the range in use.
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     INTERFACE
@@ -376,7 +376,7 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
     !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
     !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
-    !> rank order. On exit, the range in use.
+    !> rank order. To obtain the range in use without requesting one, pass range = -1. On exit, the range in use.
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     INTERFACE
@@ -487,7 +487,7 @@ end select
     CHARACTER(*), INTENT(in), OPTIONAL :: algorithm !< keyword specifying optimization algorithm
     !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
     !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
-    !> rank order. On exit, the range in use.
+    !> rank order. To obtain the range in use without requesting one, pass range = -1. On exit, the range in use.
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh_value !< convergence threshold for function value
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
@@ -592,7 +592,7 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm, eg DIIS
     !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
     !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
-    !> rank order. On exit, the range in use.
+    !> rank order. To obtain the range in use without requesting one, pass range = -1. On exit, the range in use.
     INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     INTERFACE
@@ -1228,6 +1228,8 @@ end select
       end if
       if (nwork.lt.1) exit
     end do
+    ! a DO loop that runs to completion leaves its variable one past the upper bound
+    Iterative_Solver_Iterations = min(Iterative_Solver_Iterations, int(IterativeSolverMaxIter()))
     if (IterativeSolverHasValues().ne.0) then
       reported = problem%report(-nwork, verbosity, Iterative_Solver_Errors(), value = Iterative_Solver_Value())
     else if (IterativeSolverHasEigenvalues().ne.0) then
