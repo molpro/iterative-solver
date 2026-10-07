@@ -12,9 +12,16 @@ struct DavidsonOptions {
   DavidsonOptions() = default;
   DavidsonOptions(const options_map& opt);
 
+  //! Every reset_D iterations, discard the D space and move the current solutions into the Q space. Default: never.
   std::optional<std::size_t> reset_D;
+  //! Maximum size of the Q space immediately after a D-space reset. Default: unlimited, but never more than
+  //! max_size_qspace.
   std::optional<std::size_t> reset_D_max_Q_size;
+  //! Maximum number of vectors kept in the Q space; older vectors are folded into the D space. Default: unlimited.
+  //! A limit bounds memory and disk use, but slows convergence of hard problems, and without reset_D small limits can
+  //! prevent convergence altogether, so set reset_D (e.g. 10) together with it.
   std::optional<std::size_t> max_size_qspace;
+  //! Minimum number of vectors kept in the Q space when it is truncated. Default: 0.
   std::optional<std::size_t> min_size_qspace;
   std::optional<double> contrib_thresh;
   std::optional<double> norm_thresh;

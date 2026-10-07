@@ -272,7 +272,7 @@ protected:
   // for non-linear problems, actions already contains the residual
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {}
 
-  int m_max_size_qspace = std::numeric_limits<int>::max(); //!< maximum size of Q space
+  int m_max_size_qspace = 20; //!< maximum size of Q space
   bool m_strong_Wolfe = true;                              //!< Whether to use strong or weak Wolfe conditions
   value_type_abs m_Wolfe_1 = 1e-4; //!< Acceptance parameter for function value; recommended value Nocedal and Wright p142
   value_type_abs m_Wolfe_2 = 0.9;  //!< Acceptance parameter for function gradient; recommended value Nocedal and Wright p142
