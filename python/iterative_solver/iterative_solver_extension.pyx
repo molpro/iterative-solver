@@ -17,6 +17,7 @@ cdef extern from "../src/molpro/linalg/IterativeSolverC.h":
 
 current_problem = None
 
+from libc.stdint cimport SIZE_MAX
 from libcpp.vector cimport vector
 cdef void apply_on_p(const double* coefficients, double* action, const size_t size, const size_t* ranges) noexcept:
     cdef size_t size_ = size
@@ -244,7 +245,7 @@ class Optimize(IterativeSolver):
         cdef size_t n_ = n
         cdef size_t range_[2]
         if range is None:
-            range_ = [0, 0]
+            range_ = [SIZE_MAX, SIZE_MAX]  # no range requested: let the library choose the distribution
         else:
             range_ = range
         cdef size_t * rb = &range_[0]
@@ -274,7 +275,7 @@ class NonLinearEquations(IterativeSolver):
         cdef size_t n_ = n
         cdef size_t range_[2]
         if range is None:
-            range_ = [0, 0]
+            range_ = [SIZE_MAX, SIZE_MAX]  # no range requested: let the library choose the distribution
         else:
             range_ = range
         cdef size_t * rb = &range_[0]
@@ -310,7 +311,7 @@ class LinearEquations(IterativeSolver):
         cdef double[::1] rhs_ = rhs.reshape([n*nroot])
         cdef size_t range_[2]
         if range is None:
-            range_ = [0, 0]
+            range_ = [SIZE_MAX, SIZE_MAX]  # no range requested: let the library choose the distribution
         else:
             range_ = range
         cdef size_t * rb = &range_[0]
@@ -343,7 +344,7 @@ class LinearEigensystem(IterativeSolver):
         cdef size_t nroot_ = nroot
         cdef size_t range_[2]
         if range is None:
-            range_ = [0, 0]
+            range_ = [SIZE_MAX, SIZE_MAX]  # no range requested: let the library choose the distribution
         else:
             range_ = range
         cdef size_t * rb = &range_[0]

@@ -26,6 +26,7 @@ using molpro::linalg::itsolv::VecRef;
 using molpro::linalg::itsolv::wrap;
 #ifndef NOFORTRAN
 extern "C" int test_nested_finalizef();
+extern "C" int test_supplied_rangef(const double* matrix, size_t n, size_t nroot, const double* expected);
 extern "C" int test_lineareigensystemf(double *matrix, size_t n, size_t np, size_t nroot, int hermitian,
                                        double *eigenvalues);
 #endif
@@ -448,4 +449,19 @@ TEST_F(LinearEigensystemF, linearly_dependent_guess) {
 #ifndef NOFORTRAN
 // Finalising a nested solver must restore the enclosing solver's root count in the Fortran interface
 TEST(LinearEigensystemFortran, nested_finalize) { EXPECT_NE(test_nested_finalizef(), 0); }
+#endif
+
+#ifndef NOFORTRAN
+// A range requested through the Fortran interface is honoured, and values outside it are ignored. Also run on two
+// processes (see CMakeLists.txt), where the requested ranges differ from the default distribution.
+TEST(LinearEigensystemFortran, supplied_range) {
+  const size_t n = 40, nroot = 3;
+  Eigen::MatrixXd m(n, n);
+  for (size_t i = 0; i < n; ++i)
+    for (size_t j = 0; j < n; ++j)
+      m(i, j) = i == j ? 1.0 + i : 0.01 * std::cos(double(i + 2 * j)) + 0.01 * std::cos(double(j + 2 * i));
+  Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(m);
+  const Eigen::VectorXd expected = es.eigenvalues().head(nroot);
+  EXPECT_NE(test_supplied_rangef(m.data(), n, nroot, expected.data()), 0);
+}
 #endif

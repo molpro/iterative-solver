@@ -77,4 +77,12 @@ foreach (t test_LinearEigensystem test_LinearEquations test_Optimize test_NonLin
     endif ()
 endforeach ()
 
+if (MPI AND FORTRAN AND TARGET test_LinearEigensystem.exe)
+    # a requested range only differs from the default distribution when there is more than one process
+    add_test(NAME LinearEigensystemFortran.supplied_range_2procs
+            COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} 2 ${MPIEXEC_PREFLAGS}
+            $<TARGET_FILE:test_LinearEigensystem.exe> --gtest_filter=LinearEigensystemFortran.supplied_range
+            ${MPIEXEC_POSTFLAGS})
+endif ()
+
 add_subdirectory(subspace)

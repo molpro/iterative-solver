@@ -1,8 +1,10 @@
 #include "IterativeSolverC.h"
 #include "molpro/Profiler.h"
 #include <algorithm>
+#include <limits>
 #include <map>
 #include <memory>
+#include <stdexcept>
 #include <tuple>
 #include <vector>
 #ifdef LINEARALGEBRA_ARRAY_GA
@@ -75,6 +77,7 @@ struct Instance {
   apply_on_p_t apply_on_p_fort;
   size_t dimension;
   MPI_Comm comm;
+  Distribution<size_t> distribution; //!< distribution of the vectors over the processes of comm
   std::unique_ptr<Qvector> diagonals;
   bool has_values = false;
   bool has_eigenvalues = false;
@@ -127,12 +130,48 @@ void require_instance();
 
 std::pair<size_t, size_t> DistrArrayDefaultRange() {
   auto& instance = instances.top();
+  int mpi_rank;
+  MPI_Comm_rank(instance.comm, &mpi_rank);
+  return instance.distribution.range(mpi_rank);
+}
+
+//! Marks a range that the caller did not specify
+constexpr size_t unspecified_range = std::numeric_limits<size_t>::max();
+
+/*!
+ * @brief Set how the instance's vectors are distributed over the processes of its communicator.
+ *
+ * If every process supplies its local range (range_begin != unspecified_range), the ranges must cover
+ * [0, dimension) contiguously in rank order, and they are used. If none does, the default distribution is used. On
+ * return, range_begin and range_end hold this process's range. Collective over the instance's communicator.
+ */
+void set_distribution(Instance& instance, size_t* range_begin, size_t* range_end) {
   int mpi_rank, comm_size;
   MPI_Comm_rank(instance.comm, &mpi_rank);
   MPI_Comm_size(instance.comm, &comm_size);
-  auto d = make_distribution_spread_remainder<size_t>(instance.dimension, comm_size);
-  auto range = d.range(mpi_rank);
-  return range;
+  const unsigned long long mine[3] = {*range_begin != unspecified_range, *range_begin, *range_end};
+  std::vector<unsigned long long> all(3 * comm_size);
+  MPI_Allgather(mine, 3, MPI_UNSIGNED_LONG_LONG, all.data(), 3, MPI_UNSIGNED_LONG_LONG, instance.comm);
+  int n_supplied = 0;
+  for (int r = 0; r < comm_size; ++r)
+    n_supplied += int(all[3 * r]);
+  if (n_supplied == 0) {
+    instance.distribution = make_distribution_spread_remainder<size_t>(instance.dimension, comm_size);
+  } else {
+    if (n_supplied != comm_size)
+      throw std::invalid_argument("IterativeSolver: a range must be given on every process or on none");
+    std::vector<size_t> borders{0};
+    for (int r = 0; r < comm_size; ++r) {
+      if (all[3 * r + 1] != borders.back() || all[3 * r + 2] < all[3 * r + 1])
+        throw std::invalid_argument("IterativeSolver: the ranges of the processes must be contiguous, in rank order, "
+                                    "starting at 0");
+      borders.push_back(all[3 * r + 2]);
+    }
+    if (borders.back() != instance.dimension)
+      throw std::invalid_argument("IterativeSolver: the ranges of the processes must cover the whole dimension");
+    instance.distribution = Distribution<size_t>(borders);
+  }
+  std::tie(*range_begin, *range_end) = instance.distribution.range(mpi_rank);
 }
 
 std::vector<Rvector> CreateDistrArray(size_t nvec, double* data) {
@@ -141,7 +180,7 @@ std::vector<Rvector> CreateDistrArray(size_t nvec, double* data) {
   int mpi_rank, comm_size;
   MPI_Comm_rank(instance.comm, &mpi_rank);
   MPI_Comm_size(instance.comm, &comm_size);
-  auto distr = make_distribution_spread_remainder<size_t>(instance.dimension, comm_size);
+  const auto& distr = instance.distribution;
   auto range = distr.range(mpi_rank);
   auto rn = range.second - range.first;
   std::vector<Rvector> c;
@@ -159,7 +198,7 @@ std::vector<Rvector> CreateDistrArray(size_t nvec, const double* data) {
   int mpi_rank, comm_size;
   MPI_Comm_rank(instance.comm, &mpi_rank);
   MPI_Comm_size(instance.comm, &comm_size);
-  auto distr = make_distribution_spread_remainder<size_t>(instance.dimension, comm_size);
+  const auto& distr = instance.distribution;
   auto range = distr.range(mpi_rank);
   auto rn = range.second - range.first;
   std::vector<Rvector> c;
@@ -226,6 +265,7 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
   instances.emplace(Instance{molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>(algorithm, options),
                              profiler, nQ, comm});
   auto& instance = instances.top();
+  set_distribution(instance, range_begin, range_end);
   instance.solver->set_n_roots(nroot);
   instance.solver->set_verbosity(verbosity);
   instance.verbosity = verbosity;
@@ -246,7 +286,6 @@ extern "C" void IterativeSolverLinearEigensystemInitialize(size_t nQ, size_t nro
         verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
     solver->logger().enable_data_dumps(verbosity > 0);
   }
-  std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
 
 extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot, size_t* range_begin, size_t* range_end,
@@ -264,6 +303,7 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
       Instance{molpro::linalg::itsolv::create_LinearEquations<Rvector, Qvector, Pvector>(algorithm, options), profiler,
                n, comm});
   auto& instance = instances.top();
+  set_distribution(instance, range_begin, range_end);
   auto rr = CreateDistrArray(nroot, rhs);
   auto solver = dynamic_cast<LinearEquationsDavidson<Rvector, Qvector, Pvector>*>(instance.solver.get());
   if (!solver)
@@ -284,7 +324,6 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
   // instance.solver->m_verbosity = verbosity;
   instance.solver->set_verbosity(verbosity);
   instance.verbosity = verbosity;
-  std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
 
 extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* range_begin, size_t* range_end,
@@ -300,11 +339,11 @@ extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* ra
       Instance{molpro::linalg::itsolv::create_NonLinearEquations<Rvector, Qvector, Pvector>(algorithm, options),
                profiler, n, comm});
   auto& instance = instances.top();
+  set_distribution(instance, range_begin, range_end);
   instance.solver->set_convergence_threshold(thresh);
   // instance.solver->m_verbosity = verbosity;
   instance.solver->set_verbosity(verbosity);
   instance.verbosity = verbosity;
-  std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
   molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>* solver =
       dynamic_cast<molpro::linalg::itsolv::NonLinearEquationsDIIS<Rvector, Qvector, Pvector>*>(instance.solver.get());
   if (!solver)
@@ -331,6 +370,7 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   instances.emplace(Instance{molpro::linalg::itsolv::create_Optimize<Rvector, Qvector, Pvector>(algorithm, options),
                              profiler, n, comm});
   auto& instance = instances.top();
+  set_distribution(instance, range_begin, range_end);
   instance.solver->set_n_roots(1);
   instance.solver->set_convergence_threshold(thresh);
   instance.solver->set_convergence_threshold_value(thresh_value);
@@ -350,7 +390,6 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   solver->logger().enable_data_dumps(verbosity > 0);
 
   instance.has_values = true;
-  std::tie(*range_begin, *range_end) = DistrArrayDefaultRange();
 }
 
 extern "C" void IterativeSolverFinalize() { instances.pop(); }
