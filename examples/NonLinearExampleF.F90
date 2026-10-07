@@ -68,24 +68,29 @@ PROGRAM QuasiNewton_Example
   IMPLICIT NONE
   INTEGER, PARAMETER :: n = 100, verbosity = 2
   DOUBLE PRECISION, DIMENSION (n) :: c, g
-  ! try one of the following
-  !      type(quadratic_t) :: problem
+  ! quadratic_t is the alternative problem: a normalised quadratic form, equivalent to finding an eigenvector
   type(forced_t) :: problem
   call mpi_init
-  call &
-      ! try one of the following
-      Solve_Optimization(&
-          !      Solve_Nonlinear_Equations(&
-          c, g, problem, thresh = 1d-6, verbosity = verbosity)
-  if (verbosity.lt.1) then
-    print *, 'Optimized function value ', Iterative_Solver_Value()
-    print *, 'Error ', Iterative_Solver_Errors(), Iterative_Solver_Converged()
-  end if
-  if (verbosity.gt.1) then
-    call Iterative_Solver_Solution([1], c, g)
-    PRINT *, 'solution ', c(1:MIN(n, 10))
-    PRINT *, 'residual ', g(1:MIN(n, 10))
-  end if
-  CALL Iterative_Solver_Finalize
+  ! The same problem is solved by minimisation (BFGS) and as non-linear equations (DIIS)
+  call Solve_Optimization(c, g, problem, thresh = 1d-6, verbosity = verbosity)
+  call report_and_check('Solve_Optimization')
+  call Solve_Nonlinear_Equations(c, g, problem, thresh = 1d-6, verbosity = verbosity)
+  call report_and_check('Solve_Nonlinear_Equations')
   call mpi_finalize
+contains
+  !> Check the solution independently of the solver: it is stationary when sum(c) + (3*i-1)*c(i) = 1 for all i
+  subroutine report_and_check(driver)
+    character(*), intent(in) :: driver
+    double precision :: error
+    integer :: i
+    if (verbosity.gt.1) then
+      call Iterative_Solver_Solution([1], c, g)
+      PRINT *, 'solution ', c(1:MIN(n, 10))
+      PRINT *, 'residual ', g(1:MIN(n, 10))
+    end if
+    error = maxval([(abs(sum(c) + (3 * i - 1) * c(i) - 1), i = 1, n)])
+    print *, driver, ': converged ', Iterative_Solver_Converged(), ', stationarity error ', error
+    if (.not. Iterative_Solver_Converged() .or. error .gt. 1d-5) error stop 'NonLinearExampleF: wrong solution'
+    CALL Iterative_Solver_Finalize
+  end subroutine report_and_check
 END PROGRAM QuasiNewton_Example
