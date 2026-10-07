@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['wrappers_3a_20vecref_20and_20cvecref_0',['Wrappers: VecRef and CVecRef',['../TopicVecRef.html',1,'']]]
+  ['library_20design_0',['Library Design',['../md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html',1,'']]]
 ];

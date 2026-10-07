@@ -34,16 +34,26 @@ var NAVTREE =
       [ "Arbitrary precision", "index.html#autotoc_md13", null ],
       [ "Complex arithmetic", "index.html#autotoc_md14", null ]
     ] ],
-    [ "Citing", "index.html#autotoc_md15", null ],
-    [ "List of Contributors", "index.html#autotoc_md16", null ],
+    [ "Contributing", "index.html#autotoc_md15", null ],
+    [ "Citing", "index.html#autotoc_md16", null ],
+    [ "List of Contributors", "index.html#autotoc_md17", null ],
     [ "Library Design", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html", [
-      [ "Iterative solvers", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md17", [
-        [ "Solver interfaces and implementations", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md18", null ],
-        [ "Dependency inversion mechanism", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md19", null ],
-        [ "Setting solver Options", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md20", null ],
-        [ "Solver Factory", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md21", null ]
+      [ "Iterative solvers", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md18", [
+        [ "Solver interfaces and implementations", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md19", null ],
+        [ "Dependency inversion mechanism", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md20", null ],
+        [ "Setting solver Options", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md21", null ],
+        [ "Solver Factory", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md22", null ]
       ] ],
-      [ "Distributed Arrays", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md22", null ]
+      [ "Distributed Arrays", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md23", null ]
+    ] ],
+    [ "Consistency audit playbook", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html", [
+      [ "Setup", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md24", null ],
+      [ "The shape of a pass", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md25", null ],
+      [ "How to drive a single pass", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md26", null ],
+      [ "Lessons from the first round", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md27", null ],
+      [ "Lessons from later rounds", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md28", null ],
+      [ "Suggested PR shape", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md29", null ],
+      [ "What to expect from the LLM", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md30", null ]
     ] ],
     [ "Iterative solvers", "TopicIterativeSolver.html", null ],
     [ "Distributed arrays", "TopicDistrArrays.html", null ],
@@ -78,10 +88,10 @@ var NAVTREEINDEX =
 "classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html#abfbcd5624f05c8f86e335cc99b9d50ee",
 "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1CSlice.html#ae707f005edd4908b43b90c9d8f71e9bb",
 "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html#a7b1a72e28e82f7fc93edc4fa89b68492",
-"namespacemembers.html",
-"namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ac70ab2e80d1290423912509a803ba173",
-"structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a5e953e7f21a8dd27afe039fd1cfe0b26",
-"structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#afc80d997e12454aa6ea3b96e59f433a8"
+"namespaceiterative__solver.html#aeed2ec3b74a21dd29d3ab3853ace408b",
+"namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail.html#a0efd48e0270cf34547fab72be6e90388",
+"structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a271e3d0797aebcc8b9d18988fa8bb812",
+"structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#ab9fe04e2282fd9e6fd3b6e21e948780d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

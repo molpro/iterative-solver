@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['library_20design_0',['Library Design',['../md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html',1,'']]]
+  ['iterative_20solvers_0',['Iterative solvers',['../TopicIterativeSolver.html',1,'']]],
+  ['iterative_2dsolver_1',['iterative-solver',['../index.html',1,'']]]
 ];
