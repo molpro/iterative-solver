@@ -77,6 +77,18 @@ foreach (t test_LinearEigensystem test_LinearEquations test_Optimize test_NonLin
     endif ()
 endforeach ()
 
+if (MPI AND FORTRAN)
+    # The Fortran interface distributes vectors over the processes, so also run the Fortran-backed tests on three
+    # processes, which gives an uneven default distribution
+    foreach (t test_LinearEigensystem test_LinearEquations test_Optimize test_NonLinearEquations)
+        if (TARGET ${t}.exe AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${t}F.f90")
+            add_test(NAME ${t}_3procs
+                    COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} 3 ${MPIEXEC_PREFLAGS} $<TARGET_FILE:${t}.exe>
+                    ${MPIEXEC_POSTFLAGS})
+        endif ()
+    endforeach ()
+endif ()
+
 if (MPI AND FORTRAN AND TARGET test_LinearEigensystem.exe)
     # a requested range only differs from the default distribution when there is more than one process
     add_test(NAME LinearEigensystemFortran.supplied_range_2procs

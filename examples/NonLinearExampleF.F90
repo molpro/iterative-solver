@@ -5,6 +5,7 @@
 !> The second example makes stationary a quadratic form plus a linear force.
 module QuasiNewton_Examples
   USE Iterative_Solver_Problem
+  implicit none
   private
   !> @brief objective function is (1/2) * c . m . c - sum(c)  where m(i,j) = 1 + (3*i-1)*delta(i,j)
   type, extends(Problem), public :: forced_t
@@ -29,14 +30,19 @@ contains
     double precision, intent(in), dimension(:, :) :: parameters
     double precision, intent(inout), dimension(:, :) :: residuals
     integer, dimension(2), intent(in) :: range
+    integer :: i
+    ! Residuals are needed only in this process's range, but the function value must be the same on every process,
+    ! so compute it from the full parameter vector
     do i = range(1) + 1, range(2); residuals(i, 1) = sum(parameters(:, 1)) + (3 * i - 1) * parameters(i, 1) - 1;
     enddo
-    e = 0.5 * dot_product(parameters(:, 1), residuals(:, 1)) - 0.5 * sum(parameters(:, 1))
+    e = 0.5 * (sum(parameters(:, 1))**2 + sum([((3 * i - 1) * parameters(i, 1)**2, i = 1, size(parameters, 1))])) &
+        - sum(parameters(:, 1))
   end function forced_residual
 
   logical function forced_diagonals(this, d)
     class(forced_t), intent(in) :: this
     double precision, intent(inout), dimension(:) :: d
+    integer :: i
     d = [(3 * i, i = 1, size(d))]
     forced_diagonals = .true.
   end function forced_diagonals
@@ -47,15 +53,20 @@ contains
     double precision, intent(in), dimension(:, :) :: parameters
     double precision, intent(inout), dimension(:, :) :: residuals
     integer, dimension(2), intent(in) :: range
-    do i = range(1) + 1, range(2); residuals(i, 1) = sum(parameters(:, 1)) + (3 * i - 1) * parameters(i, 1);
+    integer :: i
+    ! As in forced_residual, the function value is computed from the full parameter vector
+    e = (sum(parameters(:, 1))**2 + sum([((3 * i - 1) * parameters(i, 1)**2, i = 1, size(parameters, 1))])) &
+        / dot_product(parameters(:, 1), parameters(:, 1))
+    do i = range(1) + 1, range(2)
+      residuals(i, 1) = (sum(parameters(:, 1)) + (3 * i - 1) * parameters(i, 1) - e * parameters(i, 1)) &
+          / dot_product(parameters(:, 1), parameters(:, 1))
     enddo
-    e = dot_product(parameters(:, 1), residuals(:, 1)) / dot_product(parameters(:, 1), parameters(:, 1))
-    residuals = (residuals - e * parameters) / dot_product(parameters(:, 1), parameters(:, 1))
   end function quadratic_residual
 
   logical function quadratic_diagonals(this, d)
     class(quadratic_t), intent(in) :: this
     double precision, intent(inout), dimension(:) :: d
+    integer :: i
     d = [(3 * i, i = 1, size(d))]
     quadratic_diagonals = .true.
   end function quadratic_diagonals
