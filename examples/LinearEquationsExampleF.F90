@@ -58,6 +58,10 @@ PROGRAM Linear_Equations_Example
   INTEGER, PARAMETER :: n = 30, nroot = 2
   DOUBLE PRECISION, DIMENSION (n, nroot) :: c, g
   TYPE(linear_problem) :: problem
+  DOUBLE PRECISION, DIMENSION (n, nroot) :: ax
+  DOUBLE PRECISION, DIMENSION (n) :: b
+  DOUBLE PRECISION :: error
+  INTEGER :: k
   call mpi_init
   IF (mpi_rank_global() .gt. 0) close(6)
   PRINT *, 'Fortran binding of IterativeSolver'
@@ -65,6 +69,15 @@ PROGRAM Linear_Equations_Example
   problem%nroot = nroot
   CALL Solve_Linear_Equations(c, g, problem, thresh = 1d-11, verbosity = 2)
   PRINT*, 'convergence?', Iterative_Solver_Converged(), ', residual length: ', norm2(g)
+  ! check the solution independently of the solver: relative residual of A x = b
+  CALL problem%action(c, ax, [0, n])
+  error = 0
+  DO k = 1, nroot
+    IF (.NOT. problem%RHS(b, k, [0, n])) ERROR STOP 'LinearEquationsExampleF: missing right-hand side'
+    error = MAX(error, norm2(ax(:, k) - b) / norm2(b))
+  END DO
+  PRINT *, 'relative residual ', error
+  IF (.NOT. Iterative_Solver_Converged() .OR. error .GT. 1d-8) ERROR STOP 'LinearEquationsExampleF: wrong solution'
   CALL Iterative_Solver_Print_Statistics
   CALL Iterative_Solver_Finalize
   CALL mpi_finalize

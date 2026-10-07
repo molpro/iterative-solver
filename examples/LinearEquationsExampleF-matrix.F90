@@ -12,6 +12,8 @@ PROGRAM Linear_Equations_Example
   DOUBLE PRECISION, DIMENSION (n, nroot), target :: rhs
   DOUBLE PRECISION, DIMENSION (n, nroot) :: c, g
   TYPE(Matrix_Problem) :: problem
+  DOUBLE PRECISION :: error
+  INTEGER :: k
   CALL mpi_init
   PRINT *, 'Fortran binding of IterativeSolver'
   IF (mpi_rank_global() .gt. 0) CLOSE(6)
@@ -19,6 +21,13 @@ PROGRAM Linear_Equations_Example
   CALL problem%attach(m, rhs)
   CALL Solve_Linear_Equations(c, g, problem, thresh = 1d-11, verbosity = 2, max_p = 30, hermitian = .true.)
   PRINT *, 'convergence?', Iterative_Solver_Converged(), ', residual length: ', norm2(g)
+  ! check the solution independently of the solver: relative residual of m x = rhs
+  error = 0
+  DO k = 1, nroot
+    error = MAX(error, norm2(MATMUL(m, c(:, k)) - rhs(:, k)) / norm2(rhs(:, k)))
+  END DO
+  PRINT *, 'relative residual ', error
+  IF (.NOT. Iterative_Solver_Converged() .OR. error .GT. 1d-8) ERROR STOP 'LinearEquationsExampleF-matrix: wrong solution'
   !    print *,c
   !    print *,g
   CALL Iterative_Solver_Print_Statistics
