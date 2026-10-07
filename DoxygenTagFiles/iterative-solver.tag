@@ -1406,6 +1406,13 @@
       <anchor>a9095a1d96c2d44d2202aca4c3f7265be</anchor>
       <arglist>()</arglist>
     </member>
+    <member kind="function" static="yes">
+      <type>static int</type>
+      <name>rank_in</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html</anchorfile>
+      <anchor>a1e316c4629c55377d7cde4d49ea9cad5</anchor>
+      <arglist>(const T &amp;array)</arglist>
+    </member>
     <member kind="typedef" protection="protected">
       <type>typename T::value_type</type>
       <name>value_type</name>
