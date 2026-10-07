@@ -55,7 +55,7 @@ else ()
     message(STATUS "iterative-solver: Eigen3::Eigen target already defined")
 endif ()
 
-foreach (t test_LinearEigensystem test_LinearEquations test_Optimize test_NonLinearEquations test_svd_system test_LinearEigensystem_e2e)
+foreach (t test_LinearEigensystem test_LinearEquations test_Optimize test_NonLinearEquations test_svd_system test_LinearEigensystem_e2e test_FortranInterface)
     add_executable(${t}.exe ${t}.cpp test.h SolverFactory_implementation.cpp)
 	if (FORTRAN AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${t}F.f90")
         target_sources(${t}.exe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${t}F.f90)
@@ -80,7 +80,7 @@ endforeach ()
 if (MPI AND FORTRAN)
     # The Fortran interface distributes vectors over the processes, so also run the Fortran-backed tests on three
     # processes, which gives an uneven default distribution
-    foreach (t test_LinearEigensystem test_LinearEquations test_Optimize test_NonLinearEquations)
+    foreach (t test_LinearEigensystem test_LinearEquations test_Optimize test_NonLinearEquations test_FortranInterface)
         if (TARGET ${t}.exe AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${t}F.f90")
             add_test(NAME ${t}_3procs
                     COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} 3 ${MPIEXEC_PREFLAGS} $<TARGET_FILE:${t}.exe>
