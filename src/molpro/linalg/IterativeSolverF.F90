@@ -2,12 +2,12 @@
 MODULE Iterative_Solver
   USE, INTRINSIC :: iso_c_binding
   USE Iterative_Solver_Problem, only : problem_class => Problem
+  IMPLICIT NONE
   PUBLIC :: Solve_Linear_Eigensystem
   PUBLIC :: Solve_Linear_Equations
   PUBLIC :: Solve_Nonlinear_Equations
   PUBLIC :: Solve_Optimization
   PUBLIC :: Iterative_Solver_Linear_Eigensystem_Initialize, Iterative_Solver_Finalize, Iterative_Solver_Finalize_All
-  PUBLIC :: Iterative_Solver_Linear_Eigensystem_Initialize_Ranges
   PUBLIC :: Iterative_Solver_DIIS_Initialize, Iterative_Solver_Linear_Equations_Initialize
   PUBLIC :: Iterative_Solver_Optimize_Initialize
   PRIVATE :: Iterative_Solver_Add_Value
@@ -95,7 +95,10 @@ CONTAINS
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
-    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
+    !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
+    !> rank order. On exit, the range in use.
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     logical :: guess
     integer :: i, nq
@@ -139,7 +142,10 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
-    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
+    !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
+    !> rank order. On exit, the range in use.
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     DOUBLE PRECISION, DIMENSION(1) :: rhs
     DOUBLE PRECISION, POINTER, DIMENSION(:) :: buffer_1
@@ -185,7 +191,10 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
-    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
+    !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
+    !> rank order. On exit, the range in use.
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     logical :: guess
     integer :: nq
@@ -219,7 +228,10 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
-    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
+    !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
+    !> rank order. On exit, the range in use.
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     logical :: guess
     integer :: nq
@@ -250,7 +262,10 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm, eg Davidson
-    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
+    !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
+    !> rank order. On exit, the range in use.
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     INTERFACE
       SUBROUTINE Iterative_Solver_Linear_Eigensystem_InitializeC(nq, nroot, range_begin, range_end, thresh, thresh_value, &
@@ -285,6 +300,10 @@ end select
     IF (PRESENT(range)) THEN
       m_range_begin = INT(range(1), kind = c_size_t)
       m_range_end = INT(range(2), kind = c_size_t)
+    ELSE
+      ! no range requested: let the library choose the distribution
+      m_range_begin = -1_c_size_t
+      m_range_end = -1_c_size_t
     END IF
     IF (PRESENT(pname)) THEN
       ALLOCATE(pnameC(LEN(pname) + 1))
@@ -355,7 +374,10 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
-    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
+    !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
+    !> rank order. On exit, the range in use.
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     INTERFACE
       SUBROUTINE Iterative_Solver_Linear_Equations_InitializeC(nq, nroot, range_begin, range_end, rhs, &
@@ -392,6 +414,10 @@ end select
     IF (PRESENT(range)) THEN
       m_range_begin = INT(range(1), kind = c_size_t)
       m_range_end = INT(range(2), kind = c_size_t)
+    ELSE
+      ! no range requested: let the library choose the distribution
+      m_range_begin = -1_c_size_t
+      m_range_end = -1_c_size_t
     END IF
     IF (PRESENT(pname)) THEN
       ALLOCATE(pnameC(LEN(pname) + 1))
@@ -459,7 +485,10 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
     CHARACTER(*), INTENT(in), OPTIONAL :: algorithm !< keyword specifying optimization algorithm
-    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
+    !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
+    !> rank order. On exit, the range in use.
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh_value !< convergence threshold for function value
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     INTERFACE
@@ -490,6 +519,10 @@ end select
     IF (PRESENT(range)) THEN
       m_range_begin = INT(range(1), kind = c_size_t)
       m_range_end = INT(range(2), kind = c_size_t)
+    ELSE
+      ! no range requested: let the library choose the distribution
+      m_range_begin = -1_c_size_t
+      m_range_end = -1_c_size_t
     END IF
     IF (PRESENT(pname)) THEN
       ALLOCATE(pnameC(LEN(pname) + 1))
@@ -522,7 +555,7 @@ end select
       ALLOCATE(algorithmC(1))
       algorithmC(1) = c_null_char
     ENDIF
-    minimize_C = 1
+    minimizeC = 1
     IF (PRESENT(minimize)) THEN
       IF (.NOT. minimize) minimizeC = 0
     END IF
@@ -557,7 +590,10 @@ end select
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< Profiler communicator
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm, eg DIIS
-    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range !< distributed array local range start and end indices
+    !> Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests
+    !> that distribution: then every process must supply one, the ranges covering the whole space contiguously in
+    !> rank order. On exit, the range in use.
+    INTEGER, DIMENSION(2), INTENT(inout), OPTIONAL :: range
     CHARACTER(*), INTENT(in), OPTIONAL :: options !< key1=value1, key2=value1,... to specify arbitrary options
     INTERFACE
       SUBROUTINE Iterative_Solver_DIIS_InitializeC(nq, range_begin, range_end, thresh, verbosity, &
@@ -583,6 +619,10 @@ end select
     IF (PRESENT(range)) THEN
       m_range_begin = INT(range(1), kind = c_size_t)
       m_range_end = INT(range(2), kind = c_size_t)
+    ELSE
+      ! no range requested: let the library choose the distribution
+      m_range_begin = -1_c_size_t
+      m_range_end = -1_c_size_t
     END IF
     IF (PRESENT(pname)) THEN
       ALLOCATE(pnameC(LEN(pname) + 1))
@@ -800,6 +840,7 @@ end select
       END SUBROUTINE Add_Equation_C
     END INTERFACE
     double precision, dimension(:), pointer :: pr
+    INTEGER :: i
 #ifndef thing
 ! because incomplete Fortran support in CLion - switch to ifdef for editing
     select rank(rhs)
@@ -840,6 +881,7 @@ end select
     INTEGER(c_int) :: nroot
     INTEGER(c_int) :: lsyncC
     double precision, dimension(:), pointer :: pp, pa
+    INTEGER :: i
     lsyncC = 1
     IF (PRESENT(synchronize)) THEN
       IF (.NOT. synchronize) lsyncC = 0
@@ -951,6 +993,7 @@ end select
     INTEGER(c_size_t), DIMENSION(SIZE(indices)) :: indicesC
     INTEGER(c_int) :: lsyncC
     TYPE(C_FUNPTR) :: cproc
+    INTEGER :: i
     cproc = C_FUNLOC(fproc)
     lsyncC = 1
     IF (PRESENT(synchronize)) THEN
@@ -994,6 +1037,7 @@ end select
     REAL(C_double) :: thresholdC = 0
     INTEGER(c_size_t), DIMENSION(SIZE(indices)) :: indicesC
     INTEGER(c_size_t) :: maximumNumber
+    INTEGER :: i
     indicesC = 0
     maximumNumber = INT(size(indices), c_size_t)
     !write (6,*) 'fortran suggestP, maximumNumber=',size(indices)
@@ -1209,6 +1253,7 @@ end select
   SUBROUTINE c_string_from_f(fstring, cstring)
     CHARACTER(kind = c_char), DIMENSION(*) :: cstring !< A C char[] big enough to hold the result. No checks are made for overflow.
     CHARACTER(*), INTENT(in) :: fstring !< The fortran string to be converted
+    INTEGER :: i
     DO i = 1, len_TRIM(fstring)
       cstring(i) = fstring(i:i)
     END DO
