@@ -30,7 +30,8 @@ function test_LinearEquationsF(matrix, rhs, n, np, nroot, hermitian, augmented_h
   double precision, intent(in), value :: augmented_hessian
   double precision, dimension(n, nroot) :: c, g
   double precision :: error
-  integer :: nwork, i, j, k
+  integer :: nwork, i, j, k, iterations
+  double precision, dimension(nroot) :: reported, calculated
   integer, dimension(nroot) :: guess
   double precision :: guess_value
   double precision, parameter :: thresh = 1d-10
@@ -79,23 +80,34 @@ function test_LinearEquationsF(matrix, rhs, n, np, nroot, hermitian, augmented_h
     !    write (6, *) 'nwork after end_iteration ', nwork, Iterative_Solver_Errors(); call flush(6)
     if (nwork.le.0) exit
   end do
+  iterations = i
   call Iterative_Solver_Solution([(i, i = 1, nroot)], c, g)
   error = 0
   do i = 1, nroot
     !    write (6, *) 'solution ', i, c(:, i)
     !    write (6, *) 'reported residual ', i, g(:, i)
-    error = max(error, sqrt(dot_product(g(:, i), g(:, i))))
+    reported(i) = sqrt(dot_product(g(:, i), g(:, i)))
+    error = max(error, reported(i))
     !    write (6, *) 'reported residual length ', sqrt(dot_product(g(:, i), g(:, i)))
     if (.true.) then ! TODO really check this, as sometimes it differs
       g(:, i) = matmul(matrix, c(:, i)) - rhs(:, i)
 !      write (6, *) 'calculated residual ', i, g(:, i)
-      error = max(error, sqrt(dot_product(g(:, i), g(:, i))))
+      calculated(i) = sqrt(dot_product(g(:, i), g(:, i)))
+      error = max(error, calculated(i))
 !      write (6, *) 'calculated residual length ', sqrt(dot_product(g(:, i), g(:, i)))
     end if
   end do
   test_LinearEquationsF = 1
   if (error.gt.1d-3) then
     write (6, *) 'test_linearEquationsF has failed ', error
+    ! diagnostics for issue #637: is the solver's own residual small while the recalculated one is not?
+    write (6, *) '  n=', n, ' nroot=', nroot, ' iterations=', iterations, ' (limit 1000) last nwork=', nwork, &
+        ' converged=', Iterative_Solver_Converged()
+    write (6, *) '  solver errors       ', Iterative_Solver_Errors()
+    do i = 1, int(nroot)
+      write (6, '(A,I3,3(A,ES10.3))') '   root', i, ': reported residual', reported(i), ', recalculated residual', &
+          calculated(i), ', |rhs|', sqrt(dot_product(rhs(:, i), rhs(:, i)))
+    end do
     test_LinearEquationsF = 0
   end if
   call Iterative_Solver_Finalize
