@@ -13069,8 +13069,8 @@
       <type>void</type>
       <name>normalise</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a410e557c1407524363361004d522b4ba</anchor>
-      <arglist>(VecRef&lt; R &gt; &amp;params, array::ArrayHandler&lt; R, R &gt; &amp;handler, Logger &amp;logger, typename array::ArrayHandler&lt; R, R &gt;::value_type_abs thresh=precision_scaled&lt; typename array::ArrayHandler&lt; R, R &gt;::value_type_abs &gt;(1e-14))</arglist>
+      <anchor>a6ab06f994ed7d224a95fd3e111273072</anchor>
+      <arglist>(VecRef&lt; R &gt; &amp;params, array::ArrayHandler&lt; R, R &gt; &amp;handler, Logger &amp;logger, typename array::ArrayHandler&lt; R, R &gt;::value_type_abs thresh=1/std::numeric_limits&lt; typename array::ArrayHandler&lt; R, R &gt;::value_type_abs &gt;::max())</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
