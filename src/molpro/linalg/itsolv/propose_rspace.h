@@ -463,6 +463,8 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
  *
  * @param rparams R space parameters
  * @param overlap overlap of P+Q+D subspace
+ * @param rx_overlap overlaps <r_j|x_i> of the R space parameters (rows) with the P+Q+D parameters (columns), as
+ * already calculated by append_overlap_with_r()
  * @param dims dimensions of P+Q+D subspace
  * @param pparams P space parameters
  * @param qparams Q space parameters
@@ -473,58 +475,50 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
  */
 template <class R, class Q, class P, typename value_type, typename value_type_abs>
 auto modified_gram_schmidt(const VecRef<R>& rparams, const subspace::Matrix<value_type>& overlap,
-                           const subspace::Dimensions& dims, const CVecRef<P>& pparams, const CVecRef<Q>& qparams,
-                           const CVecRef<Q>& dparams, const value_type_abs norm_thresh,
+                           const subspace::Matrix<value_type>& rx_overlap, const subspace::Dimensions& dims,
+                           const CVecRef<P>& pparams, const CVecRef<Q>& qparams, const CVecRef<Q>& dparams,
+                           const value_type_abs norm_thresh,
                            ArrayHandlers<R, Q, P>& handlers, Logger& logger) {
   logger.trace("modified_gram_schmidt()");
   const auto nR = rparams.size(), nP = pparams.size(), nQ = qparams.size(), nD = dparams.size();
   // std::cout << "modified_gram_schmidt() nR="<<nR<<" nQ="<<nQ<<" nD="<<nD<<std::endl;
   assert(nP == dims.nP && nQ == dims.nQ && nD == dims.nD);
+  assert(rx_overlap.rows() == nR && rx_overlap.cols() == dims.nX());
   // Project the new parameters out of the span of P+Q+D. The existing vectors need not be orthogonal to each other
   // (for example user-supplied initial guesses), so subtract V S^{-1} V^dagger r rather than projecting on each vector
-  // separately; repeat once, since a single projection loses orthogonality when S is ill-conditioned.
+  // separately.
   auto prof = molpro::Profiler::single();
   prof->start("orthoganalise");
   const auto nX = nP + nQ + nD;
   if (nR > 0 and nX > 0) {
     using EMatrix = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
     EMatrix S(nX, nX);
-    const size_t offsets[3] = {dims.oP(), dims.oQ(), dims.oD()}, sizes[3] = {nP, nQ, nD};
-    for (size_t bi = 0, ii = 0; bi < 3; ii += sizes[bi], ++bi)
-      for (size_t bj = 0, jj = 0; bj < 3; jj += sizes[bj], ++bj)
-        for (size_t i = 0; i < sizes[bi]; ++i)
-          for (size_t j = 0; j < sizes[bj]; ++j)
-            S(ii + i, jj + j) = overlap(offsets[bi] + i, offsets[bj] + j);
+    for (size_t i = 0; i < nX; ++i)
+      for (size_t j = 0; j < nX; ++j)
+        S(i, j) = overlap(i, j);
     // equilibrate, so that vectors of very different lengths do not make S needlessly ill-conditioned
     Eigen::Vector<value_type, Eigen::Dynamic> scale(nX);
     for (size_t i = 0; i < nX; ++i)
       scale(i) = std::abs(S(i, i)) > 0 ? 1 / std::sqrt(std::abs(S(i, i))) : 0;
     const auto Sinv = (scale.asDiagonal() * S * scale.asDiagonal()).eval().completeOrthogonalDecomposition();
-    for (int pass = 0; pass < 2; ++pass) {
-      EMatrix dots(nX, nR);
-      // gemm_inner(r, x) holds <r_j|x_i>; the projection needs <x_i|r_j>
-      auto copy_block = [&dots, nR](const auto& m, size_t o) {
-        for (size_t i = 0; i < m.cols(); ++i)
-          for (size_t j = 0; j < nR; ++j)
-            dots(o + i, j) = molpro::linalg::conjugate(m(j, i));
-      };
-      copy_block(handlers.rp().gemm_inner(cwrap(rparams), pparams), 0);
-      copy_block(handlers.rq().gemm_inner(cwrap(rparams), qparams), nP);
-      copy_block(handlers.rq().gemm_inner(cwrap(rparams), dparams), nP + nQ);
-      const EMatrix y = scale.asDiagonal() * Sinv.solve(scale.asDiagonal() * dots);
-      auto subtract = [&y, &rparams, nR](const auto& xparams, auto& handler, size_t o, size_t n) {
-        if (n == 0)
-          return;
-        subspace::Matrix<value_type> coeff({n, nR});
-        for (size_t i = 0; i < n; ++i)
-          for (size_t j = 0; j < nR; ++j)
-            coeff(i, j) = -y(o + i, j);
-        handler.gemm_outer(coeff, xparams, rparams);
-      };
-      subtract(pparams, handlers.rp(), 0, nP);
-      subtract(qparams, handlers.rq(), nP, nQ);
-      subtract(dparams, handlers.rq(), nP + nQ, nD);
-    }
+    // the projection needs <x_i|r_j>, the conjugate of the overlaps already calculated
+    EMatrix dots(nX, nR);
+    for (size_t i = 0; i < nX; ++i)
+      for (size_t j = 0; j < nR; ++j)
+        dots(i, j) = molpro::linalg::conjugate(rx_overlap(j, i));
+    const EMatrix y = scale.asDiagonal() * Sinv.solve(scale.asDiagonal() * dots);
+    auto subtract = [&y, &rparams, nR](const auto& xparams, auto& handler, size_t o, size_t n) {
+      if (n == 0)
+        return;
+      subspace::Matrix<value_type> coeff({n, nR});
+      for (size_t i = 0; i < n; ++i)
+        for (size_t j = 0; j < nR; ++j)
+          coeff(i, j) = -y(o + i, j);
+      handler.gemm_outer(coeff, xparams, rparams);
+    };
+    subtract(pparams, handlers.rp(), dims.oP(), nP);
+    subtract(qparams, handlers.rq(), dims.oQ(), nQ);
+    subtract(dparams, handlers.rq(), dims.oD(), nD);
   }
   prof->stop();
   prof->start("get null_params");
@@ -635,12 +629,23 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
       redundant_parameters(full_overlap, xspace.dimensions().nX(), wresidual.size(), r_opts.svd_thresh, logger);
   prof->stop();
   logger.debug("redundant indices = ", redundant_indices);
+  // overlaps of the remaining R parameters with P+Q+D, to save modified_gram_schmidt() from recalculating them
+  const auto nX = xspace.dimensions().nX();
+  auto kept = std::vector<size_t>{};
+  for (size_t j = 0; j < wresidual.size(); ++j)
+    if (std::find(redundant_indices.begin(), redundant_indices.end(), int(j)) == redundant_indices.end())
+      kept.push_back(j);
+  auto rx_overlap = subspace::Matrix<typename decltype(full_overlap)::value_type>({kept.size(), nX});
+  for (size_t j = 0; j < kept.size(); ++j)
+    for (size_t i = 0; i < nX; ++i)
+      rx_overlap(j, i) = full_overlap(nX + kept[j], i);
   util::delete_parameters(redundant_indices, wresidual);
   profiler.start("modified_gram_schmidt");
   prof->start("modified_gram_schmidt");
   auto null_param_indices =
-      modified_gram_schmidt(wresidual, xspace.data.at(subspace::EqnData::S), xspace.dimensions(), xspace.cparamsp(),
-                            xspace.cparamsq(), xspace.cparamsd(), r_opts.norm_thresh, handlers, logger);
+      modified_gram_schmidt(wresidual, xspace.data.at(subspace::EqnData::S), rx_overlap, xspace.dimensions(),
+                            xspace.cparamsp(), xspace.cparamsq(), xspace.cparamsd(), r_opts.norm_thresh, handlers,
+                            logger);
   profiler.stop();
   prof->stop();
   // Now that there is SVD null_param_indices should always be empty
