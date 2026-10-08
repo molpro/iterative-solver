@@ -224,7 +224,8 @@ end select
     DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh_value !< value convergence threshold
     INTEGER, INTENT(in), OPTIONAL :: verbosity !< how much to print. Default is zero, which prints nothing except errors.
     !< One gives a summary at the end; two gives a single progress-report line each iteration.
-    LOGICAL, INTENT(in), OPTIONAL :: minimize !< whether to minimize (default) or maximize
+    LOGICAL, INTENT(in), OPTIONAL :: minimize !< whether to minimize (default) or maximize. When maximizing, the
+    !< value, gradient and preconditioner are still those of the function being maximized.
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
     CHARACTER(len = *), INTENT(in), OPTIONAL :: algorithm !< algorithm
@@ -481,7 +482,8 @@ end select
     DOUBLE PRECISION, INTENT(in), OPTIONAL :: thresh !< convergence threshold
     INTEGER, INTENT(in), OPTIONAL :: verbosity !< how much to print. Default is zero, which prints nothing except errors.
     !< One gives a single progress-report line each iteration.
-    LOGICAL, INTENT(in), OPTIONAL :: minimize !< whether to minimize (default) or maximize
+    LOGICAL, INTENT(in), OPTIONAL :: minimize !< whether to minimize (default) or maximize. When maximizing, the
+    !< value, gradient and preconditioner are still those of the function being maximized.
     CHARACTER(len = *), INTENT(in), OPTIONAL :: pname !< Profiler object name
     INTEGER(KIND = mpicomm_kind), INTENT(in), OPTIONAL :: mpicomm !< MPI communicator
     CHARACTER(*), INTENT(in), OPTIONAL :: algorithm !< keyword specifying optimization algorithm
