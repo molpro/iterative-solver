@@ -12,6 +12,7 @@ add_executable(test-${PROJECT_NAME}-itsolv.exe
     test_precision_e2e.cpp
     test_options_map.cpp
     test_profiler.cpp
+    test_propose_rspace.cpp
     test_rayleigh_quotient.cpp
     test_simplified.cpp
     test_util.cpp
