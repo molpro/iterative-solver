@@ -326,7 +326,8 @@ function test_minimizeF() bind(C)
     call Solve_Optimization(c, g, problem, thresh = tight(i))
     if (.not. Iterative_Solver_Converged() .or. maxval(Iterative_Solver_Errors()) .gt. tight(i) &
         .or. norm2(g) .gt. tight(i) .or. forced_error(c) .gt. tight(i)) then
-      write (6, *) 'test_minimizeF: inconsistent at thresh ', tight(i), ': converged ', Iterative_Solver_Converged(), &
+      write (6, *) 'test_minimizeF failed: at thresh ', tight(i), ' expected converged with errors, |g| and', &
+          ' stationarity error all within thresh; got converged ', Iterative_Solver_Converged(), &
           ', errors ', Iterative_Solver_Errors(), ', |g| ', norm2(g), ', stationarity error ', forced_error(c)
       test_minimizeF = 0
     end if
