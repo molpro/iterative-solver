@@ -295,7 +295,7 @@ function test_options_and_algorithmF() bind(C)
 end function test_options_and_algorithmF
 
 !> Solve_Optimization minimises, by default and with minimize=.true. (the minimize argument used to be passed to C
-!> uninitialised when absent; maximisation is not implemented by the library, so is not tested)
+!> uninitialised when absent), and maximises with minimize=.false.
 function test_minimizeF() bind(C)
   use iso_c_binding
   use Iterative_Solver
@@ -333,6 +333,18 @@ function test_minimizeF() bind(C)
     end if
     call Iterative_Solver_Finalize
   end do
+  ! minimize=.false. maximises: the maximum of -f is the minimum of f, with the value negated (issue #633)
+  problem%sign = -1
+  call Solve_Optimization(c, g, problem, thresh = 1d-6, minimize = .false.)
+  if (.not. Iterative_Solver_Converged() .or. forced_error(c) .gt. 1d-5 .or. norm2(g) .gt. 1d-6 &
+      .or. abs(Iterative_Solver_Value() + value_default) .gt. 1d-10) then
+    write (6, *) 'test_minimizeF failed: maximising -f with minimize=.false. expected converged, stationarity error', &
+        ' within 1e-5 and value ', -value_default, '; got converged ', Iterative_Solver_Converged(), &
+        ', stationarity error ', forced_error(c), ', |g| ', norm2(g), ', value ', Iterative_Solver_Value()
+    test_minimizeF = 0
+  end if
+  call Iterative_Solver_Finalize
+  problem%sign = 1
 end function test_minimizeF
 
 !> Overridden precondition, report and RHS are used by the Solve drivers

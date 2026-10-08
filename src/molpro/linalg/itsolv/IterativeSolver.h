@@ -448,7 +448,8 @@ public:
   virtual bool get_hermiticity() const = 0;
 };
 
-//! Optimises to a stationary point using methods such as L-BFGS
+//! Optimises to a stationary point using methods such as L-BFGS. The objective is minimised; to maximise a function,
+//! minimise its negative. (The C, Fortran and Python interfaces do that when asked to maximise.)
 template <class R, class Q, class P>
 class Optimize : public IterativeSolver<R, Q, P> {};
 

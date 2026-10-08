@@ -81,6 +81,9 @@ struct Instance {
   std::unique_ptr<Qvector> diagonals;
   bool has_values = false;
   bool has_eigenvalues = false;
+  //! Optimize only: maximise the objective, by minimising its negative. Values and gradients are negated on their way
+  //! into and out of the solver, so that the caller always sees those of its own objective.
+  bool maximise = false;
   int verbosity = 0; //!< print level requested by the caller
 };
 class InstanceRegistry {
@@ -393,6 +396,7 @@ extern "C" void IterativeSolverOptimizeInitialize(size_t n, size_t* range_begin,
   solver->logger().enable_data_dumps(verbosity > 0);
 
   instance.has_values = true;
+  instance.maximise = minimize == 0;
 }
 
 extern "C" void IterativeSolverFinalize() { instances.pop(); }
@@ -445,7 +449,15 @@ extern "C" size_t IterativeSolverAddValue(double value, double* parameters, doub
   auto* solver = dynamic_cast<molpro::linalg::itsolv::Optimize<Rvector, Qvector, Pvector>*>(instance.solver.get());
   if (!solver)
     throw std::runtime_error("IterativeSolverAddValue: current solver is not an Optimize solver");
+  if (instance.maximise) {
+    value = -value;
+    ggg[0].scal(-1);
+  }
   size_t working_set_size = solver->add_vector(ccc[0], ggg[0], value) > 0 ? 1 : 0;
+  // the caller preconditions the returned residual with its own (negative) Hessian diagonal, which gives the step
+  // that minimising the negative objective needs: (-g)/(-d) = g/d
+  if (instance.maximise)
+    ggg[0].scal(-1);
   if (instance.prof != nullptr) {
     instance.prof->stop();
     instance.prof->start("AddValue:Sync");
@@ -502,6 +514,9 @@ extern "C" void IterativeSolverSolution(int nroot, int* roots, double* parameter
   if (instance.prof != nullptr)
     instance.prof->start("Solution:Call");
   instance.solver->solution(croots, cc, gg);
+  if (instance.maximise)
+    for (auto& g : gg)
+      g.scal(-1);
   if (instance.prof != nullptr) {
     instance.prof->stop();
     instance.prof->start("Solution:Sync");
@@ -690,7 +705,7 @@ extern "C" void IterativeSolverDiagonals(double* diagonals) {
 }
 extern "C" double IterativeSolverValue() {
   require_instance();
-  return instances.top().solver->value();
+  return instances.top().maximise ? -instances.top().solver->value() : instances.top().solver->value();
 }
 // The initialisers set the logger with their own mapping from the requested print level, which cannot be inverted
 // (levels 0 to 2 all give log::Verbosity::Info), so return the level that was requested.
