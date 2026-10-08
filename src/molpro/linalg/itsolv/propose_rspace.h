@@ -16,23 +16,29 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <format>
 #include <functional>
+#include <limits>
 #include <ranges>
 #include <utility>
 #include <vector>
 
 namespace molpro::linalg::itsolv::detail {
 
+// Normalises each parameter to unit length, leaving alone only vectors whose length is zero or too small to invert.
+// The threshold must not depend on the scale of the problem: a preconditioned residual can legitimately be very short
+// (for example with a large diagonal), and whether it is redundant is decided afterwards from the overlap of
+// normalised vectors.
 template <class R>
 void normalise(VecRef<R>& params, array::ArrayHandler<R, R>& handler, Logger& logger,
                typename array::ArrayHandler<R, R>::value_type_abs thresh =
-                   precision_scaled<typename array::ArrayHandler<R, R>::value_type_abs>(1e-14)) {
+                   1 / std::numeric_limits<typename array::ArrayHandler<R, R>::value_type_abs>::max()) {
   for (auto& p : params) {
     // the length of a vector is a magnitude, real even when the elements are complex
     const typename array::ArrayHandler<R, R>::value_type_abs dot = std::sqrt(std::abs(handler.dot(p, p)));
-    if (dot > thresh) {
+    if (dot > thresh and std::isfinite(dot)) {
       handler.scal(1. / dot, p);
     } else {
       logger.warn("parameter's length is too small for normalisation, dot = " + std::format("{:.2e}", double(dot)));
