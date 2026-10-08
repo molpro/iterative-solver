@@ -93,12 +93,13 @@ function test_LinearEquationsF(matrix, rhs, n, np, nroot, hermitian, augmented_h
       g(:, i) = matmul(matrix, c(:, i)) - rhs(:, i)
 !      write (6, *) 'calculated residual ', i, g(:, i)
       calculated(i) = sqrt(dot_product(g(:, i), g(:, i)))
-      error = max(error, calculated(i))
+      ! the solver scales its residual by |rhs|, so compare the recalculated residual on the same scale
+      error = max(error, calculated(i) / sqrt(dot_product(rhs(:, i), rhs(:, i))))
 !      write (6, *) 'calculated residual length ', sqrt(dot_product(g(:, i), g(:, i)))
     end if
   end do
   test_LinearEquationsF = 1
-  if (error.gt.1d-3) then
+  if (error.gt.1d-6) then
     write (6, *) 'test_linearEquationsF has failed ', error
     ! diagnostics for issue #637: is the solver's own residual small while the recalculated one is not?
     write (6, *) '  n=', n, ' nroot=', nroot, ' iterations=', iterations, ' (limit 1000) last nwork=', nwork, &
