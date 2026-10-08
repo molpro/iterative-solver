@@ -684,3 +684,96 @@ TEST_P(BufferedDistrArrayFileTest, GEMM) {
 }
 
 INSTANTIATE_TEST_SUITE_P(,BufferedDistrArrayFileTest, testing::Range(static_cast<size_t>(0), static_cast<size_t>(9)));
+
+// The buffered gemm must serve every array held on disk, not only DistrArrayFile itself (issue #119). A subclass of
+// DistrArrayFile stands in for another DistrArrayDisk, such as DistrArrayHDF5: the buffered path reads it in chunks
+// through get(), whereas the unbuffered path would read whole vectors through local_buffer().
+namespace {
+struct CountingFile : DistrArrayFile {
+  using DistrArrayFile::DistrArrayFile;
+  static inline int local_buffer_calls = 0;
+  [[nodiscard]] std::unique_ptr<LocalBuffer> local_buffer() override {
+    ++local_buffer_calls;
+    return DistrArrayFile::local_buffer();
+  }
+  [[nodiscard]] std::unique_ptr<const LocalBuffer> local_buffer() const override {
+    ++local_buffer_calls;
+    return DistrArrayFile::local_buffer();
+  }
+};
+} // namespace
+
+TEST(TestGemm, distrarraydisk_subclass_buffered) {
+  using molpro::linalg::array::util::gemm_inner_distr_distr;
+  using molpro::linalg::array::util::gemm_outer_distr_distr;
+  using molpro::mpi::comm_global;
+  static_assert(molpro::linalg::array::util::is_disk_array_v<CountingFile>);
+  const size_t n = 4, dim = 30;
+  int mpi_rank, mpi_size;
+  MPI_Comm_rank(comm_global(), &mpi_rank);
+  MPI_Comm_size(comm_global(), &mpi_size);
+  const auto crange = make_distribution_spread_remainder<size_t>(dim, mpi_size).range(mpi_rank);
+  const auto clength = crange.second - crange.first;
+  std::vector<std::vector<double>> vx(n, std::vector<double>(dim)), vy(n, std::vector<double>(dim)),
+      vz(n, std::vector<double>(dim)), vzref(n, std::vector<double>(dim));
+  std::vector<CountingFile> cx;
+  std::vector<DistrArrayFile> cxref;
+  std::vector<DistrArraySpan> cy, cz, czref;
+  cx.reserve(n);
+  cxref.reserve(n);
+  cy.reserve(n);
+  cz.reserve(n);
+  czref.reserve(n);
+  for (size_t i = 0; i < n; i++) {
+    for (size_t k = 0; k < dim; ++k) {
+      vx[i][k] = std::cos(1.0 + i + 0.3 * k);
+      vy[i][k] = std::sin(2.0 + i + 0.7 * k);
+      vz[i][k] = vzref[i][k] = 0.1 * (i + k);
+    }
+    cx.emplace_back(dim);
+    cx.back().put(crange.first, crange.second, &vx[i][crange.first]);
+    cxref.emplace_back(dim);
+    cxref.back().put(crange.first, crange.second, &vx[i][crange.first]);
+    cy.emplace_back(dim, Span<double>(&vy[i][crange.first], clength), comm_global());
+    cz.emplace_back(dim, Span<double>(&vz[i][crange.first], clength), comm_global());
+    czref.emplace_back(dim, Span<double>(&vzref[i][crange.first], clength), comm_global());
+  }
+  std::vector<double> coeff(n * n);
+  std::iota(coeff.begin(), coeff.end(), 1);
+  const Matrix<double> alpha(coeff, std::make_pair(n, n));
+
+  CountingFile::local_buffer_calls = 0;
+  const auto inner_yx = gemm_inner_distr_distr(cwrap(cy), cwrap(cx));
+  const auto inner_xy = gemm_inner_distr_distr(cwrap(cx), cwrap(cy));
+  gemm_outer_distr_distr(alpha, cwrap(cx), wrap(cz));
+  EXPECT_EQ(CountingFile::local_buffer_calls, 0);
+
+  // the same operations on DistrArrayFile, and computed directly from the data
+  const auto ref_yx = gemm_inner_distr_distr(cwrap(cy), cwrap(cxref));
+  const auto ref_xy = gemm_inner_distr_distr(cwrap(cxref), cwrap(cy));
+  gemm_outer_distr_distr(alpha, cwrap(cxref), wrap(czref));
+  Matrix<double> direct_yx({n, n}), direct_xy({n, n});
+  std::vector<std::vector<double>> direct_z(n, std::vector<double>(dim));
+  for (size_t i = 0; i < n; ++i)
+    for (size_t j = 0; j < n; ++j) {
+      direct_yx(i, j) = std::inner_product(vy[i].begin(), vy[i].end(), vx[j].begin(), 0.0);
+      direct_xy(i, j) = std::inner_product(vx[i].begin(), vx[i].end(), vy[j].begin(), 0.0);
+    }
+  for (size_t j = 0; j < n; ++j)
+    for (size_t k = 0; k < dim; ++k) {
+      direct_z[j][k] = 0.1 * (j + k);
+      for (size_t i = 0; i < n; ++i)
+        direct_z[j][k] += alpha(i, j) * vx[i][k];
+    }
+  for (size_t i = 0; i < n * n; ++i) {
+    EXPECT_NEAR(inner_yx.data()[i], direct_yx.data()[i], 1e-12) << "inner (in memory, disk) " << i;
+    EXPECT_NEAR(inner_xy.data()[i], direct_xy.data()[i], 1e-12) << "inner (disk, in memory) " << i;
+    EXPECT_NEAR(ref_yx.data()[i], direct_yx.data()[i], 1e-12) << "DistrArrayFile inner (in memory, disk) " << i;
+    EXPECT_NEAR(ref_xy.data()[i], direct_xy.data()[i], 1e-12) << "DistrArrayFile inner (disk, in memory) " << i;
+  }
+  for (size_t j = 0; j < n; ++j)
+    for (size_t k = crange.first; k < crange.second; ++k) {
+      EXPECT_NEAR(vz[j][k], direct_z[j][k], 1e-12) << "outer " << j << ", " << k;
+      EXPECT_NEAR(vzref[j][k], direct_z[j][k], 1e-12) << "DistrArrayFile outer " << j << ", " << k;
+    }
+}
