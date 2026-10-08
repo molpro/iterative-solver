@@ -303,6 +303,8 @@ function test_minimizeF() bind(C)
   implicit none
   integer(c_int) :: test_minimizeF
   double precision :: c(n), g(n), value_default
+  double precision, parameter :: tight(2) = [1d-9, 1d-11]
+  integer :: i
   type(forced_problem) :: problem
   test_minimizeF = 1
   call Solve_Optimization(c, g, problem, thresh = 1d-6)
@@ -319,6 +321,17 @@ function test_minimizeF() bind(C)
     test_minimizeF = 0
   end if
   call Iterative_Solver_Finalize
+  ! at tight thresholds the convergence flag must agree with the solution returned (issue #634)
+  do i = 1, size(tight)
+    call Solve_Optimization(c, g, problem, thresh = tight(i))
+    if (.not. Iterative_Solver_Converged() .or. maxval(Iterative_Solver_Errors()) .gt. tight(i) &
+        .or. norm2(g) .gt. tight(i) .or. forced_error(c) .gt. tight(i)) then
+      write (6, *) 'test_minimizeF: inconsistent at thresh ', tight(i), ': converged ', Iterative_Solver_Converged(), &
+          ', errors ', Iterative_Solver_Errors(), ', |g| ', norm2(g), ', stationarity error ', forced_error(c)
+      test_minimizeF = 0
+    end if
+    call Iterative_Solver_Finalize
+  end do
 end function test_minimizeF
 
 !> Overridden precondition, report and RHS are used by the Solve drivers

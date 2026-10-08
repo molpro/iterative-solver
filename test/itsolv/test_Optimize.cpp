@@ -175,3 +175,41 @@ TEST(Optimize, trig1d) {
     molpro::cout << "end_iteration returns x=" << x[0] << ", g=" << g[0] << std::endl;
   }
 }
+
+// At tight thresholds the change in the objective between iterations falls below its rounding error, which must not
+// trigger a line search that discards a converged point; and the reported convergence must match the returned
+// solution (issue #634). The objective is the quadratic f = c.M.c/2 - sum(c) of test_FortranInterfaceF.f90.
+TEST(Optimize, tight_threshold_consistency) {
+  const size_t n = 40;
+  Eigen::MatrixXd m(n, n);
+  for (size_t i = 0; i < n; ++i)
+    for (size_t j = 0; j < n; ++j)
+      m(i, j) = i == j ? double(i + 1)
+                       : 0.01 * std::cos(double(i + 1 + 2 * (j + 1))) + 0.01 * std::cos(double(j + 1 + 2 * (i + 1)));
+  struct quadratic : molpro::linalg::itsolv::Problem<Rvector> {
+    const Eigen::MatrixXd& m;
+    explicit quadratic(const Eigen::MatrixXd& m) : m(m) {}
+    value_t residual(const Rvector& parameters, Rvector& residual) const override {
+      const auto c = Eigen::Map<const Eigen::VectorXd>(parameters.data(), parameters.size());
+      Eigen::Map<Eigen::VectorXd>(residual.data(), residual.size()) = m * c - Eigen::VectorXd::Ones(c.size());
+      return 0.5 * c.dot(m * c) - c.sum();
+    }
+    bool diagonals(Rvector& d) const override {
+      for (Eigen::Index i = 0; i < m.rows(); ++i)
+        d[i] = m(i, i);
+      return true;
+    }
+  } problem(m);
+  for (const double threshold : {1e-9, 1e-11, 1e-13}) {
+    auto solver = molpro::linalg::itsolv::create_Optimize<Rvector, Qvector>("BFGS");
+    solver->set_convergence_threshold(threshold);
+    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    Rvector c(n, 0), g(n);
+    EXPECT_TRUE(solver->solve(c, g, problem)) << "threshold=" << threshold;
+    EXPECT_LE(solver->errors().front(), threshold) << "threshold=" << threshold;
+    solver->solution(c, g);
+    const auto x = Eigen::Map<const Eigen::VectorXd>(c.data(), n);
+    EXPECT_LE((m * x - Eigen::VectorXd::Ones(n)).norm(), threshold) << "threshold=" << threshold;
+    EXPECT_LE(solver->statistics().iterations, 20) << "threshold=" << threshold;
+  }
+}
