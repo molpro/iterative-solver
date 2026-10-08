@@ -1,23 +1,3 @@
-module mod_linear_problem
-  use Iterative_Solver_Matrix_Problem
-  type, extends(matrix_Problem) :: linear_problem
-    double precision, dimension(:,:), pointer :: rhss
-    contains
-    procedure, pass :: RHS
-  end type linear_problem
-contains
-  logical function RHS(this, vector, instance, range)
-    class(linear_problem), intent(in) :: this
-    double precision, intent(inout), dimension(:) :: vector
-    integer, intent(in) :: instance
-    integer, dimension(2), intent(in) :: range
-    RHS = .false.
-    if (instance.lt.lbound(this%rhss,2).or.instance.gt.ubound(this%rhss,2)) return
-    RHS = .true.
-    vector(range(1)+1:range(2)) = this%rhss(range(1)+1:range(2),instance)
-  end function RHS
-
-end module mod_linear_problem
 function test_LinearEquationsF(matrix, rhs, n, np, nroot, hermitian, augmented_hessian) BIND(C)
   use iso_c_binding
   use Iterative_Solver
@@ -116,8 +96,8 @@ function test_LinearEquationsF(matrix, rhs, n, np, nroot, hermitian, augmented_h
   return
 contains
   subroutine simplified_solver
-    use mod_linear_problem, only : linear_problem
-    type(linear_problem) :: prob
+    use Iterative_Solver_Matrix_Problem, only : Matrix_Problem
+    type(Matrix_Problem) :: prob
     call prob%attach(matrix, rhs)
     call Solve_Linear_Equations(c, g, prob, augmented_hessian = augmented_hessian, &
         hermitian = hermitian.ne.0, &
