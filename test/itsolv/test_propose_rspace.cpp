@@ -17,8 +17,10 @@ using molpro::linalg::itsolv::subspace::Dimensions;
 using molpro::linalg::itsolv::subspace::Matrix;
 
 namespace {
-// New parameters must come out orthogonal to the span of the existing P+Q+D vectors even when those are not orthogonal
-// to each other, as happens when the caller supplies its own initial vectors (issue #640)
+// New parameters must come out orthogonal to the span of the existing P+Q+D vectors even when those are not
+// orthogonal to each other, as happens when the caller supplies its own initial vectors (issue #640). The existing
+// vectors here are nearly parallel, so a single projection leaves overlaps of order epsilon times the condition number
+// of their (equilibrated) overlap matrix, about 1e-11; projecting on each vector separately left about 1e-4.
 template <typename T>
 void check_orthogonal_to_nonorthogonal_space() {
   using R = std::vector<T>;
@@ -44,13 +46,15 @@ void check_orthogonal_to_nonorthogonal_space() {
   const std::vector<P> p;
   const std::vector<R> d;
   Logger logger;
+  // <r_j|q_i>, as append_overlap_with_r() provides in propose_rspace()
+  const auto rx_overlap = handlers.rq().gemm_inner(cwrap(r), cwrap(q));
   auto wr = wrap(r);
   const auto null_params = molpro::linalg::itsolv::detail::modified_gram_schmidt(
-      wr, overlap, Dimensions(0, nQ, 0), cwrap(p), cwrap(q), cwrap(d), 1e-10, handlers, logger);
+      wr, overlap, rx_overlap, Dimensions(0, nQ, 0), cwrap(p), cwrap(q), cwrap(d), 1e-10, handlers, logger);
   EXPECT_TRUE(null_params.empty());
   for (size_t j = 0; j < nR; ++j) {
     for (size_t i = 0; i < nQ; ++i)
-      EXPECT_LT(std::abs(handlers.qq().dot(q[i], r[j])) / std::sqrt(std::abs(handlers.qq().dot(q[i], q[i]))), 1e-12)
+      EXPECT_LT(std::abs(handlers.qq().dot(q[i], r[j])) / std::sqrt(std::abs(handlers.qq().dot(q[i], q[i]))), 1e-10)
           << "q[" << i << "], r[" << j << "]";
     for (size_t k = 0; k < nR; ++k)
       EXPECT_NEAR(std::abs(handlers.rr().dot(r[j], r[k])), j == k ? 1 : 0, 1e-12) << "r[" << j << "], r[" << k << "]";
