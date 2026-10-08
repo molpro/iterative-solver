@@ -192,6 +192,9 @@ public:
   [[nodiscard]] virtual std::unique_ptr<const LocalBuffer> local_buffer() const = 0;
   //! Access distribution of the array among processes
   [[nodiscard]] virtual const Distribution &distribution() const = 0;
+  //! For an array held on disk, which has no local buffer, the number of elements that elementwise operations read
+  //! and write at a time; 0 for an array held in memory
+  [[nodiscard]] virtual size_t disk_page_size() const { return 0; }
   //! @}
 
   /*! @name One-sided RMA

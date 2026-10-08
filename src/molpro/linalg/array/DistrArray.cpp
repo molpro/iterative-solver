@@ -10,6 +10,98 @@
 
 namespace molpro::linalg::array {
 
+namespace {
+using value_type = DistrArray::value_type;
+using index_type = DistrArray::index_type;
+
+//! One operand of an elementwise operation
+struct Operand {
+  const DistrArray& array;
+  bool read;  //!< whether the operation reads the operand
+  bool write; //!< whether the operation writes the operand
+};
+
+//! The section [lo, hi) of the array held by this process
+std::pair<index_type, index_type> local_range(const DistrArray& a) {
+  int rank = 0;
+  if (a.communicator() == molpro::mpi::comm_global())
+    rank = molpro::mpi::rank_global();
+#ifdef HAVE_MPI_H
+  else
+    MPI_Comm_rank(a.communicator(), &rank);
+#endif
+  return a.distribution().range(rank);
+}
+
+/*!
+ * @brief Applies f(start, n, p) to the local sections of the operands, where p[k] addresses elements [start, start+n)
+ * of operand k.
+ *
+ * Operands held in memory are addressed in place through their local buffers, and if none of the operands is held on
+ * disk, f is called once for the whole local section. Operands on disk, which have no local buffer, are paged through
+ * buffers of disk_page_size() elements: each page is read before f is called if the operation reads the operand, and
+ * written back afterwards if it writes it.
+ */
+void for_each_local_chunk(std::initializer_list<Operand> operands,
+                          const std::function<void(index_type start, size_t n, value_type* const* p)>& f) {
+  const std::vector<Operand> ops(operands);
+  const auto [lo, hi] = local_range(ops.front().array);
+  // the local buffers of the operands in memory (DistrArray::LocalBuffer itself is not accessible here)
+  std::vector<decltype(std::declval<DistrArray&>().local_buffer())> buffers;
+  std::vector<decltype(std::declval<const DistrArray&>().local_buffer())> const_buffers;
+  std::vector<value_type*> base(ops.size(), nullptr);
+  std::vector<bool> on_disk(ops.size(), false);
+  size_t page = 0;
+  for (size_t k = 0; k < ops.size(); ++k) {
+    const auto& a = ops[k].array;
+    if (local_range(a) != std::make_pair(lo, hi))
+      ops.front().array.error("DistrArray: operands are distributed differently");
+    if (a.disk_page_size() > 0) {
+      on_disk[k] = true;
+      page = page == 0 ? a.disk_page_size() : std::min(page, a.disk_page_size());
+    } else if (ops[k].write) {
+      buffers.push_back(const_cast<DistrArray&>(a).local_buffer());
+      base[k] = buffers.back()->data();
+    } else {
+      const_buffers.push_back(a.local_buffer());
+      base[k] = const_cast<value_type*>(const_buffers.back()->data());
+    }
+  }
+  if (page == 0) {
+    f(lo, hi - lo, base.data());
+    return;
+  }
+  std::vector<std::vector<value_type>> pages(ops.size());
+  std::vector<value_type*> p(ops.size());
+  for (index_type start = lo; start < hi; start += page) {
+    const size_t n = std::min<size_t>(page, hi - start);
+    for (size_t k = 0; k < ops.size(); ++k) {
+      if (on_disk[k]) {
+        pages[k].resize(n);
+        if (ops[k].read)
+          ops[k].array.get(start, start + n, pages[k].data());
+        p[k] = pages[k].data();
+      } else
+        p[k] = base[k] + (start - lo);
+    }
+    f(start, n, p.data());
+    for (size_t k = 0; k < ops.size(); ++k)
+      if (on_disk[k] and ops[k].write)
+        const_cast<DistrArray&>(ops[k].array).put(start, start + n, pages[k].data());
+  }
+}
+
+//! Keeps the n entries of selection with the largest values
+void keep_largest(std::map<size_t, value_type>& selection, size_t n) {
+  if (selection.size() <= n)
+    return;
+  auto entries = std::vector<std::pair<size_t, value_type>>(selection.begin(), selection.end());
+  std::nth_element(entries.begin(), entries.begin() + n, entries.end(),
+                   [](const auto& a, const auto& b) { return a.second > b.second; });
+  selection = std::map<size_t, value_type>(entries.begin(), entries.begin() + n);
+}
+} // namespace
+
 DistrArray::DistrArray(size_t dimension, MPI_Comm commun) : m_dimension(dimension), m_communicator(commun) {}
 
 void DistrArray::sync() const { MPI_Barrier(m_communicator); }
@@ -50,9 +142,9 @@ util::ValueProxy<DistrArray> DistrArray::operator[](index_type ind) {
 void DistrArray::zero() { fill(0); }
 
 void DistrArray::fill(DistrArray::value_type val) {
-  auto lb = local_buffer();
-  for (auto& el : *lb)
-    el = val;
+  for_each_local_chunk({{*this, false, true}}, [val](index_type, size_t n, value_type* const* p) {
+    std::fill_n(p[0], n, val);
+  });
 }
 
 void DistrArray::axpy(value_type a, const DistrArray& y) {
@@ -63,34 +155,36 @@ void DistrArray::axpy(value_type a, const DistrArray& y) {
     error(name + " incompatible arrays");
   if (a == 0)
     return;
-  auto loc_x = local_buffer();
-  auto loc_y = y.local_buffer();
-  if (!loc_x->compatible(*loc_y))
-    error(name + " incompatible local buffers");
-  if (a == 1)
-    for (size_t i = 0; i < loc_x->size(); ++i)
-      (*loc_x)[i] += (*loc_y)[i];
-  else if (a == -1)
-    for (size_t i = 0; i < loc_x->size(); ++i)
-      (*loc_x)[i] -= (*loc_y)[i];
-  else
-    for (size_t i = 0; i < loc_x->size(); ++i)
-      (*loc_x)[i] += a * (*loc_y)[i];
+  for_each_local_chunk({{*this, true, true}, {y, true, false}}, [a](index_type, size_t n, value_type* const* p) {
+    auto x = p[0];
+    const auto yy = p[1];
+    if (a == 1)
+      for (size_t i = 0; i < n; ++i)
+        x[i] += yy[i];
+    else if (a == -1)
+      for (size_t i = 0; i < n; ++i)
+        x[i] -= yy[i];
+    else
+      for (size_t i = 0; i < n; ++i)
+        x[i] += a * yy[i];
+  });
   prof->stop();
 }
 
 void DistrArray::scal(DistrArray::value_type a) {
-  auto x = local_buffer();
-  for (auto& el : *x)
-    el *= a;
+  for_each_local_chunk({{*this, true, true}}, [a](index_type, size_t n, value_type* const* p) {
+    for (size_t i = 0; i < n; ++i)
+      p[0][i] *= a;
+  });
 }
 
 void DistrArray::add(const DistrArray& y) { return axpy(1, y); }
 
 void DistrArray::add(DistrArray::value_type a) {
-  auto x = local_buffer();
-  for (auto& el : *x)
-    el += a;
+  for_each_local_chunk({{*this, true, true}}, [a](index_type, size_t n, value_type* const* p) {
+    for (size_t i = 0; i < n; ++i)
+      p[0][i] += a;
+  });
 }
 
 void DistrArray::sub(const DistrArray& y) { return axpy(-1, y); }
@@ -98,21 +192,20 @@ void DistrArray::sub(const DistrArray& y) { return axpy(-1, y); }
 void DistrArray::sub(DistrArray::value_type a) { return add(-a); }
 
 void DistrArray::recip() {
-  auto x = local_buffer();
-  for (auto& el : *x)
-    el = 1. / el;
+  for_each_local_chunk({{*this, true, true}}, [](index_type, size_t n, value_type* const* p) {
+    for (size_t i = 0; i < n; ++i)
+      p[0][i] = 1. / p[0][i];
+  });
 }
 
 void DistrArray::times(const DistrArray& y) {
   auto name = std::string{"Array::times"};
   if (!compatible(y))
     error(name + " incompatible arrays");
-  auto loc_x = local_buffer();
-  auto loc_y = y.local_buffer();
-  if (!loc_x->compatible(*loc_y))
-    error(name + " incompatible local buffers");
-  for (size_t i = 0; i < loc_x->size(); ++i)
-    (*loc_x)[i] *= (*loc_y)[i];
+  for_each_local_chunk({{*this, true, true}, {y, true, false}}, [](index_type, size_t n, value_type* const* p) {
+    for (size_t i = 0; i < n; ++i)
+      p[0][i] *= p[1][i];
+  });
 }
 
 void DistrArray::times(const DistrArray& y, const DistrArray& z) {
@@ -121,13 +214,11 @@ void DistrArray::times(const DistrArray& y, const DistrArray& z) {
     error(name + " array y is incompatible");
   if (!compatible(z))
     error(name + " array z is incompatible");
-  auto loc_x = local_buffer();
-  auto loc_y = y.local_buffer();
-  auto loc_z = z.local_buffer();
-  if (!loc_x->compatible(*loc_y) || !loc_x->compatible(*loc_z))
-    error(name + " incompatible local buffers");
-  for (size_t i = 0; i < loc_x->size(); ++i)
-    (*loc_x)[i] = (*loc_y)[i] * (*loc_z)[i];
+  for_each_local_chunk({{*this, false, true}, {y, true, false}, {z, true, false}},
+                       [](index_type, size_t n, value_type* const* p) {
+                         for (size_t i = 0; i < n; ++i)
+                           p[0][i] = p[1][i] * p[2][i];
+                       });
 }
 
 DistrArray::value_type DistrArray::dot(const DistrArray& y) const {
@@ -135,14 +226,12 @@ DistrArray::value_type DistrArray::dot(const DistrArray& y) const {
   auto name = std::string{"Array::dot"};
   if (!compatible(y))
     error(name + " array x is incompatible");
-  auto loc_x = local_buffer();
-  auto loc_y = y.local_buffer();
-  if (!loc_x->compatible(*loc_y))
-    error(name + " incompatible local buffers");
-  auto a = std::inner_product(begin(*loc_x), end(*loc_x), begin(*loc_y), (value_type)0, std::plus<value_type>{},
-                              [](const auto &elx, const auto &ely) {
-                                return molpro::linalg::conjugate(value_type(elx)) * value_type(ely);
-                              });
+  value_type a = 0;
+  for_each_local_chunk({{*this, true, false}, {y, true, false}}, [&a](index_type, size_t n, value_type* const* p) {
+    a = std::inner_product(p[0], p[0] + n, p[1], a, std::plus<value_type>{}, [](const auto& elx, const auto& ely) {
+      return molpro::linalg::conjugate(value_type(elx)) * value_type(ely);
+    });
+  });
 #ifdef HAVE_MPI_H
   MPI_Allreduce(MPI_IN_PLACE, &a, 1, MPI_DOUBLE, MPI_SUM, communicator());
 #endif
@@ -156,26 +245,27 @@ void DistrArray::_divide(const DistrArray& y, const DistrArray& z, DistrArray::v
     error(name + " array y is incompatible");
   if (!compatible(z))
     error(name + " array z is incompatible");
-  auto loc_x = local_buffer();
-  auto loc_y = y.local_buffer();
-  auto loc_z = z.local_buffer();
-  if (!loc_x->compatible(*loc_y) || !loc_x->compatible(*loc_z))
-    error(name + " incompatible local buffers");
-  if (append) {
-    if (negative)
-      for (size_t i = 0; i < loc_x->size(); ++i)
-        (*loc_x)[i] -= (*loc_y)[i] / ((*loc_z)[i] + shift);
-    else
-      for (size_t i = 0; i < loc_x->size(); ++i)
-        (*loc_x)[i] += (*loc_y)[i] / ((*loc_z)[i] + shift);
-  } else {
-    if (negative)
-      for (size_t i = 0; i < loc_x->size(); ++i)
-        (*loc_x)[i] = -(*loc_y)[i] / ((*loc_z)[i] + shift);
-    else
-      for (size_t i = 0; i < loc_x->size(); ++i)
-        (*loc_x)[i] = (*loc_y)[i] / ((*loc_z)[i] + shift);
-  }
+  for_each_local_chunk({{*this, append, true}, {y, true, false}, {z, true, false}},
+                       [shift, append, negative](index_type, size_t n, value_type* const* p) {
+                         auto x = p[0];
+                         const auto yy = p[1];
+                         const auto zz = p[2];
+                         if (append) {
+                           if (negative)
+                             for (size_t i = 0; i < n; ++i)
+                               x[i] -= yy[i] / (zz[i] + shift);
+                           else
+                             for (size_t i = 0; i < n; ++i)
+                               x[i] += yy[i] / (zz[i] + shift);
+                         } else {
+                           if (negative)
+                             for (size_t i = 0; i < n; ++i)
+                               x[i] = -yy[i] / (zz[i] + shift);
+                           else
+                             for (size_t i = 0; i < n; ++i)
+                               x[i] = yy[i] / (zz[i] + shift);
+                         }
+                       });
 }
 
 namespace util {
@@ -247,13 +337,16 @@ std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, co
     error("DistrArray::select_max_dot: incompatible arrays");
   if (n > size() || n > y.size())
     error("DistrArray::select_max_dot: n is too large");
-  auto xbuf = local_buffer();
-  auto ybuf = y.local_buffer();
-  auto local_selection =
-      util::select_max_dot<LocalBuffer, LocalBuffer, value_type, value_type>(std::min(n, xbuf->size()), *xbuf, *ybuf);
-  auto shifted_local_selection = decltype(local_selection)();
-  for (auto& el : local_selection)
-    shifted_local_selection.emplace(xbuf->start() + el.first, el.second);
+  auto shifted_local_selection = std::map<size_t, value_type>();
+  for_each_local_chunk({{*this, true, false}, {y, true, false}},
+                       [n, &shifted_local_selection](index_type start, size_t m, value_type* const* p) {
+                         const auto xs = Span<value_type>(p[0], m);
+                         const auto ys = Span<value_type>(p[1], m);
+                         for (const auto& el : util::select_max_dot<Span<value_type>, Span<value_type>, value_type,
+                                                                    value_type>(std::min(n, m), xs, ys))
+                           shifted_local_selection.emplace(start + el.first, el.second);
+                         keep_largest(shifted_local_selection, n);
+                       });
   return util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
 }
 
@@ -265,23 +358,30 @@ std::map<size_t, DistrArray::value_type> DistrArray::select_max_dot(size_t n, co
     error(name + " sparse array x is too large");
   if (n > size() || n > y.size())
     error(" n is too large");
-  auto xbuf = local_buffer();
-  auto local_selection = util::select_max_dot_iter_sparse<LocalBuffer, SparseArray, value_type, value_type>(
-      std::min(n, xbuf->size()), *xbuf, y);
-  auto shifted_local_selection = decltype(local_selection)();
-  for (auto& el : local_selection)
-    shifted_local_selection.emplace(xbuf->start() + el.first, el.second);
+  auto shifted_local_selection = std::map<size_t, value_type>();
+  for_each_local_chunk({{*this, true, false}},
+                       [n, &y, &shifted_local_selection](index_type start, size_t m, value_type* const* p) {
+                         for (auto it = y.lower_bound(start); it != y.end() and it->first < start + m; ++it)
+                           shifted_local_selection.emplace(it->first, std::abs(p[0][it->first - start] * it->second));
+                         keep_largest(shifted_local_selection, n);
+                       });
   return util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
 }
 
 std::map<size_t, DistrArray::value_type> DistrArray::select(size_t n, bool max, bool ignore_sign) const {
   if (n > size())
     error("DistrArray::select: n is too large");
-  auto xbuf = local_buffer();
-  auto local_selection = util::select<LocalBuffer, value_type>(std::min(n, xbuf->size()), *xbuf, max, ignore_sign);
-  auto shifted_local_selection = decltype(local_selection)();
-  for (const auto& el : local_selection)
-    shifted_local_selection.emplace(xbuf->start() + el.first, max ? el.second : -el.second);
+  // the selection is kept with values ordered so that larger is better
+  auto shifted_local_selection = std::map<size_t, value_type>();
+  for_each_local_chunk({{*this, true, false}},
+                       [n, max, ignore_sign, &shifted_local_selection](index_type start, size_t m,
+                                                                       value_type* const* p) {
+                         const auto xs = Span<value_type>(p[0], m);
+                         for (const auto& el : util::select<Span<value_type>, value_type>(std::min(n, m), xs, max,
+                                                                                          ignore_sign))
+                           shifted_local_selection.emplace(start + el.first, max ? el.second : -el.second);
+                         keep_largest(shifted_local_selection, n);
+                       });
   std::map<size_t, double> result = util::select_max_dot_broadcast(n, shifted_local_selection, communicator());
   if (not max)
     for (auto& el : result)
@@ -294,19 +394,21 @@ template <class Compare>
 std::list<std::pair<DistrArray::index_type, DistrArray::value_type>> extrema(const DistrArray& x, int n) {
   if (x.size() == 0)
     return {};
-  auto buffer = x.local_buffer();
-  auto length = buffer->size();
+  const auto [lo, hi] = local_range(x);
+  const size_t length = hi - lo;
   auto nmin = length > size_t(n) ? size_t(n) : length;
   auto loc_extrema = std::list<std::pair<DistrArray::index_type, double>>();
-  for (size_t i = 0; i < nmin; ++i)
-    loc_extrema.emplace_back(buffer->start() + i, (*buffer)[i]);
   auto compare = Compare();
   auto compare_pair = [&compare](const auto& p1, const auto& p2) { return compare(p1.second, p2.second); };
-  for (size_t i = nmin; i < length; ++i) {
-    loc_extrema.emplace_back(buffer->start() + i, (*buffer)[i]);
-    loc_extrema.sort(compare_pair);
-    loc_extrema.pop_back();
-  }
+  for_each_local_chunk({{x, true, false}}, [&, lo = lo](index_type start, size_t m, value_type* const* p) {
+    for (size_t j = 0; j < m; ++j) {
+      loc_extrema.emplace_back(start + j, p[0][j]);
+      if (start + j - lo >= nmin) {
+        loc_extrema.sort(compare_pair);
+        loc_extrema.pop_back();
+      }
+    }
+  });
   auto indices_loc = std::vector<DistrArray::index_type>(n, x.size() + 1);
   auto indices_glob = std::vector<DistrArray::index_type>(n);
   auto values_loc = std::vector<double>(n);
@@ -406,28 +508,29 @@ void DistrArray::copy(const DistrArray& y) {
   auto name = std::string{"Array::copy"};
   if (!compatible(y))
     error(name + " incompatible arrays");
-  auto loc_x = local_buffer();
-  auto loc_y = y.local_buffer();
-  if (!loc_x->compatible(*loc_y))
-    error(name + " incompatible local buffers");
-  for (size_t i = 0; i < loc_x->size(); ++i)
-    (*loc_x)[i] = (*loc_y)[i];
+  for_each_local_chunk({{*this, false, true}, {y, true, false}}, [](index_type, size_t n, value_type* const* p) {
+    std::copy_n(p[1], n, p[0]);
+  });
 }
 
 void DistrArray::copy_patch(const DistrArray& y, DistrArray::index_type start, DistrArray::index_type end) {
   auto name = std::string{"Array::copy_patch"};
   if (!compatible(y))
     error(name + " incompatible arrays");
-  auto loc_x = local_buffer();
-  auto loc_y = y.local_buffer();
-  if (!loc_x->compatible(*loc_y))
-    error(name + " incompatible local buffers");
   if (start > end)
     return;
-  auto s = start <= loc_x->start() ? 0 : start - loc_x->start();
-  auto e = end - start + 1 >= loc_x->size() ? loc_x->size() : end - start + 1;
-  for (auto i = s; i < e; ++i)
-    (*loc_x)[i] = (*loc_y)[i];
+  // offsets s to e within the local section, as calculated before the operation was paged
+  const auto [lo, hi] = local_range(*this);
+  const size_t length = hi - lo;
+  const size_t s = start <= lo ? 0 : start - lo;
+  const size_t e = end - start + 1 >= length ? length : end - start + 1;
+  // the target is read as well as written, since only part of each page is copied
+  for_each_local_chunk({{*this, true, true}, {y, true, false}},
+                       [s, e, lo = lo](index_type chunk_start, size_t n, value_type* const* p) {
+                         const size_t offset = chunk_start - lo;
+                         for (size_t i = std::max(s, offset); i < std::min(e, offset + n); ++i)
+                           p[0][i - offset] = p[1][i - offset];
+                       });
 }
 
 DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
@@ -436,16 +539,11 @@ DistrArray::value_type DistrArray::dot(const SparseArray& y) const {
     return 0;
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is incompatible");
-  auto loc_x = local_buffer();
   double res = 0;
-  if (loc_x->size() > 0) {
-    index_type i;
-    value_type v;
-    for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size() - 1); ++it) {
-      std::tie(i, v) = *it;
-      res += (*loc_x)[i - loc_x->start()] * v;
-    }
-  }
+  for_each_local_chunk({{*this, true, false}}, [&y, &res](index_type start, size_t n, value_type* const* p) {
+    for (auto it = y.lower_bound(start); it != y.end() and it->first < start + n; ++it)
+      res += p[0][it->first - start] * it->second;
+  });
 #ifdef HAVE_MPI_H
   MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_DOUBLE, MPI_SUM, communicator());
 #endif
@@ -458,26 +556,10 @@ void DistrArray::axpy(value_type a, const SparseArray& y) {
     return;
   if (size() < y.rbegin()->first + 1)
     error(name + " sparse array x is incompatible");
-  auto loc_x = local_buffer();
-  if (loc_x->size() > 0) {
-    index_type i;
-    value_type v;
-    if (a == 1)
-      for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size() - 1); ++it) {
-        std::tie(i, v) = *it;
-        (*loc_x)[i - loc_x->start()] += v;
-      }
-    else if (a == -1)
-      for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size() - 1); ++it) {
-        std::tie(i, v) = *it;
-        (*loc_x)[i - loc_x->start()] -= v;
-      }
-    else
-      for (auto it = y.lower_bound(loc_x->start()); it != y.upper_bound(loc_x->start() + loc_x->size() - 1); ++it) {
-        std::tie(i, v) = *it;
-        (*loc_x)[i - loc_x->start()] += a * v;
-      }
-  }
+  for_each_local_chunk({{*this, true, true}}, [a, &y](index_type start, size_t n, value_type* const* p) {
+    for (auto it = y.lower_bound(start); it != y.end() and it->first < start + n; ++it)
+      p[0][it->first - start] += a * it->second;
+  });
 }
 
 } // namespace molpro::linalg::array
