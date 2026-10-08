@@ -165,3 +165,39 @@ TEST(LinearEquation, scale_invariance) {
   EXPECT_EQ(iterations[0], iterations[1]);
   EXPECT_EQ(iterations[2], iterations[1]);
 }
+
+// The value threshold applies to the change in chi_ii = <b_i|x_i> between iterations (issue #85). It adds to the
+// residual criterion, so a tight value threshold with a loose residual threshold needs more iterations, and confirms
+// that chi has settled.
+TEST(LinearEquation, value_threshold) {
+  const int n = 300, nroot = 2;
+  Problem_ problem(n, nroot);
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j)
+      problem.matrix(i, j) = i + j;
+    problem.matrix(i, i) = 302 * i + 300;
+    for (int k = 0; k < nroot; ++k)
+      problem.rhs(i, k) = 1.0 / (i + k + 1);
+  }
+  std::vector<int> iterations;
+  for (const double value_threshold : {std::numeric_limits<double>::max(), 1e-8, 1e-12}) {
+    auto solver = molpro::linalg::itsolv::create_LinearEquations<Rvector, Qvector, Pvector>("Davidson");
+    solver->set_convergence_threshold(1e-3);
+    solver->set_convergence_threshold_value(value_threshold);
+    std::vector<Rvector> parameters(nroot, Rvector(n)), actions(nroot, Rvector(n));
+    EXPECT_TRUE(solver->solve(parameters, actions, problem, true)) << "value threshold " << value_threshold;
+    iterations.push_back(solver->statistics().iterations);
+    std::vector<int> roots(nroot);
+    std::iota(roots.begin(), roots.end(), 0);
+    solver->solution(roots, parameters, actions);
+    for (int root = 0; root < nroot; ++root) {
+      const Eigen::VectorXd x = Eigen::Map<const Eigen::VectorXd>(parameters[root].data(), n);
+      const Eigen::VectorXd exact = problem.matrix.partialPivLu().solve(problem.rhs.col(root));
+      const double chi_error = std::abs(problem.rhs.col(root).dot(x - exact));
+      if (value_threshold < 1)
+        EXPECT_LT(chi_error, value_threshold) << "value threshold " << value_threshold << ", root " << root;
+    }
+  }
+  EXPECT_LT(iterations[0], iterations[1]);
+  EXPECT_LE(iterations[1], iterations[2]);
+}
