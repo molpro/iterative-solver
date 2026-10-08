@@ -12,11 +12,11 @@ namespace molpro::linalg::array {
  *
  * This class stores the full array on disk and implements RMA and more efficient linear algebra operations.
  *
- * RMA operations read/write directly to disk. Care must be taken that they do not overlap with local buffer
- * modifications.
+ * RMA operations read/write directly to disk.
  *
- * LocalBuffer reads the whole local section into memory. This might be prohivitively expensive for large arrays, so
- * care must be taken.
+ * There is no local buffer: the memory used must not scale with the size of the array, so local_buffer() throws.
+ * Elementwise operations, including those with arrays held in memory, page through the local section
+ * disk_page_size() elements at a time.
  *
  * BufferManager reads the local section in chunks using a separate thread for I/O. This is more memory efficient
  * and allows overlap of communication and computation. The walk through the local section is via iterators.
@@ -52,37 +52,15 @@ public:
   //! Erase the array from disk.
   virtual void erase() = 0;
   [[nodiscard]] const Distribution& distribution() const override;
-  [[nodiscard]] value_type dot(const DistrArrayDisk& y) const;
-  [[nodiscard]] value_type dot(const DistrArray& y) const override;
-  [[nodiscard]] value_type dot(const SparseArray& y) const override;
+  [[nodiscard]] value_type dot(const DistrArrayDisk& y) const { return DistrArray::dot(y); }
+  using DistrArray::dot;
   void set_buffer_size(size_t buffer_size) { m_buffer_size = buffer_size; }
-  void copy(const DistrArray& y) override;
+  [[nodiscard]] size_t disk_page_size() const override { return m_buffer_size; }
 
-protected:
-  //! Reads the whole local buffer from disk into memory. By default the buffer is written to disk on destruction,
-  //! unless do_dump is false.
-  class LocalBufferDisk : public DistrArray::LocalBuffer {
-  public:
-    explicit LocalBufferDisk(DistrArrayDisk& source);
-    explicit LocalBufferDisk(DistrArrayDisk& source, const span::Span<value_type>& buffer);
-    ~LocalBufferDisk() override;
-    //! If true, than buffer is dumped to file on destruction.
-    bool do_dump = true;
-
-  protected:
-    std::vector<value_type> m_snapshot_buffer; //!< when external buffer is not provided
-    DistrArrayDisk& m_source;                  //!< keep a handle on source to dump data to disk
-  };
-
-public:
+  //! Not available: an array on disk is not held in memory. @throws std::logic_error
   [[nodiscard]] std::unique_ptr<LocalBuffer> local_buffer() override;
+  //! Not available: an array on disk is not held in memory. @throws std::logic_error
   [[nodiscard]] std::unique_ptr<const LocalBuffer> local_buffer() const override;
-  //! Access local section, reading it into the provided buffer
-  [[nodiscard]] std::unique_ptr<LocalBuffer> local_buffer(const span::Span<value_type>& buffer);
-  //! Read-only access to the local section, reading it into the provided buffer
-  [[nodiscard]] std::unique_ptr<const LocalBuffer> local_buffer(const span::Span<value_type>& buffer) const;
-
-public:
 };
 
 double dot(const DistrArrayDisk& x, const DistrArrayDisk& y);

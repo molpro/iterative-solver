@@ -1,28 +1,12 @@
 #include "DistrArrayDisk.h"
 #include "util.h"
 #include "util/Distribution.h"
-#include "util/gemm.h"
 #include <future>
 #include <iostream>
 #include <numeric>
 
 namespace molpro::linalg::array {
 using util::Task;
-namespace {
-
-int mpi_rank(MPI_Comm comm) {
-  if (comm == molpro::mpi::comm_global())
-    return molpro::mpi::rank_global();
-#ifdef HAVE_MPI_H
-  int rank;
-  MPI_Comm_rank(comm, &rank);
-  return rank;
-#endif
-  throw std::logic_error("Attempt to access MPI communicator in serial mode");
-}
-
-} // namespace
-
 DistrArrayDisk::DistrArrayDisk(std::unique_ptr<Distribution> distr, MPI_Comm commun)
     : DistrArray(distr->border().second, commun), m_distribution(std::move(distr)) {}
 
@@ -43,49 +27,6 @@ DistrArrayDisk::DistrArrayDisk(DistrArrayDisk&& source) noexcept
 
 DistrArrayDisk::~DistrArrayDisk() = default;
 
-void DistrArrayDisk::copy(const DistrArray& y) {
-  auto name = std::string{"Array::copy"};
-  if (!compatible(y))
-    error(name + " incompatible arrays");
-  auto loc_y = y.local_buffer();
-  auto range = m_distribution->range(mpi_rank(m_communicator));
-  put(range.first, range.second, loc_y->data());
-}
-
-DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source) : m_source{source} {
-  //  std::cout << "DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source)  " << this << std::endl;
-  int rank = mpi_rank(source.communicator());
-  index_type hi;
-  std::tie(m_start, hi) = source.distribution().range(rank);
-  m_size = hi - m_start;
-  //  std::cout << "LocalBufferDisk " << this << " resizes from  " << m_snapshot_buffer.size() << " to " << m_size
-  //            << std::endl;
-  m_snapshot_buffer.resize(m_size);
-  m_buffer = &m_snapshot_buffer[0];
-  source.get(start(), start() + size(), m_buffer);
-}
-
-DistrArrayDisk::LocalBufferDisk::LocalBufferDisk(DistrArrayDisk& source, const Span<value_type>& buffer)
-    : m_source{source} {
-  int rank = mpi_rank(source.communicator());
-  index_type hi;
-  std::tie(m_start, hi) = source.distribution().range(rank);
-  m_size = hi - m_start;
-  if (m_size > buffer.size())
-    source.error("LocalBufferDisk(): attempting to construct from a buffer that is too small");
-  // LocalBuffer logically owns write access to this buffer (source.get below
-  // and put in the destructor both write through m_buffer); the const-ref on
-  // the Span parameter is just the "I won't change the Span object" idiom.
-  m_buffer = buffer.empty() ? nullptr : const_cast<value_type*>(&buffer[0]);
-  source.get(start(), start() + size(), m_buffer);
-}
-
-DistrArrayDisk::LocalBufferDisk::~LocalBufferDisk() {
-  //  std::cout << "LocalBufferDisk destructor " << this << ", size = " << m_snapshot_buffer.size() << std::endl;
-  if (do_dump)
-    m_source.put(start(), start() + size(), m_buffer);
-}
-
 const DistrArray::Distribution& DistrArrayDisk::distribution() const {
   if (!m_distribution)
     error("allocate buffer before asking for distribution");
@@ -93,51 +34,11 @@ const DistrArray::Distribution& DistrArrayDisk::distribution() const {
 }
 
 std::unique_ptr<DistrArray::LocalBuffer> DistrArrayDisk::local_buffer() {
-  // TODO implement this, and the three following, when all code that calls this is removed
-  //  throw std::logic_error("local_buffer created (this should never happen)");
-  return std::make_unique<LocalBufferDisk>(*this);
+  throw std::logic_error("DistrArrayDisk::local_buffer(): an array on disk has no local buffer");
 }
 
 std::unique_ptr<const DistrArray::LocalBuffer> DistrArrayDisk::local_buffer() const {
-  //  throw std::logic_error("local_buffer created (this should never happen)");
-  auto l = std::make_unique<LocalBufferDisk>(*const_cast<DistrArrayDisk*>(this));
-  l->do_dump = false;
-  return l;
+  throw std::logic_error("DistrArrayDisk::local_buffer(): an array on disk has no local buffer");
 }
-
-std::unique_ptr<DistrArray::LocalBuffer> DistrArrayDisk::local_buffer(const Span<value_type>& buffer) {
-  //  throw std::logic_error("local_buffer created (this should never happen)");
-  return std::make_unique<LocalBufferDisk>(*this, buffer);
-}
-std::unique_ptr<const DistrArray::LocalBuffer> DistrArrayDisk::local_buffer(const Span<value_type>& buffer) const {
-  //  throw std::logic_error("local_buffer created (this should never happen)");
-  auto l = std::make_unique<LocalBufferDisk>(*const_cast<DistrArrayDisk*>(this), buffer);
-  l->do_dump = false;
-  return l;
-}
-
-DistrArray::value_type DistrArrayDisk::dot(const DistrArrayDisk& y) const {
-  if (&y == this) {
-    // The squared norm. Read the local section once, rather than taking two snapshots of the same file.
-    auto loc = local_buffer();
-    auto a = std::inner_product(begin(*loc), end(*loc), begin(*loc), value_type{0});
-#ifdef HAVE_MPI_H
-    MPI_Allreduce(MPI_IN_PLACE, &a, 1, MPI_DOUBLE, MPI_SUM, communicator());
-#endif
-    return a;
-  }
-  return DistrArray::dot(y); // TODO: implement buffering in both DistrArrays
-}
-
-DistrArray::value_type DistrArrayDisk::dot(const DistrArray& y) const {
-  if (&y == this)
-    return dot(static_cast<const DistrArrayDisk&>(y));
-  auto y_cvec = molpro::linalg::itsolv::CVecRef<DistrArray>{{y}};
-  auto this_cvec = molpro::linalg::itsolv::CVecRef<DistrArray>{{*this}};
-  auto result = molpro::linalg::array::util::gemm_inner_distr_distr(y_cvec, this_cvec)(0, 0);
-  return result;
-}
-
-DistrArray::value_type DistrArrayDisk::dot(const DistrArray::SparseArray& y) const { return DistrArray::dot(y); }
 
 } // namespace molpro::linalg::array
