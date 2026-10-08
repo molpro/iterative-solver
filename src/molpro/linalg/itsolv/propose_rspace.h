@@ -1,5 +1,6 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_PROPOSE_RSPACE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_PROPOSE_RSPACE_H
+#include <Eigen/Dense>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
 #include <molpro/linalg/itsolv/helper.h>
 #include <molpro/linalg/itsolv/qspace_options.h>
@@ -479,25 +480,52 @@ auto modified_gram_schmidt(const VecRef<R>& rparams, const subspace::Matrix<valu
   const auto nR = rparams.size(), nP = pparams.size(), nQ = qparams.size(), nD = dparams.size();
   // std::cout << "modified_gram_schmidt() nR="<<nR<<" nQ="<<nQ<<" nD="<<nD<<std::endl;
   assert(nP == dims.nP && nQ == dims.nQ && nD == dims.nD);
-  auto orthogonalise = [&overlap, &rparams, nR](const auto& xparams, auto& handler, const size_t oX, const size_t nX) {
-    for (size_t i = 0; i < nX; ++i) {
-      auto norm = std::abs(overlap(oX + i, oX + i));
-      if (nR > 0) {
-        auto dot_mat = handler.gemm_inner(cwrap(rparams), cwrap_arg(xparams.at(i).get()));
-        std::pair<size_t, size_t> mcoeff_dim = std::make_pair(1, nR);
-        subspace::Matrix<typename std::decay_t<decltype(dot_mat)>::value_type> mcoeff(dot_mat.data(), mcoeff_dim);
-        for (size_t j = 0; j < nR; ++j) {
-          mcoeff(0, j) = -mcoeff(0, j) / norm;
-        }
-        handler.gemm_outer(mcoeff, cwrap_arg(xparams.at(i).get()), rparams);
-      }
-    }
-  };
+  // Project the new parameters out of the span of P+Q+D. The existing vectors need not be orthogonal to each other
+  // (for example user-supplied initial guesses), so subtract V S^{-1} V^dagger r rather than projecting on each vector
+  // separately; repeat once, since a single projection loses orthogonality when S is ill-conditioned.
   auto prof = molpro::Profiler::single();
   prof->start("orthoganalise");
-  orthogonalise(pparams, handlers.rp(), dims.oP(), nP);
-  orthogonalise(qparams, handlers.rq(), dims.oQ(), nQ);
-  orthogonalise(dparams, handlers.rq(), dims.oD(), nD);
+  const auto nX = nP + nQ + nD;
+  if (nR > 0 and nX > 0) {
+    using EMatrix = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
+    EMatrix S(nX, nX);
+    const size_t offsets[3] = {dims.oP(), dims.oQ(), dims.oD()}, sizes[3] = {nP, nQ, nD};
+    for (size_t bi = 0, ii = 0; bi < 3; ii += sizes[bi], ++bi)
+      for (size_t bj = 0, jj = 0; bj < 3; jj += sizes[bj], ++bj)
+        for (size_t i = 0; i < sizes[bi]; ++i)
+          for (size_t j = 0; j < sizes[bj]; ++j)
+            S(ii + i, jj + j) = overlap(offsets[bi] + i, offsets[bj] + j);
+    // equilibrate, so that vectors of very different lengths do not make S needlessly ill-conditioned
+    Eigen::Vector<value_type, Eigen::Dynamic> scale(nX);
+    for (size_t i = 0; i < nX; ++i)
+      scale(i) = std::abs(S(i, i)) > 0 ? 1 / std::sqrt(std::abs(S(i, i))) : 0;
+    const auto Sinv = (scale.asDiagonal() * S * scale.asDiagonal()).eval().completeOrthogonalDecomposition();
+    for (int pass = 0; pass < 2; ++pass) {
+      EMatrix dots(nX, nR);
+      // gemm_inner(r, x) holds <r_j|x_i>; the projection needs <x_i|r_j>
+      auto copy_block = [&dots, nR](const auto& m, size_t o) {
+        for (size_t i = 0; i < m.cols(); ++i)
+          for (size_t j = 0; j < nR; ++j)
+            dots(o + i, j) = molpro::linalg::conjugate(m(j, i));
+      };
+      copy_block(handlers.rp().gemm_inner(cwrap(rparams), pparams), 0);
+      copy_block(handlers.rq().gemm_inner(cwrap(rparams), qparams), nP);
+      copy_block(handlers.rq().gemm_inner(cwrap(rparams), dparams), nP + nQ);
+      const EMatrix y = scale.asDiagonal() * Sinv.solve(scale.asDiagonal() * dots);
+      auto subtract = [&y, &rparams, nR](const auto& xparams, auto& handler, size_t o, size_t n) {
+        if (n == 0)
+          return;
+        subspace::Matrix<value_type> coeff({n, nR});
+        for (size_t i = 0; i < n; ++i)
+          for (size_t j = 0; j < nR; ++j)
+            coeff(i, j) = -y(o + i, j);
+        handler.gemm_outer(coeff, xparams, rparams);
+      };
+      subtract(pparams, handlers.rp(), 0, nP);
+      subtract(qparams, handlers.rq(), nP, nQ);
+      subtract(dparams, handlers.rq(), nP + nQ, nD);
+    }
+  }
   prof->stop();
   prof->start("get null_params");
   auto null_params = std::vector<int>{};
