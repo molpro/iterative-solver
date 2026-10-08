@@ -182,10 +182,10 @@ Functions</h2></td></tr>
 <tr class="memitem:aaf70adb15e11786f878400d6a794df3e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aaf70adb15e11786f878400d6a794df3e">construct_dspace</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;solutions, const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html">subspace::IXSpace</a>&lt; R, Q, P &gt; &amp;xspace, const std::vector&lt; std::size_t &gt; &amp;q_delete, const value_type_abs norm_thresh, const value_type_abs svd_thresh, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; Q, Q &gt; &amp;handler, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger)</td></tr>
 <tr class="memdesc:aaf70adb15e11786f878400d6a794df3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the new D space by projecting the solutions onto Qd+D subspace and ensuring they are well conditioned.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aaf70adb15e11786f878400d6a794df3e">More...</a><br /></td></tr>
 <tr class="separator:aaf70adb15e11786f878400d6a794df3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5d64fe02b3f3b416bb9b172f77f1bf5"><td class="memTemplParams" colspan="2">template&lt;class R , class Q , class P , typename value_type , typename value_type_abs &gt; </td></tr>
-<tr class="memitem:ae5d64fe02b3f3b416bb9b172f77f1bf5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ae5d64fe02b3f3b416bb9b172f77f1bf5">modified_gram_schmidt</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;rparams, const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;overlap, const <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html">subspace::Dimensions</a> &amp;dims, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; P &gt; &amp;pparams, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; Q &gt; &amp;qparams, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; Q &gt; &amp;dparams, const value_type_abs norm_thresh, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &amp;handlers, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger)</td></tr>
-<tr class="memdesc:ae5d64fe02b3f3b416bb9b172f77f1bf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Orthogonalises R parameters against P+Q+D subspace (and themselves)  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ae5d64fe02b3f3b416bb9b172f77f1bf5">More...</a><br /></td></tr>
-<tr class="separator:ae5d64fe02b3f3b416bb9b172f77f1bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8b8be81a98ef921223d8da0d9befc95"><td class="memTemplParams" colspan="2">template&lt;class R , class Q , class P , typename value_type , typename value_type_abs &gt; </td></tr>
+<tr class="memitem:ab8b8be81a98ef921223d8da0d9befc95"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ab8b8be81a98ef921223d8da0d9befc95">modified_gram_schmidt</a> (const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;rparams, const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;overlap, const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;rx_overlap, const <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html">subspace::Dimensions</a> &amp;dims, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; P &gt; &amp;pparams, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; Q &gt; &amp;qparams, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; Q &gt; &amp;dparams, const value_type_abs norm_thresh, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &amp;handlers, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger)</td></tr>
+<tr class="memdesc:ab8b8be81a98ef921223d8da0d9befc95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Orthogonalises R parameters against P+Q+D subspace (and themselves)  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ab8b8be81a98ef921223d8da0d9befc95">More...</a><br /></td></tr>
+<tr class="separator:ab8b8be81a98ef921223d8da0d9befc95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3c2afce975327f0d495ef8f7d2eff86"><td class="memTemplParams" colspan="2">template&lt;class R &gt; </td></tr>
 <tr class="memitem:ad3c2afce975327f0d495ef8f7d2eff86"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad3c2afce975327f0d495ef8f7d2eff86">get_new_working_set</a> (const std::vector&lt; int &gt; &amp;working_set, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;wparams)</td></tr>
 <tr class="memdesc:ad3c2afce975327f0d495ef8f7d2eff86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns new working set based on parameters included in wparams.  <a href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad3c2afce975327f0d495ef8f7d2eff86">More...</a><br /></td></tr>
@@ -662,8 +662,8 @@ template&lt;class R , class Q &gt; </div>
 
 </div>
 </div>
-<a id="ae5d64fe02b3f3b416bb9b172f77f1bf5" name="ae5d64fe02b3f3b416bb9b172f77f1bf5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5d64fe02b3f3b416bb9b172f77f1bf5">&#9670;&nbsp;</a></span>modified_gram_schmidt()</h2>
+<a id="ab8b8be81a98ef921223d8da0d9befc95" name="ab8b8be81a98ef921223d8da0d9befc95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8b8be81a98ef921223d8da0d9befc95">&#9670;&nbsp;</a></span>modified_gram_schmidt()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -681,6 +681,12 @@ template&lt;class R , class Q , class P , typename value_type , typename value_t
           <td></td>
           <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;&#160;</td>
           <td class="paramname"><em>overlap</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rx_overlap</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -738,6 +744,7 @@ template&lt;class R , class Q , class P , typename value_type , typename value_t
   <table class="params">
     <tr><td class="paramname">rparams</td><td>R space parameters </td></tr>
     <tr><td class="paramname">overlap</td><td>overlap of P+Q+D subspace </td></tr>
+    <tr><td class="paramname">rx_overlap</td><td>overlaps &lt;r_j|x_i&gt; of the R space parameters (rows) with the P+Q+D parameters (columns), as already calculated by <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad63c6172e8baa3a325c27a4e5314c203" title="Constructs overlap of the full subspace by appending overlap with new parameters to the overlap of pr...">append_overlap_with_r()</a> </td></tr>
     <tr><td class="paramname">dims</td><td>dimensions of P+Q+D subspace </td></tr>
     <tr><td class="paramname">pparams</td><td>P space parameters </td></tr>
     <tr><td class="paramname">qparams</td><td>Q space parameters </td></tr>

@@ -13097,8 +13097,8 @@
       <type>auto</type>
       <name>modified_gram_schmidt</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>ae5d64fe02b3f3b416bb9b172f77f1bf5</anchor>
-      <arglist>(const VecRef&lt; R &gt; &amp;rparams, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const subspace::Dimensions &amp;dims, const CVecRef&lt; P &gt; &amp;pparams, const CVecRef&lt; Q &gt; &amp;qparams, const CVecRef&lt; Q &gt; &amp;dparams, const value_type_abs norm_thresh, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers, Logger &amp;logger)</arglist>
+      <anchor>ab8b8be81a98ef921223d8da0d9befc95</anchor>
+      <arglist>(const VecRef&lt; R &gt; &amp;rparams, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const subspace::Matrix&lt; value_type &gt; &amp;rx_overlap, const subspace::Dimensions &amp;dims, const CVecRef&lt; P &gt; &amp;pparams, const CVecRef&lt; Q &gt; &amp;qparams, const CVecRef&lt; Q &gt; &amp;dparams, const value_type_abs norm_thresh, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
