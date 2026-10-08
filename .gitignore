@@ -87,3 +87,7 @@ cmake-build*
 dependencies/*/
 dist/
 *.egg-info/
+
+# doxygen output when run from the repository root
+/html/
+*.tag
