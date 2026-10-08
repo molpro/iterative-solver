@@ -3,5 +3,5 @@
 <area shape="rect" id="node2" href="$classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem.html" title="Interface for a specific iterative solver, it can add special member functions or variables." alt="" coords="209,5,392,61"/>
 <area shape="rect" id="node3" href="$classmolpro_1_1linalg_1_1itsolv_1_1LinearEquations.html" title=" " alt="" coords="219,85,382,141"/>
 <area shape="rect" id="node4" href="$classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquations.html" title="Solves non&#45;linear system of equations using methods such as DIIS." alt="" coords="215,165,386,221"/>
-<area shape="rect" id="node5" href="$classmolpro_1_1linalg_1_1itsolv_1_1Optimize.html" title="Optimises to a stationary point using methods such as L&#45;BFGS." alt="" coords="219,246,382,287"/>
+<area shape="rect" id="node5" href="$classmolpro_1_1linalg_1_1itsolv_1_1Optimize.html" title=" " alt="" coords="219,246,382,287"/>
 </map>

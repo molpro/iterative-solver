@@ -1109,7 +1109,7 @@ Variables</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">nq</td><td>dimension of parameter space </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">thresh</td><td>convergence threshold </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">verbosity</td><td>how much to print. Default is zero, which prints nothing except errors. One gives a single progress-report line each iteration. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">minimize</td><td>whether to minimize (default) or maximize </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">minimize</td><td>whether to minimize (default) or maximize. When maximizing, the value, gradient and preconditioner are still those of the function being maximized. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pname</td><td>Profiler object name </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">mpicomm</td><td>MPI communicator </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">algorithm</td><td>keyword specifying optimization algorithm </td></tr>
@@ -1806,7 +1806,7 @@ Variables</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">thresh</td><td>convergence threshold</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">thresh_value</td><td>value convergence threshold</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">verbosity</td><td>how much to print. Default is zero, which prints nothing except errors. One gives a summary at the end; two gives a single progress-report line each iteration.</td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">minimize</td><td>whether to minimize (default) or maximize</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">minimize</td><td>whether to minimize (default) or maximize. When maximizing, the value, gradient and preconditioner are still those of the function being maximized.</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pname</td><td>Profiler object name</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">mpicomm</td><td>MPI communicator</td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">range</td><td>Local range of the distributed vectors on this process, as 0-based [begin, end). If present on entry, requests that distribution: then every process must supply one, the ranges covering the whole space contiguously in rank order. To obtain the range in use without requesting one, pass range = -1. On exit, the range in use.</td></tr>
