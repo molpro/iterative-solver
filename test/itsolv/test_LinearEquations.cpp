@@ -130,3 +130,38 @@ TEST(LinearEquation, augmented_hessian) {
     }
   }
 }
+
+// Convergence must not depend on the scale of the problem. The residual is measured relative to the right-hand side,
+// but multiplying the matrix by a constant divides the preconditioned residual by it, and a short preconditioned
+// residual must not be mistaken for a redundant one (issue #640)
+TEST(LinearEquation, scale_invariance) {
+  const int n = 300, nroot = 2;
+  Problem_ problem(n, nroot);
+  Eigen::MatrixXd matrix(n, n);
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j)
+      matrix(i, j) = i + j;
+    matrix(i, i) = 302 * i + 300;
+    for (int k = 0; k < nroot; ++k)
+      problem.rhs(i, k) = 1.0 / (i + k + 1);
+  }
+  std::vector<int> iterations;
+  for (const double scale : {1e-6, 1.0, 1e6}) {
+    problem.matrix = scale * matrix;
+    auto solver = molpro::linalg::itsolv::create_LinearEquations<Rvector, Qvector, Pvector>("Davidson");
+    solver->set_convergence_threshold(1e-13);
+    std::vector<Rvector> parameters(nroot, Rvector(n)), actions(nroot, Rvector(n));
+    EXPECT_TRUE(solver->solve(parameters, actions, problem, true)) << "scale=" << scale;
+    iterations.push_back(solver->statistics().iterations);
+    std::vector<int> roots(nroot);
+    std::iota(roots.begin(), roots.end(), 0);
+    solver->solution(roots, parameters, actions);
+    for (int root = 0; root < nroot; ++root) {
+      const Eigen::VectorXd x = Eigen::Map<const Eigen::VectorXd>(parameters[root].data(), n);
+      EXPECT_LT((problem.matrix * x - problem.rhs.col(root)).norm(), 1e-12 * problem.rhs.col(root).norm())
+          << "scale=" << scale << ", root=" << root;
+    }
+  }
+  EXPECT_EQ(iterations[0], iterations[1]);
+  EXPECT_EQ(iterations[2], iterations[1]);
+}
