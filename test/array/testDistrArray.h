@@ -253,11 +253,6 @@ public:
   std::vector<typename Array::value_type> sub_values;
 };
 
-// DistrArrayRangeRMAF test suite temporarily disabled due to RMA issues
-// (GA: MPI_Win_flush invalid window; MPI3: residual MPICH race condition)
-// TODO: Re-enable once both upstream issues are resolved
-#if 0
-
 template <typename Array>
 class DistrArrayRangeRMAF : public DistrArrayRangeF<Array>, public ::testing::Test {};
 
@@ -327,6 +322,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, set) {
   for (size_t i = 0; i < this->dim; ++i) {
     TypeParam::sync();
     const double orig = TypeParam::at(i);
+    TypeParam::sync(); // every rank must read orig before rank 0 overwrites it
     const double modified1 = orig * 0.12345;
 
     EXPECT_THAT(orig, Not(DoubleEq(modified1)));
@@ -400,6 +396,7 @@ TYPED_TEST_P(DistrArrayRangeRMAF, iteration) {
   EXPECT_EQ(*(cend(self) - 1), self.at(self.size() - 1));
 
   double orig = *begin(self);
+  TypeParam::sync(); // every rank must read orig before rank 0 overwrites it
   double modified = orig * 0.12345;
   EXPECT_THAT(orig, Not(DoubleEq(modified)));
   if (this->p_rank == 0)
@@ -484,8 +481,6 @@ TYPED_TEST_P(DistrArrayRangeRMAF, stl_algorithms) {
   }
   TypeParam::sync();
 }
-
-#endif // #if 0 - DistrArrayRangeRMAF test suite
 
 template <typename Array>
 class DistrArrayRangeMinMaxF : public DistrArrayRangeF<Array>, public ::testing::Test {};
@@ -855,7 +850,7 @@ TYPED_TEST_P(DistrArrayCollectiveLinAlgF, divide_overwrite_positive) {
 
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicF, size, zero, fill);
 REGISTER_TYPED_TEST_SUITE_P(DistArrayBasicRMAF, vec, get, put);
-// REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at, set, iteration, stl_algorithms);
+REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeRMAF, gather, scatter, scatter_acc, at, set, iteration, stl_algorithms);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeMinMaxF, min_loc_n, min_loc_n_reverse, max_n, min_abs_n, max_abs_n);
 REGISTER_TYPED_TEST_SUITE_P(DistrArrayRangeLinAlgF, scal_double, add_double, sub_double, recip);
 REGISTER_TYPED_TEST_SUITE_P(TestDistrArray, constructor, constructor_copy, constructor_copy_allocated,

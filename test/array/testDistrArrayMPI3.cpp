@@ -8,9 +8,7 @@ using molpro::linalg::array::util::LockMPI3;
 using ArrayTypes = ::testing::Types<DistrArrayMPI3>;
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistArrayBasicF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistArrayBasicRMAF, ArrayTypes);
-// DistrArrayRangeRMAF tests temporarily disabled due to residual MPICH RMA race condition
-// (see commit 3afec935). TODO: Re-enable once MPICH upstream issue is resolved.
-// INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistrArrayRangeRMAF, ArrayTypes);
+INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistrArrayRangeRMAF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistrArrayRangeLinAlgF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, DistrArrayRangeMinMaxF, ArrayTypes);
 INSTANTIATE_TYPED_TEST_SUITE_P(MPI3, TestDistrArray, ArrayTypes);
