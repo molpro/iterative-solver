@@ -8,6 +8,7 @@
 #include <molpro/linalg/itsolv/rspace_options.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceSolverLinEig.h>
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
+#include <limits>
 
 namespace molpro::linalg::itsolv {
 /*!
@@ -19,6 +20,13 @@ namespace molpro::linalg::itsolv {
  * Residual
  * --------
  * The residual is scaled down by the norm of the RHS vector so that thresholds are consistent.
+ *
+ * Value
+ * -----
+ * The value of solution i is \f$\chi_{ii}=\langle b_i|x_i\rangle\f$, the diagonal element of the susceptibility
+ * (second-order property) when the equations are for first-order perturbed wavefunctions. The value error used with
+ * the value convergence threshold is the absolute change in \f$\chi_{ii}\f$ since the previous iteration, without
+ * the scaling applied to the residual. With the augmented Hessian it is instead the change in the subspace eigenvalue.
  *
  * Preconditioner
  * -------------
@@ -59,7 +67,8 @@ public:
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
     auto prof = this->profiler()->push("itsolv::end_iteration");
-    if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
+    m_resetting_in_progress = m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions());
+    if (m_resetting_in_progress) {
       this->m_working_set =
           m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
                                 rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
@@ -191,6 +200,29 @@ public:
   }
 
 protected:
+  //! The values chi_ii = <b_i|x_i> of the current solutions, or with the augmented Hessian the subspace eigenvalues
+  std::vector<value_type> values() const {
+    if (get_augmented_hessian() > 0)
+      return this->m_subspace_solver->eigenvalues();
+    const auto& solutions = this->m_subspace_solver->solutions(); // c(i, k): root i, subspace vector k
+    const auto& rhs = this->m_xspace->data.at(subspace::EqnData::rhs); // <v_k|b_i>
+    auto chi = std::vector<value_type>(std::min(solutions.rows(), rhs.cols()), value_type{0});
+    for (size_t i = 0; i < chi.size(); ++i)
+      for (size_t k = 0; k < std::min(solutions.cols(), rhs.rows()); ++k)
+        chi[i] += solutions(i, k) * molpro::linalg::conjugate(rhs(k, i));
+    return chi;
+  }
+
+  void set_value_errors() override {
+    const auto current_values = values();
+    this->m_value_errors.assign(current_values.size(), std::numeric_limits<value_type_abs>::max());
+    for (size_t i = 0; i < std::min(m_last_values.size(), current_values.size()); i++)
+      this->m_value_errors[i] = std::abs(current_values[i] - m_last_values[i]);
+    // resetting the D space does not change the solutions, so the change measured across it would be meaningless
+    if (!m_resetting_in_progress)
+      m_last_values = current_values;
+  }
+
   // FIXME The scale is fixed by the norm of RHS, but if RHS=0 there is no reference. We could use the norm of params
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
     assert(params.size() >= roots.size());
@@ -214,6 +246,8 @@ protected:
   QSpaceOptions qspace_opts;                   //!< Options concerning Q-space handling
   detail::DSpaceResetter<Q> m_dspace_resetter; //!< resets D space
   bool m_hermiticity = true;                   //!< whether the problem is hermitian or not
+  std::vector<value_type> m_last_values;       //!< the values from the previous iteration
+  bool m_resetting_in_progress = false;        //!< whether D space resetting is in progress
 };
 
 } // namespace molpro::linalg::itsolv
