@@ -12259,42 +12259,42 @@
       <type>Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt;</type>
       <name>gemm_inner_distr_distr</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>a0c1e6c4b8f6c9b52a60ba4a7e466cdf2</anchor>
-      <arglist>(const CVecRef&lt; AL &gt; &amp;yy, const CVecRef&lt; DistrArrayFile &gt; &amp;xx)</arglist>
+      <anchor>a73c6aaad0759ad712d855f5f41affcaf</anchor>
+      <arglist>(const CVecRef&lt; AL &gt; &amp;yy, const CVecRef&lt; AD &gt; &amp;xx)</arglist>
     </member>
     <member kind="function">
       <type>Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt;</type>
       <name>gemm_inner_distr_distr</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>ab7da757075ac77e8119ce53f2b8fe584</anchor>
-      <arglist>(const CVecRef&lt; DistrArrayFile &gt; &amp;xx, const CVecRef&lt; AL &gt; &amp;yy)</arglist>
+      <anchor>a4515e26021ec4400448c2fabed966578</anchor>
+      <arglist>(const CVecRef&lt; AD &gt; &amp;xx, const CVecRef&lt; AL &gt; &amp;yy)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>gemm_outer_distr_distr</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>a0babf653da3ab28d9a624d08097878f5</anchor>
-      <arglist>(const Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt; alphas, const CVecRef&lt; DistrArrayFile &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy)</arglist>
+      <anchor>ae0e0d333b3b563d5dfefe2d7ff5b93a5</anchor>
+      <arglist>(const Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt; alphas, const CVecRef&lt; AD &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>gemm_distr_distr</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>a6d920450e7705203a7618e77b8e16e3a</anchor>
-      <arglist>(array::mapped_or_value_type_t&lt; AL &gt; *alphadata, const CVecRef&lt; DistrArrayFile &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy, gemm_type gemm_type)</arglist>
+      <anchor>abd5300a40e34566269266efd76d8b0a2</anchor>
+      <arglist>(array::mapped_or_value_type_t&lt; AL &gt; *alphadata, const CVecRef&lt; AD &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy, gemm_type gemm_type)</arglist>
     </member>
     <member kind="function">
       <type>Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt;</type>
       <name>gemm_inner_distr_distr</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>a49ebbbdf6c9acf6f10b00029f2d7de33</anchor>
+      <anchor>a00e1f7a7989554848db1a2843a93d102</anchor>
       <arglist>(const CVecRef&lt; AL &gt; &amp;xx, const CVecRef&lt; AR &gt; &amp;yy)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>gemm_outer_distr_distr</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>aeee45304f9ebef815900389e09221b7e</anchor>
+      <anchor>a44e5c18fe30271c3d6c0c3bc9620acf2</anchor>
       <arglist>(const Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt; alphas, const CVecRef&lt; AR &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy)</arglist>
     </member>
     <member kind="function">
@@ -12358,6 +12358,13 @@
       <name>is_allocatable_v</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
       <anchor>aaba327f38775ab51cf90be6370a3cf25</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_disk_array_v</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a1dfc512e3766ca80665fcd51104d5ae6</anchor>
       <arglist></arglist>
     </member>
   </compound>
