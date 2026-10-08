@@ -92,7 +92,6 @@ $(document).ready(function(){initNavTree('classmolpro_1_1linalg_1_1array_1_1Dist
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
@@ -128,8 +127,8 @@ Collaboration diagram for molpro::linalg::array::DistrArrayDisk:</div>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Distributed array located primarily on disk. </p>
 <p >This class stores the full array on disk and implements RMA and more efficient linear algebra operations.</p>
-<p >RMA operations read/write directly to disk. Care must be taken that they do not overlap with local buffer modifications.</p>
-<p >LocalBuffer reads the whole local section into memory. This might be prohivitively expensive for large arrays, so care must be taken.</p>
+<p >RMA operations read/write directly to disk.</p>
+<p >There is no local buffer: the memory used must not scale with the size of the array, so <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a5155710fe9ecf2caeb57961fee7eeb5a" title="Not available: an array on disk is not held in memory.">local_buffer()</a> throws. Elementwise operations, including those with arrays held in memory, page through the local section <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a0844434ab0ddf8f3b4ddb9a26467d968">disk_page_size()</a> elements at a time.</p>
 <p >BufferManager reads the local section in chunks using a separate thread for I/O. This is more memory efficient and allows overlap of communication and computation. The walk through the local section is via iterators.</p>
 <p >IO can be done in a separate thread using <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1Task.html">util::Task</a>.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;molpro/linalg/array/util.h&gt;</span></div>
@@ -143,11 +142,6 @@ Collaboration diagram for molpro::linalg::array::DistrArrayDisk:</div>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1util_1_1Task_html_a48c277aecabb4172bbc217282de2524a"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1util_1_1Task.html#a48c277aecabb4172bbc217282de2524a">molpro::linalg::array::util::Task::create</a></div><div class="ttdeci">static Task create(Func &amp;&amp;f, Args &amp;&amp;...args)</div><div class="ttdef"><b>Definition:</b> util.h:73</div></div>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1util_1_1Task_html_aac1fc9ecc6188d27bd71a5cd2899eddb"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1util_1_1Task.html#aac1fc9ecc6188d27bd71a5cd2899eddb">molpro::linalg::array::util::Task::wait</a></div><div class="ttdeci">Result wait()</div><div class="ttdoc">wait for the task to complete and return its result</div><div class="ttdef"><b>Definition:</b> util.h:88</div></div>
 </div><!-- fragment --> </div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html">LocalBufferDisk</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a3b7d0a28a47e1f354506704c5050ec39"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a3b7d0a28a47e1f354506704c5050ec39">disk_array</a> = void</td></tr>
@@ -174,28 +168,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad485855dd9584378e097b2048f55c188"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a1ff2572f6537752365b0d0354015a850">Distribution</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ad485855dd9584378e097b2048f55c188">distribution</a> () const override</td></tr>
 <tr class="memdesc:ad485855dd9584378e097b2048f55c188"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access distribution of the array among processes.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ad485855dd9584378e097b2048f55c188">More...</a><br /></td></tr>
 <tr class="separator:ad485855dd9584378e097b2048f55c188"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc0c53e6bab3b4f900a3db33b8989fb2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#abc0c53e6bab3b4f900a3db33b8989fb2">dot</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html">DistrArrayDisk</a> &amp;y) const</td></tr>
-<tr class="separator:abc0c53e6bab3b4f900a3db33b8989fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7538f5e319160f6431ed995732f2f4bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a7538f5e319160f6431ed995732f2f4bd">dot</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y) const override</td></tr>
-<tr class="memdesc:a7538f5e319160f6431ed995732f2f4bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scalar product of two arrays. Collective. Throws error if any array is empty. Both arrays should be part of the same processor group (same communicator). The result is broadcast to each process.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a7538f5e319160f6431ed995732f2f4bd">More...</a><br /></td></tr>
-<tr class="separator:a7538f5e319160f6431ed995732f2f4bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af247b4c8e347e5219b3ec9a142fd0145"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#af247b4c8e347e5219b3ec9a142fd0145">dot</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a3fcf79ae1da7f58c1ddbe71f90042f75">SparseArray</a> &amp;y) const override</td></tr>
-<tr class="separator:af247b4c8e347e5219b3ec9a142fd0145"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bd6cfac46eb0ece848ed5eb4e286fbd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a0bd6cfac46eb0ece848ed5eb4e286fbd">dot</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html">DistrArrayDisk</a> &amp;y) const</td></tr>
+<tr class="separator:a0bd6cfac46eb0ece848ed5eb4e286fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9f9964f531accee84aee648a0b55799"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#af9f9964f531accee84aee648a0b55799">set_buffer_size</a> (size_t buffer_size)</td></tr>
 <tr class="separator:af9f9964f531accee84aee648a0b55799"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12eff185b5102d1636287b09f269dadb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a12eff185b5102d1636287b09f269dadb">copy</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y) override</td></tr>
-<tr class="separator:a12eff185b5102d1636287b09f269dadb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0844434ab0ddf8f3b4ddb9a26467d968"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a0844434ab0ddf8f3b4ddb9a26467d968">disk_page_size</a> () const override</td></tr>
+<tr class="separator:a0844434ab0ddf8f3b4ddb9a26467d968"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5155710fe9ecf2caeb57961fee7eeb5a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray_1_1LocalBuffer.html">LocalBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a5155710fe9ecf2caeb57961fee7eeb5a">local_buffer</a> () override</td></tr>
-<tr class="memdesc:a5155710fe9ecf2caeb57961fee7eeb5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access the buffer local to this process.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a5155710fe9ecf2caeb57961fee7eeb5a">More...</a><br /></td></tr>
+<tr class="memdesc:a5155710fe9ecf2caeb57961fee7eeb5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Not available: an array on disk is not held in memory.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a5155710fe9ecf2caeb57961fee7eeb5a">More...</a><br /></td></tr>
 <tr class="separator:a5155710fe9ecf2caeb57961fee7eeb5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3db2de9f782f8b17d47616aa1f30809"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray_1_1LocalBuffer.html">LocalBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ae3db2de9f782f8b17d47616aa1f30809">local_buffer</a> () const override</td></tr>
+<tr class="memdesc:ae3db2de9f782f8b17d47616aa1f30809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Not available: an array on disk is not held in memory.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ae3db2de9f782f8b17d47616aa1f30809">More...</a><br /></td></tr>
 <tr class="separator:ae3db2de9f782f8b17d47616aa1f30809"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3d06b053dd86e22cce9bd220ec82bae"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray_1_1LocalBuffer.html">LocalBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ae3d06b053dd86e22cce9bd220ec82bae">local_buffer</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">span::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; &amp;buffer)</td></tr>
-<tr class="memdesc:ae3d06b053dd86e22cce9bd220ec82bae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access local section, reading it into the provided buffer.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ae3d06b053dd86e22cce9bd220ec82bae">More...</a><br /></td></tr>
-<tr class="separator:ae3d06b053dd86e22cce9bd220ec82bae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a485a9938423d0cdaec7b5b1aefac0743"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray_1_1LocalBuffer.html">LocalBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a485a9938423d0cdaec7b5b1aefac0743">local_buffer</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">span::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; &amp;buffer) const</td></tr>
-<tr class="memdesc:a485a9938423d0cdaec7b5b1aefac0743"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read-only access to the local section, reading it into the provided buffer.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a485a9938423d0cdaec7b5b1aefac0743">More...</a><br /></td></tr>
-<tr class="separator:a485a9938423d0cdaec7b5b1aefac0743"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d32f113660ca10a15f2bea070389799"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a4d32f113660ca10a15f2bea070389799">dot</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y) const</td></tr>
+<tr class="memdesc:a4d32f113660ca10a15f2bea070389799"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scalar product of two arrays. Collective. Throws error if any array is empty. Both arrays should be part of the same processor group (same communicator). The result is broadcast to each process.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a4d32f113660ca10a15f2bea070389799">More...</a><br /></td></tr>
+<tr class="separator:a4d32f113660ca10a15f2bea070389799"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac25fdc7e140b903be31399f2c352caa7"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ac25fdc7e140b903be31399f2c352caa7">dot</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a3fcf79ae1da7f58c1ddbe71f90042f75">SparseArray</a> &amp;y) const</td></tr>
+<tr class="separator:ac25fdc7e140b903be31399f2c352caa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">molpro::linalg::array::DistrArray</a></td></tr>
 <tr class="memitem:a9429b74abc625dd5097ae93c4ed1b87a inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a9429b74abc625dd5097ae93c4ed1b87a">~DistrArray</a> ()=default</td></tr>
 <tr class="separator:a9429b74abc625dd5097ae93c4ed1b87a inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -259,6 +248,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2b3c8e9c3691b02452086960db32f007 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e5fc760719f8af338fc47c2d5cc5352 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a0e5fc760719f8af338fc47c2d5cc5352">fill</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> val)</td></tr>
 <tr class="separator:a0e5fc760719f8af338fc47c2d5cc5352 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13953b59c18f19d9b2afaf024f0363d9 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a13953b59c18f19d9b2afaf024f0363d9">copy</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y)</td></tr>
+<tr class="separator:a13953b59c18f19d9b2afaf024f0363d9 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad416250c4a3eb8b72999ccdc8fe2b253 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ad416250c4a3eb8b72999ccdc8fe2b253">copy_patch</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ada7d77229bb5b1ed17256c5407ff5702">index_type</a> start, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ada7d77229bb5b1ed17256c5407ff5702">index_type</a> <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1span.html#a2263f905c14e6ac40e5fd2e372e61006">end</a>)</td></tr>
 <tr class="memdesc:ad416250c4a3eb8b72999ccdc8fe2b253 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies elements in a patch of y. If both arrays are empty than does nothing. If only one is empty, throws an error.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ad416250c4a3eb8b72999ccdc8fe2b253">More...</a><br /></td></tr>
 <tr class="separator:ad416250c4a3eb8b72999ccdc8fe2b253 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1DistrArray"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -521,8 +512,8 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a12eff185b5102d1636287b09f269dadb" name="a12eff185b5102d1636287b09f269dadb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a12eff185b5102d1636287b09f269dadb">&#9670;&nbsp;</a></span>copy()</h2>
+<a id="a0844434ab0ddf8f3b4ddb9a26467d968" name="a0844434ab0ddf8f3b4ddb9a26467d968"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0844434ab0ddf8f3b4ddb9a26467d968">&#9670;&nbsp;</a></span>disk_page_size()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -531,22 +522,21 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void molpro::linalg::array::DistrArrayDisk::copy </td>
+          <td class="memname">size_t molpro::linalg::array::DistrArrayDisk::disk_page_size </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;&#160;</td>
-          <td class="paramname"><em>y</em></td><td>)</td>
-          <td></td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Copies all elements of y. If both arrays are empty than does nothing. If only one is empty, throws an error. </p>
+<p >For an array held on disk, which has no local buffer, the number of elements that elementwise operations read and write at a time; 0 for an array held in memory </p>
 
-<p>Reimplemented from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a13953b59c18f19d9b2afaf024f0363d9">molpro::linalg::array::DistrArray</a>.</p>
+<p>Reimplemented from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a46a64be91016fc8a567f59c6b46c0841">molpro::linalg::array::DistrArray</a>.</p>
 
 </div>
 </div>
@@ -694,8 +684,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a7538f5e319160f6431ed995732f2f4bd" name="a7538f5e319160f6431ed995732f2f4bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7538f5e319160f6431ed995732f2f4bd">&#9670;&nbsp;</a></span>dot() <span class="overload">[1/3]</span></h2>
+<a id="a4d32f113660ca10a15f2bea070389799" name="a4d32f113660ca10a15f2bea070389799"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d32f113660ca10a15f2bea070389799">&#9670;&nbsp;</a></span>dot() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -704,7 +694,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> molpro::linalg::array::DistrArrayDisk::dot </td>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> molpro::linalg::array::DistrArray::dot </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;&#160;</td>
           <td class="paramname"><em>y</em></td><td>)</td>
@@ -713,7 +703,7 @@ Protected Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -724,26 +714,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="abc0c53e6bab3b4f900a3db33b8989fb2" name="abc0c53e6bab3b4f900a3db33b8989fb2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc0c53e6bab3b4f900a3db33b8989fb2">&#9670;&nbsp;</a></span>dot() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> molpro::linalg::array::DistrArrayDisk::dot </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html">DistrArrayDisk</a> &amp;&#160;</td>
-          <td class="paramname"><em>y</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af247b4c8e347e5219b3ec9a142fd0145" name="af247b4c8e347e5219b3ec9a142fd0145"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af247b4c8e347e5219b3ec9a142fd0145">&#9670;&nbsp;</a></span>dot() <span class="overload">[3/3]</span></h2>
+<a id="a0bd6cfac46eb0ece848ed5eb4e286fbd" name="a0bd6cfac46eb0ece848ed5eb4e286fbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bd6cfac46eb0ece848ed5eb4e286fbd">&#9670;&nbsp;</a></span>dot() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -752,7 +724,33 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> molpro::linalg::array::DistrArrayDisk::dot </td>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> molpro::linalg::array::DistrArrayDisk::dot </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html">DistrArrayDisk</a> &amp;&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac25fdc7e140b903be31399f2c352caa7" name="ac25fdc7e140b903be31399f2c352caa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac25fdc7e140b903be31399f2c352caa7">&#9670;&nbsp;</a></span>dot() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> molpro::linalg::array::DistrArray::dot </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a3fcf79ae1da7f58c1ddbe71f90042f75">SparseArray</a> &amp;&#160;</td>
           <td class="paramname"><em>y</em></td><td>)</td>
@@ -761,7 +759,7 @@ Protected Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -800,7 +798,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="ae3db2de9f782f8b17d47616aa1f30809" name="ae3db2de9f782f8b17d47616aa1f30809"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3db2de9f782f8b17d47616aa1f30809">&#9670;&nbsp;</a></span>local_buffer() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3db2de9f782f8b17d47616aa1f30809">&#9670;&nbsp;</a></span>local_buffer() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -822,12 +820,20 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Not available: an array on disk is not held in memory. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::logic_error</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p>Implements <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#acc95a3e905bd982b22ae527e00393c0c">molpro::linalg::array::DistrArray</a>.</p>
 
 </div>
 </div>
 <a id="a5155710fe9ecf2caeb57961fee7eeb5a" name="a5155710fe9ecf2caeb57961fee7eeb5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5155710fe9ecf2caeb57961fee7eeb5a">&#9670;&nbsp;</a></span>local_buffer() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5155710fe9ecf2caeb57961fee7eeb5a">&#9670;&nbsp;</a></span>local_buffer() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -849,49 +855,15 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Access the buffer local to this process. </p>
+<p>Not available: an array on disk is not held in memory. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::logic_error</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Implements <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a6eddd4b6d9683979c764db15d4aba048">molpro::linalg::array::DistrArray</a>.</p>
-
-</div>
-</div>
-<a id="ae3d06b053dd86e22cce9bd220ec82bae" name="ae3d06b053dd86e22cce9bd220ec82bae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3d06b053dd86e22cce9bd220ec82bae">&#9670;&nbsp;</a></span>local_buffer() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unique_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray_1_1LocalBuffer.html">LocalBuffer</a> &gt; molpro::linalg::array::DistrArrayDisk::local_buffer </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">span::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Access local section, reading it into the provided buffer. </p>
-
-</div>
-</div>
-<a id="a485a9938423d0cdaec7b5b1aefac0743" name="a485a9938423d0cdaec7b5b1aefac0743"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a485a9938423d0cdaec7b5b1aefac0743">&#9670;&nbsp;</a></span>local_buffer() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unique_ptr&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray_1_1LocalBuffer.html">LocalBuffer</a> &gt; molpro::linalg::array::DistrArrayDisk::local_buffer </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">span::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Read-only access to the local section, reading it into the provided buffer. </p>
 
 </div>
 </div>

@@ -33,6 +33,7 @@ var namespacemolpro_1_1linalg_1_1array_1_1util =
     [ "gemm_outer_distr_distr", "namespacemolpro_1_1linalg_1_1array_1_1util.html#ae0e0d333b3b563d5dfefe2d7ff5b93a5", null ],
     [ "gemm_outer_distr_distr", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a44e5c18fe30271c3d6c0c3bc9620acf2", null ],
     [ "gemm_outer_distr_sparse", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a783a152fbc37bae2ee82da0ad168c354", null ],
+    [ "local_range", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a79fda49f6c22de25fdbdb5d020dd9dbb", null ],
     [ "make_distribution_spread_remainder", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a8a380319734cfdfd55647ef78bd2133d", null ],
     [ "remove_duplicates", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a922d235e8c5336c4ef99bd5f966bb896", null ],
     [ "select", "namespacemolpro_1_1linalg_1_1array_1_1util.html#a6ac9e3ee7cc084965065211c4f490786", null ],

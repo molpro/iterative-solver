@@ -2384,6 +2384,13 @@
       <anchor>a673acdaae53ad3ed20d56bd4f493eaa3</anchor>
       <arglist>() const =0</arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual size_t</type>
+      <name>disk_page_size</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a46a64be91016fc8a567f59c6b46c0841</anchor>
+      <arglist>() const</arglist>
+    </member>
     <member kind="function" virtualness="pure">
       <type>virtual value_type</type>
       <name>at</name>
@@ -2692,6 +2699,13 @@
       <anchor>a673acdaae53ad3ed20d56bd4f493eaa3</anchor>
       <arglist>() const =0</arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual size_t</type>
+      <name>disk_page_size</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a46a64be91016fc8a567f59c6b46c0841</anchor>
+      <arglist>() const</arglist>
+    </member>
     <member kind="function" virtualness="pure">
       <type>virtual value_type</type>
       <name>at</name>
@@ -2949,7 +2963,6 @@
     <name>molpro::linalg::array::DistrArrayDisk</name>
     <filename>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</filename>
     <base>molpro::linalg::array::DistrArray</base>
-    <class kind="class">molpro::linalg::array::DistrArrayDisk::LocalBufferDisk</class>
     <member kind="typedef">
       <type>void</type>
       <name>disk_array</name>
@@ -2975,22 +2988,8 @@
       <type>value_type</type>
       <name>dot</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
-      <anchor>abc0c53e6bab3b4f900a3db33b8989fb2</anchor>
+      <anchor>a0bd6cfac46eb0ece848ed5eb4e286fbd</anchor>
       <arglist>(const DistrArrayDisk &amp;y) const</arglist>
-    </member>
-    <member kind="function">
-      <type>value_type</type>
-      <name>dot</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
-      <anchor>a7538f5e319160f6431ed995732f2f4bd</anchor>
-      <arglist>(const DistrArray &amp;y) const override</arglist>
-    </member>
-    <member kind="function">
-      <type>value_type</type>
-      <name>dot</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
-      <anchor>af247b4c8e347e5219b3ec9a142fd0145</anchor>
-      <arglist>(const SparseArray &amp;y) const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -3000,11 +2999,11 @@
       <arglist>(size_t buffer_size)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>copy</name>
+      <type>size_t</type>
+      <name>disk_page_size</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
-      <anchor>a12eff185b5102d1636287b09f269dadb</anchor>
-      <arglist>(const DistrArray &amp;y) override</arglist>
+      <anchor>a0844434ab0ddf8f3b4ddb9a26467d968</anchor>
+      <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>std::unique_ptr&lt; LocalBuffer &gt;</type>
@@ -3021,18 +3020,18 @@
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; LocalBuffer &gt;</type>
-      <name>local_buffer</name>
+      <type>virtual value_type</type>
+      <name>dot</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
-      <anchor>ae3d06b053dd86e22cce9bd220ec82bae</anchor>
-      <arglist>(const span::Span&lt; value_type &gt; &amp;buffer)</arglist>
+      <anchor>a4d32f113660ca10a15f2bea070389799</anchor>
+      <arglist>(const DistrArray &amp;y) const</arglist>
     </member>
     <member kind="function">
-      <type>std::unique_ptr&lt; const LocalBuffer &gt;</type>
-      <name>local_buffer</name>
+      <type>virtual value_type</type>
+      <name>dot</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
-      <anchor>a485a9938423d0cdaec7b5b1aefac0743</anchor>
-      <arglist>(const span::Span&lt; value_type &gt; &amp;buffer) const</arglist>
+      <anchor>ac25fdc7e140b903be31399f2c352caa7</anchor>
+      <arglist>(const SparseArray &amp;y) const</arglist>
     </member>
     <member kind="function" protection="protected">
       <type></type>
@@ -7318,53 +7317,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray_1_1LocalBuffer.html</anchorfile>
       <anchor>a4c7377ed3e20e7947faf84fccd356a3e</anchor>
       <arglist>(LocalBuffer &amp;, LocalBuffer &amp;)=delete</arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>molpro::linalg::array::DistrArrayDisk::LocalBufferDisk</name>
-    <filename>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html</filename>
-    <base>molpro::linalg::array::DistrArray::LocalBuffer</base>
-    <member kind="function">
-      <type></type>
-      <name>LocalBufferDisk</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html</anchorfile>
-      <anchor>a2fdb9ef53c5ce7294b4014c767b4b50b</anchor>
-      <arglist>(DistrArrayDisk &amp;source)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>LocalBufferDisk</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html</anchorfile>
-      <anchor>a7e60f72d7330c188da4ecf34c0d0417e</anchor>
-      <arglist>(DistrArrayDisk &amp;source, const span::Span&lt; value_type &gt; &amp;buffer)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>~LocalBufferDisk</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html</anchorfile>
-      <anchor>a560b28394248aa197f64338e72a54b47</anchor>
-      <arglist>() override</arglist>
-    </member>
-    <member kind="variable">
-      <type>bool</type>
-      <name>do_dump</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html</anchorfile>
-      <anchor>a8f58babec5898232b01599677d797398</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>std::vector&lt; value_type &gt;</type>
-      <name>m_snapshot_buffer</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html</anchorfile>
-      <anchor>a0d1c06de52d347d7a3ed26532b4e6b70</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>DistrArrayDisk &amp;</type>
-      <name>m_source</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html</anchorfile>
-      <anchor>adb5a02e1bdcc0eb944bb4b3c611148ea</anchor>
-      <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -12282,6 +12234,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
       <anchor>acfea8dacbd30c52cd53641219a873959</anchor>
       <arglist>(const fs::path &amp;base_name, const std::string &amp;suffix)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>local_range</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a79fda49f6c22de25fdbdb5d020dd9dbb</anchor>
+      <arglist>(const A &amp;a)</arglist>
     </member>
     <member kind="function">
       <type>Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt;</type>

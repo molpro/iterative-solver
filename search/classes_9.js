@@ -14,11 +14,10 @@ var searchData=
   ['linearequationsdavidsonoptions_11',['LinearEquationsDavidsonOptions',['../structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html',1,'molpro::linalg::itsolv']]],
   ['linearequationsoptions_12',['LinearEquationsOptions',['../structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsOptions.html',1,'molpro::linalg::itsolv']]],
   ['localbuffer_13',['LocalBuffer',['../classmolpro_1_1linalg_1_1array_1_1DistrArray_1_1LocalBuffer.html',1,'molpro::linalg::array::DistrArray']]],
-  ['localbufferdisk_14',['LocalBufferDisk',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk_1_1LocalBufferDisk.html',1,'molpro::linalg::array::DistrArrayDisk']]],
-  ['localbufferga_15',['LocalBufferGA',['../structmolpro_1_1linalg_1_1array_1_1DistrArrayGA_1_1LocalBufferGA.html',1,'molpro::linalg::array::DistrArrayGA']]],
-  ['localbuffermpi3_16',['LocalBufferMPI3',['../structmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3_1_1LocalBufferMPI3.html',1,'molpro::linalg::array::DistrArrayMPI3']]],
-  ['localbufferspan_17',['LocalBufferSpan',['../structmolpro_1_1linalg_1_1array_1_1DistrArraySpan_1_1LocalBufferSpan.html',1,'molpro::linalg::array::DistrArraySpan']]],
-  ['lockmpi3_18',['LockMPI3',['../classmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3.html',1,'molpro::linalg::array::util']]],
-  ['logger_19',['Logger',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html',1,'molpro::linalg::itsolv']]],
-  ['loghandler_20',['LogHandler',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html',1,'molpro::linalg::itsolv::log']]]
+  ['localbufferga_14',['LocalBufferGA',['../structmolpro_1_1linalg_1_1array_1_1DistrArrayGA_1_1LocalBufferGA.html',1,'molpro::linalg::array::DistrArrayGA']]],
+  ['localbuffermpi3_15',['LocalBufferMPI3',['../structmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3_1_1LocalBufferMPI3.html',1,'molpro::linalg::array::DistrArrayMPI3']]],
+  ['localbufferspan_16',['LocalBufferSpan',['../structmolpro_1_1linalg_1_1array_1_1DistrArraySpan_1_1LocalBufferSpan.html',1,'molpro::linalg::array::DistrArraySpan']]],
+  ['lockmpi3_17',['LockMPI3',['../classmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3.html',1,'molpro::linalg::array::util']]],
+  ['logger_18',['Logger',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html',1,'molpro::linalg::itsolv']]],
+  ['loghandler_19',['LogHandler',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html',1,'molpro::linalg::itsolv::log']]]
 ];

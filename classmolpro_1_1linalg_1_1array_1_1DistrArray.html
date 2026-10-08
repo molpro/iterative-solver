@@ -232,6 +232,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a673acdaae53ad3ed20d56bd4f493eaa3"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a1ff2572f6537752365b0d0354015a850">Distribution</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a673acdaae53ad3ed20d56bd4f493eaa3">distribution</a> () const =0</td></tr>
 <tr class="memdesc:a673acdaae53ad3ed20d56bd4f493eaa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access distribution of the array among processes.  <a href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a673acdaae53ad3ed20d56bd4f493eaa3">More...</a><br /></td></tr>
 <tr class="separator:a673acdaae53ad3ed20d56bd4f493eaa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46a64be91016fc8a567f59c6b46c0841"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a46a64be91016fc8a567f59c6b46c0841">disk_page_size</a> () const</td></tr>
+<tr class="separator:a46a64be91016fc8a567f59c6b46c0841"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">One-sided RMA</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p >One-sided remote-memory-access operations. They are non-collective </p>
 </div></td></tr>
@@ -899,8 +901,6 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p >Copies all elements of y. If both arrays are empty than does nothing. If only one is empty, throws an error. </p>
 
-<p>Reimplemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a12eff185b5102d1636287b09f269dadb">molpro::linalg::array::DistrArrayDisk</a>.</p>
-
 </div>
 </div>
 <a id="ad416250c4a3eb8b72999ccdc8fe2b253" name="ad416250c4a3eb8b72999ccdc8fe2b253"></a>
@@ -952,6 +952,34 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a46a64be91016fc8a567f59c6b46c0841" name="a46a64be91016fc8a567f59c6b46c0841"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46a64be91016fc8a567f59c6b46c0841">&#9670;&nbsp;</a></span>disk_page_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual size_t molpro::linalg::array::DistrArray::disk_page_size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >For an array held on disk, which has no local buffer, the number of elements that elementwise operations read and write at a time; 0 for an array held in memory </p>
+
+<p>Reimplemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a0844434ab0ddf8f3b4ddb9a26467d968">molpro::linalg::array::DistrArrayDisk</a>.</p>
 
 </div>
 </div>
@@ -1077,7 +1105,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Scalar product of two arrays. Collective. Throws error if any array is empty. Both arrays should be part of the same processor group (same communicator). The result is broadcast to each process. </p>
 
-<p>Reimplemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a7538f5e319160f6431ed995732f2f4bd">molpro::linalg::array::DistrArrayDisk</a>.</p>
+<p>Reimplemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a4d32f113660ca10a15f2bea070389799">molpro::linalg::array::DistrArrayDisk</a>.</p>
 
 </div>
 </div>
@@ -1105,7 +1133,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#af247b4c8e347e5219b3ec9a142fd0145">molpro::linalg::array::DistrArrayDisk</a>.</p>
+<p>Reimplemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ac25fdc7e140b903be31399f2c352caa7">molpro::linalg::array::DistrArrayDisk</a>.</p>
 
 </div>
 </div>

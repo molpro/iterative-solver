@@ -22,6 +22,7 @@ var classmolpro_1_1linalg_1_1array_1_1DistrArray =
     [ "compatible", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a1b46632636f9f92c9f25bebcc4c71230", null ],
     [ "copy", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a13953b59c18f19d9b2afaf024f0363d9", null ],
     [ "copy_patch", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ad416250c4a3eb8b72999ccdc8fe2b253", null ],
+    [ "disk_page_size", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a46a64be91016fc8a567f59c6b46c0841", null ],
     [ "distribution", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a673acdaae53ad3ed20d56bd4f493eaa3", null ],
     [ "divide", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ab76e40bda340ceb59a2c816054d64223", null ],
     [ "dot", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a4d32f113660ca10a15f2bea070389799", null ],
