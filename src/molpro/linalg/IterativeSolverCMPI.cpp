@@ -658,7 +658,13 @@ extern "C" void IterativeSolverPrintStatistics() {
 
 extern "C" int IterativeSolverConverged() {
   require_instance();
-  return instances.top().solver->working_set().empty() ? 1 : 0;
+  const auto& solver = instances.top().solver;
+  // as in solve(): an empty working set is not enough, the errors must also be within the threshold
+  const auto& errors = solver->errors();
+  return solver->working_set().empty() and not errors.empty() and
+                 *std::max_element(errors.begin(), errors.end()) <= solver->convergence_threshold()
+             ? 1
+             : 0;
 }
 
 extern "C" int IterativeSolverNonLinear() {

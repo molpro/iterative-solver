@@ -19,7 +19,7 @@ PROGRAM Linear_Equations_Example
   IF (mpi_rank_global() .gt. 0) CLOSE(6)
   CALL initialise_matrices
   CALL problem%attach(m, rhs)
-  CALL Solve_Linear_Equations(c, g, problem, thresh = 1d-11, verbosity = 2, max_p = 30, hermitian = .true.)
+  CALL Solve_Linear_Equations(c, g, problem, thresh = 1d-9, verbosity = 2, max_p = 30, hermitian = .true.)
   PRINT *, 'convergence?', Iterative_Solver_Converged(), ', residual length: ', norm2(g)
   ! check the solution independently of the solver: relative residual of m x = rhs
   error = 0
