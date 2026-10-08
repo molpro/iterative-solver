@@ -9,7 +9,7 @@
 #include <molpro/Options.h>
 #include <molpro/Profiler.h>
 #include <molpro/cblas.h>
-#include <molpro/linalg/array/DistrArrayFile.h>
+#include <molpro/linalg/array/DistrArrayDisk.h>
 #include <molpro/linalg/array/type_traits.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/wrap.h>
@@ -26,11 +26,15 @@ using molpro::linalg::itsolv::subspace::Matrix;
 
 enum gemm_type { inner, outer };
 
-// Buffered
+//! Whether arrays of type A are held on disk, and so must be read through buffers rather than local_buffer()
+template <class A>
+inline constexpr bool is_disk_array_v = std::is_base_of_v<DistrArrayDisk, std::decay_t<A>>;
 
-template <class AL>
+// Buffered: the disk arrays xx are read in chunks through a BufferManager
+
+template <class AL, class AD, std::enable_if_t<is_disk_array_v<AD>, int> = 0>
 Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const CVecRef<AL>& yy,
-                                                                          const CVecRef<DistrArrayFile>& xx) {
+                                                                          const CVecRef<AD>& xx) {
   auto prof = molpro::Profiler::single()->push("gemm_inner_distr_distr (buffered)");
   if (not yy.empty())
     prof += xx.size() * yy.size() * yy[0].get().local_buffer()->size() * 2;
@@ -48,8 +52,8 @@ Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const 
   return alphas;
 }
 
-template <class AL, typename = std::enable_if_t<!std::is_same_v<std::decay_t<AL>, DistrArrayFile>>>
-Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const CVecRef<DistrArrayFile>& xx,
+template <class AD, class AL, std::enable_if_t<is_disk_array_v<AD> and not is_disk_array_v<AL>, int> = 0>
+Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const CVecRef<AD>& xx,
                                                                           const CVecRef<AL>& yy) {
   // gemm_inner is the hermitian inner product, so the two orders are conjugate transposes
   auto result_transpose = gemm_inner_distr_distr(yy, xx);
@@ -58,9 +62,9 @@ Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const 
   return result;
 }
 
-template <class AL>
-void gemm_outer_distr_distr(const Matrix<typename array::mapped_or_value_type_t<AL>> alphas,
-                            const CVecRef<DistrArrayFile>& xx, const VecRef<AL>& yy) {
+template <class AL, class AD, std::enable_if_t<is_disk_array_v<AD>, int> = 0>
+void gemm_outer_distr_distr(const Matrix<typename array::mapped_or_value_type_t<AL>> alphas, const CVecRef<AD>& xx,
+                            const VecRef<AL>& yy) {
   if (yy.empty() or xx.empty())
     return;
   auto prof = molpro::Profiler::single()->push("gemm_outer_distr_distr (buffered)");
@@ -76,9 +80,9 @@ void gemm_outer_distr_distr(const Matrix<typename array::mapped_or_value_type_t<
                    gemm_type::outer);
 }
 
-template <class AL>
-void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRef<DistrArrayFile>& xx,
-                      const VecRef<AL>& yy, gemm_type gemm_type) {
+template <class AL, class AD>
+void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRef<AD>& xx, const VecRef<AL>& yy,
+                      gemm_type gemm_type) {
 
   auto prof = molpro::Profiler::single()->push("gemm_distr_distr");
   if (xx.size() == 0 || yy.size() == 0) {
@@ -157,14 +161,11 @@ void gemm_distr_distr(array::mapped_or_value_type_t<AL>* alphadata, const CVecRe
   }
 }
 
-// Without buffers
+// Without buffers, for arrays held in memory
 
-template <class AL, class AR = AL>
+template <class AL, class AR = AL, std::enable_if_t<not is_disk_array_v<AL> and not is_disk_array_v<AR>, int> = 0>
 Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const CVecRef<AL>& xx,
                                                                           const CVecRef<AR>& yy) {
-  if (std::is_same<AL, DistrArrayFile>::value) {
-    throw std::runtime_error("gemm_inner_distr_distr (unbuffered) called with DistrArrayFile (should never happen!)");
-  }
   // const size_t spacing = 1;
   using value_type = typename array::mapped_or_value_type_t<AL>;
   auto mat = Matrix<value_type>({xx.size(), yy.size()});
@@ -188,11 +189,11 @@ Matrix<typename array::mapped_or_value_type_t<AL>> gemm_inner_distr_distr(const 
   return mat;
 }
 
-template <class AL, class AR = AL>
+template <class AL, class AR = AL, std::enable_if_t<not is_disk_array_v<AR>, int> = 0>
 void gemm_outer_distr_distr(const Matrix<typename array::mapped_or_value_type_t<AL>> alphas, const CVecRef<AR>& xx,
                             const VecRef<AL>& yy) {
-  if (std::is_same<AL, DistrArrayFile>::value) {
-    throw std::runtime_error("gemm_outer_distr_distr (unbuffered) called with DistrArrayFile (should never happen!)");
+  if (is_disk_array_v<AL>) {
+    throw std::runtime_error("gemm_outer_distr_distr (unbuffered) called to update disk arrays (should never happen!)");
   }
   auto prof = molpro::Profiler::single()->push("gemm_outer_distr_distr (unbuffered)");
   if (not yy.empty())

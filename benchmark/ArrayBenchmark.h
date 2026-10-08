@@ -15,6 +15,7 @@
 #include <molpro/linalg/array/ArrayHandlerDDisk.h>
 #include <molpro/linalg/array/ArrayHandlerDistr.h>
 #include <molpro/linalg/array/ArrayHandlerIterable.h>
+#include <molpro/linalg/array/DistrArrayFile.h>
 #include <molpro/linalg/array/DistrArraySpan.h>
 #ifdef LINEARALGEBRA_ARRAY_HDF5
 #include <molpro/linalg/array/DistrArrayHDF5.h>
