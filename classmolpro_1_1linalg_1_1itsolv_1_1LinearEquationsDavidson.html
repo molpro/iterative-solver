@@ -136,8 +136,11 @@ class molpro::linalg::itsolv::LinearEquationsDavidson&lt; R, Q, P &gt;</div><p >
 Residual</h2>
 <p >The residual is scaled down by the norm of the RHS vector so that thresholds are consistent.</p>
 <h2><a class="anchor" id="autotoc_md2"></a>
-Preconditioner</h2>
+Value</h2>
+<p >The value of solution i is <img class="formulaInl" alt="$\chi_{ii}=\langle b_i|x_i\rangle$" src="form_0.png"/>, the diagonal element of the susceptibility (second-order property) when the equations are for first-order perturbed wavefunctions. The value error used with the value convergence threshold is the absolute change in <img class="formulaInl" alt="$\chi_{ii}$" src="form_1.png"/> since the previous iteration, without the scaling applied to the residual. With the augmented Hessian it is instead the change in the subspace eigenvalue.</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
+Preconditioner</h2>
+<h2><a class="anchor" id="autotoc_md4"></a>
 Augmented Hessian</h2>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
@@ -490,6 +493,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:ad5240207d872bc8ecafd622f40e22fb1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a027b41582a1fff9ebb679e6ae6e2fe5f">value_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ad5240207d872bc8ecafd622f40e22fb1">values</a> () const</td></tr>
+<tr class="memdesc:ad5240207d872bc8ecafd622f40e22fb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The values chi_ii = &lt;b_i|x_i&gt; of the current solutions, or with the augmented Hessian the subspace eigenvalues.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ad5240207d872bc8ecafd622f40e22fb1">More...</a><br /></td></tr>
+<tr class="separator:ad5240207d872bc8ecafd622f40e22fb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7c1a475a4d305d7ea0bfbf9b6a39000"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ab7c1a475a4d305d7ea0bfbf9b6a39000">set_value_errors</a> () override</td></tr>
+<tr class="memdesc:ab7c1a475a4d305d7ea0bfbf9b6a39000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ab7c1a475a4d305d7ea0bfbf9b6a39000">More...</a><br /></td></tr>
+<tr class="separator:ab7c1a475a4d305d7ea0bfbf9b6a39000"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85d020e1e7abe04d905564573885a93a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a85d020e1e7abe04d905564573885a93a">construct_residual</a> (const std::vector&lt; int &gt; &amp;roots, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, const <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions) override</td></tr>
 <tr class="memdesc:a85d020e1e7abe04d905564573885a93a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs residual for given roots provided their parameters and actions.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a85d020e1e7abe04d905564573885a93a">More...</a><br /></td></tr>
 <tr class="separator:a85d020e1e7abe04d905564573885a93a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -530,6 +539,12 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a7a816bb027c4409f79fbe2f616350a1e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a7a816bb027c4409f79fbe2f616350a1e">m_hermiticity</a> = true</td></tr>
 <tr class="memdesc:a7a816bb027c4409f79fbe2f616350a1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the problem is hermitian or not  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a7a816bb027c4409f79fbe2f616350a1e">More...</a><br /></td></tr>
 <tr class="separator:a7a816bb027c4409f79fbe2f616350a1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b9b9c71d1b33a1fdb2660dab09bf544"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a027b41582a1fff9ebb679e6ae6e2fe5f">value_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a8b9b9c71d1b33a1fdb2660dab09bf544">m_last_values</a></td></tr>
+<tr class="memdesc:a8b9b9c71d1b33a1fdb2660dab09bf544"><td class="mdescLeft">&#160;</td><td class="mdescRight">the values from the previous iteration  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a8b9b9c71d1b33a1fdb2660dab09bf544">More...</a><br /></td></tr>
+<tr class="separator:a8b9b9c71d1b33a1fdb2660dab09bf544"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40cfc0874ef45b7e258ba07bb438b724"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a40cfc0874ef45b7e258ba07bb438b724">m_resetting_in_progress</a> = false</td></tr>
+<tr class="memdesc:a40cfc0874ef45b7e258ba07bb438b724"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether D space resetting is in progress  <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a40cfc0874ef45b7e258ba07bb438b724">More...</a><br /></td></tr>
+<tr class="separator:a40cfc0874ef45b7e258ba07bb438b724"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate&lt; LinearEquations, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a></td></tr>
 <tr class="memitem:a3a9fde47c295d0370ba3d65b91bc9b95 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, R, std::map&lt; size_t, typename R::value_type &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a3a9fde47c295d0370ba3d65b91bc9b95">m_handlers</a></td></tr>
 <tr class="memdesc:a3a9fde47c295d0370ba3d65b91bc9b95 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array handlers.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a3a9fde47c295d0370ba3d65b91bc9b95">More...</a><br /></td></tr>
@@ -1600,6 +1615,37 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 
 </div>
 </div>
+<a id="ab7c1a475a4d305d7ea0bfbf9b6a39000" name="ab7c1a475a4d305d7ea0bfbf9b6a39000"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7c1a475a4d305d7ea0bfbf9b6a39000">&#9670;&nbsp;</a></span>set_value_errors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::set_value_errors </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues) </p>
+
+<p>Reimplemented from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#abf9774c4ebf5d2ac8f670236d417ceb6">molpro::linalg::itsolv::IterativeSolverTemplate&lt; LinearEquations, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</a>.</p>
+
+</div>
+</div>
 <a id="a070cbeddff5d6ca1b30055fa7b30f8ef" name="a070cbeddff5d6ca1b30055fa7b30f8ef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a070cbeddff5d6ca1b30055fa7b30f8ef">&#9670;&nbsp;</a></span>solve()</h2>
 
@@ -1664,6 +1710,35 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 
 </div>
 </div>
+<a id="ad5240207d872bc8ecafd622f40e22fb1" name="ad5240207d872bc8ecafd622f40e22fb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5240207d872bc8ecafd622f40e22fb1">&#9670;&nbsp;</a></span>values()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a027b41582a1fff9ebb679e6ae6e2fe5f">value_type</a> &gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::values </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The values chi_ii = &lt;b_i|x_i&gt; of the current solutions, or with the augmented Hessian the subspace eigenvalues. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a0472ab791f0ddb7074cec65c3dbbca0e" name="a0472ab791f0ddb7074cec65c3dbbca0e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0472ab791f0ddb7074cec65c3dbbca0e">&#9670;&nbsp;</a></span>m_dspace_resetter</h2>
@@ -1714,6 +1789,58 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
 </div><div class="memdoc">
 
 <p>whether the problem is hermitian or not </p>
+
+</div>
+</div>
+<a id="a8b9b9c71d1b33a1fdb2660dab09bf544" name="a8b9b9c71d1b33a1fdb2660dab09bf544"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b9b9c71d1b33a1fdb2660dab09bf544">&#9670;&nbsp;</a></span>m_last_values</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a027b41582a1fff9ebb679e6ae6e2fe5f">value_type</a>&gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::m_last_values</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>the values from the previous iteration </p>
+
+</div>
+</div>
+<a id="a40cfc0874ef45b7e258ba07bb438b724" name="a40cfc0874ef45b7e258ba07bb438b724"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40cfc0874ef45b7e258ba07bb438b724">&#9670;&nbsp;</a></span>m_resetting_in_progress</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html">molpro::linalg::itsolv::LinearEquationsDavidson</a>&lt; R, Q, P &gt;::m_resetting_in_progress = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>whether D space resetting is in progress </p>
 
 </div>
 </div>

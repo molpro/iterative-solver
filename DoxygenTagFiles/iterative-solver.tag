@@ -7171,6 +7171,20 @@
       <arglist>() const override</arglist>
     </member>
     <member kind="function" protection="protected">
+      <type>std::vector&lt; value_type &gt;</type>
+      <name>values</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
+      <anchor>ad5240207d872bc8ecafd622f40e22fb1</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>set_value_errors</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
+      <anchor>ab7c1a475a4d305d7ea0bfbf9b6a39000</anchor>
+      <arglist>() override</arglist>
+    </member>
+    <member kind="function" protection="protected">
       <type>void</type>
       <name>construct_residual</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
@@ -7203,6 +7217,20 @@
       <name>m_hermiticity</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
       <anchor>a7a816bb027c4409f79fbe2f616350a1e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; value_type &gt;</type>
+      <name>m_last_values</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
+      <anchor>a8b9b9c71d1b33a1fdb2660dab09bf544</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>bool</type>
+      <name>m_resetting_in_progress</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
+      <anchor>a40cfc0874ef45b7e258ba07bb438b724</anchor>
       <arglist></arglist>
     </member>
   </compound>

@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="textblock"><p ><a class="anchor" id="md____w_iterative_solver_iterative_solver_README"></a></p>
 <p ><a href="https://github.com/molpro/iterative-solver/actions/workflows/build-and-test.yml"><img src="https://github.com/molpro/iterative-solver/actions/workflows/build-and-test.yml/badge.svg" alt="Build and test" style="pointer-events: none;" class="inline"/></a></p>
 <p ><a href="https://github.com/molpro/iterative-solver/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="license" style="pointer-events: none;" class="inline"/></a></p>
-<h1><a class="anchor" id="autotoc_md7"></a>
+<h1><a class="anchor" id="autotoc_md8"></a>
 Overview</h1>
 <p >Implements iterative solvers for linear and non-linear problems and distributed arrays for HPC. The solvers are specialised to work with specific data types, but are also templated on the container allowing for easy integration into existing software.</p>
 <p >List of key features:</p><ul>
@@ -113,7 +113,7 @@ Overview</h1>
 <li>Provides distributed arrays in memory and on disk for HPC</li>
 <li>Contains Fortran and C wrappers</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md8"></a>
+<h1><a class="anchor" id="autotoc_md9"></a>
 Installation</h1>
 <p >CMake is used to build the library and it can integrate easily with other CMake builds.</p>
 <div class="fragment"><div class="line">include(FetchContent)</div>
@@ -123,13 +123,13 @@ Installation</h1>
 <div class="line">        GIT_TAG ${COMMIT_HASH_OR_TAG_VALUE})</div>
 <div class="line">FetchContent_MakeAvailable(iterative-solver)</div>
 <div class="line">target_link_libraries(${YOUR_LIBRARY_NAME} PUBLIC molpro::iterative-solver)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md9"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md10"></a>
 Usage</h1>
-<h2><a class="anchor" id="autotoc_md10"></a>
+<h2><a class="anchor" id="autotoc_md11"></a>
 Interfaces</h2>
 <p >There is a hierarchy of abstract classes defined in <code><a class="el" href="IterativeSolver_8h_source.html">molpro/linalg/itsolv/IterativeSolver.h</a></code> with <code>IterativeSolver</code> defining the interface for common functionality and <code>LinearEigensystem</code>, <code>LinearEquations</code>, <code>Optimize</code> and <code>NonLinearEquations</code> defining functions that are specific to each type of solver. They are provided to reduce header bloat in user's code.</p>
 <p >Each type of solver has at least one implementation class, e.g. <code>LinearEigensystemDavidson</code> in <code><a class="el" href="LinearEigensystemDavidson_8h_source.html">molpro/linalg/itsolv/LinearEigensystemDavidson.h</a></code>, which implements the full interface. The library is designed to make it easy to add new iterative solvers, so there might be more than one implementation.</p>
-<h2><a class="anchor" id="autotoc_md11"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Example</h2>
 <p >The simplest way to use the library is to define a <code>Problem</code> subclass that supplies the matrix action and (optionally) diagonals, then call <code>solve()</code>. Here is an example of using <code>LinearEigensystemDavidson</code>,</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;molpro/linalg/itsolv/LinearEigensystemDavidson.h&gt;</span></div>
@@ -152,7 +152,7 @@ Example</h2>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1Problem_html_a0d3d1df78eda376e661d9677449008ca"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a0d3d1df78eda376e661d9677449008ca">molpro::linalg::itsolv::Problem::action</a></div><div class="ttdeci">virtual void action(const CVecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;action) const</div><div class="ttdoc">Calculate the action of the kernel matrix on a set of parameters. Used by linear solvers,...</div><div class="ttdef"><b>Definition:</b> IterativeSolver.h:109</div></div>
 <div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1Problem_html_a6887ee4a7b23709c1164ebcf5221ce8e"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a6887ee4a7b23709c1164ebcf5221ce8e">molpro::linalg::itsolv::Problem::diagonals</a></div><div class="ttdeci">virtual bool diagonals(container_t &amp;d) const</div><div class="ttdoc">Optionally provide the diagonal elements of the underlying kernel. If implemented and returning true,...</div><div class="ttdef"><b>Definition:</b> IterativeSolver.h:121</div></div>
 </div><!-- fragment --><p >More advanced users can copy and modify the code in <code>solve()</code> to tailor it for their own use, see implementation in <code><a class="el" href="IterativeSolverTemplate_8h_source.html">molpro/linalg/itsolv/IterativeSolverTemplate.h</a></code>.</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Containers and array handlers</h2>
 <p >In many programs there are special containers for storing the vectors and operating on them. This might be for efficiency reasons, e.g. exploiting symmetry of the problem, or for collecting metadata, e.g. memory usage and operation count. In either case, The code is templated on container types to ease adaptation.</p>
 <p >To avoid the code-bloat of header only libraries all of the numerically intensive work is explicitly instantiated for <code>double</code>, <code>std::complex&lt;double&gt;</code> and <code>long double</code> element types. This makes recompilation of IterativeSolver with different container types very fast. Containers with other element types are supported as well; see Arbitrary precision.</p>
@@ -180,7 +180,7 @@ Containers and array handlers</h2>
 <li>must have an element type the solvers can compute in; see Arbitrary precision</li>
 </ul>
 <p >ArrayHandler is an abstract class used by IterativeSolver to perform copy and linear algebra operations (<code>dot</code>, <code>axpy</code>). iterative-solver provides implementations for Iterable containers (e.g. <code>std::vector</code>), distributed containers (e.g. <code><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html" title="Array distributed across many processes supporting remote-memory-access, access to process local buff...">molpro::linalg::array::DistrArray</a></code>), and mapped containers (e.g. <code>std::map</code>). However, some users might need/want to provide their own implementations.</p>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Arbitrary precision</h2>
 <p >Nothing in the solvers is tied to double precision. The scalar type is taken from the container (<code>R::value_type</code>), and every threshold, working array and dense decomposition follows it.</p>
 <p >The dense linear algebra dispatches on that scalar type: <code>float</code>, <code>double</code>, <code>std::complex&lt;float&gt;</code> and <code>std::complex&lt;double&gt;</code> go to LAPACK through the LAPACKE interface, and every other type goes to the equivalent templated Eigen decomposition. That covers any scalar for which <code>Eigen::NumTraits</code> is specialised — <code>long double</code> out of the box, and extended- and arbitrary-precision types such as <code>boost::multiprecision</code> or <code>mpfr::mpreal</code> through the Eigen support those libraries provide. The dispatch is in <code><a class="el" href="helper-dispatch_8h_source.html">molpro/linalg/itsolv/helper-dispatch.h</a></code>; <code>has_lapack_kernel&lt;T&gt;</code> reports which branch a given type takes.</p>
@@ -191,19 +191,19 @@ Arbitrary precision</h2>
 <p >Thresholds that were originally hard-coded for double precision — "this quantity is zero", "this
 direction is null" — are not absolute constants but are rescaled to the working precision by <code>precision_scaled&lt;T&gt;()</code>, which preserves their margin measured in machine epsilons and returns them unchanged when the working precision is double. Without this the solvers would declare convergence, or discard new directions as redundant, long before the extra precision had been used.</p>
 <p >One limitation remains: the distributed arrays in <code><a class="el" href="namespacemolpro_1_1linalg_1_1array.html">molpro::linalg::array</a></code> fix <code>value_type</code> to <code>double</code>, so extended precision applies to in-memory containers such as <code>std::vector&lt;long double&gt;</code>.</p>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md15"></a>
 Complex arithmetic</h2>
 <p >Containers with a complex element type are supported throughout, and compose with the above: a <code>std::vector&lt;std::complex&lt;long double&gt;&gt;</code> takes the Eigen branch of the dispatch at extended precision.</p>
 <p ><b>The inner product is hermitian.</b> <code>ArrayHandler::dot(x, y)</code> is <code>&lt;x|y&gt;</code> &ndash; conjugate-linear in its first argument, linear in its second &ndash; so <code>dot(x, x)</code> is real and non-negative and the subspace overlap is a hermitian matrix. Earlier releases computed <code>sum(x_i * y_i)</code> without the conjugation, which made the overlap complex symmetric; that was never usable, because every complex subspace solver was an <code>assert(false)</code> stub, but the change matters to anyone who wrote their own <code>ArrayHandler</code> subclass for a complex container. If you want the bilinear c-product of complex-scaling and CAP methods instead, do not conjugate in your own handler &ndash; but note that the subspace solvers assume the hermitian convention.</p>
 <p >Quantities that are magnitudes rather than scalars of the problem &ndash; residual norms, singular values, convergence thresholds &ndash; are typed <code>value_type_abs</code>, which is <code>double</code> for a <code>std::complex&lt;double&gt;</code> container. <code>IterativeSolver::errors()</code> returns them, and so does <code>set_convergence_threshold()</code>.</p>
 <p >The optimisers (<code>Optimize</code>, i.e. BFGS and steepest descent) accept complex containers, but their objective is taken to be real: the line search orders function values, so only the real part of the value returned by <code>Problem::residual()</code> is used. Selecting a P space also needs an ordering and so throws for a complex element type, as it did before.</p>
-<h1><a class="anchor" id="autotoc_md15"></a>
+<h1><a class="anchor" id="autotoc_md16"></a>
 Contributing</h1>
 <p ><a class="el" href="md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html">doc/contributing/ConsistencyAudit.md</a> records the playbook used for the consistency-audit series, for anyone wanting to redo or extend that work.</p>
-<h1><a class="anchor" id="autotoc_md16"></a>
+<h1><a class="anchor" id="autotoc_md17"></a>
 Citing</h1>
 <p >Any publications resulting from this work should cite relevant papers in CITE.txt</p>
-<h1><a class="anchor" id="autotoc_md17"></a>
+<h1><a class="anchor" id="autotoc_md18"></a>
 List of Contributors</h1>
 <p >Peter Knowles</p>
 <p >Marat Sibaev</p>

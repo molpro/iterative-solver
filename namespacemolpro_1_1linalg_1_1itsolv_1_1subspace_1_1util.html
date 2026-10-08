@@ -266,9 +266,9 @@ template&lt;typename T &gt; </div>
 
 <p>Performs Gram-Schmidt orthogonalisation without normalisation. </p>
 <p >Any orthogonal vector with a norm less than threshold is not orthogonalised against.</p>
-<p >For a vector set {v} with overlap matrix <img class="formulaInl" alt="$ S_{ij}= v_i . v_j $" src="form_0.png"/>, generate a linear transformation L to a new orthogonal vector set <img class="formulaInl" alt="$ u_i = \sum_j L_{ij} v_j $" src="form_1.png"/>.</p>
+<p >For a vector set {v} with overlap matrix <img class="formulaInl" alt="$ S_{ij}= v_i . v_j $" src="form_2.png"/>, generate a linear transformation L to a new orthogonal vector set <img class="formulaInl" alt="$ u_i = \sum_j L_{ij} v_j $" src="form_3.png"/>.</p>
 <p >u_0 = v_0 u_1 = v_1 - &lt;v_1, u_0&gt; / &lt;u_0, u_0&gt; u_i = v_i -\sum_j=0^{i-1} &lt;v_i, u_j&gt; / &lt;u_j, u_j&gt; u_j = v_i -\sum_j=0^{i-1} &lt;v_i, u_j&gt; / &lt;u_j, u_j&gt; \sum_{k=0}^j L_{jk} v_k = v_i -\sum_j=0^{i-1} (\sum_{k=0}^{j} W_{ij} / N_{jj} L_{jk}) v_k</p>
-<p >Let the overlap between u and v be, <img class="formulaInl" alt="$ W_{ij} = &lt;v_i, u_j&gt; $" src="form_2.png"/></p>
+<p >Let the overlap between u and v be, <img class="formulaInl" alt="$ W_{ij} = &lt;v_i, u_j&gt; $" src="form_4.png"/></p>
 <p >W_{ij} = &lt;v_i, u_j&gt; = \sum_{k=0}^{j} S_{ik} L_{jk} N_{ii} = &lt;u_i, u_i&gt; = \sum_{k} L_{ik} &lt;v_k, u_i&gt; = \sum_{km} L_{ik} L_{im} S_{km}</p>
 <p >L_{0,j} = \delta_{i,j} L_{i,k} = \delta_{i,k} - (1 + \delta_{i,k})(\sum_{j=0}^{k} W_{ij} / N_{jj} L_{jk})</p>
 <dl class="params"><dt>Parameters</dt><dd>

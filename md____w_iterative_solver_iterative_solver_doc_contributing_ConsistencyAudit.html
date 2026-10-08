@@ -95,14 +95,14 @@ $(document).ready(function(){initNavTree('md____w_iterative_solver_iterative_sol
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p >This is the playbook followed for the consistency-audit work in PRs #559–#564, #566 and #569 (May 2026). It is intended for anyone who wants to redo or extend that audit, ideally driven by an LLM with a human steering and verifying.</p>
-<h1><a class="anchor" id="autotoc_md24"></a>
+<h1><a class="anchor" id="autotoc_md25"></a>
 Setup</h1>
 <ol type="1">
 <li><b>Fresh clone</b>, current <code>master</code>, working build under your normal compiler.</li>
 <li><b>A strict compiler for one verification build</b>: <code>gcc 16+</code> or recent <code>clang</code>. Many bugs that the first round found compile silently under older toolchains. Keep one build directory configured against a strict one.</li>
 <li><b>An LLM</b> with file access and shell access to the repo (e.g. Claude Code). The audit is too tedious to do by hand; the bottleneck is reviewer time, not the LLM's.</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 The shape of a pass</h1>
 <p >A <em>pass</em> is one trip through the codebase looking for <b>one specific kind of problem</b>. Not "find
 bugs" — "find this kind of bug." Mixing kinds makes the diff impossible to review.</p>
@@ -142,7 +142,7 @@ bugs" — "find this kind of bug." Mixing kinds makes the diff impossible to rev
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">13   </td><td class="markdownTableBodyNone">Row- versus column-major confusion   </td><td class="markdownTableBodyNone">an <code>Eigen::Map</code> whose storage order disagrees with how the caller filled the buffer. Invisible for a symmetric matrix and wrong for anything else, so it hides until the data stops being symmetric.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md26"></a>
+<h1><a class="anchor" id="autotoc_md27"></a>
 How to drive a single pass</h1>
 <ol type="1">
 <li><b>Prompt the LLM</b> with a tight description of what to look for, plus the path to scan. Be specific about the <em>kind</em> of bug. Example:</li>
@@ -160,7 +160,7 @@ any code yet." </p>
 <li><b>Commit</b> with a message that explains <em>why</em> each fix matters, not just <em>what</em> changed. Group commits within the PR by sub-theme.</li>
 <li><b>Open the PR</b>. Title format that worked well: <code>&lt;Component&gt; &lt;kind of fix&gt;: &lt;short summary&gt;</code>. Body lists each commit and explains the audit method.</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 Lessons from the first round</h1>
 <p >A few traps you'll hit that aren't obvious from the lens list:</p>
 <ul>
@@ -170,7 +170,7 @@ Lessons from the first round</h1>
 <li><b>Keep CMake and packaging out of the same PR as code logic.</b> Maintainers can rubber-stamp a CMake-hygiene PR in a minute. A mixed PR forces them to read every line.</li>
 <li><b>Skip nothing.</b> If a pass turns up findings you don't want to fix (API-breaking, requires design discussion), file them as a tracker issue rather than silently dropping. #557 is the example from the first round.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md28"></a>
+<h1><a class="anchor" id="autotoc_md29"></a>
 Lessons from later rounds</h1>
 <ul>
 <li><b>A test that has never failed proves nothing.</b> For any fix, verify the accompanying test fails without it. Several bugs in the #587 series had sat under a passing test that only asserted the result contained no NaNs, which a wrong-but-finite answer satisfies.</li>
@@ -178,11 +178,11 @@ Lessons from later rounds</h1>
 <li><b>A no-op abstraction is not free in a debug build.</b> Wrapping a hot loop's body in a lambda that calls a function which is the identity for the type in question costs nothing at <code>-O3</code> and roughly a factor of two at <code>-O0</code>. Branch on the type with <code>if constexpr</code> so the common path is the code that was there before.</li>
 <li><b>Reproduce the reviewer's platform rather than reasoning about it.</b> <code>-mlong-double-64</code> makes x86-64 GCC use the same <code>long double</code> as arm64 macOS, which turned a round of guesses about a reviewer's failing tests into a local reproduction.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md29"></a>
+<h1><a class="anchor" id="autotoc_md30"></a>
 Suggested PR shape</h1>
 <p >Aim for PRs in the range <b>30–200 changed lines</b>, one lens per PR, <em>each rebased on current <code>master</code></em>. PRs over ~300 lines tend to attract "I can't review this" comments. The split from the first series (#559–#564, #566 and #569) is the upper end of what's still reviewable — finer-grained is fine.</p>
 <p >Note that GitHub will not accept a base branch that lives on a fork, so a stack of interdependent PRs from a fork all have to target <code>master</code>. Each diff then also shows the commits below it until those merge, which is worth saying in the PR body so reviewers are not surprised.</p>
-<h1><a class="anchor" id="autotoc_md30"></a>
+<h1><a class="anchor" id="autotoc_md31"></a>
 What to expect from the LLM</h1>
 <p >It will:</p>
 <ul>
