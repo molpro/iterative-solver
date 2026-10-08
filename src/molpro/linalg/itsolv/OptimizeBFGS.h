@@ -9,6 +9,7 @@
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
 
 #include <cmath>
+#include <limits>
 #include <map>
 #include <memory>
 
@@ -76,7 +77,10 @@ public:
       const value_type_abs fcurrent = real_part(Value(0, 0)); // the current point
       const value_type_abs gprev = real_part(H(0, 1) - H(1, 1));
       const value_type_abs gcurrent = real_part(H(0, 0) - H(1, 0));
-      bool Wolfe_1 = fcurrent <= fprev + m_Wolfe_1 * gprev;
+      // a change in the value within its rounding error says nothing about sufficient decrease
+      const value_type_abs f_noise =
+          10 * std::numeric_limits<value_type_abs>::epsilon() * std::max(std::abs(fprev), std::abs(fcurrent));
+      bool Wolfe_1 = fcurrent <= fprev + m_Wolfe_1 * gprev + f_noise;
       bool Wolfe_2 = m_strong_Wolfe ? gcurrent >= m_Wolfe_2 * gprev : std::abs(gcurrent) <= m_Wolfe_2 * std::abs(gprev);
       const value_type_abs step = real_part(S(0, 0) - S(1, 0) - S(0, 1) + S(1, 1));
       if (false) {
@@ -92,9 +96,8 @@ public:
         molpro::cout << "m_convergence_threshold=" << this->m_convergence_threshold << std::endl;
         molpro::cout << "Wolfe conditions: " << Wolfe_1 << Wolfe_2 << std::endl;
       }
-      if (
-          //          std::abs(gcurrent) < this->m_convergence_threshold or
-          (Wolfe_1 && Wolfe_2))
+      // a point that already meets the convergence threshold is kept, rather than line-searched away
+      if (this->m_errors.front() <= this->m_convergence_threshold or (Wolfe_1 && Wolfe_2))
         goto accept;
       //      molpro::cout << "evaluating line search" << std::endl;
       using interpolator = Interpolator<value_type_abs>;
@@ -196,7 +199,8 @@ public:
       m_last_iteration_linesearching = true;
     }
     this->m_stats->iterations++;
-    return this->errors().front() < this->m_convergence_threshold ? 0 : 1;
+    // a line-search step has to be evaluated; the errors still belong to the point it replaces
+    return m_linesearch ? 1 : (this->errors().front() < this->m_convergence_threshold ? 0 : 1);
   }
 
   size_t end_iteration(std::vector<R>& parameters, std::vector<R>& action) override {
