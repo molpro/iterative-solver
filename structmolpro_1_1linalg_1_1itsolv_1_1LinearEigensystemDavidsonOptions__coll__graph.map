@@ -1,6 +1,9 @@
 <map id="molpro::linalg::itsolv::LinearEigensystemDavidsonOptions" name="molpro::linalg::itsolv::LinearEigensystemDavidsonOptions">
-<area shape="rect" id="node1" title="Allows setting and getting of options for LinearEigensystemDavidson instance via IterativeSolver base..." alt="" coords="461,39,727,80"/>
-<area shape="rect" id="node2" href="$structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemOptions.html" title=" " alt="" coords="209,5,413,47"/>
-<area shape="rect" id="node3" href="$structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers." alt="" coords="5,5,161,47"/>
-<area shape="rect" id="node4" href="$structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html" title=" " alt="" coords="233,71,389,112"/>
+<area shape="rect" id="Node000001" title="Allows setting and getting of options for LinearEigensystemDavidson instance via IterativeSolver base..." alt="" coords="461,37,727,77"/>
+<area shape="rect" id="Node000002" href="$structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemOptions.html" title=" " alt="" coords="209,5,413,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="427,36,461,40,461,45,427,41"/>
+<area shape="rect" id="Node000003" href="$structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers." alt="" coords="5,5,161,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="175,23,209,23,209,28,175,28"/>
+<area shape="rect" id="Node000004" href="$structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html" title=" " alt="" coords="233,69,389,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="403,76,461,70,461,75,403,82"/>
 </map>

@@ -19,8 +19,6 @@ var classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson =
     [ "get_reset_D_maxQ_size", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a64c70aa7cafca66228994805f913fa91", null ],
     [ "get_svd_thresh", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a0708628024a4d58bb5e5e237656f1422", null ],
     [ "nonlinear", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a6bf15f4b37f912dc22393997154cdca7", null ],
-    [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#ab4748964a82d882be6cfebd7c158511e", null ],
-    [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a2586061786c83f40ee932189f6a59353", null ],
     [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#aad10a92985b4c8ca6119e00096410f19", null ],
     [ "rhs", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a8e3f14d5cd05418e40e614a20ffc4053", null ],
     [ "set_augmented_hessian", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#abf49d778d621611c8d8e5dbf59280b5e", null ],

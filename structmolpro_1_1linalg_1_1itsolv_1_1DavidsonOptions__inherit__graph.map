@@ -1,5 +1,7 @@
 <map id="molpro::linalg::itsolv::DavidsonOptions" name="molpro::linalg::itsolv::DavidsonOptions">
-<area shape="rect" id="node1" title=" " alt="" coords="5,39,161,80"/>
-<area shape="rect" id="node2" href="$structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html" title="Allows setting and getting of options for LinearEigensystemDavidson instance via IterativeSolver base..." alt="" coords="209,5,475,47"/>
-<area shape="rect" id="node3" href="$structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html" title="Allows setting and getting of options for LinearEquationsDavidson instance via IterativeSolver base c..." alt="" coords="219,71,465,112"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,161,77"/>
+<area shape="rect" id="Node000002" href="$structmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidsonOptions.html" title="Allows setting and getting of options for LinearEigensystemDavidson instance via IterativeSolver base..." alt="" coords="209,5,475,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,43,209,39,209,44,175,49"/>
+<area shape="rect" id="Node000003" href="$structmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidsonOptions.html" title="Allows setting and getting of options for LinearEquationsDavidson instance via IterativeSolver base c..." alt="" coords="219,69,465,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,66,219,71,219,77,175,71"/>
 </map>

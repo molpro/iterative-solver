@@ -1,0 +1,5 @@
+<map id="iterative_solver_problem::problem" name="iterative_solver_problem::problem">
+<area shape="rect" id="Node000001" title="Abstract class defining the problem&#45;specific interface for the simplified solver interface to Iterati..." alt="" coords="5,108,191,148"/>
+<area shape="rect" id="Node000002" href="$structiterative__solver__pspace_1_1pspace.html" title=" " alt="" coords="9,5,187,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,59,101,108,95,108,95,59"/>
+</map>

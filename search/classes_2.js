@@ -12,7 +12,7 @@ var searchData=
   ['contextbase_3c_20iterationreport_2c_20true_20_3e_9',['ContextBase&lt; IterationReport, true &gt;',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html',1,'molpro::linalg::itsolv::log']]],
   ['contextbase_3c_20newiteration_2c_20true_2c_20int_2c_20std_3a_3avector_3c_20double_20_3e_20_3e_10',['ContextBase&lt; NewIteration, true, int, std::vector&lt; double &gt; &gt;',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html',1,'molpro::linalg::itsolv::log']]],
   ['contextbase_3c_20summaryreport_2c_20true_20_3e_11',['ContextBase&lt; SummaryReport, true &gt;',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html',1,'molpro::linalg::itsolv::log']]],
-  ['counter_12',['Counter',['../structmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1Counter.html',1,'molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;::Counter'],['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Counter.html',1,'molpro::profiler::Counter']]],
+  ['counter_12',['counter',['../structmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1Counter.html',1,'molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;::Counter'],['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Counter.html',1,'molpro::profiler::Counter']]],
   ['create_5fdefault_5fhandler_13',['create_default_handler',['../structmolpro_1_1linalg_1_1array_1_1detail_1_1create__default__handler.html',1,'molpro::linalg::array::detail']]],
   ['cslice_14',['CSlice',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1CSlice.html',1,'molpro::linalg::itsolv::subspace::Matrix']]]
 ];

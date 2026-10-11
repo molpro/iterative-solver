@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-<tagfile doxygen_version="1.9.4">
+<tagfile doxygen_version="1.9.8">
   <compound kind="struct">
     <name>molpro::linalg::array::array_family</name>
     <filename>structmolpro_1_1linalg_1_1array_1_1array__family.html</filename>
@@ -274,7 +274,7 @@
     <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html</filename>
     <templarg>class AL</templarg>
     <templarg>class AR</templarg>
-    <base>ArrayHandler&lt; AL, AL &gt;</base>
+    <base>molpro::linalg::array::ArrayHandler</base>
     <member kind="function">
       <type></type>
       <name>ArrayHandlerDDisk</name>
@@ -379,7 +379,7 @@
     <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html</filename>
     <templarg>class AL</templarg>
     <templarg>class AR</templarg>
-    <base>ArrayHandler&lt; AL, AL &gt;</base>
+    <base>molpro::linalg::array::ArrayHandler</base>
     <member kind="function">
       <type></type>
       <name>ArrayHandlerDDiskDistr</name>
@@ -576,7 +576,7 @@
     <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDefault.html</filename>
     <templarg>class AL</templarg>
     <templarg>class AR</templarg>
-    <base>ArrayHandler&lt; AL, AL &gt;</base>
+    <base>molpro::linalg::array::ArrayHandler</base>
     <member kind="function">
       <type>AL</type>
       <name>copy</name>
@@ -660,7 +660,7 @@
     <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistr.html</filename>
     <templarg>class AL</templarg>
     <templarg>class AR</templarg>
-    <base>ArrayHandler&lt; AL, AL &gt;</base>
+    <base>molpro::linalg::array::ArrayHandler</base>
     <member kind="function">
       <type>ProxyHandle</type>
       <name>lazy_handle</name>
@@ -744,7 +744,7 @@
     <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrDDisk.html</filename>
     <templarg>class AL</templarg>
     <templarg>class AR</templarg>
-    <base>ArrayHandler&lt; AL, AL &gt;</base>
+    <base>molpro::linalg::array::ArrayHandler</base>
     <member kind="function">
       <type>ProxyHandle</type>
       <name>lazy_handle</name>
@@ -924,7 +924,7 @@
     <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html</filename>
     <templarg>typename AL</templarg>
     <templarg>typename AR</templarg>
-    <base>ArrayHandler&lt; AL, AL &gt;</base>
+    <base>molpro::linalg::array::ArrayHandler</base>
     <member kind="function">
       <type></type>
       <name>ArrayHandlerIterable</name>
@@ -1266,7 +1266,7 @@
     <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerSparse.html</filename>
     <templarg>typename AL</templarg>
     <templarg>typename AR</templarg>
-    <base>ArrayHandler&lt; AL, AL &gt;</base>
+    <base>molpro::linalg::array::ArrayHandler</base>
     <member kind="function">
       <type>AL</type>
       <name>copy</name>
@@ -4970,6 +4970,39 @@
       <arglist></arglist>
     </member>
   </compound>
+  <compound kind="interface">
+    <name>iterative_solver::iterative_solver_print_statistics</name>
+    <filename>interfaceiterative__solver_1_1iterative__solver__print__statistics.html</filename>
+    <member kind="function">
+      <type>subroutine</type>
+      <name>iterative_solver_print_statistics</name>
+      <anchorfile>interfaceiterative__solver_1_1iterative__solver__print__statistics.html</anchorfile>
+      <anchor>a649f91a9adae20e0b09e8bf21b44111b</anchor>
+      <arglist>()</arglist>
+    </member>
+  </compound>
+  <compound kind="interface">
+    <name>iterative_solver::iterative_solver_value</name>
+    <filename>interfaceiterative__solver_1_1iterative__solver__value.html</filename>
+    <member kind="function">
+      <type>double precision function</type>
+      <name>iterative_solver_value</name>
+      <anchorfile>interfaceiterative__solver_1_1iterative__solver__value.html</anchorfile>
+      <anchor>ad6260f31086b2c885ccf12cc09ea1963</anchor>
+      <arglist>()</arglist>
+    </member>
+  </compound>
+  <compound kind="interface">
+    <name>iterative_solver::iterative_solver_verbosity</name>
+    <filename>interfaceiterative__solver_1_1iterative__solver__verbosity.html</filename>
+    <member kind="function">
+      <type>integer(c_int) function</type>
+      <name>iterative_solver_verbosity</name>
+      <anchorfile>interfaceiterative__solver_1_1iterative__solver__verbosity.html</anchorfile>
+      <anchor>a2be0725ddaec04c229aeeb2b2efc219c</anchor>
+      <arglist>()</arglist>
+    </member>
+  </compound>
   <compound kind="class">
     <name>molpro::linalg::itsolv::IterativeSolver</name>
     <filename>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</filename>
@@ -6449,7 +6482,7 @@
     <templarg>class R</templarg>
     <templarg>class Q</templarg>
     <templarg>class P</templarg>
-    <base>IterativeSolverTemplate&lt; LinearEigensystem, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</base>
+    <base>molpro::linalg::itsolv::IterativeSolverTemplate</base>
     <member kind="typedef">
       <type>IterativeSolverTemplate&lt; LinearEigensystem, R, Q, P &gt;</type>
       <name>SolverTemplate</name>
@@ -6713,7 +6746,7 @@
     <templarg>class R</templarg>
     <templarg>class Q</templarg>
     <templarg>class P</templarg>
-    <base>IterativeSolverTemplate&lt; LinearEigensystem, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</base>
+    <base>molpro::linalg::itsolv::IterativeSolverTemplate</base>
     <member kind="typedef">
       <type>IterativeSolverTemplate&lt; LinearEigensystem, R, Q, P &gt;</type>
       <name>SolverTemplate</name>
@@ -6944,7 +6977,7 @@
     <templarg>class R</templarg>
     <templarg>class Q</templarg>
     <templarg>class P</templarg>
-    <base>IterativeSolverTemplate&lt; LinearEquations, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</base>
+    <base>molpro::linalg::itsolv::IterativeSolverTemplate</base>
     <member kind="typedef">
       <type>IterativeSolverTemplate&lt; LinearEquations, R, Q, P &gt;</type>
       <name>SolverTemplate</name>
@@ -7154,20 +7187,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
       <anchor>aad10a92985b4c8ca6119e00096410f19</anchor>
       <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>report</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a2586061786c83f40ee932189f6a59353</anchor>
-      <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>report</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
-      <arglist>() const override</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>std::vector&lt; value_type &gt;</type>
@@ -7906,43 +7925,43 @@
       <type>procedure, pass</type>
       <name>attach</name>
       <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
-      <anchor>ad3e7f40dd9b3fa1ad2158177f35159fe</anchor>
-      <arglist></arglist>
+      <anchor>a6eff924266fd7c48a284070e9cef946f</anchor>
+      <arglist>(this, matrix, rhs)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>rhs</name>
       <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
-      <anchor>a9be92f8f1a735537f99d8ebf7ff5aa96</anchor>
-      <arglist></arglist>
+      <anchor>a593d050518459cbbb2f3f10d5c0020c5</anchor>
+      <arglist>(this, vector, instance, range)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>diagonals</name>
       <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
-      <anchor>ab0d932f2cd05b9063f260222ad4753ed</anchor>
-      <arglist></arglist>
+      <anchor>afa28489b0a1d1395d9dbc0b3d1f048aa</anchor>
+      <arglist>(this, d)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>action</name>
       <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
-      <anchor>ac59b38994c3c8d34a0a2edb6d85edca2</anchor>
-      <arglist></arglist>
+      <anchor>ae60e3a83aa3e875df2e997bdb6db39d9</anchor>
+      <arglist>(this, parameters, actions, range)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>pp_action_matrix</name>
       <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
-      <anchor>adf41b7d9e3a624890c717a9707a9759f</anchor>
-      <arglist></arglist>
+      <anchor>a045713ede19c23952cee673f543b4c85</anchor>
+      <arglist>(this)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>p_action</name>
       <anchorfile>structiterative__solver__matrix__problem_1_1matrix__problem.html</anchorfile>
-      <anchor>a36009c3afe206e116e1589314c66578c</anchor>
-      <arglist></arglist>
+      <anchor>a93387f85a5831f46c6aa7a240e91f6ac</anchor>
+      <arglist>(this, p_coefficients, actions, range)</arglist>
     </member>
     <member kind="variable">
       <type>double precision, dimension(:, :), pointer</type>
@@ -7980,12 +7999,70 @@
     </member>
   </compound>
   <compound kind="interface">
+    <name>iterative_solver::mpi_finalize</name>
+    <filename>interfaceiterative__solver_1_1mpi__finalize.html</filename>
+    <member kind="function">
+      <type>subroutine</type>
+      <name>mpi_finalize</name>
+      <anchorfile>interfaceiterative__solver_1_1mpi__finalize.html</anchorfile>
+      <anchor>a9cdb2a5b2be845f893b61955c87746ac</anchor>
+      <arglist>()</arglist>
+    </member>
+  </compound>
+  <compound kind="interface">
     <name>iterative_solver::mpi_init</name>
     <filename>interfaceiterative__solver_1_1mpi__init.html</filename>
+    <member kind="function">
+      <type>subroutine</type>
+      <name>mpi_init</name>
+      <anchorfile>interfaceiterative__solver_1_1mpi__init.html</anchorfile>
+      <anchor>ae2288903028bd8bd70dc671946edaee8</anchor>
+      <arglist>()</arglist>
+    </member>
   </compound>
   <compound kind="interface">
     <name>iterative_solver::mpi_rank_global</name>
     <filename>interfaceiterative__solver_1_1mpi__rank__global.html</filename>
+    <member kind="function">
+      <type>integer(c_int64_t) function</type>
+      <name>mpi_rank_global</name>
+      <anchorfile>interfaceiterative__solver_1_1mpi__rank__global.html</anchorfile>
+      <anchor>acb24420e0ae6b03b3028bd4b8c803064</anchor>
+      <arglist>()</arglist>
+    </member>
+  </compound>
+  <compound kind="interface">
+    <name>iterative_solver::mpi_size_global</name>
+    <filename>interfaceiterative__solver_1_1mpi__size__global.html</filename>
+    <member kind="function">
+      <type>integer(c_int64_t) function</type>
+      <name>mpi_size_global</name>
+      <anchorfile>interfaceiterative__solver_1_1mpi__size__global.html</anchorfile>
+      <anchor>a4f2a967b1abf927578a037bbea66aa22</anchor>
+      <arglist>()</arglist>
+    </member>
+  </compound>
+  <compound kind="interface">
+    <name>iterative_solver::mpicomm_global</name>
+    <filename>interfaceiterative__solver_1_1mpicomm__global.html</filename>
+    <member kind="function">
+      <type>integer(kind=mpicomm_kind) function</type>
+      <name>mpicomm_global</name>
+      <anchorfile>interfaceiterative__solver_1_1mpicomm__global.html</anchorfile>
+      <anchor>acd9d7b17425f45f2b1d202dc5832af43</anchor>
+      <arglist>()</arglist>
+    </member>
+  </compound>
+  <compound kind="interface">
+    <name>iterative_solver::mpicomm_self</name>
+    <filename>interfaceiterative__solver_1_1mpicomm__self.html</filename>
+    <member kind="function">
+      <type>integer(kind=mpicomm_kind) function</type>
+      <name>mpicomm_self</name>
+      <anchorfile>interfaceiterative__solver_1_1mpicomm__self.html</anchorfile>
+      <anchor>a9e2c78f929831d6d595f1bf87061b27e</anchor>
+      <arglist>()</arglist>
+    </member>
   </compound>
   <compound kind="struct">
     <name>molpro::linalg::itsolv::subspace::xspace::NewData</name>
@@ -8060,7 +8137,7 @@
     <templarg>class R</templarg>
     <templarg>class Q</templarg>
     <templarg>class P</templarg>
-    <base>IterativeSolverTemplate&lt; NonLinearEquations, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</base>
+    <base>molpro::linalg::itsolv::IterativeSolverTemplate</base>
     <member kind="typedef">
       <type>IterativeSolverTemplate&lt; NonLinearEquations, R, Q, P &gt;</type>
       <name>SolverTemplate</name>
@@ -8172,20 +8249,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
       <anchor>a0ccbb4f204c39eb91b6b3266b585a2a0</anchor>
       <arglist>(R &amp;parameters, R &amp;actions) override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>report</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>a2586061786c83f40ee932189f6a59353</anchor>
-      <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>report</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1NonLinearEquationsDIIS.html</anchorfile>
-      <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
-      <arglist>() const override</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -8336,7 +8399,7 @@
     <templarg>class R</templarg>
     <templarg>class Q</templarg>
     <templarg>class P</templarg>
-    <base>IterativeSolverTemplate&lt; Optimize, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</base>
+    <base>molpro::linalg::itsolv::IterativeSolverTemplate</base>
     <member kind="typedef">
       <type>IterativeSolverTemplate&lt; Optimize, R, Q, P &gt;</type>
       <name>SolverTemplate</name>
@@ -8448,20 +8511,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
       <anchor>a2d0c85e8b671a68c34fb1665aeb97aef</anchor>
       <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>report</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>a2586061786c83f40ee932189f6a59353</anchor>
-      <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>report</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html</anchorfile>
-      <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
-      <arglist>() const override</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -8648,7 +8697,7 @@
     <templarg>class R</templarg>
     <templarg>class Q</templarg>
     <templarg>class P</templarg>
-    <base>IterativeSolverTemplate&lt; Optimize, R, R, std::map&lt; size_t, typename R::value_type &gt; &gt;</base>
+    <base>molpro::linalg::itsolv::IterativeSolverTemplate</base>
     <member kind="typedef">
       <type>IterativeSolverTemplate&lt; Optimize, R, Q, P &gt;</type>
       <name>SolverTemplate</name>
@@ -8732,20 +8781,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html</anchorfile>
       <anchor>a200c4935c6e218cf3e7bf80bb70e4646</anchor>
       <arglist>(R &amp;parameters, R &amp;actions) override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>report</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html</anchorfile>
-      <anchor>a2586061786c83f40ee932189f6a59353</anchor>
-      <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>report</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html</anchorfile>
-      <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
-      <arglist>() const override</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -8982,64 +9017,64 @@
       <type>procedure, pass</type>
       <name>diagonals</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
-      <anchor>ad7241abf6805551d1dc0b2676aecd9e9</anchor>
-      <arglist></arglist>
+      <anchor>ae523975636cab68ad489ce1c6b3f80a3</anchor>
+      <arglist>(this, d)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>precondition</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
-      <anchor>ad14be3f894acae5a09e59d46b9eff8ef</anchor>
-      <arglist></arglist>
+      <anchor>afbf0076dd03e43ce0936cf61ee4a5804</anchor>
+      <arglist>(this, action, shift, diagonals, range)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>residual</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
-      <anchor>adf9c229878bfe6bac1c0e0967a94428c</anchor>
-      <arglist></arglist>
+      <anchor>a7769f19692a1ccdd9bd0f6a77ba0f5c0</anchor>
+      <arglist>(this, parameters, residuals, range)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>action</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
-      <anchor>a061ed74cbe7993c76ccee00b75218a93</anchor>
-      <arglist></arglist>
+      <anchor>aef5d3998e0abc76947ff28b12e3fbb7f</anchor>
+      <arglist>(this, parameters, actions, range)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>rhs</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
-      <anchor>a5134b99305b8e07054d0a3e7eb0c246d</anchor>
-      <arglist></arglist>
+      <anchor>ab9879a229eeaf98124af7b525035ac76</anchor>
+      <arglist>(this, vector, instance, range)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>report</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
-      <anchor>ab226e906c11bbee23169e73ca6f12280</anchor>
-      <arglist></arglist>
+      <anchor>a173e659a464db0ab8f7c2005b68ec57e</anchor>
+      <arglist>(this, iteration, verbosity, errors, value, eigenvalues)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>p_action</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
-      <anchor>a284e747ad56ea8980eaf65123547db8a</anchor>
-      <arglist></arglist>
+      <anchor>a2e4df53ca3648da3346a59f2ce934f61</anchor>
+      <arglist>(this, p_coefficients, actions, range)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>pp_action_matrix</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
-      <anchor>a92f51ae6a758597adc86539eb92e10f9</anchor>
-      <arglist></arglist>
+      <anchor>ab135c9778178c4678cc695db02c267d0</anchor>
+      <arglist>(this)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>test_parameters</name>
       <anchorfile>structiterative__solver__problem_1_1problem.html</anchorfile>
-      <anchor>a1d5d433d1e6f732f1ee2126bbaf71732</anchor>
-      <arglist></arglist>
+      <anchor>a0b61bb40dbaae301df6c6df1d16dbb47</anchor>
+      <arglist>(this, instance, parameters)</arglist>
     </member>
     <member kind="variable">
       <type>type(pspace)</type>
@@ -9395,29 +9430,29 @@
       <type>procedure, pass</type>
       <name>add_complex</name>
       <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
-      <anchor>a70bb8096bb364df84977c4e6291e99e6</anchor>
-      <arglist>=&gt; pspace_add_complex</arglist>
+      <anchor>ab20621814eb84a2ae87d3430ccad31d3</anchor>
+      <arglist>(this, indices, coefficients)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>add_simple</name>
       <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
-      <anchor>a0d239e70d6b9d6cbc8618859b4f91952</anchor>
-      <arglist>=&gt; pspace_add_simple</arglist>
+      <anchor>a5025010cc0ebf1cb601b6605b2a5b6d9</anchor>
+      <arglist>(this, indices)</arglist>
     </member>
     <member kind="function">
       <type>procedure, pass</type>
       <name>ensure</name>
       <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
-      <anchor>a49827a40cea8691669ce6918e112729e</anchor>
-      <arglist>=&gt; pspace_ensure</arglist>
+      <anchor>a6a9eaed5a4bb78ce81952c50061cf2d0</anchor>
+      <arglist>(this)</arglist>
     </member>
     <member kind="function">
       <type>final</type>
       <name>pspace_final</name>
       <anchorfile>structiterative__solver__pspace_1_1pspace.html</anchorfile>
-      <anchor>a0fb398b66fd222ec8ce0e31879d431d9</anchor>
-      <arglist></arglist>
+      <anchor>ad8d07d0a1cf4c535010505529e5382fb</anchor>
+      <arglist>(this)</arglist>
     </member>
     <member kind="variable">
       <type>integer, dimension(:), allocatable</type>
@@ -11526,8 +11561,15 @@
   <compound kind="namespace">
     <name>iterative_solver</name>
     <filename>namespaceiterative__solver.html</filename>
+    <class kind="interface">iterative_solver::iterative_solver_print_statistics</class>
+    <class kind="interface">iterative_solver::iterative_solver_value</class>
+    <class kind="interface">iterative_solver::iterative_solver_verbosity</class>
+    <class kind="interface">iterative_solver::mpi_finalize</class>
     <class kind="interface">iterative_solver::mpi_init</class>
     <class kind="interface">iterative_solver::mpi_rank_global</class>
+    <class kind="interface">iterative_solver::mpi_size_global</class>
+    <class kind="interface">iterative_solver::mpicomm_global</class>
+    <class kind="interface">iterative_solver::mpicomm_self</class>
     <member kind="function">
       <type>integer(kind=mpicomm_kind) function, public</type>
       <name>mpicomm_compute</name>
@@ -11613,25 +11655,11 @@
       <arglist></arglist>
     </member>
     <member kind="function">
-      <type>integer function, dimension(2)</type>
-      <name>iterative_solver_range</name>
-      <anchorfile>namespaceiterative__solver.html</anchorfile>
-      <anchor>a2174400663d4e6e433bf197150e423ce</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
       <type>integer function, public</type>
       <name>iterative_solver_add_vector</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
       <anchor>a70258968c6cc6e822b9008afcccd8a79</anchor>
       <arglist>(parameters, action, synchronize, value)</arglist>
-    </member>
-    <member kind="function">
-      <type>subroutine</type>
-      <name>iterative_solver_add_equations</name>
-      <anchorfile>namespaceiterative__solver.html</anchorfile>
-      <anchor>aa8b03a6e82fb1df6df6b25e5017d3714</anchor>
-      <arglist>(rhs)</arglist>
     </member>
     <member kind="function">
       <type>subroutine, public</type>
@@ -11658,8 +11686,8 @@
       <type>integer function, public</type>
       <name>iterative_solver_add_p</name>
       <anchorfile>namespaceiterative__solver.html</anchorfile>
-      <anchor>aa924c3a27ae8d7dfb5f6946c9ab55222</anchor>
-      <arglist>(nP, offsets, indices, coefficients, pp, parameters, action, fproc, synchronize)</arglist>
+      <anchor>a1948e0854dbb8578dff7c90276349d8c</anchor>
+      <arglist>(np, offsets, indices, coefficients, pp, parameters, action, fproc, synchronize)</arglist>
     </member>
     <member kind="function">
       <type>integer function, public</type>
@@ -11733,8 +11761,8 @@
       <type>subroutine</type>
       <name>attach</name>
       <anchorfile>namespaceiterative__solver__matrix__problem.html</anchorfile>
-      <anchor>a25d2e7a2cfa8e72dc78666f215609087</anchor>
-      <arglist>(this, matrix, RHS)</arglist>
+      <anchor>a1431e70fa48ca66516536af8d9b185fb</anchor>
+      <arglist>(this, matrix, rhs)</arglist>
     </member>
   </compound>
   <compound kind="namespace">
@@ -11760,12 +11788,6 @@
       <anchor>a2783f91d094f117bfdabfb21b3d97864</anchor>
       <arglist>(this)</arglist>
     </member>
-  </compound>
-  <compound kind="namespace">
-    <name>molpro</name>
-    <filename>namespacemolpro.html</filename>
-    <namespace>molpro::linalg</namespace>
-    <namespace>molpro::profiler</namespace>
   </compound>
   <compound kind="namespace">
     <name>molpro::linalg</name>
@@ -12158,14 +12180,14 @@
       <anchor>a922d235e8c5336c4ef99bd5f966bb896</anchor>
       <arglist>(const std::list&lt; std::tuple&lt; X, Y, Z &gt; &gt; &amp;reg, EqualX equal_x, EqualY equal_y, EqualZ equal_z)</arglist>
     </member>
-    <member kind="function">
+    <member kind="function" protection="protected">
       <type>std::list&lt; std::pair&lt; DistrArray::index_type, DistrArray::value_type &gt; &gt;</type>
       <name>extrema</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
       <anchor>ae6526259fb284a6ef4562a23fd7d2e54</anchor>
       <arglist>(const DistrArray &amp;x, int n)</arglist>
     </member>
-    <member kind="function">
+    <member kind="function" protection="protected">
       <type>std::map&lt; size_t, double &gt;</type>
       <name>select_max_dot_broadcast</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
@@ -13460,19 +13482,15 @@
       <arglist>(std::vector&lt; int &gt; indices, Container &amp;params)</arglist>
     </member>
   </compound>
-  <compound kind="namespace">
-    <name>molpro::profiler</name>
-    <filename>namespacemolpro_1_1profiler.html</filename>
-  </compound>
   <compound kind="page">
-    <name>md____w_iterative_solver_iterative_solver_doc_LibraryDesign</name>
+    <name>md__2____w_2iterative-solver_2iterative-solver_2doc_2LibraryDesign</name>
     <title>Library Design</title>
-    <filename>md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html</filename>
+    <filename>md__2____w_2iterative-solver_2iterative-solver_2doc_2LibraryDesign.html</filename>
   </compound>
   <compound kind="page">
-    <name>md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit</name>
+    <name>md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit</name>
     <title>Consistency audit playbook</title>
-    <filename>md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html</filename>
+    <filename>md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html</filename>
   </compound>
   <compound kind="page">
     <name>TopicIterativeSolver</name>
@@ -13498,6 +13516,6 @@
     <name>index</name>
     <title>iterative-solver</title>
     <filename>index.html</filename>
-    <docanchor file="index.html">md____w_iterative_solver_iterative_solver_README</docanchor>
+    <docanchor file="index.html" title="iterative-solver">md__2____w_2iterative-solver_2iterative-solver_2README</docanchor>
   </compound>
 </tagfile>

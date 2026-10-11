@@ -1,4 +1,5 @@
 <map id="molpro::linalg::itsolv::log::ComplexRootsDavidson&lt; value_type &gt;" name="molpro::linalg::itsolv::log::ComplexRootsDavidson&lt; value_type &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="304,20,519,76"/>
-<area shape="rect" id="node2" href="$structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html" title=" " alt="" coords="5,5,256,91"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="304,20,519,75"/>
+<area shape="rect" id="Node000002" href="$structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html" title=" " alt="" coords="5,5,256,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="270,45,304,45,304,50,270,50"/>
 </map>

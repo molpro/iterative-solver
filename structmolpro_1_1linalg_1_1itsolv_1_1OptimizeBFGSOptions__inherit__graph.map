@@ -1,5 +1,7 @@
 <map id="molpro::linalg::itsolv::OptimizeBFGSOptions" name="molpro::linalg::itsolv::OptimizeBFGSOptions">
-<area shape="rect" id="node1" title="Allows setting and getting of options for OptimizeBFGS instance via IterativeSolver base class." alt="" coords="5,184,180,225"/>
-<area shape="rect" id="node2" href="$structmolpro_1_1linalg_1_1itsolv_1_1OptimizeOptions.html" title=" " alt="" coords="15,95,171,136"/>
-<area shape="rect" id="node3" href="$structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers." alt="" coords="15,5,171,47"/>
+<area shape="rect" id="Node000001" title="Allows setting and getting of options for OptimizeBFGS instance via IterativeSolver base class." alt="" coords="5,181,180,221"/>
+<area shape="rect" id="Node000002" href="$structmolpro_1_1linalg_1_1itsolv_1_1OptimizeOptions.html" title=" " alt="" coords="15,93,171,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,147,95,181,90,181,90,147"/>
+<area shape="rect" id="Node000003" href="$structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers." alt="" coords="15,5,171,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,59,95,93,90,93,90,59"/>
 </map>

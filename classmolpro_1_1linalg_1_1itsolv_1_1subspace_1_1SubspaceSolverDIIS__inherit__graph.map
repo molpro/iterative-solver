@@ -1,4 +1,5 @@
 <map id="molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;" name="molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;">
-<area shape="rect" id="node1" title="Solves non&#45;linear equations using DIIS." alt="" coords="5,109,233,165"/>
-<area shape="rect" id="node2" href="$structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html" title="Manages solution of the subspace problem and storage of those solutions." alt="" coords="16,5,223,61"/>
+<area shape="rect" id="Node000001" title="Solves non&#45;linear equations using DIIS." alt="" coords="5,108,233,163"/>
+<area shape="rect" id="Node000002" href="$structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html" title="Manages solution of the subspace problem and storage of those solutions." alt="" coords="16,5,223,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,74,122,108,117,108,117,74"/>
 </map>

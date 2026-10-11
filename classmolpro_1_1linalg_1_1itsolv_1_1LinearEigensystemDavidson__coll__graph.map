@@ -1,7 +1,7 @@
 <map id="molpro::linalg::itsolv::LinearEigensystemDavidson&lt; R, Q, P &gt;" name="molpro::linalg::itsolv::LinearEigensystemDavidson&lt; R, Q, P &gt;">
-<area shape="rect" id="node1" title="One specific implementation of LinearEigensystem using Davidson&#39;s algorithm with modifications to man..." alt="" coords="953,91,1168,147"/>
-<area shape="rect" id="node2" href="$classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html" title=" " alt="" coords="561,5,772,91"/>
-<area shape="rect" id="node3" href="$classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem.html" title=" " alt="" coords="281,13,508,83"/>
-<area shape="rect" id="node4" href="$classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html" title=" " alt="" coords="5,13,232,83"/>
-<area shape="rect" id="node5" href="$classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html" title=" " alt="" coords="557,115,776,157"/>
+<area shape="rect" id="Node000001" title="One specific implementation of LinearEigensystem using Davidson&#39;s algorithm with modifications to man..." alt="" coords="401,41,616,96"/>
+<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html" title="Implements IterativeSolver interface that is common to all solvers." alt="" coords="21,5,208,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,40,401,56,401,62,222,45"/>
+<area shape="rect" id="Node000003" href="$classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html" title=" " alt="" coords="5,85,224,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,91,401,76,401,81,239,96"/>
 </map>

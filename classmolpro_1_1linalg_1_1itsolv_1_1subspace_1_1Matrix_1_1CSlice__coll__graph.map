@@ -1,4 +1,5 @@
 <map id="molpro::linalg::itsolv::subspace::Matrix&lt; T &gt;::CSlice" name="molpro::linalg::itsolv::subspace::Matrix&lt; T &gt;::CSlice">
-<area shape="rect" id="node1" title="Constant slice that cannot be assigned to." alt="" coords="5,124,169,180"/>
-<area shape="rect" id="node2" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html" title="Proxy mapping to a rectangular slice of the matrix data. Implements simple assignment." alt="" coords="5,5,169,61"/>
+<area shape="rect" id="Node000001" title="Constant slice that cannot be assigned to." alt="" coords="5,123,169,177"/>
+<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html" title="Proxy mapping to a rectangular slice of the matrix data. Implements simple assignment." alt="" coords="5,5,169,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,74,90,122,85,122,85,74"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="molpro::linalg::itsolv::interpolate_detail::Morse_problem&lt; value_type &gt;" name="molpro::linalg::itsolv::interpolate_detail::Morse_problem&lt; value_type &gt;">
-<area shape="rect" id="node1" title="Fits the four Morse parameters to the two defining points." alt="" coords="5,109,231,165"/>
-<area shape="rect" id="node2" href="$classmolpro_1_1linalg_1_1itsolv_1_1Problem.html" title=" " alt="" coords="34,5,202,61"/>
+<area shape="rect" id="Node000001" title="Fits the four Morse parameters to the two defining points." alt="" coords="5,108,231,163"/>
+<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1itsolv_1_1Problem.html" title=" " alt="" coords="34,5,202,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,74,121,108,115,108,115,74"/>
 </map>

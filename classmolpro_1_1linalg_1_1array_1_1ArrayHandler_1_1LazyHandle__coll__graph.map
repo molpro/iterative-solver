@@ -1,6 +1,9 @@
 <map id="molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;::LazyHandle" name="molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;::LazyHandle">
-<area shape="rect" id="node1" title="Registers operations for lazy evaluation. Evaluation is triggered by calling eval() or on destruction..." alt="" coords="351,115,524,171"/>
-<area shape="rect" id="node2" href="$structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html" title=" " alt="" coords="5,5,229,76"/>
-<area shape="rect" id="node3" href="$structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html" title=" " alt="" coords="19,101,215,186"/>
-<area shape="rect" id="node4" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html" title=" " alt="" coords="23,211,211,252"/>
+<area shape="rect" id="Node000001" title="Registers operations for lazy evaluation. Evaluation is triggered by calling eval() or on destruction..." alt="" coords="351,114,524,169"/>
+<area shape="rect" id="Node000002" href="$structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html" title=" " alt="" coords="5,5,229,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="241,76,351,111,350,117,239,81"/>
+<area shape="rect" id="Node000003" href="$structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html" title=" " alt="" coords="19,99,215,183"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,139,350,139,350,144,229,144"/>
+<area shape="rect" id="Node000004" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html" title=" " alt="" coords="23,208,211,248"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="205,202,350,162,351,167,206,207"/>
 </map>

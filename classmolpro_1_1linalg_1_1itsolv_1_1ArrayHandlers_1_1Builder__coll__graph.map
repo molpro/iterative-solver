@@ -1,11 +1,32 @@
 <map id="molpro::linalg::itsolv::ArrayHandlers&lt; R, Q, P &gt;::Builder" name="molpro::linalg::itsolv::ArrayHandlers&lt; R, Q, P &gt;::Builder">
-<area shape="rect" id="node1" title=" " alt="" coords="849,220,1019,276"/>
-<area shape="rect" id="node2" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="5,197,209,253"/>
-<area shape="rect" id="node3" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html" title=" " alt="" coords="307,243,476,299"/>
-<area shape="rect" id="node4" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="573,60,780,116"/>
-<area shape="rect" id="node5" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="575,140,778,196"/>
-<area shape="rect" id="node6" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="574,220,779,276"/>
-<area shape="rect" id="node7" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="575,300,778,356"/>
-<area shape="rect" id="node8" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="574,380,779,436"/>
-<area shape="rect" id="node9" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="575,469,779,525"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="849,219,1019,274"/>
+<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="5,197,209,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,187,206,154,271,117,346,80,429,47,517,22,607,11,652,12,696,17,739,29,781,46,808,62,832,82,872,128,903,177,924,218,919,220,898,179,868,131,828,85,805,66,779,50,738,34,695,23,651,17,607,17,518,28,430,52,348,84,273,122,209,159,159,191"/>
+<area shape="rect" id="Node000003" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html" title=" " alt="" coords="307,242,476,297"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="223,240,307,253,306,259,222,245"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="293,276,233,271,173,254,174,249,234,265,293,271"/>
+<area shape="rect" id="Node000004" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="573,61,780,115"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="407,228,442,166,468,136,499,111,534,95,572,86,574,91,536,100,501,116,472,140,447,169,411,231"/>
+<area shape="rect" id="Node000005" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="575,141,778,195"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="431,231,463,208,499,190,536,178,575,171,576,176,538,183,501,194,466,213,434,235"/>
+<area shape="rect" id="Node000006" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="574,219,779,274"/>
+<area shape="poly" id="edge9_Node000006_Node000003" title=" " alt="" coords="489,252,500,251,574,246,574,251,500,256,490,257"/>
+<area shape="rect" id="Node000007" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="575,298,778,353"/>
+<area shape="poly" id="edge11_Node000007_Node000003" title=" " alt="" coords="490,286,575,303,574,308,489,291"/>
+<area shape="rect" id="Node000008" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="574,378,779,433"/>
+<area shape="poly" id="edge13_Node000008_Node000003" title=" " alt="" coords="420,307,455,348,477,368,501,383,537,396,574,403,573,409,535,401,499,388,474,372,451,352,416,310"/>
+<area shape="rect" id="Node000009" href="$classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html" title=" " alt="" coords="575,469,779,523"/>
+<area shape="poly" id="edge15_Node000009_Node000003" title=" " alt="" coords="404,310,416,351,436,397,464,441,482,460,501,476,536,493,575,500,574,505,535,498,499,481,478,464,460,444,431,399,411,353,399,311"/>
+<area shape="poly" id="edge16_Node000001_Node000004" title=" " alt="" coords="769,119,781,126,849,171,904,217,901,221,846,176,779,130,766,124"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="575,123,537,140,502,161,454,202,416,243,412,240,450,198,498,156,535,135,573,118"/>
+<area shape="poly" id="edge17_Node000001_Node000005" title=" " alt="" coords="781,197,850,218,848,223,779,202"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="584,202,501,232,467,244,465,239,499,227,582,197"/>
+<area shape="poly" id="edge18_Node000001_Node000006" title=" " alt="" coords="793,244,849,244,849,249,793,249"/>
+<area shape="poly" id="edge8_Node000003_Node000006" title=" " alt="" coords="561,270,550,271,476,274,476,268,549,265,560,264"/>
+<area shape="poly" id="edge19_Node000001_Node000007" title=" " alt="" coords="779,291,848,270,850,275,781,296"/>
+<area shape="poly" id="edge10_Node000003_Node000007" title=" " alt="" coords="601,359,551,368,525,367,499,361,474,349,451,333,414,299,417,295,454,329,477,345,501,356,525,362,550,363,600,354"/>
+<area shape="poly" id="edge20_Node000001_Node000008" title=" " alt="" coords="766,370,779,363,846,318,901,272,904,277,849,322,781,368,769,374"/>
+<area shape="poly" id="edge12_Node000003_Node000008" title=" " alt="" coords="622,441,593,454,561,461,529,462,499,452,478,437,460,419,431,378,410,335,397,298,402,296,415,333,435,375,464,416,481,433,501,447,530,456,560,456,591,448,620,437"/>
+<area shape="poly" id="edge21_Node000001_Node000009" title=" " alt="" coords="754,460,778,443,822,401,860,355,915,273,919,276,864,358,826,405,782,447,758,464"/>
+<area shape="poly" id="edge14_Node000003_Node000009" title=" " alt="" coords="624,532,594,546,561,554,529,554,499,542,470,518,447,488,429,455,415,420,398,352,391,297,397,297,403,351,420,418,434,452,452,485,474,514,501,538,530,549,561,549,592,541,621,528"/>
 </map>

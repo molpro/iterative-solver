@@ -1,8 +1,13 @@
 <map id="molpro::linalg::itsolv::subspace::ISubspaceSolver&lt; RT, QT, PT &gt;" name="molpro::linalg::itsolv::subspace::ISubspaceSolver&lt; RT, QT, PT &gt;">
-<area shape="rect" id="node1" title="Manages solution of the subspace problem and storage of those solutions." alt="" coords="5,125,212,181"/>
-<area shape="rect" id="node2" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html" title="Solves non&#45;linear equations using DIIS." alt="" coords="260,5,488,61"/>
-<area shape="rect" id="node3" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html" title="Solves subspace problem for linear eigenvalues and system of linear equations." alt="" coords="263,85,485,141"/>
-<area shape="rect" id="node5" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html" title="Solves subspace problem for minimisation using the Steepest Descent algorithm." alt="" coords="261,165,487,221"/>
-<area shape="rect" id="node6" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html" title="Solves subspace problem for minimisation using the Steepest Descent algorithm." alt="" coords="261,245,487,301"/>
-<area shape="rect" id="node4" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html" title=" " alt="" coords="536,85,771,141"/>
+<area shape="rect" id="Node000001" title="Manages solution of the subspace problem and storage of those solutions." alt="" coords="5,124,212,179"/>
+<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html" title="Solves non&#45;linear equations using DIIS." alt="" coords="260,5,488,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,115,259,69,287,58,289,63,261,74,170,120"/>
+<area shape="rect" id="Node000003" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html" title="Solves subspace problem for linear eigenvalues and system of linear equations." alt="" coords="263,84,485,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,131,263,125,264,131,226,136"/>
+<area shape="rect" id="Node000005" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html" title="Solves subspace problem for minimisation using the Steepest Descent algorithm." alt="" coords="261,163,487,217"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="226,166,261,171,261,176,225,171"/>
+<area shape="rect" id="Node000006" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html" title="Solves subspace problem for minimisation using the Steepest Descent algorithm." alt="" coords="261,241,487,296"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="172,183,261,226,292,239,290,244,259,231,170,188"/>
+<area shape="rect" id="Node000004" href="$classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html" title=" " alt="" coords="536,84,771,139"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="498,109,536,109,536,114,498,114"/>
 </map>

@@ -8,10 +8,13 @@ var searchData=
   ['update_5fdspace_5faction_5fdata_5',['update_dspace_action_data',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace.html#a683d076ddc577aecc5301b0621316731',1,'molpro::linalg::itsolv::subspace::xspace']]],
   ['update_5fdspace_5foverlap_5fdata_6',['update_dspace_overlap_data',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace.html#ac061e9c07544907d0c7dbee4e40812e2',1,'molpro::linalg::itsolv::subspace::xspace']]],
   ['update_5ferrors_7',['update_errors',['../namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a83f1c4849c0c4a40c4adad952fee9da7',1,'molpro::linalg::itsolv::detail']]],
-  ['update_5fpspace_8',['update_pspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a64639a8ee6c512fcc860875eb76cede7',1,'molpro::linalg::itsolv::subspace::XSpace::update_pspace()'],['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a90ffba67ffb0262cf996e73d0cd95354',1,'molpro::linalg::itsolv::subspace::IXSpace::update_pspace()']]],
+  ['update_5fpspace_8',['update_pspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a90ffba67ffb0262cf996e73d0cd95354',1,'molpro::linalg::itsolv::subspace::IXSpace::update_pspace()'],['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a64639a8ee6c512fcc860875eb76cede7',1,'molpro::linalg::itsolv::subspace::XSpace::update_pspace(const CVecRef&lt; P &gt; &amp;params, const array::Span&lt; value_type &gt; &amp;pp_action_matrix) override']]],
   ['update_5fqspace_9',['update_qspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a2dcb242fbc0afca00d2b44f666702932',1,'molpro::linalg::itsolv::subspace::XSpace::update_qspace()'],['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aea25a4672a5baaeba2fcb36ad9b09b2e',1,'molpro::linalg::itsolv::subspace::IXSpace::update_qspace()']]],
   ['update_5fqspace_5fdata_10',['update_qspace_data',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace.html#a7e056a64c3ab82ab660b6141a53a3481',1,'molpro::linalg::itsolv::subspace::xspace']]],
   ['update_5frhs_5fwith_5fpspace_11',['update_rhs_with_pspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ac92c8b77befb04daa22114fea51b0453',1,'molpro::linalg::itsolv::subspace::XSpace']]],
   ['upl_12',['upl',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html#a0769807933c25ef3dffa52ccfd16b832',1,'molpro::linalg::itsolv::subspace::Matrix::Slice']]],
-  ['uses_5ffixed_5farguments_13',['uses_fixed_arguments',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html#ac342a2a8ab55f014afe878af52e9f34c',1,'molpro::linalg::itsolv::log::ContextBase']]]
+  ['usage_13',['Usage',['../index.html#autotoc_md10',1,'']]],
+  ['use_20cases_14',['Use cases',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#autotoc_md7',1,'']]],
+  ['uses_5ffixed_5farguments_15',['uses_fixed_arguments',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html#ac342a2a8ab55f014afe878af52e9f34c',1,'molpro::linalg::itsolv::log::ContextBase']]],
+  ['using_20the_20factory_16',['Using the factory',['../classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html#autotoc_md6',1,'']]]
 ];

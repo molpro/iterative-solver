@@ -13,8 +13,6 @@ var classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS =
     [ "get_max_size_qspace", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#ab170d17ad464245443decb12d558b1d9", null ],
     [ "get_options", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a3310a0da2e529678642d9ff058fc7eca", null ],
     [ "nonlinear", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a33d00ccc2b14f572705f881f99e44b41", null ],
-    [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#ab4748964a82d882be6cfebd7c158511e", null ],
-    [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a2586061786c83f40ee932189f6a59353", null ],
     [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a2d0c85e8b671a68c34fb1665aeb97aef", null ],
     [ "set_max_size_qspace", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a99fca8a245026032ba0f92784883df1e", null ],
     [ "set_options", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a6e35691eacd5524090e51113a4965520", null ],

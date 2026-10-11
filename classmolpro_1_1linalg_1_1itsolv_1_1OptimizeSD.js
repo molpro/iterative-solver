@@ -10,8 +10,6 @@ var classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD =
     [ "end_iteration", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a713f270c65bfedc5aa91fe096aa25d79", null ],
     [ "get_options", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a8fb8626f4484de8f65d884ac0ce7bd12", null ],
     [ "nonlinear", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a5471155b5ff63e8206823da6afe27ebe", null ],
-    [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#ab4748964a82d882be6cfebd7c158511e", null ],
-    [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a2586061786c83f40ee932189f6a59353", null ],
     [ "report", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a3a45ba4bb4649f7d4c5036b288e8060b", null ],
     [ "set_options", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#ad55d168c0b41759afc65e772fb28f88d", null ],
     [ "set_value_errors", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a59cfae007796b412274f8a6b1761ce28", null ]

@@ -37,23 +37,23 @@ var NAVTREE =
     [ "Contributing", "index.html#autotoc_md16", null ],
     [ "Citing", "index.html#autotoc_md17", null ],
     [ "List of Contributors", "index.html#autotoc_md18", null ],
-    [ "Library Design", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html", [
-      [ "Iterative solvers", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md19", [
-        [ "Solver interfaces and implementations", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md20", null ],
-        [ "Dependency inversion mechanism", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md21", null ],
-        [ "Setting solver Options", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md22", null ],
-        [ "Solver Factory", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md23", null ]
+    [ "Library Design", "md__2____w_2iterative-solver_2iterative-solver_2doc_2LibraryDesign.html", [
+      [ "Iterative solvers", "md__2____w_2iterative-solver_2iterative-solver_2doc_2LibraryDesign.html#autotoc_md19", [
+        [ "Solver interfaces and implementations", "md__2____w_2iterative-solver_2iterative-solver_2doc_2LibraryDesign.html#autotoc_md20", null ],
+        [ "Dependency inversion mechanism", "md__2____w_2iterative-solver_2iterative-solver_2doc_2LibraryDesign.html#autotoc_md21", null ],
+        [ "Setting solver Options", "md__2____w_2iterative-solver_2iterative-solver_2doc_2LibraryDesign.html#autotoc_md22", null ],
+        [ "Solver Factory", "md__2____w_2iterative-solver_2iterative-solver_2doc_2LibraryDesign.html#autotoc_md23", null ]
       ] ],
-      [ "Distributed Arrays", "md____w_iterative_solver_iterative_solver_doc_LibraryDesign.html#autotoc_md24", null ]
+      [ "Distributed Arrays", "md__2____w_2iterative-solver_2iterative-solver_2doc_2LibraryDesign.html#autotoc_md24", null ]
     ] ],
-    [ "Consistency audit playbook", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html", [
-      [ "Setup", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md25", null ],
-      [ "The shape of a pass", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md26", null ],
-      [ "How to drive a single pass", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md27", null ],
-      [ "Lessons from the first round", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md28", null ],
-      [ "Lessons from later rounds", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md29", null ],
-      [ "Suggested PR shape", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md30", null ],
-      [ "What to expect from the LLM", "md____w_iterative_solver_iterative_solver_doc_contributing_ConsistencyAudit.html#autotoc_md31", null ]
+    [ "Consistency audit playbook", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html", [
+      [ "Setup", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md25", null ],
+      [ "The shape of a pass", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md26", null ],
+      [ "How to drive a single pass", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md27", null ],
+      [ "Lessons from the first round", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md28", null ],
+      [ "Lessons from later rounds", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md29", null ],
+      [ "Suggested PR shape", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md30", null ],
+      [ "What to expect from the LLM", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md31", null ]
     ] ],
     [ "Iterative solvers", "TopicIterativeSolver.html", null ],
     [ "Distributed arrays", "TopicDistrArrays.html", null ],
@@ -84,14 +84,15 @@ var NAVTREEINDEX =
 "classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html#a1569b152a585cdccc81e1ab84508d1b8",
 "classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html#a34f81a70e437c714c5df45be102ff85b",
 "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aa5ed89e3da36e7f9e4b065213826e703",
-"classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a913906c3d2ef808a309592d0e88a271c",
-"classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#a27b03a2d4922c913b5c7725b2fe8b8e3",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html#a155b5568d037955ce1be7c7bd3bf4d8d",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a0863cf8b61514cd6d4c6bcb691f90df7",
-"namespacemembers.html",
-"namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cda6adf97f83acf6453d4a6a4b1070f3754",
-"structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a48eba3b2150ec0560bd9501e474ad0ab",
-"structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#af9d6d357bf7a662cbdd2d8fb7941a8c6"
+"classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#aa18de07639b2a59f4aab0fa00b3336ed",
+"classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#aebb756f173cea19c6e499f75b695c98f",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html#a61244ceb1487474bd1fb855102b522c4",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a3e5656317e00535ceca0becaa1179fcd",
+"namespaceiterative__solver.html#a2890fe920d167483bcac382af12afe5d",
+"namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a83f1c4849c0c4a40c4adad952fee9da7",
+"structmolpro_1_1linalg_1_1array_1_1default__handler_3_01T_00_01S_00_01ArrayFamily_1_1Distributed68a38ca64bb82db94f7881986d11feac.html",
+"structmolpro_1_1linalg_1_1itsolv_1_1OptimizeSDOptions.html#a13e6320fbbf9725456145b536a84f1a0",
+"structmolpro_1_1linalg_1_1real__type.html#a9a5b61e0c546677e9c21a51288e6a8c6"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

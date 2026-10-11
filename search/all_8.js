@@ -1,16 +1,19 @@
 var searchData=
 [
   ['h_0',['H',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195ac1d9f50f86825a1a2302ec2449c17196',1,'molpro::linalg::itsolv::subspace']]],
-  ['handle_1',['handle',['https://molpro.github.io/profiler/structprofilerf_1_1profiler.html#ab0fc2e7b48fa188b792f578e863e2afd',1,'profilerf::profiler::handle()'],['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html#ae85e4139a2e2212cb2eefe6a0d978919',1,'molpro::linalg::itsolv::log::LogHandler::handle(const Logger &amp;logger, Severity severity, Verbosity verbosity, std::string_view message, Ts...args)=delete'],['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html#a81e3ea5cdfe2c1fb17b21b9ae74c049b',1,'molpro::linalg::itsolv::log::LogHandler::handle(Severity severity, Verbosity verbosity, std::string_view message, Ts...args)=delete']]],
+  ['handle_1',['handle',['https://molpro.github.io/profiler/structprofilerf_1_1profiler.html#ab0fc2e7b48fa188b792f578e863e2afd',1,'profilerf::profiler::handle'],['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html#ae85e4139a2e2212cb2eefe6a0d978919',1,'molpro::linalg::itsolv::log::LogHandler::handle(const Logger &amp;logger, Severity severity, Verbosity verbosity, std::string_view message, Ts...args)=delete'],['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html#a81e3ea5cdfe2c1fb17b21b9ae74c049b',1,'molpro::linalg::itsolv::log::LogHandler::handle(Severity severity, Verbosity verbosity, std::string_view message, Ts...args)=delete']]],
   ['handler_2',['handler',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html#ad3c2a9e4ce0b39b68faf7c96c11ec1b1',1,'molpro::linalg::itsolv::ArrayHandlers::Builder::Proxy']]],
-  ['handles_3',['handles',['../structmolpro_1_1linalg_1_1array_1_1util_1_1TempHandle.html#a63da5f203df8218f905857e3f1eb4916',1,'molpro::linalg::array::util::TempHandle']]],
-  ['has_5fiterator_4',['has_iterator',['../structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html',1,'molpro::linalg::itsolv']]],
-  ['has_5flapack_5fkernel_5',['has_lapack_kernel',['../structmolpro_1_1linalg_1_1itsolv_1_1has__lapack__kernel.html',1,'molpro::linalg::itsolv']]],
-  ['has_5flapack_5fkernel_5fv_6',['has_lapack_kernel_v',['../namespacemolpro_1_1linalg_1_1itsolv.html#a43a917ac5c9b4d26e795a437be1a6807',1,'molpro::linalg::itsolv']]],
-  ['has_5fmapped_5ftype_7',['has_mapped_type',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type.html',1,'molpro::linalg::array']]],
-  ['has_5fmapped_5ftype_3c_20a_2c_20void_5ft_3c_20typename_20a_3a_3amapped_5ftype_20_3e_20_3e_8',['has_mapped_type&lt; A, void_t&lt; typename A::mapped_type &gt; &gt;',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type_3_01A_00_01void__t_3_01typename_01A_1_1mapped__type_01_4_01_4.html',1,'molpro::linalg::array']]],
-  ['has_5fmapped_5ftype_5fv_9',['has_mapped_type_v',['../namespacemolpro_1_1linalg_1_1array.html#a13f02b59213de0924418fca64e40acf3',1,'molpro::linalg::array']]],
-  ['has_5fparent_10',['has_parent',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1dotgraph.html#a3642a4c9eb27db3c082b371b3edfed75',1,'molpro::profiler::dotgraph']]],
-  ['hbar_11',['Hbar',['../structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#ac9438db8a90e07537c654fd1d5ee2d5d',1,'molpro::linalg::itsolv::detail::orthogonalised_subspace']]],
-  ['hermiticity_12',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a521a7db340a0a9241725c1e62012b9c1',1,'molpro::linalg::itsolv::DavidsonOptions']]]
+  ['handlers_3',['handlers',['../TopicArrayHandlers.html',1,'Array handlers'],['../index.html#autotoc_md13',1,'Containers and array handlers']]],
+  ['handles_4',['handles',['../structmolpro_1_1linalg_1_1array_1_1util_1_1TempHandle.html#a63da5f203df8218f905857e3f1eb4916',1,'molpro::linalg::array::util::TempHandle']]],
+  ['has_5fiterator_5',['has_iterator',['../structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html',1,'molpro::linalg::itsolv']]],
+  ['has_5flapack_5fkernel_6',['has_lapack_kernel',['../structmolpro_1_1linalg_1_1itsolv_1_1has__lapack__kernel.html',1,'molpro::linalg::itsolv']]],
+  ['has_5flapack_5fkernel_5fv_7',['has_lapack_kernel_v',['../namespacemolpro_1_1linalg_1_1itsolv.html#a43a917ac5c9b4d26e795a437be1a6807',1,'molpro::linalg::itsolv']]],
+  ['has_5fmapped_5ftype_8',['has_mapped_type',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type.html',1,'molpro::linalg::array']]],
+  ['has_5fmapped_5ftype_3c_20a_2c_20void_5ft_3c_20typename_20a_3a_3amapped_5ftype_20_3e_20_3e_9',['has_mapped_type&lt; A, void_t&lt; typename A::mapped_type &gt; &gt;',['../structmolpro_1_1linalg_1_1array_1_1has__mapped__type_3_01A_00_01void__t_3_01typename_01A_1_1mapped__type_01_4_01_4.html',1,'molpro::linalg::array']]],
+  ['has_5fmapped_5ftype_5fv_10',['has_mapped_type_v',['../namespacemolpro_1_1linalg_1_1array.html#a13f02b59213de0924418fca64e40acf3',1,'molpro::linalg::array']]],
+  ['has_5fparent_11',['has_parent',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1dotgraph.html#a3642a4c9eb27db3c082b371b3edfed75',1,'molpro::profiler::dotgraph']]],
+  ['hbar_12',['Hbar',['../structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#ac9438db8a90e07537c654fd1d5ee2d5d',1,'molpro::linalg::itsolv::detail::orthogonalised_subspace']]],
+  ['hermiticity_13',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a521a7db340a0a9241725c1e62012b9c1',1,'molpro::linalg::itsolv::DavidsonOptions']]],
+  ['hessian_14',['hessian',['../todo.html#_todo000005',1,'Augmented Hessian'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#autotoc_md4',1,'Augmented Hessian']]],
+  ['how_20to_20drive_20a_20single_20pass_15',['How to drive a single pass',['../md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md27',1,'']]]
 ];

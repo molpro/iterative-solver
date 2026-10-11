@@ -1,8 +1,15 @@
 var annotated =
 [
     [ "iterative_solver", "namespaceiterative__solver.html", [
-      [ "mpi_init", "interfaceiterative__solver_1_1mpi__init.html", null ],
-      [ "mpi_rank_global", "interfaceiterative__solver_1_1mpi__rank__global.html", null ]
+      [ "iterative_solver_print_statistics", "interfaceiterative__solver_1_1iterative__solver__print__statistics.html", "interfaceiterative__solver_1_1iterative__solver__print__statistics" ],
+      [ "iterative_solver_value", "interfaceiterative__solver_1_1iterative__solver__value.html", "interfaceiterative__solver_1_1iterative__solver__value" ],
+      [ "iterative_solver_verbosity", "interfaceiterative__solver_1_1iterative__solver__verbosity.html", "interfaceiterative__solver_1_1iterative__solver__verbosity" ],
+      [ "mpi_finalize", "interfaceiterative__solver_1_1mpi__finalize.html", "interfaceiterative__solver_1_1mpi__finalize" ],
+      [ "mpi_init", "interfaceiterative__solver_1_1mpi__init.html", "interfaceiterative__solver_1_1mpi__init" ],
+      [ "mpi_rank_global", "interfaceiterative__solver_1_1mpi__rank__global.html", "interfaceiterative__solver_1_1mpi__rank__global" ],
+      [ "mpi_size_global", "interfaceiterative__solver_1_1mpi__size__global.html", "interfaceiterative__solver_1_1mpi__size__global" ],
+      [ "mpicomm_global", "interfaceiterative__solver_1_1mpicomm__global.html", "interfaceiterative__solver_1_1mpicomm__global" ],
+      [ "mpicomm_self", "interfaceiterative__solver_1_1mpicomm__self.html", "interfaceiterative__solver_1_1mpicomm__self" ]
     ] ],
     [ "iterative_solver_matrix_problem", "namespaceiterative__solver__matrix__problem.html", [
       [ "matrix_problem", "structiterative__solver__matrix__problem_1_1matrix__problem.html", "structiterative__solver__matrix__problem_1_1matrix__problem" ]
@@ -13,7 +20,7 @@ var annotated =
     [ "iterative_solver_pspace", "namespaceiterative__solver__pspace.html", [
       [ "pspace", "structiterative__solver__pspace_1_1pspace.html", "structiterative__solver__pspace_1_1pspace" ]
     ] ],
-    [ "molpro", "namespacemolpro.html", [
+    [ "molpro", null, [
       [ "linalg", "namespacemolpro_1_1linalg.html", [
         [ "array", "namespacemolpro_1_1linalg_1_1array.html", [
           [ "detail", "namespacemolpro_1_1linalg_1_1array_1_1detail.html", [
