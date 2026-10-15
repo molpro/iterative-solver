@@ -1474,7 +1474,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Eigen-decomposition of a real symmetric / complex hermitian matrix. </p>
-<p>Dispatches to ?syev/?heev for the scalar types LAPACK covers and to Eigen::SelfAdjointEigenSolver for every other precision; both branches produce the same layout and ordering.</p>
+<p>Dispatches to ?syevd/?heevd for the scalar types LAPACK covers and to Eigen::SelfAdjointEigenSolver for every other precision; both branches produce the same layout and ordering.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">matrix</td><td>the input matrix (will not be altered). Must be square, dimension*dimension elements long. Only the lower triangle in column-major order is referenced. </td></tr>
