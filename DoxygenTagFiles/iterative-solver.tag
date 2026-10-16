@@ -12524,8 +12524,8 @@
       <type>void</type>
       <name>eigenproblem</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a1f646d60361d12deebaa6b83c6fe2494</anchor>
-      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, real_type_t&lt; value_type &gt; svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *imag_eval_parts=nullptr)</arglist>
+      <anchor>adce93acdc18222a6760538ca8ed4973d</anchor>
+      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, real_type_t&lt; value_type &gt; svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *imag_eval_parts=nullptr, size_t nroots=std::numeric_limits&lt; size_t &gt;::max())</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -12566,8 +12566,8 @@
       <type>template void</type>
       <name>eigenproblem&lt; double &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a3a194854413e2c3c0d9aece23bb6a136</anchor>
-      <arglist>(std::vector&lt; double &gt; &amp;eigenvectors, std::vector&lt; double &gt; &amp;eigenvalues, const std::vector&lt; double &gt; &amp;matrix, const std::vector&lt; double &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, double &gt; &gt; *imag_eval_parts)</arglist>
+      <anchor>a3dd4cc68a0541097c389b5423e6096b8</anchor>
+      <arglist>(std::vector&lt; double &gt; &amp;eigenvectors, std::vector&lt; double &gt; &amp;eigenvalues, const std::vector&lt; double &gt; &amp;matrix, const std::vector&lt; double &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, double &gt; &gt; *imag_eval_parts, size_t nroots)</arglist>
     </member>
     <member kind="function">
       <type>template void</type>
@@ -12608,8 +12608,8 @@
       <type>template void</type>
       <name>eigenproblem&lt; long double &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a1c5918f8696f2d2e33d6c9c771212f42</anchor>
-      <arglist>(std::vector&lt; long double &gt; &amp;eigenvectors, std::vector&lt; long double &gt; &amp;eigenvalues, const std::vector&lt; long double &gt; &amp;matrix, const std::vector&lt; long double &gt; &amp;metric, const size_t dimension, bool hermitian, long double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, long double &gt; &gt; *imag_eval_parts)</arglist>
+      <anchor>ac63302b8c0cd0aa6ddf25e21cc53f2aa</anchor>
+      <arglist>(std::vector&lt; long double &gt; &amp;eigenvectors, std::vector&lt; long double &gt; &amp;eigenvalues, const std::vector&lt; long double &gt; &amp;matrix, const std::vector&lt; long double &gt; &amp;metric, const size_t dimension, bool hermitian, long double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, long double &gt; &gt; *imag_eval_parts, size_t nroots)</arglist>
     </member>
     <member kind="function">
       <type>template void</type>
@@ -12643,8 +12643,8 @@
       <type>template void</type>
       <name>eigenproblem&lt; std::complex&lt; double &gt; &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>ab7cef904906252b2eac9acf00f9f30a3</anchor>
-      <arglist>(std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvectors, std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvalues, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, std::complex&lt; double &gt; &gt; &gt; *imag_eval_parts)</arglist>
+      <anchor>a618454f04ae0b436bbcc997fec5b2f7b</anchor>
+      <arglist>(std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvectors, std::vector&lt; std::complex&lt; double &gt; &gt; &amp;eigenvalues, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;metric, const size_t dimension, bool hermitian, double svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, std::complex&lt; double &gt; &gt; &gt; *imag_eval_parts, size_t nroots)</arglist>
     </member>
     <member kind="function">
       <type>template void</type>
@@ -12659,6 +12659,20 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>af57298c8ffb7301296ceb75fb179eab6</anchor>
       <arglist>(std::vector&lt; std::complex&lt; double &gt; &gt; &amp;solution, const std::vector&lt; std::complex&lt; double &gt; &gt; &amp;matrix, const size_t dimension, double svdThreshold, int verbosity)</arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>eigensolver_hermitian_lowest</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a4a4844b5a3e6d59ee8afca3e1ac7e5d1</anchor>
+      <arglist>(std::span&lt; const value_type &gt; matrix, std::span&lt; value_type &gt; eigenvectors, std::span&lt; real_type_t&lt; value_type &gt; &gt; eigenvalues, const size_t dimension, const size_t nroots)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>generalized_eigensolver_hermitian_lowest</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>ae13b427fe37d183b0519fbbcdedd0d44</anchor>
+      <arglist>(std::span&lt; const value_type &gt; matrix, std::span&lt; const value_type &gt; metric, std::span&lt; value_type &gt; eigenvectors, std::span&lt; real_type_t&lt; value_type &gt; &gt; eigenvalues, size_t dimension, size_t nroots, real_type_t&lt; value_type &gt; min_rcond)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
@@ -12944,8 +12958,8 @@
       <type>template void</type>
       <name>eigenproblem&lt; value_type &gt;</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
-      <anchor>a4c417b0f00426929bf097236a8d69c08</anchor>
-      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, real_type_t&lt; value_type &gt; svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *imag_eval_parts)</arglist>
+      <anchor>aa602a0add5ee629e4041035d5107b5f2</anchor>
+      <arglist>(std::vector&lt; value_type &gt; &amp;eigenvectors, std::vector&lt; value_type &gt; &amp;eigenvalues, const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, bool hermitian, real_type_t&lt; value_type &gt; svdThreshold, int verbosity, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; *imag_eval_parts, size_t nroots)</arglist>
     </member>
     <member kind="function">
       <type>template void</type>
@@ -12991,6 +13005,20 @@
       <arglist>(std::false_type, std::span&lt; value_type &gt; a, std::span&lt; real_type_t&lt; value_type &gt; &gt; w, size_t dimension)</arglist>
     </member>
     <member kind="function">
+      <type>int</type>
+      <name>eigensolver_hermitian_lowest_kernel</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>a903d63a96c78dbf1a6ea78cc9374bb6d</anchor>
+      <arglist>(std::false_type, std::span&lt; value_type &gt; a, std::span&lt; value_type &gt; z, std::span&lt; real_type_t&lt; value_type &gt; &gt; w, size_t dimension, size_t nroots)</arglist>
+    </member>
+    <member kind="function">
+      <type>real_type_t&lt; value_type &gt;</type>
+      <name>one_norm</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>a469b416f025f9d08905b484bac91bfb6</anchor>
+      <arglist>(std::span&lt; const value_type &gt; a, size_t dimension)</arglist>
+    </member>
+    <member kind="function">
       <type>std::list&lt; SVD&lt; value_type &gt; &gt;</type>
       <name>svd_system_impl</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
@@ -13003,6 +13031,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
       <anchor>aeefde5321c2241da42bb5f1dda879a2b</anchor>
       <arglist>(const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, real_type_t&lt; value_type &gt; svdThreshold, int verbosity)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>hermitian_lowest_by_cholesky</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>a31d6df34ab44c54108d9bae122d9f72f</anchor>
+      <arglist>(const std::vector&lt; value_type &gt; &amp;matrix, const std::vector&lt; value_type &gt; &amp;metric, size_t dimension, size_t nroots, real_type_t&lt; value_type &gt; svdThreshold, matrix_type &amp;eigenvectors, vector_type &amp;eigenvalues)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

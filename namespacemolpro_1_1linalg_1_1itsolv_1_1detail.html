@@ -126,6 +126,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a02c4aabef5937a3c16d034c2efd976b3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a02c4aabef5937a3c16d034c2efd976b3">eigensolver_hermitian_kernel</a> (std::false_type, std::span&lt; value_type &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">a</a>, std::span&lt; real_type_t&lt; value_type &gt; &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">w</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> dimension)</td></tr>
 <tr class="memdesc:a02c4aabef5937a3c16d034c2efd976b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen implementation of the hermitian eigenproblem, used for every scalar type LAPACK does not cover.  <br /></td></tr>
 <tr class="separator:a02c4aabef5937a3c16d034c2efd976b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a903d63a96c78dbf1a6ea78cc9374bb6d" id="r_a903d63a96c78dbf1a6ea78cc9374bb6d"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </td></tr>
+<tr class="memitem:a903d63a96c78dbf1a6ea78cc9374bb6d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a903d63a96c78dbf1a6ea78cc9374bb6d">eigensolver_hermitian_lowest_kernel</a> (std::false_type, std::span&lt; value_type &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">a</a>, std::span&lt; value_type &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">z</a>, std::span&lt; real_type_t&lt; value_type &gt; &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">w</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> dimension, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nroots</a>)</td></tr>
+<tr class="memdesc:a903d63a96c78dbf1a6ea78cc9374bb6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The lowest <code>nroots</code> eigenpairs of a hermitian matrix: without a partial kernel, the whole decomposition, truncated.  <br /></td></tr>
+<tr class="separator:a903d63a96c78dbf1a6ea78cc9374bb6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a469b416f025f9d08905b484bac91bfb6" id="r_a469b416f025f9d08905b484bac91bfb6"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </td></tr>
+<tr class="memitem:a469b416f025f9d08905b484bac91bfb6"><td class="memTemplItemLeft" align="right" valign="top">real_type_t&lt; value_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a469b416f025f9d08905b484bac91bfb6">one_norm</a> (std::span&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> value_type &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">a</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> dimension)</td></tr>
+<tr class="memdesc:a469b416f025f9d08905b484bac91bfb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The 1-norm, the largest absolute column sum, of a square column-major matrix.  <br /></td></tr>
+<tr class="separator:a469b416f025f9d08905b484bac91bfb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7948ad2d2e2f697346b7f78cba3bf514" id="r_a7948ad2d2e2f697346b7f78cba3bf514"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </td></tr>
 <tr class="memitem:a7948ad2d2e2f697346b7f78cba3bf514"><td class="memTemplItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1SVD.html">SVD</a>&lt; value_type &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a7948ad2d2e2f697346b7f78cba3bf514">svd_system_impl</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nrows</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">ncols</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; value_type &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">m</a>, real_type_t&lt; value_type &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">threshold</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">hermitian</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">reduce_to_rank</a>)</td></tr>
 <tr class="memdesc:a7948ad2d2e2f697346b7f78cba3bf514"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab3ec63329fae114435836814df28e717" title="Performs singular value decomposition and returns SVD objects for singular values less than threshold...">svd_system()</a>, shared by its real and complex overloads.  <br /></td></tr>
@@ -134,6 +142,10 @@ Functions</h2></td></tr>
 <tr class="memitem:aeefde5321c2241da42bb5f1dda879a2b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html">orthogonalised_subspace</a>&lt; value_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aeefde5321c2241da42bb5f1dda879a2b">orthogonalise_subspace</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; value_type &gt; &amp;matrix, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; value_type &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> dimension, real_type_t&lt; value_type &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">svdThreshold</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> verbosity)</td></tr>
 <tr class="memdesc:aeefde5321c2241da42bb5f1dda879a2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduce H C = S C E to the standard eigenproblem Hbar U = U E, whose solution is C = X U.  <br /></td></tr>
 <tr class="separator:aeefde5321c2241da42bb5f1dda879a2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31d6df34ab44c54108d9bae122d9f72f" id="r_a31d6df34ab44c54108d9bae122d9f72f"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> matrix_type , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">vector_type</a> &gt; </td></tr>
+<tr class="memitem:a31d6df34ab44c54108d9bae122d9f72f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a31d6df34ab44c54108d9bae122d9f72f">hermitian_lowest_by_cholesky</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; value_type &gt; &amp;matrix, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; value_type &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> dimension, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nroots</a>, real_type_t&lt; value_type &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">svdThreshold</a>, matrix_type &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">eigenvectors</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">vector_type</a> &amp;eigenvalues)</td></tr>
+<tr class="memdesc:a31d6df34ab44c54108d9bae122d9f72f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The lowest <code>nroots</code> eigenpairs of a hermitian H C = S C E by Cholesky reduction, where that is safe.  <br /></td></tr>
+<tr class="separator:a31d6df34ab44c54108d9bae122d9f72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad192d3769b2e85fe8572980dec433b9a" id="r_ad192d3769b2e85fe8572980dec433b9a"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </td></tr>
 <tr class="memitem:ad192d3769b2e85fe8572980dec433b9a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad192d3769b2e85fe8572980dec433b9a">solve_LinearEquations_impl</a> (std::vector&lt; value_type &gt; &amp;solution, std::vector&lt; value_type &gt; &amp;eigenvalues, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; value_type &gt; &amp;matrix, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; value_type &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; value_type &gt; &amp;rhs, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> dimension, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nroot</a>, real_type_t&lt; value_type &gt; augmented_hessian, real_type_t&lt; value_type &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">svdThreshold</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> verbosity)</td></tr>
 <tr class="memdesc:ad192d3769b2e85fe8572980dec433b9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a6823cb52ddf7a7b02c07ec01ac708da8">solve_LinearEquations()</a>, shared by its real and complex overloads.  <br /></td></tr>
@@ -521,6 +533,70 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="a903d63a96c78dbf1a6ea78cc9374bb6d" name="a903d63a96c78dbf1a6ea78cc9374bb6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a903d63a96c78dbf1a6ea78cc9374bb6d">&#9670;&#160;</a></span>eigensolver_hermitian_lowest_kernel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> molpro::linalg::itsolv::detail::eigensolver_hermitian_lowest_kernel </td>
+          <td>(</td>
+          <td class="paramtype">std::false_type&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; value_type &gt;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; value_type &gt;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; real_type_t&lt; value_type &gt; &gt;&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td>
+          <td class="paramname"><em>nroots</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The lowest <code>nroots</code> eigenpairs of a hermitian matrix: without a partial kernel, the whole decomposition, truncated. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>on entry the matrix in column-major order; overwritten </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">z</td><td>the eigenvectors as the columns of a column-major dimension x nroots matrix </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">w</td><td>the eigenvalues in ascending order, <code>nroots</code> of them </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ad3c2afce975327f0d495ef8f7d2eff86" name="ad3c2afce975327f0d495ef8f7d2eff86"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad3c2afce975327f0d495ef8f7d2eff86">&#9670;&#160;</a></span>get_new_working_set()</h2>
 
@@ -556,6 +632,78 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Returns new working set based on parameters included in wparams. </p>
+
+</div>
+</div>
+<a id="a31d6df34ab44c54108d9bae122d9f72f" name="a31d6df34ab44c54108d9bae122d9f72f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31d6df34ab44c54108d9bae122d9f72f">&#9670;&#160;</a></span>hermitian_lowest_by_cholesky()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> matrix_type , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">vector_type</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> molpro::linalg::itsolv::detail::hermitian_lowest_by_cholesky </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td>
+          <td class="paramname"><em>nroots</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real_type_t&lt; value_type &gt;&#160;</td>
+          <td class="paramname"><em>svdThreshold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">matrix_type &amp;&#160;</td>
+          <td class="paramname"><em>eigenvectors</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">vector_type</a> &amp;&#160;</td>
+          <td class="paramname"><em>eigenvalues</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The lowest <code>nroots</code> eigenpairs of a hermitian H C = S C E by Cholesky reduction, where that is safe. </p>
+<p><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aeefde5321c2241da42bb5f1dda879a2b" title="Reduce H C = S C E to the standard eigenproblem Hbar U = U E, whose solution is C = X U.">orthogonalise_subspace()</a> decomposes the whole metric and transforms H with it, then the whole reduced matrix is diagonalized, all to O(dimension^3) work, even though the solvers want only a few roots. When S is comfortably positive definite, symmetric orthogonalisation would keep every one of its directions, so the Cholesky reduction of LAPACK's ?sygvx/?hegvx solves the same problem, computing only the wanted eigenvectors. That holds when the estimated reciprocal condition number of S, which is at most the ratio of its extreme eigenvalues (bounded below by the true one, and estimated to within a modest factor), exceeds the rank threshold with a wide margin; it is also held well above the working precision, so the factorisation stays accurate.</p>
+<p>Applies only to the scalar types LAPACK covers, and only when fewer roots than the dimension are wanted, so a caller asking for the whole spectrum keeps the behaviour it had.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrix</td><td>H, row-major, as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html" title="Matrix container that allows simple data access, slicing, copying and resizing without loosing data.">subspace::Matrix</a> stores it </td></tr>
+    <tr><td class="paramname">metric</td><td>S, row-major, as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html" title="Matrix container that allows simple data access, slicing, copying and resizing without loosing data.">subspace::Matrix</a> stores it </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>whether <code>eigenvectors</code> (dimension x wanted, S-orthonormal) and <code>eigenvalues</code> (ascending) were computed </dd></dl>
 
 </div>
 </div>
@@ -849,6 +997,38 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a469b416f025f9d08905b484bac91bfb6" name="a469b416f025f9d08905b484bac91bfb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a469b416f025f9d08905b484bac91bfb6">&#9670;&#160;</a></span>one_norm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">real_type_t&lt; value_type &gt; molpro::linalg::itsolv::detail::one_norm </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> value_type &gt;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td>
+          <td class="paramname"><em>dimension</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The 1-norm, the largest absolute column sum, of a square column-major matrix. </p>
 
 </div>
 </div>

@@ -13,7 +13,8 @@ var searchData=
   ['has_5fmapped_5ftype_5fv_10',['has_mapped_type_v',['../namespacemolpro_1_1linalg_1_1array.html#a13f02b59213de0924418fca64e40acf3',1,'molpro::linalg::array']]],
   ['has_5fparent_11',['has_parent',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1dotgraph.html#a3642a4c9eb27db3c082b371b3edfed75',1,'molpro::profiler::dotgraph']]],
   ['hbar_12',['Hbar',['../structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#ac9438db8a90e07537c654fd1d5ee2d5d',1,'molpro::linalg::itsolv::detail::orthogonalised_subspace']]],
-  ['hermiticity_13',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a521a7db340a0a9241725c1e62012b9c1',1,'molpro::linalg::itsolv::DavidsonOptions']]],
-  ['hessian_14',['hessian',['../todo.html#_todo000005',1,'Augmented Hessian'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#autotoc_md4',1,'Augmented Hessian']]],
-  ['how_20to_20drive_20a_20single_20pass_15',['How to drive a single pass',['../md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md27',1,'']]]
+  ['hermitian_5flowest_5fby_5fcholesky_13',['hermitian_lowest_by_cholesky',['../namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a31d6df34ab44c54108d9bae122d9f72f',1,'molpro::linalg::itsolv::detail']]],
+  ['hermiticity_14',['hermiticity',['../structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a521a7db340a0a9241725c1e62012b9c1',1,'molpro::linalg::itsolv::DavidsonOptions']]],
+  ['hessian_15',['hessian',['../todo.html#_todo000005',1,'Augmented Hessian'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#autotoc_md4',1,'Augmented Hessian']]],
+  ['how_20to_20drive_20a_20single_20pass_16',['How to drive a single pass',['../md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md27',1,'']]]
 ];
