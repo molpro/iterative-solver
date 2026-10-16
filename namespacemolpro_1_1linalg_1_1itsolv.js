@@ -75,6 +75,7 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "eigensolver_hermitian_lowest", "namespacemolpro_1_1linalg_1_1itsolv.html#a4a4844b5a3e6d59ee8afca3e1ac7e5d1", null ],
     [ "eigensolver_lapacke_dsyev", "namespacemolpro_1_1linalg_1_1itsolv.html#a01a226724a579e6c811d3dc030fc6f52", null ],
     [ "eigensolver_lapacke_dsyev", "namespacemolpro_1_1linalg_1_1itsolv.html#a7004fcfd7dc7522336f1166185df6775", null ],
+    [ "eigenvalues_certainly_above", "namespacemolpro_1_1linalg_1_1itsolv.html#a6f6012531b5c53d10181c00fd724e61c", null ],
     [ "find_ref", "namespacemolpro_1_1linalg_1_1itsolv.html#a7e616ad022172235476de18eb323784c", null ],
     [ "find_ref", "namespacemolpro_1_1linalg_1_1itsolv.html#ae20486ad3a90d99c4b5d2d24beaac100", null ],
     [ "generalized_eigensolver_hermitian_lowest", "namespacemolpro_1_1linalg_1_1itsolv.html#ae13b427fe37d183b0519fbbcdedd0d44", null ],

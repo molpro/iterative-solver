@@ -12669,6 +12669,13 @@
     </member>
     <member kind="function">
       <type>bool</type>
+      <name>eigenvalues_certainly_above</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
+      <anchor>a6f6012531b5c53d10181c00fd724e61c</anchor>
+      <arglist>(std::span&lt; const value_type &gt; matrix, size_t dimension, real_type_t&lt; value_type &gt; threshold, real_type_t&lt; value_type &gt; margin=1e4)</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
       <name>generalized_eigensolver_hermitian_lowest</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv.html</anchorfile>
       <anchor>ae13b427fe37d183b0519fbbcdedd0d44</anchor>
