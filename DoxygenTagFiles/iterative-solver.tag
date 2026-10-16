@@ -4641,8 +4641,8 @@
       <type>auto</type>
       <name>format</name>
       <anchorfile>structstd_1_1formatter_3_01molpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_3_01T_01_4_01_4.html</anchorfile>
-      <anchor>a2c78b024a98370de26339a10b28ac09b</anchor>
-      <arglist>(const molpro::linalg::itsolv::subspace::Matrix&lt; T &gt; &amp;mat, std::format_context &amp;ctx) const</arglist>
+      <anchor>a629083f64902d8d0b4c7e00115e3c1ec</anchor>
+      <arglist>(const molpro::linalg::itsolv::subspace::Matrix&lt; T &gt; &amp;mat, FormatContext &amp;ctx) const</arglist>
     </member>
     <member kind="variable">
       <type>std::size_t</type>
