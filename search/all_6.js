@@ -24,6 +24,7 @@ var searchData=
   ['from_20later_20rounds_21',['Lessons from later rounds',['../md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md29',1,'']]],
   ['from_20the_20first_20round_22',['Lessons from the first round',['../md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md28',1,'']]],
   ['from_20the_20llm_23',['What to expect from the LLM',['../md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md31',1,'']]],
-  ['fused_5faxpy_24',['fused_axpy',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a8d3ebad34f0f0b94a12816e50c7f3ee6',1,'molpro::linalg::array::ArrayHandler']]],
-  ['fused_5fdot_25',['fused_dot',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a0cd5e391cf70fa6cf09acc8f72a55830',1,'molpro::linalg::array::ArrayHandler']]]
+  ['full_20subspace_24',['X space (full subspace)',['../TopicSpaces.html#SpacesX',1,'']]],
+  ['fused_5faxpy_25',['fused_axpy',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a8d3ebad34f0f0b94a12816e50c7f3ee6',1,'molpro::linalg::array::ArrayHandler']]],
+  ['fused_5fdot_26',['fused_dot',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a0cd5e391cf70fa6cf09acc8f72a55830',1,'molpro::linalg::array::ArrayHandler']]]
 ];

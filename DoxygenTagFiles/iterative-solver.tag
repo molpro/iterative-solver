@@ -13540,6 +13540,18 @@
     <filename>TopicIterativeSolver.html</filename>
   </compound>
   <compound kind="page">
+    <name>TopicSpaces</name>
+    <title>Spaces</title>
+    <filename>TopicSpaces.html</filename>
+    <docanchor file="TopicSpaces.html" title="The container types R, Q and P">SpacesContainers</docanchor>
+    <docanchor file="TopicSpaces.html" title="R space (working set)">SpacesR</docanchor>
+    <docanchor file="TopicSpaces.html" title="P space">SpacesP</docanchor>
+    <docanchor file="TopicSpaces.html" title="Q space">SpacesQ</docanchor>
+    <docanchor file="TopicSpaces.html" title="D space">SpacesD</docanchor>
+    <docanchor file="TopicSpaces.html" title="X space (full subspace)">SpacesX</docanchor>
+    <docanchor file="TopicSpaces.html" title="Overview of an iteration">SpacesIteration</docanchor>
+  </compound>
+  <compound kind="page">
     <name>TopicDistrArrays</name>
     <title>Distributed arrays</title>
     <filename>TopicDistrArrays.html</filename>

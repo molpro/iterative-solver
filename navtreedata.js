@@ -56,6 +56,15 @@ var NAVTREE =
       [ "What to expect from the LLM", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md31", null ]
     ] ],
     [ "Iterative solvers", "TopicIterativeSolver.html", null ],
+    [ "Spaces", "TopicSpaces.html", [
+      [ "The container types R, Q and P", "TopicSpaces.html#SpacesContainers", null ],
+      [ "R space (working set)", "TopicSpaces.html#SpacesR", null ],
+      [ "P space", "TopicSpaces.html#SpacesP", null ],
+      [ "Q space", "TopicSpaces.html#SpacesQ", null ],
+      [ "D space", "TopicSpaces.html#SpacesD", null ],
+      [ "X space (full subspace)", "TopicSpaces.html#SpacesX", null ],
+      [ "Overview of an iteration", "TopicSpaces.html#SpacesIteration", null ]
+    ] ],
     [ "Distributed arrays", "TopicDistrArrays.html", null ],
     [ "Array handlers", "TopicArrayHandlers.html", null ],
     [ "Wrappers: VecRef and CVecRef", "TopicVecRef.html", null ],
@@ -78,21 +87,21 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "ExampleProblemDistrArray_8h-example.html",
-"classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrSparse_3_01AL_00_01AR_00_01true_01_4.html#aabd1dc42a41f54d0a3bf81ce90004671",
-"classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ac41c30eb54ca313a848ec0ba195ad6e9",
-"classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html#a9d0184264e90cd661d127acf7aa36db8",
-"classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html#a1569b152a585cdccc81e1ab84508d1b8",
-"classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_1_1Proxy.html#a34f81a70e437c714c5df45be102ff85b",
-"classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aa5ed89e3da36e7f9e4b065213826e703",
-"classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#aa18de07639b2a59f4aab0fa00b3336ed",
-"classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#aebb756f173cea19c6e499f75b695c98f",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html#a61244ceb1487474bd1fb855102b522c4",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a3e5656317e00535ceca0becaa1179fcd",
-"namespaceiterative__solver.html#a2890fe920d167483bcac382af12afe5d",
-"namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a6ab06f994ed7d224a95fd3e111273072",
-"structmolpro_1_1linalg_1_1array_1_1default__handler_3_01T_00_01S_00_01ArrayFamily_1_1Distributed3dcbef7436a9781ba51119693d448467.html#a7cadadbafbc1b85bf9fd27080887a07a",
-"structmolpro_1_1linalg_1_1itsolv_1_1OptimizeOptions.html#af818b1286046e4876d81c6c714e88a5d",
-"structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#ab1a42602d93a684c43706a5f40b37c1a"
+"classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrSparse_3_01AL_00_01AR_00_01true_01_4.html#a2525b401ae39fdf5a4488d5865b392c2",
+"classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ab643e904aa7d28d920c3a300443f384f",
+"classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html#a9463179c7646adbc969014fa06ecf9ff",
+"classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html#adc68c0146902898f004096134c6c6b74",
+"classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#abb67948c3c5053c20c411b94dfa84a5d",
+"classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a97c813a5516113c4fdc5dc9abd44fa87",
+"classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a85d020e1e7abe04d905564573885a93a",
+"classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#ac4efef2ba4e3ef8a6f64dec34a1f7fcf",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html#a414b7de61feb1e46a28741e4260bbe82",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a197e910aad5223bd802996fedd7e7376",
+"namespaceiterative__solver.html#a0193308603bbbe44226e4745032d12f7",
+"namespacemolpro_1_1linalg_1_1itsolv.html#aff594b07a52dd297a4fc83b5a4cca785",
+"structmolpro_1_1linalg_1_1array_1_1default__handler.html#aec8251d9a4a1d7a2bb3e9a2ea601775c",
+"structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#adf37f6cd71efda9948e29f1731e4701e",
+"structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
