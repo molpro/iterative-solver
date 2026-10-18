@@ -98,8 +98,44 @@ $(document).ready(function(){initNavTree('TopicArrayHandlers.html',''); initResi
   <div class="headertitle"><div class="title">Array handlers</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Work in Progress. </p>
-</div></div><!-- contents -->
+<div class="textblock"><p>Work in Progress.</p>
+<h1><a class="anchor" id="ArrayHandlersContiguousDisk"></a>
+Contiguous arrays and disk arrays</h1>
+<p>When the R space is held in contiguous memory, e.g. <code>std::vector&lt;double&gt;</code> or array::Span&lt;double&gt;, and the Q space on disk, e.g. <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html" title="Distributed array storing the buffer on disk using temporary local files.">array::DistrArrayFile</a>, the default handlers are <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html" title="Array handler between a contiguous array (left), e.g. std::vector or Span, and a distributed array (r...">array::ArrayHandlerIterableDDisk</a> (rq) and <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html" title="Array handler between a distributed array (left), typically one held on disk, and a contiguous array ...">array::ArrayHandlerDDiskIterable</a> (qr). Every operation is available in both directions.</p>
+<ul>
+<li>The contiguous array is addressed in place; there are no per-element proxies.</li>
+<li>The disk array is paged through <code>get()</code> and <code>put()</code>, so that the memory used does not scale with its size. gemm reads it through a double-buffered <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html" title="BufferManager provides single-buffered or asynchronous double-buffered read access to the data in a c...">array::util::BufferManager</a> and does the arithmetic with dgemm. R vectors that are not evenly spaced in memory are first copied, a page at a time, into one buffer, which each thread keeps for later calls.</li>
+<li>A Q made as a copy of an R by the qr handler is created by <code>CreateTempCopy()</code> of the Q type on molpro::mpi::comm_self(), because R is not distributed. As for any distributed array on a communicator other than molpro::mpi::comm_global(), MPI must have been initialised.</li>
+<li>If a Q is distributed over several processes, the R arrays hold all elements on every process. Each process works on the local section of Q, and an R written to is then replicated over all processes.</li>
+</ul>
+<p>The handlers forward to <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html" title="Array distributed across many processes supporting remote-memory-access, access to process local buff...">array::DistrArray</a> members taking a Span, e.g. <code>dot(Span&lt;const double&gt;)</code>, and to the contiguous gemm functions in <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html">array::util</a>, so the same operations are available for any distributed array.</p>
+<h2><a class="anchor" id="ArrayHandlersChoosingR"></a>
+Choosing the R array type</h2>
+<ul>
+<li>On a single process, or with an independent solve on each process, a contiguous R such as <code>std::vector&lt;double&gt;</code> or array::Span&lt;double&gt; is the simplest choice. It needs no distribution or communicator, and performs as well as <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">array::DistrArraySpan</a>.</li>
+<li>For a solve shared by several processes, use a distributed R, e.g. <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">array::DistrArraySpan</a>, distributed like Q. Each process then does only its share of the work on R, and nothing has to be gathered after an operation. A contiguous R is replicated instead: every operation on R alone is done in full on every process, and every operation that writes R ends with an <code>MPI_Allgatherv</code> over Q's communicator.</li>
+<li>If the caller holds full vectors on every process, wrap the local section of each in an <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArraySpan.html">array::DistrArraySpan</a> and gather the vectors once when they are handed back, as the C and Fortran interface does (<code>CreateDistrArray</code> and <code>DistrArraySynchronize</code> in IterativeSolverCMPI.cpp).</li>
+</ul>
+<h1><a class="anchor" id="ArrayHandlersTempFiles"></a>
+Files of new disk arrays</h1>
+<p>The handlers that create disk arrays, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html">array::ArrayHandlerDDisk</a>, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html">array::ArrayHandlerDDiskDistr</a> and <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html" title="Array handler between a distributed array (left), typically one held on disk, and a contiguous array ...">array::ArrayHandlerDDiskIterable</a>, do so with the <code>CreateTempCopy()</code> functions of the disk array types, e.g. <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html#aa9f9c27a135bc9ddb438fdde0d333847" title="Creates a copy of source, with the same distribution and communicator, in a file which is erased on d...">array::DistrArrayFile::CreateTempCopy()</a>. The files are erased with the arrays. Each of these handlers can be constructed with</p>
+<ul>
+<li>no argument: a copy of a disk array is put next to the file of the source, and any other copy into the current directory;</li>
+<li>a directory, into which all files are put, e.g. a scratch directory local to the node;</li>
+<li>a copy function, which creates the new array in any way it likes, e.g. on another communicator.</li>
+</ul>
+<p>For example, to have all Q files in <code>/scratch/run</code> : </p><div class="fragment"><div class="line"><span class="keyword">using </span>R = std::vector&lt;double&gt;;</div>
+<div class="line"><span class="keyword">using </span>Q = <a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html">molpro::linalg::array::DistrArrayFile</a>;</div>
+<div class="line"><span class="keyword">auto</span> handlers = <a class="code hl_function" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html#a511c639fd98850e5e6c294595bbeff50">molpro::linalg::itsolv::ArrayHandlers&lt;R, Q&gt;::create</a>()</div>
+<div class="line">                    .<a class="code hl_variable" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#a2be277beaf97a327fa797d46253cca3b">qq</a>(std::make_shared&lt;<a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html">molpro::linalg::array::ArrayHandlerDDisk&lt;Q&gt;</a>&gt;(<span class="stringliteral">&quot;/scratch/run&quot;</span>))</div>
+<div class="line">                    .qr(std::make_shared&lt;<a class="code hl_class" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html">molpro::linalg::array::ArrayHandlerDDiskIterable&lt;Q, R&gt;</a>&gt;(<span class="stringliteral">&quot;/scratch/run&quot;</span>))</div>
+<div class="line">                    .build();</div>
+<div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html">molpro::linalg::array::ArrayHandlerDDiskIterable</a></div><div class="ttdoc">Array handler between a distributed array (left), typically one held on disk, and a contiguous array ...</div><div class="ttdef"><b>Definition</b> ArrayHandlerDDiskIterable.h:24</div></div>
+<div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html">molpro::linalg::array::ArrayHandlerDDisk</a></div><div class="ttdef"><b>Definition</b> ArrayHandlerDDisk.h:13</div></div>
+<div class="ttc" id="aclassmolpro_1_1linalg_1_1array_1_1DistrArrayFile_html"><div class="ttname"><a href="classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html">molpro::linalg::array::DistrArrayFile</a></div><div class="ttdoc">Distributed array storing the buffer on disk using temporary local files.</div><div class="ttdef"><b>Definition</b> DistrArrayFile.h:21</div></div>
+<div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder_html_a2be277beaf97a327fa797d46253cca3b"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#a2be277beaf97a327fa797d46253cca3b">molpro::linalg::itsolv::ArrayHandlers::Builder::qq</a></div><div class="ttdeci">Proxy&lt; Q, Q &gt; qq</div><div class="ttdef"><b>Definition</b> ArrayHandlers.h:97</div></div>
+<div class="ttc" id="aclassmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_html_a511c639fd98850e5e6c294595bbeff50"><div class="ttname"><a href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html#a511c639fd98850e5e6c294595bbeff50">molpro::linalg::itsolv::ArrayHandlers::create</a></div><div class="ttdeci">static Builder create()</div><div class="ttdoc">Utility for creating Array handlers with some user specified handlers.</div><div class="ttdef"><b>Definition</b> ArrayHandlers.h:57</div></div>
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
 <!-- start footer part -->

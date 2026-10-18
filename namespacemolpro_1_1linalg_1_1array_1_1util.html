@@ -115,6 +115,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html">DistrArrayIteratorImpl</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html">DistrChunks</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pointers to, and on completion the write-back of, chunks of distributed arrays yy for <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a5444c36a139936abd82e02da4c41d1b5" title="gemm between distributed arrays xx, read through a BufferManager, and arrays yy, which can be held an...">gemm_buffered()</a>  <a href="structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags.html">DistrFlags</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distributed array of integer flags with one flag per process and a locking mechanism to ensure atomic access.  <a href="classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,6 +172,14 @@ Functions</h2></td></tr>
 <tr class="separator:ae6526259fb284a6ef4562a23fd7d2e54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26c2faa1a3bbc4ec01fea6621b900388" id="r_a26c2faa1a3bbc4ec01fea6621b900388"><td class="memItemLeft" align="right" valign="top">std::map&lt; size_t, double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a26c2faa1a3bbc4ec01fea6621b900388">select_max_dot_broadcast</a> (size_t n, std::map&lt; size_t, double &gt; &amp;local_selection, MPI_Comm communicator)</td></tr>
 <tr class="separator:a26c2faa1a3bbc4ec01fea6621b900388"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00b6343b6748184fd82886fa5992fb71" id="r_a00b6343b6748184fd82886fa5992fb71"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a00b6343b6748184fd82886fa5992fb71"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a00b6343b6748184fd82886fa5992fb71">allocate_like</a> (std::size_t size)</td></tr>
+<tr class="memdesc:a00b6343b6748184fd82886fa5992fb71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an array of type T able to hold size elements.  <br /></td></tr>
+<tr class="separator:a00b6343b6748184fd82886fa5992fb71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a474ae5583f94a9ec0d8eac2c1e81029e" id="r_a474ae5583f94a9ec0d8eac2c1e81029e"><td class="memTemplParams" colspan="2">template&lt;class R &gt; </td></tr>
+<tr class="memitem:a474ae5583f94a9ec0d8eac2c1e81029e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a474ae5583f94a9ec0d8eac2c1e81029e">contiguous_span</a> (R &amp;r)</td></tr>
+<tr class="memdesc:a474ae5583f94a9ec0d8eac2c1e81029e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A view of all the elements of a contiguous array.  <br /></td></tr>
+<tr class="separator:a474ae5583f94a9ec0d8eac2c1e81029e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a380319734cfdfd55647ef78bd2133d" id="r_a8a380319734cfdfd55647ef78bd2133d"><td class="memTemplParams" colspan="2">template&lt;typename Ind &gt; </td></tr>
 <tr class="memitem:a8a380319734cfdfd55647ef78bd2133d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1Distribution.html">Distribution</a>&lt; Ind &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a8a380319734cfdfd55647ef78bd2133d">make_distribution_spread_remainder</a> (size_t dimension, int n_chunks)</td></tr>
 <tr class="memdesc:a8a380319734cfdfd55647ef78bd2133d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a distribution with first (dimension % n_chunks) chunks larger by 1 element.  <br /></td></tr>
@@ -206,6 +217,49 @@ Functions</h2></td></tr>
 <tr class="memitem:a79fda49f6c22de25fdbdb5d020dd9dbb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a79fda49f6c22de25fdbdb5d020dd9dbb">local_range</a> (const A &amp;a)</td></tr>
 <tr class="memdesc:a79fda49f6c22de25fdbdb5d020dd9dbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The section [lo, hi) of a distributed array held by this process.  <br /></td></tr>
 <tr class="separator:a79fda49f6c22de25fdbdb5d020dd9dbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a640f8250d5cb4b5705c836c84d4051a7" id="r_a640f8250d5cb4b5705c836c84d4051a7"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a640f8250d5cb4b5705c836c84d4051a7"><td class="memTemplItemLeft" align="right" valign="top">size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a640f8250d5cb4b5705c836c84d4051a7">constant_stride</a> (const std::vector&lt; T * &gt; &amp;p, size_t n)</td></tr>
+<tr class="separator:a640f8250d5cb4b5705c836c84d4051a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacf7a664d82f47e0ff4a2a8a8f2841ea" id="r_aacf7a664d82f47e0ff4a2a8a8f2841ea"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:aacf7a664d82f47e0ff4a2a8a8f2841ea"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#aacf7a664d82f47e0ff4a2a8a8f2841ea">offset_pointers</a> (const std::vector&lt; T * &gt; &amp;bases, size_t lo, size_t g)</td></tr>
+<tr class="memdesc:aacf7a664d82f47e0ff4a2a8a8f2841ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointers to elements [g, ...) of arrays whose local sections, starting at global index lo, are at bases.  <br /></td></tr>
+<tr class="separator:aacf7a664d82f47e0ff4a2a8a8f2841ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7df5152319e754bbcfb51463d07d388" id="r_ab7df5152319e754bbcfb51463d07d388"><td class="memTemplParams" colspan="2">template&lt;class T , class A &gt; </td></tr>
+<tr class="memitem:ab7df5152319e754bbcfb51463d07d388"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ab7df5152319e754bbcfb51463d07d388">local_buffer_pointers</a> (const std::vector&lt; std::reference_wrapper&lt; A &gt; &gt; &amp;aa)</td></tr>
+<tr class="memdesc:ab7df5152319e754bbcfb51463d07d388"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointers to the start of the local sections of distributed arrays held in memory.  <br /></td></tr>
+<tr class="separator:ab7df5152319e754bbcfb51463d07d388"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bf95c8e8831ac85cd352e8b6081ca39" id="r_a1bf95c8e8831ac85cd352e8b6081ca39"><td class="memTemplParams" colspan="2">template&lt;class A , class Range &gt; </td></tr>
+<tr class="memitem:a1bf95c8e8831ac85cd352e8b6081ca39"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a1bf95c8e8831ac85cd352e8b6081ca39">check_local_ranges</a> (const std::vector&lt; std::reference_wrapper&lt; A &gt; &gt; &amp;aa, const Range &amp;range, const std::string &amp;name)</td></tr>
+<tr class="memdesc:a1bf95c8e8831ac85cd352e8b6081ca39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks that the distributed arrays aa all have the local section range, so that they can be processed together.  <br /></td></tr>
+<tr class="separator:a1bf95c8e8831ac85cd352e8b6081ca39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf19b3c65c33919e983e63c256c10f0b" id="r_aaf19b3c65c33919e983e63c256c10f0b"><td class="memTemplParams" colspan="2">template&lt;class T , class R , class A &gt; </td></tr>
+<tr class="memitem:aaf19b3c65c33919e983e63c256c10f0b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#aaf19b3c65c33919e983e63c256c10f0b">contiguous_pointers</a> (const std::vector&lt; std::reference_wrapper&lt; R &gt; &gt; &amp;rr, const A &amp;q, const std::string &amp;name)</td></tr>
+<tr class="memdesc:aaf19b3c65c33919e983e63c256c10f0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointers to the elements of contiguous arrays rr, offset to the start of the local section of the distributed array q.  <br /></td></tr>
+<tr class="separator:aaf19b3c65c33919e983e63c256c10f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e3aae11809976496645c6b705d5e745" id="r_a8e3aae11809976496645c6b705d5e745"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a8e3aae11809976496645c6b705d5e745"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a8e3aae11809976496645c6b705d5e745">gemm_chunk</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ac1856c20beb303170f5bbbbf9e08771f">gemm_type</a> type, size_t n, const T *x, size_t ldx, size_t nx, T *alphadata, const std::vector&lt; T * &gt; &amp;y)</td></tr>
+<tr class="memdesc:a8e3aae11809976496645c6b705d5e745"><td class="mdescLeft">&#160;</td><td class="mdescRight">One chunk of n elements of a gemm between the arrays xx, which are the nx columns of x with leading dimension ldx, and the arrays yy at pointers y.  <br /></td></tr>
+<tr class="separator:a8e3aae11809976496645c6b705d5e745"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5444c36a139936abd82e02da4c41d1b5" id="r_a5444c36a139936abd82e02da4c41d1b5"><td class="memTemplParams" colspan="2">template&lt;class AD , class T  = typename AD::value_type&gt; </td></tr>
+<tr class="memitem:a5444c36a139936abd82e02da4c41d1b5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a5444c36a139936abd82e02da4c41d1b5">gemm_buffered</a> (T *alphadata, const CVecRef&lt; AD &gt; &amp;xx, const std::type_identity_t&lt; std::function&lt; std::vector&lt; T * &gt;(size_t g, size_t n)&gt; &gt; &amp;y_pointers, const std::function&lt; void(size_t g, size_t n)&gt; &amp;y_done, <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ac1856c20beb303170f5bbbbf9e08771f">gemm_type</a> type)</td></tr>
+<tr class="memdesc:a5444c36a139936abd82e02da4c41d1b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">gemm between distributed arrays xx, read through a <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html" title="BufferManager provides single-buffered or asynchronous double-buffered read access to the data in a c...">BufferManager</a>, and arrays yy, which can be held anywhere.  <br /></td></tr>
+<tr class="separator:a5444c36a139936abd82e02da4c41d1b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bbafbd8ff4d0c5432a79ed252720b9e" id="r_a9bbafbd8ff4d0c5432a79ed252720b9e"><td class="memTemplParams" colspan="2">template&lt;class AD , class T  = typename AD::value_type&gt; </td></tr>
+<tr class="memitem:a9bbafbd8ff4d0c5432a79ed252720b9e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a9bbafbd8ff4d0c5432a79ed252720b9e">gemm_inner_buffered</a> (size_t ny, const CVecRef&lt; AD &gt; &amp;xx, const std::type_identity_t&lt; std::function&lt; std::vector&lt; T * &gt;(size_t g, size_t n)&gt; &gt; &amp;y_pointers, const std::function&lt; void(size_t g, size_t n)&gt; &amp;y_done={})</td></tr>
+<tr class="memdesc:a9bbafbd8ff4d0c5432a79ed252720b9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The overlap matrix between arrays yy, accessed as described in <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a5444c36a139936abd82e02da4c41d1b5" title="gemm between distributed arrays xx, read through a BufferManager, and arrays yy, which can be held an...">gemm_buffered()</a>, and distributed arrays xx, which are read through a <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html" title="BufferManager provides single-buffered or asynchronous double-buffered read access to the data in a c...">BufferManager</a>. Collective.  <br /></td></tr>
+<tr class="separator:a9bbafbd8ff4d0c5432a79ed252720b9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c225ee2ea2aa03f439007238b7a400c" id="r_a6c225ee2ea2aa03f439007238b7a400c"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a6c225ee2ea2aa03f439007238b7a400c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a6c225ee2ea2aa03f439007238b7a400c">check_gemm_outer_dimensions</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt; &amp;alphas, size_t nx, size_t ny, const std::string &amp;name)</td></tr>
+<tr class="memdesc:a6c225ee2ea2aa03f439007238b7a400c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the dimensions of the coefficient matrix of gemm_outer.  <br /></td></tr>
+<tr class="separator:a6c225ee2ea2aa03f439007238b7a400c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fdbf8d02f31fa551f88c2007c31bd9f" id="r_a5fdbf8d02f31fa551f88c2007c31bd9f"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a5fdbf8d02f31fa551f88c2007c31bd9f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a5fdbf8d02f31fa551f88c2007c31bd9f">conjugate_transpose</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt; &amp;m)</td></tr>
+<tr class="memdesc:a5fdbf8d02f31fa551f88c2007c31bd9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The transpose of an overlap matrix, which for the hermitian inner product is its conjugate transpose.  <br /></td></tr>
+<tr class="separator:a5fdbf8d02f31fa551f88c2007c31bd9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25fadbd9ba444f1e15042731ac168ee8" id="r_a25fadbd9ba444f1e15042731ac168ee8"><td class="memTemplParams" colspan="2">template&lt;class AD , class T  = typename AD::value_type&gt; </td></tr>
+<tr class="memitem:a25fadbd9ba444f1e15042731ac168ee8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a25fadbd9ba444f1e15042731ac168ee8">gemm_outer_to_distr</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt; &amp;alphas, const std::vector&lt; T * &gt; &amp;x_bases, const VecRef&lt; AD &gt; &amp;yy)</td></tr>
+<tr class="memdesc:a25fadbd9ba444f1e15042731ac168ee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">yy += alphas^T xx, for arrays xx held in memory and distributed arrays yy held anywhere.  <br /></td></tr>
+<tr class="separator:a25fadbd9ba444f1e15042731ac168ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73c6aaad0759ad712d855f5f41affcaf" id="r_a73c6aaad0759ad712d855f5f41affcaf"><td class="memTemplParams" colspan="2">template&lt;class AL , class AD , std::enable_if_t&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a1dfc512e3766ca80665fcd51104d5ae6">is_disk_array_v</a>&lt; AD &gt;, int &gt;  = 0&gt; </td></tr>
 <tr class="memitem:a73c6aaad0759ad712d855f5f41affcaf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename <a class="el" href="namespacemolpro_1_1linalg_1_1array.html#a5aeb80119c6ea1e4cd9155b6fb025344">array::mapped_or_value_type_t</a>&lt; AL &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a73c6aaad0759ad712d855f5f41affcaf">gemm_inner_distr_distr</a> (const CVecRef&lt; AL &gt; &amp;yy, const CVecRef&lt; AD &gt; &amp;xx)</td></tr>
 <tr class="separator:a73c6aaad0759ad712d855f5f41affcaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -215,9 +269,22 @@ Functions</h2></td></tr>
 <tr class="memitem:ae0e0d333b3b563d5dfefe2d7ff5b93a5" id="r_ae0e0d333b3b563d5dfefe2d7ff5b93a5"><td class="memTemplParams" colspan="2">template&lt;class AL , class AD , std::enable_if_t&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a1dfc512e3766ca80665fcd51104d5ae6">is_disk_array_v</a>&lt; AD &gt;, int &gt;  = 0&gt; </td></tr>
 <tr class="memitem:ae0e0d333b3b563d5dfefe2d7ff5b93a5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ae0e0d333b3b563d5dfefe2d7ff5b93a5">gemm_outer_distr_distr</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename <a class="el" href="namespacemolpro_1_1linalg_1_1array.html#a5aeb80119c6ea1e4cd9155b6fb025344">array::mapped_or_value_type_t</a>&lt; AL &gt; &gt; alphas, const CVecRef&lt; AD &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy)</td></tr>
 <tr class="separator:ae0e0d333b3b563d5dfefe2d7ff5b93a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd5300a40e34566269266efd76d8b0a2" id="r_abd5300a40e34566269266efd76d8b0a2"><td class="memTemplParams" colspan="2">template&lt;class AL , class AD &gt; </td></tr>
-<tr class="memitem:abd5300a40e34566269266efd76d8b0a2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#abd5300a40e34566269266efd76d8b0a2">gemm_distr_distr</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1array.html#a5aeb80119c6ea1e4cd9155b6fb025344">array::mapped_or_value_type_t</a>&lt; AL &gt; *alphadata, const CVecRef&lt; AD &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy, <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ac1856c20beb303170f5bbbbf9e08771f">gemm_type</a> <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ac1856c20beb303170f5bbbbf9e08771f">gemm_type</a>)</td></tr>
-<tr class="separator:abd5300a40e34566269266efd76d8b0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1da5cf75005ec439609002339682ba4d" id="r_a1da5cf75005ec439609002339682ba4d"><td class="memTemplParams" colspan="2">template&lt;class R , class AD &gt; </td></tr>
+<tr class="memitem:a1da5cf75005ec439609002339682ba4d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename AD::value_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a1da5cf75005ec439609002339682ba4d">gemm_inner_contiguous_distr</a> (const CVecRef&lt; R &gt; &amp;rr, const CVecRef&lt; AD &gt; &amp;qq)</td></tr>
+<tr class="memdesc:a1da5cf75005ec439609002339682ba4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The overlap matrix (rr.size(), qq.size()) between contiguous arrays rr and distributed arrays qq. Collective.  <br /></td></tr>
+<tr class="separator:a1da5cf75005ec439609002339682ba4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2f324e136b1ee87b37eadd08e9b51e7" id="r_ac2f324e136b1ee87b37eadd08e9b51e7"><td class="memTemplParams" colspan="2">template&lt;class AD , class R &gt; </td></tr>
+<tr class="memitem:ac2f324e136b1ee87b37eadd08e9b51e7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename AD::value_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ac2f324e136b1ee87b37eadd08e9b51e7">gemm_inner_distr_contiguous</a> (const CVecRef&lt; AD &gt; &amp;qq, const CVecRef&lt; R &gt; &amp;rr)</td></tr>
+<tr class="memdesc:ac2f324e136b1ee87b37eadd08e9b51e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The overlap matrix (qq.size(), rr.size()) between distributed arrays qq and contiguous arrays rr. Collective.  <br /></td></tr>
+<tr class="separator:ac2f324e136b1ee87b37eadd08e9b51e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad68e2736b2168876a36695c43d9ef00" id="r_aad68e2736b2168876a36695c43d9ef00"><td class="memTemplParams" colspan="2">template&lt;class AD , class R &gt; </td></tr>
+<tr class="memitem:aad68e2736b2168876a36695c43d9ef00"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#aad68e2736b2168876a36695c43d9ef00">gemm_outer_distr_contiguous</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename AD::value_type &gt; &amp;alphas, const CVecRef&lt; AD &gt; &amp;qq, const VecRef&lt; R &gt; &amp;rr)</td></tr>
+<tr class="memdesc:aad68e2736b2168876a36695c43d9ef00"><td class="mdescLeft">&#160;</td><td class="mdescRight">rr += alphas^T qq for contiguous arrays rr and distributed arrays qq. Collective.  <br /></td></tr>
+<tr class="separator:aad68e2736b2168876a36695c43d9ef00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5c6c1b3ea4e47bce705631e7fc6479e" id="r_aa5c6c1b3ea4e47bce705631e7fc6479e"><td class="memTemplParams" colspan="2">template&lt;class R , class AD &gt; </td></tr>
+<tr class="memitem:aa5c6c1b3ea4e47bce705631e7fc6479e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#aa5c6c1b3ea4e47bce705631e7fc6479e">gemm_outer_contiguous_distr</a> (const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename AD::value_type &gt; &amp;alphas, const CVecRef&lt; R &gt; &amp;rr, const VecRef&lt; AD &gt; &amp;qq)</td></tr>
+<tr class="memdesc:aa5c6c1b3ea4e47bce705631e7fc6479e"><td class="mdescLeft">&#160;</td><td class="mdescRight">qq += alphas^T rr for contiguous arrays rr and distributed arrays qq. Local.  <br /></td></tr>
+<tr class="separator:aa5c6c1b3ea4e47bce705631e7fc6479e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00e1f7a7989554848db1a2843a93d102" id="r_a00e1f7a7989554848db1a2843a93d102"><td class="memTemplParams" colspan="2">template&lt;class AL , class AR  = AL, std::enable_if_t&lt; not <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a1dfc512e3766ca80665fcd51104d5ae6">is_disk_array_v</a>&lt; AL &gt; and not <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a1dfc512e3766ca80665fcd51104d5ae6">is_disk_array_v</a>&lt; AR &gt;, int &gt;  = 0&gt; </td></tr>
 <tr class="memitem:a00e1f7a7989554848db1a2843a93d102"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename <a class="el" href="namespacemolpro_1_1linalg_1_1array.html#a5aeb80119c6ea1e4cd9155b6fb025344">array::mapped_or_value_type_t</a>&lt; AL &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a00e1f7a7989554848db1a2843a93d102">gemm_inner_distr_distr</a> (const CVecRef&lt; AL &gt; &amp;xx, const CVecRef&lt; AR &gt; &amp;yy)</td></tr>
 <tr class="separator:a00e1f7a7989554848db1a2843a93d102"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -278,6 +345,230 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a00b6343b6748184fd82886fa5992fb71" name="a00b6343b6748184fd82886fa5992fb71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00b6343b6748184fd82886fa5992fb71">&#9670;&#160;</a></span>allocate_like()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T molpro::linalg::array::util::allocate_like </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an array of type T able to hold size elements. </p>
+<p>Fixed-size arrays are default constructed, types constructible from a size are constructed from it, and any other type is created by the customization point <a class="el" href="namespacemolpro_1_1linalg_1_1array.html#a0f1558ddafd2f5f706c0b761ab27af32" title="Allocates an array of type T to hold the specified amount of items.">allocate_array()</a>. </p>
+
+</div>
+</div>
+<a id="a6c225ee2ea2aa03f439007238b7a400c" name="a6c225ee2ea2aa03f439007238b7a400c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c225ee2ea2aa03f439007238b7a400c">&#9670;&#160;</a></span>check_gemm_outer_dimensions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::util::check_gemm_outer_dimensions </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>alphas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>nx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>ny</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks the dimensions of the coefficient matrix of gemm_outer. </p>
+
+</div>
+</div>
+<a id="a1bf95c8e8831ac85cd352e8b6081ca39" name="a1bf95c8e8831ac85cd352e8b6081ca39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bf95c8e8831ac85cd352e8b6081ca39">&#9670;&#160;</a></span>check_local_ranges()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class A , class Range &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::util::check_local_ranges </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::reference_wrapper&lt; A &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>aa</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Range &amp;&#160;</td>
+          <td class="paramname"><em>range</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks that the distributed arrays aa all have the local section range, so that they can be processed together. </p>
+
+</div>
+</div>
+<a id="a5fdbf8d02f31fa551f88c2007c31bd9f" name="a5fdbf8d02f31fa551f88c2007c31bd9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fdbf8d02f31fa551f88c2007c31bd9f">&#9670;&#160;</a></span>conjugate_transpose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt; molpro::linalg::array::util::conjugate_transpose </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The transpose of an overlap matrix, which for the hermitian inner product is its conjugate transpose. </p>
+
+</div>
+</div>
+<a id="a640f8250d5cb4b5705c836c84d4051a7" name="a640f8250d5cb4b5705c836c84d4051a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a640f8250d5cb4b5705c836c84d4051a7">&#9670;&#160;</a></span>constant_stride()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t molpro::linalg::array::util::constant_stride </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; T * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the constant distance between consecutive arrays at pointers p, if they are the columns of a matrix with n rows, or 0 if they are not. A single array is given the stride n. </p>
+
+</div>
+</div>
+<a id="aaf19b3c65c33919e983e63c256c10f0b" name="aaf19b3c65c33919e983e63c256c10f0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf19b3c65c33919e983e63c256c10f0b">&#9670;&#160;</a></span>contiguous_pointers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T , class R , class A &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; T * &gt; molpro::linalg::array::util::contiguous_pointers </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::reference_wrapper&lt; R &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const A &amp;&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pointers to the elements of contiguous arrays rr, offset to the start of the local section of the distributed array q. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::out_of_range</td><td>if any of rr differs from q in size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a474ae5583f94a9ec0d8eac2c1e81029e" name="a474ae5583f94a9ec0d8eac2c1e81029e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a474ae5583f94a9ec0d8eac2c1e81029e">&#9670;&#160;</a></span>contiguous_span()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto molpro::linalg::array::util::contiguous_span </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>r</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A view of all the elements of a contiguous array. </p>
+
+</div>
+</div>
 <a id="ae6526259fb284a6ef4562a23fd7d2e54" name="ae6526259fb284a6ef4562a23fd7d2e54"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae6526259fb284a6ef4562a23fd7d2e54">&#9670;&#160;</a></span>extrema()</h2>
 
@@ -361,25 +652,26 @@ template&lt;class Compare &gt; </div>
   <table class="params">
     <tr><td class="paramname">distr</td><td>distribution of the container, which local data chuncks are to be replicated </td></tr>
     <tr><td class="paramname">commun</td><td>MPI communicator </td></tr>
-    <tr><td class="paramname">first_elem</td><td>pointer to the beginning of the container, which data to be replicated </td></tr>
+    <tr><td class="paramname">first_elem</td><td>pointer to the beginning of the container, which data to be replicated</td></tr>
   </table>
   </dd>
 </dl>
+<p>Does nothing without MPI, or on a single process, when the container already holds all the data. </p>
 
 </div>
 </div>
-<a id="abd5300a40e34566269266efd76d8b0a2" name="abd5300a40e34566269266efd76d8b0a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd5300a40e34566269266efd76d8b0a2">&#9670;&#160;</a></span>gemm_distr_distr()</h2>
+<a id="a5444c36a139936abd82e02da4c41d1b5" name="a5444c36a139936abd82e02da4c41d1b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5444c36a139936abd82e02da4c41d1b5">&#9670;&#160;</a></span>gemm_buffered()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class AL , class AD &gt; </div>
+template&lt;class AD , class T  = typename AD::value_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void molpro::linalg::array::util::gemm_distr_distr </td>
+          <td class="memname">void molpro::linalg::array::util::gemm_buffered </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1array.html#a5aeb80119c6ea1e4cd9155b6fb025344">array::mapped_or_value_type_t</a>&lt; AL &gt; *&#160;</td>
+          <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>alphadata</em>, </td>
         </tr>
         <tr>
@@ -391,14 +683,20 @@ template&lt;class AL , class AD &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const VecRef&lt; AL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>yy</em>, </td>
+          <td class="paramtype">const std::type_identity_t&lt; std::function&lt; std::vector&lt; T * &gt;(size_t g, size_t n)&gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y_pointers</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; void(size_t g, size_t n)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>y_done</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ac1856c20beb303170f5bbbbf9e08771f">gemm_type</a>&#160;</td>
-          <td class="paramname"><em>gemm_type</em>&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -407,6 +705,157 @@ template&lt;class AL , class AD &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>gemm between distributed arrays xx, read through a <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html" title="BufferManager provides single-buffered or asynchronous double-buffered read access to the data in a c...">BufferManager</a>, and arrays yy, which can be held anywhere. </p>
+<p>Only the local section of xx is processed, chunk by chunk. For each chunk of global indices [g, g+n), y_pointers(g,
+n) returns pointers to the same elements of each of yy, and y_done(g, n) is called once the chunk is complete, e.g. to write back yy updated by <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ac1856c20beb303170f5bbbbf9e08771fa431bd84fcae17203f58b37dec475624e">gemm_type::outer</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">alphadata</td><td>see <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a8e3aae11809976496645c6b705d5e745" title="One chunk of n elements of a gemm between the arrays xx, which are the nx columns of x with leading d...">gemm_chunk()</a>, with nx = xx.size() and ny the number of yy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8e3aae11809976496645c6b705d5e745" name="a8e3aae11809976496645c6b705d5e745"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e3aae11809976496645c6b705d5e745">&#9670;&#160;</a></span>gemm_chunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::util::gemm_chunk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#ac1856c20beb303170f5bbbbf9e08771f">gemm_type</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>ldx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>nx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>alphadata</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; T * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>One chunk of n elements of a gemm between the arrays xx, which are the nx columns of x with leading dimension ldx, and the arrays yy at pointers y. </p>
+<p>inner: alphadata[i + k * nx] += x_i . y_k outer: y_k += sum_i alphadata[i * ny + k] * x_i</p>
+<p>This is a single dgemm. If yy are not evenly spaced, they are first packed into one matrix, which an outer product then updates before it is copied back. </p>
+
+</div>
+</div>
+<a id="a9bbafbd8ff4d0c5432a79ed252720b9e" name="a9bbafbd8ff4d0c5432a79ed252720b9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bbafbd8ff4d0c5432a79ed252720b9e">&#9670;&#160;</a></span>gemm_inner_buffered()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class AD , class T  = typename AD::value_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt; molpro::linalg::array::util::gemm_inner_buffered </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>ny</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CVecRef&lt; AD &gt; &amp;&#160;</td>
+          <td class="paramname"><em>xx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::type_identity_t&lt; std::function&lt; std::vector&lt; T * &gt;(size_t g, size_t n)&gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y_pointers</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; void(size_t g, size_t n)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>y_done</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The overlap matrix between arrays yy, accessed as described in <a class="el" href="namespacemolpro_1_1linalg_1_1array_1_1util.html#a5444c36a139936abd82e02da4c41d1b5" title="gemm between distributed arrays xx, read through a BufferManager, and arrays yy, which can be held an...">gemm_buffered()</a>, and distributed arrays xx, which are read through a <a class="el" href="classmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager.html" title="BufferManager provides single-buffered or asynchronous double-buffered read access to the data in a c...">BufferManager</a>. Collective. </p>
+<dl class="section return"><dt>Returns</dt><dd>matrix of dimensions (ny, xx.size()) </dd></dl>
+
+</div>
+</div>
+<a id="a1da5cf75005ec439609002339682ba4d" name="a1da5cf75005ec439609002339682ba4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1da5cf75005ec439609002339682ba4d">&#9670;&#160;</a></span>gemm_inner_contiguous_distr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class AD &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename AD::value_type &gt; molpro::linalg::array::util::gemm_inner_contiguous_distr </td>
+          <td>(</td>
+          <td class="paramtype">const CVecRef&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CVecRef&lt; AD &gt; &amp;&#160;</td>
+          <td class="paramname"><em>qq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The overlap matrix (rr.size(), qq.size()) between contiguous arrays rr and distributed arrays qq. Collective. </p>
 
 </div>
 </div>
@@ -443,6 +892,38 @@ template&lt;class Handler , class AL , class AR  = AL&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac2f324e136b1ee87b37eadd08e9b51e7" name="ac2f324e136b1ee87b37eadd08e9b51e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2f324e136b1ee87b37eadd08e9b51e7">&#9670;&#160;</a></span>gemm_inner_distr_contiguous()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class AD , class R &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename AD::value_type &gt; molpro::linalg::array::util::gemm_inner_distr_contiguous </td>
+          <td>(</td>
+          <td class="paramtype">const CVecRef&lt; AD &gt; &amp;&#160;</td>
+          <td class="paramname"><em>qq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CVecRef&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The overlap matrix (qq.size(), rr.size()) between distributed arrays qq and contiguous arrays rr. Collective. </p>
 
 </div>
 </div>
@@ -566,6 +1047,44 @@ template&lt;class AL , class AR  = AL&gt; </div>
 
 </div>
 </div>
+<a id="aa5c6c1b3ea4e47bce705631e7fc6479e" name="aa5c6c1b3ea4e47bce705631e7fc6479e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5c6c1b3ea4e47bce705631e7fc6479e">&#9670;&#160;</a></span>gemm_outer_contiguous_distr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R , class AD &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::util::gemm_outer_contiguous_distr </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename AD::value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>alphas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CVecRef&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const VecRef&lt; AD &gt; &amp;&#160;</td>
+          <td class="paramname"><em>qq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>qq += alphas^T rr for contiguous arrays rr and distributed arrays qq. Local. </p>
+
+</div>
+</div>
 <a id="aa499104a489fffa3b3d34c6ae9380551" name="aa499104a489fffa3b3d34c6ae9380551"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa499104a489fffa3b3d34c6ae9380551">&#9670;&#160;</a></span>gemm_outer_default()</h2>
 
@@ -605,6 +1124,44 @@ template&lt;class Handler , class AL , class AR  = AL&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad68e2736b2168876a36695c43d9ef00" name="aad68e2736b2168876a36695c43d9ef00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad68e2736b2168876a36695c43d9ef00">&#9670;&#160;</a></span>gemm_outer_distr_contiguous()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class AD , class R &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::util::gemm_outer_distr_contiguous </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; typename AD::value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>alphas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CVecRef&lt; AD &gt; &amp;&#160;</td>
+          <td class="paramname"><em>qq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const VecRef&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>rr += alphas^T qq for contiguous arrays rr and distributed arrays qq. Collective. </p>
 
 </div>
 </div>
@@ -716,6 +1273,67 @@ template&lt;class AL , class AR  = AL&gt; </div>
 
 </div>
 </div>
+<a id="a25fadbd9ba444f1e15042731ac168ee8" name="a25fadbd9ba444f1e15042731ac168ee8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25fadbd9ba444f1e15042731ac168ee8">&#9670;&#160;</a></span>gemm_outer_to_distr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class AD , class T  = typename AD::value_type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::util::gemm_outer_to_distr </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>alphas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; T * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x_bases</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const VecRef&lt; AD &gt; &amp;&#160;</td>
+          <td class="paramname"><em>yy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>yy += alphas^T xx, for arrays xx held in memory and distributed arrays yy held anywhere. </p>
+<p>Only the local section of yy is processed, in pages. Pages of yy without a local buffer are read with get() and written back with put(), so that each element is read and written once. x_bases are pointers to the starts of the local sections of xx; unless they are evenly spaced, each page of them is first packed into one matrix, so that the update is always a single dgemm. </p>
+
+</div>
+</div>
+<a id="ab7df5152319e754bbcfb51463d07d388" name="ab7df5152319e754bbcfb51463d07d388"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7df5152319e754bbcfb51463d07d388">&#9670;&#160;</a></span>local_buffer_pointers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T , class A &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; T * &gt; molpro::linalg::array::util::local_buffer_pointers </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::reference_wrapper&lt; A &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>aa</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pointers to the start of the local sections of distributed arrays held in memory. </p>
+
+</div>
+</div>
 <a id="a79fda49f6c22de25fdbdb5d020dd9dbb" name="a79fda49f6c22de25fdbdb5d020dd9dbb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a79fda49f6c22de25fdbdb5d020dd9dbb">&#9670;&#160;</a></span>local_range()</h2>
 
@@ -781,6 +1399,44 @@ template&lt;typename Ind &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="aacf7a664d82f47e0ff4a2a8a8f2841ea" name="aacf7a664d82f47e0ff4a2a8a8f2841ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacf7a664d82f47e0ff4a2a8a8f2841ea">&#9670;&#160;</a></span>offset_pointers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; T * &gt; molpro::linalg::array::util::offset_pointers </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; T * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>bases</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>lo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pointers to elements [g, ...) of arrays whose local sections, starting at global index lo, are at bases. </p>
 
 </div>
 </div>

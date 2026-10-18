@@ -11,6 +11,7 @@ var classmolpro_1_1linalg_1_1array_1_1span_1_1Span =
     [ "Span", "classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a21f614cddfbfcf554e33ee2e288bd4bd", null ],
     [ "~Span", "classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a349c7ea95f10e82b45e5133ec194e094", null ],
     [ "Span", "classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a1f47386e9f38d285d6116650ab78b5a5", null ],
+    [ "Span", "classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#ab3e7f3d8c54444703b1284e7f1c94ca8", null ],
     [ "Span", "classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#ad6dea4305315afc49f427824e90d1ed4", null ],
     [ "Span", "classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a2f868dfe54168f3261c3f71b36915149", null ],
     [ "begin", "classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#ac02b118c484b8c079c0c19d61ec209af", null ],

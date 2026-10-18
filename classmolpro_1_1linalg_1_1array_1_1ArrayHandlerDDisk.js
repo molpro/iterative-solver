@@ -1,10 +1,10 @@
 var classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk =
 [
     [ "ArrayHandlerDDisk", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a1f01a56394550e0e8b099024c6a923cc", null ],
+    [ "ArrayHandlerDDisk", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a14a7829215a864929b016e6056d92f2e", null ],
     [ "ArrayHandlerDDisk", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#aec8696d377b0d9461dec6a440c1b8b15", null ],
     [ "axpy", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a519be01e94da0dbb6a69bf0a0f4fcc3e", null ],
     [ "copy", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a8d27b11bd2cbf656444310065daaaf90", null ],
-    [ "copy", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a40f21d8a1d3a4c9e3761f02d0d195a56", null ],
     [ "dot", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#afec5927acb5661806b8af05328e5be32", null ],
     [ "fill", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a540ff543dbf816ade506e4cbac615325", null ],
     [ "gemm_inner", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a27a49873388daafd66e5dad2a4212a21", null ],
@@ -12,6 +12,5 @@ var classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk =
     [ "lazy_handle", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a05a5d5f3a57548f6d5d6451dd4236172", null ],
     [ "scal", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a9bdd2084e01645890ad067df4f557629", null ],
     [ "select", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a4481d9881f5c20990b3db602e4da0698", null ],
-    [ "select_max_dot", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a4ec7f5bbe19dea40d3fd3bb27a06718e", null ],
-    [ "m_copy_func", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a311ece305fc0afcf359911dd69816cf9", null ]
+    [ "select_max_dot", "classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a4ec7f5bbe19dea40d3fd3bb27a06718e", null ]
 ];

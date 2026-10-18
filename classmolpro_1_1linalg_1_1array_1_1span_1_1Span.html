@@ -141,6 +141,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a349c7ea95f10e82b45e5133ec194e094"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f47386e9f38d285d6116650ab78b5a5" id="r_a1f47386e9f38d285d6116650ab78b5a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a1f47386e9f38d285d6116650ab78b5a5">Span</a> (T *<a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#af3d8343f18111df965fa0fd08d60a237">data</a>, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a8b3a38440fadc5f5f1cc8e6b790b51df">size_type</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#ac971fd9e588c9f3ae1f946918e435b64">size</a>)</td></tr>
 <tr class="separator:a1f47386e9f38d285d6116650ab78b5a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3e7f3d8c54444703b1284e7f1c94ca8" id="r_ab3e7f3d8c54444703b1284e7f1c94ca8"><td class="memTemplParams" colspan="2">template&lt;typename U , typename  = std::enable_if_t&lt;std::is_same_v&lt;const U, T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:ab3e7f3d8c54444703b1284e7f1c94ca8"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#ab3e7f3d8c54444703b1284e7f1c94ca8">Span</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; U &gt; &amp;source)</td></tr>
+<tr class="memdesc:ab3e7f3d8c54444703b1284e7f1c94ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">A view of constant elements from a view of modifiable ones, as for std::span.  <br /></td></tr>
+<tr class="separator:ab3e7f3d8c54444703b1284e7f1c94ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6dea4305315afc49f427824e90d1ed4" id="r_ad6dea4305315afc49f427824e90d1ed4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#ad6dea4305315afc49f427824e90d1ed4">Span</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a> &amp;source)=default</td></tr>
 <tr class="separator:ad6dea4305315afc49f427824e90d1ed4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f868dfe54168f3261c3f71b36915149" id="r_a2f868dfe54168f3261c3f71b36915149"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a2f868dfe54168f3261c3f71b36915149">Span</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; T &gt; &amp;&amp;source) noexcept</td></tr>
@@ -318,7 +322,7 @@ template&lt;typename T  = double&gt; </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a21f614cddfbfcf554e33ee2e288bd4bd" name="a21f614cddfbfcf554e33ee2e288bd4bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21f614cddfbfcf554e33ee2e288bd4bd">&#9670;&#160;</a></span>Span() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a21f614cddfbfcf554e33ee2e288bd4bd">&#9670;&#160;</a></span>Span() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -372,7 +376,7 @@ template&lt;typename T  = double&gt; </div>
 </div>
 </div>
 <a id="a1f47386e9f38d285d6116650ab78b5a5" name="a1f47386e9f38d285d6116650ab78b5a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f47386e9f38d285d6116650ab78b5a5">&#9670;&#160;</a></span>Span() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f47386e9f38d285d6116650ab78b5a5">&#9670;&#160;</a></span>Span() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -409,8 +413,40 @@ template&lt;typename T  = double&gt; </div>
 
 </div>
 </div>
+<a id="ab3e7f3d8c54444703b1284e7f1c94ca8" name="ab3e7f3d8c54444703b1284e7f1c94ca8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3e7f3d8c54444703b1284e7f1c94ca8">&#9670;&#160;</a></span>Span() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T  = double&gt; </div>
+<div class="memtemplate">
+template&lt;typename U , typename  = std::enable_if_t&lt;std::is_same_v&lt;const U, T&gt;&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">molpro::linalg::array::span::Span</a>&lt; T &gt;::Span </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; U &gt; &amp;&#160;</td>
+          <td class="paramname"><em>source</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A view of constant elements from a view of modifiable ones, as for std::span. </p>
+
+</div>
+</div>
 <a id="ad6dea4305315afc49f427824e90d1ed4" name="ad6dea4305315afc49f427824e90d1ed4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6dea4305315afc49f427824e90d1ed4">&#9670;&#160;</a></span>Span() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6dea4305315afc49f427824e90d1ed4">&#9670;&#160;</a></span>Span() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -438,7 +474,7 @@ template&lt;typename T  = double&gt; </div>
 </div>
 </div>
 <a id="a2f868dfe54168f3261c3f71b36915149" name="a2f868dfe54168f3261c3f71b36915149"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f868dfe54168f3261c3f71b36915149">&#9670;&#160;</a></span>Span() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f868dfe54168f3261c3f71b36915149">&#9670;&#160;</a></span>Span() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

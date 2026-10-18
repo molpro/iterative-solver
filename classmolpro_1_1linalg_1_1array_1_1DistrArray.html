@@ -178,7 +178,7 @@ Inheritance diagram for molpro::linalg::array::DistrArray:</div>
 <div class="line">  y.accumulate(i_lo, i_hi, result_block.data());</div>
 <div class="line">}</div>
 <div class="line">y.sync();</div>
-<div class="ttc" id="anamespacemolpro_1_1linalg_1_1array_1_1span_html_a1685994156d0ee2713c481e85594a8d8"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1array_1_1span.html#a1685994156d0ee2713c481e85594a8d8">molpro::linalg::array::span::begin</a></div><div class="ttdeci">auto begin(Span&lt; T &gt; &amp;x)</div><div class="ttdef"><b>Definition</b> Span.h:87</div></div>
+<div class="ttc" id="anamespacemolpro_1_1linalg_1_1array_1_1span_html_a1685994156d0ee2713c481e85594a8d8"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1array_1_1span.html#a1685994156d0ee2713c481e85594a8d8">molpro::linalg::array::span::begin</a></div><div class="ttdeci">auto begin(Span&lt; T &gt; &amp;x)</div><div class="ttdef"><b>Definition</b> Span.h:90</div></div>
 </div><!-- fragment --> </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -292,7 +292,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a63ab08569b888803190980dccf6db5cb" id="r_a63ab08569b888803190980dccf6db5cb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a63ab08569b888803190980dccf6db5cb">axpy</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> a, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a3fcf79ae1da7f58c1ddbe71f90042f75">SparseArray</a> &amp;y)</td></tr>
 <tr class="separator:a63ab08569b888803190980dccf6db5cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5b727d10d41e677fefcfe4c92de2d5e" id="r_aa5b727d10d41e677fefcfe4c92de2d5e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#aa5b727d10d41e677fefcfe4c92de2d5e">scal</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> a)</td></tr>
-<tr class="memdesc:aa5b727d10d41e677fefcfe4c92de2d5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale by a constant. Local.  <br /></td></tr>
 <tr class="separator:aa5b727d10d41e677fefcfe4c92de2d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca2e59deac50295a278e8ea11253d994" id="r_aca2e59deac50295a278e8ea11253d994"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#aca2e59deac50295a278e8ea11253d994">add</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y)</td></tr>
 <tr class="memdesc:aca2e59deac50295a278e8ea11253d994"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add another array to this. Local. Throws error if any array is empty.  <br /></td></tr>
@@ -315,6 +314,25 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1d47c67f719dd4da6260ce545336da7f" id="r_a1d47c67f719dd4da6260ce545336da7f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a1d47c67f719dd4da6260ce545336da7f">times</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;z)</td></tr>
 <tr class="memdesc:a1d47c67f719dd4da6260ce545336da7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">this[i] = y[i]*z[i]. Throws error if any array is empty.  <br /></td></tr>
 <tr class="separator:a1d47c67f719dd4da6260ce545336da7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Operations with a contiguous array</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p>The contiguous array y holds all <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ab2146249e167e65d8b5204bf2e25a154" title="total number of elements, same as overall dimension of array">size()</a> elements on every process, i.e. it is replicated rather than distributed. The distributed array is accessed only in its local section, which is paged through <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a315204c97a4b1eac89f03bfb5b654f9a" title="Gets buffer[lo:hi) from global array (hi is past-the-end). Blocking.">get()</a> and <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a325eae41a73eda5f5d42570dd7d75e49" title="array[lo:hi) = data[:] (hi is past-the-end). Blocking">put()</a> if it has no local buffer. y is addressed in place. </p>
+</div></td></tr>
+<tr class="memitem:a257cfcdfc4fac4ba077f421fbd5e67e2" id="r_a257cfcdfc4fac4ba077f421fbd5e67e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a257cfcdfc4fac4ba077f421fbd5e67e2">copy</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; y)</td></tr>
+<tr class="separator:a257cfcdfc4fac4ba077f421fbd5e67e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16ea980f19cb7b6823fc13c06963852a" id="r_a16ea980f19cb7b6823fc13c06963852a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a16ea980f19cb7b6823fc13c06963852a">axpy</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> a, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; y)</td></tr>
+<tr class="memdesc:a16ea980f19cb7b6823fc13c06963852a"><td class="mdescLeft">&#160;</td><td class="mdescRight">this[:] += a * y[:] over the local section. Local.  <br /></td></tr>
+<tr class="separator:a16ea980f19cb7b6823fc13c06963852a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab01423d73b8aefaa175436491d12149d" id="r_ab01423d73b8aefaa175436491d12149d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ab01423d73b8aefaa175436491d12149d">copy_to</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; y) const</td></tr>
+<tr class="memdesc:ab01423d73b8aefaa175436491d12149d"><td class="mdescLeft">&#160;</td><td class="mdescRight">y[:] = this[:]. Collective: each process copies its local section, and then y is replicated over all of them.  <br /></td></tr>
+<tr class="separator:ab01423d73b8aefaa175436491d12149d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2ab5e92d893b78c1bc68fb15f14b9c9" id="r_af2ab5e92d893b78c1bc68fb15f14b9c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#af2ab5e92d893b78c1bc68fb15f14b9c9">axpy_to</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> a, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; y) const</td></tr>
+<tr class="separator:af2ab5e92d893b78c1bc68fb15f14b9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae745e8ae47b09dbb17c67eb7f5274d4f" id="r_ae745e8ae47b09dbb17c67eb7f5274d4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ae745e8ae47b09dbb17c67eb7f5274d4f">dot</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; y) const</td></tr>
+<tr class="memdesc:ae745e8ae47b09dbb17c67eb7f5274d4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scalar product &lt;this|y&gt;. Collective, the result is available to each process.  <br /></td></tr>
+<tr class="separator:ae745e8ae47b09dbb17c67eb7f5274d4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cb74862ae5eceb004761481bd81baeb" id="r_a4cb74862ae5eceb004761481bd81baeb"><td class="memItemLeft" align="right" valign="top">std::map&lt; size_t, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a4cb74862ae5eceb004761481bd81baeb">select_max_dot</a> (size_t n, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; y) const</td></tr>
+<tr class="memdesc:a4cb74862ae5eceb004761481bd81baeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The n indices with the largest |this[i]*y[i]|. Collective.  <br /></td></tr>
+<tr class="separator:a4cb74862ae5eceb004761481bd81baeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Collective linear algebra operations, synchronisation on exit</div></td></tr>
 <tr class="memitem:a4d32f113660ca10a15f2bea070389799" id="r_a4d32f113660ca10a15f2bea070389799"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a4d32f113660ca10a15f2bea070389799">dot</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y) const</td></tr>
 <tr class="memdesc:a4d32f113660ca10a15f2bea070389799"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scalar product of two arrays. Collective. Throws error if any array is empty. Both arrays should be part of the same processor group (same communicator). The result is broadcast to each process.  <br /></td></tr>
@@ -353,6 +371,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a06cddc4939b74533794457dd961d91f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca5fd27c1376c9edf2079a156a58fb87" id="r_aca5fd27c1376c9edf2079a156a58fb87"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#aca5fd27c1376c9edf2079a156a58fb87">DistrArray</a> ()=default</td></tr>
 <tr class="separator:aca5fd27c1376c9edf2079a156a58fb87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb66b8198ee401ea178c061a6df9e3ff" id="r_acb66b8198ee401ea178c061a6df9e3ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#acb66b8198ee401ea178c061a6df9e3ff">check_compatible</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt; y, const std::string &amp;name) const</td></tr>
+<tr class="memdesc:acb66b8198ee401ea178c061a6df9e3ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops with an error unless the contiguous array y has as many elements as this.  <br /></td></tr>
+<tr class="separator:acb66b8198ee401ea178c061a6df9e3ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04c5f6eabcf33711aaa8df2b0297a5e1" id="r_a04c5f6eabcf33711aaa8df2b0297a5e1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a04c5f6eabcf33711aaa8df2b0297a5e1">_divide</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;z, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> shift, bool append, bool negative)</td></tr>
 <tr class="separator:a04c5f6eabcf33711aaa8df2b0297a5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -765,7 +786,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a2599f5d68e2be0d8dcc5c5cc01778d2d" name="a2599f5d68e2be0d8dcc5c5cc01778d2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2599f5d68e2be0d8dcc5c5cc01778d2d">&#9670;&#160;</a></span>axpy() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2599f5d68e2be0d8dcc5c5cc01778d2d">&#9670;&#160;</a></span>axpy() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -803,7 +824,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a63ab08569b888803190980dccf6db5cb" name="a63ab08569b888803190980dccf6db5cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63ab08569b888803190980dccf6db5cb">&#9670;&#160;</a></span>axpy() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a63ab08569b888803190980dccf6db5cb">&#9670;&#160;</a></span>axpy() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -835,6 +856,103 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a16ea980f19cb7b6823fc13c06963852a" name="a16ea980f19cb7b6823fc13c06963852a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16ea980f19cb7b6823fc13c06963852a">&#9670;&#160;</a></span>axpy() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::DistrArray::axpy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>this[:] += a * y[:] over the local section. Local. </p>
+
+</div>
+</div>
+<a id="af2ab5e92d893b78c1bc68fb15f14b9c9" name="af2ab5e92d893b78c1bc68fb15f14b9c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2ab5e92d893b78c1bc68fb15f14b9c9">&#9670;&#160;</a></span>axpy_to()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::DistrArray::axpy_to </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a>&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>y[:] += a * this[:]. Collective: each process updates its local section, and then y is replicated over all of them. y must hold the same values on all processes on entry. </p>
+
+</div>
+</div>
+<a id="acb66b8198ee401ea178c061a6df9e3ff" name="acb66b8198ee401ea178c061a6df9e3ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb66b8198ee401ea178c061a6df9e3ff">&#9670;&#160;</a></span>check_compatible()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::DistrArray::check_compatible </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stops with an error unless the contiguous array y has as many elements as this. </p>
 
 </div>
 </div>
@@ -886,7 +1004,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a13953b59c18f19d9b2afaf024f0363d9" name="a13953b59c18f19d9b2afaf024f0363d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13953b59c18f19d9b2afaf024f0363d9">&#9670;&#160;</a></span>copy()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a13953b59c18f19d9b2afaf024f0363d9">&#9670;&#160;</a></span>copy() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -909,6 +1027,25 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Copies all elements of y. If both arrays are empty than does nothing. If only one is empty, throws an error. </p>
+
+</div>
+</div>
+<a id="a257cfcdfc4fac4ba077f421fbd5e67e2" name="a257cfcdfc4fac4ba077f421fbd5e67e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a257cfcdfc4fac4ba077f421fbd5e67e2">&#9670;&#160;</a></span>copy() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::DistrArray::copy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt;&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>this[:] = y[:] over the local section. Local. </p>
 
 </div>
 </div>
@@ -961,6 +1098,26 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ab01423d73b8aefaa175436491d12149d" name="ab01423d73b8aefaa175436491d12149d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab01423d73b8aefaa175436491d12149d">&#9670;&#160;</a></span>copy_to()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::DistrArray::copy_to </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt;&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>y[:] = this[:]. Collective: each process copies its local section, and then y is replicated over all of them. </p>
 
 </div>
 </div>
@@ -1089,7 +1246,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a4d32f113660ca10a15f2bea070389799" name="a4d32f113660ca10a15f2bea070389799"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d32f113660ca10a15f2bea070389799">&#9670;&#160;</a></span>dot() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d32f113660ca10a15f2bea070389799">&#9670;&#160;</a></span>dot() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1119,7 +1276,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="ac25fdc7e140b903be31399f2c352caa7" name="ac25fdc7e140b903be31399f2c352caa7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac25fdc7e140b903be31399f2c352caa7">&#9670;&#160;</a></span>dot() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac25fdc7e140b903be31399f2c352caa7">&#9670;&#160;</a></span>dot() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1143,6 +1300,26 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented in <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#ac25fdc7e140b903be31399f2c352caa7">molpro::linalg::array::DistrArrayDisk</a>.</p>
+
+</div>
+</div>
+<a id="ae745e8ae47b09dbb17c67eb7f5274d4f" name="ae745e8ae47b09dbb17c67eb7f5274d4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae745e8ae47b09dbb17c67eb7f5274d4f">&#9670;&#160;</a></span>dot() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> molpro::linalg::array::DistrArray::dot </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt;&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Scalar product &lt;this|y&gt;. Collective, the result is available to each process. </p>
 
 </div>
 </div>
@@ -1663,7 +1840,6 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
 <p>Scale by a constant. Local. </p>
 
 </div>
@@ -1783,7 +1959,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a182c67ba7775724fa72bbf57d924aa43" name="a182c67ba7775724fa72bbf57d924aa43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a182c67ba7775724fa72bbf57d924aa43">&#9670;&#160;</a></span>select_max_dot() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a182c67ba7775724fa72bbf57d924aa43">&#9670;&#160;</a></span>select_max_dot() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1811,7 +1987,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a46de5bc51eb99248d4610d0c7724d15f" name="a46de5bc51eb99248d4610d0c7724d15f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46de5bc51eb99248d4610d0c7724d15f">&#9670;&#160;</a></span>select_max_dot() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a46de5bc51eb99248d4610d0c7724d15f">&#9670;&#160;</a></span>select_max_dot() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1835,6 +2011,36 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4cb74862ae5eceb004761481bd81baeb" name="a4cb74862ae5eceb004761481bd81baeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cb74862ae5eceb004761481bd81baeb">&#9670;&#160;</a></span>select_max_dot() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; size_t, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">DistrArray::value_type</a> &gt; molpro::linalg::array::DistrArray::select_max_dot </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">Span</a>&lt; const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> &gt;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The n indices with the largest |this[i]*y[i]|. Collective. </p>
 
 </div>
 </div>

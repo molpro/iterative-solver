@@ -1,17 +1,21 @@
 <map id="molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;" name="molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;">
 <area shape="rect" id="Node000001" title="Enhances various operations between pairs of arrays and allows dynamic code injection with uniform in..." alt="" coords="5,249,193,289"/>
-<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html" title=" " alt="" coords="251,5,418,60"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,235,163,154,199,109,240,69,257,58,259,62,243,73,203,112,168,157,119,238"/>
-<area shape="rect" id="Node000003" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html" title=" " alt="" coords="241,84,428,139"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="128,237,179,192,240,148,261,136,263,141,243,152,182,196,132,241"/>
-<area shape="rect" id="Node000004" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDefault.html" title="Fall back handler that calls member functions of arrays." alt="" coords="253,163,417,217"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="172,242,252,215,253,220,174,247"/>
-<area shape="rect" id="Node000005" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistr.html" title=" " alt="" coords="255,241,414,296"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="207,266,255,266,255,271,207,271"/>
-<area shape="rect" id="Node000006" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrDDisk.html" title=" " alt="" coords="241,320,428,375"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="174,291,253,317,251,322,172,296"/>
-<area shape="rect" id="Node000007" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html" title="Array handler for two containers both of which can be iterated through using begin() and end() member..." alt="" coords="251,399,418,453"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="133,296,182,340,243,384,266,396,263,401,240,388,179,344,129,300"/>
-<area shape="rect" id="Node000008" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerSparse.html" title="Array handler between two sparse arrays (e.g. std::map)" alt="" coords="255,477,415,532"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="119,300,168,380,203,424,243,463,261,475,258,479,240,467,199,428,164,383,115,303"/>
+<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html" title=" " alt="" coords="241,5,451,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,235,134,197,163,153,198,108,240,69,257,58,260,62,243,73,202,112,167,156,139,200,118,237"/>
+<area shape="rect" id="Node000003" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDefault.html" title="Fall back handler that calls member functions of arrays." alt="" coords="264,84,428,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="128,237,178,192,240,148,263,136,265,141,243,152,181,196,131,241"/>
+<area shape="rect" id="Node000004" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistr.html" title=" " alt="" coords="267,163,425,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="175,242,266,213,267,218,177,247"/>
+<area shape="rect" id="Node000005" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrDDisk.html" title=" " alt="" coords="253,241,439,296"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="207,266,252,266,252,271,207,271"/>
+<area shape="rect" id="Node000006" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html" title="Array handler for two containers both of which can be iterated through using begin() and end() member..." alt="" coords="263,320,429,375"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="176,290,263,318,261,323,175,295"/>
+<area shape="rect" id="Node000007" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerSparse.html" title="Array handler between two sparse arrays (e.g. std::map)" alt="" coords="266,399,426,453"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="132,296,182,340,243,384,267,396,264,401,240,388,178,345,128,300"/>
+<area shape="rect" id="Node000008" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html" title="Base for handlers whose left arrays are created by a function given by the user." alt="" coords="241,477,451,532"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="119,300,167,381,202,424,243,463,262,475,259,479,240,467,198,428,163,384,114,302"/>
+<area shape="rect" id="Node000009" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html" title=" " alt="" coords="509,437,675,492"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="464,483,508,476,509,481,464,488"/>
+<area shape="rect" id="Node000010" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html" title=" " alt="" coords="499,516,685,571"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="465,521,499,526,498,531,464,526"/>
 </map>

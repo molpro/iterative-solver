@@ -97,7 +97,6 @@ $(document).ready(function(){initNavTree('classmolpro_1_1linalg_1_1array_1_1Arra
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">molpro::linalg::array::ArrayHandlerDDisk&lt; AL, AR &gt; Class Template Reference</div></div>
 </div><!--header-->
@@ -109,9 +108,11 @@ Inheritance diagram for molpro::linalg::array::ArrayHandlerDDisk&lt; AL, AR &gt;
 <div class="dyncontent">
 <div class="center"><img src="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk__inherit__graph.png" border="0" usemap="#amolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk_3_01AL_00_01AR_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="amolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk_3_01AL_00_01AR_01_4_inherit__map" id="amolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk_3_01AL_00_01AR_01_4_inherit__map">
-<area shape="rect" title=" " alt="" coords="16,93,183,148"/>
-<area shape="rect" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html" title="Enhances various operations between pairs of arrays and allows dynamic code injection with uniform in..." alt="" coords="5,5,193,45"/>
-<area shape="poly" title=" " alt="" coords="102,59,102,93,97,93,97,59"/>
+<area shape="rect" title=" " alt="" coords="27,196,193,251"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html" title="Base for handlers whose left arrays are created by a function given by the user." alt="" coords="5,93,215,148"/>
+<area shape="poly" title=" " alt="" coords="113,162,113,196,107,196,107,162"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html" title="Enhances various operations between pairs of arrays and allows dynamic code injection with uniform in..." alt="" coords="16,5,204,45"/>
+<area shape="poly" title=" " alt="" coords="113,59,113,93,107,93,107,59"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -119,24 +120,28 @@ Collaboration diagram for molpro::linalg::array::ArrayHandlerDDisk&lt; AL, AR &g
 <div class="dyncontent">
 <div class="center"><img src="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk__coll__graph.png" border="0" usemap="#amolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk_3_01AL_00_01AR_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="amolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk_3_01AL_00_01AR_01_4_coll__map" id="amolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk_3_01AL_00_01AR_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="16,93,183,148"/>
-<area shape="rect" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html" title="Enhances various operations between pairs of arrays and allows dynamic code injection with uniform in..." alt="" coords="5,5,193,45"/>
-<area shape="poly" title=" " alt="" coords="102,59,102,93,97,93,97,59"/>
+<area shape="rect" title=" " alt="" coords="27,196,193,251"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html" title="Base for handlers whose left arrays are created by a function given by the user." alt="" coords="5,93,215,148"/>
+<area shape="poly" title=" " alt="" coords="113,162,113,196,107,196,107,162"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html" title="Enhances various operations between pairs of arrays and allows dynamic code injection with uniform in..." alt="" coords="16,5,204,45"/>
+<area shape="poly" title=" " alt="" coords="113,59,113,93,107,93,107,59"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1f01a56394550e0e8b099024c6a923cc" id="r_a1f01a56394550e0e8b099024c6a923cc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a1f01a56394550e0e8b099024c6a923cc">ArrayHandlerDDisk</a> ()</td></tr>
+<tr class="memdesc:a1f01a56394550e0e8b099024c6a923cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">New arrays are created by AL::CreateTempCopy(), with any file next to that of the source, if it has one.  <br /></td></tr>
 <tr class="separator:a1f01a56394550e0e8b099024c6a923cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14a7829215a864929b016e6056d92f2e" id="r_a14a7829215a864929b016e6056d92f2e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a14a7829215a864929b016e6056d92f2e">ArrayHandlerDDisk</a> (const std::string &amp;directory)</td></tr>
+<tr class="memdesc:a14a7829215a864929b016e6056d92f2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">New arrays are created by AL::CreateTempCopy(), with any file in directory.  <br /></td></tr>
+<tr class="separator:a14a7829215a864929b016e6056d92f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec8696d377b0d9461dec6a440c1b8b15" id="r_aec8696d377b0d9461dec6a440c1b8b15"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#aec8696d377b0d9461dec6a440c1b8b15">ArrayHandlerDDisk</a> (std::function&lt; AL(const AR &amp;)&gt; copy_func)</td></tr>
-<tr class="memdesc:aec8696d377b0d9461dec6a440c1b8b15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor taking a copy function.  <br /></td></tr>
+<tr class="memdesc:aec8696d377b0d9461dec6a440c1b8b15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor taking a copy function, which can e.g. specify the file underlying the new array.  <br /></td></tr>
 <tr class="separator:aec8696d377b0d9461dec6a440c1b8b15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05a5d5f3a57548f6d5d6451dd4236172" id="r_a05a5d5f3a57548f6d5d6451dd4236172"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1ProxyHandle.html">ProxyHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a05a5d5f3a57548f6d5d6451dd4236172">lazy_handle</a> () override</td></tr>
 <tr class="memdesc:a05a5d5f3a57548f6d5d6451dd4236172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a lazy handle. Most implementations simply need to call the overload: return lazy_handle(*this);.  <br /></td></tr>
 <tr class="separator:a05a5d5f3a57548f6d5d6451dd4236172"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40f21d8a1d3a4c9e3761f02d0d195a56" id="r_a40f21d8a1d3a4c9e3761f02d0d195a56"><td class="memItemLeft" align="right" valign="top">AL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a40f21d8a1d3a4c9e3761f02d0d195a56">copy</a> (const AR &amp;source) override</td></tr>
-<tr class="separator:a40f21d8a1d3a4c9e3761f02d0d195a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d27b11bd2cbf656444310065daaaf90" id="r_a8d27b11bd2cbf656444310065daaaf90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a8d27b11bd2cbf656444310065daaaf90">copy</a> (AL &amp;x, const AR &amp;y) override</td></tr>
 <tr class="memdesc:a8d27b11bd2cbf656444310065daaaf90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy content of y into x.  <br /></td></tr>
 <tr class="separator:a8d27b11bd2cbf656444310065daaaf90"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,6 +164,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4481d9881f5c20990b3db602e4da0698" id="r_a4481d9881f5c20990b3db602e4da0698"><td class="memItemLeft" align="right" valign="top">std::map&lt; size_t, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#abb16bb06ec4dfd2118e55f64087a204e">value_type_abs</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a4481d9881f5c20990b3db602e4da0698">select</a> (size_t n, const AL &amp;x, bool max=false, bool ignore_sign=false) override</td></tr>
 <tr class="memdesc:a4481d9881f5c20990b3db602e4da0698"><td class="mdescLeft">&#160;</td><td class="mdescRight">Select n indices with largest (or smallest) actual (or absolute) value.  <br /></td></tr>
 <tr class="separator:a4481d9881f5c20990b3db602e4da0698"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html">molpro::linalg::array::ArrayHandlerWithCopyFunc&lt; AL, AR &gt;</a></td></tr>
+<tr class="memitem:a4cb1c30c98f92d3d3377fe2f02f056a4 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc" id="r_a4cb1c30c98f92d3d3377fe2f02f056a4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html#a4cb1c30c98f92d3d3377fe2f02f056a4">ArrayHandlerWithCopyFunc</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html#a5bb36613442f0f8b270af5c557922bc5">copy_func_type</a> copy_func)</td></tr>
+<tr class="memdesc:a4cb1c30c98f92d3d3377fe2f02f056a4 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor taking a copy function.  <br /></td></tr>
+<tr class="separator:a4cb1c30c98f92d3d3377fe2f02f056a4 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2721d8cc6a93e4d1cbeb14b1488fb9bd inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc" id="r_a2721d8cc6a93e4d1cbeb14b1488fb9bd"><td class="memItemLeft" align="right" valign="top">AL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html#a2721d8cc6a93e4d1cbeb14b1488fb9bd">copy</a> (const AR &amp;source) override</td></tr>
+<tr class="separator:a2721d8cc6a93e4d1cbeb14b1488fb9bd inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;</a></td></tr>
 <tr class="memitem:abe05067f4eb67264edaef960015a9423 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler" id="r_abe05067f4eb67264edaef960015a9423"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1Counter.html">Counter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#abe05067f4eb67264edaef960015a9423">counter</a> () const</td></tr>
 <tr class="separator:abe05067f4eb67264edaef960015a9423 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,20 +181,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a9adcb3b8f3875d8706e792a0e09d5780 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html" title="Enhances various operations between pairs of arrays and allows dynamic code injection with uniform in...">ArrayHandler</a> instance and invalidates any LazyHandler it created. Invalidated handler will not evaluate.  <br /></td></tr>
 <tr class="separator:a9adcb3b8f3875d8706e792a0e09d5780 inherit pub_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a311ece305fc0afcf359911dd69816cf9" id="r_a311ece305fc0afcf359911dd69816cf9"><td class="memItemLeft" align="right" valign="top">std::function&lt; AL(const AR &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html#a311ece305fc0afcf359911dd69816cf9">m_copy_func</a></td></tr>
-<tr class="memdesc:a311ece305fc0afcf359911dd69816cf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">function for making a copy  <br /></td></tr>
-<tr class="separator:a311ece305fc0afcf359911dd69816cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;</a></td></tr>
-<tr class="memitem:a07fc7fcd247c2bc725a97ac15f2f7cb2 inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler" id="r_a07fc7fcd247c2bc725a97ac15f2f7cb2"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1Counter.html">Counter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a07fc7fcd247c2bc725a97ac15f2f7cb2">m_counter</a></td></tr>
-<tr class="separator:a07fc7fcd247c2bc725a97ac15f2f7cb2 inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a261ade4cb7ffb330d8876acda683440d inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler" id="r_a261ade4cb7ffb330d8876acda683440d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::weak_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1LazyHandle.html">LazyHandle</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a261ade4cb7ffb330d8876acda683440d">m_lazy_handles</a></td></tr>
-<tr class="memdesc:a261ade4cb7ffb330d8876acda683440d inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">keeps track of all created lazy handles  <br /></td></tr>
-<tr class="separator:a261ade4cb7ffb330d8876acda683440d inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html">molpro::linalg::array::ArrayHandlerWithCopyFunc&lt; AL, AR &gt;</a></td></tr>
+<tr class="memitem:a5bb36613442f0f8b270af5c557922bc5 inherit pub_types_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc" id="r_a5bb36613442f0f8b270af5c557922bc5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html#a5bb36613442f0f8b270af5c557922bc5">copy_func_type</a> = std::function&lt; AL(const AR &amp;)&gt;</td></tr>
+<tr class="separator:a5bb36613442f0f8b270af5c557922bc5 inherit pub_types_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmolpro_1_1linalg_1_1array_1_1ArrayHandler')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;</a></td></tr>
 <tr class="memitem:a421d6107b2a60ffcdfb79d2d27c30c73 inherit pub_types_classmolpro_1_1linalg_1_1array_1_1ArrayHandler" id="r_a421d6107b2a60ffcdfb79d2d27c30c73"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a421d6107b2a60ffcdfb79d2d27c30c73">value_type_L</a> = typename <a class="el" href="namespacemolpro_1_1linalg_1_1array.html#a5aeb80119c6ea1e4cd9155b6fb025344">array::mapped_or_value_type_t</a>&lt; AL &gt;</td></tr>
 <tr class="separator:a421d6107b2a60ffcdfb79d2d27c30c73 inherit pub_types_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -212,10 +214,20 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:adffb2fe5e20a200af2a6656138d79907 inherit pro_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb672cde1dc9b5ed521c8efe0ae1b18e inherit pro_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler" id="r_acb672cde1dc9b5ed521c8efe0ae1b18e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1ProxyHandle.html">ProxyHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#acb672cde1dc9b5ed521c8efe0ae1b18e">lazy_handle</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">ArrayHandler</a>&lt; AL, AR &gt; &amp;handler)</td></tr>
 <tr class="separator:acb672cde1dc9b5ed521c8efe0ae1b18e inherit pro_methods_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html">molpro::linalg::array::ArrayHandlerWithCopyFunc&lt; AL, AR &gt;</a></td></tr>
+<tr class="memitem:a5f4f55341cc1f6ae327f2ccb36a9f92a inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc" id="r_a5f4f55341cc1f6ae327f2ccb36a9f92a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html#a5bb36613442f0f8b270af5c557922bc5">copy_func_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html#a5f4f55341cc1f6ae327f2ccb36a9f92a">m_copy_func</a></td></tr>
+<tr class="memdesc:a5f4f55341cc1f6ae327f2ccb36a9f92a inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc"><td class="mdescLeft">&#160;</td><td class="mdescRight">function for making a copy  <br /></td></tr>
+<tr class="separator:a5f4f55341cc1f6ae327f2ccb36a9f92a inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;</a></td></tr>
+<tr class="memitem:a07fc7fcd247c2bc725a97ac15f2f7cb2 inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler" id="r_a07fc7fcd247c2bc725a97ac15f2f7cb2"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1Counter.html">Counter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a07fc7fcd247c2bc725a97ac15f2f7cb2">m_counter</a></td></tr>
+<tr class="separator:a07fc7fcd247c2bc725a97ac15f2f7cb2 inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a261ade4cb7ffb330d8876acda683440d inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler" id="r_a261ade4cb7ffb330d8876acda683440d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::weak_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1LazyHandle.html">LazyHandle</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a261ade4cb7ffb330d8876acda683440d">m_lazy_handles</a></td></tr>
+<tr class="memdesc:a261ade4cb7ffb330d8876acda683440d inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">keeps track of all created lazy handles  <br /></td></tr>
+<tr class="separator:a261ade4cb7ffb330d8876acda683440d inherit pro_attribs_classmolpro_1_1linalg_1_1array_1_1ArrayHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1f01a56394550e0e8b099024c6a923cc" name="a1f01a56394550e0e8b099024c6a923cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f01a56394550e0e8b099024c6a923cc">&#9670;&#160;</a></span>ArrayHandlerDDisk() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f01a56394550e0e8b099024c6a923cc">&#9670;&#160;</a></span>ArrayHandlerDDisk() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -239,10 +251,42 @@ template&lt;class AL , class AR  = AL&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>New arrays are created by AL::CreateTempCopy(), with any file next to that of the source, if it has one. </p>
+
+</div>
+</div>
+<a id="a14a7829215a864929b016e6056d92f2e" name="a14a7829215a864929b016e6056d92f2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14a7829215a864929b016e6056d92f2e">&#9670;&#160;</a></span>ArrayHandlerDDisk() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class AL , class AR  = AL&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html">molpro::linalg::array::ArrayHandlerDDisk</a>&lt; AL, AR &gt;::ArrayHandlerDDisk </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>directory</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>New arrays are created by AL::CreateTempCopy(), with any file in directory. </p>
+
 </div>
 </div>
 <a id="aec8696d377b0d9461dec6a440c1b8b15" name="aec8696d377b0d9461dec6a440c1b8b15"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec8696d377b0d9461dec6a440c1b8b15">&#9670;&#160;</a></span>ArrayHandlerDDisk() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aec8696d377b0d9461dec6a440c1b8b15">&#9670;&#160;</a></span>ArrayHandlerDDisk() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -267,14 +311,7 @@ template&lt;class AL , class AR  = AL&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor taking a copy function. </p>
-<p>Disk arrays may require extra arguments in the copy constructor to specify the underlying filename. The user can pass copy_func which implements</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">copy_func</td><td>copy function </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Constructor taking a copy function, which can e.g. specify the file underlying the new array. </p>
 
 </div>
 </div>
@@ -326,7 +363,7 @@ template&lt;class AL , class AR  = AL&gt; </div>
 </div>
 </div>
 <a id="a8d27b11bd2cbf656444310065daaaf90" name="a8d27b11bd2cbf656444310065daaaf90"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d27b11bd2cbf656444310065daaaf90">&#9670;&#160;</a></span>copy() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d27b11bd2cbf656444310065daaaf90">&#9670;&#160;</a></span>copy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -364,36 +401,6 @@ template&lt;class AL , class AR  = AL&gt; </div>
 <p>Copy content of y into x. </p>
 
 <p>Implements <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a6788b6924c2e9565d4cbac8e6c84109f">molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;</a>.</p>
-
-</div>
-</div>
-<a id="a40f21d8a1d3a4c9e3761f02d0d195a56" name="a40f21d8a1d3a4c9e3761f02d0d195a56"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40f21d8a1d3a4c9e3761f02d0d195a56">&#9670;&#160;</a></span>copy() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class AL , class AR  = AL&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">AL <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html">molpro::linalg::array::ArrayHandlerDDisk</a>&lt; AL, AR &gt;::copy </td>
-          <td>(</td>
-          <td class="paramtype">const AR &amp;&#160;</td>
-          <td class="paramname"><em>source</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a4e3e408ae09aaf1a463257dec668cb1f">molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;</a>.</p>
 
 </div>
 </div>
@@ -758,33 +765,6 @@ template&lt;class AL , class AR  = AL&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>map of indices and corresponding x,y product </dd></dl>
 
 <p>Implements <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#a961a362008722b7118640c95eb5189ac">molpro::linalg::array::ArrayHandler&lt; AL, AR &gt;</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a311ece305fc0afcf359911dd69816cf9" name="a311ece305fc0afcf359911dd69816cf9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a311ece305fc0afcf359911dd69816cf9">&#9670;&#160;</a></span>m_copy_func</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class AL , class AR  = AL&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::function&lt;AL(const AR &amp;)&gt; <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html">molpro::linalg::array::ArrayHandlerDDisk</a>&lt; AL, AR &gt;::m_copy_func</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>function for making a copy </p>
 
 </div>
 </div>

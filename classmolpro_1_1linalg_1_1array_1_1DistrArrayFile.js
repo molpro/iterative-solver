@@ -11,6 +11,7 @@ var classmolpro_1_1linalg_1_1array_1_1DistrArrayFile =
     [ "at", "classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html#a869cbf0f14a83262bd5b5e137bfe44a9", null ],
     [ "compatible", "classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html#a24cf11319b198df2238cab728fe81a29", null ],
     [ "erase", "classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html#a0e0a9bf6423f365790cdc4b8d71739ef", null ],
+    [ "file_directory", "classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html#add38e8fc84fa519545634b3eb2bb83e1", null ],
     [ "gather", "classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html#a9b888dee28aefae63d83f7834efc3092", null ],
     [ "get", "classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html#ac9faf610e6ac8b882c798c8e558a9e2a", null ],
     [ "get", "classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html#a711dc83abc360ef2fa7c34f82968d9a9", null ],

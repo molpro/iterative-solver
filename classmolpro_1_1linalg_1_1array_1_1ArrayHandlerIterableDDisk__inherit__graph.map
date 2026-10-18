@@ -1,0 +1,5 @@
+<map id="molpro::linalg::array::ArrayHandlerIterableDDisk&lt; AL, AR &gt;" name="molpro::linalg::array::ArrayHandlerIterableDDisk&lt; AL, AR &gt;">
+<area shape="rect" id="Node000001" title="Array handler between a contiguous array (left), e.g. std::vector or Span, and a distributed array (r..." alt="" coords="5,93,211,148"/>
+<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html" title=" " alt="" coords="14,5,202,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,59,111,93,105,93,105,59"/>
+</map>

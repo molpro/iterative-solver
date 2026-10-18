@@ -274,13 +274,20 @@
     <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html</filename>
     <templarg>class AL</templarg>
     <templarg>class AR</templarg>
-    <base>molpro::linalg::array::ArrayHandler</base>
+    <base>molpro::linalg::array::ArrayHandlerWithCopyFunc</base>
     <member kind="function">
       <type></type>
       <name>ArrayHandlerDDisk</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html</anchorfile>
       <anchor>a1f01a56394550e0e8b099024c6a923cc</anchor>
       <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>ArrayHandlerDDisk</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html</anchorfile>
+      <anchor>a14a7829215a864929b016e6056d92f2e</anchor>
+      <arglist>(const std::string &amp;directory)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -295,13 +302,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html</anchorfile>
       <anchor>a05a5d5f3a57548f6d5d6451dd4236172</anchor>
       <arglist>() override</arglist>
-    </member>
-    <member kind="function">
-      <type>AL</type>
-      <name>copy</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html</anchorfile>
-      <anchor>a40f21d8a1d3a4c9e3761f02d0d195a56</anchor>
-      <arglist>(const AR &amp;source) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -366,26 +366,26 @@
       <anchor>a4481d9881f5c20990b3db602e4da0698</anchor>
       <arglist>(size_t n, const AL &amp;x, bool max=false, bool ignore_sign=false) override</arglist>
     </member>
-    <member kind="variable" protection="protected">
-      <type>std::function&lt; AL(const AR &amp;)&gt;</type>
-      <name>m_copy_func</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDisk.html</anchorfile>
-      <anchor>a311ece305fc0afcf359911dd69816cf9</anchor>
-      <arglist></arglist>
-    </member>
   </compound>
   <compound kind="class">
     <name>molpro::linalg::array::ArrayHandlerDDiskDistr</name>
     <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html</filename>
     <templarg>class AL</templarg>
     <templarg>class AR</templarg>
-    <base>molpro::linalg::array::ArrayHandler</base>
+    <base>molpro::linalg::array::ArrayHandlerWithCopyFunc</base>
     <member kind="function">
       <type></type>
       <name>ArrayHandlerDDiskDistr</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html</anchorfile>
       <anchor>a023f4f9014ef95ec98713a1653c6df33</anchor>
       <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>ArrayHandlerDDiskDistr</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html</anchorfile>
+      <anchor>ad8777cec5618c916bc8f4156d9a942be</anchor>
+      <arglist>(const std::string &amp;directory)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -400,13 +400,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html</anchorfile>
       <anchor>ae30c74995215dabf2fcb8950ccfe7440</anchor>
       <arglist>() override</arglist>
-    </member>
-    <member kind="function">
-      <type>AL</type>
-      <name>copy</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html</anchorfile>
-      <anchor>a3fc57bf0eaa3bf00a4622c647b25371e</anchor>
-      <arglist>(const AR &amp;source) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -471,12 +464,103 @@
       <anchor>ab0df5b05835057027d07c7bb39a7b9db</anchor>
       <arglist>(size_t n, const AL &amp;x, bool max=false, bool ignore_sign=false) override</arglist>
     </member>
-    <member kind="variable" protection="protected">
-      <type>std::function&lt; AL(const AR &amp;)&gt;</type>
-      <name>m_copy_func</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskDistr.html</anchorfile>
-      <anchor>a9b69e3bde33e878efae97529298f2be5</anchor>
-      <arglist></arglist>
+  </compound>
+  <compound kind="class">
+    <name>molpro::linalg::array::ArrayHandlerDDiskIterable</name>
+    <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</filename>
+    <templarg>class AL</templarg>
+    <templarg>class AR</templarg>
+    <base>ArrayHandlerWithCopyFunc&lt; AL, AR &gt;</base>
+    <member kind="function">
+      <type></type>
+      <name>ArrayHandlerDDiskIterable</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>a44c5fbaf80610dec1a6b8f55c8ffc1b1</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>ArrayHandlerDDiskIterable</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>a9bfd7ebf122889d92354a7b2fa63b062</anchor>
+      <arglist>(const std::string &amp;directory)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>ArrayHandlerDDiskIterable</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>aba2621d9c2a4bb228e744c323749a669</anchor>
+      <arglist>(std::function&lt; AL(const AR &amp;)&gt; copy_func)</arglist>
+    </member>
+    <member kind="function">
+      <type>ProxyHandle</type>
+      <name>lazy_handle</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>a64cd62acee6153b9543257ed4e4e06ee</anchor>
+      <arglist>() override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>copy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>ac47200745d4aa0fa9e7e8f01cef5b440</anchor>
+      <arglist>(AL &amp;x, const AR &amp;y) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>scal</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>a0174f8fdd906c51400a1c60471882ed6</anchor>
+      <arglist>(value_type alpha, AL &amp;x) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>fill</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>abcb2d5bd40e90d166e0caa5b2eba0743</anchor>
+      <arglist>(value_type alpha, AL &amp;x) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>axpy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>abe88447fabb8d1d3278bbe00505f1d8a</anchor>
+      <arglist>(value_type alpha, const AR &amp;x, AL &amp;y) override</arglist>
+    </member>
+    <member kind="function">
+      <type>value_type</type>
+      <name>dot</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>a3bddfd35881c66b4296f207af98d6cfc</anchor>
+      <arglist>(const AL &amp;x, const AR &amp;y) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>gemm_outer</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>af3818472f0a53f504e6ada42741f3334</anchor>
+      <arglist>(const Matrix&lt; value_type &gt; alphas, const CVecRef&lt; AR &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy) override</arglist>
+    </member>
+    <member kind="function">
+      <type>Matrix&lt; value_type &gt;</type>
+      <name>gemm_inner</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>a4167225ef8fece03861cc6696d826efb</anchor>
+      <arglist>(const CVecRef&lt; AL &gt; &amp;xx, const CVecRef&lt; AR &gt; &amp;yy) override</arglist>
+    </member>
+    <member kind="function">
+      <type>std::map&lt; size_t, value_type_abs &gt;</type>
+      <name>select_max_dot</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>ad5e64c3a5d0513d26ea2cd73faea0a1f</anchor>
+      <arglist>(size_t n, const AL &amp;x, const AR &amp;y) override</arglist>
+    </member>
+    <member kind="function">
+      <type>std::map&lt; size_t, value_type &gt;</type>
+      <name>select</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDDiskIterable.html</anchorfile>
+      <anchor>a82cfe2a8c6a1cff84db5f571e99e3f7a</anchor>
+      <arglist>(size_t n, const AL &amp;x, bool max=false, bool ignore_sign=false) override</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -1020,22 +1104,92 @@
       <type>T</type>
       <name>copyAny</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html</anchorfile>
-      <anchor>a16b328328cac8d8cbfccf744fa7baa4f</anchor>
+      <anchor>a4478a2a2384e5ca0f245458ece6d279a</anchor>
       <arglist>(const S &amp;source)</arglist>
     </member>
-    <member kind="function" protection="protected">
-      <type>T</type>
-      <name>copyAny</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html</anchorfile>
-      <anchor>a16b328328cac8d8cbfccf744fa7baa4f</anchor>
-      <arglist>(const S &amp;source)</arglist>
+  </compound>
+  <compound kind="class">
+    <name>molpro::linalg::array::ArrayHandlerIterableDDisk</name>
+    <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</filename>
+    <templarg>class AL</templarg>
+    <templarg>class AR</templarg>
+    <base>ArrayHandler&lt; AL, AR &gt;</base>
+    <member kind="function">
+      <type>ProxyHandle</type>
+      <name>lazy_handle</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>a62354ec8a34219a0f2745226139bfe7b</anchor>
+      <arglist>() override</arglist>
     </member>
-    <member kind="function" protection="protected">
-      <type>T</type>
-      <name>copyAny</name>
-      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterable.html</anchorfile>
-      <anchor>a16b328328cac8d8cbfccf744fa7baa4f</anchor>
-      <arglist>(const S &amp;source)</arglist>
+    <member kind="function">
+      <type>AL</type>
+      <name>copy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>ad3592f50c422814b9ded12ed5e5b66c6</anchor>
+      <arglist>(const AR &amp;source) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>copy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>aedf1cfc529d45b04e27cfa9c8574e93e</anchor>
+      <arglist>(AL &amp;x, const AR &amp;y) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>scal</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>a26397af088d015480fd94fbccebfc2dc</anchor>
+      <arglist>(value_type alpha, AL &amp;x) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>fill</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>ad848393ccbf49e35f6c862f73d82afda</anchor>
+      <arglist>(value_type alpha, AL &amp;x) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>axpy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>a4de29288ee0f0b930ddf1f48ee03f652</anchor>
+      <arglist>(value_type alpha, const AR &amp;x, AL &amp;y) override</arglist>
+    </member>
+    <member kind="function">
+      <type>value_type</type>
+      <name>dot</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>af1ba544a328ee7274353d3d99af322f8</anchor>
+      <arglist>(const AL &amp;x, const AR &amp;y) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>gemm_outer</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>aa4a61b53735dc5f6af24a0743ddcf017</anchor>
+      <arglist>(const Matrix&lt; value_type &gt; alphas, const CVecRef&lt; AR &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy) override</arglist>
+    </member>
+    <member kind="function">
+      <type>Matrix&lt; value_type &gt;</type>
+      <name>gemm_inner</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>aeaa8808857b5504833d2a68cdd8742ae</anchor>
+      <arglist>(const CVecRef&lt; AL &gt; &amp;xx, const CVecRef&lt; AR &gt; &amp;yy) override</arglist>
+    </member>
+    <member kind="function">
+      <type>std::map&lt; size_t, value_type_abs &gt;</type>
+      <name>select_max_dot</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>ab916148ce6bcbfe07aa985a133e7c9e6</anchor>
+      <arglist>(size_t n, const AL &amp;x, const AR &amp;y) override</arglist>
+    </member>
+    <member kind="function">
+      <type>std::map&lt; size_t, value_type &gt;</type>
+      <name>select</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerIterableDDisk.html</anchorfile>
+      <anchor>abfdadd9ba26c862710e412adcea7b9d4</anchor>
+      <arglist>(size_t n, const AL &amp;x, bool max=false, bool ignore_sign=false) override</arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -1343,6 +1497,41 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerSparse.html</anchorfile>
       <anchor>ad8d571c5f450ec725daf8ae633e746e6</anchor>
       <arglist>() override</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>molpro::linalg::array::ArrayHandlerWithCopyFunc</name>
+    <filename>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html</filename>
+    <templarg>class AL</templarg>
+    <templarg>class AR</templarg>
+    <base>molpro::linalg::array::ArrayHandler</base>
+    <member kind="typedef">
+      <type>std::function&lt; AL(const AR &amp;)&gt;</type>
+      <name>copy_func_type</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html</anchorfile>
+      <anchor>a5bb36613442f0f8b270af5c557922bc5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>ArrayHandlerWithCopyFunc</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html</anchorfile>
+      <anchor>a4cb1c30c98f92d3d3377fe2f02f056a4</anchor>
+      <arglist>(copy_func_type copy_func)</arglist>
+    </member>
+    <member kind="function">
+      <type>AL</type>
+      <name>copy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html</anchorfile>
+      <anchor>a2721d8cc6a93e4d1cbeb14b1488fb9bd</anchor>
+      <arglist>(const AR &amp;source) override</arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>copy_func_type</type>
+      <name>m_copy_func</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html</anchorfile>
+      <anchor>a5f4f55341cc1f6ae327f2ccb36a9f92a</anchor>
+      <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -2122,6 +2311,19 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::DistributedDisk, ArrayFamily::Iterable &gt;</name>
+    <filename>structmolpro_1_1linalg_1_1array_1_1default__handler_3_01T_00_01S_00_01ArrayFamily_1_1Distributed1a4c0523688e031251c82676ee9bd8b9.html</filename>
+    <templarg>class T</templarg>
+    <templarg>class S</templarg>
+    <member kind="typedef">
+      <type>std::conditional_t&lt; is_contiguous_v&lt; S &gt;, ArrayHandlerDDiskIterable&lt; T, S &gt;, ArrayHandlerDefault&lt; T, S &gt; &gt;</type>
+      <name>value</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1default__handler_3_01T_00_01S_00_01ArrayFamily_1_1Distributed1a4c0523688e031251c82676ee9bd8b9.html</anchorfile>
+      <anchor>a6ab6d81c4e38c694a37b01c0e15cdb38</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::DistributedDisk, ArrayFamily::Sparse &gt;</name>
     <filename>structmolpro_1_1linalg_1_1array_1_1default__handler_3_01T_00_01S_00_01ArrayFamily_1_1Distributed36aa416066f57f33fdac6a4fbd137692.html</filename>
     <templarg>class T</templarg>
@@ -2131,6 +2333,19 @@
       <name>value</name>
       <anchorfile>structmolpro_1_1linalg_1_1array_1_1default__handler_3_01T_00_01S_00_01ArrayFamily_1_1Distributed36aa416066f57f33fdac6a4fbd137692.html</anchorfile>
       <anchor>add88cf6c11c49b82df633f3672ce078b</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::Iterable, ArrayFamily::DistributedDisk &gt;</name>
+    <filename>structmolpro_1_1linalg_1_1array_1_1default__handler_3_01T_00_01S_00_01ArrayFamily_1_1Iterable_007497eb3f381c951fd428a2a7b38d9ccd.html</filename>
+    <templarg>class T</templarg>
+    <templarg>class S</templarg>
+    <member kind="typedef">
+      <type>std::conditional_t&lt; is_contiguous_v&lt; T &gt;, ArrayHandlerIterableDDisk&lt; T, S &gt;, ArrayHandlerDefault&lt; T, S &gt; &gt;</type>
+      <name>value</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1default__handler_3_01T_00_01S_00_01ArrayFamily_1_1Iterable_007497eb3f381c951fd428a2a7b38d9ccd.html</anchorfile>
+      <anchor>a521474095a9ff4767891e8d1b9e0bd7e</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -2566,6 +2781,48 @@
       <anchor>a1d47c67f719dd4da6260ce545336da7f</anchor>
       <arglist>(const DistrArray &amp;y, const DistrArray &amp;z)</arglist>
     </member>
+    <member kind="function">
+      <type>void</type>
+      <name>copy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a257cfcdfc4fac4ba077f421fbd5e67e2</anchor>
+      <arglist>(Span&lt; const value_type &gt; y)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>axpy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a16ea980f19cb7b6823fc13c06963852a</anchor>
+      <arglist>(value_type a, Span&lt; const value_type &gt; y)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>copy_to</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>ab01423d73b8aefaa175436491d12149d</anchor>
+      <arglist>(Span&lt; value_type &gt; y) const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>axpy_to</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>af2ab5e92d893b78c1bc68fb15f14b9c9</anchor>
+      <arglist>(value_type a, Span&lt; value_type &gt; y) const</arglist>
+    </member>
+    <member kind="function">
+      <type>value_type</type>
+      <name>dot</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>ae745e8ae47b09dbb17c67eb7f5274d4f</anchor>
+      <arglist>(Span&lt; const value_type &gt; y) const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::map&lt; size_t, value_type &gt;</type>
+      <name>select_max_dot</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a4cb74862ae5eceb004761481bd81baeb</anchor>
+      <arglist>(size_t n, Span&lt; const value_type &gt; y) const</arglist>
+    </member>
     <member kind="function" virtualness="virtual">
       <type>virtual value_type</type>
       <name>dot</name>
@@ -2656,6 +2913,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
       <anchor>aca5fd27c1376c9edf2079a156a58fb87</anchor>
       <arglist>()=default</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>check_compatible</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>acb66b8198ee401ea178c061a6df9e3ff</anchor>
+      <arglist>(Span&lt; const value_type &gt; y, const std::string &amp;name) const</arglist>
     </member>
     <member kind="function" protection="protected" virtualness="virtual">
       <type>virtual void</type>
@@ -2881,6 +3145,48 @@
       <anchor>a1d47c67f719dd4da6260ce545336da7f</anchor>
       <arglist>(const DistrArray &amp;y, const DistrArray &amp;z)</arglist>
     </member>
+    <member kind="function">
+      <type>void</type>
+      <name>copy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a257cfcdfc4fac4ba077f421fbd5e67e2</anchor>
+      <arglist>(Span&lt; const value_type &gt; y)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>axpy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a16ea980f19cb7b6823fc13c06963852a</anchor>
+      <arglist>(value_type a, Span&lt; const value_type &gt; y)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>copy_to</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>ab01423d73b8aefaa175436491d12149d</anchor>
+      <arglist>(Span&lt; value_type &gt; y) const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>axpy_to</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>af2ab5e92d893b78c1bc68fb15f14b9c9</anchor>
+      <arglist>(value_type a, Span&lt; value_type &gt; y) const</arglist>
+    </member>
+    <member kind="function">
+      <type>value_type</type>
+      <name>dot</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>ae745e8ae47b09dbb17c67eb7f5274d4f</anchor>
+      <arglist>(Span&lt; const value_type &gt; y) const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::map&lt; size_t, value_type &gt;</type>
+      <name>select_max_dot</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a4cb74862ae5eceb004761481bd81baeb</anchor>
+      <arglist>(size_t n, Span&lt; const value_type &gt; y) const</arglist>
+    </member>
     <member kind="function" virtualness="virtual">
       <type>virtual value_type</type>
       <name>dot</name>
@@ -3005,6 +3311,13 @@
       <anchor>a0844434ab0ddf8f3b4ddb9a26467d968</anchor>
       <arglist>() const override</arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual std::string</type>
+      <name>file_directory</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
+      <anchor>a948e48bd5694384e4d73b0322b550d31</anchor>
+      <arglist>() const</arglist>
+    </member>
     <member kind="function">
       <type>std::unique_ptr&lt; LocalBuffer &gt;</type>
       <name>local_buffer</name>
@@ -3020,6 +3333,13 @@
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
+      <type>value_type</type>
+      <name>dot</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
+      <anchor>ae745e8ae47b09dbb17c67eb7f5274d4f</anchor>
+      <arglist>(Span&lt; const value_type &gt; y) const</arglist>
+    </member>
+    <member kind="function">
       <type>virtual value_type</type>
       <name>dot</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
@@ -3032,6 +3352,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
       <anchor>ac25fdc7e140b903be31399f2c352caa7</anchor>
       <arglist>(const SparseArray &amp;y) const</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static std::string</type>
+      <name>temp_copy_directory</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html</anchorfile>
+      <anchor>a85409af83aba9359b8113e02547553da</anchor>
+      <arglist>(const DistrArray &amp;source, const std::string &amp;directory)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type></type>
@@ -3186,6 +3513,13 @@
       <arglist>() override</arglist>
     </member>
     <member kind="function">
+      <type>std::string</type>
+      <name>file_directory</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html</anchorfile>
+      <anchor>add38e8fc84fa519545634b3eb2bb83e1</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
       <type>bool</type>
       <name>compatible</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html</anchorfile>
@@ -3273,8 +3607,15 @@
       <type>static DistrArrayFile</type>
       <name>CreateTempCopy</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html</anchorfile>
-      <anchor>ae1b0f75756ae323a48335df8ba3d9648</anchor>
-      <arglist>(const DistrArray &amp;source, const std::string &amp;directory=&quot;.&quot;)</arglist>
+      <anchor>aa9f9c27a135bc9ddb438fdde0d333847</anchor>
+      <arglist>(const DistrArray &amp;source, const std::string &amp;directory=&quot;&quot;)</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static DistrArrayFile</type>
+      <name>CreateTempCopy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArrayFile.html</anchorfile>
+      <anchor>a59c4cfba2e619ad2f56bc5d95883e115</anchor>
+      <arglist>(Span&lt; const value_type &gt; source, MPI_Comm comm, const std::string &amp;directory=&quot;.&quot;)</arglist>
     </member>
     <member kind="friend">
       <type>friend void</type>
@@ -4125,6 +4466,82 @@
       <arglist>(DistrArraySpan &amp;a1, DistrArraySpan &amp;a2) noexcept</arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::array::util::DistrChunks</name>
+    <filename>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</filename>
+    <templarg>class AL</templarg>
+    <templarg>class T</templarg>
+    <member kind="function">
+      <type></type>
+      <name>DistrChunks</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>ae7110c1a473157d6967cf7f725a6e960</anchor>
+      <arglist>(const VecRef&lt; AL &gt; &amp;yy, gemm_type type)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; T * &gt;</type>
+      <name>pointers</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>a248c778bfb302060d20e65dbda7525d6</anchor>
+      <arglist>(size_t g, size_t n)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>done</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>ab3ce2f735cc6e4bbdf8f8cb6cd279cf5</anchor>
+      <arglist>(size_t g, size_t n)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::function&lt; std::vector&lt; T * &gt;(size_t, size_t)&gt;</type>
+      <name>pointers_function</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>a24fa5526435f22f971dede8936ce2dde</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>std::function&lt; void(size_t, size_t)&gt;</type>
+      <name>done_function</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>a7bcd5cd0f3a7480cb47f84bf3e2930d8</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="variable">
+      <type>const VecRef&lt; AL &gt; &amp;</type>
+      <name>yy</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>a9198f996630cfae71eed81284fbd1a64</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const gemm_type</type>
+      <name>type</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>ab539382204d8d4c2b9761ae7da7941e2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>size_t</type>
+      <name>lo</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>a872f2bb95f44ba449e9d0fb4364b19f6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; T * &gt;</type>
+      <name>bases</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>a610a08bb3c104113c460374ec49ce5c2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; T &gt;</type>
+      <name>chunk</name>
+      <anchorfile>structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html</anchorfile>
+      <anchor>a7a9bff265cbea8232a7950d11d68e9f1</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
   <compound kind="class">
     <name>molpro::linalg::array::util::DistrFlags</name>
     <filename>classmolpro_1_1linalg_1_1array_1_1util_1_1DistrFlags.html</filename>
@@ -4781,6 +5198,17 @@
     <name>molpro::linalg::is_complex&lt; std::complex&lt; T &gt; &gt;</name>
     <filename>structmolpro_1_1linalg_1_1is__complex_3_01std_1_1complex_3_01T_01_4_01_4.html</filename>
     <templarg>typename T</templarg>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::array::is_contiguous</name>
+    <filename>structmolpro_1_1linalg_1_1array_1_1is__contiguous.html</filename>
+    <templarg>class T</templarg>
+    <templarg>typename</templarg>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::array::is_contiguous&lt; T, void_t&lt; decltype(std::size(std::declval&lt; const T &amp; &gt;())), std::enable_if_t&lt; std::is_pointer_v&lt; decltype(std::data(std::declval&lt; const T &amp; &gt;()))&gt; &amp;&amp;!is_sparse_v&lt; T &gt; &gt; &gt; &gt;</name>
+    <filename>structmolpro_1_1linalg_1_1array_1_1is__contiguous_3_01T_00_01void__t_3_01decltype_07std_1_1size_93d6fc60c4213a8a6488ca895887309e.html</filename>
+    <templarg>class T</templarg>
   </compound>
   <compound kind="struct">
     <name>molpro::linalg::array::is_disk</name>
@@ -10078,6 +10506,13 @@
       <type></type>
       <name>Span</name>
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html</anchorfile>
+      <anchor>ab3e7f3d8c54444703b1284e7f1c94ca8</anchor>
+      <arglist>(const Span&lt; U &gt; &amp;source)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>Span</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html</anchorfile>
       <anchor>ad6dea4305315afc49f427824e90d1ed4</anchor>
       <arglist>(const Span &amp;source)=default</arglist>
     </member>
@@ -11863,6 +12298,7 @@
     <class kind="class">molpro::linalg::array::ArrayHandler</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerDDisk</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerDDiskDistr</class>
+    <class kind="class">molpro::linalg::array::ArrayHandlerDDiskIterable</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerDDiskSparse</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerDDiskSparse&lt; AL, AR, true &gt;</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerDefault</class>
@@ -11871,16 +12307,20 @@
     <class kind="class">molpro::linalg::array::ArrayHandlerDistrSparse</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerDistrSparse&lt; AL, AR, true &gt;</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerIterable</class>
+    <class kind="class">molpro::linalg::array::ArrayHandlerIterableDDisk</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerIterableSparse</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerIterableSparse&lt; AL, AR, true &gt;</class>
     <class kind="class">molpro::linalg::array::ArrayHandlerSparse</class>
+    <class kind="class">molpro::linalg::array::ArrayHandlerWithCopyFunc</class>
     <class kind="struct">molpro::linalg::array::default_handler</class>
     <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::Distributed, ArrayFamily::Distributed &gt;</class>
     <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::Distributed, ArrayFamily::DistributedDisk &gt;</class>
     <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::Distributed, ArrayFamily::Sparse &gt;</class>
     <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::DistributedDisk, ArrayFamily::Distributed &gt;</class>
     <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::DistributedDisk, ArrayFamily::DistributedDisk &gt;</class>
+    <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::DistributedDisk, ArrayFamily::Iterable &gt;</class>
     <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::DistributedDisk, ArrayFamily::Sparse &gt;</class>
+    <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::Iterable, ArrayFamily::DistributedDisk &gt;</class>
     <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::Iterable, ArrayFamily::Iterable &gt;</class>
     <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::Iterable, ArrayFamily::Sparse &gt;</class>
     <class kind="struct">molpro::linalg::array::default_handler&lt; T, S, ArrayFamily::Sparse, ArrayFamily::Sparse &gt;</class>
@@ -11892,6 +12332,8 @@
     <class kind="class">molpro::linalg::array::DistrArraySpan</class>
     <class kind="struct">molpro::linalg::array::has_mapped_type</class>
     <class kind="struct">molpro::linalg::array::has_mapped_type&lt; A, void_t&lt; typename A::mapped_type &gt; &gt;</class>
+    <class kind="struct">molpro::linalg::array::is_contiguous</class>
+    <class kind="struct">molpro::linalg::array::is_contiguous&lt; T, void_t&lt; decltype(std::size(std::declval&lt; const T &amp; &gt;())), std::enable_if_t&lt; std::is_pointer_v&lt; decltype(std::data(std::declval&lt; const T &amp; &gt;()))&gt; &amp;&amp;!is_sparse_v&lt; T &gt; &gt; &gt; &gt;</class>
     <class kind="struct">molpro::linalg::array::is_disk</class>
     <class kind="struct">molpro::linalg::array::is_disk&lt; T, void_t&lt; typename T::disk_array &gt; &gt;</class>
     <class kind="struct">molpro::linalg::array::is_distributed</class>
@@ -11947,13 +12389,6 @@
       <enumvalue file="namespacemolpro_1_1linalg_1_1array.html" anchor="acc52e65e7b1ba494644a4783d10a8500a7407fb7e6a4df6392aaabd2368157312">Sparse</enumvalue>
       <enumvalue file="namespacemolpro_1_1linalg_1_1array.html" anchor="acc52e65e7b1ba494644a4783d10a8500a8c16cbebef45d87fd2b36ce69f46c526">Distributed</enumvalue>
       <enumvalue file="namespacemolpro_1_1linalg_1_1array.html" anchor="acc52e65e7b1ba494644a4783d10a8500a7767e6bfd66b2c629f74e4be4031e01e">DistributedDisk</enumvalue>
-    </member>
-    <member kind="function">
-      <type>T</type>
-      <name>allocate_array</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
-      <anchor>a0f1558ddafd2f5f706c0b761ab27af32</anchor>
-      <arglist>(std::size_t size)</arglist>
     </member>
     <member kind="function">
       <type>constexpr auto</type>
@@ -12033,6 +12468,13 @@
       <arglist>(const DistrArray &amp;x, const DistrArrayDisk &amp;y)</arglist>
     </member>
     <member kind="function">
+      <type>T</type>
+      <name>allocate_array</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>a0f1558ddafd2f5f706c0b761ab27af32</anchor>
+      <arglist>(std::size_t size)</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>swap</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
@@ -12072,6 +12514,13 @@
       <name>is_iterable_v</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
       <anchor>a37f32650280ead1187209883828505be</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_contiguous_v</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array.html</anchorfile>
+      <anchor>abb6371399cfa89f65a708cb666f419a2</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -12141,6 +12590,7 @@
     <class kind="class">molpro::linalg::array::util::BufferManager</class>
     <class kind="struct">molpro::linalg::array::util::CompareAbs</class>
     <class kind="class">molpro::linalg::array::util::DistrArrayIteratorImpl</class>
+    <class kind="struct">molpro::linalg::array::util::DistrChunks</class>
     <class kind="class">molpro::linalg::array::util::DistrFlags</class>
     <class kind="class">molpro::linalg::array::util::Distribution</class>
     <class kind="struct">molpro::linalg::array::util::is_allocatable</class>
@@ -12193,6 +12643,20 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
       <anchor>a26c2faa1a3bbc4ec01fea6621b900388</anchor>
       <arglist>(size_t n, std::map&lt; size_t, double &gt; &amp;local_selection, MPI_Comm communicator)</arglist>
+    </member>
+    <member kind="function">
+      <type>T</type>
+      <name>allocate_like</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a00b6343b6748184fd82886fa5992fb71</anchor>
+      <arglist>(std::size_t size)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>contiguous_span</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a474ae5583f94a9ec0d8eac2c1e81029e</anchor>
+      <arglist>(R &amp;r)</arglist>
     </member>
     <member kind="function">
       <type>Distribution&lt; Ind &gt;</type>
@@ -12265,6 +12729,83 @@
       <arglist>(const A &amp;a)</arglist>
     </member>
     <member kind="function">
+      <type>size_t</type>
+      <name>constant_stride</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a640f8250d5cb4b5705c836c84d4051a7</anchor>
+      <arglist>(const std::vector&lt; T * &gt; &amp;p, size_t n)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; T * &gt;</type>
+      <name>offset_pointers</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>aacf7a664d82f47e0ff4a2a8a8f2841ea</anchor>
+      <arglist>(const std::vector&lt; T * &gt; &amp;bases, size_t lo, size_t g)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; T * &gt;</type>
+      <name>local_buffer_pointers</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>ab7df5152319e754bbcfb51463d07d388</anchor>
+      <arglist>(const std::vector&lt; std::reference_wrapper&lt; A &gt; &gt; &amp;aa)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>check_local_ranges</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a1bf95c8e8831ac85cd352e8b6081ca39</anchor>
+      <arglist>(const std::vector&lt; std::reference_wrapper&lt; A &gt; &gt; &amp;aa, const Range &amp;range, const std::string &amp;name)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; T * &gt;</type>
+      <name>contiguous_pointers</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>aaf19b3c65c33919e983e63c256c10f0b</anchor>
+      <arglist>(const std::vector&lt; std::reference_wrapper&lt; R &gt; &gt; &amp;rr, const A &amp;q, const std::string &amp;name)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>gemm_chunk</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a8e3aae11809976496645c6b705d5e745</anchor>
+      <arglist>(gemm_type type, size_t n, const T *x, size_t ldx, size_t nx, T *alphadata, const std::vector&lt; T * &gt; &amp;y)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>gemm_buffered</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a5444c36a139936abd82e02da4c41d1b5</anchor>
+      <arglist>(T *alphadata, const CVecRef&lt; AD &gt; &amp;xx, const std::type_identity_t&lt; std::function&lt; std::vector&lt; T * &gt;(size_t g, size_t n)&gt; &gt; &amp;y_pointers, const std::function&lt; void(size_t g, size_t n)&gt; &amp;y_done, gemm_type type)</arglist>
+    </member>
+    <member kind="function">
+      <type>Matrix&lt; T &gt;</type>
+      <name>gemm_inner_buffered</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a9bbafbd8ff4d0c5432a79ed252720b9e</anchor>
+      <arglist>(size_t ny, const CVecRef&lt; AD &gt; &amp;xx, const std::type_identity_t&lt; std::function&lt; std::vector&lt; T * &gt;(size_t g, size_t n)&gt; &gt; &amp;y_pointers, const std::function&lt; void(size_t g, size_t n)&gt; &amp;y_done={})</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>check_gemm_outer_dimensions</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a6c225ee2ea2aa03f439007238b7a400c</anchor>
+      <arglist>(const Matrix&lt; T &gt; &amp;alphas, size_t nx, size_t ny, const std::string &amp;name)</arglist>
+    </member>
+    <member kind="function">
+      <type>Matrix&lt; T &gt;</type>
+      <name>conjugate_transpose</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a5fdbf8d02f31fa551f88c2007c31bd9f</anchor>
+      <arglist>(const Matrix&lt; T &gt; &amp;m)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>gemm_outer_to_distr</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>a25fadbd9ba444f1e15042731ac168ee8</anchor>
+      <arglist>(const Matrix&lt; T &gt; &amp;alphas, const std::vector&lt; T * &gt; &amp;x_bases, const VecRef&lt; AD &gt; &amp;yy)</arglist>
+    </member>
+    <member kind="function">
       <type>Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt;</type>
       <name>gemm_inner_distr_distr</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
@@ -12286,11 +12827,32 @@
       <arglist>(const Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt; alphas, const CVecRef&lt; AD &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>gemm_distr_distr</name>
+      <type>Matrix&lt; typename AD::value_type &gt;</type>
+      <name>gemm_inner_contiguous_distr</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
-      <anchor>abd5300a40e34566269266efd76d8b0a2</anchor>
-      <arglist>(array::mapped_or_value_type_t&lt; AL &gt; *alphadata, const CVecRef&lt; AD &gt; &amp;xx, const VecRef&lt; AL &gt; &amp;yy, gemm_type gemm_type)</arglist>
+      <anchor>a1da5cf75005ec439609002339682ba4d</anchor>
+      <arglist>(const CVecRef&lt; R &gt; &amp;rr, const CVecRef&lt; AD &gt; &amp;qq)</arglist>
+    </member>
+    <member kind="function">
+      <type>Matrix&lt; typename AD::value_type &gt;</type>
+      <name>gemm_inner_distr_contiguous</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>ac2f324e136b1ee87b37eadd08e9b51e7</anchor>
+      <arglist>(const CVecRef&lt; AD &gt; &amp;qq, const CVecRef&lt; R &gt; &amp;rr)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>gemm_outer_distr_contiguous</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>aad68e2736b2168876a36695c43d9ef00</anchor>
+      <arglist>(const Matrix&lt; typename AD::value_type &gt; &amp;alphas, const CVecRef&lt; AD &gt; &amp;qq, const VecRef&lt; R &gt; &amp;rr)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>gemm_outer_contiguous_distr</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1array_1_1util.html</anchorfile>
+      <anchor>aa5c6c1b3ea4e47bce705631e7fc6479e</anchor>
+      <arglist>(const Matrix&lt; typename AD::value_type &gt; &amp;alphas, const CVecRef&lt; R &gt; &amp;rr, const VecRef&lt; AD &gt; &amp;qq)</arglist>
     </member>
     <member kind="function">
       <type>Matrix&lt; typename array::mapped_or_value_type_t&lt; AL &gt; &gt;</type>
@@ -13560,6 +14122,9 @@
     <name>TopicArrayHandlers</name>
     <title>Array handlers</title>
     <filename>TopicArrayHandlers.html</filename>
+    <docanchor file="TopicArrayHandlers.html" title="Contiguous arrays and disk arrays">ArrayHandlersContiguousDisk</docanchor>
+    <docanchor file="TopicArrayHandlers.html" title="Choosing the R array type">ArrayHandlersChoosingR</docanchor>
+    <docanchor file="TopicArrayHandlers.html" title="Files of new disk arrays">ArrayHandlersTempFiles</docanchor>
   </compound>
   <compound kind="page">
     <name>TopicVecRef</name>
