@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <cmath>
 #include <complex>
+#include <limits>
+#include <numeric>
 #include <vector>
 
 namespace {
@@ -168,6 +170,9 @@ public:
   bool linear_metric = true; //!< if false, metric_action() adds a constant, which test_problem() must notice
   double metric_non_hermiticity = 0; //!< factor reducing the elements of the metric below the diagonal
   double metric_condition = 1;       //!< roughly the condition number of the metric
+  bool cheap_metric = false;         //!< whether the metric is applied on the fly rather than its actions stored
+
+  bool metric_is_cheap() const override { return cheap_metric; }
 
   double kernel(size_t i, size_t j) const {
     if (complex_pair and i + j == 1)
@@ -261,38 +266,80 @@ private:
   }
 };
 
+//! Solves problem and checks the eigenvalues and, except for complex pairs, the residuals; returns the iterations
 template <class Qvector>
-void solve_generalized_problem(const GeneralizedProblem &problem, const size_t nroot, const size_t nparams) {
+int solve_generalized_problem(const GeneralizedProblem &problem, const size_t nroot, const size_t nparams,
+                              const size_t max_size_qspace = std::numeric_limits<size_t>::max()) {
   auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>, Qvector>("Davidson");
   solver->set_n_roots(nroot);
   solver->set_hermiticity(problem.hermitian());
   solver->set_convergence_threshold(1e-10);
+  auto options = molpro::linalg::itsolv::LinearEigensystemDavidsonOptions{};
+  options.max_size_qspace = max_size_qspace;
+  solver->set_options(options);
   auto params = std::vector<std::vector<double>>(nparams, std::vector<double>(problem.n));
   auto actions = params, metric_actions = params;
   EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
   EXPECT_THAT(solver->errors(), ::testing::Each(::testing::Le(1e-10)));
   EXPECT_THAT(solver->eigenvalues(), ::testing::Pointwise(::testing::DoubleNear(1e-9), problem.reference(nroot)));
+  if (not problem.complex_pair) {
+    // the residuals returned by solution() are A x - lambda M x
+    auto x = std::vector<std::vector<double>>(nroot, std::vector<double>(problem.n));
+    auto residuals = x, ax = x, mx = x;
+    std::vector<int> roots(nroot);
+    std::iota(roots.begin(), roots.end(), 0);
+    solver->solution(roots, x, residuals);
+    problem.action_with_metric(molpro::linalg::itsolv::cwrap(x), molpro::linalg::itsolv::wrap(ax),
+                               molpro::linalg::itsolv::wrap(mx));
+    for (size_t k = 0; k < nroot; ++k)
+      for (size_t i = 0; i < problem.n; ++i)
+        EXPECT_NEAR(residuals[k][i], ax[k][i] - solver->eigenvalues()[k] * mx[k][i], 1e-12) << "root " << k;
+  }
+  return solver->statistics().iterations;
 }
 } // namespace
 
-// solve() for generalised eigenproblems, with Q vectors in memory and on disk
+// solve() for generalised eigenproblems, with Q vectors in memory and on disk, and with the actions of the metric
+// stored or the metric applied on the fly
 TEST(LinearEigensystem, Davidson_generalized) {
   molpro::mpi::init();
   GeneralizedProblem problem;
-  for (const double non_hermiticity : {0., 0.2}) {
-    SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity));
-    problem.non_hermiticity = non_hermiticity;
-    solve_generalized_problem<std::vector<double>>(problem, 3, 3);
-    solve_generalized_problem<molpro::linalg::array::DistrArrayFile>(problem, 3, 3);
-  }
+  for (const bool cheap_metric : {false, true})
+    for (const double non_hermiticity : {0., 0.2}) {
+      SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) + " cheap=" + std::to_string(cheap_metric));
+      problem.non_hermiticity = non_hermiticity;
+      problem.cheap_metric = cheap_metric;
+      solve_generalized_problem<std::vector<double>>(problem, 3, 3);
+      solve_generalized_problem<molpro::linalg::array::DistrArrayFile>(problem, 3, 3);
+    }
 }
 
 // A complex conjugate pair of eigenvalues of a real non-hermitian kernel: the residuals of the real and imaginary
 // parts of the eigenvector are coupled through the metric
 TEST(LinearEigensystem, Davidson_generalized_complex_pair) {
   GeneralizedProblem problem;
-  problem.complex_pair = true;
-  solve_generalized_problem<std::vector<double>>(problem, 3, 3);
+  for (const bool cheap_metric : {false, true}) {
+    SCOPED_TRACE("cheap=" + std::to_string(cheap_metric));
+    problem.complex_pair = true;
+    problem.cheap_metric = cheap_metric;
+    solve_generalized_problem<std::vector<double>>(problem, 3, 3);
+  }
+}
+
+// Applying a cheap metric on the fly gives the same iterations as storing its actions, also when Q vectors are moved
+// into the D space, and also with fewer parameter vectors than roots, when the actions of the metric on the solutions
+// are kept in Q vectors
+TEST(LinearEigensystem, Davidson_generalized_cheap_metric) {
+  GeneralizedProblem problem;
+  for (const double non_hermiticity : {0., 0.2})
+    for (const size_t nparams : {3, 2}) {
+      SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) + " nparams=" + std::to_string(nparams));
+      problem.non_hermiticity = non_hermiticity;
+      problem.cheap_metric = false;
+      const auto stored = solve_generalized_problem<std::vector<double>>(problem, 3, nparams, 6);
+      problem.cheap_metric = true;
+      EXPECT_EQ(solve_generalized_problem<std::vector<double>>(problem, 3, nparams, 6), stored);
+    }
 }
 
 // Scaling the metric scales the eigenvalues inversely, but changes neither the errors nor the course of the iterations,
@@ -442,6 +489,12 @@ TEST(LinearEigensystem, Davidson_generalized_invalid_metric) {
   problem.metric_non_hermiticity = 0.5;
   EXPECT_FALSE(test_problem());
   EXPECT_THAT(solve_error(), ::testing::HasSubstr("not Hermitian"));
+  // also without stored actions of the metric
+  problem.cheap_metric = true;
+  EXPECT_THAT(solve_error(), ::testing::HasSubstr("not Hermitian"));
+  problem.metric_scale = -1;
+  problem.metric_non_hermiticity = 0;
+  EXPECT_THAT(solve_error(), ::testing::HasSubstr("not positive definite"));
 }
 
 // An ill-conditioned, but positive definite, metric is not mistaken for one that is not positive definite

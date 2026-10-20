@@ -46,8 +46,12 @@ public:
   /*!
    * @brief Declares whether the subspace has a metric, which creates or removes the metric matrix EqnData::M. Only
    * possible while the subspace is empty, unless it does not change anything.
+   * @param metric whether there is a metric
+   * @param store_actions whether the actions of the metric on the Q and D vectors are kept
    */
-  virtual void set_metric(bool metric) = 0;
+  virtual void set_metric(bool metric, bool store_actions = true) = 0;
+  //! Whether the actions of the metric on the Q and D vectors are kept
+  virtual bool stores_metric_actions() const = 0;
 
   /*!
    * @brief Adds parameters to the Q space

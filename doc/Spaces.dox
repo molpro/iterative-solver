@@ -42,8 +42,8 @@ the action has to be calculated next. There is one R vector per root in the *wor
 not converged yet (`IterativeSolver::working_set()`).
 
 R vectors are not stored by the solver between iterations. When a new set of R parameters is added to the subspace,
-copies of the parameters and their actions, and for a generalised eigenproblem their actions of the metric, are made in
-the Q space (`IXSpace::update_qspace()`).
+copies of the parameters and their actions, and for a generalised eigenproblem their actions of the metric unless the
+metric is applied on the fly, are made in the Q space (`IXSpace::update_qspace()`).
 
 Before new R parameters are proposed (`detail::propose_rspace()`), the preconditioned residuals are normalised,
 orthogonalised against P+Q+D and each other, and any that turn out to be linearly dependent are removed. The
@@ -74,7 +74,9 @@ exactly from the start.
 @section SpacesQ Q space
 
 The Q space holds the history of previous expansion vectors (*Q parameters*) together with their actions and, for a
-generalised eigenproblem, their actions of the metric, all stored in `Q` containers (`subspace::QSpace`). New parameters are prepended, so the most recent vectors come first.
+generalised eigenproblem whose metric is not applied on the fly (`IterativeSolver::set_metric()`), their actions of the
+metric, all stored in `Q` containers (`subspace::QSpace`). New parameters are prepended, so the most recent vectors come
+first.
 New parameters that are linearly dependent among themselves are discarded when they are added.
 
 In the linear solvers the size of the Q space can be controlled through `QSpaceOptions` (exposed as solver options):
@@ -100,8 +102,9 @@ the P+Q+R subspace that is needed to reproduce the previous solutions exactly.
 When Q vectors are deleted (`detail::construct_dspace()`), the current solutions are projected onto the space spanned
 by the deleted Q vectors and the old D vectors. After removing null and linearly dependent combinations, the
 projections are normalised and become the new D space; the old D space is discarded. D vectors and their actions (and
-actions of the metric, if there is one) are stored in `Q` containers. As a result the D space never holds more vectors than there are solutions, and the
-subspace still contains the previous solutions, even though the Q vectors that contributed to them are gone.
+actions of the metric, if they are stored) are stored in `Q` containers. As a result the D space never holds more vectors
+than there are solutions, and the subspace still contains the previous solutions, even though the Q vectors that
+contributed to them are gone.
 
 Because the D space is built from linear combinations of stored vectors, numerical noise accumulates in it over many
 iterations. It can therefore be reset periodically (`reset_D` option, `detail::DSpaceResetter`): the full current
@@ -120,6 +123,8 @@ data projected onto the subspace (`subspace::SubspaceData`):
 - `EqnData::rhs`: the projected right-hand-side vectors (linear equations only),
 - `EqnData::M`: for a generalised eigenproblem A v = lambda M v only, the metric matrix <x_i|M x_j>. The overlap S is
   still the one of the subspace vectors and is used for managing the subspace, e.g. for detecting linear dependencies.
+  The elements of new Q vectors are calculated from their actions of the metric as <M x_i|x_j>, and those of new D
+  vectors by transforming the metric matrix, so that neither needs the actions of the metric on the other vectors.
 
 The rows and columns of these matrices are ordered as P, then Q, then D. The sizes and offsets of the three blocks are
 given by `subspace::Dimensions`:
@@ -133,7 +138,8 @@ The subspace solver (`subspace::ISubspaceSolver`) solves the projected problem i
 solutions as coefficient matrices. For a generalised eigenproblem the metric matrix takes the place of the overlap in
 the subspace eigenproblem, so that the solutions are normalised in the metric. The full solutions and residuals are then
 constructed in R containers as linear combinations of the P, Q and D vectors (for P vectors through `p_action()`), the
-residuals of a generalised eigenproblem with the actions of the metric.
+residuals of a generalised eigenproblem with the stored actions of the metric or, if it is applied on the fly, with its
+actions on the solutions.
 
 @section SpacesIteration Overview of an iteration
 

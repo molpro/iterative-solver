@@ -69,6 +69,14 @@ void construct_solution(const VecRef<R>& params, const std::vector<int>& roots,
   handlers.rq().gemm_outer(rd_mat, cwrap(dparams), params);
 }
 
+//! The actions of a metric applied on the fly on solutions, in R vectors or, if there are not enough of them, Q vectors
+template <class R, class Q>
+struct MetricSolutions {
+  CVecRef<R> r;
+  CVecRef<Q> q;
+  bool empty() const { return r.empty() && q.empty(); }
+};
+
 template <typename T>
 std::vector<std::vector<T>> construct_vectorP(const std::vector<int>& roots, const subspace::Matrix<T>& solutions,
                                               const size_t oP, const size_t nP) {
@@ -182,7 +190,7 @@ public:
     const auto nW = n_added_vectors(parameters);
     if (metric_actions.size() < nW)
       throw std::runtime_error("IterativeSolver::add_vector(): fewer actions of the metric than parameters");
-    return add_vector_impl(parameters, actions, cwrap(begin(metric_actions), begin(metric_actions) + nW));
+    return add_vector_impl(parameters, actions, wrap(begin(metric_actions), begin(metric_actions) + nW));
   }
 
   bool supports_metric(MetricKind kind) const override { return kind == MetricKind::Identity; }
@@ -192,12 +200,14 @@ public:
       throw std::invalid_argument("This solver does not support the requested kind of metric");
     if (kind == MetricKind::Identity && apply_metric)
       throw std::invalid_argument("A function applying the metric was given for the identity");
-    if (apply_metric)
-      throw std::invalid_argument("Applying the metric on the fly is not implemented");
-    if (m_xspace->dimensions().nX() != 0 && kind != m_metric_kind)
-      throw std::logic_error("The metric cannot be changed once the subspace is not empty");
+    const bool store_actions = !apply_metric;
+    if (m_xspace->dimensions().nX() != 0 &&
+        (kind != m_metric_kind || (kind != MetricKind::Identity && store_actions != !m_apply_metric)))
+      throw std::logic_error("The metric, or whether its actions are stored, cannot be changed once the subspace is not "
+                             "empty");
     m_metric_kind = kind;
-    m_xspace->set_metric(kind != MetricKind::Identity);
+    m_apply_metric = std::move(apply_metric);
+    m_xspace->set_metric(kind != MetricKind::Identity, store_actions);
   }
 
   MetricKind metric_kind() const override { return m_metric_kind; }
@@ -226,6 +236,16 @@ public:
   void clearP() override {}
 
   void solution(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual) override {
+    solution_impl(roots, parameters, residual, {});
+  }
+
+  /*!
+   * @brief Implements solution()
+   * @param scratch R vectors that may be overwritten, for the actions of a metric applied on the fly; if there are
+   * fewer than roots, Q vectors are used instead
+   */
+  void solution_impl(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual,
+                     const VecRef<R>& scratch) {
     // auto prof = profiler()->push("itsolv::solution"); // FIXME two profilers
     auto prof = molpro::Profiler::single();
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
@@ -234,6 +254,26 @@ public:
                                m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
                                m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
     prof->stop();
+    auto metric_solutions = detail::MetricSolutions<R, Q>{};
+    auto metric_solutions_q = std::vector<Q>{};
+    if (m_apply_metric && !roots.empty()) {
+      prof->start("apply metric");
+      const auto solutions = cwrap(parameters.begin(), parameters.begin() + roots.size());
+      const bool use_scratch = scratch.size() >= roots.size();
+      // without scratch vectors, the residuals hold the actions of the metric until they are copied
+      const auto metric_actions = use_scratch ? wrap(scratch.begin(), scratch.begin() + roots.size())
+                                              : wrap(residual.begin(), residual.begin() + roots.size());
+      m_apply_metric(solutions, metric_actions);
+      if (use_scratch) {
+        metric_solutions.r = cwrap(metric_actions);
+      } else {
+        for (const auto& m : metric_actions)
+          metric_solutions_q.emplace_back(m_handlers->qr().copy(m));
+        m_stats->q_creations += metric_solutions_q.size();
+        metric_solutions.q = cwrap(metric_solutions_q);
+      }
+      prof->stop();
+    }
     prof->start("construct_solution (residual)");
     detail::construct_solution(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
                                m_xspace->actionsd(), m_xspace->dimensions().oP(), m_xspace->dimensions().oQ(),
@@ -244,10 +284,10 @@ public:
                                               m_xspace->dimensions().nP);
     if (m_apply_p)
       m_apply_p(pvectors, m_xspace->cparamsp(), residual);
-    construct_residual(roots, cwrap(parameters), residual);
+    construct_residual(roots, cwrap(parameters), residual, metric_solutions);
     read_handler_counts(m_stats, m_handlers);
     prof->stop();
-  };
+  }
 
   void solution(const std::vector<int>& roots, std::vector<R>& parameters, std::vector<R>& residual) override {
     return solution(roots, wrap(parameters), wrap(residual));
@@ -424,7 +464,12 @@ public:
       this->m_logger->enable_data_dumps(true);
     }
     const bool metric = problem.metric_kind() != MetricKind::Identity;
-    set_metric(problem.metric_kind());
+    if (metric and problem.metric_is_cheap())
+      set_metric(problem.metric_kind(), [&problem](const CVecRef<R>& parameters, const VecRef<R>& metric_actions) {
+        problem.metric_action(parameters, metric_actions);
+      });
+    else
+      set_metric(problem.metric_kind());
     if (metric and m_max_p > 0)
       throw std::runtime_error("A P space cannot be used together with a metric; set max_p to 0");
     bool use_diagonals = problem.diagonals(actions.at(0));
@@ -669,9 +714,12 @@ protected:
 
   //! Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)
   virtual void set_value_errors() {}
-  //! Constructs residual for given roots provided their parameters and actions
-  virtual void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params,
-                                  const VecRef<R>& actions) = 0;
+  /*!
+   * @brief Constructs residual for given roots provided their parameters and actions
+   * @param metric_solutions the actions of the metric on params if it is applied on the fly, otherwise empty
+   */
+  virtual void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
+                                  const detail::MetricSolutions<R, Q>& metric_solutions) = 0;
   virtual bool linearEigensystem() const { return false; }
 
   //! The number of the given parameters that add_vector() takes up: no more than there are in the working set
@@ -684,7 +732,7 @@ protected:
    * @param metric_actions For a problem with a metric, the actions of the metric on the first n_added_vectors() of
    * parameters, otherwise empty
    */
-  int add_vector_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const CVecRef<R>& metric_actions) {
+  int add_vector_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions) {
     auto outer = profiler()->push("itsolv::add_vector");
     auto prof = molpro::Profiler::single();
     m_logger->trace("IterativeSolverTemplate::add_vector  iteration = ", m_stats->iterations);
@@ -698,14 +746,15 @@ protected:
     auto cwactions = cwrap(begin(actions), begin(actions) + nW);
     m_stats->r_creations += nW;
     prof->start("update_qspace");
-    m_xspace->update_qspace(cwparams, cwactions, metric_actions);
-    m_stats->q_creations += (metric_actions.empty() ? 2 : 3) * nW;
+    m_xspace->update_qspace(cwparams, cwactions, cwrap(metric_actions));
+    m_stats->q_creations += (m_xspace->stores_metric_actions() ? 3 : 2) * nW;
     prof->stop();
     if (m_metric_kind == MetricKind::HermitianPositiveDefinite ||
         m_metric_kind == MetricKind::HermitianPositiveSemidefinite)
       subspace::check_metric_positive(m_xspace->data.at(subspace::EqnData::M), m_xspace->data.at(subspace::EqnData::S));
     prof->start("solve_and_generate_working_set");
-    auto working_set = solve_and_generate_working_set(parameters, actions);
+    // the actions of the metric are not needed any more and serve as scratch space
+    auto working_set = solve_and_generate_working_set(parameters, actions, metric_actions);
     prof->stop();
     read_handler_counts(m_stats, m_handlers);
     this->m_end_iteration_needed = true;
@@ -716,10 +765,11 @@ protected:
    * in parameters and action
    * @param parameters container for storing parameters of the working set
    * @param action container for storing the residual of the working set
-   * @param apply_p function that accumulates action from the P space projection of parameters
+   * @param scratch vectors that may be overwritten, see solution_impl()
    * @return size of the working set
    */
-  size_t solve_and_generate_working_set(const VecRef<R>& parameters, const VecRef<R>& action) {
+  size_t solve_and_generate_working_set(const VecRef<R>& parameters, const VecRef<R>& action,
+                                        const VecRef<R>& scratch = {}) {
     auto prof = profiler();
     auto p = prof->push("itsolv::solve_and_generate_working_set");
     prof->start("itsolv::solve");
@@ -733,7 +783,7 @@ protected:
       auto [start_sol, end_sol] = batch;
       auto roots = std::vector<int>(end_sol - start_sol);
       std::iota(begin(roots), end(roots), start_sol);
-      solution(roots, parameters, action);
+      solution_impl(roots, parameters, action, scratch);
       auto errors = std::vector<value_type_abs>(roots.size(), 0);
       detail::update_errors(errors, cwrap(action), m_handlers->rr());
       if (m_xspace->has_metric()) {
@@ -889,6 +939,7 @@ protected:
   int m_max_iter = 100;                         //!< maximum number of iterations in solve()
   size_t m_max_p = 0;                           //!< maximum size of P space
   MetricKind m_metric_kind = MetricKind::Identity; //!< the metric declared with set_metric()
+  fapply_metric_type m_apply_metric = {};          //!< applies the metric on the fly, if its actions are not stored
   value_type_abs m_p_threshold = std::numeric_limits<value_type_abs>::max(); //!< threshold for selecting P space
 private:
   mutable std::shared_ptr<molpro::profiler::Profiler> m_profiler;

@@ -450,7 +450,7 @@ std::vector<std::size_t> limit_qspace_size(const subspace::Dimensions& dims, con
  * @param svd_thresh svd threshold for marking the null space
  * @param handler array handler
  * @param logger logger
- * @return D space parameters, actions, actions of the metric if the subspace has a metric (otherwise empty), and the
+ * @return D space parameters, actions, actions of the metric if the subspace stores them (otherwise empty), and the
  * coefficients of the new D vectors in the deleted Q vectors (columns in the order of q_delete) followed by the old D
  * vectors, one row per D vector
  */
@@ -476,7 +476,7 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
   const auto& qactions = xspace.cactionsq();
   const auto& dparams = xspace.cparamsd();
   const auto& dactions = xspace.cactionsd();
-  const bool metric = xspace.has_metric();
+  const bool metric = xspace.stores_metric_actions();
   const auto& qmetric_actions = xspace.cmetric_actionsq();
   const auto& dmetric_actions = xspace.cmetric_actionsd();
   std::vector<Q> dparams_new, dactions_new, dmetric_actions_new;
