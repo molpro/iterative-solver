@@ -15,6 +15,7 @@ using molpro::linalg::itsolv::cwrap;
 using molpro::linalg::itsolv::Logger;
 using molpro::linalg::itsolv::wrap;
 using molpro::linalg::itsolv::subspace::EqnData;
+using molpro::linalg::itsolv::subspace::Matrix;
 using molpro::linalg::itsolv::subspace::XSpace;
 using ::testing::ElementsAre;
 
@@ -121,9 +122,19 @@ TEST(XSpace, metric_matrix_consistent) {
   EXPECT_EQ(xs.dimensions().nQ, 3);
   check_metric_consistent(xs);
   std::vector<Q> d{{0.1, 0.2, 0.3, 1}}, d_actions = d, d_metric = metric_actions(d);
+  // the metric matrix with the new D space is given, rather than calculated from the vectors
+  auto params = std::vector<R>{};
+  for (const auto& q : xs.cparamsq())
+    params.push_back(q.get());
+  params.push_back(d[0]);
+  Matrix<double> metric({params.size(), params.size()});
+  for (size_t i = 0; i < params.size(); ++i)
+    for (size_t j = 0; j < params.size(); ++j)
+      metric(i, j) = dot(params[i], apply_metric(params[j]));
   auto wd = wrap(d);
   auto wd_actions = wrap(d_actions);
-  xs.update_dspace(wd, wd_actions, wrap(d_metric));
+  EXPECT_THROW(xs.update_dspace(wd, wd_actions, wrap(d_metric)), std::runtime_error);
+  xs.update_dspace(wd, wd_actions, wrap(d_metric), metric);
   EXPECT_EQ(xs.dimensions().nD, 1);
   check_metric_consistent(xs);
   xs.erase(xs.dimensions().oQ() + 1);

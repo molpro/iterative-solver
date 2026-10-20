@@ -450,7 +450,9 @@ std::vector<std::size_t> limit_qspace_size(const subspace::Dimensions& dims, con
  * @param svd_thresh svd threshold for marking the null space
  * @param handler array handler
  * @param logger logger
- * @return D space parameters, actions and, if the subspace has a metric, actions of the metric (otherwise empty)
+ * @return D space parameters, actions, actions of the metric if the subspace has a metric (otherwise empty), and the
+ * coefficients of the new D vectors in the deleted Q vectors (columns in the order of q_delete) followed by the old D
+ * vectors, one row per D vector
  */
 template <class R, class Q, class P, typename value_type, typename value_type_abs>
 auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subspace::IXSpace<R, Q, P>& xspace,
@@ -458,7 +460,7 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
                       const value_type_abs svd_thresh, array::ArrayHandler<Q, Q>& handler, Logger& logger) {
   const auto dims = xspace.dimensions();
   const auto overlap = xspace.data.at(subspace::EqnData::S);
-  const auto solutions_proj =
+  auto solutions_proj =
       dspace::stable_projected_solutions(solutions, overlap, dims, q_delete, norm_thresh, svd_thresh, logger);
 #ifndef NDEBUG
   // a decomposition of the whole subspace overlap, wanted only by this check
@@ -523,8 +525,11 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
     handler.scal(1. / norm, dactions_new[i]);
     if (metric)
       handler.scal(1. / norm, dmetric_actions_new[i]);
+    for (size_t j = 0; j < solutions_proj.cols(); ++j)
+      solutions_proj(i, j) /= value_type(norm);
   }
-  return std::make_tuple(std::move(dparams_new), std::move(dactions_new), std::move(dmetric_actions_new));
+  return std::make_tuple(std::move(dparams_new), std::move(dactions_new), std::move(dmetric_actions_new),
+                         std::move(solutions_proj));
 }
 
 /*!
@@ -624,6 +629,43 @@ auto get_new_working_set(const std::vector<int>& working_set, const CVecRef<R>& 
 }
 
 /*!
+ * @brief The metric matrix of the subspace after the deletion of Q vectors and their replacement, together with the
+ * old D vectors, by new D vectors, obtained by transforming the current metric matrix rather than from the vectors
+ * @param metric the current metric matrix
+ * @param dims the current dimensions
+ * @param q_delete indices of the Q vectors to be deleted
+ * @param dcoefficients the coefficients of the new D vectors, as returned by construct_dspace()
+ * @return the metric matrix of P, the remaining Q, and the new D vectors, in this order
+ */
+template <typename value_type>
+subspace::Matrix<value_type> metric_with_new_dspace(const subspace::Matrix<value_type>& metric,
+                                                    const subspace::Dimensions& dims,
+                                                    const std::vector<std::size_t>& q_delete,
+                                                    const subspace::Matrix<value_type>& dcoefficients) {
+  using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
+  using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  const auto nQnew = dims.nQ - q_delete.size();
+  const auto nXnew = dims.nP + nQnew + dcoefficients.rows();
+  // columns: the new subspace vectors in terms of the current ones
+  matrix_type transformation = matrix_type::Zero(dims.nX(), nXnew);
+  for (size_t i = 0; i < dims.nP; ++i)
+    transformation(dims.oP() + i, i) = 1;
+  for (size_t i = 0, k = 0; i < dims.nQ; ++i)
+    if (std::find(q_delete.begin(), q_delete.end(), i) == q_delete.end())
+      transformation(dims.oQ() + i, dims.nP + k++) = 1;
+  for (size_t i = 0; i < dcoefficients.rows(); ++i) {
+    for (size_t j = 0; j < q_delete.size(); ++j)
+      transformation(dims.oQ() + q_delete[j], dims.nP + nQnew + i) = dcoefficients(i, j);
+    for (size_t j = 0; j < dims.nD; ++j)
+      transformation(dims.oD() + j, dims.nP + nQnew + i) = dcoefficients(i, q_delete.size() + j);
+  }
+  const matrix_type m = Eigen::Map<const row_major_type>(metric.data().data(), dims.nX(), dims.nX());
+  const row_major_type m_new = transformation.adjoint() * m * transformation;
+  return subspace::Matrix<value_type>(std::vector<value_type>(m_new.data(), m_new.data() + m_new.size()),
+                                      {nXnew, nXnew});
+}
+
+/*!
  * \brief Proposes new parameters for the subspace from the preconditioned residuals.
  *
  * Outline
@@ -670,12 +712,15 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   logger.debug("delete Q parameter indices = ", q_delete);
   if (!q_delete.empty()) {
     auto prof = profiler.push("construct_dspace");
-    auto [dparams, dactions, dmetric_actions] =
+    auto [dparams, dactions, dmetric_actions, dcoefficients] =
         construct_dspace(solutions, xspace, q_delete, r_opts.norm_thresh, r_opts.svd_thresh, handlers.qq(), logger);
+    const auto metric = xspace.has_metric() ? metric_with_new_dspace(xspace.data.at(subspace::EqnData::M),
+                                                                     xspace.dimensions(), q_delete, dcoefficients)
+                                            : subspace::Matrix<typename decltype(dcoefficients)::value_type>{};
     erase_qspace(xspace, q_delete);
     auto wdparams = wrap(dparams);
     auto wdactions = wrap(dactions);
-    xspace.update_dspace(wdparams, wdactions, wrap(dmetric_actions));
+    xspace.update_dspace(wdparams, wdactions, wrap(dmetric_actions), metric);
     auto eigenvalues_ref = subspace_solver.eigenvalues();
     subspace_solver.solve(xspace, subspace_solver.size());
     const auto& eigenvalues_new = subspace_solver.eigenvalues();

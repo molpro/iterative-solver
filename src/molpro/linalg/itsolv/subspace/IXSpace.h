@@ -58,8 +58,14 @@ public:
   virtual void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
                              const CVecRef<R>& metric_actions = {}) = 0;
 
-  //! Updates D space with the new parameters, their actions and, if there is a metric, their actions of the metric
-  virtual void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {}) = 0;
+  /*!
+   * @brief Updates D space with the new parameters, their actions and, if there is a metric, their actions of the
+   * metric
+   * @param metric_matrix if there is a metric and the new D space is not empty, the whole metric matrix of the
+   * subspace with the new D space, which is not calculated from the vectors
+   */
+  virtual void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {},
+                             const Matrix<value_type>& metric_matrix = {}) = 0;
 
   virtual VecRef<P> paramsp() = 0;
   virtual VecRef<Q> paramsq() = 0;
