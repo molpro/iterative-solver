@@ -360,9 +360,9 @@ auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CV
 }
 
 /*!
- * @brief The solutions whose coefficients measure the contributions of the subspace vectors in
- * limit_qspace_size(): with a metric, the solutions are normalised in it, and are scaled to unit length so that the
- * contributions do not depend on the scale of the metric
+ * @brief The solutions scaled to unit length, as needed wherever thresholds apply to their coefficients or to norms of
+ * their projections (limit_qspace_size(), construct_dspace(), D space resets): with a metric, the solutions are
+ * normalised in it, and the thresholds would otherwise depend on the scale of the metric
  */
 template <class R, class Q, class P, typename value_type>
 subspace::Matrix<value_type> contribution_solutions(const subspace::Matrix<value_type>& solutions,
@@ -708,12 +708,15 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   profiler.start("itsolv::ISubspaceSolver::solutions");
   auto solutions = subspace_solver.solutions();
   profiler.stop();
-  auto q_delete = limit_qspace_size(xspace.dimensions(), q_opts, contribution_solutions(solutions, xspace), logger);
+  // the solutions scaled to unit length, so that thresholds on contributions and norms do not depend on their
+  // normalisation
+  const auto unit_solutions = contribution_solutions(solutions, xspace);
+  auto q_delete = limit_qspace_size(xspace.dimensions(), q_opts, unit_solutions, logger);
   logger.debug("delete Q parameter indices = ", q_delete);
   if (!q_delete.empty()) {
     auto prof = profiler.push("construct_dspace");
-    auto [dparams, dactions, dmetric_actions, dcoefficients] =
-        construct_dspace(solutions, xspace, q_delete, r_opts.norm_thresh, r_opts.svd_thresh, handlers.qq(), logger);
+    auto [dparams, dactions, dmetric_actions, dcoefficients] = construct_dspace(
+        unit_solutions, xspace, q_delete, r_opts.norm_thresh, r_opts.svd_thresh, handlers.qq(), logger);
     const auto metric = xspace.has_metric() ? metric_with_new_dspace(xspace.data.at(subspace::EqnData::M),
                                                                      xspace.dimensions(), q_delete, dcoefficients)
                                             : subspace::Matrix<typename decltype(dcoefficients)::value_type>{};
