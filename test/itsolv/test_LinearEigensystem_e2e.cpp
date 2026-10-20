@@ -430,7 +430,7 @@ TEST(LinearEigensystem, Davidson_generalized_metric_scale) {
   // Converged, the iterations and eigenvalues are compared
   const auto reference = solve(1, 100);
   ASSERT_THAT(reference.errors, ::testing::Each(::testing::Le(1e-10)));
-  for (const double metric_scale : {64., 1. / 64}) {
+  for (const double metric_scale : {64., 1. / 64, std::ldexp(1., -50), std::ldexp(1., 50)}) {
     SCOPED_TRACE("metric scale=" + std::to_string(metric_scale));
     const auto unconverged = solve(metric_scale, 3);
     ASSERT_EQ(unconverged.errors.size(), reference_unconverged.errors.size());
