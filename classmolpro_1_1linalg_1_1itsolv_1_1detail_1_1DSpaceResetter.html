@@ -143,8 +143,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:ad67746d55c68662ec41b1cf38983d642" id="r_ad67746d55c68662ec41b1cf38983d642"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#ad67746d55c68662ec41b1cf38983d642">m_nreset</a> = std::numeric_limits&lt;std::size_t&gt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">::max</a>()</td></tr>
-<tr class="memdesc:ad67746d55c68662ec41b1cf38983d642"><td class="mdescLeft">&#160;</td><td class="mdescRight">reset D space every n iterations  <br /></td></tr>
+<tr class="memitem:ad67746d55c68662ec41b1cf38983d642" id="r_ad67746d55c68662ec41b1cf38983d642"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#ad67746d55c68662ec41b1cf38983d642">m_nreset</a> = 0</td></tr>
+<tr class="memdesc:ad67746d55c68662ec41b1cf38983d642"><td class="mdescLeft">&#160;</td><td class="mdescRight">reset D space every n iterations, 0 for never  <br /></td></tr>
 <tr class="separator:ad67746d55c68662ec41b1cf38983d642"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08799e579c0d5103bd23289d493e1da3" id="r_a08799e579c0d5103bd23289d493e1da3"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#a08799e579c0d5103bd23289d493e1da3">m_max_Qsize_after_reset</a></td></tr>
 <tr class="memdesc:a08799e579c0d5103bd23289d493e1da3"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum size of Q space after reset  <br /></td></tr>
@@ -483,7 +483,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html">molpro::linalg::itsolv::detail::DSpaceResetter</a>&lt; Q &gt;::m_nreset = std::numeric_limits&lt;std::size_t&gt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">::max</a>()</td>
+          <td class="memname">std::size_t <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html">molpro::linalg::itsolv::detail::DSpaceResetter</a>&lt; Q &gt;::m_nreset = 0</td>
         </tr>
       </table>
   </td>
@@ -493,7 +493,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </table>
 </div><div class="memdoc">
 
-<p>reset D space every n iterations </p>
+<p>reset D space every n iterations, 0 for never </p>
 
 </div>
 </div>

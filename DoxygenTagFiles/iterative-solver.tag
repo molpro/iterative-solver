@@ -13686,6 +13686,13 @@
       <arglist>(subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, const subspace::Matrix&lt; value_type &gt; &amp;solutions, std::size_t max_size, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
+      <type>void</type>
+      <name>erase_qspace</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>a50782f7f10ea48a28cbd168b77035ec1</anchor>
+      <arglist>(subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, subspace::Matrix&lt; value_type &gt; &amp;solutions, std::vector&lt; Index &gt; indices)</arglist>
+    </member>
+    <member kind="function">
       <type>auto</type>
       <name>max_overlap_with_R</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
@@ -13735,6 +13742,13 @@
       <arglist>(VecRef&lt; R &gt; &amp;params, array::ArrayHandler&lt; R, R &gt; &amp;handler, Logger &amp;logger, typename array::ArrayHandler&lt; R, R &gt;::value_type_abs thresh=1/std::numeric_limits&lt; typename array::ArrayHandler&lt; R, R &gt;::value_type_abs &gt;::max())</arglist>
     </member>
     <member kind="function">
+      <type>void</type>
+      <name>erase_qspace</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
+      <anchor>a6e865249cb101a0c2d8e727774eb92e5</anchor>
+      <arglist>(subspace::IXSpace&lt; R, Q, P &gt; &amp;xspace, std::vector&lt; Index &gt; indices)</arglist>
+    </member>
+    <member kind="function">
       <type>auto</type>
       <name>append_overlap_with_r</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
@@ -13757,9 +13771,9 @@
     </member>
     <member kind="function">
       <type>auto</type>
-      <name>modified_gram_schmidt</name>
+      <name>project_out_and_orthonormalise</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>ab8b8be81a98ef921223d8da0d9befc95</anchor>
+      <anchor>ab2d77d711dbe941b3e7a318e1f0d1976</anchor>
       <arglist>(const VecRef&lt; R &gt; &amp;rparams, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const subspace::Matrix&lt; value_type &gt; &amp;rx_overlap, const subspace::Dimensions &amp;dims, const CVecRef&lt; P &gt; &amp;pparams, const CVecRef&lt; Q &gt; &amp;qparams, const CVecRef&lt; Q &gt; &amp;dparams, const value_type_abs norm_thresh, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
@@ -13781,11 +13795,32 @@
     <name>molpro::linalg::itsolv::detail::dspace</name>
     <filename>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</filename>
     <member kind="function">
+      <type>std::vector&lt; std::size_t &gt;</type>
+      <name>projected_solutions_basis</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
+      <anchor>af192f392cc3ade374ce9a0f17ff5a4eb</anchor>
+      <arglist>(const subspace::Dimensions &amp;dims, const std::vector&lt; std::size_t &gt; &amp;remove_qspace)</arglist>
+    </member>
+    <member kind="function">
       <type>auto</type>
       <name>construct_projected_solution</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
       <anchor>a16f370809219435b563f0c3a6cd8633a</anchor>
       <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions, const subspace::Dimensions &amp;dims, const std::vector&lt; std::size_t &gt; &amp;remove_qspace, Logger &amp;logger)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>projected_solutions_overlap</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
+      <anchor>a0457ecf1d134a02cffc3aee21e87f008</anchor>
+      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions_proj, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const std::vector&lt; std::size_t &gt; &amp;basis, const std::vector&lt; std::size_t &gt; &amp;indices)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>projected_solutions_overlap</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
+      <anchor>ad3280fb78e388b0ee2bd33863e63cb6b</anchor>
+      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions_proj, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const std::vector&lt; std::size_t &gt; &amp;basis)</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
@@ -13807,6 +13842,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
       <anchor>a4864b4a60dab5a5e7e3821fb31b7aeb8</anchor>
       <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions_proj, const subspace::Matrix&lt; value_type &gt; &amp;overlap_proj, const value_type_abs svd_thresh, Logger &amp;logger)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>stable_projected_solutions</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html</anchorfile>
+      <anchor>a106205ce83d13b9f9bde29e02f86897a</anchor>
+      <arglist>(const subspace::Matrix&lt; value_type &gt; &amp;solutions, const subspace::Matrix&lt; value_type &gt; &amp;overlap, const subspace::Dimensions &amp;dims, const std::vector&lt; std::size_t &gt; &amp;remove_qspace, const value_type_abs norm_thresh, const value_type_abs svd_thresh, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
