@@ -7,6 +7,7 @@
 #include <molpro/linalg/itsolv/subspace/ISubspaceSolver.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
+#include <molpro/linalg/itsolv/subspace/check_metric.h>
 #include <molpro/linalg/itsolv/subspace/util.h>
 #include <molpro/linalg/itsolv/util.h>
 #include <molpro/linalg/itsolv/wrap.h>
@@ -583,6 +584,8 @@ public:
         if (problem.metric_kind() != MetricKind::Identity)
           check_scaling([&problem](R& x, R& y) { problem.metric_action({x}, {y}); }, "action of the metric");
       }
+      if (problem.metric_kind() != MetricKind::Identity)
+        success = test_metric(problem, v0, v1, verbosity, threshold) && success;
     }
     return success;
   }
@@ -621,6 +624,47 @@ protected:
       std::cerr << "~IterativeSolverTemplate: failed to write profiler output" << std::endl;
     }
     molpro::Profiler::single()->set_max_depth(m_profiler_saved_depth);
+  }
+
+  /*!
+   * @brief Tests that the metric of a problem is Hermitian, <u|M v> = <M u|v>, and, if its kind says so, positive
+   * (semi)definite, on the first two test parameters
+   * @return false if errors were found, otherwise true
+   */
+  bool test_metric(const Problem<R>& problem, R& v0, R& v1, int verbosity, value_type_abs threshold) const {
+    bool success = true;
+    const bool positive = problem.metric_kind() == MetricKind::HermitianPositiveDefinite ||
+                          problem.metric_kind() == MetricKind::HermitianPositiveSemidefinite;
+    std::optional<std::pair<Q, Q>> u; // the first test parameter and its action of the metric
+    for (int instance = 0; instance < 2 && problem.test_parameters(instance, v0); ++instance) {
+      problem.metric_action({v0}, {v1});
+      const auto norm = std::sqrt(std::abs(m_handlers->rr().dot(v0, v0)));
+      const auto norm_metric_action = std::sqrt(std::abs(m_handlers->rr().dot(v1, v1)));
+      const auto vmv = m_handlers->rr().dot(v0, v1);
+      if (std::abs(vmv - conjugate(vmv)) / 2 > threshold * norm * norm_metric_action or
+          (positive and real_part(vmv) < -threshold * norm * norm_metric_action)) {
+        success = false;
+        if (verbosity > -1)
+          std::cout << "<v|M v> = " << vmv << " is not real" << (positive ? " and non-negative" : "") << std::endl;
+      }
+      if (u) {
+        const auto umv = conjugate(m_handlers->rq().dot(v1, u->first));
+        const auto muv = m_handlers->rq().dot(v0, u->second);
+        const auto scale = std::sqrt(std::abs(m_handlers->qq().dot(u->first, u->first)) *
+                                     std::abs(m_handlers->qq().dot(u->second, u->second))) *
+                           norm * norm_metric_action;
+        const auto defect = std::abs(umv - conjugate(muv));
+        if (defect > threshold * std::sqrt(scale)) {
+          success = false;
+          if (verbosity > -1)
+            std::cout << "The metric is not Hermitian: <u|M v> = " << umv << ", <M u|v> = " << conjugate(muv)
+                      << std::endl;
+        } else if (verbosity > 0)
+          std::cout << "Hermiticity defect of the metric: " << defect << std::endl;
+      } else
+        u.emplace(m_handlers->qr().copy(v0), m_handlers->qr().copy(v1));
+    }
+    return success;
   }
 
   //! Implementation class can overload this to combine the errors of solutions, once those of all are known
@@ -673,6 +717,9 @@ protected:
     m_xspace->update_qspace(cwparams, cwactions, metric_actions);
     m_stats->q_creations += (metric_actions.empty() ? 2 : 3) * nW;
     prof->stop();
+    if (m_metric_kind == MetricKind::HermitianPositiveDefinite ||
+        m_metric_kind == MetricKind::HermitianPositiveSemidefinite)
+      subspace::check_metric_positive(m_xspace->data.at(subspace::EqnData::M), m_xspace->data.at(subspace::EqnData::S));
     prof->start("solve_and_generate_working_set");
     auto working_set = solve_and_generate_working_set(parameters, actions);
     prof->stop();

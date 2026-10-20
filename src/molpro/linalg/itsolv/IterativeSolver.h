@@ -438,6 +438,11 @@ public:
    * Solutions are then normalised such that |<x|M|x>| = 1, and their residuals are A x - lambda M x. The errors are
    * the norms of the residuals of the solutions scaled to unit length, |A x - lambda M x| / |x|, which do not depend
    * on the scale of M and are the same as without a metric if M is the identity.
+   *
+   * add_vector() throws std::runtime_error if the actions of the metric show that it is not Hermitian or, for the
+   * positive (semi)definite kinds, that it is not positive (semi)definite. These checks see the metric only on the
+   * subspace, so that, e.g., an indefinite metric is noticed only once one of its negative directions enters the
+   * subspace; test_problem() checks the metric of a Problem more directly.
    * @param kind the kind of metric
    * @param apply_metric if given, the solver does not keep the actions of the metric on the subspace vectors, which
    * is worthwhile where the metric is cheap to apply, and calls apply_metric on the solutions whenever it constructs
@@ -625,6 +630,10 @@ public:
   virtual Logger &logger() = 0;
   /*!
    * @brief Test a supplied problem class
+   *
+   * For a linear problem, checks that the actions of the kernel and, if there is one, of the metric are linear, and
+   * that the metric is Hermitian and, for the positive (semi)definite kinds, positive (semi)definite on the test
+   * parameters.
    * @param problem
    * @param v0
    * @param v1

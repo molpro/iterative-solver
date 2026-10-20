@@ -9,7 +9,10 @@
 #include <molpro/linalg/itsolv/subspace/QSpace.h>
 
 #include <cassert>
+#include <cmath>
+#include <format>
 #include <memory>
+#include <stdexcept>
 
 namespace molpro::linalg::itsolv::subspace {
 namespace xspace {
@@ -211,6 +214,8 @@ public:
     auto new_data = xspace::update_qspace_data(
         params, actions, cparamsp(), cparamsq(), cactionsq(), cparamsd(), cactionsd(), cwrap(m_rhs), m_dim, *m_handlers,
         *m_logger, m_hermitian, m_action_dot_action, metric_actions);
+    if (has_metric() && !params.empty())
+      check_metric_hermitian(params, new_data.qx.at(EqnData::M));
     qspace.update(params, actions, new_data.qq, new_data.qx, new_data.xq, m_dim, data, metric_actions);
     update_dimensions();
   }
@@ -359,6 +364,32 @@ protected:
     data[EqnData::rhs].resize({m_dim.nP, m_dim.nRHS});
     data[EqnData::rhs].slice() = util::overlap(cparamsp(), rhs(), m_handlers->qp());
   };
+
+  /*!
+   * @brief Throws if the metric is found not to be Hermitian
+   *
+   * The metric matrix is calculated on the assumption that the metric is Hermitian, from the actions of the metric on
+   * the new parameters only. Its elements <x|M q> with the most recent Q vector q are calculated again here from the
+   * action of the metric on q, which costs a single pass over two vectors.
+   * @param params the new parameters x
+   * @param qx_metric the metric matrix elements <x|M b> = <M x|b> of the new parameters with the subspace vectors b
+   */
+  void check_metric_hermitian(const CVecRef<R>& params, const Matrix<value_type>& qx_metric) {
+    const auto qmetric_actions = cmetric_actionsq();
+    if (qmetric_actions.empty() || params.empty())
+      return;
+    const auto& q_metric_action = qmetric_actions.front().get();
+    const auto norm_metric_action = std::sqrt(std::abs(m_handlers->qq().dot(q_metric_action, q_metric_action)));
+    for (size_t i = 0; i < params.size(); ++i) {
+      const auto from_q = m_handlers->rq().dot(params[i], q_metric_action);
+      const auto from_x = qx_metric(i, m_dim.oQ());
+      const auto norm_x = std::sqrt(std::abs(m_handlers->rr().dot(params[i], params[i])));
+      if (std::abs(from_q - from_x) > precision_scaled<value_type>(1e-8) * norm_x * norm_metric_action)
+        throw std::runtime_error(std::format("The metric is not Hermitian: <x|M q> = {:.6e} differs from <M x|q> = "
+                                             "{:.6e} for a new parameter x and a subspace vector q",
+                                             double(std::abs(from_q)), double(std::abs(from_x))));
+    }
+  }
 
   void remove_data(size_t i) {
     for (auto d : square_blocks(data))
