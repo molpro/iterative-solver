@@ -374,19 +374,38 @@ public:
       this->m_logger->set_verbosity(log::Verbosity::Trace);
       this->m_logger->enable_data_dumps(true);
     }
+    const bool metric = problem.provides_metric();
+    if (metric and not supports_metric())
+      throw std::logic_error("The problem provides a metric, which this solver does not support");
+    if (metric and m_max_p > 0)
+      throw std::runtime_error("A P space cannot be used together with a metric; set max_p to 0");
     bool use_diagonals = problem.diagonals(actions.at(0));
     std::unique_ptr<Q> diagonals;
     if (use_diagonals)
       diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
+    std::unique_ptr<Q> metric_diagonals;
+    if (metric and use_diagonals and problem.metric_diagonals(actions.at(0))) {
+      if (parameters.size() < 2)
+        throw std::runtime_error("IterativeSolver::solve() needs at least two parameter vectors to hand the diagonal "
+                                 "elements of the kernel and the metric to the preconditioner");
+      metric_diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
+    }
     if (generate_initial_guess and not use_diagonals)
       throw std::runtime_error("Default initial guess requested, but diagonal elements are not available");
+    // the lowest eigenvalues of a generalised eigenproblem are expected at the lowest ratios of the diagonals
+    std::unique_ptr<Q> ratios;
+    if (metric_diagonals) {
+      m_handlers->rq().copy(parameters.at(0), *diagonals);
+      precondition_default(wrap_arg(parameters.at(0).get()), std::vector<value_type>{0}, actions.at(0).get());
+      ratios.reset(new Q{m_handlers->qr().copy(parameters.at(0))});
+    }
     int nwork = parameters.size();
     std::vector<P> pspace;
     if (use_diagonals and m_max_p > 0)
       pspace = select_pspace(*diagonals);
     // a P space replaces any initial guess; without one, max_p > 0 still means the contents of parameters are not used
     if (pspace.empty() and (generate_initial_guess or (use_diagonals and m_max_p > 0)))
-      generate_initial_guess_from_diagonals(parameters, *diagonals);
+      generate_initial_guess_from_diagonals(parameters, ratios ? *ratios : *diagonals);
     if (!pspace.empty())
       nwork = initialise_pspace(pspace, problem, parameters, actions);
     for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
@@ -400,14 +419,29 @@ public:
       } else if (iter > 0 or pspace.empty()) {
         // add_vector() takes up no more vectors than there are in the working set
         const auto naction = std::min(size_t(nwork), m_working_set.size());
+        const auto wparameters = cwrap(parameters.begin(), parameters.begin() + naction);
+        const auto wactions = wrap(actions.begin(), actions.begin() + naction);
+        std::vector<Q> metric_actions;
+        if (metric and naction > 0) {
+          // the actions buffers serve for the actions of the metric first, which are kept as Q vectors
+          problem.metric_action(wparameters, wactions);
+          for (const auto& m : wactions)
+            metric_actions.emplace_back(m_handlers->qr().copy(m));
+        }
         if (naction > 0)
-          problem.action(cwrap(parameters.begin(), parameters.begin() + naction),
-                         wrap(actions.begin(), actions.begin() + naction));
-        nwork = this->add_vector(parameters, actions);
+          problem.action(wparameters, wactions);
+        nwork = metric ? add_vector_impl(parameters, actions, std::move(metric_actions))
+                       : this->add_vector(parameters, actions);
       }
       while (this->end_iteration_needed()) {
         if (nwork > 0) {
-          if (use_diagonals) {
+          if (metric_diagonals) {
+            // parameters[0] and parameters[1] are overwritten to hand the diagonals to the preconditioner
+            m_handlers->rq().copy(parameters.at(0), *diagonals);
+            m_handlers->rq().copy(parameters.at(1), *metric_diagonals);
+            problem.precondition(wrap(actions.begin(), actions.begin() + nwork), this->working_set_eigenvalues(),
+                                 parameters.at(0), parameters.at(1));
+          } else if (use_diagonals) {
             // parameters[0] is overwritten to hand the diagonals to the preconditioner
             m_handlers->rq().copy(parameters.at(0), *diagonals);
             problem.precondition(wrap(actions.begin(), actions.begin() + nwork), this->working_set_eigenvalues(),
@@ -488,18 +522,24 @@ public:
         success = success && std::abs(residual_numerical - residual_analytic) < threshold;
       }
     } else {
-      for (int instance = 0; problem.test_parameters(instance, v0); ++instance) {
-        problem.action({v0}, {v1});
+      // checks that the operator applied by apply(x, y) scales linearly; name describes its result
+      auto check_scaling = [&](const auto& apply, const std::string& name) {
+        apply(v0, v1);
         Q residual = m_handlers->qr().copy(v1);
         auto norm2_residual = std::sqrt(m_handlers->rr().dot(v1, v1));
         const value_type_abs scale_factor{10.0};
         m_handlers->rr().scal(scale_factor, v0);
-        problem.action({v0}, {v1});
+        apply(v0, v1);
         m_handlers->rq().axpy(-scale_factor, residual, v1);
         auto norm2 = std::sqrt(m_handlers->rr().dot(v1, v1));
         success = success && std::abs(norm2 / norm2_residual) < threshold;
         if (verbosity > 0 or (verbosity > -1 and not success))
-          std::cout << "Length of residual: " << norm2_residual << ", scaling defect: " << norm2 << std::endl;
+          std::cout << "Length of " << name << ": " << norm2_residual << ", scaling defect: " << norm2 << std::endl;
+      };
+      for (int instance = 0; problem.test_parameters(instance, v0); ++instance) {
+        check_scaling([&problem](R& x, R& y) { problem.action({x}, {y}); }, "residual");
+        if (problem.provides_metric())
+          check_scaling([&problem](R& x, R& y) { problem.metric_action({x}, {y}); }, "action of the metric");
       }
     }
     return success;

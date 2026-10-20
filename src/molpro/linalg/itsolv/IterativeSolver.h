@@ -182,6 +182,52 @@ public:
   }
 
   /*!
+   * @brief Apply preconditioning to a residual vector of a generalised eigenproblem. Used instead of the other
+   * precondition() overloads when both diagonals() and metric_diagonals() are provided.
+   * @param residual On entry, assumed to be the residual. On exit, the negative of the
+   * predicted step.
+   * @param shift Contains the current eigenvalue estimates for each of the parameter vectors in the set.
+   * @param diagonals The diagonal elements of the underlying kernel
+   * @param metric_diagonals The diagonal elements of the metric
+   */
+  virtual void precondition(const VecRef<R>& residual, const std::vector<value_t>& shift, const R& diagonals,
+                            const R& metric_diagonals) const {
+    precondition_default(residual, shift, diagonals, metric_diagonals);
+  }
+
+  /*!
+   * @brief Whether the problem provides a metric M other than the identity, turning an eigenproblem
+   * A v = lambda v into the generalised eigenproblem A v = lambda M v. M must be Hermitian and positive definite.
+   * If true, metric_action() has to be implemented. Supported only by solvers of LinearEigensystem that implement
+   * add_vector() with actions of the metric (LinearEigensystemDavidson), and not together with a P space; the other
+   * solvers throw in IterativeSolver::solve().
+   */
+  virtual bool provides_metric() const { return false; }
+
+  /*!
+   * @brief Calculate the action of the metric on a set of parameters. Called only if provides_metric() returns
+   * true.
+   * @param parameters The trial solutions for which the action is to be calculated
+   * @param metric_actions The action vectors of the metric
+   */
+  virtual void metric_action(const CVecRef<R>& parameters, const VecRef<R>& metric_actions) const {
+    throw std::logic_error("Metric unavailable: unimplemented metric_action() in Problem class");
+  }
+
+  /*!
+   * @brief Optionally provide the diagonal elements of the metric. If implemented and returning true, and if
+   * diagonals() is provided as well, the preconditioner gets them too, and an initial guess is generated from the
+   * lowest ratios of the diagonal elements of the kernel and the metric. Used only if provides_metric() returns true.
+   *
+   * IterativeSolver::solve() then needs at least two parameter vectors, as it hands both sets of diagonal elements
+   * to precondition() in them, and generating the initial guess needs a container supported by
+   * precondition_default().
+   * @param d On exit, contains the diagonal elements of the metric
+   * @return Whether the diagonal elements of the metric have been provided.
+   */
+  virtual bool metric_diagonals(R& d) const { return false; }
+
+  /*!
    * @brief Return the inhomogeneous part of a linear equation system.
    * @param RHS On return, will contain the requested right-hand-side of equations if available.
    * @param instance Which RHS is required. If there are N sets of equations to solve, then 0,1,...N-1 number the instances.
@@ -299,6 +345,12 @@ public:
    * Starting vectors, whether generated or taken from parameters, are only used for the roots in the working set, at
    * most one per root. On a solver that is used again after an earlier solve(), roots that have already converged are
    * not in the working set, so fewer guesses, or none at all, are generated.
+   *
+   * If the problem provides a metric (Problem::provides_metric()), the generalised eigenproblem A v = lambda M v is
+   * solved, which only some solvers of LinearEigensystem support and which cannot be combined with a P space
+   * (max_p > 0). If the problem also provides the diagonal elements of the kernel and of the metric, they are both
+   * passed to the preconditioner, for which at least two parameter vectors are needed, and a generated initial guess
+   * is based on the lowest ratios of the diagonal elements.
    */
   virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
                      bool generate_initial_guess = false) = 0;

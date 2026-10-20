@@ -119,6 +119,75 @@ TEST(precision_e2e, davidson_long_double) {
 
 namespace {
 
+//! The generalised eigenproblem A v = lambda M v with A of DiagonallyDominantProblem and a non-diagonal metric
+template <typename scalar>
+struct GeneralizedProblem : DiagonallyDominantProblem<scalar> {
+  using R = typename DiagonallyDominantProblem<scalar>::R;
+  using DiagonallyDominantProblem<scalar>::DiagonallyDominantProblem;
+
+  scalar metric(size_t i, size_t j) const {
+    return i == j ? scalar(1.5L) + scalar(std::cos(double(i))) : scalar(0.05L) / scalar(1 + i + j);
+  }
+
+  bool provides_metric() const override { return true; }
+  bool metric_diagonals(R& d) const override {
+    for (size_t i = 0; i < d.size(); i++)
+      d[i] = metric(i, i);
+    return true;
+  }
+  void metric_action(const molpro::linalg::itsolv::CVecRef<R>& parameters,
+                     const molpro::linalg::itsolv::VecRef<R>& actions) const override {
+    for (size_t k = 0; k < parameters.size(); k++) {
+      const auto& v = parameters[k].get();
+      auto& a = actions[k].get();
+      for (size_t i = 0; i < a.size(); i++) {
+        a[i] = 0;
+        for (size_t j = 0; j < a.size(); j++)
+          a[i] += metric(i, j) * v[j];
+      }
+    }
+  }
+};
+
+template <typename scalar>
+Outcome solve_generalized(long double convergence_threshold) {
+  using C = containers<scalar>;
+  auto solver =
+      molpro::linalg::itsolv::create_LinearEigensystem<typename C::R, typename C::Q, typename C::P>("Davidson");
+  solver->set_n_roots(nroot);
+  solver->set_hermiticity(true);
+  solver->set_convergence_threshold(scalar(convergence_threshold));
+  solver->set_verbosity(0);
+  GeneralizedProblem<scalar> problem(n);
+  std::vector<typename C::R> params(nroot, typename C::R(n, 0)), actions(nroot, typename C::R(n, 0));
+  Outcome outcome{};
+  outcome.converged = solver->solve(params, actions, problem, true);
+  for (size_t i = 0; i < nroot; ++i)
+    outcome.eigenvalues.push_back(static_cast<long double>(solver->eigenvalues()[i]));
+  outcome.largest_error = 0;
+  for (auto e : solver->errors())
+    outcome.largest_error = std::max(outcome.largest_error, static_cast<long double>(e));
+  return outcome;
+}
+
+} // namespace
+
+//! A generalised eigenproblem converges in extended precision below the double-precision residual floor, to the
+//! eigenvalues found in double precision
+TEST(precision_e2e, davidson_generalized) {
+  const auto in_double = solve_generalized<double>(1e-13L);
+  EXPECT_TRUE(in_double.converged);
+  EXPECT_LT(in_double.largest_error, 1e-13L);
+  const auto in_long_double = solve_generalized<long double>(long_double_is_extended ? 1e-17L : 1e-13L);
+  EXPECT_TRUE(in_long_double.converged);
+  EXPECT_LT(in_long_double.largest_error, long_double_is_extended ? 1e-17L : 1e-13L);
+  ASSERT_EQ(in_double.eigenvalues.size(), in_long_double.eigenvalues.size());
+  for (size_t i = 0; i < in_double.eigenvalues.size(); ++i)
+    EXPECT_NEAR(double(in_double.eigenvalues[i]), double(in_long_double.eigenvalues[i]), 1e-11);
+}
+
+namespace {
+
 /*!
  * @brief Minimise 1/2 (x-1)^T A (x-1), whose solution is the vector of ones.
  *
