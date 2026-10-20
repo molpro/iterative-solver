@@ -438,7 +438,8 @@ struct LinearEigensystemF : ::testing::Test {
       auto r = ax[k];
       for (size_t i = 0; i < n; i++)
         r[i] -= solver->eigenvalues()[k] * mx[k][i];
-      EXPECT_LE(std::sqrt(dot(r, r)), solver->convergence_threshold());
+      // the convergence threshold applies to the residual of the solution scaled to unit length
+      EXPECT_LE(std::sqrt(dot(r, r) / dot(parameters[k], parameters[k])), solver->convergence_threshold());
     }
     return max_nD;
   }

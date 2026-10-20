@@ -538,8 +538,9 @@ public:
    * positive definite metric M.
    *
    * The actions of the metric have to be given in every call, starting with the first one, and a P space cannot be
-   * used. The solutions are normalised in the metric, and the residuals, whose norms are the errors, are
-   * A v - lambda M v.
+   * used. The solutions are normalised in the metric, and the residuals are A v - lambda M v. The errors are the norms
+   * of the residuals of the solutions scaled to unit length, |A v - lambda M v| / |v|, which do not depend on the scale
+   * of M and are the same as without a metric if M is the identity.
    * @param parameters On input, the current solution or expansion vector. On exit, undefined.
    * @param actions On input, the action of the kernel A on parameters. On exit, a vector set that should be
    * preconditioned before returning to end_iteration().
