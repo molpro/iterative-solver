@@ -5844,6 +5844,13 @@
       <arglist>(molpro::profiler::Profiler &amp;profiler)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
+      <type>virtual void</type>
+      <name>set_profiler</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
+      <anchor>aa2c4bdb89c3eeb4f1a73010951acfb6a</anchor>
+      <arglist>(std::shared_ptr&lt; molpro::profiler::Profiler &gt; profiler)=0</arglist>
+    </member>
+    <member kind="function" virtualness="pure">
       <type>virtual const std::shared_ptr&lt; molpro::profiler::Profiler &gt; &amp;</type>
       <name>profiler</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html</anchorfile>
@@ -6200,6 +6207,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
       <anchor>a17509a0c4ccbd30a313f3e606dc54696</anchor>
       <arglist>(molpro::profiler::Profiler &amp;profiler) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_profiler</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a170cf8d85faca23551c0d9e43a588506</anchor>
+      <arglist>(std::shared_ptr&lt; molpro::profiler::Profiler &gt; profiler) override</arglist>
     </member>
     <member kind="function">
       <type>const std::shared_ptr&lt; molpro::profiler::Profiler &gt; &amp;</type>

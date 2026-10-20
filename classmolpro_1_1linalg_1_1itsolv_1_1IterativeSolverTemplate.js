@@ -44,6 +44,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate =
     [ "set_options", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ac3edaefda50129b65bd9b829a3d7d931", null ],
     [ "set_p_threshold", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a6201f13979f3d033dc1588d0f056fc64", null ],
     [ "set_profiler", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a17509a0c4ccbd30a313f3e606dc54696", null ],
+    [ "set_profiler", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a170cf8d85faca23551c0d9e43a588506", null ],
     [ "set_value_errors", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#abf9774c4ebf5d2ac8f670236d417ceb6", null ],
     [ "set_verbosity", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#af1240a8405dbaa9cda64e3d684bce2d5", null ],
     [ "set_verbosity", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad6ffddd7ef42abcddf96847b6fe3e897", null ],
