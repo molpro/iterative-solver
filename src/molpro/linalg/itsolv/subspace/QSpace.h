@@ -15,9 +15,6 @@
 #include <molpro/linalg/itsolv/util.h>
 #include <molpro/linalg/itsolv/helper-implementation.h>
 
-#include <algorithm>
-#include <optional>
-
 namespace molpro::linalg::itsolv::subspace {
 
 namespace qspace {
@@ -168,20 +165,6 @@ struct QSpace {
   }
 
   size_t size() const { return m_params.size(); }
-
-  //! The unique id of parameter i. @param i index in the current Q space
-  size_t id(size_t i) const { return std::next(m_params.begin(), i)->id; }
-
-  //! The unique id the next new parameter will get
-  size_t next_id() const { return m_unique_id; }
-
-  //! The index in the current Q space of the parameter with the given unique id, if it is still there
-  std::optional<size_t> index(size_t id) const {
-    auto it = std::find_if(m_params.begin(), m_params.end(), [id](const auto& p) { return p.id == id; });
-    if (it == m_params.end())
-      return std::nullopt;
-    return std::distance(m_params.begin(), it);
-  }
 
   VecRef<Q> params() {
     auto qparams = qspace::wrap_params<Q>(m_params.begin(), m_params.end());

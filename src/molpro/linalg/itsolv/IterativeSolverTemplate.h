@@ -4,10 +4,10 @@
 #include <molpro/iostream.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
 #include <molpro/linalg/itsolv/Logger.h>
+#include <molpro/linalg/itsolv/MetricChecker.h>
 #include <molpro/linalg/itsolv/subspace/ISubspaceSolver.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
-#include <molpro/linalg/itsolv/subspace/check_metric.h>
 #include <molpro/linalg/itsolv/subspace/util.h>
 #include <molpro/linalg/itsolv/util.h>
 #include <molpro/linalg/itsolv/wrap.h>
@@ -206,6 +206,8 @@ public:
     if (m_xspace->dimensions().nX() != 0 && (kind != m_metric_kind || storage != m_metric_storage))
       throw std::logic_error("The metric, or how its actions are obtained, cannot be changed once the subspace is not "
                              "empty");
+    if (m_xspace->dimensions().nX() == 0)
+      m_metric_checker.reset();
     m_metric_kind = kind;
     m_metric_storage = storage;
     m_apply_metric = std::move(apply_metric);
@@ -213,6 +215,8 @@ public:
   }
 
   MetricKind metric_kind() const override { return m_metric_kind; }
+  void set_check_metric(bool check) override { m_check_metric = check; }
+  bool get_check_metric() const override { return m_check_metric; }
   MetricStorage metric_storage() const override { return m_metric_storage; }
 
   int add_vector(std::vector<R>& parameters, std::vector<R>& actions) override {
@@ -299,6 +303,8 @@ public:
       set_max_p(options.max_p.value());
     if (options.p_threshold)
       set_p_threshold(options.p_threshold.value());
+    if (options.check_metric)
+      set_check_metric(options.check_metric.value());
   }
 
   std::shared_ptr<Options> get_options() const override {
@@ -309,6 +315,7 @@ public:
     options->max_iter = get_max_iter();
     options->max_p = get_max_p();
     options->p_threshold = get_p_threshold();
+    options->check_metric = get_check_metric();
     return options;
   }
 
@@ -764,6 +771,9 @@ protected:
       throw std::runtime_error("P space must be empty or at least as large as number of roots sought");
     if (apply_p)
       m_apply_p = std::move(apply_p);
+    if (m_check_metric && m_metric_kind != MetricKind::Identity &&
+        pp_metric_matrix.size() == pparams.size() * pparams.size())
+      detail::MetricChecker<R, Q, P>::check_hermitian(pp_metric_matrix, pparams.size());
     m_xspace->update_pspace(pparams, pp_action_matrix, pp_metric_matrix);
     check_metric_positive();
     auto working_set = solve_and_generate_working_set(parameters, actions);
@@ -771,11 +781,12 @@ protected:
     return working_set;
   }
 
-  //! For a positive (semi)definite metric, throws if the metric matrix shows that it is not
+  //! For a positive (semi)definite metric, throws if the metric matrix shows that it is not, unless checks are off
   void check_metric_positive() const {
-    if (m_metric_kind == MetricKind::HermitianPositiveDefinite ||
-        m_metric_kind == MetricKind::HermitianPositiveSemidefinite)
-      subspace::check_metric_positive(m_xspace->data.at(subspace::EqnData::M), m_xspace->data.at(subspace::EqnData::S));
+    if (m_check_metric && (m_metric_kind == MetricKind::HermitianPositiveDefinite ||
+                           m_metric_kind == MetricKind::HermitianPositiveSemidefinite))
+      detail::MetricChecker<R, Q, P>::check_positive(m_xspace->data.at(subspace::EqnData::M),
+                                                     m_xspace->data.at(subspace::EqnData::S));
   }
 
   //! The number of the given parameters that add_vector() takes up: no more than there are in the working set
@@ -804,10 +815,15 @@ protected:
     auto cwparams = cwrap(begin(parameters), begin(parameters) + nW);
     auto cwactions = cwrap(begin(actions), begin(actions) + nW);
     m_stats->r_creations += nW;
+    const auto cwmetric_actions = cwrap(metric_actions);
+    if (m_check_metric && m_metric_kind != MetricKind::Identity && cwmetric_actions.size() == nW)
+      m_metric_checker.check_hermitian(cwparams, cwmetric_actions, *m_xspace, *m_handlers);
     prof->start("update_qspace");
-    m_xspace->update_qspace(cwparams, cwactions, cwrap(metric_actions));
+    m_xspace->update_qspace(cwparams, cwactions, cwmetric_actions);
     m_stats->q_creations += (m_xspace->stores_metric_actions() ? 3 : 2) * nW;
     prof->stop();
+    if (m_check_metric && m_metric_kind != MetricKind::Identity)
+      m_metric_checker.remember(cwparams, cwmetric_actions, *m_xspace, *m_handlers);
     check_metric_positive();
     prof->start("solve_and_generate_working_set");
     // the actions of the metric are not needed any more and serve as scratch space
@@ -1000,6 +1016,8 @@ protected:
   MetricKind m_metric_kind = MetricKind::Identity;        //!< the metric declared with set_metric()
   MetricStorage m_metric_storage = MetricStorage::Stored; //!< how the actions of the metric are obtained
   fapply_metric_type m_apply_metric = {};          //!< applies the metric on the fly, if its actions are not stored
+  bool m_check_metric = true;                      //!< whether the properties of the metric are checked
+  detail::MetricChecker<R, Q, P> m_metric_checker; //!< checks the properties of the metric
   fapply_on_p_type m_apply_metric_p = {}; //!< adds the action of the metric on the P space, if its actions are stored
   value_type_abs m_p_threshold = std::numeric_limits<value_type_abs>::max(); //!< threshold for selecting P space
 private:
