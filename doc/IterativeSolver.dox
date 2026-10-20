@@ -19,8 +19,9 @@ then normalised in the metric, and their residuals are A v - lambda M v. The err
 the solutions scaled to unit length, |A v - lambda M v| / |v|, which do not depend on the scale of M, and which are the
 same as without a metric if M is the identity, so that the convergence threshold has the same meaning with and without
 a metric. The eigenvalues, and so the value errors, scale inversely with M. The solver throws if the metric is found
-not to be Hermitian or not to be positive definite on the subspace; IterativeSolver::test_problem() checks these
-properties on test vectors.
+not to be Hermitian or not to be positive definite on the subspace, unless the checks are switched off with the option
+`check_metric` (IterativeSolver::set_check_metric()); IterativeSolver::test_problem() checks these properties on test
+vectors.
 
 Linear eigensystem and linear equations use a novel P space and D space algorithm described in the paper (WIP).
 The different kinds of spaces used by the solvers are described in @ref TopicSpaces.

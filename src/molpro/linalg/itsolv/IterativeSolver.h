@@ -460,10 +460,11 @@ public:
    * the norms of the residuals of the solutions scaled to unit length, |A x - lambda M x| / |x|, which do not depend
    * on the scale of M and are the same as without a metric if M is the identity.
    *
-   * add_vector() throws std::runtime_error if the actions of the metric show that it is not Hermitian or, for the
-   * positive (semi)definite kinds, that it is not positive (semi)definite. These checks see the metric only on the
-   * subspace, so that, e.g., an indefinite metric is noticed only once one of its negative directions enters the
-   * subspace; test_problem() checks the metric of a Problem more directly.
+   * add_p() and add_vector() throw std::runtime_error if the actions of the metric show that it is not Hermitian or,
+   * for the positive (semi)definite kinds, that it is not positive (semi)definite, unless switched off with
+   * set_check_metric(). These checks see the metric only on the subspace, so that, e.g., an indefinite metric is
+   * noticed only once one of its negative directions enters the subspace; test_problem() checks the metric of a
+   * Problem more directly.
    * @param kind the kind of metric
    * @param storage how the solver obtains the actions of the metric on its subspace vectors: with
    * MetricStorage::Stored it keeps those given to add_vector(); with MetricStorage::OnTheFly, which is worthwhile where
@@ -481,6 +482,14 @@ public:
   virtual MetricKind metric_kind() const { return MetricKind::Identity; }
   //! How the actions of the metric declared with set_metric() are obtained
   virtual MetricStorage metric_storage() const { return MetricStorage::Stored; }
+  /*!
+   * @brief Sets whether add_p() and add_vector() check that the metric is Hermitian and, for the positive
+   * (semi)definite kinds, positive (semi)definite on the subspace (default: true). The checks cost a few operations on
+   * vectors in every iteration.
+   */
+  virtual void set_check_metric(bool check) {}
+  //! Whether the metric is checked, see set_check_metric()
+  virtual bool get_check_metric() const { return false; }
 
   /*!
    * \brief Take, typically, a current solution and residual, and add it to the solution

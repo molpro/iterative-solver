@@ -561,6 +561,12 @@ TEST(LinearEigensystem, Davidson_generalized_invalid_metric) {
   problem.metric_scale = -1;
   problem.metric_non_hermiticity = 0;
   EXPECT_THAT(solve_error(), ::testing::HasSubstr("not positive definite"));
+  // unless the checks are switched off
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson", "check_metric=false");
+  EXPECT_FALSE(solver->get_check_metric());
+  solver->set_n_roots(2);
+  solver->set_hermiticity(true);
+  EXPECT_NO_THROW(solver->solve(params, actions, metric_actions, problem, true));
 }
 
 // An ill-conditioned, but positive definite, metric is not mistaken for one that is not positive definite

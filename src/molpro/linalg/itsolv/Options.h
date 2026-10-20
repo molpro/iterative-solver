@@ -31,6 +31,7 @@ struct Options {
   std::optional<int> max_iter;                 //!< maximum number of iterations during IterativeSolver::solve()
   std::optional<int> max_p;                    //!< maximum size of P space
   std::optional<double> p_threshold;           //!< threshold for selecting P space
+  std::optional<bool> check_metric;            //!< whether the properties of a metric are checked every iteration
 
   /*!
    * @brief copies options from source object
