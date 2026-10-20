@@ -155,6 +155,7 @@ class IterativeSolverTemplate : public Solver<R, Q, P> {
 public:
   using typename Solver<R, Q, P>::fapply_on_p_type;
   using typename Solver<R, Q, P>::fapply_metric_type;
+  using typename Solver<R, Q, P>::PSpaceMetric;
   using typename Solver<R, Q, P>::scalar_type;
   using typename Solver<R, Q, P>::value_type;
   using typename Solver<R, Q, P>::value_type_abs;
@@ -234,17 +235,16 @@ public:
     return add_p_impl(pparams, pp_action_matrix, {}, parameters, actions, std::move(apply_p));
   }
 
-  size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
-               const array::Span<value_type>& pp_metric_matrix, const VecRef<R>& parameters, const VecRef<R>& actions,
-               fapply_on_p_type apply_p, fapply_on_p_type apply_metric_p) override {
+  size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix, const VecRef<R>& parameters,
+               const VecRef<R>& actions, fapply_on_p_type apply_p, const PSpaceMetric& metric) override {
     if (m_metric_kind == MetricKind::Identity)
-      throw std::logic_error("A metric matrix in the P space was given, but no metric was declared with set_metric()");
-    if (!pparams.empty() && m_xspace->stores_metric_actions() && !apply_metric_p)
+      throw std::logic_error("A metric in the P space was given, but no metric was declared with set_metric()");
+    if (!pparams.empty() && m_xspace->stores_metric_actions() && !metric.apply)
       throw std::invalid_argument("A function applying the metric in the P space is needed unless the metric is "
                                   "applied on the fly");
-    if (apply_metric_p)
-      m_apply_metric_p = std::move(apply_metric_p);
-    return add_p_impl(pparams, pp_action_matrix, pp_metric_matrix, parameters, actions, std::move(apply_p));
+    if (metric.apply)
+      m_apply_metric_p = metric.apply;
+    return add_p_impl(pparams, pp_action_matrix, metric.pp_matrix, parameters, actions, std::move(apply_p));
   }
 
   void clearP() override {}
@@ -982,8 +982,8 @@ protected:
       problem.p_metric_action(pcoeff, pparams, metric_actions);
     };
     auto metric_matrix = problem.pp_metric_matrix(pspace);
-    return add_p(cwrap(pspace), action_span, array::Span<value_type>(metric_matrix.data(), metric_matrix.size()),
-                 parameters, actions, apply_on_p, apply_metric_on_p);
+    return add_p(cwrap(pspace), action_span, parameters, actions, apply_on_p,
+                 PSpaceMetric{array::Span<value_type>(metric_matrix.data(), metric_matrix.size()), apply_metric_on_p});
   }
 
 

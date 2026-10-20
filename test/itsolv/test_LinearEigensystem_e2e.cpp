@@ -641,6 +641,20 @@ TEST(LinearEigensystem, Davidson_generalized_errors) {
                                molpro::linalg::array::Span<double>(pp.data(), pp.size()),
                                molpro::linalg::itsolv::wrap(params), molpro::linalg::itsolv::wrap(actions), {}),
                  std::logic_error);
+    // where the actions of the metric are stored, its action in the P space is needed
+    auto mm = problem.pp_metric_matrix(pspace);
+    using PSpaceMetric = decltype(solver)::element_type::PSpaceMetric;
+    EXPECT_THROW(solver->add_p(molpro::linalg::itsolv::cwrap(pspace),
+                               molpro::linalg::array::Span<double>(pp.data(), pp.size()),
+                               molpro::linalg::itsolv::wrap(params), molpro::linalg::itsolv::wrap(actions), {},
+                               PSpaceMetric{molpro::linalg::array::Span<double>(mm.data(), mm.size()), {}}),
+                 std::invalid_argument);
+    // and a metric in the P space needs a declared metric
+    EXPECT_THROW(davidson()->add_p(molpro::linalg::itsolv::cwrap(pspace),
+                                   molpro::linalg::array::Span<double>(pp.data(), pp.size()),
+                                   molpro::linalg::itsolv::wrap(params), molpro::linalg::itsolv::wrap(actions), {},
+                                   PSpaceMetric{molpro::linalg::array::Span<double>(mm.data(), mm.size()), {}}),
+                 std::logic_error);
   }
   // without buffers for the actions of the metric
   EXPECT_THROW(davidson()->solve(params, actions, problem, true), std::invalid_argument);
