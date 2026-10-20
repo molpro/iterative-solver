@@ -1993,7 +1993,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
     <tr><td class="paramname">parameters</td><td>A set of scratch vectors. On entry, these vectors should be filled with starting guesses. Where possible, the number of vectors should be equal to the number of solutions sought, but a smaller array is permitted. </td></tr>
     <tr><td class="paramname">actions</td><td>A set of scratch vectors. It should have the same size as parameters. </td></tr>
     <tr><td class="paramname">problem</td><td>A <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html" title="Abstract class defining the problem-specific interface for the simplified solver interface to Iterati...">Problem</a> object defining the problem to be solved </td></tr>
-    <tr><td class="paramname">generate_initial_guess</td><td>Whether to start with a guess based on diagonal elements (true) or on the contents of parameters (false) </td></tr>
+    <tr><td class="paramname">generate_initial_guess</td><td>Whether to start with a guess based on diagonal elements (true) or on the contents of parameters (false). A generated guess fills at most as many vectors as there are roots in the working set, so on a solver whose previous <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> has converged no guess is generated. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2056,7 +2056,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
     <tr><td class="paramname">parameters</td><td>A set of scratch vectors. On entry, these vectors should be filled with starting guesses. Where possible, the number of vectors should be equal to the number of solutions sought, but a smaller array is permitted. </td></tr>
     <tr><td class="paramname">actions</td><td>A set of scratch vectors. It should have the same size as parameters. </td></tr>
     <tr><td class="paramname">problem</td><td>A <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html" title="Abstract class defining the problem-specific interface for the simplified solver interface to Iterati...">Problem</a> object defining the problem to be solved </td></tr>
-    <tr><td class="paramname">generate_initial_guess</td><td>Whether to start with a guess based on diagonal elements (true) or on the contents of parameters (false) </td></tr>
+    <tr><td class="paramname">generate_initial_guess</td><td>Whether to start with a guess based on diagonal elements (true) or on the contents of parameters (false). A generated guess fills at most as many vectors as there are roots in the working set, so on a solver whose previous <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> has converged no guess is generated. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2119,7 +2119,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
     <tr><td class="paramname">parameters</td><td>A set of scratch vectors. On entry, these vectors should be filled with starting guesses. Where possible, the number of vectors should be equal to the number of solutions sought, but a smaller array is permitted. </td></tr>
     <tr><td class="paramname">actions</td><td>A set of scratch vectors. It should have the same size as parameters. </td></tr>
     <tr><td class="paramname">problem</td><td>A <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html" title="Abstract class defining the problem-specific interface for the simplified solver interface to Iterati...">Problem</a> object defining the problem to be solved </td></tr>
-    <tr><td class="paramname">generate_initial_guess</td><td>Whether to start with a guess based on diagonal elements (true) or on the contents of parameters (false) </td></tr>
+    <tr><td class="paramname">generate_initial_guess</td><td>Whether to start with a guess based on diagonal elements (true) or on the contents of parameters (false). A generated guess fills at most as many vectors as there are roots in the working set, so on a solver whose previous <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> has converged no guess is generated. </td></tr>
   </table>
   </dd>
 </dl>
