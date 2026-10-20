@@ -437,7 +437,7 @@ std::vector<std::size_t> limit_qspace_size(const subspace::Dimensions& dims, con
  * @param svd_thresh svd threshold for marking the null space
  * @param handler array handler
  * @param logger logger
- * @return D space parameters and actions
+ * @return D space parameters, actions and, if the subspace has a metric, actions of the metric (otherwise empty)
  */
 template <class R, class Q, class P, typename value_type, typename value_type_abs>
 auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subspace::IXSpace<R, Q, P>& xspace,
@@ -461,12 +461,17 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
   const auto& qactions = xspace.cactionsq();
   const auto& dparams = xspace.cparamsd();
   const auto& dactions = xspace.cactionsd();
-  std::vector<Q> dparams_new, dactions_new;
+  const bool metric = xspace.has_metric();
+  const auto& qmetric_actions = xspace.cmetric_actionsq();
+  const auto& dmetric_actions = xspace.cmetric_actionsd();
+  std::vector<Q> dparams_new, dactions_new, dmetric_actions_new;
   if (nD > 0) {
     const Q& q = !qparams.empty() ? qparams.front().get() : dparams.front().get();
     for (size_t i = 0; i < nD; ++i) {
       dparams_new.emplace_back(util::construct_zeroed_copy(q, handler));
       dactions_new.emplace_back(util::construct_zeroed_copy(q, handler));
+      if (metric)
+        dmetric_actions_new.emplace_back(util::construct_zeroed_copy(q, handler));
     }
     // coefficient matrix with Q_{delete} and D vectors in rows and new D vectors in columns, as required by gemm_outer
     auto coeff = subspace::Matrix<value_type>({nQd + dims.nD, nD});
@@ -475,17 +480,24 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
         coeff(j, i) = solutions_proj(i, j);
     // Q_{delete} followed by D, as the columns of solutions_proj, so that one call per output passes over each new
     // vector only once
-    auto qd_params = CVecRef<Q>{}, qd_actions = CVecRef<Q>{};
+    auto qd_params = CVecRef<Q>{}, qd_actions = CVecRef<Q>{}, qd_metric_actions = CVecRef<Q>{};
     for (auto iq : q_delete) {
       qd_params.emplace_back(qparams.at(iq));
       qd_actions.emplace_back(qactions.at(iq));
+      if (metric)
+        qd_metric_actions.emplace_back(qmetric_actions.at(iq));
     }
     qd_params.insert(qd_params.end(), dparams.begin(), dparams.end());
     qd_actions.insert(qd_actions.end(), dactions.begin(), dactions.end());
+    qd_metric_actions.insert(qd_metric_actions.end(), dmetric_actions.begin(), dmetric_actions.end());
     const auto wdparams_new = wrap(dparams_new);
     const auto wdactions_new = wrap(dactions_new);
     handler.gemm_outer(coeff, qd_params, wdparams_new);
     handler.gemm_outer(coeff, qd_actions, wdactions_new);
+    if (metric) {
+      const auto wdmetric_actions_new = wrap(dmetric_actions_new);
+      handler.gemm_outer(coeff, qd_metric_actions, wdmetric_actions_new);
+    }
   }
   for (size_t i = 0; i < nD; ++i) {
     auto norm = std::sqrt(std::abs(handler.dot(dparams_new.at(i), dparams_new.at(i))));
@@ -496,8 +508,10 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
     }
     handler.scal(1. / norm, dparams_new[i]);
     handler.scal(1. / norm, dactions_new[i]);
+    if (metric)
+      handler.scal(1. / norm, dmetric_actions_new[i]);
   }
-  return std::make_tuple(std::move(dparams_new), std::move(dactions_new));
+  return std::make_tuple(std::move(dparams_new), std::move(dactions_new), std::move(dmetric_actions_new));
 }
 
 /*!
@@ -643,12 +657,12 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   logger.debug("delete Q parameter indices = ", q_delete);
   if (!q_delete.empty()) {
     auto prof = profiler.push("construct_dspace");
-    auto [dparams, dactions] =
+    auto [dparams, dactions, dmetric_actions] =
         construct_dspace(solutions, xspace, q_delete, r_opts.norm_thresh, r_opts.svd_thresh, handlers.qq(), logger);
     erase_qspace(xspace, q_delete);
     auto wdparams = wrap(dparams);
     auto wdactions = wrap(dactions);
-    xspace.update_dspace(wdparams, wdactions);
+    xspace.update_dspace(wdparams, wdactions, wrap(dmetric_actions));
     auto eigenvalues_ref = subspace_solver.eigenvalues();
     subspace_solver.solve(xspace, subspace_solver.size());
     const auto& eigenvalues_new = subspace_solver.eigenvalues();

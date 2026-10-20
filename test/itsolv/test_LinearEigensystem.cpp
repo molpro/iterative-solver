@@ -5,6 +5,7 @@
 #include <complex>
 #include <fstream>
 #include <iomanip>
+#include <limits>
 #include <molpro/iostream.h>
 #include <numeric>
 #include <regex>
@@ -350,6 +351,97 @@ struct LinearEigensystemF : ::testing::Test {
       }
     }
   }
+
+  MatrixXdc mmat; //!< the metric of a generalised eigenproblem
+
+  //! A symmetric, positive definite, non-diagonal metric, which is the identity if scale is 0
+  void load_metric(double scale) {
+    mmat.resize(n, n);
+    for (size_t i = 0; i < n; i++)
+      for (size_t j = 0; j < n; j++)
+        mmat(i, j) = i == j ? 1 + scale * std::cos(double(i)) : 0.1 * scale / (1.0 + i + j);
+  }
+
+  void metric_action(const CVecRef<Rvector> &psx, const VecRef<Rvector> &outputs) {
+    for (size_t k = 0; k < psx.size(); k++) {
+      auto x = Eigen::Map<const Eigen::VectorXd>(psx.at(k).get().data(), n);
+      Eigen::Map<Eigen::VectorXd>(outputs.at(k).get().data(), n) = mmat * x;
+    }
+  }
+
+  /*!
+   * @brief Solves A x = lambda M x with the stepwise interface, preconditioning with diag(A) - lambda diag(M)
+   * @return the largest size of the D space during the iterations
+   */
+  size_t test_generalized_eigen(const size_t nroot, const size_t max_size_qspace = 1000, const size_t reset_D = 0) {
+    const bool hermitian = check_mat_hermiticity();
+    std::vector<double> hmat_row(n * n), mmat_row(n * n), eigenvectors, expected_eigenvalues;
+    for (size_t i = 0, ij = 0; i < n; ++i)
+      for (size_t j = 0; j < n; ++j, ++ij) {
+        hmat_row[ij] = hmat(i, j);
+        mmat_row[ij] = mmat(i, j);
+      }
+    molpro::linalg::itsolv::eigenproblem(eigenvectors, expected_eigenvalues, hmat_row, mmat_row, n, hermitian, 1e-14,
+                                         0);
+    std::sort(expected_eigenvalues.begin(), expected_eigenvalues.end());
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    auto options = CastOptions::LinearEigensystem(solver->get_options());
+    options->n_roots = nroot;
+    options->convergence_threshold = 1e-8;
+    options->max_size_qspace = max_size_qspace;
+    if (reset_D)
+      options->reset_D = reset_D;
+    options->hermiticity = hermitian;
+    solver->set_options(*options);
+    auto [x, g] = create_containers(nroot);
+    auto m = g;
+    // the initial guess from the lowest ratios of the diagonal elements
+    std::vector<double> ratios;
+    for (size_t i = 0; i < n; i++)
+      ratios.push_back(hmat(i, i) / mmat(i, i));
+    for (auto &xx : x) {
+      const auto i = std::min_element(ratios.begin(), ratios.end()) - ratios.begin();
+      xx[i] = 1;
+      ratios[i] = std::numeric_limits<double>::max();
+    }
+    size_t max_nD = 0;
+    for (auto iter = 0; iter < 100; iter++) {
+      action(cwrap(x), wrap(g));
+      metric_action(cwrap(x), wrap(m));
+      const auto nwork = solver->add_vector(wrap(x), wrap(g), wrap(m));
+      max_nD = std::max(max_nD, solver->dimensions().nD);
+      if (nwork == 0)
+        break;
+      const auto shift = solver->working_set_eigenvalues();
+      for (size_t k = 0; k < shift.size(); k++)
+        for (size_t i = 0; i < n; i++)
+          g[k][i] *= -1 / (1e-12 + hmat(i, i) - shift[k] * mmat(i, i));
+      if (solver->end_iteration(x, g) == 0)
+        break;
+    }
+    EXPECT_THAT(solver->errors(), ::testing::Each(::testing::Le(solver->convergence_threshold())));
+    EXPECT_THAT(solver->eigenvalues(), ::testing::Pointwise(::testing::DoubleNear(1e-9),
+                                                            std::vector<double>(expected_eigenvalues.begin(),
+                                                                                expected_eigenvalues.begin() + nroot)));
+    // the solutions are normalised in the metric, and their residuals are A x - lambda M x
+    auto [parameters, residuals] = create_containers(nroot);
+    std::vector<int> roots(nroot);
+    std::iota(roots.begin(), roots.end(), 0);
+    solver->solution(roots, parameters, residuals);
+    auto mx = residuals, ax = residuals;
+    metric_action(cwrap(parameters), wrap(mx));
+    action(cwrap(parameters), wrap(ax));
+    for (size_t k = 0; k < size_t(nroot); k++) {
+      EXPECT_NEAR(std::abs(dot(parameters[k], mx[k])), 1, 1e-10);
+      for (size_t i = 0; i < n; i++)
+        EXPECT_NEAR(residuals[k][i], ax[k][i] - solver->eigenvalues()[k] * mx[k][i], 1e-10);
+      auto r = ax[k];
+      for (size_t i = 0; i < n; i++)
+        r[i] -= solver->eigenvalues()[k] * mx[k][i];
+      EXPECT_LE(std::sqrt(dot(r, r)), solver->convergence_threshold());
+    }
+    return max_nD;
+  }
 };
 
 TEST_F(LinearEigensystemF, file_eigen) {
@@ -379,6 +471,64 @@ TEST_F(LinearEigensystemF, nonhermitian_eigen) {
       //      std::cout << "hmat\n"<<hmat<<std::endl;
       test_eigen(std::to_string(n) + "/" + std::to_string(param) + " non-hermiticy=" + std::to_string(non_hermiticity));
     }
+  }
+}
+
+// Generalised eigenproblems A x = lambda M x, hermitian and non-hermitian, including M = 1
+TEST_F(LinearEigensystemF, generalized_eigen) {
+  for (auto non_hermiticity : std::vector<double>{0, 0.1}) {
+    for (auto metric_scale : std::vector<double>{0, 0.5}) {
+      load_matrix(30, "", 1, non_hermiticity);
+      load_metric(metric_scale);
+      for (size_t nroot : {1, 3}) {
+        SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) +
+                     " metric scale=" + std::to_string(metric_scale) + " nroot=" + std::to_string(nroot));
+        test_generalized_eigen(nroot);
+      }
+    }
+  }
+}
+
+// A small Q space moves vectors into the D space, which must take their actions of the metric along, also through D
+// space resets
+TEST_F(LinearEigensystemF, generalized_eigen_dspace) {
+  for (auto non_hermiticity : std::vector<double>{0, 0.1}) {
+    load_matrix(40, "", 1, non_hermiticity);
+    load_metric(0.5);
+    for (size_t reset_D : {0, 4}) {
+      SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) + " reset_D=" + std::to_string(reset_D));
+      EXPECT_GT(test_generalized_eigen(2, 4, reset_D), 0);
+    }
+  }
+}
+
+// Actions of the metric are given in every call or never, and only solvers that support a metric accept them
+TEST_F(LinearEigensystemF, generalized_eigen_errors) {
+  load_matrix(10, "", 1);
+  load_metric(0.5);
+  auto [x, g] = create_containers(1);
+  auto m = g;
+  x[0][0] = 1;
+  action(cwrap(x), wrap(g));
+  metric_action(cwrap(x), wrap(m));
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    solver->add_vector(x[0], g[0], m[0]);
+    solver->end_iteration(x, g);
+    action(cwrap(x), wrap(g));
+    EXPECT_THROW(solver->add_vector(x[0], g[0]), std::runtime_error);
+  }
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    solver->add_vector(x[0], g[0]);
+    solver->end_iteration(x, g);
+    action(cwrap(x), wrap(g));
+    metric_action(cwrap(x), wrap(m));
+    EXPECT_THROW(solver->add_vector(x[0], g[0], m[0]), std::runtime_error);
+  }
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>("RSPT");
+    EXPECT_THROW(solver->add_vector(x[0], g[0], m[0]), std::logic_error);
   }
 }
 

@@ -480,6 +480,23 @@ template <class R, class Q, class P>
 class LinearEigensystem : public IterativeSolver<R, Q, P> {
 public:
   using typename IterativeSolver<R, Q, P>::scalar_type;
+  using IterativeSolver<R, Q, P>::add_vector;
+  /*!
+   * @brief Like IterativeSolver::add_vector(), for a generalised eigenproblem A v = lambda M v with a Hermitian,
+   * positive definite metric M.
+   *
+   * The actions of the metric have to be given in every call, starting with the first one, and a P space cannot be
+   * used. The solutions are normalised in the metric, and the residuals, whose norms are the errors, are
+   * A v - lambda M v.
+   * @param parameters On input, the current solution or expansion vector. On exit, undefined.
+   * @param actions On input, the action of the kernel A on parameters. On exit, a vector set that should be
+   * preconditioned before returning to end_iteration().
+   * @param metric_actions On input, the action of the metric M on parameters. On exit, unchanged.
+   * @return The size of the new working set.
+   */
+  virtual int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions) = 0;
+  //! @copydoc add_vector(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&)
+  virtual int add_vector(R& parameters, R& actions, R& metric_actions) = 0;
   //! The calculated eigenvalues of the subspace matrix
   virtual std::vector<scalar_type> eigenvalues() const = 0;
   //! Sets hermiticity of kernel
