@@ -525,6 +525,42 @@ TEST(LinearEigensystem, Davidson_generalized_metric_scale) {
   }
 }
 
+// The contributions of Q vectors to the solutions, which decide which Q vectors are deleted, are measured on solutions of
+// unit length, so that trimming the Q space does not depend on the scale of the metric either
+TEST(LinearEigensystem, Davidson_generalized_metric_scale_qspace_trimming) {
+  GeneralizedProblem problem;
+  struct Outcome {
+    std::vector<double> eigenvalues;
+    int iterations;
+    size_t nQ;
+  };
+  auto solve = [&problem](double metric_scale) {
+    problem.metric_scale = metric_scale;
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+    solver->set_n_roots(2);
+    solver->set_hermiticity(true);
+    solver->set_convergence_threshold(1e-10);
+    auto options = molpro::linalg::itsolv::LinearEigensystemDavidsonOptions{};
+    options.contrib_thresh = 1e-2;
+    options.min_size_qspace = 2;
+    solver->set_options(options);
+    auto params = std::vector<std::vector<double>>(2, std::vector<double>(problem.n));
+    auto actions = params;
+    EXPECT_TRUE(solver->solve(params, actions, problem, true));
+    return Outcome{solver->eigenvalues(), solver->statistics().iterations, solver->dimensions().nQ};
+  };
+  const auto reference = solve(1);
+  for (const double metric_scale : {64., 1. / 64}) {
+    SCOPED_TRACE("metric scale=" + std::to_string(metric_scale));
+    const auto scaled = solve(metric_scale);
+    EXPECT_EQ(scaled.iterations, reference.iterations);
+    EXPECT_EQ(scaled.nQ, reference.nQ);
+    ASSERT_EQ(scaled.eigenvalues.size(), reference.eigenvalues.size());
+    for (size_t i = 0; i < reference.eigenvalues.size(); ++i)
+      EXPECT_NEAR(scaled.eigenvalues[i] * metric_scale, reference.eigenvalues[i], 1e-12) << "root " << i;
+  }
+}
+
 // Without the diagonal elements of the metric, the solver gets by with the diagonal elements of the kernel and a
 // single parameter vector
 TEST(LinearEigensystem, Davidson_generalized_without_metric_diagonals) {

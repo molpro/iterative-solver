@@ -402,7 +402,8 @@ protected:
     auto partner_error = std::sqrt(std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
     if (this->m_xspace->has_metric())
       // as in SolverTemplate::compute_errors(), the error of the partner of unit length
-      partner_error /= detail::solution_norm(solutions, *partner, this->m_xspace->data.at(subspace::EqnData::S));
+      partner_error /=
+          subspace::util::solution_norm(solutions, *partner, this->m_xspace->data.at(subspace::EqnData::S));
     errors.at(i) = std::sqrt(errors.at(i) * errors.at(i) + partner_error * partner_error);
   }
 

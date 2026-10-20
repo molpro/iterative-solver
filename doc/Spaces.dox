@@ -85,6 +85,9 @@ In the linear solvers the size of the Q space can be controlled through `QSpaceO
 - `contrib_thresh`: Q vectors whose largest contribution to any current solution is smaller than this are considered
   redundant and deleted even if the Q space is not full.
 
+The contribution of a Q vector to a solution is the size of its coefficient in the solution scaled to unit length, so
+that it does not depend on how the solutions are normalised, e.g. in the metric of a generalised eigenproblem.
+
 The non-linear solvers (`NonLinearEquationsDIIS`, `OptimizeBFGS`) also store their history in the Q space and have a
 `max_size_qspace` option, but delete old vectors directly without building a D space.
 

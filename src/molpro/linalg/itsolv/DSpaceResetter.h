@@ -22,7 +22,8 @@ template <class R, class Q, class P, typename value_type>
 void resize_qspace(subspace::IXSpace<R, Q, P>& xspace, const subspace::Matrix<value_type>& solutions,
                    std::size_t max_size, Logger& logger) {
   logger.trace("resize_qspace()");
-  auto q_delete = limit_qspace_size(xspace.dimensions(), QSpaceOptions{.max_size = max_size}, solutions, logger);
+  auto q_delete = limit_qspace_size(xspace.dimensions(), QSpaceOptions{.max_size = max_size},
+                                    contribution_solutions(solutions, xspace), logger);
   logger.debug("delete Q parameter indices = ", q_delete);
   erase_qspace(xspace, q_delete);
 }

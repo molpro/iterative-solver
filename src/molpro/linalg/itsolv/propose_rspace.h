@@ -360,6 +360,19 @@ auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CV
 }
 
 /*!
+ * @brief The solutions whose coefficients measure the contributions of the subspace vectors in
+ * limit_qspace_size(): with a metric, the solutions are normalised in it, and are scaled to unit length so that the
+ * contributions do not depend on the scale of the metric
+ */
+template <class R, class Q, class P, typename value_type>
+subspace::Matrix<value_type> contribution_solutions(const subspace::Matrix<value_type>& solutions,
+                                                    const subspace::IXSpace<R, Q, P>& xspace) {
+  if (!xspace.has_metric())
+    return solutions;
+  return subspace::util::unit_length_solutions(solutions, xspace.data.at(subspace::EqnData::S));
+}
+
+/*!
  * @brief Ensures that size Q space is within limit by proposing Q parameters for deletion
  * @param dims dimensions of current P+Q+D subspace
  * @param max_size_qspace maximum size of Q space
@@ -653,7 +666,7 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   profiler.start("itsolv::ISubspaceSolver::solutions");
   auto solutions = subspace_solver.retained_solutions();
   profiler.stop();
-  auto q_delete = limit_qspace_size(xspace.dimensions(), q_opts, solutions, logger);
+  auto q_delete = limit_qspace_size(xspace.dimensions(), q_opts, contribution_solutions(solutions, xspace), logger);
   logger.debug("delete Q parameter indices = ", q_delete);
   if (!q_delete.empty()) {
     auto prof = profiler.push("construct_dspace");
