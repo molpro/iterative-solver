@@ -183,17 +183,16 @@ public:
   }
 
   /*!
-   * @brief Apply preconditioning to a residual vector of a generalised eigenproblem. Used instead of the other
-   * precondition() overloads, including any overriding implementations of them, when both diagonals() and
-   * metric_diagonals() are provided.
+   * @brief Apply preconditioning to a residual vector of a generalised eigenproblem. Used instead of precondition()
+   * when both diagonals() and metric_diagonals() are provided.
    * @param residual On entry, assumed to be the residual. On exit, the negative of the
    * predicted step.
    * @param shift Contains the current eigenvalue estimates for each of the parameter vectors in the set.
    * @param diagonals The diagonal elements of the underlying kernel
    * @param metric_diagonals The diagonal elements of the metric
    */
-  virtual void precondition(const VecRef<R>& residual, const std::vector<value_t>& shift, const R& diagonals,
-                            const R& metric_diagonals) const {
+  virtual void precondition_with_metric(const VecRef<R>& residual, const std::vector<value_t>& shift,
+                                        const R& diagonals, const R& metric_diagonals) const {
     precondition_default(residual, shift, diagonals, metric_diagonals);
   }
 
@@ -239,9 +238,9 @@ public:
   /*!
    * @brief Provide the diagonal elements of the metric. For a problem with a metric that provides diagonals(), this
    * is required too, so that the default preconditioner divides by diag(A) - lambda diag(M); IterativeSolver::solve()
-   * throws otherwise. The diagonal elements of the kernel and of the metric are then passed to the precondition()
-   * overload taking both, and an initial guess is generated from the lowest ratios of the diagonal elements of the
-   * kernel and the metric, which needs a container supported by precondition_default().
+   * throws otherwise. The diagonal elements of the kernel and of the metric are then passed to
+   * precondition_with_metric(), and an initial guess is generated from the lowest ratios of the diagonal elements of
+   * the kernel and the metric, which needs a container supported by precondition_default().
    * @param d On exit, contains the diagonal elements of the metric
    * @return Whether the diagonal elements of the metric have been provided.
    */
