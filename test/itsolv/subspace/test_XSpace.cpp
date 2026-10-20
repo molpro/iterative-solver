@@ -6,9 +6,11 @@
 
 #include <map>
 #include <memory>
+#include <numeric>
 #include <vector>
 
 using molpro::linalg::itsolv::ArrayHandlers;
+using molpro::linalg::itsolv::CVecRef;
 using molpro::linalg::itsolv::cwrap;
 using molpro::linalg::itsolv::Logger;
 using molpro::linalg::itsolv::wrap;
@@ -61,4 +63,99 @@ TEST(XSpace, erase_by_subspace_index) {
 
   xs.erase(xs.size()); // out of range: no change
   EXPECT_THAT(squared_lengths(xs), ElementsAre(1, 9));
+}
+
+namespace {
+//! A symmetric, positive definite, non-diagonal metric on vectors of length 4
+R apply_metric(const R& x) {
+  R mx(x.size());
+  for (size_t i = 0; i < x.size(); ++i)
+    for (size_t j = 0; j < x.size(); ++j)
+      mx[i] += (i == j ? 2.0 + i : 0.1 / (1.0 + i + j)) * x[j];
+  return mx;
+}
+
+double dot(const R& x, const R& y) { return std::inner_product(x.begin(), x.end(), y.begin(), 0.); }
+
+std::vector<Q> metric_actions(const std::vector<R>& params) {
+  std::vector<Q> m;
+  for (const auto& p : params)
+    m.push_back(apply_metric(p));
+  return m;
+}
+
+//! The stored actions of the metric and the metric matrix must match the parameters, in subspace order
+void check_metric_consistent(const XSpace<R, Q, P>& xs) {
+  ASSERT_TRUE(xs.has_metric());
+  auto params = xs.cparamsq();
+  auto metric = xs.cmetric_actionsq();
+  for (const auto& p : xs.cparamsd())
+    params.push_back(p);
+  for (const auto& m : xs.cmetric_actionsd())
+    metric.push_back(m);
+  ASSERT_EQ(metric.size(), params.size());
+  ASSERT_EQ(params.size(), xs.size());
+  const auto& m = xs.data.at(EqnData::M);
+  ASSERT_EQ(m.rows(), xs.size());
+  ASSERT_EQ(m.cols(), xs.size());
+  for (size_t i = 0; i < params.size(); ++i) {
+    EXPECT_THAT(metric[i].get(), ::testing::Pointwise(::testing::DoubleEq(), apply_metric(params[i].get())));
+    for (size_t j = 0; j < params.size(); ++j)
+      EXPECT_NEAR(m(i, j), dot(params[i], apply_metric(params[j])), 1e-14) << "M(" << i << "," << j << ")";
+  }
+}
+} // namespace
+
+// The metric matrix follows the subspace through Q space updates, including removal of a redundant new parameter, D
+// space updates and erasure
+TEST(XSpace, metric_matrix_consistent) {
+  XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
+  const std::vector<R> q1{{1, 0.5, 0, 0}, {0, 1, 0.2, 0}};
+  xs.update_qspace(cwrap(q1), cwrap(q1), metric_actions(q1));
+  check_metric_consistent(xs);
+  const std::vector<R> q2{{0, 0, 1, 0.3}, {0, 0, 1, 0.3}};
+  xs.update_qspace(cwrap(q2), cwrap(q2), metric_actions(q2));
+  EXPECT_EQ(xs.dimensions().nQ, 3);
+  check_metric_consistent(xs);
+  std::vector<Q> d{{0.1, 0.2, 0.3, 1}}, d_actions = d, d_metric = metric_actions(d);
+  auto wd = wrap(d);
+  auto wd_actions = wrap(d_actions);
+  xs.update_dspace(wd, wd_actions, wrap(d_metric));
+  EXPECT_EQ(xs.dimensions().nD, 1);
+  check_metric_consistent(xs);
+  xs.erase(xs.dimensions().oQ() + 1);
+  check_metric_consistent(xs);
+  xs.erase(xs.dimensions().oD());
+  check_metric_consistent(xs);
+}
+
+// Without actions of the metric, no metric is stored
+TEST(XSpace, no_metric) {
+  XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
+  const std::vector<R> q{scaled_unit(0, 1), scaled_unit(1, 2)};
+  xs.update_qspace(cwrap(q), cwrap(q));
+  EXPECT_FALSE(xs.has_metric());
+  EXPECT_EQ(xs.data.count(EqnData::M), 0);
+  EXPECT_TRUE(xs.cmetric_actionsq().empty());
+}
+
+// Actions of the metric are given either for every update from the first one on, or never
+TEST(XSpace, metric_given_consistently) {
+  const std::vector<R> q1{scaled_unit(0, 1)}, q2{scaled_unit(1, 1)};
+  {
+    XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
+    xs.update_qspace(cwrap(q1), cwrap(q1));
+    EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2), metric_actions(q2)), std::runtime_error);
+  }
+  {
+    XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
+    xs.update_qspace(cwrap(q1), cwrap(q1), metric_actions(q1));
+    // adding no vectors needs no actions of the metric either
+    EXPECT_NO_THROW(xs.update_qspace(CVecRef<R>{}, CVecRef<R>{}));
+    EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2)), std::runtime_error);
+    std::vector<Q> d{scaled_unit(2, 1)}, d_actions = d;
+    auto wd = wrap(d);
+    auto wd_actions = wrap(d_actions);
+    EXPECT_THROW(xs.update_dspace(wd, wd_actions), std::runtime_error);
+  }
 }

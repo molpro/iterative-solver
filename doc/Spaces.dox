@@ -42,7 +42,8 @@ the action has to be calculated next. There is one R vector per root in the *wor
 not converged yet (`IterativeSolver::working_set()`).
 
 R vectors are not stored by the solver between iterations. When a new set of R parameters is added to the subspace,
-copies of the parameters and their actions are made in the Q space (`IXSpace::update_qspace()`).
+copies of the parameters and their actions, and for a generalised eigenproblem their actions of the metric, are made in
+the Q space (`IXSpace::update_qspace()`).
 
 Before new R parameters are proposed (`detail::propose_rspace()`), the preconditioned residuals are normalised,
 orthogonalised against P+Q+D and each other, and any that turn out to be linearly dependent are removed. The
@@ -60,7 +61,7 @@ vectors that are linear combinations of P vectors (`Problem::p_action()`). This 
 is most important (e.g. the coordinates with the lowest diagonal elements in an eigenvalue problem) to be treated
 exactly from the start.
 
-- The P space can only be used with linear problems with hermitian kernels.
+- The P space can only be used with linear problems with hermitian kernels, and not together with a metric.
 - It must be set up while the subspace is still empty, i.e. before the first call to `add_vector()`, by calling
   `add_p()`. Its size must be zero or at least the number of roots sought.
 - When solving through `IterativeSolver::solve()` and the problem provides `diagonals()`, a P space is selected
@@ -72,8 +73,8 @@ exactly from the start.
 
 @section SpacesQ Q space
 
-The Q space holds the history of previous expansion vectors (*Q parameters*) together with their actions, both
-stored in `Q` containers (`subspace::QSpace`). New parameters are prepended, so the most recent vectors come first.
+The Q space holds the history of previous expansion vectors (*Q parameters*) together with their actions and, for a
+generalised eigenproblem, their actions of the metric, all stored in `Q` containers (`subspace::QSpace`). New parameters are prepended, so the most recent vectors come first.
 New parameters that are linearly dependent among themselves are discarded when they are added.
 
 In the linear solvers the size of the Q space can be controlled through `QSpaceOptions` (exposed as solver options):
@@ -95,8 +96,8 @@ the P+Q+R subspace that is needed to reproduce the previous solutions exactly.
 
 When Q vectors are deleted (`detail::construct_dspace()`), the current solutions are projected onto the space spanned
 by the deleted Q vectors and the old D vectors. After removing null and linearly dependent combinations, the
-projections are normalised and become the new D space; the old D space is discarded. D vectors and their actions are
-stored in `Q` containers. As a result the D space never holds more vectors than there are solutions, and the
+projections are normalised and become the new D space; the old D space is discarded. D vectors and their actions (and
+actions of the metric, if there is one) are stored in `Q` containers. As a result the D space never holds more vectors than there are solutions, and the
 subspace still contains the previous solutions, even though the Q vectors that contributed to them are gone.
 
 Because the D space is built from linear combinations of stored vectors, numerical noise accumulates in it over many
@@ -113,7 +114,9 @@ data projected onto the subspace (`subspace::SubspaceData`):
 
 - `EqnData::H`: the kernel matrix (for DIIS the matrix of residual overlaps),
 - `EqnData::S`: the overlap matrix,
-- `EqnData::rhs`: the projected right-hand-side vectors (linear equations only).
+- `EqnData::rhs`: the projected right-hand-side vectors (linear equations only),
+- `EqnData::M`: for a generalised eigenproblem A v = lambda M v only, the metric matrix <x_i|M x_j>. The overlap S is
+  still the one of the subspace vectors and is used for managing the subspace, e.g. for detecting linear dependencies.
 
 The rows and columns of these matrices are ordered as P, then Q, then D. The sizes and offsets of the three blocks are
 given by `subspace::Dimensions`:
