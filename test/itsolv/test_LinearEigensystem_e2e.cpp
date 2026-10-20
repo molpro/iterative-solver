@@ -357,6 +357,7 @@ public:
   static constexpr size_t n = 60;
   double non_hermiticity = 0;
   bool complex_pair = false; //!< if true, the two lowest eigenvalues are a complex conjugate pair
+  double metric_scale = 1;   //!< factor applied to the whole metric
   bool provide_metric_diagonals = true;
   bool linear_metric = true; //!< if false, metric_action() adds a constant, which test_problem() must notice
 
@@ -366,7 +367,9 @@ public:
     return i == j ? 1. + i : 0.1 / (1. + std::abs(double(i) - double(j))) * (j < i ? 1 - non_hermiticity : 1);
   }
   bool hermitian() const { return non_hermiticity == 0 and not complex_pair; }
-  double metric(size_t i, size_t j) const { return i == j ? 1.5 + std::cos(double(i)) : 0.05 / (1. + i + j); }
+  double metric(size_t i, size_t j) const {
+    return metric_scale * (i == j ? 1.5 + std::cos(double(i)) : 0.05 / (1. + i + j));
+  }
 
   bool diagonals(std::vector<double> &d) const override {
     for (size_t i = 0; i < n; ++i)
@@ -477,6 +480,49 @@ TEST(LinearEigensystem, Davidson_generalized_complex_pair) {
   GeneralizedProblem problem;
   problem.complex_pair = true;
   solve_generalized_problem<std::vector<double>>(problem, 3, 3);
+}
+
+// Scaling the metric scales the eigenvalues inversely, but changes neither the errors nor the course of the iterations,
+// so that a convergence threshold has the same meaning whatever the scale of the metric. Powers of two keep the
+// scaled problems exact in floating point.
+TEST(LinearEigensystem, Davidson_generalized_metric_scale) {
+  GeneralizedProblem problem;
+  struct Outcome {
+    std::vector<double> eigenvalues, errors;
+    int iterations;
+  };
+  auto solve = [&problem](double metric_scale, int max_iter) {
+    problem.metric_scale = metric_scale;
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+    solver->set_n_roots(3);
+    solver->set_hermiticity(true);
+    solver->set_convergence_threshold(1e-10);
+    solver->set_max_iter(max_iter);
+    auto params = std::vector<std::vector<double>>(3, std::vector<double>(problem.n));
+    auto actions = params;
+    solver->solve(params, actions, problem, true);
+    return Outcome{solver->eigenvalues(), solver->errors(), solver->statistics().iterations};
+  };
+  // Stopped early, the errors are well above the rounding level, so that they can be compared closely. Errors that
+  // depended on the scale of the metric would differ by the factor 1/sqrt(metric scale), i.e. 8 here.
+  const auto reference_unconverged = solve(1, 3);
+  ASSERT_THAT(reference_unconverged.errors, ::testing::Each(::testing::Gt(1e-8)));
+  // Converged, the iterations and eigenvalues are compared
+  const auto reference = solve(1, 100);
+  ASSERT_THAT(reference.errors, ::testing::Each(::testing::Le(1e-10)));
+  for (const double metric_scale : {64., 1. / 64}) {
+    SCOPED_TRACE("metric scale=" + std::to_string(metric_scale));
+    const auto unconverged = solve(metric_scale, 3);
+    ASSERT_EQ(unconverged.errors.size(), reference_unconverged.errors.size());
+    for (size_t i = 0; i < reference_unconverged.errors.size(); ++i)
+      EXPECT_NEAR(unconverged.errors[i], reference_unconverged.errors[i], 1e-6 * reference_unconverged.errors[i])
+          << "root " << i;
+    const auto converged = solve(metric_scale, 100);
+    EXPECT_EQ(converged.iterations, reference.iterations);
+    ASSERT_EQ(converged.eigenvalues.size(), reference.eigenvalues.size());
+    for (size_t i = 0; i < reference.eigenvalues.size(); ++i)
+      EXPECT_NEAR(converged.eigenvalues[i] * metric_scale, reference.eigenvalues[i], 1e-12) << "root " << i;
+  }
 }
 
 // Without the diagonal elements of the metric, the solver gets by with the diagonal elements of the kernel and a
