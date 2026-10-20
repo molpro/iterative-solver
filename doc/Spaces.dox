@@ -127,14 +127,17 @@ given by `subspace::Dimensions`:
 @endcode
 
 The subspace solver (`subspace::ISubspaceSolver`) solves the projected problem in the X space and returns the
-solutions as coefficient matrices. The full solutions and residuals are then constructed in R containers as linear
-combinations of the P, Q and D vectors (for P vectors through `p_action()`).
+solutions as coefficient matrices. For a generalised eigenproblem the metric matrix takes the place of the overlap in
+the subspace eigenproblem, so that the solutions are normalised in the metric. The full solutions and residuals are then
+constructed in R containers as linear combinations of the P, Q and D vectors (for P vectors through `p_action()`), the
+residuals of a generalised eigenproblem with the actions of the metric.
 
 @section SpacesIteration Overview of an iteration
 
 For the linear Davidson solvers, a single iteration involves the spaces as follows:
 
-1. The user evaluates the action of the kernel on the current R parameters and calls `add_vector()`.
+1. The user evaluates the action of the kernel (and of the metric, for a generalised eigenproblem) on the current R
+   parameters and calls `add_vector()`.
 2. The R parameters and actions are copied into the Q space, and the equation data of the X space is extended.
 3. The subspace problem is solved in X = P+Q+D, and solutions and residuals are constructed in the R vectors.
 4. The user preconditions the residuals and calls `end_iteration()`.

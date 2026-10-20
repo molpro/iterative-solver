@@ -166,28 +166,7 @@ public:
   Logger &logger() override { return *m_logger; }
 
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
-    auto outer = profiler()->push("itsolv::add_vector");
-    auto prof = molpro::Profiler::single();
-    m_logger->trace("IterativeSolverTemplate::add_vector  iteration = ", m_stats->iterations);
-    m_logger->debug("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = ",
-                      parameters.size(), actions.size(), m_working_set.size());
-    if (m_xspace->dimensions().nP != 0 && !m_apply_p)
-      throw std::runtime_error(
-          "Solver contains P space but no valid apply_p function. Make sure add_p was called correctly.");
-    auto nW = std::min(m_working_set.size(), parameters.size());
-    auto cwparams = cwrap(begin(parameters), begin(parameters) + nW);
-    auto cwactions = cwrap(begin(actions), begin(actions) + nW);
-    m_stats->r_creations += nW;
-    prof->start("update_qspace");
-    m_xspace->update_qspace(cwparams, cwactions);
-    m_stats->q_creations += 2 * nW;
-    prof->stop();
-    prof->start("solve_and_generate_working_set");
-    auto working_set = solve_and_generate_working_set(parameters, actions);
-    prof->stop();
-    read_handler_counts(m_stats, m_handlers);
-    this->m_end_iteration_needed = true;
-    return working_set;
+    return add_vector_impl(parameters, actions, {});
   }
 
   int add_vector(std::vector<R>& parameters, std::vector<R>& actions) override {
@@ -568,6 +547,46 @@ protected:
   virtual void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params,
                                   const VecRef<R>& actions) = 0;
   virtual bool linearEigensystem() const { return false; }
+  //! Whether the solver can solve a generalised eigenproblem, with the actions of a metric given to add_vector()
+  virtual bool supports_metric() const { return false; }
+
+  //! The number of the given parameters that add_vector() takes up: no more than there are in the working set
+  size_t n_added_vectors(const VecRef<R>& parameters) const {
+    return std::min(m_working_set.size(), parameters.size());
+  }
+
+  /*!
+   * @brief Implements add_vector()
+   * @param metric_actions For a generalised eigenproblem, the actions of the metric on the first n_added_vectors() of
+   * parameters, otherwise empty
+   */
+  int add_vector_impl(const VecRef<R>& parameters, const VecRef<R>& actions, std::vector<Q>&& metric_actions) {
+    auto outer = profiler()->push("itsolv::add_vector");
+    auto prof = molpro::Profiler::single();
+    m_logger->trace("IterativeSolverTemplate::add_vector  iteration = ", m_stats->iterations);
+    m_logger->debug("IterativeSolverTemplate::add_vector  size of {params, actions, working_set} = ", parameters.size(),
+                    actions.size(), m_working_set.size());
+    if (m_xspace->dimensions().nP != 0 && !m_apply_p)
+      throw std::runtime_error(
+          "Solver contains P space but no valid apply_p function. Make sure add_p was called correctly.");
+    if (!metric_actions.empty() && !supports_metric())
+      throw std::logic_error("This solver does not support a metric");
+    auto nW = n_added_vectors(parameters);
+    auto cwparams = cwrap(begin(parameters), begin(parameters) + nW);
+    auto cwactions = cwrap(begin(actions), begin(actions) + nW);
+    m_stats->r_creations += nW;
+    m_stats->q_creations += metric_actions.size();
+    prof->start("update_qspace");
+    m_xspace->update_qspace(cwparams, cwactions, std::move(metric_actions));
+    m_stats->q_creations += 2 * nW;
+    prof->stop();
+    prof->start("solve_and_generate_working_set");
+    auto working_set = solve_and_generate_working_set(parameters, actions);
+    prof->stop();
+    read_handler_counts(m_stats, m_handlers);
+    this->m_end_iteration_needed = true;
+    return working_set;
+  }
   /*!
    * @brief Solves the subspace problems and selects the working set of roots, returning their parameters and residual
    * in parameters and action

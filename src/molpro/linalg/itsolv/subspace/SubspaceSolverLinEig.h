@@ -52,8 +52,9 @@ protected:
   void solve_eigenvalue(IXSpace<R, Q, P>& xspace, const size_t nroots_max) {
     m_logger->trace("SubspaceSolverLinEig::solve_eigenvalue");
     auto h = xspace.data[EqnData::H];
-    auto s = xspace.data[EqnData::S];
-    m_logger->data_dump("S = ", s);
+    // the metric of a generalised eigenproblem replaces the overlap of the subspace vectors
+    auto s = xspace.data[xspace.has_metric() ? EqnData::M : EqnData::S];
+    m_logger->data_dump(xspace.has_metric() ? "M = " : "S = ", s);
     m_logger->data_dump<15>("H = ", h);
     auto dim = h.rows();
     auto evec = std::vector<value_type>{};

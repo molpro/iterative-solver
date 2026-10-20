@@ -55,6 +55,16 @@ public:
 
   bool linearEigensystem() const override { return true; }
 
+  using SolverTemplate::add_vector;
+  //! Not supported: perturbation theory is implemented for a unit metric only
+  int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions) override {
+    throw std::logic_error("LinearEigensystemRSPT does not support a metric");
+  }
+  //! Not supported: perturbation theory is implemented for a unit metric only
+  int add_vector(R& parameters, R& actions, R& metric_actions) override {
+    throw std::logic_error("LinearEigensystemRSPT does not support a metric");
+  }
+
   /*!
    * \brief constructs next perturbed wavefunction
    *
