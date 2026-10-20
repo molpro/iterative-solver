@@ -488,15 +488,22 @@ TEST(LinearEigensystem, Davidson_generalized_single_root) {
   solve_generalized_problem<std::vector<double>>(problem, 1, 1);
 }
 
-// solve() calculates the actions of kernel and metric through action_with_metric(), which a problem can override
+// solve() calculates the actions of kernel and metric through action_with_metric() and preconditions through
+// precondition_with_metric(), which a problem can override
 TEST(LinearEigensystem, Davidson_generalized_combined_action) {
   struct CountingProblem : GeneralizedProblem {
-    mutable int combined_calls = 0;
+    mutable int combined_calls = 0, precondition_calls = 0;
     void action_with_metric(const molpro::linalg::itsolv::CVecRef<std::vector<double>> &parameters,
                             const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions,
                             const molpro::linalg::itsolv::VecRef<std::vector<double>> &metric_actions) const override {
       ++combined_calls;
       GeneralizedProblem::action_with_metric(parameters, actions, metric_actions);
+    }
+    void precondition_with_metric(const molpro::linalg::itsolv::VecRef<std::vector<double>> &residual,
+                                  const std::vector<double> &shift, const std::vector<double> &diagonals,
+                                  const std::vector<double> &metric_diagonals) const override {
+      ++precondition_calls;
+      GeneralizedProblem::precondition_with_metric(residual, shift, diagonals, metric_diagonals);
     }
   } problem;
   auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
@@ -506,9 +513,9 @@ TEST(LinearEigensystem, Davidson_generalized_combined_action) {
   auto actions = params, metric_actions = params;
   EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
   EXPECT_EQ(problem.combined_calls, solver->statistics().iterations);
+  EXPECT_EQ(problem.precondition_calls, solver->statistics().iterations - 1);
 }
 
-// test_problem() checks the action of the metric as well
 TEST(LinearEigensystem, Davidson_generalized_test_problem) {
   GeneralizedProblem problem;
   auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");

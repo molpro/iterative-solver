@@ -573,8 +573,8 @@ protected:
             // parameters[0] and metric_actions[0] are overwritten to hand the diagonals to the preconditioner
             m_handlers->rq().copy(parameters.at(0), *diagonals);
             m_handlers->rq().copy(metric_actions.at(0), *metric_diagonals);
-            problem.precondition(wrap(actions.begin(), actions.begin() + nwork), this->working_set_eigenvalues(),
-                                 parameters.at(0), metric_actions.at(0));
+            problem.precondition_with_metric(wrap(actions.begin(), actions.begin() + nwork),
+                                             this->working_set_eigenvalues(), parameters.at(0), metric_actions.at(0));
           } else if (use_diagonals) {
             // parameters[0] is overwritten to hand the diagonals to the preconditioner
             m_handlers->rq().copy(parameters.at(0), *diagonals);
