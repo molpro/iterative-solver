@@ -182,7 +182,9 @@ public:
       d[i] = kernel(i, i);
     return true;
   }
-  bool provides_metric() const override { return true; }
+  molpro::linalg::itsolv::MetricKind metric_kind() const override {
+    return molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite;
+  }
   bool metric_diagonals(std::vector<double> &d) const override {
     for (size_t i = 0; i < n; ++i)
       d[i] = metric(i, i);
@@ -261,8 +263,8 @@ void solve_generalized_problem(const GeneralizedProblem &problem, const size_t n
   solver->set_hermiticity(problem.hermitian());
   solver->set_convergence_threshold(1e-10);
   auto params = std::vector<std::vector<double>>(nparams, std::vector<double>(problem.n));
-  auto actions = params;
-  EXPECT_TRUE(solver->solve(params, actions, problem, true));
+  auto actions = params, metric_actions = params;
+  EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
   EXPECT_THAT(solver->errors(), ::testing::Each(::testing::Le(1e-10)));
   EXPECT_THAT(solver->eigenvalues(), ::testing::Pointwise(::testing::DoubleNear(1e-9), problem.reference(nroot)));
 }
@@ -305,8 +307,8 @@ TEST(LinearEigensystem, Davidson_generalized_metric_scale) {
     solver->set_convergence_threshold(1e-10);
     solver->set_max_iter(max_iter);
     auto params = std::vector<std::vector<double>>(3, std::vector<double>(problem.n));
-    auto actions = params;
-    solver->solve(params, actions, problem, true);
+    auto actions = params, metric_actions = params;
+    solver->solve(params, actions, metric_actions, problem, true);
     return Outcome{solver->eigenvalues(), solver->errors(), solver->statistics().iterations};
   };
   // Stopped early, the errors are well above the rounding level, so that they can be compared closely. Errors that
@@ -351,8 +353,8 @@ TEST(LinearEigensystem, Davidson_generalized_metric_scale_qspace_trimming) {
     options.min_size_qspace = 2;
     solver->set_options(options);
     auto params = std::vector<std::vector<double>>(2, std::vector<double>(problem.n));
-    auto actions = params;
-    EXPECT_TRUE(solver->solve(params, actions, problem, true));
+    auto actions = params, metric_actions = params;
+    EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
     return Outcome{solver->eigenvalues(), solver->statistics().iterations, solver->dimensions().nQ};
   };
   const auto reference = solve(1);
@@ -367,12 +369,31 @@ TEST(LinearEigensystem, Davidson_generalized_metric_scale_qspace_trimming) {
   }
 }
 
-// Without the diagonal elements of the metric, the solver gets by with the diagonal elements of the kernel and a
-// single parameter vector
-TEST(LinearEigensystem, Davidson_generalized_without_metric_diagonals) {
+// A single root is found with a single set of buffers, which also hand the diagonal elements of kernel and metric to
+// the preconditioner
+TEST(LinearEigensystem, Davidson_generalized_single_root) {
   GeneralizedProblem problem;
-  problem.provide_metric_diagonals = false;
   solve_generalized_problem<std::vector<double>>(problem, 1, 1);
+}
+
+// solve() calculates the actions of kernel and metric through action_with_metric(), which a problem can override
+TEST(LinearEigensystem, Davidson_generalized_combined_action) {
+  struct CountingProblem : GeneralizedProblem {
+    mutable int combined_calls = 0;
+    void action_with_metric(const molpro::linalg::itsolv::CVecRef<std::vector<double>> &parameters,
+                            const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions,
+                            const molpro::linalg::itsolv::VecRef<std::vector<double>> &metric_actions) const override {
+      ++combined_calls;
+      GeneralizedProblem::action_with_metric(parameters, actions, metric_actions);
+    }
+  } problem;
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+  solver->set_n_roots(2);
+  solver->set_hermiticity(true);
+  auto params = std::vector<std::vector<double>>(2, std::vector<double>(problem.n));
+  auto actions = params, metric_actions = params;
+  EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
+  EXPECT_EQ(problem.combined_calls, solver->statistics().iterations);
 }
 
 // test_problem() checks the action of the metric as well
@@ -389,23 +410,30 @@ TEST(LinearEigensystem, Davidson_generalized_test_problem) {
 TEST(LinearEigensystem, Davidson_generalized_errors) {
   GeneralizedProblem problem;
   auto params = std::vector<std::vector<double>>(2, std::vector<double>(problem.n));
-  auto actions = params;
+  auto actions = params, metric_actions = params;
+  auto davidson = []() { return molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson"); };
   {
-    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+    auto solver = davidson();
     solver->set_max_p(10);
-    EXPECT_THROW(solver->solve(params, actions, problem, true), std::runtime_error);
+    EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::runtime_error);
   }
+  // without buffers for the actions of the metric
+  EXPECT_THROW(davidson()->solve(params, actions, problem, true), std::invalid_argument);
   {
-    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
-    EXPECT_THROW(solver->solve(params[0], actions[0], problem, true), std::runtime_error);
+    auto too_few = std::vector<std::vector<double>>(1, std::vector<double>(problem.n));
+    EXPECT_THROW(davidson()->solve(params, actions, too_few, problem, true), std::runtime_error);
   }
+  // the default preconditioner would ignore the metric without its diagonal elements
+  problem.provide_metric_diagonals = false;
+  EXPECT_THROW(davidson()->solve(params, actions, metric_actions, problem, true), std::runtime_error);
+  problem.provide_metric_diagonals = true;
   {
     auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("RSPT");
-    EXPECT_THROW(solver->solve(params, actions, problem, true), std::logic_error);
+    EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::invalid_argument);
   }
   {
     auto solver = molpro::linalg::itsolv::create_LinearEquations<std::vector<double>>("Davidson");
-    EXPECT_THROW(solver->solve(params, actions, problem, true), std::logic_error);
+    EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::invalid_argument);
   }
 }
 

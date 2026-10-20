@@ -81,12 +81,12 @@ struct QSpace {
    * @param xq_in data block between current X space and the new Q parameters
    * @param dims current dimensions
    * @param old_data current data
-   * @param metric_actions new actions of the metric, taken over by the Q space; empty unless there is a metric
+   * @param metric_actions new actions of the metric; empty unless there is a metric
    */
   template <typename T>
   void update(const CVecRef<R>& params, const CVecRef<R>& actions, const SubspaceData<T>& qq_in,
               const SubspaceData<T>& qx_in, const SubspaceData<T>& xq_in, const Dimensions& dims,
-              SubspaceData<T>& old_data, std::vector<Q>&& metric_actions = {}) {
+              SubspaceData<T>& old_data, const CVecRef<R>& metric_actions = {}) {
     m_logger->trace("QSpace::update");
     assert(metric_actions.empty() || metric_actions.size() == params.size());
     auto it_begin = m_params.begin();
@@ -95,7 +95,8 @@ struct QSpace {
           it_begin,
           qspace::QParam<Q>{std::make_unique<Q>(m_handlers->qr().copy(params.at(i))),
                             std::make_unique<Q>(m_handlers->qr().copy(actions.at(i))), m_unique_id++,
-                            metric_actions.empty() ? nullptr : std::make_unique<Q>(std::move(metric_actions[i]))});
+                            metric_actions.empty() ? nullptr
+                                                   : std::make_unique<Q>(m_handlers->qr().copy(metric_actions.at(i)))});
     }
     size_t nQnew = params.size();
     auto qq = qq_in;

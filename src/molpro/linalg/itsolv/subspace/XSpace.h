@@ -46,7 +46,7 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
                         const CVecRef<Q>& qparams, const CVecRef<Q>& qactions, const CVecRef<Q>& dparams,
                         const CVecRef<Q>& dactions, const CVecRef<Q>& rhs, const Dimensions& dims,
                         ArrayHandlers<R, Q, P>& handlers, Logger& logger, bool hermitian = false,
-                        bool action_dot_action = false, const CVecRef<Q>& metric_actions = {},
+                        bool action_dot_action = false, const CVecRef<R>& metric_actions = {},
                         const CVecRef<Q>& qmetric_actions = {}, const CVecRef<Q>& dmetric_actions = {}) {
   auto nQnew = params.size();
   const bool metric = !metric_actions.empty();
@@ -81,7 +81,7 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
   }
   if (metric) {
     // <x_i|M x_j> for the new parameters x_i, and the metric M, which is hermitian
-    qq[EqnData::M] = util::overlap(params, metric_actions, handlers.rq());
+    qq[EqnData::M] = util::overlap(params, metric_actions, handlers.rr());
     qx[EqnData::M].slice({0, dims.oQ()}, {nQnew, dims.oQ() + dims.nQ}) =
         util::overlap(params, qmetric_actions, handlers.rq());
     qx[EqnData::M].slice({0, dims.oD()}, {nQnew, dims.oD() + dims.nD}) =
@@ -191,23 +191,29 @@ public:
     data = null_data<value_type, EqnData::H, EqnData::S, EqnData::rhs>();
   };
 
+  void set_metric(bool metric) override {
+    if (metric == has_metric())
+      return;
+    if (m_dim.nX() != 0)
+      throw std::logic_error("XSpace::set_metric: the metric cannot be changed once the subspace is not empty");
+    if (metric)
+      data[EqnData::M] = {};
+    else
+      data.erase(EqnData::M);
+  }
+
   //! Update parameters in Q space and corresponding equation data
   void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
-                     std::vector<Q>&& metric_actions = {}) override {
+                     const CVecRef<R>& metric_actions = {}) override {
     m_logger->trace("QSpace::update_qspace");
-    if (!metric_actions.empty() && metric_actions.size() != params.size())
-      throw std::runtime_error("XSpace::update_qspace: number of metric actions differs from number of parameters");
-    if (!params.empty() && metric_actions.empty() == has_metric()) {
-      if (metric_actions.empty())
-        throw std::runtime_error("Actions of the metric are needed for every update of a generalised eigenproblem");
-      if (m_dim.nX() != 0)
-        throw std::runtime_error("Actions of the metric have to be given from the first update of the subspace on");
-      data[EqnData::M] = {};
-    }
+    if (metric_actions.size() != (has_metric() ? params.size() : 0))
+      throw std::runtime_error(
+          "XSpace::update_qspace: actions of the metric must be given for every parameter exactly when there is a "
+          "metric");
     auto new_data = xspace::update_qspace_data(
         params, actions, cparamsp(), cparamsq(), cactionsq(), cparamsd(), cactionsd(), cwrap(m_rhs), m_dim, *m_handlers,
-        *m_logger, m_hermitian, m_action_dot_action, cwrap(metric_actions), cmetric_actionsq(), cmetric_actionsd());
-    qspace.update(params, actions, new_data.qq, new_data.qx, new_data.xq, m_dim, data, std::move(metric_actions));
+        *m_logger, m_hermitian, m_action_dot_action, metric_actions, cmetric_actionsq(), cmetric_actionsd());
+    qspace.update(params, actions, new_data.qq, new_data.qx, new_data.xq, m_dim, data, metric_actions);
     update_dimensions();
   }
 

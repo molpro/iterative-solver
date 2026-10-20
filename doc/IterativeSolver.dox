@@ -12,13 +12,13 @@ There are four types of systems that iterative-solver can solve:
 The interface for different solvers is declared in ``molpro/linalg/itsolv/IterativeSolver.h``.
 
 Linear eigensystem solver is implemented in ``molpro/linalg/itsolv/LinearEigensystemDavidson.h``. It also solves
-generalised eigenproblems A v = lambda M v with a Hermitian, positive definite metric M, whose action on the expansion
-vectors is supplied along with the action of A (Problem::provides_metric(), Problem::metric_action(),
-LinearEigensystem::add_vector()). The solutions are then normalised in the metric, and their residuals are
-A v - lambda M v. The errors are the norms of the residuals of the solutions scaled to unit length, |A v - lambda M v| /
-|v|, which do not depend on the scale of M, and which are the same as without a metric if M is the identity, so that the
-convergence threshold has the same meaning with and without a metric. The eigenvalues, and so the value errors, scale
-inversely with M.
+generalised eigenproblems A v = lambda M v with a Hermitian, positive definite metric M (MetricKind), whose action on
+the expansion vectors is supplied along with the action of A (Problem::metric_kind(), Problem::metric_action(),
+Problem::action_with_metric(), IterativeSolver::set_metric(), IterativeSolver::add_vector()). The solutions are
+then normalised in the metric, and their residuals are A v - lambda M v. The errors are the norms of the residuals of
+the solutions scaled to unit length, |A v - lambda M v| / |v|, which do not depend on the scale of M, and which are the
+same as without a metric if M is the identity, so that the convergence threshold has the same meaning with and without
+a metric. The eigenvalues, and so the value errors, scale inversely with M.
 
 Linear eigensystem and linear equations use a novel P space and D space algorithm described in the paper (WIP).
 The different kinds of spaces used by the solvers are described in @ref TopicSpaces.

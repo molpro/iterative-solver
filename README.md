@@ -82,8 +82,14 @@ solver->solution(parameters, actions);
 ```
 
 For a generalised eigenvalue problem A v = &lambda; M v with a Hermitian, positive definite metric M, the `Problem`
-additionally returns `true` from `provides_metric()` and implements `metric_action()`, and optionally
-`metric_diagonals()` for the preconditioner.
+additionally returns the kind of metric from `metric_kind()` and implements `metric_action()` (and `metric_diagonals()`
+if it provides `diagonals()`), and the problem is solved with the `solve()` overload that takes a third set of buffers,
+for the actions of the metric:
+
+```c++
+std::vector<Rvector> metric_actions(n_roots, Rvector(n));
+solver->solve(parameters, actions, metric_actions, problem, /*generate_initial_guess=*/true);
+```
 
 More advanced users can copy and modify the code in `solve()` to tailor it for their own use, see implementation in `molpro/linalg/itsolv/IterativeSolverTemplate.h`.
 

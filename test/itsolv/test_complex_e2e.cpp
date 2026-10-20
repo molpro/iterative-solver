@@ -208,7 +208,9 @@ struct GeneralizedHermitianProblem : HermitianProblem<std::complex<double>> {
     return scalar(0.05, 0.03 * (double(j) - double(i))) / (1. + i + j);
   }
 
-  bool provides_metric() const override { return true; }
+  molpro::linalg::itsolv::MetricKind metric_kind() const override {
+    return molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite;
+  }
   bool metric_diagonals(R& d) const override {
     for (size_t i = 0; i < d.size(); i++)
       d[i] = metric(i, i);
@@ -244,12 +246,12 @@ TEST(complex_e2e, davidson_generalized_hermitian) {
   solver->set_n_roots(nroot);
   solver->set_hermiticity(true);
   solver->set_convergence_threshold(1e-11);
-  std::vector<CC_R> params(nroot, CC_R(n)), actions(nroot, CC_R(n));
+  std::vector<CC_R> params(nroot, CC_R(n)), actions(nroot, CC_R(n)), metric_actions(nroot, CC_R(n));
   // the guess cannot be generated, as selecting the lowest elements is not implemented for complex types; these unit
   // vectors are at the lowest ratios of the diagonal elements of the kernel and the metric
   for (size_t i = 0; i < nroot; ++i)
     params[i][i] = 1;
-  EXPECT_TRUE(solver->solve(params, actions, problem));
+  EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem));
   for (size_t i = 0; i < nroot; ++i) {
     EXPECT_NEAR(solver->eigenvalues()[i].real(), reference.eigenvalues()(i), 1e-10) << "root " << i;
     EXPECT_NEAR(solver->eigenvalues()[i].imag(), 0.0, 1e-12) << "root " << i << " of a hermitian problem must be real";

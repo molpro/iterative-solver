@@ -145,6 +145,7 @@ template <template <class, class, class> class Solver, class R, class Q, class P
 class IterativeSolverTemplate : public Solver<R, Q, P> {
 public:
   using typename Solver<R, Q, P>::fapply_on_p_type;
+  using typename Solver<R, Q, P>::fapply_metric_type;
   using typename Solver<R, Q, P>::scalar_type;
   using typename Solver<R, Q, P>::value_type;
   using typename Solver<R, Q, P>::value_type_abs;
@@ -165,9 +166,40 @@ public:
 
   Logger &logger() override { return *m_logger; }
 
+  using Solver<R, Q, P>::add_vector;
+  using Solver<R, Q, P>::solve;
+
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
+    if (m_metric_kind != MetricKind::Identity)
+      throw std::logic_error("The actions of the metric declared with set_metric() have to be given to add_vector()");
     return add_vector_impl(parameters, actions, {});
   }
+
+  int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions) override {
+    if (m_metric_kind == MetricKind::Identity)
+      throw std::logic_error("Actions of a metric given to add_vector(), but no metric was declared with set_metric()");
+    const auto nW = n_added_vectors(parameters);
+    if (metric_actions.size() < nW)
+      throw std::runtime_error("IterativeSolver::add_vector(): fewer actions of the metric than parameters");
+    return add_vector_impl(parameters, actions, cwrap(begin(metric_actions), begin(metric_actions) + nW));
+  }
+
+  bool supports_metric(MetricKind kind) const override { return kind == MetricKind::Identity; }
+
+  void set_metric(MetricKind kind, fapply_metric_type apply_metric = {}) override {
+    if (!supports_metric(kind))
+      throw std::invalid_argument("This solver does not support the requested kind of metric");
+    if (kind == MetricKind::Identity && apply_metric)
+      throw std::invalid_argument("A function applying the metric was given for the identity");
+    if (apply_metric)
+      throw std::invalid_argument("Applying the metric on the fly is not implemented");
+    if (m_xspace->dimensions().nX() != 0 && kind != m_metric_kind)
+      throw std::logic_error("The metric cannot be changed once the subspace is not empty");
+    m_metric_kind = kind;
+    m_xspace->set_metric(kind != MetricKind::Identity);
+  }
+
+  MetricKind metric_kind() const override { return m_metric_kind; }
 
   int add_vector(std::vector<R>& parameters, std::vector<R>& actions) override {
     return add_vector(wrap(parameters), wrap(actions));
@@ -362,6 +394,22 @@ public:
 
   bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
              bool generate_initial_guess = false) override {
+    if (problem.metric_kind() != MetricKind::Identity)
+      throw std::invalid_argument("A problem with a metric has to be solved with the overload of "
+                                  "IterativeSolver::solve() taking buffers for the actions of the metric");
+    return solve_impl(parameters, actions, {}, problem, generate_initial_guess);
+  }
+
+  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
+             const Problem<R>& problem, bool generate_initial_guess = false) override {
+    if (parameters.size() != metric_actions.size())
+      throw std::runtime_error("Inconsistent container sizes in IterativeSolver::solve()");
+    return solve_impl(parameters, actions, metric_actions, problem, generate_initial_guess);
+  }
+
+  //! Implements solve(), with empty metric_actions for a problem without a metric
+  bool solve_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
+                  const Problem<R>& problem, bool generate_initial_guess) {
     if (parameters.empty())
       throw std::runtime_error("Empty container passed to IterativeSolver::solve()");
     if (parameters.size() != actions.size())
@@ -374,9 +422,8 @@ public:
       this->m_logger->set_verbosity(log::Verbosity::Trace);
       this->m_logger->enable_data_dumps(true);
     }
-    const bool metric = problem.provides_metric();
-    if (metric and not supports_metric())
-      throw std::logic_error("The problem provides a metric, which this solver does not support");
+    const bool metric = problem.metric_kind() != MetricKind::Identity;
+    set_metric(problem.metric_kind());
     if (metric and m_max_p > 0)
       throw std::runtime_error("A P space cannot be used together with a metric; set max_p to 0");
     bool use_diagonals = problem.diagonals(actions.at(0));
@@ -384,10 +431,10 @@ public:
     if (use_diagonals)
       diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
     std::unique_ptr<Q> metric_diagonals;
-    if (metric and use_diagonals and problem.metric_diagonals(actions.at(0))) {
-      if (parameters.size() < 2)
-        throw std::runtime_error("IterativeSolver::solve() needs at least two parameter vectors to hand the diagonal "
-                                 "elements of the kernel and the metric to the preconditioner");
+    if (metric and use_diagonals) {
+      if (not problem.metric_diagonals(actions.at(0)))
+        throw std::runtime_error("The problem provides diagonals() but not metric_diagonals(), without which the "
+                                 "default preconditioner would ignore the metric");
       metric_diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
     }
     if (generate_initial_guess and not use_diagonals)
@@ -421,26 +468,21 @@ public:
         const auto naction = std::min(size_t(nwork), m_working_set.size());
         const auto wparameters = cwrap(parameters.begin(), parameters.begin() + naction);
         const auto wactions = wrap(actions.begin(), actions.begin() + naction);
-        std::vector<Q> metric_actions;
-        if (metric and naction > 0) {
-          // the actions buffers serve for the actions of the metric first, which are kept as Q vectors
-          problem.metric_action(wparameters, wactions);
-          for (const auto& m : wactions)
-            metric_actions.emplace_back(m_handlers->qr().copy(m));
-        }
-        if (naction > 0)
+        if (naction > 0 and metric)
+          problem.action_with_metric(wparameters, wactions,
+                                     wrap(metric_actions.begin(), metric_actions.begin() + naction));
+        else if (naction > 0)
           problem.action(wparameters, wactions);
-        nwork = metric ? add_vector_impl(parameters, actions, std::move(metric_actions))
-                       : this->add_vector(parameters, actions);
+        nwork = metric ? this->add_vector(parameters, actions, metric_actions) : this->add_vector(parameters, actions);
       }
       while (this->end_iteration_needed()) {
         if (nwork > 0) {
           if (metric_diagonals) {
-            // parameters[0] and parameters[1] are overwritten to hand the diagonals to the preconditioner
+            // parameters[0] and metric_actions[0] are overwritten to hand the diagonals to the preconditioner
             m_handlers->rq().copy(parameters.at(0), *diagonals);
-            m_handlers->rq().copy(parameters.at(1), *metric_diagonals);
+            m_handlers->rq().copy(metric_actions.at(0), *metric_diagonals);
             problem.precondition(wrap(actions.begin(), actions.begin() + nwork), this->working_set_eigenvalues(),
-                                 parameters.at(0), parameters.at(1));
+                                 parameters.at(0), metric_actions.at(0));
           } else if (use_diagonals) {
             // parameters[0] is overwritten to hand the diagonals to the preconditioner
             m_handlers->rq().copy(parameters.at(0), *diagonals);
@@ -538,7 +580,7 @@ public:
       };
       for (int instance = 0; problem.test_parameters(instance, v0); ++instance) {
         check_scaling([&problem](R& x, R& y) { problem.action({x}, {y}); }, "residual");
-        if (problem.provides_metric())
+        if (problem.metric_kind() != MetricKind::Identity)
           check_scaling([&problem](R& x, R& y) { problem.metric_action({x}, {y}); }, "action of the metric");
       }
     }
@@ -587,8 +629,6 @@ protected:
   virtual void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params,
                                   const VecRef<R>& actions) = 0;
   virtual bool linearEigensystem() const { return false; }
-  //! Whether the solver can solve a generalised eigenproblem, with the actions of a metric given to add_vector()
-  virtual bool supports_metric() const { return false; }
 
   //! The number of the given parameters that add_vector() takes up: no more than there are in the working set
   size_t n_added_vectors(const VecRef<R>& parameters) const {
@@ -597,10 +637,10 @@ protected:
 
   /*!
    * @brief Implements add_vector()
-   * @param metric_actions For a generalised eigenproblem, the actions of the metric on the first n_added_vectors() of
+   * @param metric_actions For a problem with a metric, the actions of the metric on the first n_added_vectors() of
    * parameters, otherwise empty
    */
-  int add_vector_impl(const VecRef<R>& parameters, const VecRef<R>& actions, std::vector<Q>&& metric_actions) {
+  int add_vector_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const CVecRef<R>& metric_actions) {
     auto outer = profiler()->push("itsolv::add_vector");
     auto prof = molpro::Profiler::single();
     m_logger->trace("IterativeSolverTemplate::add_vector  iteration = ", m_stats->iterations);
@@ -609,16 +649,13 @@ protected:
     if (m_xspace->dimensions().nP != 0 && !m_apply_p)
       throw std::runtime_error(
           "Solver contains P space but no valid apply_p function. Make sure add_p was called correctly.");
-    if (!metric_actions.empty() && !supports_metric())
-      throw std::logic_error("This solver does not support a metric");
     auto nW = n_added_vectors(parameters);
     auto cwparams = cwrap(begin(parameters), begin(parameters) + nW);
     auto cwactions = cwrap(begin(actions), begin(actions) + nW);
     m_stats->r_creations += nW;
-    m_stats->q_creations += metric_actions.size();
     prof->start("update_qspace");
-    m_xspace->update_qspace(cwparams, cwactions, std::move(metric_actions));
-    m_stats->q_creations += 2 * nW;
+    m_xspace->update_qspace(cwparams, cwactions, metric_actions);
+    m_stats->q_creations += (metric_actions.empty() ? 2 : 3) * nW;
     prof->stop();
     prof->start("solve_and_generate_working_set");
     auto working_set = solve_and_generate_working_set(parameters, actions);
@@ -804,6 +841,7 @@ protected:
   std::optional<Verbosity> m_verbosity = {};    //!< how much output to print in solve()
   int m_max_iter = 100;                         //!< maximum number of iterations in solve()
   size_t m_max_p = 0;                           //!< maximum size of P space
+  MetricKind m_metric_kind = MetricKind::Identity; //!< the metric declared with set_metric()
   value_type_abs m_p_threshold = std::numeric_limits<value_type_abs>::max(); //!< threshold for selecting P space
 private:
   mutable std::shared_ptr<molpro::profiler::Profiler> m_profiler;
