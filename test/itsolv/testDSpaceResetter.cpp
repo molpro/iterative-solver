@@ -81,7 +81,8 @@ struct ResetXSpace : DummyXSpace<R, Q, P> {
     q.erase(q.begin() + i);
     update_dims();
   }
-  void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {}) override {
+  void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {},
+                     const Matrix<double>& metric_matrix = {}) override {
     d.clear();
     for (const auto& p : params)
       d.push_back(p.get());
