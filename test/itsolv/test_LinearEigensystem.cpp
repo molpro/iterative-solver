@@ -2,6 +2,7 @@
 
 #include <Eigen/Dense>
 #include <cmath>
+#include <complex>
 #include <fstream>
 #include <iomanip>
 #include <molpro/iostream.h>
@@ -10,6 +11,8 @@
 #include <vector>
 
 #include "vector_types.h"
+#include <molpro/linalg/array/DistrArraySpan.h>
+#include <molpro/linalg/array/util/Distribution.h>
 #include <molpro/linalg/itsolv/CastOptions.h>
 #include <molpro/linalg/itsolv/SolverFactory.h>
 #include <molpro/linalg/itsolv/helper.h>
@@ -465,3 +468,84 @@ TEST(LinearEigensystemFortran, supplied_range) {
   EXPECT_NE(test_supplied_rangef(m.data(), n, nroot, expected.data()), 0);
 }
 #endif
+
+namespace {
+//! Elements of the residuals, kernel diagonals and metric diagonals used in the precondition_default() tests
+double precondition_residual(size_t k, size_t i) { return std::cos(1.0 + k + 0.7 * i); }
+double precondition_diagonal(size_t i) { return 2.0 + i; }
+double precondition_metric(size_t i) { return 0.5 + 0.1 * i; }
+const std::vector<double> precondition_shifts{0.3, -1.1};
+} // namespace
+
+template <typename T>
+struct PreconditionDefault : ::testing::Test {};
+using PreconditionDefaultTypes = ::testing::Types<double, std::complex<double>, long double>;
+TYPED_TEST_SUITE(PreconditionDefault, PreconditionDefaultTypes);
+
+// The default preconditioner divides by (diagonals - shift) and, given the diagonals of a metric, by
+// (diagonals - shift * metric diagonals)
+TYPED_TEST(PreconditionDefault, vector) {
+  using value_type = TypeParam;
+  using molpro::linalg::itsolv::precondition_default;
+  const size_t n = 7;
+  const auto shift = std::vector<value_type>(precondition_shifts.begin(), precondition_shifts.end());
+  std::vector<value_type> diagonals(n), metric(n);
+  for (size_t i = 0; i < n; ++i) {
+    diagonals[i] = precondition_diagonal(i);
+    metric[i] = precondition_metric(i);
+  }
+  for (const bool with_metric : {false, true}) {
+    auto residuals = std::vector<std::vector<value_type>>(shift.size(), std::vector<value_type>(n));
+    for (size_t k = 0; k < shift.size(); ++k)
+      for (size_t i = 0; i < n; ++i)
+        residuals[k][i] = precondition_residual(k, i);
+    if (with_metric)
+      precondition_default(wrap(residuals), shift, diagonals, metric);
+    else
+      precondition_default(wrap(residuals), shift, diagonals);
+    for (size_t k = 0; k < shift.size(); ++k)
+      for (size_t i = 0; i < n; ++i) {
+        const auto denominator = diagonals[i] - shift[k] * (with_metric ? metric[i] : value_type(1));
+        EXPECT_NEAR(std::abs(residuals[k][i] - value_type(precondition_residual(k, i)) / denominator), 0, 1e-14)
+            << "with_metric=" << with_metric << " k=" << k << " i=" << i;
+      }
+  }
+}
+
+// The same for distributed arrays, which are preconditioned through their local buffers
+TEST(PreconditionDefault, DistrArray) {
+  using molpro::linalg::array::DistrArraySpan;
+  using molpro::linalg::itsolv::precondition_default;
+  using molpro::mpi::comm_global;
+  const size_t n = 7;
+  const auto [lo, hi] =
+      molpro::linalg::array::util::make_distribution_spread_remainder<size_t>(n, molpro::mpi::size_global())
+          .range(molpro::mpi::rank_global());
+  std::vector<double> diagonals_storage(hi - lo), metric_storage(hi - lo);
+  for (size_t i = lo; i < hi; ++i) {
+    diagonals_storage[i - lo] = precondition_diagonal(i);
+    metric_storage[i - lo] = precondition_metric(i);
+  }
+  const DistrArraySpan diagonals(n, Span<double>(diagonals_storage.data(), hi - lo), comm_global());
+  const DistrArraySpan metric(n, Span<double>(metric_storage.data(), hi - lo), comm_global());
+  for (const bool with_metric : {false, true}) {
+    auto storage = std::vector<std::vector<double>>(precondition_shifts.size(), std::vector<double>(hi - lo));
+    std::vector<DistrArraySpan> residuals;
+    for (size_t k = 0; k < precondition_shifts.size(); ++k) {
+      for (size_t i = lo; i < hi; ++i)
+        storage[k][i - lo] = precondition_residual(k, i);
+      residuals.emplace_back(n, Span<double>(storage[k].data(), hi - lo), comm_global());
+    }
+    if (with_metric)
+      precondition_default(wrap(residuals), precondition_shifts, diagonals, metric);
+    else
+      precondition_default(wrap(residuals), precondition_shifts, diagonals);
+    for (size_t k = 0; k < precondition_shifts.size(); ++k)
+      for (size_t i = lo; i < hi; ++i) {
+        const auto denominator =
+            precondition_diagonal(i) - precondition_shifts[k] * (with_metric ? precondition_metric(i) : 1.0);
+        EXPECT_NEAR(storage[k][i - lo], precondition_residual(k, i) / denominator, 1e-14)
+            << "with_metric=" << with_metric << " k=" << k << " i=" << i;
+      }
+  }
+}
