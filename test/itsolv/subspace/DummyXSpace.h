@@ -31,10 +31,11 @@ struct DummyXSpace : public molpro::linalg::itsolv::subspace::IXSpace<R, Q, P> {
                      const molpro::linalg::array::Span<value_type>& pp_action_matrix) override {}
 
   //! Adds parameters to the Q space
-  void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions) override {}
+  void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
+                     std::vector<Q>&& metric_actions = {}) override {}
 
   //! Updates D space with the new parameters
-  void update_dspace(VecRef<Q>& params, VecRef<Q>& actions) override {}
+  void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {}) override {}
 
   VecRef<P> paramsp() override { return VecRef<P>{}; }
   VecRef<Q> paramsq() override { return VecRef<Q>{}; }
@@ -53,6 +54,8 @@ struct DummyXSpace : public molpro::linalg::itsolv::subspace::IXSpace<R, Q, P> {
   CVecRef<Q> cactionsq() const override { return CVecRef<Q>{}; }
   CVecRef<Q> cparamsd() const override { return CVecRef<Q>{}; }
   CVecRef<Q> cactionsd() const override { return CVecRef<Q>{}; }
+  CVecRef<Q> cmetric_actionsq() const override { return CVecRef<Q>{}; }
+  CVecRef<Q> cmetric_actionsd() const override { return CVecRef<Q>{}; }
 
   const molpro::linalg::itsolv::subspace::Dimensions& dimensions() const override { return dims; }
 

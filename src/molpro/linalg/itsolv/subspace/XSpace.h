@@ -16,8 +16,12 @@ namespace xspace {
 //! New sections of equation data
 template <typename T>
 struct NewData {
-  NewData(size_t nQnew, size_t nX, size_t nRHS) {
-    for (auto d : {EqnData::H, EqnData::S}) {
+  //! @param metric whether there are also blocks of the metric matrix, EqnData::M
+  NewData(size_t nQnew, size_t nX, size_t nRHS, bool metric = false) {
+    if (metric)
+      for (auto* blocks : {&qq, &qx, &xq})
+        (*blocks)[EqnData::M] = {};
+    for (auto d : square_blocks(qq)) {
       qq[d].resize({nQnew, nQnew});
       qx[d].resize({nQnew, nX});
       xq[d].resize({nX, nQnew});
@@ -30,15 +34,24 @@ struct NewData {
   SubspaceData<T> xq = null_data<T, EqnData::H, EqnData::S>(); //!< data block between current X space and new parameters
 };
 
-//! Returns new sections of equation data
+/*!
+ * @brief Returns new sections of equation data
+ *
+ * If metric_actions is not empty, the blocks of the metric matrix, EqnData::M, are calculated too, from the actions of
+ * the metric on the new parameters (metric_actions) and on the Q and D spaces (qmetric_actions and dmetric_actions).
+ * The P space is then expected to be empty.
+ */
 template <class R, class Q, class P>
 auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, const CVecRef<P>& pparams,
                         const CVecRef<Q>& qparams, const CVecRef<Q>& qactions, const CVecRef<Q>& dparams,
                         const CVecRef<Q>& dactions, const CVecRef<Q>& rhs, const Dimensions& dims,
                         ArrayHandlers<R, Q, P>& handlers, Logger& logger, bool hermitian = false,
-                        bool action_dot_action = false) {
+                        bool action_dot_action = false, const CVecRef<Q>& metric_actions = {},
+                        const CVecRef<Q>& qmetric_actions = {}, const CVecRef<Q>& dmetric_actions = {}) {
   auto nQnew = params.size();
-  auto data = NewData<typename array::ArrayHandler<R, R>::value_type>(nQnew, dims.nX(), rhs.size());
+  const bool metric = !metric_actions.empty();
+  assert(!metric || dims.nP == 0);
+  auto data = NewData<typename array::ArrayHandler<R, R>::value_type>(nQnew, dims.nX(), rhs.size(), metric);
   auto& qq = data.qq;
   auto& qx = data.qx;
   auto& xq = data.xq;
@@ -66,6 +79,15 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
     xq[EqnData::H].slice({dims.oQ(), 0}, {dims.oQ() + dims.nQ, nQnew}) = util::overlap(qparams, actions, handlers.rq());
     xq[EqnData::H].slice({dims.oD(), 0}, {dims.oD() + dims.nD, nQnew}) = util::overlap(dparams, actions, handlers.rq());
   }
+  if (metric) {
+    // <x_i|M x_j> for the new parameters x_i, and the metric M, which is hermitian
+    qq[EqnData::M] = util::overlap(params, metric_actions, handlers.rq());
+    qx[EqnData::M].slice({0, dims.oQ()}, {nQnew, dims.oQ() + dims.nQ}) =
+        util::overlap(params, qmetric_actions, handlers.rq());
+    qx[EqnData::M].slice({0, dims.oD()}, {nQnew, dims.oD() + dims.nD}) =
+        util::overlap(params, dmetric_actions, handlers.rq());
+    conjugate_transpose_copy(xq[EqnData::M].slice(), qx[EqnData::M].slice());
+  }
   qq[EqnData::rhs] = util::overlap(params, rhs, handlers.rq());
   conjugate_transpose_copy(xq[EqnData::S].slice({dims.oP(), 0}, {dims.oP() + dims.nP, nQnew}),
                  qx[EqnData::S].slice({0, dims.oP()}, {nQnew, dims.oP() + dims.nP}));
@@ -80,6 +102,10 @@ auto update_qspace_data(const CVecRef<R>& params, const CVecRef<R>& actions, con
   logger.data_dump("Hqx = ", qx[EqnData::H]);
   logger.data_dump("Sxq = ", xq[EqnData::S]);
   logger.data_dump("Hxq = ", xq[EqnData::H]);
+  if (metric) {
+    logger.data_dump("Mqq = ", qq[EqnData::M]);
+    logger.data_dump("Mqx = ", qx[EqnData::M]);
+  }
   logger.data_dump("rhs_q = ", qq[EqnData::rhs]);
   return data;
 }
@@ -107,27 +133,30 @@ auto update_dspace_overlap_data(const CVecRef<P>& pparams, const CVecRef<Q>& qpa
   return data;
 }
 
-//! Calculates overlap blocks between D space and the rest of the subspace
+/*!
+ * @brief Calculates blocks of an operator matrix between D space and the rest of the subspace
+ * @param e the kind of matrix: EqnData::H from the actions, or EqnData::M from the actions of the metric
+ */
 template <class Q, class P>
 auto update_dspace_action_data(const CVecRef<P>& pparams, const CVecRef<Q>& qparams, const CVecRef<Q>& qactions,
                                const CVecRef<Q>& dparams, const CVecRef<Q>& dactions,
                                array::ArrayHandler<Q, P>& handler_qp, array::ArrayHandler<Q, Q>& handler_qq,
-                               Logger& logger) {
+                               Logger& logger, const EqnData e = EqnData::H) {
   const auto nP = pparams.size();
   const auto nQ = qparams.size();
   const auto nX = nP + nQ;
   auto nD = dparams.size();
-  auto data = NewData<typename array::ArrayHandler<Q, Q>::value_type>(nD, nX, 0);
-  const auto e = EqnData::H;
+  auto data = NewData<typename array::ArrayHandler<Q, Q>::value_type>(nD, nX, 0, e == EqnData::M);
   data.qq[e].slice() = util::overlap(dparams, dactions, handler_qq);
   data.xq[e].slice({0, 0}, {nP, nD}) = util::overlap(pparams, dactions, handler_qp);
   data.xq[e].slice({nP, 0}, {nX, nD}) = util::overlap(qparams, dactions, handler_qq);
   data.qx[e].slice({0, nP}, {nD, nX}) = util::overlap(dparams, qactions, handler_qq);
   conjugate_transpose_copy(data.qx[e].slice({0, 0}, {nD, nP}), data.xq[e].slice({0, 0}, {nP, nD}));
   logger.data_dump("xspace::update_dspace_action_data() nD = ", nD);
-  logger.data_dump("Hdd = ", data.qq[e]);
-  logger.data_dump("Hdx = ", data.qx[e]);
-  logger.data_dump("Hxd = ", data.xq[e]);
+  const auto name = e == EqnData::M ? "M" : "H";
+  logger.data_dump(name + std::string("dd = "), data.qq[e]);
+  logger.data_dump(name + std::string("dx = "), data.qx[e]);
+  logger.data_dump(name + std::string("xd = "), data.xq[e]);
   return data;
 }
 
@@ -155,6 +184,7 @@ public:
   using typename IXSpace<R, Q, P>::value_type;
   using typename IXSpace<R, Q, P>::value_type_abs;
   using IXSpace<R, Q, P>::data;
+  using IXSpace<R, Q, P>::has_metric;
 
   explicit XSpace(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers, const std::shared_ptr<Logger>& logger)
       : pspace(), qspace(handlers, logger), dspace(logger), m_handlers(handlers), m_logger(logger) {
@@ -162,20 +192,34 @@ public:
   };
 
   //! Update parameters in Q space and corresponding equation data
-  void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions) override {
+  void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
+                     std::vector<Q>&& metric_actions = {}) override {
     m_logger->trace("QSpace::update_qspace");
-    auto new_data =
-        xspace::update_qspace_data(params, actions, cparamsp(), cparamsq(), cactionsq(), cparamsd(), cactionsd(),
-                                   cwrap(m_rhs), m_dim, *m_handlers, *m_logger, m_hermitian, m_action_dot_action);
-    qspace.update(params, actions, new_data.qq, new_data.qx, new_data.xq, m_dim, data);
+    if (!metric_actions.empty() && metric_actions.size() != params.size())
+      throw std::runtime_error("XSpace::update_qspace: number of metric actions differs from number of parameters");
+    if (!params.empty() && metric_actions.empty() == has_metric()) {
+      if (metric_actions.empty())
+        throw std::runtime_error("Actions of the metric are needed for every update of a generalised eigenproblem");
+      if (m_dim.nX() != 0)
+        throw std::runtime_error("Actions of the metric have to be given from the first update of the subspace on");
+      data[EqnData::M] = {};
+    }
+    auto new_data = xspace::update_qspace_data(
+        params, actions, cparamsp(), cparamsq(), cactionsq(), cparamsd(), cactionsd(), cwrap(m_rhs), m_dim, *m_handlers,
+        *m_logger, m_hermitian, m_action_dot_action, cwrap(metric_actions), cmetric_actionsq(), cmetric_actionsd());
+    qspace.update(params, actions, new_data.qq, new_data.qx, new_data.xq, m_dim, data, std::move(metric_actions));
     update_dimensions();
   }
 
-  //! Clears old D space container and stores new params and actions. @param lin_trans_only_R R space component of D
-  void update_dspace(VecRef<Q>& params, VecRef<Q>& actions) override {
-    dspace.update(params, actions);
+  //! Clears old D space container and stores new params, actions and, if there is a metric, their actions of the
+  //! metric
+  void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {}) override {
+    if (metric_actions.size() != (has_metric() ? params.size() : 0))
+      throw std::runtime_error(
+          "XSpace::update_dspace: actions of the metric must be given exactly when there is a metric");
+    dspace.update(params, actions, metric_actions);
     update_dimensions();
-    for (auto e : {EqnData::H, EqnData::S})
+    for (auto e : square_blocks(data))
       data[e].resize({m_dim.nX(), m_dim.nX()});
     auto new_data = xspace::update_dspace_overlap_data(cparamsp(), cparamsq(), cparamsd(), cwrap(m_rhs),
                                                        m_handlers->qp(), m_handlers->qq(), *m_logger);
@@ -183,6 +227,12 @@ public:
     auto new_data_action = xspace::update_dspace_action_data(
         cparamsp(), cparamsq(), cactionsq(), cparamsd(), cactionsd(), m_handlers->qp(), m_handlers->qq(), *m_logger);
     xspace::copy_dspace_eqn_data(new_data_action, data, EqnData::H, m_dim);
+    if (has_metric()) {
+      auto new_data_metric =
+          xspace::update_dspace_action_data(cparamsp(), cparamsq(), cmetric_actionsq(), cparamsd(), cmetric_actionsd(),
+                                            m_handlers->qp(), m_handlers->qq(), *m_logger, EqnData::M);
+      xspace::copy_dspace_eqn_data(new_data_metric, data, EqnData::M, m_dim);
+    }
     data[EqnData::rhs].resize({m_dim.nX(), m_dim.nRHS});
     data[EqnData::rhs].slice({m_dim.oD(), 0}, {m_dim.oD() + m_dim.nD, m_dim.nRHS}) = new_data.qq[EqnData::rhs].slice();
   }
@@ -193,6 +243,8 @@ public:
     assert(m_dim.nX() == 0);
     if (!m_hermitian)
       throw std::runtime_error("P space can only be used with hermitian kernels");
+    if (has_metric())
+      throw std::runtime_error("P space cannot be used together with a metric");
     pspace.update(params, m_handlers->pp());
     update_dimensions();
     const size_t nP = m_dim.nP;
@@ -274,6 +326,9 @@ public:
   CVecRef<Q> cparamsd() const override { return dspace.cparams(); }
   CVecRef<Q> cactionsd() const override { return dspace.cactions(); }
 
+  CVecRef<Q> cmetric_actionsq() const override { return qspace.cmetric_actions(); }
+  CVecRef<Q> cmetric_actionsd() const override { return dspace.cmetric_actions(); }
+
   void set_logger(std::shared_ptr<Logger> logger) override { m_logger = std::move(logger); }
 
   //! Set Hermiticity of the subspace. P space can only be used with Hermitian problems
@@ -298,7 +353,7 @@ protected:
   };
 
   void remove_data(size_t i) {
-    for (auto d : {EqnData::H, EqnData::S})
+    for (auto d : square_blocks(data))
       data[d].remove_row_col(i, i);
     if (data.find(EqnData::rhs) != std::end(data) && !data[EqnData::rhs].empty())
       data[EqnData::rhs].remove_row(i);

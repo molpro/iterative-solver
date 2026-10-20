@@ -7,6 +7,7 @@
 #include <molpro/linalg/itsolv/wrap.h>
 
 #include <memory>
+#include <vector>
 
 namespace molpro::linalg::itsolv {
 
@@ -42,11 +43,18 @@ public:
   //! Adds parameters to the P space
   virtual void update_pspace(const CVecRef<P>& params, const array::Span<value_type>& pp_action_matrix) = 0;
 
-  //! Adds parameters to the Q space
-  virtual void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions) = 0;
+  /*!
+   * @brief Adds parameters to the Q space
+   * @param params new parameters
+   * @param actions their actions
+   * @param metric_actions their actions of the metric, taken over by the Q space. Empty unless there is a metric, in
+   * which case they have to be given from the first update of an empty subspace on.
+   */
+  virtual void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
+                             std::vector<Q>&& metric_actions = {}) = 0;
 
-  //! Updates D space with the new parameters
-  virtual void update_dspace(VecRef<Q>& params, VecRef<Q>& actions) = 0;
+  //! Updates D space with the new parameters, their actions and, if there is a metric, their actions of the metric
+  virtual void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {}) = 0;
 
   virtual VecRef<P> paramsp() = 0;
   virtual VecRef<Q> paramsq() = 0;
@@ -65,6 +73,13 @@ public:
   virtual CVecRef<Q> cactionsq() const = 0;
   virtual CVecRef<Q> cparamsd() const = 0;
   virtual CVecRef<Q> cactionsd() const = 0;
+
+  //! Actions of the metric on the Q space parameters, empty unless there is a metric
+  virtual CVecRef<Q> cmetric_actionsq() const = 0;
+  //! Actions of the metric on the D space parameters, empty unless there is a metric
+  virtual CVecRef<Q> cmetric_actionsd() const = 0;
+  //! Whether the subspace holds the metric matrix, EqnData::M, of a generalised eigenproblem
+  bool has_metric() const { return data.count(EqnData::M) > 0; }
 
   virtual const Dimensions& dimensions() const = 0;
 
