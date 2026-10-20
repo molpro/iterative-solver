@@ -1,5 +1,7 @@
 var NAVTREEINDEX13 =
 {
+"structiterative__solver__matrix__problem_1_1matrix__problem.html":[13,1,0],
+"structiterative__solver__matrix__problem_1_1matrix__problem.html#a045713ede19c23952cee673f543b4c85":[14,0,1,0,4],
 "structiterative__solver__matrix__problem_1_1matrix__problem.html#a045713ede19c23952cee673f543b4c85":[13,1,0,4],
 "structiterative__solver__matrix__problem_1_1matrix__problem.html#a1f2b6aeb15895857cb5bf552d5acfd8a":[14,0,1,0,7],
 "structiterative__solver__matrix__problem_1_1matrix__problem.html#a1f2b6aeb15895857cb5bf552d5acfd8a":[13,1,0,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX13 =
 "structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#a47814fe7fa063f47e1969eea29016bf1":[13,4,0,0,2,11,0,3],
 "structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#a99dd29b7a12cc785474c0936dd4335da":[13,4,0,0,2,11,0,0],
 "structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#a99dd29b7a12cc785474c0936dd4335da":[14,0,4,0,0,2,11,0,0],
-"structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#a9fd46ffa600db9a7cfbe0278a11b1639":[14,0,4,0,0,2,11,0,2],
-"structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#a9fd46ffa600db9a7cfbe0278a11b1639":[13,4,0,0,2,11,0,2],
-"structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#af58e970c26bd9dac6a5619d9c6efb190":[13,4,0,0,2,11,0,1]
+"structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#a9fd46ffa600db9a7cfbe0278a11b1639":[14,0,4,0,0,2,11,0,2]
 };

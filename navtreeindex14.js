@@ -1,5 +1,7 @@
 var NAVTREEINDEX14 =
 {
+"structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#a9fd46ffa600db9a7cfbe0278a11b1639":[13,4,0,0,2,11,0,2],
+"structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#af58e970c26bd9dac6a5619d9c6efb190":[13,4,0,0,2,11,0,1],
 "structmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3_1_1Proxy.html#af58e970c26bd9dac6a5619d9c6efb190":[14,0,4,0,0,2,11,0,1],
 "structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html":[14,0,4,0,0,2,12],
 "structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html":[13,4,0,0,2,12],
@@ -247,7 +249,5 @@ var NAVTREEINDEX14 =
 "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#abe70fa42847652d3af0dd982142396fc":[13,4,0,1,0,2,4],
 "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#ac9438db8a90e07537c654fd1d5ee2d5d":[14,0,4,0,2,0,3,1],
 "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#ac9438db8a90e07537c654fd1d5ee2d5d":[13,4,0,1,0,2,1],
-"structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html":[13,4,0,1,10],
-"structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html":[14,0,4,0,2,10],
-"structmolpro_1_1linalg_1_1itsolv_1_1has__lapack__kernel.html":[13,4,0,1,11]
+"structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html":[13,4,0,1,10]
 };

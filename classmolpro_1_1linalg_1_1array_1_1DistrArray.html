@@ -291,6 +291,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2599f5d68e2be0d8dcc5c5cc01778d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63ab08569b888803190980dccf6db5cb" id="r_a63ab08569b888803190980dccf6db5cb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a63ab08569b888803190980dccf6db5cb">axpy</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> a, const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a3fcf79ae1da7f58c1ddbe71f90042f75">SparseArray</a> &amp;y)</td></tr>
 <tr class="separator:a63ab08569b888803190980dccf6db5cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5146a8463b0d16b398ddff0c7291b37d" id="r_a5146a8463b0d16b398ddff0c7291b37d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a5146a8463b0d16b398ddff0c7291b37d">copy</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a3fcf79ae1da7f58c1ddbe71f90042f75">SparseArray</a> &amp;y)</td></tr>
+<tr class="memdesc:a5146a8463b0d16b398ddff0c7291b37d"><td class="mdescLeft">&#160;</td><td class="mdescRight">this[:] = y[:], i.e. the elements of y, and zero elsewhere. Local, each process sets its local section.  <br /></td></tr>
+<tr class="separator:a5146a8463b0d16b398ddff0c7291b37d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5b727d10d41e677fefcfe4c92de2d5e" id="r_aa5b727d10d41e677fefcfe4c92de2d5e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#aa5b727d10d41e677fefcfe4c92de2d5e">scal</a> (<a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a01ce15f1218bd98d16a76447b98d40cd">value_type</a> a)</td></tr>
 <tr class="separator:aa5b727d10d41e677fefcfe4c92de2d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca2e59deac50295a278e8ea11253d994" id="r_aca2e59deac50295a278e8ea11253d994"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#aca2e59deac50295a278e8ea11253d994">add</a> (const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html">DistrArray</a> &amp;y)</td></tr>
@@ -1004,7 +1007,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a13953b59c18f19d9b2afaf024f0363d9" name="a13953b59c18f19d9b2afaf024f0363d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13953b59c18f19d9b2afaf024f0363d9">&#9670;&#160;</a></span>copy() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a13953b59c18f19d9b2afaf024f0363d9">&#9670;&#160;</a></span>copy() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1030,8 +1033,28 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5146a8463b0d16b398ddff0c7291b37d" name="a5146a8463b0d16b398ddff0c7291b37d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5146a8463b0d16b398ddff0c7291b37d">&#9670;&#160;</a></span>copy() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void molpro::linalg::array::DistrArray::copy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a3fcf79ae1da7f58c1ddbe71f90042f75">SparseArray</a> &amp;&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>this[:] = y[:], i.e. the elements of y, and zero elsewhere. Local, each process sets its local section. </p>
+
+</div>
+</div>
 <a id="a257cfcdfc4fac4ba077f421fbd5e67e2" name="a257cfcdfc4fac4ba077f421fbd5e67e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a257cfcdfc4fac4ba077f421fbd5e67e2">&#9670;&#160;</a></span>copy() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a257cfcdfc4fac4ba077f421fbd5e67e2">&#9670;&#160;</a></span>copy() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

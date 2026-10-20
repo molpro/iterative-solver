@@ -24,6 +24,7 @@ var classmolpro_1_1linalg_1_1array_1_1DistrArray =
     [ "communicator", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ab53011e0965e3ddee49a8588a2d623de", null ],
     [ "compatible", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a1b46632636f9f92c9f25bebcc4c71230", null ],
     [ "copy", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a13953b59c18f19d9b2afaf024f0363d9", null ],
+    [ "copy", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a5146a8463b0d16b398ddff0c7291b37d", null ],
     [ "copy", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a257cfcdfc4fac4ba077f421fbd5e67e2", null ],
     [ "copy_patch", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ad416250c4a3eb8b72999ccdc8fe2b253", null ],
     [ "copy_to", "classmolpro_1_1linalg_1_1array_1_1DistrArray.html#ab01423d73b8aefaa175436491d12149d", null ],

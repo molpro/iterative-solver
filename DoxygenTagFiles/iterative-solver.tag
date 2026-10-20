@@ -2725,6 +2725,13 @@
       <anchor>a63ab08569b888803190980dccf6db5cb</anchor>
       <arglist>(value_type a, const SparseArray &amp;y)</arglist>
     </member>
+    <member kind="function">
+      <type>void</type>
+      <name>copy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a5146a8463b0d16b398ddff0c7291b37d</anchor>
+      <arglist>(const SparseArray &amp;y)</arglist>
+    </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>scal</name>
@@ -3088,6 +3095,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
       <anchor>a63ab08569b888803190980dccf6db5cb</anchor>
       <arglist>(value_type a, const SparseArray &amp;y)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>copy</name>
+      <anchorfile>classmolpro_1_1linalg_1_1array_1_1DistrArray.html</anchorfile>
+      <anchor>a5146a8463b0d16b398ddff0c7291b37d</anchor>
+      <arglist>(const SparseArray &amp;y)</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
