@@ -166,6 +166,8 @@ public:
   double metric_scale = 1;   //!< factor applied to the whole metric
   bool provide_metric_diagonals = true;
   bool linear_metric = true; //!< if false, metric_action() adds a constant, which test_problem() must notice
+  double metric_non_hermiticity = 0; //!< factor reducing the elements of the metric below the diagonal
+  double metric_condition = 1;       //!< roughly the condition number of the metric
 
   double kernel(size_t i, size_t j) const {
     if (complex_pair and i + j == 1)
@@ -174,7 +176,10 @@ public:
   }
   bool hermitian() const { return non_hermiticity == 0 and not complex_pair; }
   double metric(size_t i, size_t j) const {
-    return metric_scale * (i == j ? 1.5 + std::cos(double(i)) : 0.05 / (1. + i + j));
+    // the scaling keeps the metric positive definite whatever its condition
+    auto scaling = [this](size_t k) { return std::pow(metric_condition, -0.5 * double(k) / (n - 1)); };
+    return metric_scale * scaling(i) * scaling(j) *
+           (i == j ? 1.5 + std::cos(double(i)) : 0.05 / (1. + i + j) * (j < i ? 1 - metric_non_hermiticity : 1));
   }
 
   bool diagonals(std::vector<double> &d) const override {
@@ -404,6 +409,69 @@ TEST(LinearEigensystem, Davidson_generalized_test_problem) {
   EXPECT_TRUE(solver->test_problem(problem, v0, v1, -1));
   problem.linear_metric = false;
   EXPECT_FALSE(solver->test_problem(problem, v0, v1, -1));
+}
+
+// A metric that is not positive definite, or not Hermitian, is reported by solve() and by test_problem()
+TEST(LinearEigensystem, Davidson_generalized_invalid_metric) {
+  GeneralizedProblem problem;
+  auto params = std::vector<std::vector<double>>(2, std::vector<double>(problem.n));
+  auto actions = params, metric_actions = params;
+  std::vector<double> v0(problem.n), v1(problem.n);
+  auto solve = [&]() {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+    solver->set_n_roots(2);
+    solver->set_hermiticity(true);
+    return solver->solve(params, actions, metric_actions, problem, true);
+  };
+  auto test_problem = [&]() {
+    return molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson")->test_problem(
+        problem, v0, v1, -1);
+  };
+  auto solve_error = [&]() -> std::string {
+    try {
+      solve();
+    } catch (const std::runtime_error &e) {
+      return e.what();
+    }
+    return "";
+  };
+  problem.metric_scale = -1;
+  EXPECT_FALSE(test_problem());
+  EXPECT_THAT(solve_error(), ::testing::HasSubstr("not positive definite"));
+  problem.metric_scale = 1;
+  problem.metric_non_hermiticity = 0.5;
+  EXPECT_FALSE(test_problem());
+  EXPECT_THAT(solve_error(), ::testing::HasSubstr("not Hermitian"));
+}
+
+// An ill-conditioned, but positive definite, metric is not mistaken for one that is not positive definite
+TEST(LinearEigensystem, Davidson_generalized_ill_conditioned_metric) {
+  GeneralizedProblem problem;
+  problem.metric_condition = 1e10;
+  std::vector<double> v0(problem.n), v1(problem.n);
+  EXPECT_TRUE(molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson")->test_problem(
+      problem, v0, v1, -1));
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+  solver->set_n_roots(3);
+  solver->set_hermiticity(true);
+  solver->set_convergence_threshold(1e-8);
+  auto params = std::vector<std::vector<double>>(3, std::vector<double>(problem.n));
+  auto actions = params, metric_actions = params;
+  EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
+  // The reference from the equivalent problem M v = (1 / lambda) A v. With the well conditioned A in place of the
+  // metric, the dense solver gives the largest 1 / lambda, i.e. the lowest lambda, to full precision, whereas solving
+  // A v = lambda M v densely loses about the condition number of M times the machine epsilon.
+  Eigen::MatrixXd a(problem.n, problem.n), m(problem.n, problem.n);
+  for (size_t i = 0; i < problem.n; ++i)
+    for (size_t j = 0; j < problem.n; ++j) {
+      a(i, j) = problem.kernel(i, j);
+      m(i, j) = problem.metric(i, j);
+    }
+  const Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> inverse(m, a, Eigen::EigenvaluesOnly);
+  for (size_t i = 0; i < 3; ++i)
+    EXPECT_NEAR(solver->eigenvalues()[i], 1 / inverse.eigenvalues()(problem.n - 1 - i),
+                1e-7 * std::abs(solver->eigenvalues()[i]))
+        << "root " << i;
 }
 
 // Uses of a metric that solve() cannot support are reported
