@@ -345,6 +345,13 @@ public:
   using fapply_on_p_type = std::function<void(const std::vector<VectorP>&, const CVecRef<P>&, const VecRef<R>&)>;
   //! Function type for applying the metric to a set of vectors (first argument), writing the results into the second
   using fapply_metric_type = std::function<void(const CVecRef<R>&, const VecRef<R>&)>;
+  //! The metric of a problem in the P space, see add_p()
+  struct PSpaceMetric {
+    array::Span<value_type> pp_matrix; //!< the metric matrix in the P space, in the layout of the kernel matrix
+    //! adds the action of the metric on vectors in the P space, like the function for the kernel; needed unless the
+    //! metric is applied on the fly
+    fapply_on_p_type apply;
+  };
 
   virtual ~IterativeSolver() = default;
   IterativeSolver() = default;
@@ -549,17 +556,15 @@ public:
    * fapply_on_p_type), for a problem with a metric declared with set_metric(), which this overload requires.
    * \param pparams the vectors to add, as for the other overload
    * \param pp_action_matrix the kernel matrix in the P space, as for the other overload
-   * \param pp_metric_matrix the metric matrix in the P space, in the same layout as pp_action_matrix
    * \param parameters Used as scratch working space
    * \param action On exit, the residual of the interpolated solution, missing the contributions from the P space
    * \param apply_p A function that adds the action of the kernel on vectors in the P space
-   * \param apply_metric_p A function that adds the action of the metric on vectors in the P space, like apply_p.
-   * Needed unless the metric is applied on the fly.
+   * \param metric the metric in the P space
    * \return The number of vectors contained in parameters, action, parametersP
    */
   virtual size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
-                       const array::Span<value_type>& pp_metric_matrix, const VecRef<R>& parameters,
-                       const VecRef<R>& action, fapply_on_p_type apply_p, fapply_on_p_type apply_metric_p) {
+                       const VecRef<R>& parameters, const VecRef<R>& action, fapply_on_p_type apply_p,
+                       const PSpaceMetric& metric) {
     throw std::logic_error("This solver does not support a metric");
   }
 
