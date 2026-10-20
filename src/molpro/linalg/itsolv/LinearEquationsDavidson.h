@@ -53,15 +53,6 @@ public:
     set_hermiticity(m_hermiticity);
   }
 
-  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
-             bool generate_initial_guess = false) override {
-    R& vector = actions[0];
-    for (unsigned int instance = 0; problem.RHS(vector, instance); ++instance)
-      add_equations(vector);
-    return IterativeSolverTemplate<LinearEquations, R, Q, P>::solve(parameters, actions, problem,
-                                                                    generate_initial_guess);
-  }
-
   bool nonlinear() const override { return false; }
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
@@ -199,6 +190,17 @@ public:
   }
 
 protected:
+  //! Adds the right-hand sides provided by problem before solving
+  bool solve_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
+                  const Problem<R>& problem, bool generate_initial_guess) override {
+    if (actions.empty())
+      throw std::runtime_error("Empty container passed to IterativeSolver::solve()");
+    R& vector = actions[0];
+    for (unsigned int instance = 0; problem.RHS(vector, instance); ++instance)
+      add_equations(vector);
+    return SolverTemplate::solve_impl(parameters, actions, metric_actions, problem, generate_initial_guess);
+  }
+
   //! The values chi_ii = <b_i|x_i> of the current solutions, or with the augmented Hessian the subspace eigenvalues
   std::vector<value_type> values() const {
     if (get_augmented_hessian() > 0)

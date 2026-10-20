@@ -246,56 +246,6 @@ public:
     solution_impl(roots, parameters, residual, {});
   }
 
-  /*!
-   * @brief Implements solution()
-   * @param scratch R vectors that may be overwritten, for the actions of a metric applied on the fly; if there are
-   * fewer than roots, Q vectors are used instead
-   */
-  void solution_impl(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual,
-                     const VecRef<R>& scratch) {
-    // auto prof = profiler()->push("itsolv::solution"); // FIXME two profilers
-    auto prof = molpro::Profiler::single();
-    check_consistent_number_of_roots_and_solutions(roots, parameters.size());
-    prof->start("construct_solution (parameters)");
-    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
-                               m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
-    prof->stop();
-    auto metric_solutions = detail::MetricSolutions<R, Q>{};
-    auto metric_solutions_q = std::vector<Q>{};
-    if (m_apply_metric && !roots.empty()) {
-      prof->start("apply metric");
-      const auto solutions = cwrap(parameters.begin(), parameters.begin() + roots.size());
-      const bool use_scratch = scratch.size() >= roots.size();
-      // without scratch vectors, the residuals hold the actions of the metric until they are copied
-      const auto metric_actions = use_scratch ? wrap(scratch.begin(), scratch.begin() + roots.size())
-                                              : wrap(residual.begin(), residual.begin() + roots.size());
-      m_apply_metric(solutions, metric_actions);
-      if (use_scratch) {
-        metric_solutions.r = cwrap(metric_actions);
-      } else {
-        for (const auto& m : metric_actions)
-          metric_solutions_q.emplace_back(m_handlers->qr().copy(m));
-        m_stats->q_creations += metric_solutions_q.size();
-        metric_solutions.q = cwrap(metric_solutions_q);
-      }
-      prof->stop();
-    }
-    prof->start("construct_solution (residual)");
-    detail::construct_solution(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
-                               m_xspace->actionsd(), m_xspace->dimensions().oP(), m_xspace->dimensions().oQ(),
-                               m_xspace->dimensions().oD(), *m_handlers);
-    prof->stop();
-    prof->start("apply");
-    auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP(),
-                                              m_xspace->dimensions().nP);
-    if (m_apply_p)
-      m_apply_p(pvectors, m_xspace->cparamsp(), residual);
-    construct_residual(roots, cwrap(parameters), residual, metric_solutions);
-    read_handler_counts(m_stats, m_handlers);
-    prof->stop();
-  }
-
   void solution(const std::vector<int>& roots, std::vector<R>& parameters, std::vector<R>& residual) override {
     return solution(roots, wrap(parameters), wrap(residual));
   }
@@ -455,9 +405,86 @@ public:
     return solve_impl(parameters, actions, metric_actions, problem, generate_initial_guess);
   }
 
-  //! Implements solve(), with empty metric_actions for a problem without a metric
-  bool solve_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
-                  const Problem<R>& problem, bool generate_initial_guess) {
+  bool solve(R& parameters, R& actions, const Problem<R>& problem, bool generate_initial_guess = false) override {
+    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
+    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
+    return solve(wparams, wactions, problem, generate_initial_guess);
+  }
+  bool solve(std::vector<R>& parameters, std::vector<R>& actions, const Problem<R>& problem,
+             bool generate_initial_guess = false) override {
+    return solve(wrap(parameters), wrap(actions), problem, generate_initial_guess);
+  }
+
+  bool test_problem(const Problem<R>& problem, R& v0, R& v1, int verbosity, value_type_abs threshold) const override {
+    bool success = true;
+    value_type_abs step = 1e-4;
+    if (this->nonlinear()) {
+      if (!problem.test_parameters(0, v0))
+        return true;
+      auto value0 = problem.residual(v0, v1);
+      if (verbosity > 1) {
+        std::cout << "value0 " << value0 << std::endl;
+        //        std::cout << "parameters0 " << v0[0] << "," << v0[1] << ",..." << std::endl;
+        //        std::cout << "residual0 " << v1[0] << "," << v1[1] << ",..." << std::endl;
+      }
+      Q parameters0 = m_handlers->qr().copy(v0);
+      Q residual0 = m_handlers->qr().copy(v1);
+      for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
+        m_handlers->rq().axpy(-1.0, parameters0, v0);
+        m_handlers->rr().scal(1 / std::sqrt(std::abs(m_handlers->rr().dot(v0, v0))), v0);
+        Q step1 = m_handlers->qr().copy(v0);
+        auto residual_analytic = m_handlers->rq().dot(v0, residual0);
+        m_handlers->rq().copy(v0, parameters0);
+        m_handlers->rq().axpy(-2*step, step1, v0);
+        auto valuem2 = problem.residual(v0, v1);
+        m_handlers->rq().copy(v0, parameters0);
+        m_handlers->rq().axpy(-1*step, step1, v0);
+        auto valuem1 = problem.residual(v0, v1);
+        m_handlers->rq().copy(v0, parameters0);
+        m_handlers->rq().axpy(+1*step, step1, v0);
+        auto valuep1 = problem.residual(v0, v1);
+        m_handlers->rq().copy(v0, parameters0);
+        m_handlers->rq().axpy(+2*step, step1, v0);
+        auto valuep2 = problem.residual(v0, v1);
+        auto residual_numerical = (valuem2 - value_type(8) * valuem1 + value_type(8) * valuep1 - valuep2) /
+                                  value_type(12 * step);
+        if (verbosity > 1)
+          std::cout << "testing problem class, instance: " << instance << ", numerical: " << residual_numerical <<", analytical: "<<residual_analytic <<", difference: "<<residual_numerical-residual_analytic << std::endl;
+        success = success && std::abs(residual_numerical - residual_analytic) < threshold;
+      }
+    } else {
+      // checks that the operator applied by apply(x, y) scales linearly; name describes its result
+      auto check_scaling = [&](const auto& apply, const std::string& name) {
+        apply(v0, v1);
+        Q residual = m_handlers->qr().copy(v1);
+        auto norm2_residual = std::sqrt(m_handlers->rr().dot(v1, v1));
+        const value_type_abs scale_factor{10.0};
+        m_handlers->rr().scal(scale_factor, v0);
+        apply(v0, v1);
+        m_handlers->rq().axpy(-scale_factor, residual, v1);
+        auto norm2 = std::sqrt(m_handlers->rr().dot(v1, v1));
+        success = success && std::abs(norm2 / norm2_residual) < threshold;
+        if (verbosity > 0 or (verbosity > -1 and not success))
+          std::cout << "Length of " << name << ": " << norm2_residual << ", scaling defect: " << norm2 << std::endl;
+      };
+      for (int instance = 0; problem.test_parameters(instance, v0); ++instance) {
+        check_scaling([&problem](R& x, R& y) { problem.action({x}, {y}); }, "residual");
+        if (problem.metric_kind() != MetricKind::Identity)
+          check_scaling([&problem](R& x, R& y) { problem.metric_action({x}, {y}); }, "action of the metric");
+      }
+      if (problem.metric_kind() != MetricKind::Identity)
+        success = test_metric(problem, v0, v1, verbosity, threshold) && success;
+    }
+    return success;
+  }
+
+protected:
+  /*!
+   * @brief Implements both overloads of solve(), with empty metric_actions for a problem without a metric. Solvers
+   * that need to customise solve() override this.
+   */
+  virtual bool solve_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
+                          const Problem<R>& problem, bool generate_initial_guess) {
     if (parameters.empty())
       throw std::runtime_error("Empty container passed to IterativeSolver::solve()");
     if (parameters.size() != actions.size())
@@ -570,80 +597,56 @@ public:
     return nwork == 0 and errors_converged;
   }
 
-  bool solve(R& parameters, R& actions, const Problem<R>& problem, bool generate_initial_guess = false) override {
-    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
-    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
-    return solve(wparams, wactions, problem, generate_initial_guess);
-  }
-  bool solve(std::vector<R>& parameters, std::vector<R>& actions, const Problem<R>& problem,
-             bool generate_initial_guess = false) override {
-    return solve(wrap(parameters), wrap(actions), problem, generate_initial_guess);
-  }
-
-  bool test_problem(const Problem<R>& problem, R& v0, R& v1, int verbosity, value_type_abs threshold) const override {
-    bool success = true;
-    value_type_abs step = 1e-4;
-    if (this->nonlinear()) {
-      if (!problem.test_parameters(0, v0))
-        return true;
-      auto value0 = problem.residual(v0, v1);
-      if (verbosity > 1) {
-        std::cout << "value0 " << value0 << std::endl;
-        //        std::cout << "parameters0 " << v0[0] << "," << v0[1] << ",..." << std::endl;
-        //        std::cout << "residual0 " << v1[0] << "," << v1[1] << ",..." << std::endl;
+  /*!
+   * @brief Implements solution()
+   * @param scratch R vectors that may be overwritten, for the actions of a metric applied on the fly; if there are
+   * fewer than roots, Q vectors are used instead
+   */
+  void solution_impl(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual,
+                     const VecRef<R>& scratch) {
+    // auto prof = profiler()->push("itsolv::solution"); // FIXME two profilers
+    auto prof = molpro::Profiler::single();
+    check_consistent_number_of_roots_and_solutions(roots, parameters.size());
+    prof->start("construct_solution (parameters)");
+    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
+                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
+                               m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
+    prof->stop();
+    auto metric_solutions = detail::MetricSolutions<R, Q>{};
+    auto metric_solutions_q = std::vector<Q>{};
+    if (m_apply_metric && !roots.empty()) {
+      prof->start("apply metric");
+      const auto solutions = cwrap(parameters.begin(), parameters.begin() + roots.size());
+      const bool use_scratch = scratch.size() >= roots.size();
+      // without scratch vectors, the residuals hold the actions of the metric until they are copied
+      const auto metric_actions = use_scratch ? wrap(scratch.begin(), scratch.begin() + roots.size())
+                                              : wrap(residual.begin(), residual.begin() + roots.size());
+      m_apply_metric(solutions, metric_actions);
+      if (use_scratch) {
+        metric_solutions.r = cwrap(metric_actions);
+      } else {
+        for (const auto& m : metric_actions)
+          metric_solutions_q.emplace_back(m_handlers->qr().copy(m));
+        m_stats->q_creations += metric_solutions_q.size();
+        metric_solutions.q = cwrap(metric_solutions_q);
       }
-      Q parameters0 = m_handlers->qr().copy(v0);
-      Q residual0 = m_handlers->qr().copy(v1);
-      for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
-        m_handlers->rq().axpy(-1.0, parameters0, v0);
-        m_handlers->rr().scal(1 / std::sqrt(std::abs(m_handlers->rr().dot(v0, v0))), v0);
-        Q step1 = m_handlers->qr().copy(v0);
-        auto residual_analytic = m_handlers->rq().dot(v0, residual0);
-        m_handlers->rq().copy(v0, parameters0);
-        m_handlers->rq().axpy(-2*step, step1, v0);
-        auto valuem2 = problem.residual(v0, v1);
-        m_handlers->rq().copy(v0, parameters0);
-        m_handlers->rq().axpy(-1*step, step1, v0);
-        auto valuem1 = problem.residual(v0, v1);
-        m_handlers->rq().copy(v0, parameters0);
-        m_handlers->rq().axpy(+1*step, step1, v0);
-        auto valuep1 = problem.residual(v0, v1);
-        m_handlers->rq().copy(v0, parameters0);
-        m_handlers->rq().axpy(+2*step, step1, v0);
-        auto valuep2 = problem.residual(v0, v1);
-        auto residual_numerical = (valuem2 - value_type(8) * valuem1 + value_type(8) * valuep1 - valuep2) /
-                                  value_type(12 * step);
-        if (verbosity > 1)
-          std::cout << "testing problem class, instance: " << instance << ", numerical: " << residual_numerical <<", analytical: "<<residual_analytic <<", difference: "<<residual_numerical-residual_analytic << std::endl;
-        success = success && std::abs(residual_numerical - residual_analytic) < threshold;
-      }
-    } else {
-      // checks that the operator applied by apply(x, y) scales linearly; name describes its result
-      auto check_scaling = [&](const auto& apply, const std::string& name) {
-        apply(v0, v1);
-        Q residual = m_handlers->qr().copy(v1);
-        auto norm2_residual = std::sqrt(m_handlers->rr().dot(v1, v1));
-        const value_type_abs scale_factor{10.0};
-        m_handlers->rr().scal(scale_factor, v0);
-        apply(v0, v1);
-        m_handlers->rq().axpy(-scale_factor, residual, v1);
-        auto norm2 = std::sqrt(m_handlers->rr().dot(v1, v1));
-        success = success && std::abs(norm2 / norm2_residual) < threshold;
-        if (verbosity > 0 or (verbosity > -1 and not success))
-          std::cout << "Length of " << name << ": " << norm2_residual << ", scaling defect: " << norm2 << std::endl;
-      };
-      for (int instance = 0; problem.test_parameters(instance, v0); ++instance) {
-        check_scaling([&problem](R& x, R& y) { problem.action({x}, {y}); }, "residual");
-        if (problem.metric_kind() != MetricKind::Identity)
-          check_scaling([&problem](R& x, R& y) { problem.metric_action({x}, {y}); }, "action of the metric");
-      }
-      if (problem.metric_kind() != MetricKind::Identity)
-        success = test_metric(problem, v0, v1, verbosity, threshold) && success;
+      prof->stop();
     }
-    return success;
+    prof->start("construct_solution (residual)");
+    detail::construct_solution(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
+                               m_xspace->actionsd(), m_xspace->dimensions().oP(), m_xspace->dimensions().oQ(),
+                               m_xspace->dimensions().oD(), *m_handlers);
+    prof->stop();
+    prof->start("apply");
+    auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP(),
+                                              m_xspace->dimensions().nP);
+    if (m_apply_p)
+      m_apply_p(pvectors, m_xspace->cparamsp(), residual);
+    construct_residual(roots, cwrap(parameters), residual, metric_solutions);
+    read_handler_counts(m_stats, m_handlers);
+    prof->stop();
   }
 
-protected:
   IterativeSolverTemplate(std::shared_ptr<subspace::IXSpace<R, Q, P>> xspace,
                           std::shared_ptr<subspace::ISubspaceSolver<R, Q, P>> solver,
                           std::shared_ptr<ArrayHandlers<R, Q, P>> handlers, std::shared_ptr<Statistics> stats,
