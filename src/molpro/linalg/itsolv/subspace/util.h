@@ -68,6 +68,40 @@ Matrix<typename array::ArrayHandler<R, R>::value_type> overlap(const CVecRef<R>&
   return m;
 }
 
+/*!
+ * @brief The Euclidean norm of the solution x = sum_j c_j b_j of a root, from its subspace coefficients c and the
+ * overlap matrix S_jk = <b_j|b_k> of the subspace vectors, as sqrt(c^dagger S c)
+ */
+template <typename T>
+auto solution_norm(const Matrix<T>& solutions, const size_t root, const Matrix<T>& overlap) {
+  T norm2 = 0;
+  for (size_t j = 0; j < overlap.rows(); ++j)
+    for (size_t k = 0; k < overlap.cols(); ++k)
+      norm2 += conjugate(solutions(root, j)) * overlap(j, k) * solutions(root, k);
+  using std::abs;
+  using std::sqrt;
+  return sqrt(abs(norm2));
+}
+
+/*!
+ * @brief The subspace coefficients of the solutions scaled to unit Euclidean length, so that their sizes can be
+ * compared with thresholds whatever the normalisation of the solutions (e.g. in the metric of a generalised
+ * eigenproblem)
+ * @param solutions coefficients of the solutions, one row per solution
+ * @param overlap overlap matrix of the subspace vectors
+ */
+template <typename T>
+Matrix<T> unit_length_solutions(const Matrix<T>& solutions, const Matrix<T>& overlap) {
+  auto scaled = solutions;
+  for (size_t i = 0; i < scaled.rows(); ++i) {
+    const auto norm = solution_norm(solutions, i, overlap);
+    if (norm > 0)
+      for (size_t j = 0; j < scaled.cols(); ++j)
+        scaled(i, j) /= T(norm);
+  }
+  return scaled;
+}
+
 //! Replaces a matrix by its hermitian part, which for a real element type is its symmetric part
 template <typename T>
 void matrix_symmetrize(Matrix<T>& mat) {

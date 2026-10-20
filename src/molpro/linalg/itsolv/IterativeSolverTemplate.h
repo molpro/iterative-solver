@@ -89,21 +89,6 @@ void update_errors(std::vector<T>& errors, const CVecRef<R>& residual, array::Ar
   }
 }
 
-/*!
- * @brief The Euclidean norm of the solution x = sum_j c_j b_j of a root, from its subspace coefficients c and the
- * overlap matrix S_jk = <b_j|b_k> of the subspace vectors, as sqrt(c^dagger S c)
- */
-template <typename T>
-auto solution_norm(const subspace::Matrix<T>& solutions, const size_t root, const subspace::Matrix<T>& overlap) {
-  T norm2 = 0;
-  for (size_t j = 0; j < overlap.rows(); ++j)
-    for (size_t k = 0; k < overlap.cols(); ++k)
-      norm2 += molpro::linalg::conjugate(solutions(root, j)) * overlap(j, k) * solutions(root, k);
-  using std::abs;
-  using std::sqrt;
-  return sqrt(abs(norm2));
-}
-
 template <typename T>
 std::vector<int> select_working_set(const size_t nw, const std::vector<T>& errors, const T threshold,
                                     const std::vector<T>& value_errors, const T value_threshold) {
@@ -672,8 +657,8 @@ protected:
         // residual, would depend on the scale of the metric. The error is that of the solution of unit length instead,
         // which is the same as without a metric.
         for (size_t i = 0; i < roots.size(); ++i)
-          errors[i] /=
-              detail::solution_norm(m_subspace_solver->solutions(), roots[i], m_xspace->data.at(subspace::EqnData::S));
+          errors[i] /= subspace::util::solution_norm(m_subspace_solver->solutions(), roots[i],
+                                                     m_xspace->data.at(subspace::EqnData::S));
       }
       if (batches.size() > 1) {
         for (size_t i = 0; i < roots.size(); ++i)
