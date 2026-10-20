@@ -857,7 +857,12 @@ TEST(LinearEigensystem, Davidson_generalized_errors) {
   }
   // the default preconditioner would ignore the metric without its diagonal elements
   problem.provide_metric_diagonals = false;
-  EXPECT_THROW(davidson()->solve(params, actions, metric_actions, problem, true), std::runtime_error);
+  {
+    // the problem is rejected before the solver changes
+    auto solver = davidson();
+    EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::invalid_argument);
+    EXPECT_EQ(solver->metric_kind(), molpro::linalg::itsolv::MetricKind::Identity);
+  }
   problem.provide_metric_diagonals = true;
   {
     auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("RSPT");
