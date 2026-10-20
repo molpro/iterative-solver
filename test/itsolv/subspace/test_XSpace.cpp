@@ -13,6 +13,7 @@ using molpro::linalg::itsolv::ArrayHandlers;
 using molpro::linalg::itsolv::CVecRef;
 using molpro::linalg::itsolv::cwrap;
 using molpro::linalg::itsolv::Logger;
+using molpro::linalg::itsolv::MetricKind;
 using molpro::linalg::itsolv::wrap;
 using molpro::linalg::itsolv::subspace::EqnData;
 using molpro::linalg::itsolv::subspace::Matrix;
@@ -111,7 +112,7 @@ void check_metric_consistent(const XSpace<R, Q, P>& xs) {
 // space updates and erasure
 TEST(XSpace, metric_matrix_consistent) {
   XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
-  xs.set_metric(true);
+  xs.set_metric(MetricKind::HermitianPositiveDefinite);
   const std::vector<R> q1{{1, 0.5, 0, 0}, {0, 1, 0.2, 0}};
   const auto m1 = metric_actions(q1);
   xs.update_qspace(cwrap(q1), cwrap(q1), cwrap(m1));
@@ -162,14 +163,14 @@ TEST(XSpace, metric_given_consistently) {
     XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
     xs.update_qspace(cwrap(q1), cwrap(q1));
     EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2), cwrap(m2)), std::runtime_error);
-    EXPECT_THROW(xs.set_metric(true), std::logic_error);
-    EXPECT_NO_THROW(xs.set_metric(false));
+    EXPECT_THROW(xs.set_metric(MetricKind::HermitianPositiveDefinite), std::logic_error);
+    EXPECT_NO_THROW(xs.set_metric(MetricKind::Identity));
   }
   {
     XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
-    xs.set_metric(true);
+    xs.set_metric(MetricKind::HermitianPositiveDefinite);
     xs.update_qspace(cwrap(q1), cwrap(q1), cwrap(m1));
-    EXPECT_THROW(xs.set_metric(false), std::logic_error);
+    EXPECT_THROW(xs.set_metric(MetricKind::Identity), std::logic_error);
     // adding no vectors needs no actions of the metric either
     EXPECT_NO_THROW(xs.update_qspace(CVecRef<R>{}, CVecRef<R>{}));
     EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2)), std::runtime_error);

@@ -396,6 +396,7 @@ struct LinearEigensystemF : ::testing::Test {
     solver->set_options(*options);
     if (on_the_fly)
       solver->set_metric(molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite,
+                         molpro::linalg::itsolv::MetricStorage::OnTheFly,
                          [this](const CVecRef<Rvector> &x, const VecRef<Rvector> &mx) { metric_action(x, mx); });
     else
       solver->set_metric(molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite);
@@ -513,10 +514,11 @@ TEST_F(LinearEigensystemF, generalized_eigen_dspace) {
   }
 }
 
-// Actions of the metric are given exactly when a metric was declared, the metric cannot be changed on a non-empty
-// subspace, and only solvers that support a metric accept one
+// Actions of the metric are given exactly when a metric was declared, the metric and how its actions are obtained
+// cannot be changed on a non-empty subspace, and only solvers that support a metric accept one
 TEST_F(LinearEigensystemF, generalized_eigen_errors) {
   using molpro::linalg::itsolv::MetricKind;
+  using molpro::linalg::itsolv::MetricStorage;
   load_matrix(10, "", 1);
   load_metric(0.5);
   auto [x, g] = create_containers(1);
@@ -539,6 +541,21 @@ TEST_F(LinearEigensystemF, generalized_eigen_errors) {
     solver->add_vector(x[0], g[0], m[0]);
     EXPECT_NO_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite));
     EXPECT_THROW(solver->set_metric(MetricKind::Identity), std::logic_error);
+    // the storage cannot change either
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite, MetricStorage::OnTheFly,
+                                    [](const CVecRef<Rvector> &, const VecRef<Rvector> &) {}),
+                 std::logic_error);
+  }
+  {
+    // a function applying the metric is given exactly when it is applied on the fly
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    auto apply = [](const CVecRef<Rvector> &, const VecRef<Rvector> &) {};
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite, MetricStorage::OnTheFly),
+                 std::invalid_argument);
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite, MetricStorage::Stored, apply),
+                 std::invalid_argument);
+    solver->set_metric(MetricKind::HermitianPositiveDefinite, MetricStorage::OnTheFly, apply);
+    EXPECT_EQ(solver->metric_storage(), MetricStorage::OnTheFly);
   }
   {
     auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();

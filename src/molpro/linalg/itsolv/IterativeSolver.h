@@ -8,6 +8,7 @@
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/wrap.h>
 #include <molpro/linalg/itsolv/Logger.h>
+#include <molpro/linalg/itsolv/Metric.h>
 
 #include <molpro/linalg/array/DistrArray.h>
 #include <molpro/linalg/array/util/Distribution.h>
@@ -105,18 +106,6 @@ void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, 
                           const T& metric_diagonals) {
   detail::precondition_default(action, shift, diagonals, &metric_diagonals);
 }
-
-/*!
- * @brief The kind of metric M of a generalised problem, such as the eigenproblem A v = lambda M v
- *
- * Which kinds are supported depends on the solver, see IterativeSolver::supports_metric().
- */
-enum class MetricKind {
-  Identity,                      //!< M = 1, i.e. no metric
-  HermitianPositiveDefinite,     //!< Hermitian and positive definite, e.g. the overlap matrix of a non-orthogonal basis
-  HermitianPositiveSemidefinite, //!< Hermitian and positive semidefinite, i.e. possibly singular
-  HermitianIndefinite,           //!< Hermitian and indefinite, e.g. in RPA, TDHF or Bethe-Salpeter equations
-};
 
 /*!
  * @example ExampleProblem.h
@@ -217,9 +206,9 @@ public:
   virtual MetricKind metric_kind() const { return MetricKind::Identity; }
 
   /*!
-   * @brief Whether the metric is cheap to apply. If so, IterativeSolver::solve() does not keep the actions of the
-   * metric on all subspace vectors, but calls metric_action() on the solutions whenever it constructs residuals; see
-   * IterativeSolver::set_metric().
+   * @brief Whether the metric is cheap to apply. If so, IterativeSolver::solve() uses MetricStorage::OnTheFly: it
+   * does not keep the actions of the metric on all subspace vectors, but calls metric_action() on the solutions
+   * whenever it constructs residuals; see IterativeSolver::set_metric().
    */
   virtual bool metric_is_cheap() const { return false; }
 
@@ -429,8 +418,8 @@ public:
    *
    * Behaves like solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&, bool), and for a problem without a
    * metric exactly so. For a problem with a metric, set_metric() is called with Problem::metric_kind() (throwing if
-   * the solver does not support it) and, if Problem::metric_is_cheap(), a function calling Problem::metric_action(),
-   * so that the metric is applied on the fly. The actions of kernel and metric are calculated together by
+   * the solver does not support it) and, if Problem::metric_is_cheap(), MetricStorage::OnTheFly with a function
+   * calling Problem::metric_action(). The actions of kernel and metric are calculated together by
    * Problem::action_with_metric(). If the problem provides diagonals(), it has to provide metric_diagonals()
    * too; both are passed to the preconditioner, and a generated initial guess and the P space are selected from the
    * lowest ratios of the diagonal elements of the kernel and the metric. A P space additionally needs
@@ -464,7 +453,7 @@ public:
    * interface. solve() calls it itself.
    *
    * It has to be called before the first add_p() or add_vector(). On a non-empty subspace it may only be called again
-   * with the same kind and storage mode, replacing apply_metric. Throws if the solver does not support kind.
+   * with the same kind and storage, replacing apply_metric. Throws if the solver does not support kind.
    *
    * Once a metric other than the identity is declared, every add_vector() has to give the actions of the metric.
    * Solutions are then normalised such that |<x|M|x>| = 1, and their residuals are A x - lambda M x. The errors are
@@ -476,17 +465,22 @@ public:
    * subspace, so that, e.g., an indefinite metric is noticed only once one of its negative directions enters the
    * subspace; test_problem() checks the metric of a Problem more directly.
    * @param kind the kind of metric
-   * @param apply_metric if given, the solver does not keep the actions of the metric on the subspace vectors, which
-   * is worthwhile where the metric is cheap to apply, and calls apply_metric on the solutions whenever it constructs
-   * residuals instead; it has to remain valid as long as residuals are constructed. Otherwise the actions of the
-   * metric are kept.
+   * @param storage how the solver obtains the actions of the metric on its subspace vectors: with
+   * MetricStorage::Stored it keeps those given to add_vector(); with MetricStorage::OnTheFly, which is worthwhile where
+   * the metric is cheap to apply, it keeps none, and calls apply_metric on the solutions whenever it constructs
+   * residuals instead. Irrelevant for MetricKind::Identity.
+   * @param apply_metric applies the metric, given exactly for MetricStorage::OnTheFly; it has to remain valid as long
+   * as residuals are constructed
    */
-  virtual void set_metric(MetricKind kind, fapply_metric_type apply_metric = {}) {
+  virtual void set_metric(MetricKind kind, MetricStorage storage = MetricStorage::Stored,
+                          fapply_metric_type apply_metric = {}) {
     if (kind != MetricKind::Identity)
       throw std::invalid_argument("This solver does not support a metric");
   }
   //! The kind of metric declared with set_metric()
   virtual MetricKind metric_kind() const { return MetricKind::Identity; }
+  //! How the actions of the metric declared with set_metric() are obtained
+  virtual MetricStorage metric_storage() const { return MetricStorage::Stored; }
 
   /*!
    * \brief Take, typically, a current solution and residual, and add it to the solution
