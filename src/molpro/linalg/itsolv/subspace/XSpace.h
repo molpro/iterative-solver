@@ -1,16 +1,20 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_XSPACE_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_XSPACE_H
+#include <Eigen/Dense>
 #include <molpro/linalg/itsolv/helper.h>
-#include <molpro/linalg/itsolv/subspace/util.h>
 #include <molpro/linalg/itsolv/subspace/DSpace.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 #include <molpro/linalg/itsolv/subspace/PSpace.h>
 #include <molpro/linalg/itsolv/subspace/QSpace.h>
+#include <molpro/linalg/itsolv/subspace/util.h>
 
+#include <algorithm>
 #include <cassert>
+#include <functional>
 #include <memory>
 #include <stdexcept>
+#include <vector>
 
 namespace molpro::linalg::itsolv::subspace {
 namespace xspace {
@@ -159,6 +163,41 @@ auto update_dspace_action_data(const CVecRef<P>& pparams, const CVecRef<Q>& qpar
   return data;
 }
 
+/*!
+ * @brief The metric matrix of the subspace after the deletion of Q vectors and their replacement, together with the
+ * old D vectors, by new D vectors, obtained by transforming the current metric matrix rather than from the vectors
+ * @param metric the current metric matrix
+ * @param dims the current dimensions
+ * @param q_delete indices of the Q vectors to be deleted
+ * @param dcoefficients the coefficients of the new D vectors, as returned by construct_dspace()
+ * @return the metric matrix of P, the remaining Q, and the new D vectors, in this order
+ */
+template <typename value_type>
+Matrix<value_type> metric_with_new_dspace(const Matrix<value_type>& metric, const Dimensions& dims,
+                                          const std::vector<std::size_t>& q_delete,
+                                          const Matrix<value_type>& dcoefficients) {
+  using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
+  using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  const auto nQnew = dims.nQ - q_delete.size();
+  const auto nXnew = dims.nP + nQnew + dcoefficients.rows();
+  // columns: the new subspace vectors in terms of the current ones
+  matrix_type transformation = matrix_type::Zero(dims.nX(), nXnew);
+  for (size_t i = 0; i < dims.nP; ++i)
+    transformation(dims.oP() + i, i) = 1;
+  for (size_t i = 0, k = 0; i < dims.nQ; ++i)
+    if (std::find(q_delete.begin(), q_delete.end(), i) == q_delete.end())
+      transformation(dims.oQ() + i, dims.nP + k++) = 1;
+  for (size_t i = 0; i < dcoefficients.rows(); ++i) {
+    for (size_t j = 0; j < q_delete.size(); ++j)
+      transformation(dims.oQ() + q_delete[j], dims.nP + nQnew + i) = dcoefficients(i, j);
+    for (size_t j = 0; j < dims.nD; ++j)
+      transformation(dims.oD() + j, dims.nP + nQnew + i) = dcoefficients(i, q_delete.size() + j);
+  }
+  const matrix_type m = Eigen::Map<const row_major_type>(metric.data().data(), dims.nX(), dims.nX());
+  const row_major_type m_new = transformation.adjoint() * m * transformation;
+  return Matrix<value_type>(std::vector<value_type>(m_new.data(), m_new.data() + m_new.size()), {nXnew, nXnew});
+}
+
 template <typename T>
 void copy_dspace_eqn_data(const NewData<T>& new_data, SubspaceData<T>& data, const subspace::EqnData e,
                           const Dimensions& dims) {
@@ -223,20 +262,23 @@ public:
     update_dimensions();
   }
 
-  /*!
-   * @brief Clears old D space container and stores new params, actions and, if there is a metric, their actions of
-   * the metric
-   * @param metric_matrix if there is a metric and the new D space is not empty, the whole metric matrix of the
-   * subspace with the new D space
-   */
+  //! Replaces the old D space and the Q vectors q_delete by new D vectors, see IXSpace::update_dspace()
   void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {},
-                     const Matrix<value_type>& metric_matrix = {}) override {
+                     const std::vector<size_t>& q_delete = {}, const Matrix<value_type>& coefficients = {}) override {
     if (metric_actions.size() != (stores_metric_actions() ? params.size() : 0))
-      throw std::runtime_error(
+      throw std::invalid_argument(
           "XSpace::update_dspace: actions of the metric must be given exactly when they are stored");
-    const auto nX = m_dim.nP + m_dim.nQ + params.size();
-    if (has_metric() && !params.empty() && (metric_matrix.rows() != nX || metric_matrix.cols() != nX))
-      throw std::runtime_error("XSpace::update_dspace: the metric matrix of the new subspace is needed");
+    if (has_metric() && !params.empty() &&
+        (coefficients.rows() != params.size() || coefficients.cols() != q_delete.size() + m_dim.nD))
+      throw std::invalid_argument("XSpace::update_dspace: the coefficients of the new D vectors are needed");
+    // the metric matrix of the new subspace is transformed from the current one, before the subspace changes
+    const auto metric_matrix = has_metric() && !params.empty()
+                                   ? xspace::metric_with_new_dspace(data.at(EqnData::M), m_dim, q_delete, coefficients)
+                                   : Matrix<value_type>{};
+    auto q_delete_descending = q_delete;
+    std::sort(q_delete_descending.begin(), q_delete_descending.end(), std::greater<>());
+    for (auto iq : q_delete_descending)
+      eraseq(iq);
     dspace.update(params, actions, metric_actions);
     update_dimensions();
     for (auto e : square_blocks(data))

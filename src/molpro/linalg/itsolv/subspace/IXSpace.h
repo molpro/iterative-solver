@@ -74,13 +74,17 @@ public:
                              const CVecRef<R>& metric_actions = {}) = 0;
 
   /*!
-   * @brief Updates D space with the new parameters, their actions and, if there is a metric, their actions of the
-   * metric
-   * @param metric_matrix if there is a metric and the new D space is not empty, the whole metric matrix of the
-   * subspace with the new D space, which is not calculated from the vectors
+   * @brief Replaces the old D space and the Q vectors q_delete by new D vectors, which are linear combinations of them
+   * @param params the new D vectors
+   * @param actions their actions
+   * @param metric_actions their actions of the metric, given exactly if they are stored
+   * @param q_delete indices of the Q vectors to delete
+   * @param coefficients if there is a metric and there are new D vectors, the coefficients of the new D vectors (rows)
+   * in the deleted Q vectors (in the order of q_delete) followed by the old D vectors, from which their metric matrix
+   * elements are obtained without operations on vectors
    */
   virtual void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {},
-                             const Matrix<value_type>& metric_matrix = {}) = 0;
+                             const std::vector<size_t>& q_delete = {}, const Matrix<value_type>& coefficients = {}) = 0;
 
   virtual VecRef<P> paramsp() = 0;
   virtual VecRef<Q> paramsq() = 0;
