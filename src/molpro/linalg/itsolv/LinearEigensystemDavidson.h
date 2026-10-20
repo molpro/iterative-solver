@@ -245,7 +245,7 @@ protected:
 
     // With a metric M, the residual contains M x rather than x for each solution x. M x is given in metric_solutions
     // where the metric is applied on the fly, and otherwise assembled from the stored actions of the metric on the Q
-    // and D spaces. The coefficients are collected in these matrices.
+    // and D spaces and the action of the metric on the P space. The coefficients are collected in these matrices.
     const auto& xspace = *this->m_xspace;
     const bool metric = xspace.has_metric();
     const bool on_the_fly = !metric_solutions.empty();
@@ -253,8 +253,8 @@ protected:
     const auto& dims = xspace.dimensions();
     const auto& solutions = this->m_subspace_solver->solutions();
     using coefficient_matrix = std::decay_t<decltype(solutions)>;
-    coefficient_matrix mq_coeff({stored ? dims.nQ : 0, roots.size()}), md_coeff({stored ? dims.nD : 0, roots.size()}),
-        mx_coeff({on_the_fly ? roots.size() : 0, roots.size()});
+    coefficient_matrix mp_coeff({stored ? dims.nP : 0, roots.size()}), mq_coeff({stored ? dims.nQ : 0, roots.size()}),
+        md_coeff({stored ? dims.nD : 0, roots.size()}), mx_coeff({on_the_fly ? roots.size() : 0, roots.size()});
     // adds weight times the solution params[k], or its action of the metric, to the residual actions[i]
     auto add_solution = [&](const scalar_type weight, const size_t k, const size_t i) {
       if (!metric) {
@@ -262,6 +262,8 @@ protected:
       } else if (on_the_fly) {
         mx_coeff(k, i) += weight;
       } else {
+        for (size_t j = 0; j < dims.nP; ++j)
+          mp_coeff(j, i) += weight * solutions(roots[k], dims.oP() + j);
         for (size_t j = 0; j < dims.nQ; ++j)
           mq_coeff(j, i) += weight * solutions(roots[k], dims.oQ() + j);
         for (size_t j = 0; j < dims.nD; ++j)
@@ -314,6 +316,14 @@ protected:
     }
     const auto residuals = wrap(actions.begin(), actions.begin() + roots.size());
     if (stored) {
+      if (dims.nP > 0) {
+        using VectorP = typename SolverTemplate::VectorP;
+        auto pvectors = std::vector<VectorP>(roots.size(), VectorP(dims.nP));
+        for (size_t i = 0; i < roots.size(); ++i)
+          for (size_t j = 0; j < dims.nP; ++j)
+            pvectors[i][j] = mp_coeff(j, i);
+        this->m_apply_metric_p(pvectors, xspace.cparamsp(), residuals);
+      }
       this->m_handlers->rq().gemm_outer(mq_coeff, xspace.cmetric_actionsq(), residuals);
       this->m_handlers->rq().gemm_outer(md_coeff, xspace.cmetric_actionsd(), residuals);
     } else if (on_the_fly && !metric_solutions.r.empty()) {

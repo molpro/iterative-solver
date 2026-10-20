@@ -219,19 +219,26 @@ public:
     return add_vector(wrap_arg(parameters), wrap_arg(actions));
   }
 
-  // FIXME Currently only works if called on an empty subspace. Either enforce it or generalise.
   size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix, const VecRef<R>& parameters,
                const VecRef<R>& actions, fapply_on_p_type apply_p) override {
-    auto prof = profiler()->push("itsolv::add_p");
-    if (not pparams.empty() and pparams.size() < n_roots())
-      throw std::runtime_error("P space must be empty or at least as large as number of roots sought");
-    if (apply_p)
-      m_apply_p = std::move(apply_p);
-    m_xspace->update_pspace(pparams, pp_action_matrix);
-    auto working_set = solve_and_generate_working_set(parameters, actions);
-    read_handler_counts(m_stats, m_handlers);
-    return working_set;
-  };
+    if (m_metric_kind != MetricKind::Identity && !pparams.empty())
+      throw std::logic_error("With a metric, the P space has to be added with the overload of add_p() taking the metric "
+                             "matrix");
+    return add_p_impl(pparams, pp_action_matrix, {}, parameters, actions, std::move(apply_p));
+  }
+
+  size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
+               const array::Span<value_type>& pp_metric_matrix, const VecRef<R>& parameters, const VecRef<R>& actions,
+               fapply_on_p_type apply_p, fapply_on_p_type apply_metric_p) override {
+    if (m_metric_kind == MetricKind::Identity)
+      throw std::logic_error("A metric matrix in the P space was given, but no metric was declared with set_metric()");
+    if (!pparams.empty() && m_xspace->stores_metric_actions() && !apply_metric_p)
+      throw std::invalid_argument("A function applying the metric in the P space is needed unless the metric is "
+                                  "applied on the fly");
+    if (apply_metric_p)
+      m_apply_metric_p = std::move(apply_metric_p);
+    return add_p_impl(pparams, pp_action_matrix, pp_metric_matrix, parameters, actions, std::move(apply_p));
+  }
 
   void clearP() override {}
 
@@ -470,8 +477,6 @@ public:
       });
     else
       set_metric(problem.metric_kind());
-    if (metric and m_max_p > 0)
-      throw std::runtime_error("A P space cannot be used together with a metric; set max_p to 0");
     bool use_diagonals = problem.diagonals(actions.at(0));
     std::unique_ptr<Q> diagonals;
     if (use_diagonals)
@@ -485,20 +490,23 @@ public:
     }
     if (generate_initial_guess and not use_diagonals)
       throw std::runtime_error("Default initial guess requested, but diagonal elements are not available");
-    // the lowest eigenvalues of a generalised eigenproblem are expected at the lowest ratios of the diagonals
+    // the initial guess and the P space are selected from the lowest of these values
+    const Q* selection = diagonals.get();
     std::unique_ptr<Q> ratios;
-    if (metric_diagonals) {
+    if (metric_diagonals and (generate_initial_guess or m_max_p > 0)) {
+      // the lowest eigenvalues of a generalised eigenproblem are expected at the lowest ratios of the diagonals
       m_handlers->rq().copy(parameters.at(0), *diagonals);
       precondition_default(wrap_arg(parameters.at(0).get()), std::vector<value_type>{0}, actions.at(0).get());
       ratios.reset(new Q{m_handlers->qr().copy(parameters.at(0))});
+      selection = ratios.get();
     }
     int nwork = parameters.size();
     std::vector<P> pspace;
     if (use_diagonals and m_max_p > 0)
-      pspace = select_pspace(*diagonals);
+      pspace = select_pspace(*selection);
     // a P space replaces any initial guess; without one, max_p > 0 still means the contents of parameters are not used
     if (pspace.empty() and (generate_initial_guess or (use_diagonals and m_max_p > 0)))
-      generate_initial_guess_from_diagonals(parameters, ratios ? *ratios : *diagonals);
+      generate_initial_guess_from_diagonals(parameters, *selection);
     if (!pspace.empty())
       nwork = initialise_pspace(pspace, problem, parameters, actions);
     for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
@@ -722,6 +730,30 @@ protected:
                                   const detail::MetricSolutions<R, Q>& metric_solutions) = 0;
   virtual bool linearEigensystem() const { return false; }
 
+  // FIXME Currently only works if called on an empty subspace. Either enforce it or generalise.
+  //! Implements add_p(), with an empty pp_metric_matrix for a problem without a metric
+  size_t add_p_impl(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
+                    const array::Span<value_type>& pp_metric_matrix, const VecRef<R>& parameters,
+                    const VecRef<R>& actions, fapply_on_p_type apply_p) {
+    auto prof = profiler()->push("itsolv::add_p");
+    if (not pparams.empty() and pparams.size() < n_roots())
+      throw std::runtime_error("P space must be empty or at least as large as number of roots sought");
+    if (apply_p)
+      m_apply_p = std::move(apply_p);
+    m_xspace->update_pspace(pparams, pp_action_matrix, pp_metric_matrix);
+    check_metric_positive();
+    auto working_set = solve_and_generate_working_set(parameters, actions);
+    read_handler_counts(m_stats, m_handlers);
+    return working_set;
+  }
+
+  //! For a positive (semi)definite metric, throws if the metric matrix shows that it is not
+  void check_metric_positive() const {
+    if (m_metric_kind == MetricKind::HermitianPositiveDefinite ||
+        m_metric_kind == MetricKind::HermitianPositiveSemidefinite)
+      subspace::check_metric_positive(m_xspace->data.at(subspace::EqnData::M), m_xspace->data.at(subspace::EqnData::S));
+  }
+
   //! The number of the given parameters that add_vector() takes up: no more than there are in the working set
   size_t n_added_vectors(const VecRef<R>& parameters) const {
     return std::min(m_working_set.size(), parameters.size());
@@ -741,6 +773,9 @@ protected:
     if (m_xspace->dimensions().nP != 0 && !m_apply_p)
       throw std::runtime_error(
           "Solver contains P space but no valid apply_p function. Make sure add_p was called correctly.");
+    if (m_xspace->dimensions().nP != 0 && m_xspace->stores_metric_actions() && !m_apply_metric_p)
+      throw std::runtime_error("Solver contains P space but no valid function applying the metric to it. Make sure "
+                               "add_p was called correctly.");
     auto nW = n_added_vectors(parameters);
     auto cwparams = cwrap(begin(parameters), begin(parameters) + nW);
     auto cwactions = cwrap(begin(actions), begin(actions) + nW);
@@ -749,9 +784,7 @@ protected:
     m_xspace->update_qspace(cwparams, cwactions, cwrap(metric_actions));
     m_stats->q_creations += (m_xspace->stores_metric_actions() ? 3 : 2) * nW;
     prof->stop();
-    if (m_metric_kind == MetricKind::HermitianPositiveDefinite ||
-        m_metric_kind == MetricKind::HermitianPositiveSemidefinite)
-      subspace::check_metric_positive(m_xspace->data.at(subspace::EqnData::M), m_xspace->data.at(subspace::EqnData::S));
+    check_metric_positive();
     prof->start("solve_and_generate_working_set");
     // the actions of the metric are not needed any more and serve as scratch space
     auto working_set = solve_and_generate_working_set(parameters, actions, metric_actions);
@@ -869,6 +902,7 @@ protected:
 
   /*!
    * @brief Selects the P space from the lowest diagonal elements, subject to max_p and p_threshold
+   * @param diagonals the diagonal elements or, for a generalised eigenproblem, their ratios with those of the metric
    * @return the P-space vectors, empty if fewer than n_roots() elements were selected
    */
   std::vector<P> select_pspace(const Q& diagonals) {
@@ -917,8 +951,16 @@ protected:
       problem.p_action(pcoeff, pparams, actions);
     };
     auto action_matrix = problem.pp_action_matrix(pspace);
-    return add_p(cwrap(pspace), array::Span<value_type>(action_matrix.data(), action_matrix.size()), parameters,
-                 actions, apply_on_p);
+    const auto action_span = array::Span<value_type>(action_matrix.data(), action_matrix.size());
+    if (m_metric_kind == MetricKind::Identity)
+      return add_p(cwrap(pspace), action_span, parameters, actions, apply_on_p);
+    fapply_on_p_type apply_metric_on_p = [&problem](const std::vector<std::vector<value_type>>& pcoeff,
+                                                    const CVecRef<P>& pparams, const VecRef<R>& metric_actions) {
+      problem.p_metric_action(pcoeff, pparams, metric_actions);
+    };
+    auto metric_matrix = problem.pp_metric_matrix(pspace);
+    return add_p(cwrap(pspace), action_span, array::Span<value_type>(metric_matrix.data(), metric_matrix.size()),
+                 parameters, actions, apply_on_p, apply_metric_on_p);
   }
 
 
@@ -940,6 +982,7 @@ protected:
   size_t m_max_p = 0;                           //!< maximum size of P space
   MetricKind m_metric_kind = MetricKind::Identity; //!< the metric declared with set_metric()
   fapply_metric_type m_apply_metric = {};          //!< applies the metric on the fly, if its actions are not stored
+  fapply_on_p_type m_apply_metric_p = {}; //!< adds the action of the metric on the P space, if its actions are stored
   value_type_abs m_p_threshold = std::numeric_limits<value_type_abs>::max(); //!< threshold for selecting P space
 private:
   mutable std::shared_ptr<molpro::profiler::Profiler> m_profiler;

@@ -40,8 +40,14 @@ public:
   //! Removes parameter i from D subspace
   virtual void erased(size_t i) = 0;
 
-  //! Adds parameters to the P space
-  virtual void update_pspace(const CVecRef<P>& params, const array::Span<value_type>& pp_action_matrix) = 0;
+  /*!
+   * @brief Adds parameters to the P space
+   * @param params the P space vectors
+   * @param pp_action_matrix the kernel matrix in the P space
+   * @param pp_metric_matrix the metric matrix in the P space, given exactly if there is a metric
+   */
+  virtual void update_pspace(const CVecRef<P>& params, const array::Span<value_type>& pp_action_matrix,
+                             const array::Span<value_type>& pp_metric_matrix = {}) = 0;
 
   /*!
    * @brief Declares whether the subspace has a metric, which creates or removes the metric matrix EqnData::M. Only
