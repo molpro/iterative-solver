@@ -291,6 +291,30 @@ public:
   }
 
   /*!
+   * @brief Calculate the metric matrix in the P space, for a problem with a metric (metric_kind())
+   * @param pparams Specification of the P space
+   * @return the matrix <p_i|M p_j>, with j running fastest
+   */
+  virtual std::vector<value_t> pp_metric_matrix(const std::vector<P>& pparams) const {
+    if (not pparams.empty())
+      throw std::logic_error("P-space unavailable: unimplemented pp_metric_matrix() in Problem class");
+    return std::vector<value_t>(0);
+  }
+
+  /*!
+   * @brief Calculate the action of the metric on a set of vectors in the P space, for a problem with a metric
+   * (metric_kind()). Not used if the metric is applied on the fly (metric_is_cheap()).
+   * @param p_coefficients The projection of the vectors onto to the P space
+   * @param pparams Specification of the P space
+   * @param metric_actions On exit, the computed action of the metric has been added to the original contents
+   */
+  virtual void p_metric_action(const std::vector<std::vector<value_t>>& p_coefficients, const CVecRef<P>& pparams,
+                               const VecRef<container_t>& metric_actions) const {
+    if (not pparams.empty())
+      throw std::logic_error("P-space unavailable: unimplemented p_metric_action() in Problem class");
+  }
+
+  /*!
    * @brief Provide values of R vectors for testing the problem class.
    * For use in a non-linear solver, the first vector (instance=0) should be a reference point, and the remainder
    * (instance>0) should be close to it, such that meaningful numerical differentation can be done to test the residual
@@ -409,8 +433,8 @@ public:
    * so that the metric is applied on the fly. The actions of kernel and metric are calculated together by
    * Problem::action_with_metric(). If the problem provides diagonals(), it has to provide metric_diagonals()
    * too; both are passed to the preconditioner, and a generated initial guess and the P space are selected from the
-   * lowest ratios of the diagonal elements of the kernel and the metric. A P space cannot be used together with a
-   * metric.
+   * lowest ratios of the diagonal elements of the kernel and the metric. A P space additionally needs
+   * Problem::pp_metric_matrix() and, unless the metric is applied on the fly, Problem::p_metric_action().
    *
    * The solver keeps references to problem for later calls such as solution(), so problem has to outlive them; a
    * further call of solve() replaces them.
@@ -517,6 +541,25 @@ public:
    */
   virtual size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
                        const VecRef<R>& parameters, const VecRef<R>& action, fapply_on_p_type apply_p) = 0;
+
+  /*!
+   * \brief Like add_p(const CVecRef<P>&, const array::Span<value_type>&, const VecRef<R>&, const VecRef<R>&,
+   * fapply_on_p_type), for a problem with a metric declared with set_metric(), which this overload requires.
+   * \param pparams the vectors to add, as for the other overload
+   * \param pp_action_matrix the kernel matrix in the P space, as for the other overload
+   * \param pp_metric_matrix the metric matrix in the P space, in the same layout as pp_action_matrix
+   * \param parameters Used as scratch working space
+   * \param action On exit, the residual of the interpolated solution, missing the contributions from the P space
+   * \param apply_p A function that adds the action of the kernel on vectors in the P space
+   * \param apply_metric_p A function that adds the action of the metric on vectors in the P space, like apply_p.
+   * Needed unless the metric is applied on the fly.
+   * \return The number of vectors contained in parameters, action, parametersP
+   */
+  virtual size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
+                       const array::Span<value_type>& pp_metric_matrix, const VecRef<R>& parameters,
+                       const VecRef<R>& action, fapply_on_p_type apply_p, fapply_on_p_type apply_metric_p) {
+    throw std::logic_error("This solver does not support a metric");
+  }
 
   // FIXME Is this needed?
   virtual void clearP() = 0;

@@ -12,6 +12,7 @@
 #include <cmath>
 #include <complex>
 #include <limits>
+#include <map>
 #include <memory>
 #include <numeric>
 #include <string>
@@ -367,6 +368,27 @@ public:
   bool cheap_metric = false;         //!< whether the metric is applied on the fly rather than its actions stored
 
   bool metric_is_cheap() const override { return cheap_metric; }
+  bool provide_pp_metric_matrix = true;
+
+  using P = std::map<size_t, double>;
+  std::vector<double> pp_action_matrix(const std::vector<P> &pparams) const override {
+    return p_matrix([this](size_t i, size_t j) { return kernel(i, j); }, pparams);
+  }
+  void p_action(const std::vector<std::vector<double>> &p_coefficients,
+                const molpro::linalg::itsolv::CVecRef<P> &pparams,
+                const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions) const override {
+    add_p_action([this](size_t i, size_t j) { return kernel(i, j); }, p_coefficients, pparams, actions);
+  }
+  std::vector<double> pp_metric_matrix(const std::vector<P> &pparams) const override {
+    if (not provide_pp_metric_matrix)
+      return Problem::pp_metric_matrix(pparams);
+    return p_matrix([this](size_t i, size_t j) { return metric(i, j); }, pparams);
+  }
+  void p_metric_action(const std::vector<std::vector<double>> &p_coefficients,
+                       const molpro::linalg::itsolv::CVecRef<P> &pparams,
+                       const molpro::linalg::itsolv::VecRef<std::vector<double>> &metric_actions) const override {
+    add_p_action([this](size_t i, size_t j) { return metric(i, j); }, p_coefficients, pparams, metric_actions);
+  }
 
   double kernel(size_t i, size_t j) const {
     if (complex_pair and i + j == 1)
@@ -449,6 +471,28 @@ public:
 
 private:
   template <class Element>
+  std::vector<double> p_matrix(const Element &element, const std::vector<P> &pparams) const {
+    std::vector<double> result;
+    for (const auto &pi : pparams)
+      for (const auto &pj : pparams) {
+        result.push_back(0);
+        for (const auto &[i, ci] : pi)
+          for (const auto &[j, cj] : pj)
+            result.back() += ci * element(i, j) * cj;
+      }
+    return result;
+  }
+  template <class Element>
+  void add_p_action(const Element &element, const std::vector<std::vector<double>> &p_coefficients,
+                    const molpro::linalg::itsolv::CVecRef<P> &pparams,
+                    const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions) const {
+    for (size_t k = 0; k < p_coefficients.size(); ++k)
+      for (size_t p = 0; p < pparams.size(); ++p)
+        for (const auto &[j, cj] : pparams[p].get())
+          for (size_t i = 0; i < n; ++i)
+            actions[k].get()[i] += element(i, j) * cj * p_coefficients[k][p];
+  }
+  template <class Element>
   void apply(const Element &element, const molpro::linalg::itsolv::CVecRef<std::vector<double>> &parameters,
              const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions) const {
     for (size_t k = 0; k < parameters.size(); ++k)
@@ -463,19 +507,22 @@ private:
 //! Solves problem and checks the eigenvalues and, except for complex pairs, the residuals; returns the iterations
 template <class Qvector>
 int solve_generalized_problem(const GeneralizedProblem &problem, const size_t nroot, const size_t nparams,
-                              const size_t max_size_qspace = std::numeric_limits<size_t>::max()) {
+                              const size_t max_size_qspace = std::numeric_limits<size_t>::max(), const int max_p = 0) {
   auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>, Qvector>("Davidson");
   solver->set_n_roots(nroot);
   solver->set_hermiticity(problem.hermitian());
   solver->set_convergence_threshold(1e-10);
   auto options = molpro::linalg::itsolv::LinearEigensystemDavidsonOptions{};
   options.max_size_qspace = max_size_qspace;
+  options.max_p = max_p;
   solver->set_options(options);
   auto params = std::vector<std::vector<double>>(nparams, std::vector<double>(problem.n));
   auto actions = params, metric_actions = params;
   EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
   EXPECT_THAT(solver->errors(), ::testing::Each(::testing::Le(1e-10)));
   EXPECT_THAT(solver->eigenvalues(), ::testing::Pointwise(::testing::DoubleNear(1e-9), problem.reference(nroot)));
+  if (max_p > 0)
+    EXPECT_EQ(solver->dimensions().nP, size_t(max_p));
   if (not problem.complex_pair) {
     // the residuals returned by solution() are A x - lambda M x
     auto x = std::vector<std::vector<double>>(nroot, std::vector<double>(problem.n));
@@ -533,6 +580,18 @@ TEST(LinearEigensystem, Davidson_generalized_cheap_metric) {
       const auto stored = solve_generalized_problem<std::vector<double>>(problem, 3, nparams, 6);
       problem.cheap_metric = true;
       EXPECT_EQ(solve_generalized_problem<std::vector<double>>(problem, 3, nparams, 6), stored);
+    }
+}
+
+// A P space together with a metric, whose actions are stored or applied on the fly, also when Q vectors are moved into
+// the D space
+TEST(LinearEigensystem, Davidson_generalized_pspace) {
+  GeneralizedProblem problem;
+  for (const bool cheap_metric : {false, true})
+    for (const size_t max_size_qspace : {std::numeric_limits<size_t>::max(), size_t(4)}) {
+      SCOPED_TRACE("cheap=" + std::to_string(cheap_metric) + " max_size_qspace=" + std::to_string(max_size_qspace));
+      problem.cheap_metric = cheap_metric;
+      solve_generalized_problem<std::vector<double>>(problem, 3, 3, max_size_qspace, 10);
     }
 }
 
@@ -658,10 +717,12 @@ TEST(LinearEigensystem, Davidson_generalized_invalid_metric) {
   auto params = std::vector<std::vector<double>>(2, std::vector<double>(problem.n));
   auto actions = params, metric_actions = params;
   std::vector<double> v0(problem.n), v1(problem.n);
+  int max_p = 0;
   auto solve = [&]() {
     auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
     solver->set_n_roots(2);
     solver->set_hermiticity(true);
+    solver->set_max_p(max_p);
     return solver->solve(params, actions, metric_actions, problem, true);
   };
   auto test_problem = [&]() {
@@ -683,6 +744,10 @@ TEST(LinearEigensystem, Davidson_generalized_invalid_metric) {
   problem.metric_non_hermiticity = 0.5;
   EXPECT_FALSE(test_problem());
   EXPECT_THAT(solve_error(), ::testing::HasSubstr("not Hermitian"));
+  // also in the P space
+  max_p = 10;
+  EXPECT_THAT(solve_error(), ::testing::HasSubstr("not Hermitian"));
+  max_p = 0;
   // also without stored actions of the metric
   problem.cheap_metric = true;
   EXPECT_THAT(solve_error(), ::testing::HasSubstr("not Hermitian"));
@@ -728,9 +793,24 @@ TEST(LinearEigensystem, Davidson_generalized_errors) {
   auto actions = params, metric_actions = params;
   auto davidson = []() { return molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson"); };
   {
+    // a P space needs the metric matrix in it
+    problem.provide_pp_metric_matrix = false;
     auto solver = davidson();
     solver->set_max_p(10);
-    EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::runtime_error);
+    EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::logic_error);
+    problem.provide_pp_metric_matrix = true;
+  }
+  {
+    // the P space of a problem with a metric is added with its metric matrix
+    using P = GeneralizedProblem::P;
+    auto solver = davidson();
+    solver->set_metric(molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite);
+    std::vector<P> pspace{P{{0, 1.}}, P{{1, 1.}}};
+    auto pp = problem.pp_action_matrix(pspace);
+    EXPECT_THROW(solver->add_p(molpro::linalg::itsolv::cwrap(pspace),
+                               molpro::linalg::array::Span<double>(pp.data(), pp.size()),
+                               molpro::linalg::itsolv::wrap(params), molpro::linalg::itsolv::wrap(actions), {}),
+                 std::logic_error);
   }
   // without buffers for the actions of the metric
   EXPECT_THROW(davidson()->solve(params, actions, problem, true), std::invalid_argument);

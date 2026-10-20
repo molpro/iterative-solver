@@ -264,12 +264,21 @@ public:
 
   // FIXME this must be called when XSpace is empty
   //! @warning Subspace should be empty
-  void update_pspace(const CVecRef<P>& params, const array::Span<value_type>& pp_action_matrix) override {
+  void update_pspace(const CVecRef<P>& params, const array::Span<value_type>& pp_action_matrix,
+                     const array::Span<value_type>& pp_metric_matrix = {}) override {
     assert(m_dim.nX() == 0);
     if (!m_hermitian)
       throw std::runtime_error("P space can only be used with hermitian kernels");
-    if (has_metric())
-      throw std::runtime_error("P space cannot be used together with a metric");
+    const size_t nPnew = params.size();
+    if (pp_metric_matrix.size() != (has_metric() ? nPnew * nPnew : 0))
+      throw std::runtime_error("XSpace::update_pspace: the metric matrix in the P space must be given exactly when "
+                               "there is a metric");
+    for (size_t i = 0; i < (has_metric() ? nPnew : 0); ++i)
+      for (size_t j = 0; j < i; ++j)
+        if (std::abs(pp_metric_matrix[i * nPnew + j] - conjugate(pp_metric_matrix[j * nPnew + i])) >
+            precision_scaled<value_type>(1e-8) *
+                std::sqrt(std::abs(pp_metric_matrix[i * nPnew + i] * pp_metric_matrix[j * nPnew + j])))
+          throw std::runtime_error("The metric is not Hermitian: its matrix in the P space is not");
     pspace.update(params, m_handlers->pp());
     update_dimensions();
     const size_t nP = m_dim.nP;
@@ -280,6 +289,12 @@ public:
     for (size_t i = 0, ij = 0; i < nP; ++i)
       for (size_t j = 0; j < nP; ++j, ++ij)
         data[EqnData::H](i, j) = pp_action_matrix[ij];
+    if (has_metric()) {
+      data[EqnData::M].resize({nP, nP});
+      for (size_t i = 0, ij = 0; i < nP; ++i)
+        for (size_t j = 0; j < nP; ++j, ++ij)
+          data[EqnData::M](i, j) = pp_metric_matrix[ij];
+    }
   }
 
   //! For a system of linear equations Ax=b, adds rhs vectors b.

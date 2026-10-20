@@ -27,8 +27,8 @@ struct DummyXSpace : public molpro::linalg::itsolv::subspace::IXSpace<R, Q, P> {
   void erased(size_t i) override {}
 
   //! Adds parameters to the Q space
-  void update_pspace(const CVecRef<P>& params,
-                     const molpro::linalg::array::Span<value_type>& pp_action_matrix) override {}
+  void update_pspace(const CVecRef<P>& params, const molpro::linalg::array::Span<value_type>& pp_action_matrix,
+                     const molpro::linalg::array::Span<value_type>& pp_metric_matrix = {}) override {}
 
   //! Adds parameters to the Q space
   void set_metric(bool metric, bool store_actions = true) override {}
