@@ -103,8 +103,8 @@ Deleting Q vectors from the subspace would change the solutions of the subspace 
 far. To prevent this, the linear Davidson solvers keep a D space (`subspace::DSpace`), which stores the complement of
 the P+Q+R subspace that is needed to reproduce the previous solutions exactly.
 
-When Q vectors are deleted (`detail::construct_dspace()`), the current solutions are projected onto the space spanned
-by the deleted Q vectors and the old D vectors. After removing null and linearly dependent combinations, the
+When Q vectors are deleted (`detail::construct_dspace()`), the current solutions, scaled to unit length, are projected
+onto the space spanned by the deleted Q vectors and the old D vectors. After removing null and linearly dependent combinations, the
 projections are normalised and become the new D space; the old D space is discarded. D vectors and their actions (and
 actions of the metric, if they are stored) are stored in `Q` containers. As a result the D space never holds more vectors
 than there are solutions, and the subspace still contains the previous solutions, even though the Q vectors that
