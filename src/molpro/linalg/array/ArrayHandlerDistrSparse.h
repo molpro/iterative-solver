@@ -23,10 +23,14 @@ public:
   using typename ArrayHandler<AL, AR>::ProxyHandle;
 
   AL copy(const AR &source) override {
-    throw std::logic_error("General construction of sparse from dense is ill-defined");
+    throw std::logic_error("General copy from sparse to dense is ill-defined");
   };
 
   void copy(AL &x, const AR &y) override {
+    this->m_counter->copy++;
+    // checked before x is overwritten
+    if (not y.empty() and y.rbegin()->first >= x.size())
+      error("ArrayHandlerDistrSparse::copy() sparse array y is incompatible");
     x.fill(0);
     auto lb = x.local_buffer();
     auto start = lb->start();

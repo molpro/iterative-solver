@@ -4,6 +4,7 @@
 #include <molpro/linalg/array/util/gemm.h>
 #include <molpro/linalg/array/util/select.h>
 #include <molpro/linalg/array/util/select_max_dot.h>
+#include <algorithm>
 #include <numeric>
 #include <stdexcept>
 
@@ -25,13 +26,12 @@ public:
   using typename ArrayHandler<AL, AR>::value_type_abs;
   using typename ArrayHandler<AL, AR>::ProxyHandle;
 
-  AL copy(const AR &source) override {
-    AL result;
-    copy(result, source);
-    return result;
-  };
+  AL copy(const AR &source) override { throw std::logic_error("General copy from sparse to dense is ill-defined"); };
 
   void copy(AL &x, const AR &y) override {
+    // checked before x is overwritten
+    if (std::any_of(y.begin(), y.end(), [&x](const auto &s) { return s.first >= x.size(); }))
+      error("ArrayHandlerIterableSparse::copy() sparse array y is incompatible");
     std::fill(x.begin(), x.end(), 0);
     for (const auto &s : y)
       *(x.begin() + s.first) = s.second;

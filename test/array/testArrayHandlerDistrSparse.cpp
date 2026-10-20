@@ -66,6 +66,36 @@ TEST(TestArrayHandlerDistrSparse, dot) {
   ASSERT_DOUBLE_EQ(result, ref);
 }
 
+TEST(TestArrayHandlerDistrSparse, copy) {
+  const size_t dim = 20;
+  auto x = DistrArrayMPI3(dim, mpi_comm);
+  x.fill(0.5);
+  auto y = std::map<size_t, double>{{1, 1.0}, {3, 2.0}, {6, 3.0}, {11, 4.0}, {19, 5.0}};
+  auto ref = std::vector<double>(dim, 0.);
+  for (const auto& el : y)
+    ref[el.first] = el.second;
+  auto handler = ArrayHandlerDistrSparse<decltype(x), decltype(y)>{};
+  handler.copy(x, y);
+  EXPECT_EQ(handler.counter().copy, 1);
+  x.sync();
+  LockMPI3 lock{mpi_comm};
+  auto l = lock.scope();
+  ASSERT_THAT(x.vec(), Pointwise(DoubleEq(), ref));
+}
+
+TEST(TestArrayHandlerDistrSparse, copy_incompatible) {
+  const size_t dim = 20;
+  auto x = DistrArrayMPI3(dim, mpi_comm);
+  x.fill(0.5);
+  auto y = std::map<size_t, double>{{1, 1.0}, {dim, 2.0}};
+  auto handler = ArrayHandlerDistrSparse<decltype(x), decltype(y)>{};
+  EXPECT_THROW(handler.copy(x, y), molpro::linalg::array::util::ArrayHandlerError);
+  const auto [lo, hi] = molpro::linalg::array::util::local_range(x);
+  EXPECT_THAT(x.get(lo, hi), Each(DoubleEq(0.5)));
+  // the dimension of the dense result cannot be deduced from a sparse array
+  EXPECT_THROW(handler.copy(y), std::logic_error);
+}
+
 TEST(TestArrayHandlerDistrSparse, unary_operations_throw) {
   auto x = DistrArrayMPI3(20, mpi_comm);
   auto handler = ArrayHandlerDistrSparse<decltype(x), std::map<size_t, double>>{};

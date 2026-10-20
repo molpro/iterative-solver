@@ -8,6 +8,7 @@ using molpro::linalg::array::ArrayHandlerIterableSparse;
 
 using ::testing::ContainerEq;
 using ::testing::DoubleEq;
+using ::testing::Each;
 using ::testing::Pointwise;
 
 template <class T>
@@ -45,7 +46,29 @@ TYPED_TEST_P(TestArrayHandlerIterableSparse, unary_operations_throw) {
   EXPECT_THROW(handler.fill(2, x), std::logic_error);
 }
 
-REGISTER_TYPED_TEST_SUITE_P(TestArrayHandlerIterableSparse, constructor, dot, select_max_dot, unary_operations_throw);
+TYPED_TEST_P(TestArrayHandlerIterableSparse, copy) {
+  auto x = std::vector<typename TypeParam::first_type>(12, 0.5);
+  auto y = std::map<size_t, typename TypeParam::second_type>{{1, 1.0}, {3, 2.0}, {6, 3.0}, {11, 4.0}};
+  auto ref = std::vector<typename TypeParam::first_type>(x.size(), 0);
+  for (const auto& el : y)
+    ref[el.first] = el.second;
+  auto handler = ArrayHandlerIterableSparse<decltype(x), decltype(y)>{};
+  handler.copy(x, y);
+  ASSERT_THAT(x, Pointwise(DoubleEq(), ref));
+}
+
+TYPED_TEST_P(TestArrayHandlerIterableSparse, copy_incompatible) {
+  auto x = std::vector<typename TypeParam::first_type>(12, 0.5);
+  auto y = std::map<size_t, typename TypeParam::second_type>{{1, 1.0}, {12, 2.0}};
+  auto handler = ArrayHandlerIterableSparse<decltype(x), decltype(y)>{};
+  EXPECT_THROW(handler.copy(x, y), molpro::linalg::array::util::ArrayHandlerError);
+  EXPECT_THAT(x, Each(DoubleEq(0.5)));
+  // the dimension of the dense result cannot be deduced from a sparse array
+  EXPECT_THROW(handler.copy(y), std::logic_error);
+}
+
+REGISTER_TYPED_TEST_SUITE_P(TestArrayHandlerIterableSparse, constructor, dot, select_max_dot, unary_operations_throw,
+                            copy, copy_incompatible);
 
 using FloatTypes = ::testing::Types<std::pair<double, double>, std::pair<double, float>>;
 INSTANTIATE_TYPED_TEST_SUITE_P(Float, TestArrayHandlerIterableSparse, FloatTypes);
