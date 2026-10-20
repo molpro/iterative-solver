@@ -347,6 +347,180 @@ TEST(LinearEigensystem, Davidson_vector_R_disk_Q) {
     EXPECT_NEAR(result[i], reference[i], 1e-9);
 }
 
+namespace {
+/*!
+ * @brief A generalised eigenproblem A v = lambda M v with a symmetric positive definite, non-diagonal metric M whose
+ * diagonal varies strongly, and a diagonally dominant A that is symmetric unless non_hermiticity is set
+ */
+class GeneralizedProblem : public molpro::linalg::itsolv::Problem<std::vector<double>> {
+public:
+  static constexpr size_t n = 60;
+  double non_hermiticity = 0;
+  bool complex_pair = false; //!< if true, the two lowest eigenvalues are a complex conjugate pair
+  bool provide_metric_diagonals = true;
+  bool linear_metric = true; //!< if false, metric_action() adds a constant, which test_problem() must notice
+
+  double kernel(size_t i, size_t j) const {
+    if (complex_pair and i + j == 1)
+      return i == 0 ? -0.8 : 0.8;
+    return i == j ? 1. + i : 0.1 / (1. + std::abs(double(i) - double(j))) * (j < i ? 1 - non_hermiticity : 1);
+  }
+  bool hermitian() const { return non_hermiticity == 0 and not complex_pair; }
+  double metric(size_t i, size_t j) const { return i == j ? 1.5 + std::cos(double(i)) : 0.05 / (1. + i + j); }
+
+  bool diagonals(std::vector<double> &d) const override {
+    for (size_t i = 0; i < n; ++i)
+      d[i] = kernel(i, i);
+    return true;
+  }
+  bool provides_metric() const override { return true; }
+  bool metric_diagonals(std::vector<double> &d) const override {
+    for (size_t i = 0; i < n; ++i)
+      d[i] = metric(i, i);
+    return provide_metric_diagonals;
+  }
+
+  void action(const molpro::linalg::itsolv::CVecRef<std::vector<double>> &parameters,
+              const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions) const override {
+    apply([this](size_t i, size_t j) { return kernel(i, j); }, parameters, actions);
+  }
+  void metric_action(const molpro::linalg::itsolv::CVecRef<std::vector<double>> &parameters,
+                     const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions) const override {
+    apply([this](size_t i, size_t j) { return metric(i, j); }, parameters, actions);
+    if (!linear_metric)
+      for (auto &a : actions)
+        a.get()[0] += 1;
+  }
+
+  bool test_parameters(unsigned int instance, std::vector<double> &parameters) const override {
+    if (instance > 1)
+      return false;
+    for (size_t i = 0; i < n; ++i)
+      parameters[i] = std::cos(1. + instance + 0.3 * i);
+    return true;
+  }
+
+  //! The lowest eigenvalues, computed densely
+  std::vector<double> reference(size_t nroot) const {
+    Eigen::MatrixXd a(n, n), m(n, n);
+    for (size_t i = 0; i < n; ++i)
+      for (size_t j = 0; j < n; ++j) {
+        a(i, j) = kernel(i, j);
+        m(i, j) = metric(i, j);
+      }
+    std::vector<double> values;
+    if (hermitian()) {
+      Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> es(a, m);
+      values.assign(es.eigenvalues().data(), es.eigenvalues().data() + n);
+    } else {
+      Eigen::GeneralizedEigenSolver<Eigen::MatrixXd> es(a, m);
+      std::vector<std::complex<double>> complex_values;
+      for (Eigen::Index i = 0; i < es.eigenvalues().size(); ++i)
+        complex_values.push_back(es.eigenvalues()(i));
+      std::sort(complex_values.begin(), complex_values.end(),
+                [](const auto &x, const auto &y) { return x.real() < y.real(); });
+      for (size_t i = 0; i < complex_values.size(); ++i) {
+        // a complex pair is expected exactly where it is built into the kernel
+        if (complex_pair and i < 2)
+          EXPECT_GT(std::abs(complex_values[i].imag()), 0.1);
+        else
+          EXPECT_NEAR(complex_values[i].imag(), 0, 1e-10);
+        values.push_back(complex_values[i].real());
+      }
+    }
+    values.resize(nroot);
+    return values;
+  }
+
+private:
+  template <class Element>
+  void apply(const Element &element, const molpro::linalg::itsolv::CVecRef<std::vector<double>> &parameters,
+             const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions) const {
+    for (size_t k = 0; k < parameters.size(); ++k)
+      for (size_t i = 0; i < n; ++i) {
+        actions[k].get()[i] = 0;
+        for (size_t j = 0; j < n; ++j)
+          actions[k].get()[i] += element(i, j) * parameters[k].get()[j];
+      }
+  }
+};
+
+template <class Qvector>
+void solve_generalized_problem(const GeneralizedProblem &problem, const size_t nroot, const size_t nparams) {
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>, Qvector>("Davidson");
+  solver->set_n_roots(nroot);
+  solver->set_hermiticity(problem.hermitian());
+  solver->set_convergence_threshold(1e-10);
+  auto params = std::vector<std::vector<double>>(nparams, std::vector<double>(problem.n));
+  auto actions = params;
+  EXPECT_TRUE(solver->solve(params, actions, problem, true));
+  EXPECT_THAT(solver->errors(), ::testing::Each(::testing::Le(1e-10)));
+  EXPECT_THAT(solver->eigenvalues(), ::testing::Pointwise(::testing::DoubleNear(1e-9), problem.reference(nroot)));
+}
+} // namespace
+
+// solve() for generalised eigenproblems, with Q vectors in memory and on disk
+TEST(LinearEigensystem, Davidson_generalized) {
+  molpro::mpi::init();
+  GeneralizedProblem problem;
+  for (const double non_hermiticity : {0., 0.2}) {
+    SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity));
+    problem.non_hermiticity = non_hermiticity;
+    solve_generalized_problem<std::vector<double>>(problem, 3, 3);
+    solve_generalized_problem<molpro::linalg::array::DistrArrayFile>(problem, 3, 3);
+  }
+}
+
+// A complex conjugate pair of eigenvalues of a real non-hermitian kernel: the residuals of the real and imaginary
+// parts of the eigenvector are coupled through the metric
+TEST(LinearEigensystem, Davidson_generalized_complex_pair) {
+  GeneralizedProblem problem;
+  problem.complex_pair = true;
+  solve_generalized_problem<std::vector<double>>(problem, 3, 3);
+}
+
+// Without the diagonal elements of the metric, the solver gets by with the diagonal elements of the kernel and a
+// single parameter vector
+TEST(LinearEigensystem, Davidson_generalized_without_metric_diagonals) {
+  GeneralizedProblem problem;
+  problem.provide_metric_diagonals = false;
+  solve_generalized_problem<std::vector<double>>(problem, 1, 1);
+}
+
+// test_problem() checks the action of the metric as well
+TEST(LinearEigensystem, Davidson_generalized_test_problem) {
+  GeneralizedProblem problem;
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+  std::vector<double> v0(problem.n), v1(problem.n);
+  EXPECT_TRUE(solver->test_problem(problem, v0, v1, -1));
+  problem.linear_metric = false;
+  EXPECT_FALSE(solver->test_problem(problem, v0, v1, -1));
+}
+
+// Uses of a metric that solve() cannot support are reported
+TEST(LinearEigensystem, Davidson_generalized_errors) {
+  GeneralizedProblem problem;
+  auto params = std::vector<std::vector<double>>(2, std::vector<double>(problem.n));
+  auto actions = params;
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+    solver->set_max_p(10);
+    EXPECT_THROW(solver->solve(params, actions, problem, true), std::runtime_error);
+  }
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+    EXPECT_THROW(solver->solve(params[0], actions[0], problem, true), std::runtime_error);
+  }
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("RSPT");
+    EXPECT_THROW(solver->solve(params, actions, problem, true), std::logic_error);
+  }
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEquations<std::vector<double>>("Davidson");
+    EXPECT_THROW(solver->solve(params, actions, problem, true), std::logic_error);
+  }
+}
+
 #include <molpro/linalg/itsolv/SolverFactory-implementation.h>
 template class molpro::linalg::itsolv::SolverFactory<std::vector<double>, std::vector<double>,
                                                      std::map<size_t, double>>;

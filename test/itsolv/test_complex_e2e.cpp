@@ -128,6 +128,10 @@ std::vector<double> reference_eigenvalues(size_t n, size_t nroot, bool complex_c
 constexpr size_t n = 14;
 constexpr size_t nroot = 3;
 
+using CC_R = containers<std::complex<double>>::R;
+using CC_Q = containers<std::complex<double>>::Q;
+using CC_P = containers<std::complex<double>>::P;
+
 } // namespace
 
 template class molpro::linalg::itsolv::SolverFactory<std::vector<std::complex<double>>,
@@ -187,6 +191,70 @@ TEST(complex_e2e, davidson_hermitian_dspace) { check_davidson_hermitian("max_siz
 
 //! As above, with the D space also being reset periodically
 TEST(complex_e2e, davidson_hermitian_dspace_reset) { check_davidson_hermitian("max_size_qspace=4,reset_D=3"); }
+
+namespace {
+
+/*!
+ * @brief The generalised eigenproblem A v = lambda M v with A of HermitianProblem and a hermitian, positive definite,
+ * non-diagonal metric M with complex off-diagonal elements
+ */
+struct GeneralizedHermitianProblem : HermitianProblem<std::complex<double>> {
+  using HermitianProblem<std::complex<double>>::HermitianProblem;
+  using scalar = std::complex<double>;
+
+  scalar metric(size_t i, size_t j) const {
+    if (i == j)
+      return 1.5 + std::cos(double(i));
+    return scalar(0.05, 0.03 * (double(j) - double(i))) / (1. + i + j);
+  }
+
+  bool provides_metric() const override { return true; }
+  bool metric_diagonals(R& d) const override {
+    for (size_t i = 0; i < d.size(); i++)
+      d[i] = metric(i, i);
+    return true;
+  }
+  void metric_action(const molpro::linalg::itsolv::CVecRef<R>& parameters,
+                     const molpro::linalg::itsolv::VecRef<R>& actions) const override {
+    for (size_t k = 0; k < parameters.size(); k++) {
+      const auto& v = parameters[k].get();
+      auto& a = actions[k].get();
+      for (size_t i = 0; i < a.size(); i++) {
+        a[i] = 0;
+        for (size_t j = 0; j < a.size(); j++)
+          a[i] += metric(i, j) * v[j];
+      }
+    }
+  }
+};
+
+} // namespace
+
+//! A complex hermitian generalised eigenproblem converges to the real eigenvalues of the dense problem
+TEST(complex_e2e, davidson_generalized_hermitian) {
+  GeneralizedHermitianProblem problem(n, true);
+  Eigen::MatrixXcd a(n, n), m(n, n);
+  for (size_t i = 0; i < n; ++i)
+    for (size_t j = 0; j < n; ++j) {
+      a(i, j) = problem.matrix(i, j);
+      m(i, j) = problem.metric(i, j);
+    }
+  Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXcd> reference(a, m);
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<CC_R, CC_Q, CC_P>("Davidson");
+  solver->set_n_roots(nroot);
+  solver->set_hermiticity(true);
+  solver->set_convergence_threshold(1e-11);
+  std::vector<CC_R> params(nroot, CC_R(n)), actions(nroot, CC_R(n));
+  // the guess cannot be generated, as selecting the lowest elements is not implemented for complex types; these unit
+  // vectors are at the lowest ratios of the diagonal elements of the kernel and the metric
+  for (size_t i = 0; i < nroot; ++i)
+    params[i][i] = 1;
+  EXPECT_TRUE(solver->solve(params, actions, problem));
+  for (size_t i = 0; i < nroot; ++i) {
+    EXPECT_NEAR(solver->eigenvalues()[i].real(), reference.eigenvalues()(i), 1e-10) << "root " << i;
+    EXPECT_NEAR(solver->eigenvalues()[i].imag(), 0.0, 1e-12) << "root " << i << " of a hermitian problem must be real";
+  }
+}
 
 namespace {
 

@@ -15,8 +15,8 @@ distributed arrays for HPC. The solvers are specialised to work with specific da
 container allowing for easy integration into existing software.
 
 List of key features:
-* Implements iterative solvers for eigenvalue problem, linear equations, optimisation (L-BFGS) and non-linear equations 
-(DIIS)
+* Implements iterative solvers for eigenvalue problem (including generalised eigenvalue problems A v = &lambda; M v),
+linear equations, optimisation (L-BFGS) and non-linear equations (DIIS)
 * Novel algorithms including P-space and D-space (see paper)
 * Structured to allow easy addition of new solvers or modification of the current ones without changes to the user's 
 code
@@ -80,6 +80,10 @@ if (!solver->solve(parameters, actions, problem, /*generate_initial_guess=*/true
 }
 solver->solution(parameters, actions);
 ```
+
+For a generalised eigenvalue problem A v = &lambda; M v with a Hermitian, positive definite metric M, the `Problem`
+additionally returns `true` from `provides_metric()` and implements `metric_action()`, and optionally
+`metric_diagonals()` for the preconditioner.
 
 More advanced users can copy and modify the code in `solve()` to tailor it for their own use, see implementation in `molpro/linalg/itsolv/IterativeSolverTemplate.h`.
 
