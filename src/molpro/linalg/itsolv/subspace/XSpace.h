@@ -12,7 +12,9 @@
 #include <cmath>
 #include <format>
 #include <memory>
+#include <optional>
 #include <stdexcept>
+#include <utility>
 
 namespace molpro::linalg::itsolv::subspace {
 namespace xspace {
@@ -192,8 +194,8 @@ public:
     data = null_data<value_type, EqnData::H, EqnData::S, EqnData::rhs>();
   };
 
-  void set_metric(bool metric) override {
-    if (metric == has_metric())
+  void set_metric(bool metric, bool store_actions = true) override {
+    if (metric == has_metric() && (!metric || store_actions == m_store_metric_actions))
       return;
     if (m_dim.nX() != 0)
       throw std::logic_error("XSpace::set_metric: the metric cannot be changed once the subspace is not empty");
@@ -201,7 +203,10 @@ public:
       data[EqnData::M] = {};
     else
       data.erase(EqnData::M);
+    m_store_metric_actions = metric && store_actions;
   }
+
+  bool stores_metric_actions() const override { return m_store_metric_actions; }
 
   //! Update parameters in Q space and corresponding equation data
   void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
@@ -216,8 +221,15 @@ public:
         *m_logger, m_hermitian, m_action_dot_action, metric_actions);
     if (has_metric() && !params.empty())
       check_metric_hermitian(params, new_data.qx.at(EqnData::M));
-    qspace.update(params, actions, new_data.qq, new_data.qx, new_data.xq, m_dim, data, metric_actions);
+    const auto next_id = qspace.next_id();
+    qspace.update(params, actions, new_data.qq, new_data.qx, new_data.xq, m_dim, data,
+                  m_store_metric_actions ? metric_actions : CVecRef<R>{});
     update_dimensions();
+    if (has_metric() && !m_store_metric_actions && m_dim.nQ > 0 && qspace.id(0) >= next_id) {
+      // the action of the metric on the most recent Q vector is kept for the next check of Hermiticity
+      const auto id = qspace.id(0);
+      m_metric_check.emplace(id, m_handlers->qr().copy(metric_actions.at(id - next_id)));
+    }
   }
 
   /*!
@@ -228,9 +240,9 @@ public:
    */
   void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {},
                      const Matrix<value_type>& metric_matrix = {}) override {
-    if (metric_actions.size() != (has_metric() ? params.size() : 0))
+    if (metric_actions.size() != (m_store_metric_actions ? params.size() : 0))
       throw std::runtime_error(
-          "XSpace::update_dspace: actions of the metric must be given exactly when there is a metric");
+          "XSpace::update_dspace: actions of the metric must be given exactly when they are stored");
     const auto nX = m_dim.nP + m_dim.nQ + params.size();
     if (has_metric() && !params.empty() && (metric_matrix.rows() != nX || metric_matrix.cols() != nX))
       throw std::runtime_error("XSpace::update_dspace: the metric matrix of the new subspace is needed");
@@ -375,14 +387,24 @@ protected:
    * @param qx_metric the metric matrix elements <x|M b> = <M x|b> of the new parameters with the subspace vectors b
    */
   void check_metric_hermitian(const CVecRef<R>& params, const Matrix<value_type>& qx_metric) {
-    const auto qmetric_actions = cmetric_actionsq();
-    if (qmetric_actions.empty() || params.empty())
+    // the most recent Q vector, or where the actions of the metric are not stored, that whose action is kept
+    const Q* q_metric_action_ptr = nullptr;
+    size_t iq = 0;
+    if (m_store_metric_actions && m_dim.nQ > 0) {
+      q_metric_action_ptr = &cmetric_actionsq().front().get();
+    } else if (m_metric_check) {
+      if (const auto index = qspace.index(m_metric_check->first)) {
+        iq = *index;
+        q_metric_action_ptr = &m_metric_check->second;
+      }
+    }
+    if (!q_metric_action_ptr)
       return;
-    const auto& q_metric_action = qmetric_actions.front().get();
+    const auto& q_metric_action = *q_metric_action_ptr;
     const auto norm_metric_action = std::sqrt(std::abs(m_handlers->qq().dot(q_metric_action, q_metric_action)));
     for (size_t i = 0; i < params.size(); ++i) {
       const auto from_q = m_handlers->rq().dot(params[i], q_metric_action);
-      const auto from_x = qx_metric(i, m_dim.oQ());
+      const auto from_x = qx_metric(i, m_dim.oQ() + iq);
       const auto norm_x = std::sqrt(std::abs(m_handlers->rr().dot(params[i], params[i])));
       if (std::abs(from_q - from_x) > precision_scaled<value_type>(1e-8) * norm_x * norm_metric_action)
         throw std::runtime_error(std::format("The metric is not Hermitian: <x|M q> = {:.6e} differs from <M x|q> = "
@@ -406,6 +428,9 @@ protected:
   std::vector<value_type_abs> m_rhs_norm; //!< norm of RHS vectors
   bool m_hermitian = false;               //!< whether the matrix is Hermitian
   bool m_action_dot_action = false;       //!< whether the H matrix is action.action instead of action.parameter
+  bool m_store_metric_actions = false;    //!< whether the actions of the metric on Q and D vectors are kept
+  //! if the actions of the metric are not kept, the id of a Q vector and its action of the metric, to check Hermiticity
+  std::optional<std::pair<size_t, Q>> m_metric_check;
 };
 
 } // namespace molpro::linalg::itsolv::subspace

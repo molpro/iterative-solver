@@ -373,7 +373,8 @@ struct LinearEigensystemF : ::testing::Test {
    * @brief Solves A x = lambda M x with the stepwise interface, preconditioning with diag(A) - lambda diag(M)
    * @return the largest size of the D space during the iterations
    */
-  size_t test_generalized_eigen(const size_t nroot, const size_t max_size_qspace = 1000, const size_t reset_D = 0) {
+  size_t test_generalized_eigen(const size_t nroot, const size_t max_size_qspace = 1000, const size_t reset_D = 0,
+                                const bool on_the_fly = false) {
     const bool hermitian = check_mat_hermiticity();
     std::vector<double> hmat_row(n * n), mmat_row(n * n), eigenvectors, expected_eigenvalues;
     for (size_t i = 0, ij = 0; i < n; ++i)
@@ -393,7 +394,11 @@ struct LinearEigensystemF : ::testing::Test {
       options->reset_D = reset_D;
     options->hermiticity = hermitian;
     solver->set_options(*options);
-    solver->set_metric(molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite);
+    if (on_the_fly)
+      solver->set_metric(molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite,
+                         [this](const CVecRef<Rvector> &x, const VecRef<Rvector> &mx) { metric_action(x, mx); });
+    else
+      solver->set_metric(molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite);
     auto [x, g] = create_containers(nroot);
     auto m = g;
     // the initial guess from the lowest ratios of the diagonal elements
@@ -482,11 +487,13 @@ TEST_F(LinearEigensystemF, generalized_eigen) {
     for (auto metric_scale : std::vector<double>{0, 0.5}) {
       load_matrix(30, "", 1, non_hermiticity);
       load_metric(metric_scale);
-      for (size_t nroot : {1, 3}) {
-        SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) +
-                     " metric scale=" + std::to_string(metric_scale) + " nroot=" + std::to_string(nroot));
-        test_generalized_eigen(nroot);
-      }
+      for (size_t nroot : {1, 3})
+        for (bool on_the_fly : {false, true}) {
+          SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) +
+                       " metric scale=" + std::to_string(metric_scale) + " nroot=" + std::to_string(nroot) +
+                       " on the fly=" + std::to_string(on_the_fly));
+          test_generalized_eigen(nroot, 1000, 0, on_the_fly);
+        }
     }
   }
 }
@@ -497,10 +504,12 @@ TEST_F(LinearEigensystemF, generalized_eigen_dspace) {
   for (auto non_hermiticity : std::vector<double>{0, 0.1}) {
     load_matrix(40, "", 1, non_hermiticity);
     load_metric(0.5);
-    for (size_t reset_D : {0, 4}) {
-      SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) + " reset_D=" + std::to_string(reset_D));
-      EXPECT_GT(test_generalized_eigen(2, 4, reset_D), 0);
-    }
+    for (size_t reset_D : {0, 4})
+      for (bool on_the_fly : {false, true}) {
+        SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) + " reset_D=" + std::to_string(reset_D) +
+                     " on the fly=" + std::to_string(on_the_fly));
+        EXPECT_GT(test_generalized_eigen(2, 4, reset_D, on_the_fly), 0);
+      }
   }
 }
 

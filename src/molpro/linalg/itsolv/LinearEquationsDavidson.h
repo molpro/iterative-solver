@@ -223,7 +223,8 @@ protected:
   }
 
   // FIXME The scale is fixed by the norm of RHS, but if RHS=0 there is no reference. We could use the norm of params
-  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
+  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
+                          const detail::MetricSolutions<R, Q>& metric_solutions) override {
     assert(params.size() >= roots.size());
     const auto& norm = std::dynamic_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace)->rhs_norm();
     // With the augmented Hessian the subspace solution satisfies (H - lambda) x = rhs, with lambda the subspace

@@ -244,7 +244,8 @@ public:
   }
 
 protected:
-  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
+  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
+                          const detail::MetricSolutions<R, Q>& metric_solutions) override {
     auto prof = this->profiler()->push("itsolv::construct_residual");
     assert(params.size() >= roots.size());
     const auto& eigvals = eigenvalues();
@@ -253,27 +254,35 @@ protected:
     assert(subspace_solver);
     const auto& imag_eigval_components = subspace_solver->imag_eigval_components();
 
-    // With a metric M, the residual contains M x rather than x for each solution x. M x is assembled from the actions
-    // of the metric on the Q and D spaces, with coefficients collected in these matrices.
+    // With a metric M, the residual contains M x rather than x for each solution x. M x is given in metric_solutions
+    // where the metric is applied on the fly, and otherwise assembled from the stored actions of the metric on the Q
+    // and D spaces. The coefficients are collected in these matrices.
     const auto& xspace = *this->m_xspace;
     const bool metric = xspace.has_metric();
+    const bool on_the_fly = !metric_solutions.empty();
+    const bool stored = metric && !on_the_fly;
     const auto& dims = xspace.dimensions();
     const auto& solutions = this->m_subspace_solver->solutions();
     using coefficient_matrix = std::decay_t<decltype(solutions)>;
-    coefficient_matrix mq_coeff({metric ? dims.nQ : 0, roots.size()}), md_coeff({metric ? dims.nD : 0, roots.size()});
-    // adds weight times the action of the metric on the solution with the given row of coefficients to the residual
-    // actions[i]
+    coefficient_matrix mq_coeff({stored ? dims.nQ : 0, roots.size()}), md_coeff({stored ? dims.nD : 0, roots.size()}),
+        mx_coeff({on_the_fly ? roots.size() : 0, roots.size()});
+    // adds weight times the action of the metric on the solution params[k], whose coefficients are in the given row of
+    // coefficients, to the residual actions[i]
     auto add_metric_solution = [&](const scalar_type weight, const coefficient_matrix& coefficients, const int row,
-                                   const size_t i) {
-      for (size_t j = 0; j < dims.nQ; ++j)
-        mq_coeff(j, i) += weight * coefficients(row, dims.oQ() + j);
-      for (size_t j = 0; j < dims.nD; ++j)
-        md_coeff(j, i) += weight * coefficients(row, dims.oD() + j);
+                                   const size_t k, const size_t i) {
+      if (on_the_fly) {
+        mx_coeff(k, i) += weight;
+      } else {
+        for (size_t j = 0; j < dims.nQ; ++j)
+          mq_coeff(j, i) += weight * coefficients(row, dims.oQ() + j);
+        for (size_t j = 0; j < dims.nD; ++j)
+          md_coeff(j, i) += weight * coefficients(row, dims.oD() + j);
+      }
     };
 
     for (size_t i = 0; i < roots.size(); ++i) {
       if (metric)
-        add_metric_solution(-eigvals.at(roots[i]), solutions, roots[i], i);
+        add_metric_solution(-eigvals.at(roots[i]), solutions, roots[i], i, i);
       else
         this->m_handlers->rr().axpy(-eigvals.at(roots[i]), params.at(i), actions.at(i));
 
@@ -301,28 +310,37 @@ protected:
         // imaginary parts of the complex conjugate eigenvalue pair has flipped signs
         const auto partner = subspace_solver->complex_partner(roots[i]).value();
         const auto root_it = std::ranges::find(roots, int(partner));
-        if (metric) {
+        if (root_it != roots.end() && (!metric || on_the_fly)) {
+          const auto k = std::ranges::distance(roots.begin(), root_it);
+          if (metric)
+            add_metric_solution(it->second, solutions, int(partner), k, i);
+          else
+            this->m_handlers->rr().axpy(it->second, params.at(k), actions.at(i));
+        } else if (stored) {
           // The partner's coefficients are among the retained solutions also if it is not among roots
           if (partner >= subspace_solver->retained_solutions().rows())
             throw std::logic_error("The complex conjugate partner of a root is not among the retained solutions");
-          add_metric_solution(it->second, subspace_solver->retained_solutions(), int(partner), i);
-        } else if (root_it != roots.end()) {
-          this->m_handlers->rr().axpy(it->second, params.at(std::ranges::distance(roots.begin(), root_it)),
-                                      actions.at(i));
+          add_metric_solution(it->second, subspace_solver->retained_solutions(), int(partner), 0, i);
         } else {
           // The partner is not among roots, or was truncated away, so its vector is assembled from the subspace
           if (partner >= subspace_solver->retained_solutions().rows())
             throw std::logic_error("The complex conjugate partner of a root is not among the retained solutions");
           auto partner_param = this->m_handlers->rr().copy(actions.at(i));
           construct_subspace_vector(subspace_solver->retained_solutions(), int(partner), partner_param);
+          if (on_the_fly)
+            apply_metric(partner_param);
           this->m_handlers->rr().axpy(it->second, partner_param, actions.at(i));
         }
       }
     }
-    if (metric) {
-      const auto residuals = wrap(actions.begin(), actions.begin() + roots.size());
+    const auto residuals = wrap(actions.begin(), actions.begin() + roots.size());
+    if (stored) {
       this->m_handlers->rq().gemm_outer(mq_coeff, xspace.cmetric_actionsq(), residuals);
       this->m_handlers->rq().gemm_outer(md_coeff, xspace.cmetric_actionsd(), residuals);
+    } else if (on_the_fly && !metric_solutions.r.empty()) {
+      this->m_handlers->rr().gemm_outer(mx_coeff, metric_solutions.r, residuals);
+    } else if (on_the_fly) {
+      this->m_handlers->rq().gemm_outer(mx_coeff, metric_solutions.q, residuals);
     }
   }
 
@@ -377,9 +395,14 @@ protected:
     construct_subspace_action(solutions, int(*partner), partner_residual);
     if (this->m_xspace->has_metric()) {
       // With a metric, the residual contains the actions of the metric on the partner and on the last root
-      construct_subspace_metric_action(solutions, int(*partner), partner_param);
       auto metric_param = this->m_handlers->rr().copy(params.at(i));
-      construct_subspace_metric_action(solutions, int(nroots - 1), metric_param);
+      if (this->m_xspace->stores_metric_actions()) {
+        construct_subspace_metric_action(solutions, int(*partner), partner_param);
+        construct_subspace_metric_action(solutions, int(nroots - 1), metric_param);
+      } else {
+        apply_metric(partner_param);
+        apply_metric(metric_param);
+      }
       this->m_handlers->rr().axpy(-eigenvalues().at(nroots - 1), partner_param, partner_residual);
       this->m_handlers->rr().axpy(-it->second, metric_param, partner_residual);
     } else {
@@ -412,6 +435,13 @@ protected:
     if (this->m_apply_p)
       this->m_apply_p(detail::construct_vectorP({row}, solutions, dims.oP(), dims.nP), this->m_xspace->cparamsp(),
                       wrap_arg(action));
+  }
+
+  //! Replaces param by the action of the metric on it, with the metric applied on the fly
+  void apply_metric(R& param) {
+    auto metric_action = this->m_handlers->rr().copy(param);
+    this->m_apply_metric(cwrap_arg(param), wrap_arg(metric_action));
+    this->m_handlers->rr().copy(param, metric_action);
   }
 
   //! Constructs in metric_action the action of the metric on the subspace vector with the given row of coefficients

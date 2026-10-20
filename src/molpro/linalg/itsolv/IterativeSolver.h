@@ -217,6 +217,13 @@ public:
   virtual MetricKind metric_kind() const { return MetricKind::Identity; }
 
   /*!
+   * @brief Whether the metric is cheap to apply. If so, IterativeSolver::solve() does not keep the actions of the
+   * metric on all subspace vectors, but calls metric_action() on the solutions whenever it constructs residuals; see
+   * IterativeSolver::set_metric().
+   */
+  virtual bool metric_is_cheap() const { return false; }
+
+  /*!
    * @brief Calculate the action of the metric on a set of parameters. Called only if metric_kind() is not
    * MetricKind::Identity.
    * @param parameters The trial solutions for which the action is to be calculated
@@ -398,7 +405,8 @@ public:
    *
    * Behaves like solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&, bool), and for a problem without a
    * metric exactly so. For a problem with a metric, set_metric() is called with Problem::metric_kind() (throwing if
-   * the solver does not support it), and the actions of kernel and metric are calculated together by
+   * the solver does not support it) and, if Problem::metric_is_cheap(), a function calling Problem::metric_action(),
+   * so that the metric is applied on the fly. The actions of kernel and metric are calculated together by
    * Problem::action_with_metric(). If the problem provides diagonals(), it has to provide metric_diagonals()
    * too; both are passed to the preconditioner, and a generated initial guess and the P space are selected from the
    * lowest ratios of the diagonal elements of the kernel and the metric. A P space cannot be used together with a
