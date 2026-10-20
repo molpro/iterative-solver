@@ -66,19 +66,9 @@ public:
 
   bool nonlinear() const override { return false; }
 
-  using SolverTemplate::add_vector;
-  int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions) override {
-    const auto nW = this->n_added_vectors(parameters);
-    if (metric_actions.size() < nW)
-      throw std::runtime_error("LinearEigensystemDavidson::add_vector: fewer metric actions than parameters");
-    auto qmetric_actions = std::vector<Q>{};
-    qmetric_actions.reserve(nW);
-    for (size_t i = 0; i < nW; ++i)
-      qmetric_actions.emplace_back(this->m_handlers->qr().copy(metric_actions[i]));
-    return this->add_vector_impl(parameters, actions, std::move(qmetric_actions));
-  }
-  int add_vector(R& parameters, R& actions, R& metric_actions) override {
-    return add_vector(wrap_arg(parameters), wrap_arg(actions), wrap_arg(metric_actions));
+  //! Supports generalised eigenproblems A v = lambda M v with a Hermitian, positive definite metric M
+  bool supports_metric(MetricKind kind) const override {
+    return kind == MetricKind::Identity || kind == MetricKind::HermitianPositiveDefinite;
   }
 
   /*!
@@ -254,8 +244,6 @@ public:
   }
 
 protected:
-  bool supports_metric() const override { return true; }
-
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
     auto prof = this->profiler()->push("itsolv::construct_residual");
     assert(params.size() >= roots.size());

@@ -393,6 +393,7 @@ struct LinearEigensystemF : ::testing::Test {
       options->reset_D = reset_D;
     options->hermiticity = hermitian;
     solver->set_options(*options);
+    solver->set_metric(molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite);
     auto [x, g] = create_containers(nroot);
     auto m = g;
     // the initial guess from the lowest ratios of the diagonal elements
@@ -503,32 +504,45 @@ TEST_F(LinearEigensystemF, generalized_eigen_dspace) {
   }
 }
 
-// Actions of the metric are given in every call or never, and only solvers that support a metric accept them
+// Actions of the metric are given exactly when a metric was declared, the metric cannot be changed on a non-empty
+// subspace, and only solvers that support a metric accept one
 TEST_F(LinearEigensystemF, generalized_eigen_errors) {
+  using molpro::linalg::itsolv::MetricKind;
   load_matrix(10, "", 1);
   load_metric(0.5);
   auto [x, g] = create_containers(1);
   auto m = g;
-  x[0][0] = 1;
-  action(cwrap(x), wrap(g));
-  metric_action(cwrap(x), wrap(m));
+  auto start = [&]() {
+    x[0].assign(n, 0);
+    x[0][0] = 1;
+    action(cwrap(x), wrap(g));
+    metric_action(cwrap(x), wrap(m));
+  };
   {
     auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    EXPECT_TRUE(solver->supports_metric(MetricKind::HermitianPositiveDefinite));
+    EXPECT_FALSE(solver->supports_metric(MetricKind::HermitianIndefinite));
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianIndefinite), std::invalid_argument);
+    solver->set_metric(MetricKind::HermitianPositiveDefinite);
+    EXPECT_EQ(solver->metric_kind(), MetricKind::HermitianPositiveDefinite);
+    start();
+    EXPECT_THROW(solver->add_vector(x[0], g[0]), std::logic_error);
     solver->add_vector(x[0], g[0], m[0]);
-    solver->end_iteration(x, g);
-    action(cwrap(x), wrap(g));
-    EXPECT_THROW(solver->add_vector(x[0], g[0]), std::runtime_error);
+    EXPECT_NO_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite));
+    EXPECT_THROW(solver->set_metric(MetricKind::Identity), std::logic_error);
   }
   {
     auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    start();
+    EXPECT_THROW(solver->add_vector(x[0], g[0], m[0]), std::logic_error);
     solver->add_vector(x[0], g[0]);
-    solver->end_iteration(x, g);
-    action(cwrap(x), wrap(g));
-    metric_action(cwrap(x), wrap(m));
-    EXPECT_THROW(solver->add_vector(x[0], g[0], m[0]), std::runtime_error);
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite), std::logic_error);
   }
   {
     auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>("RSPT");
+    EXPECT_FALSE(solver->supports_metric(MetricKind::HermitianPositiveDefinite));
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite), std::invalid_argument);
+    start();
     EXPECT_THROW(solver->add_vector(x[0], g[0], m[0]), std::logic_error);
   }
 }

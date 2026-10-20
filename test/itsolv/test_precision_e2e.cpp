@@ -129,7 +129,9 @@ struct GeneralizedProblem : DiagonallyDominantProblem<scalar> {
     return i == j ? scalar(1.5L) + scalar(std::cos(double(i))) : scalar(0.05L) / scalar(1 + i + j);
   }
 
-  bool provides_metric() const override { return true; }
+  molpro::linalg::itsolv::MetricKind metric_kind() const override {
+    return molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite;
+  }
   bool metric_diagonals(R& d) const override {
     for (size_t i = 0; i < d.size(); i++)
       d[i] = metric(i, i);
@@ -159,9 +161,10 @@ Outcome solve_generalized(long double convergence_threshold) {
   solver->set_convergence_threshold(scalar(convergence_threshold));
   solver->set_verbosity(0);
   GeneralizedProblem<scalar> problem(n);
-  std::vector<typename C::R> params(nroot, typename C::R(n, 0)), actions(nroot, typename C::R(n, 0));
+  std::vector<typename C::R> params(nroot, typename C::R(n, 0)), actions(nroot, typename C::R(n, 0)),
+      metric_actions(nroot, typename C::R(n, 0));
   Outcome outcome{};
-  outcome.converged = solver->solve(params, actions, problem, true);
+  outcome.converged = solver->solve(params, actions, metric_actions, problem, true);
   for (size_t i = 0; i < nroot; ++i)
     outcome.eigenvalues.push_back(static_cast<long double>(solver->eigenvalues()[i]));
   outcome.largest_error = 0;

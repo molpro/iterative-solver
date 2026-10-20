@@ -107,6 +107,18 @@ void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, 
 }
 
 /*!
+ * @brief The kind of metric M of a generalised problem, such as the eigenproblem A v = lambda M v
+ *
+ * Which kinds are supported depends on the solver, see IterativeSolver::supports_metric().
+ */
+enum class MetricKind {
+  Identity,                      //!< M = 1, i.e. no metric
+  HermitianPositiveDefinite,     //!< Hermitian and positive definite, e.g. the overlap matrix of a non-orthogonal basis
+  HermitianPositiveSemidefinite, //!< Hermitian and positive semidefinite, i.e. possibly singular
+  HermitianIndefinite,           //!< Hermitian and indefinite, e.g. in RPA, TDHF or Bethe-Salpeter equations
+};
+
+/*!
  * @example ExampleProblem.h
  * Simple example of a problem-defining class
  * @example ExampleProblemDistrArray.h
@@ -183,7 +195,8 @@ public:
 
   /*!
    * @brief Apply preconditioning to a residual vector of a generalised eigenproblem. Used instead of the other
-   * precondition() overloads when both diagonals() and metric_diagonals() are provided.
+   * precondition() overloads, including any overriding implementations of them, when both diagonals() and
+   * metric_diagonals() are provided.
    * @param residual On entry, assumed to be the residual. On exit, the negative of the
    * predicted step.
    * @param shift Contains the current eigenvalue estimates for each of the parameter vectors in the set.
@@ -196,17 +209,16 @@ public:
   }
 
   /*!
-   * @brief Whether the problem provides a metric M other than the identity, turning an eigenproblem
-   * A v = lambda v into the generalised eigenproblem A v = lambda M v. M must be Hermitian and positive definite.
-   * If true, metric_action() has to be implemented. Supported only by solvers of LinearEigensystem that implement
-   * add_vector() with actions of the metric (LinearEigensystemDavidson), and not together with a P space; the other
-   * solvers throw in IterativeSolver::solve().
+   * @brief The kind of metric M of the problem. Anything other than MetricKind::Identity turns the eigenproblem
+   * A v = lambda v into the generalised eigenproblem A v = lambda M v, which requires metric_action() and solving
+   * with the IterativeSolver::solve() overload that takes buffers for the actions of the metric. Which kinds are
+   * supported depends on the solver (IterativeSolver::supports_metric()); solve() throws for the others.
    */
-  virtual bool provides_metric() const { return false; }
+  virtual MetricKind metric_kind() const { return MetricKind::Identity; }
 
   /*!
-   * @brief Calculate the action of the metric on a set of parameters. Called only if provides_metric() returns
-   * true.
+   * @brief Calculate the action of the metric on a set of parameters. Called only if metric_kind() is not
+   * MetricKind::Identity.
    * @param parameters The trial solutions for which the action is to be calculated
    * @param metric_actions The action vectors of the metric
    */
@@ -215,13 +227,25 @@ public:
   }
 
   /*!
-   * @brief Optionally provide the diagonal elements of the metric. If implemented and returning true, and if
-   * diagonals() is provided as well, the preconditioner gets them too, and an initial guess is generated from the
-   * lowest ratios of the diagonal elements of the kernel and the metric. Used only if provides_metric() returns true.
-   *
-   * IterativeSolver::solve() then needs at least two parameter vectors, as it hands both sets of diagonal elements
-   * to precondition() in them, and generating the initial guess needs a container supported by
-   * precondition_default().
+   * @brief Calculate the actions of the kernel and of the metric on a set of parameters together. Used by
+   * IterativeSolver::solve() for problems with a metric; the default calls action() and metric_action(), and can be
+   * overridden where both are cheaper to calculate together.
+   * @param parameters The trial solutions for which the actions are to be calculated
+   * @param actions The action vectors of the kernel
+   * @param metric_actions The action vectors of the metric
+   */
+  virtual void action_with_metric(const CVecRef<R>& parameters, const VecRef<R>& actions,
+                                  const VecRef<R>& metric_actions) const {
+    action(parameters, actions);
+    metric_action(parameters, metric_actions);
+  }
+
+  /*!
+   * @brief Provide the diagonal elements of the metric. For a problem with a metric that provides diagonals(), this
+   * is required too, so that the default preconditioner divides by diag(A) - lambda diag(M); IterativeSolver::solve()
+   * throws otherwise. The diagonal elements of the kernel and of the metric are then passed to the precondition()
+   * overload taking both, and an initial guess is generated from the lowest ratios of the diagonal elements of the
+   * kernel and the metric, which needs a container supported by precondition_default().
    * @param d On exit, contains the diagonal elements of the metric
    * @return Whether the diagonal elements of the metric have been provided.
    */
@@ -300,6 +324,8 @@ public:
   //! Function type for applying matrix to the P space vectors and accumulating result in
   //! a residual
   using fapply_on_p_type = std::function<void(const std::vector<VectorP>&, const CVecRef<P>&, const VecRef<R>&)>;
+  //! Function type for applying the metric to a set of vectors (first argument), writing the results into the second
+  using fapply_metric_type = std::function<void(const CVecRef<R>&, const VecRef<R>&)>;
 
   virtual ~IterativeSolver() = default;
   IterativeSolver() = default;
@@ -346,11 +372,8 @@ public:
    * most one per root. On a solver that is used again after an earlier solve(), roots that have already converged are
    * not in the working set, so fewer guesses, or none at all, are generated.
    *
-   * If the problem provides a metric (Problem::provides_metric()), the generalised eigenproblem A v = lambda M v is
-   * solved, which only some solvers of LinearEigensystem support and which cannot be combined with a P space
-   * (max_p > 0). If the problem also provides the diagonal elements of the kernel and of the metric, they are both
-   * passed to the preconditioner, for which at least two parameter vectors are needed, and a generated initial guess
-   * is based on the lowest ratios of the diagonal elements.
+   * A problem with a metric (Problem::metric_kind() other than MetricKind::Identity) has to be solved with the
+   * overload taking buffers for the actions of the metric; this one throws for it.
    */
   virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
                      bool generate_initial_guess = false) = 0;
@@ -359,6 +382,74 @@ public:
   //! @copydoc solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&, bool)
   virtual bool solve(std::vector<R>& parameters, std::vector<R>& actions, const Problem<R>& problem,
                      bool generate_initial_guess = false) = 0;
+
+  /*!
+   * @brief Simplified one-call solver for problems that may have a metric, e.g. the generalised eigenproblem
+   * A v = lambda M v
+   * @param parameters A set of scratch vectors, as for solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&,
+   * bool)
+   * @param actions A set of scratch vectors. It should have the same size as parameters.
+   * @param metric_actions A set of scratch vectors for the actions of the metric, of the same size as parameters. Their
+   * use by the solver is unspecified.
+   * @param problem A Problem object defining the problem to be solved
+   * @param generate_initial_guess Whether to start with a guess based on diagonal elements (true) or on the contents
+   * of parameters (false)
+   * @return true if the solution was found
+   *
+   * Behaves like solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&, bool), and for a problem without a
+   * metric exactly so. For a problem with a metric, set_metric() is called with Problem::metric_kind() (throwing if
+   * the solver does not support it), and the actions of kernel and metric are calculated together by
+   * Problem::action_with_metric(). If the problem provides diagonals(), it has to provide metric_diagonals()
+   * too; both are passed to the preconditioner, and a generated initial guess and the P space are selected from the
+   * lowest ratios of the diagonal elements of the kernel and the metric. A P space cannot be used together with a
+   * metric.
+   *
+   * The solver keeps references to problem for later calls such as solution(), so problem has to outlive them; a
+   * further call of solve() replaces them.
+   */
+  virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
+                     const Problem<R>& problem, bool generate_initial_guess = false) {
+    throw std::logic_error("This solver does not support solving a problem with a metric");
+  }
+  //! @copydoc solve(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&, const Problem<R>&, bool)
+  virtual bool solve(R& parameters, R& actions, R& metric_actions, const Problem<R>& problem,
+                     bool generate_initial_guess = false) {
+    return solve(wrap_arg(parameters), wrap_arg(actions), wrap_arg(metric_actions), problem, generate_initial_guess);
+  }
+  //! @copydoc solve(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&, const Problem<R>&, bool)
+  virtual bool solve(std::vector<R>& parameters, std::vector<R>& actions, std::vector<R>& metric_actions,
+                     const Problem<R>& problem, bool generate_initial_guess = false) {
+    return solve(wrap(parameters), wrap(actions), wrap(metric_actions), problem, generate_initial_guess);
+  }
+
+  /*!
+   * @brief Whether the solver supports a metric of the given kind. MetricKind::Identity is always supported.
+   */
+  virtual bool supports_metric(MetricKind kind) const { return kind == MetricKind::Identity; }
+
+  /*!
+   * @brief Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v, for the stepwise
+   * interface. solve() calls it itself.
+   *
+   * It has to be called before the first add_p() or add_vector(). On a non-empty subspace it may only be called again
+   * with the same kind and storage mode, replacing apply_metric. Throws if the solver does not support kind.
+   *
+   * Once a metric other than the identity is declared, every add_vector() has to give the actions of the metric.
+   * Solutions are then normalised such that |<x|M|x>| = 1, and their residuals are A x - lambda M x. The errors are
+   * the norms of the residuals of the solutions scaled to unit length, |A x - lambda M x| / |x|, which do not depend
+   * on the scale of M and are the same as without a metric if M is the identity.
+   * @param kind the kind of metric
+   * @param apply_metric if given, the solver does not keep the actions of the metric on the subspace vectors, which
+   * is worthwhile where the metric is cheap to apply, and calls apply_metric on the solutions whenever it constructs
+   * residuals instead; it has to remain valid as long as residuals are constructed. Otherwise the actions of the
+   * metric are kept.
+   */
+  virtual void set_metric(MetricKind kind, fapply_metric_type apply_metric = {}) {
+    if (kind != MetricKind::Identity)
+      throw std::invalid_argument("This solver does not support a metric");
+  }
+  //! The kind of metric declared with set_metric()
+  virtual MetricKind metric_kind() const { return MetricKind::Identity; }
 
   /*!
    * \brief Take, typically, a current solution and residual, and add it to the solution
@@ -375,6 +466,27 @@ public:
   // FIXME this should be removed in favour of VecRef interface
   virtual int add_vector(std::vector<R>& parameters, std::vector<R>& action) = 0;
   virtual int add_vector(R& parameters, R& action, value_type value = 0) = 0;
+
+  /*!
+   * @brief Like add_vector(const VecRef<R>&, const VecRef<R>&), for a problem with a metric declared with
+   * set_metric()
+   * @param parameters On input, the current solution or expansion vector. On exit, undefined.
+   * @param actions On input, the action of the kernel on parameters. On exit, a vector set that should be
+   * preconditioned before returning to end_iteration().
+   * @param metric_actions On input, the action of the metric on parameters. On exit, undefined.
+   * @return The size of the new working set.
+   */
+  virtual int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions) {
+    throw std::logic_error("This solver does not support a metric");
+  }
+  //! @copydoc add_vector(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&)
+  virtual int add_vector(std::vector<R>& parameters, std::vector<R>& actions, std::vector<R>& metric_actions) {
+    return add_vector(wrap(parameters), wrap(actions), wrap(metric_actions));
+  }
+  //! @copydoc add_vector(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&)
+  virtual int add_vector(R& parameters, R& actions, R& metric_actions) {
+    return add_vector(wrap_arg(parameters), wrap_arg(actions), wrap_arg(metric_actions));
+  }
 
   /*!
    * \brief Add P-space vectors to the expansion set for linear methods.
@@ -532,24 +644,6 @@ template <class R, class Q, class P>
 class LinearEigensystem : public IterativeSolver<R, Q, P> {
 public:
   using typename IterativeSolver<R, Q, P>::scalar_type;
-  using IterativeSolver<R, Q, P>::add_vector;
-  /*!
-   * @brief Like IterativeSolver::add_vector(), for a generalised eigenproblem A v = lambda M v with a Hermitian,
-   * positive definite metric M.
-   *
-   * The actions of the metric have to be given in every call, starting with the first one, and a P space cannot be
-   * used. The solutions are normalised in the metric, and the residuals are A v - lambda M v. The errors are the norms
-   * of the residuals of the solutions scaled to unit length, |A v - lambda M v| / |v|, which do not depend on the scale
-   * of M and are the same as without a metric if M is the identity.
-   * @param parameters On input, the current solution or expansion vector. On exit, undefined.
-   * @param actions On input, the action of the kernel A on parameters. On exit, a vector set that should be
-   * preconditioned before returning to end_iteration().
-   * @param metric_actions On input, the action of the metric M on parameters. On exit, unchanged.
-   * @return The size of the new working set.
-   */
-  virtual int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions) = 0;
-  //! @copydoc add_vector(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&)
-  virtual int add_vector(R& parameters, R& actions, R& metric_actions) = 0;
   //! The calculated eigenvalues of the subspace matrix
   virtual std::vector<scalar_type> eigenvalues() const = 0;
   //! Sets hermiticity of kernel

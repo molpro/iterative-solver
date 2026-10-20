@@ -31,8 +31,11 @@ struct DummyXSpace : public molpro::linalg::itsolv::subspace::IXSpace<R, Q, P> {
                      const molpro::linalg::array::Span<value_type>& pp_action_matrix) override {}
 
   //! Adds parameters to the Q space
+  void set_metric(bool metric) override {}
+
+  //! Adds parameters to the Q space
   void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
-                     std::vector<Q>&& metric_actions = {}) override {}
+                     const CVecRef<R>& metric_actions = {}) override {}
 
   //! Updates D space with the new parameters
   void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {}) override {}

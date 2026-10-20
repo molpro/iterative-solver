@@ -110,11 +110,14 @@ void check_metric_consistent(const XSpace<R, Q, P>& xs) {
 // space updates and erasure
 TEST(XSpace, metric_matrix_consistent) {
   XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
+  xs.set_metric(true);
   const std::vector<R> q1{{1, 0.5, 0, 0}, {0, 1, 0.2, 0}};
-  xs.update_qspace(cwrap(q1), cwrap(q1), metric_actions(q1));
+  const auto m1 = metric_actions(q1);
+  xs.update_qspace(cwrap(q1), cwrap(q1), cwrap(m1));
   check_metric_consistent(xs);
   const std::vector<R> q2{{0, 0, 1, 0.3}, {0, 0, 1, 0.3}};
-  xs.update_qspace(cwrap(q2), cwrap(q2), metric_actions(q2));
+  const auto m2 = metric_actions(q2);
+  xs.update_qspace(cwrap(q2), cwrap(q2), cwrap(m2));
   EXPECT_EQ(xs.dimensions().nQ, 3);
   check_metric_consistent(xs);
   std::vector<Q> d{{0.1, 0.2, 0.3, 1}}, d_actions = d, d_metric = metric_actions(d);
@@ -129,7 +132,7 @@ TEST(XSpace, metric_matrix_consistent) {
   check_metric_consistent(xs);
 }
 
-// Without actions of the metric, no metric is stored
+// Without a declared metric, no metric is stored
 TEST(XSpace, no_metric) {
   XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
   const std::vector<R> q{scaled_unit(0, 1), scaled_unit(1, 2)};
@@ -139,17 +142,23 @@ TEST(XSpace, no_metric) {
   EXPECT_TRUE(xs.cmetric_actionsq().empty());
 }
 
-// Actions of the metric are given either for every update from the first one on, or never
+// Actions of the metric are given for every update exactly if a metric was declared, which is possible only on an
+// empty subspace
 TEST(XSpace, metric_given_consistently) {
   const std::vector<R> q1{scaled_unit(0, 1)}, q2{scaled_unit(1, 1)};
+  const auto m1 = metric_actions(q1), m2 = metric_actions(q2);
   {
     XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
     xs.update_qspace(cwrap(q1), cwrap(q1));
-    EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2), metric_actions(q2)), std::runtime_error);
+    EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2), cwrap(m2)), std::runtime_error);
+    EXPECT_THROW(xs.set_metric(true), std::logic_error);
+    EXPECT_NO_THROW(xs.set_metric(false));
   }
   {
     XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
-    xs.update_qspace(cwrap(q1), cwrap(q1), metric_actions(q1));
+    xs.set_metric(true);
+    xs.update_qspace(cwrap(q1), cwrap(q1), cwrap(m1));
+    EXPECT_THROW(xs.set_metric(false), std::logic_error);
     // adding no vectors needs no actions of the metric either
     EXPECT_NO_THROW(xs.update_qspace(CVecRef<R>{}, CVecRef<R>{}));
     EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2)), std::runtime_error);

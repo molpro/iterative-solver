@@ -44,14 +44,19 @@ public:
   virtual void update_pspace(const CVecRef<P>& params, const array::Span<value_type>& pp_action_matrix) = 0;
 
   /*!
+   * @brief Declares whether the subspace has a metric, which creates or removes the metric matrix EqnData::M. Only
+   * possible while the subspace is empty, unless it does not change anything.
+   */
+  virtual void set_metric(bool metric) = 0;
+
+  /*!
    * @brief Adds parameters to the Q space
    * @param params new parameters
    * @param actions their actions
-   * @param metric_actions their actions of the metric, taken over by the Q space. Empty unless there is a metric, in
-   * which case they have to be given from the first update of an empty subspace on.
+   * @param metric_actions their actions of the metric, given exactly if there is a metric
    */
   virtual void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
-                             std::vector<Q>&& metric_actions = {}) = 0;
+                             const CVecRef<R>& metric_actions = {}) = 0;
 
   //! Updates D space with the new parameters, their actions and, if there is a metric, their actions of the metric
   virtual void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {}) = 0;
