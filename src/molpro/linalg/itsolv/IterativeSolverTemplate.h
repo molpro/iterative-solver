@@ -195,23 +195,25 @@ public:
 
   bool supports_metric(MetricKind kind) const override { return kind == MetricKind::Identity; }
 
-  void set_metric(MetricKind kind, fapply_metric_type apply_metric = {}) override {
+  void set_metric(MetricKind kind, MetricStorage storage = MetricStorage::Stored,
+                  fapply_metric_type apply_metric = {}) override {
     if (!supports_metric(kind))
       throw std::invalid_argument("This solver does not support the requested kind of metric");
-    if (kind == MetricKind::Identity && apply_metric)
-      throw std::invalid_argument("A function applying the metric was given for the identity");
-    const bool store_actions = !apply_metric;
-    if (m_xspace->dimensions().nX() != 0 &&
-        (kind != m_metric_kind || (kind != MetricKind::Identity && store_actions != !m_apply_metric)))
-      throw std::logic_error(
-          "The metric, or whether its actions are stored, cannot be changed once the subspace is not "
-          "empty");
+    if (kind == MetricKind::Identity)
+      storage = MetricStorage::Stored;
+    if (bool(apply_metric) != (kind != MetricKind::Identity && storage == MetricStorage::OnTheFly))
+      throw std::invalid_argument("A function applying the metric has to be given exactly for MetricStorage::OnTheFly");
+    if (m_xspace->dimensions().nX() != 0 && (kind != m_metric_kind || storage != m_metric_storage))
+      throw std::logic_error("The metric, or how its actions are obtained, cannot be changed once the subspace is not "
+                             "empty");
     m_metric_kind = kind;
+    m_metric_storage = storage;
     m_apply_metric = std::move(apply_metric);
-    m_xspace->set_metric(kind != MetricKind::Identity, store_actions);
+    m_xspace->set_metric(kind, storage);
   }
 
   MetricKind metric_kind() const override { return m_metric_kind; }
+  MetricStorage metric_storage() const override { return m_metric_storage; }
 
   int add_vector(std::vector<R>& parameters, std::vector<R>& actions) override {
     return add_vector(wrap(parameters), wrap(actions));
@@ -501,9 +503,10 @@ protected:
     }
     const bool metric = problem.metric_kind() != MetricKind::Identity;
     if (metric and problem.metric_is_cheap())
-      set_metric(problem.metric_kind(), [&problem](const CVecRef<R>& parameters, const VecRef<R>& metric_actions) {
-        problem.metric_action(parameters, metric_actions);
-      });
+      set_metric(problem.metric_kind(), MetricStorage::OnTheFly,
+                 [&problem](const CVecRef<R>& parameters, const VecRef<R>& metric_actions) {
+                   problem.metric_action(parameters, metric_actions);
+                 });
     else
       set_metric(problem.metric_kind());
     bool use_diagonals = problem.diagonals(actions.at(0));
@@ -616,7 +619,7 @@ protected:
     prof->stop();
     auto metric_solutions = detail::MetricSolutions<R, Q>{};
     auto metric_solutions_q = std::vector<Q>{};
-    if (m_apply_metric && !roots.empty()) {
+    if (m_metric_kind != MetricKind::Identity && m_metric_storage == MetricStorage::OnTheFly && !roots.empty()) {
       prof->start("apply metric");
       const auto solutions = cwrap(parameters.begin(), parameters.begin() + roots.size());
       const bool use_scratch = scratch.size() >= roots.size();
@@ -994,7 +997,8 @@ protected:
   std::optional<Verbosity> m_verbosity = {};    //!< how much output to print in solve()
   int m_max_iter = 100;                         //!< maximum number of iterations in solve()
   size_t m_max_p = 0;                           //!< maximum size of P space
-  MetricKind m_metric_kind = MetricKind::Identity; //!< the metric declared with set_metric()
+  MetricKind m_metric_kind = MetricKind::Identity;        //!< the metric declared with set_metric()
+  MetricStorage m_metric_storage = MetricStorage::Stored; //!< how the actions of the metric are obtained
   fapply_metric_type m_apply_metric = {};          //!< applies the metric on the fly, if its actions are not stored
   fapply_on_p_type m_apply_metric_p = {}; //!< adds the action of the metric on the P space, if its actions are stored
   value_type_abs m_p_threshold = std::numeric_limits<value_type_abs>::max(); //!< threshold for selecting P space

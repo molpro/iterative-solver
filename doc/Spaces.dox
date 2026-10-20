@@ -78,9 +78,9 @@ exactly from the start.
 @section SpacesQ Q space
 
 The Q space holds the history of previous expansion vectors (*Q parameters*) together with their actions and, for a
-generalised eigenproblem whose metric is not applied on the fly (`IterativeSolver::set_metric()`), their actions of the
-metric, all stored in `Q` containers (`subspace::QSpace`). New parameters are prepended, so the most recent vectors come
-first.
+generalised eigenproblem whose metric is not applied on the fly (`MetricStorage`, `IterativeSolver::set_metric()`), their
+actions of the metric, all stored in `Q` containers (`subspace::QSpace`). New parameters are prepended, so the most
+recent vectors come first.
 New parameters that are linearly dependent among themselves are discarded when they are added.
 
 In the linear solvers the size of the Q space can be controlled through `QSpaceOptions` (exposed as solver options):

@@ -2,6 +2,7 @@
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_IXSPACE_H
 #include <molpro/linalg/array/ArrayHandler.h>
 #include <molpro/linalg/array/Span.h>
+#include <molpro/linalg/itsolv/Metric.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceData.h>
 #include <molpro/linalg/itsolv/wrap.h>
@@ -50,14 +51,18 @@ public:
                              const array::Span<value_type>& pp_metric_matrix = {}) = 0;
 
   /*!
-   * @brief Declares whether the subspace has a metric, which creates or removes the metric matrix EqnData::M. Only
-   * possible while the subspace is empty, unless it does not change anything.
-   * @param metric whether there is a metric
-   * @param store_actions whether the actions of the metric on the Q and D vectors are kept
+   * @brief Declares the metric of the subspace. Anything other than MetricKind::Identity creates the metric matrix
+   * EqnData::M. Only possible while the subspace is empty, unless it does not change anything.
+   * @param kind the kind of metric
+   * @param storage whether the actions of the metric on the Q and D vectors are kept
    */
-  virtual void set_metric(bool metric, bool store_actions = true) = 0;
+  virtual void set_metric(MetricKind kind, MetricStorage storage = MetricStorage::Stored) = 0;
+  //! The kind of metric declared with set_metric()
+  virtual MetricKind metric_kind() const = 0;
+  //! How the actions of the metric declared with set_metric() are obtained
+  virtual MetricStorage metric_storage() const = 0;
   //! Whether the actions of the metric on the Q and D vectors are kept
-  virtual bool stores_metric_actions() const = 0;
+  bool stores_metric_actions() const { return has_metric() && metric_storage() == MetricStorage::Stored; }
 
   /*!
    * @brief Adds parameters to the Q space
@@ -99,8 +104,8 @@ public:
   virtual CVecRef<Q> cmetric_actionsq() const = 0;
   //! Actions of the metric on the D space parameters, empty unless there is a metric
   virtual CVecRef<Q> cmetric_actionsd() const = 0;
-  //! Whether the subspace holds the metric matrix, EqnData::M, of a generalised eigenproblem
-  bool has_metric() const { return data.count(EqnData::M) > 0; }
+  //! Whether there is a metric other than the identity, whose matrix the subspace holds in EqnData::M
+  bool has_metric() const { return metric_kind() != MetricKind::Identity; }
 
   virtual const Dimensions& dimensions() const = 0;
 

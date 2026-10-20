@@ -32,6 +32,7 @@ LibraryManager_Append(${PROJECT_NAME}
         wrap.h
         wrap_util.h
         IterativeSolver.h
+        Metric.h
         Interpolate.h
         Interpolate-implementation.h
         LinearEigensystemDavidsonOptions.h

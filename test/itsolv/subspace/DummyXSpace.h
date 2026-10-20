@@ -30,9 +30,11 @@ struct DummyXSpace : public molpro::linalg::itsolv::subspace::IXSpace<R, Q, P> {
   void update_pspace(const CVecRef<P>& params, const molpro::linalg::array::Span<value_type>& pp_action_matrix,
                      const molpro::linalg::array::Span<value_type>& pp_metric_matrix = {}) override {}
 
-  //! Adds parameters to the Q space
-  void set_metric(bool metric, bool store_actions = true) override {}
-  bool stores_metric_actions() const override { return false; }
+  using MetricKind = molpro::linalg::itsolv::MetricKind;
+  using MetricStorage = molpro::linalg::itsolv::MetricStorage;
+  void set_metric(MetricKind kind, MetricStorage storage = MetricStorage::Stored) override {}
+  MetricKind metric_kind() const override { return MetricKind::Identity; }
+  MetricStorage metric_storage() const override { return MetricStorage::Stored; }
 
   //! Adds parameters to the Q space
   void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
