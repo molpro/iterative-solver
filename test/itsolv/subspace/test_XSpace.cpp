@@ -174,7 +174,7 @@ TEST(XSpace, metric_given_consistently) {
   {
     XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
     xs.update_qspace(cwrap(q1), cwrap(q1));
-    EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2), cwrap(m2)), std::runtime_error);
+    EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2), cwrap(m2)), std::invalid_argument);
     EXPECT_THROW(xs.set_metric(MetricKind::HermitianPositiveDefinite), std::logic_error);
     EXPECT_NO_THROW(xs.set_metric(MetricKind::Identity));
   }
@@ -185,7 +185,7 @@ TEST(XSpace, metric_given_consistently) {
     EXPECT_THROW(xs.set_metric(MetricKind::Identity), std::logic_error);
     // adding no vectors needs no actions of the metric either
     EXPECT_NO_THROW(xs.update_qspace(CVecRef<R>{}, CVecRef<R>{}));
-    EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2)), std::runtime_error);
+    EXPECT_THROW(xs.update_qspace(cwrap(q2), cwrap(q2)), std::invalid_argument);
     std::vector<Q> d{scaled_unit(2, 1)}, d_actions = d;
     auto wd = wrap(d);
     auto wd_actions = wrap(d_actions);

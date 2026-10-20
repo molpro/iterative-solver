@@ -190,7 +190,7 @@ public:
       throw std::logic_error("Actions of a metric given to add_vector(), but no metric was declared with set_metric()");
     const auto nW = n_added_vectors(parameters);
     if (metric_actions.size() < nW)
-      throw std::runtime_error("IterativeSolver::add_vector(): fewer actions of the metric than parameters");
+      throw std::invalid_argument("IterativeSolver::add_vector(): fewer actions of the metric than parameters");
     return add_vector_impl(parameters, actions, wrap(begin(metric_actions), begin(metric_actions) + nW));
   }
 
@@ -499,6 +499,24 @@ protected:
       throw std::runtime_error("Empty container passed to IterativeSolver::solve()");
     if (parameters.size() != actions.size())
       throw std::runtime_error("Inconsistent container sizes in IterativeSolver::solve()");
+    const auto kind = problem.metric_kind();
+    const bool metric = kind != MetricKind::Identity;
+    if (not supports_metric(kind))
+      throw std::invalid_argument("This solver does not support the kind of metric of the problem");
+    // the problem is checked before the solver changes, using the buffers as scratch space
+    bool use_diagonals = problem.diagonals(actions.at(0));
+    if (generate_initial_guess and not use_diagonals)
+      throw std::runtime_error("Default initial guess requested, but diagonal elements are not available");
+    std::unique_ptr<Q> diagonals;
+    if (use_diagonals)
+      diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
+    std::unique_ptr<Q> metric_diagonals;
+    if (metric and use_diagonals) {
+      if (not problem.metric_diagonals(actions.at(0)))
+        throw std::invalid_argument("The problem provides diagonals() but not metric_diagonals(), without which the "
+                                    "default preconditioner would ignore the metric");
+      metric_diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
+    }
     if (this->m_verbosity == Verbosity::None) {
       // Backwards compatibility
       this->m_logger->set_verbosity(log::Verbosity::None);
@@ -507,27 +525,13 @@ protected:
       this->m_logger->set_verbosity(log::Verbosity::Trace);
       this->m_logger->enable_data_dumps(true);
     }
-    const bool metric = problem.metric_kind() != MetricKind::Identity;
     if (metric and problem.metric_is_cheap())
-      set_metric(problem.metric_kind(), MetricStorage::OnTheFly,
+      set_metric(kind, MetricStorage::OnTheFly,
                  [&problem](const CVecRef<R>& parameters, const VecRef<R>& metric_actions) {
                    problem.metric_action(parameters, metric_actions);
                  });
     else
-      set_metric(problem.metric_kind());
-    bool use_diagonals = problem.diagonals(actions.at(0));
-    std::unique_ptr<Q> diagonals;
-    if (use_diagonals)
-      diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
-    std::unique_ptr<Q> metric_diagonals;
-    if (metric and use_diagonals) {
-      if (not problem.metric_diagonals(actions.at(0)))
-        throw std::runtime_error("The problem provides diagonals() but not metric_diagonals(), without which the "
-                                 "default preconditioner would ignore the metric");
-      metric_diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
-    }
-    if (generate_initial_guess and not use_diagonals)
-      throw std::runtime_error("Default initial guess requested, but diagonal elements are not available");
+      set_metric(kind);
     // the initial guess and the P space are selected from the lowest of these values
     const Q* selection = diagonals.get();
     std::unique_ptr<Q> ratios;

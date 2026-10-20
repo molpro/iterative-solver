@@ -436,7 +436,7 @@ public:
    */
   virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
                      const Problem<R>& problem, bool generate_initial_guess = false) {
-    throw std::logic_error("This solver does not support solving a problem with a metric");
+    throw std::invalid_argument("This solver does not support solving a problem with a metric");
   }
   //! @copydoc solve(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&, const Problem<R>&, bool)
   virtual bool solve(R& parameters, R& actions, R& metric_actions, const Problem<R>& problem,

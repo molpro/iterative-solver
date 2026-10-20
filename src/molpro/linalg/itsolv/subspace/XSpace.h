@@ -251,7 +251,7 @@ public:
                      const CVecRef<R>& metric_actions = {}) override {
     m_logger->trace("QSpace::update_qspace");
     if (metric_actions.size() != (has_metric() ? params.size() : 0))
-      throw std::runtime_error(
+      throw std::invalid_argument(
           "XSpace::update_qspace: actions of the metric must be given for every parameter exactly when there is a "
           "metric");
     auto new_data = xspace::update_qspace_data(params, actions, cparamsp(), cparamsq(), cactionsq(), cparamsd(),
@@ -304,8 +304,8 @@ public:
       throw std::runtime_error("P space can only be used with hermitian kernels");
     const size_t nPnew = params.size();
     if (pp_metric_matrix.size() != (has_metric() ? nPnew * nPnew : 0))
-      throw std::runtime_error("XSpace::update_pspace: the metric matrix in the P space must be given exactly when "
-                               "there is a metric");
+      throw std::invalid_argument("XSpace::update_pspace: the metric matrix in the P space must be given exactly when "
+                                  "there is a metric");
     pspace.update(params, m_handlers->pp());
     update_dimensions();
     const size_t nP = m_dim.nP;
