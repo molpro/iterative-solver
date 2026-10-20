@@ -137,7 +137,7 @@ P space</h1>
 <ul>
 <li>The P space can only be used with linear problems with hermitian kernels.</li>
 <li>It must be set up while the subspace is still empty, i.e. before the first call to <code>add_vector()</code>, by calling <code>add_p()</code>. Its size must be zero or at least the number of roots sought.</li>
-<li>When solving through <code>IterativeSolver::solve()</code> and the problem provides <code>diagonals()</code>, a P space is selected automatically from the coordinates with the lowest diagonal elements. Its size is limited by <code>max_p</code>, and only coordinates whose diagonal element lies within <code>p_threshold</code> of the lowest one are included.</li>
+<li>When solving through <code>IterativeSolver::solve()</code> and the problem provides <code>diagonals()</code>, a P space is selected automatically from the coordinates with the lowest diagonal elements. Its size is limited by <code>max_p</code>, and only coordinates whose diagonal element lies within <code>p_threshold</code> of the lowest one are included. If this selection is smaller than the number of roots, a warning is logged and no P space is used; the solver then starts from the initial guess generated from the diagonal elements.</li>
 <li><code>suggest_p()</code> proposes coordinates that would be good candidates for extending the P space.</li>
 </ul>
 <h1><a class="anchor" id="SpacesQ"></a>

@@ -6299,6 +6299,34 @@
       <anchor>ad3c0c1a97d015e8548b02a5376df233f</anchor>
       <arglist>() override</arglist>
     </member>
+    <member kind="function" protection="protected">
+      <type>bool</type>
+      <name>verbosity_at_least</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a7d7dda14ecf811748708e940d76e8170</anchor>
+      <arglist>(Verbosity v) const</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>generate_initial_guess_from_diagonals</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a299dcb9375077a5dffdda06b83a7ea22</anchor>
+      <arglist>(const VecRef&lt; R &gt; &amp;parameters, const Q &amp;diagonals)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>std::vector&lt; P &gt;</type>
+      <name>select_pspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a8afac38705780f216bfcad564439cc1c</anchor>
+      <arglist>(const Q &amp;diagonals)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>size_t</type>
+      <name>initialise_pspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a9c6432520a89992f45afcf3f56b61f92</anchor>
+      <arglist>(const std::vector&lt; P &gt; &amp;pspace, const Problem&lt; R &gt; &amp;problem, const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;actions)</arglist>
+    </member>
     <member kind="variable" protection="protected">
       <type>std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt;</type>
       <name>m_handlers</name>
@@ -6374,13 +6402,6 @@
       <name>m_logger</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
       <anchor>abee358ce5516717e73670d75f2eebc45</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>bool</type>
-      <name>m_normalise_solution</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
-      <anchor>ab53e871487e088b6502f51f6ec2ccab3</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -13663,13 +13684,6 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
       <anchor>a3af95639074feb491b36180e8c6ef36c</anchor>
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const subspace::Matrix&lt; T &gt; &amp;solutions, const size_t oP, const size_t nP)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>normalise</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a61eb49b7dfb7acbac0b882e500c0e742</anchor>
-      <arglist>(const size_t n_roots, const VecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions, array::ArrayHandler&lt; R, R &gt; &amp;handler, Logger &amp;logger)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
