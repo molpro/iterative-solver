@@ -33,41 +33,77 @@ struct has_iterator {
       std::is_same<std::true_type, decltype(test<typename std::remove_reference<T>::type>(0))>::value;
 };
 
+namespace detail {
+// Divides each action[k] elementwise by (diagonals - shift[k] * metric_diagonals), where metric_diagonals == nullptr
+// stands for a unit metric
 template <typename T, typename S,
           typename = std::enable_if_t<std::is_base_of<molpro::linalg::array::DistrArray, T>::value>>
-void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals) {
+void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
+                          const T* metric_diagonals) {
   // regularisation of the denominator, calibrated for double precision and rescaled to the working precision
   const auto regulariser = precision_scaled<S>(1e-15);
   auto diagonals_local_buffer = diagonals.local_buffer();
+  auto metric_local_buffer = metric_diagonals ? metric_diagonals->local_buffer() : nullptr;
   for (size_t k = 0; k < action.size(); k++) {
     auto action_local_buffer = action[k].get().local_buffer();
     auto& distribution = action[k].get().distribution();
     auto range = distribution.range(molpro::mpi::rank_global());
-    for (auto i = range.first; i < range.second; i++)
-      (*action_local_buffer)[i - range.first] /= ((*diagonals_local_buffer)[i - range.first] - shift[k] + regulariser);
+    for (auto i = range.first; i < range.second; i++) {
+      const auto j = i - range.first;
+      const auto scaled_shift = metric_local_buffer ? shift[k] * (*metric_local_buffer)[j] : shift[k];
+      (*action_local_buffer)[j] /= ((*diagonals_local_buffer)[j] - scaled_shift + regulariser);
+    }
   }
 }
 
 template <class T, typename S>
 void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
-                          typename T::iterator* = nullptr // SFINAE
+                          const T* metric_diagonals, typename T::iterator* = nullptr // SFINAE
 ) {
   const auto regulariser = precision_scaled<S>(1e-15);
   for (size_t k = 0; k < action.size(); k++) {
-    auto& a = action[k].get();
-    std::transform(diagonals.begin(), diagonals.end(), a.begin(), a.begin(),
-                   [shift, k, regulariser](const auto& first, const auto& second) {
-                     return second / (first - shift[k] + regulariser);
-                   });
+    auto a = action[k].get().begin();
+    auto m = metric_diagonals ? metric_diagonals->begin() : decltype(diagonals.begin()){};
+    for (auto d = diagonals.begin(); d != diagonals.end(); ++d, ++a) {
+      const auto scaled_shift = metric_diagonals ? shift[k] * *m++ : shift[k];
+      *a /= (*d - scaled_shift + regulariser);
+    }
   }
 }
 
 template <typename T, typename S,
           typename = std::enable_if_t<!std::is_base_of<molpro::linalg::array::DistrArray, T>::value>, class = void>
 void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
+                          const T* metric_diagonals,
                           typename std::enable_if<!has_iterator<T>::value, void*>::type = nullptr // SFINAE
 ) {
   throw std::logic_error("Unimplemented preconditioner");
+}
+} // namespace detail
+
+/*!
+ * @brief Davidson preconditioner: divides each action[k] elementwise by (diagonals - shift[k])
+ * @param action On entry, the residuals; on exit, the preconditioned residuals
+ * @param shift The shift for each of the residuals
+ * @param diagonals The diagonal elements of the kernel
+ */
+template <typename T, typename S>
+void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals) {
+  detail::precondition_default(action, shift, diagonals, static_cast<const T*>(nullptr));
+}
+
+/*!
+ * @brief Davidson preconditioner for a generalised eigenproblem: divides each action[k] elementwise by
+ * (diagonals - shift[k] * metric_diagonals)
+ * @param action On entry, the residuals; on exit, the preconditioned residuals
+ * @param shift The shift for each of the residuals
+ * @param diagonals The diagonal elements of the kernel
+ * @param metric_diagonals The diagonal elements of the metric
+ */
+template <typename T, typename S>
+void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
+                          const T& metric_diagonals) {
+  detail::precondition_default(action, shift, diagonals, &metric_diagonals);
 }
 
 /*!
