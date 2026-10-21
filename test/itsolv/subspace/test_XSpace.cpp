@@ -91,7 +91,7 @@ std::vector<Q> metric_actions(const std::vector<R>& params) {
 
 //! The stored actions of the metric and the metric matrix must match the parameters, in subspace order
 void check_metric_consistent(const XSpace<R, Q, P>& xs) {
-  ASSERT_TRUE(xs.has_metric());
+  ASSERT_NE(xs.metric_kind(), MetricKind::Identity);
   auto params = xs.cparamsq();
   auto metric = xs.cmetric_actionsq();
   for (const auto& p : xs.cparamsd())
@@ -161,7 +161,7 @@ TEST(XSpace, no_metric) {
   XSpace<R, Q, P> xs(std::make_shared<ArrayHandlers<R, Q, P>>(), std::make_shared<Logger>());
   const std::vector<R> q{scaled_unit(0, 1), scaled_unit(1, 2)};
   xs.update_qspace(cwrap(q), cwrap(q));
-  EXPECT_FALSE(xs.has_metric());
+  EXPECT_EQ(xs.metric_kind(), MetricKind::Identity);
   EXPECT_EQ(xs.data.count(EqnData::M), 0);
   EXPECT_TRUE(xs.cmetric_actionsq().empty());
 }

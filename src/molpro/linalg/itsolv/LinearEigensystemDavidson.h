@@ -258,7 +258,7 @@ protected:
     // where the metric is applied on the fly, and otherwise assembled from the stored actions of the metric on the Q
     // and D spaces and the action of the metric on the P space. The coefficients are collected in these matrices.
     const auto& xspace = *this->m_xspace;
-    const bool metric = xspace.has_metric();
+    const bool metric = xspace.metric_kind() != MetricKind::Identity;
     const bool on_the_fly = !metric_solutions.empty();
     const bool stored = metric && !on_the_fly;
     const auto& dims = xspace.dimensions();
@@ -403,7 +403,7 @@ protected:
     auto partner_residual = this->m_handlers->rr().copy(params.at(i));
     construct_subspace_vector(solutions, int(*partner), partner_param);
     construct_subspace_action(solutions, int(*partner), partner_residual);
-    if (this->m_xspace->has_metric()) {
+    if (this->m_xspace->metric_kind() != MetricKind::Identity) {
       // With a metric, the residual contains the actions of the metric on the partner and on the last root
       auto metric_param = this->m_handlers->rr().copy(params.at(i));
       if (this->m_xspace->stores_metric_actions()) {
@@ -421,7 +421,7 @@ protected:
       this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
     }
     auto partner_error = std::sqrt(std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
-    if (this->m_xspace->has_metric())
+    if (this->m_xspace->metric_kind() != MetricKind::Identity)
       // as in SolverTemplate::compute_errors(), the error of the partner of unit length
       partner_error /=
           subspace::util::solution_norm(solutions, *partner, this->m_xspace->data.at(subspace::EqnData::S));

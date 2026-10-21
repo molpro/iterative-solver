@@ -754,7 +754,7 @@ protected:
   virtual void compute_errors(const std::vector<int>& roots, const CVecRef<R>& params, const CVecRef<R>& residuals,
                               std::vector<value_type_abs>& errors) {
     detail::update_errors(errors, residuals, m_handlers->rr());
-    if (m_xspace->has_metric()) {
+    if (m_xspace->metric_kind() != MetricKind::Identity) {
       // The solutions are normalised in the metric, so their Euclidean length, and with it the length of the
       // residual, would depend on the scale of the metric. The error is that of the solution of unit length instead,
       // which is the same as without a metric.
