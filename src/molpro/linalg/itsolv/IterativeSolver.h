@@ -36,13 +36,13 @@ struct has_iterator {
 
 namespace detail {
 // Divides each action[k] elementwise by (diagonals - shift[k] * metric_diagonals), where metric_diagonals == nullptr
-// stands for a unit metric
+// stands for a unit metric; if regularise, a small constant is added to the denominator
 template <typename T, typename S,
           typename = std::enable_if_t<std::is_base_of<molpro::linalg::array::DistrArray, T>::value>>
 void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
-                          const T* metric_diagonals) {
+                          const T* metric_diagonals, const bool regularise) {
   // regularisation of the denominator, calibrated for double precision and rescaled to the working precision
-  const auto regulariser = precision_scaled<S>(1e-15);
+  const auto regulariser = regularise ? precision_scaled<S>(1e-15) : decltype(precision_scaled<S>(1e-15))(0);
   auto diagonals_local_buffer = diagonals.local_buffer();
   auto metric_local_buffer = metric_diagonals ? metric_diagonals->local_buffer() : nullptr;
   for (size_t k = 0; k < action.size(); k++) {
@@ -59,9 +59,10 @@ void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, 
 
 template <class T, typename S>
 void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
-                          const T* metric_diagonals, typename T::iterator* = nullptr // SFINAE
+                          const T* metric_diagonals, const bool regularise,
+                          typename T::iterator* = nullptr // SFINAE
 ) {
-  const auto regulariser = precision_scaled<S>(1e-15);
+  const auto regulariser = regularise ? precision_scaled<S>(1e-15) : decltype(precision_scaled<S>(1e-15))(0);
   for (size_t k = 0; k < action.size(); k++) {
     auto a = action[k].get().begin();
     auto m = metric_diagonals ? metric_diagonals->begin() : decltype(diagonals.begin()){};
@@ -75,7 +76,7 @@ void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, 
 template <typename T, typename S,
           typename = std::enable_if_t<!std::is_base_of<molpro::linalg::array::DistrArray, T>::value>, class = void>
 void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
-                          const T* metric_diagonals,
+                          const T* metric_diagonals, const bool regularise,
                           typename std::enable_if<!has_iterator<T>::value, void*>::type = nullptr // SFINAE
 ) {
   throw std::logic_error("Unimplemented preconditioner");
@@ -90,7 +91,7 @@ void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, 
  */
 template <typename T, typename S>
 void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals) {
-  detail::precondition_default(action, shift, diagonals, static_cast<const T*>(nullptr));
+  detail::precondition_default(action, shift, diagonals, static_cast<const T*>(nullptr), true);
 }
 
 /*!
@@ -104,7 +105,7 @@ void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, 
 template <typename T, typename S>
 void precondition_default(const VecRef<T>& action, const std::vector<S>& shift, const T& diagonals,
                           const T& metric_diagonals) {
-  detail::precondition_default(action, shift, diagonals, &metric_diagonals);
+  detail::precondition_default(action, shift, diagonals, &metric_diagonals, true);
 }
 
 /*!

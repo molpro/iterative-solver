@@ -491,6 +491,54 @@ TEST(LinearEigensystem, Davidson_generalized_metric_scale_dspace) {
   }
 }
 
+// The initial guess is taken at the lowest ratio of the diagonal elements of kernel and metric, whatever the scale of
+// the metric. For a diagonal problem the guess is an exact eigenvector, so a guess at another ratio would converge to
+// a root that is not the lowest.
+TEST(LinearEigensystem, Davidson_generalized_guess_metric_scale) {
+  struct DiagonalProblem : molpro::linalg::itsolv::Problem<std::vector<double>> {
+    const size_t n = 10;
+    double scale = 1;
+    double kernel(size_t i) const { return i == 0 ? 1. : i == 1 ? 3. : 10. + i; }
+    double metric(size_t i) const { return scale * (i == 0 ? 0.5 : i == 1 ? 2.5 : 1.); }
+    molpro::linalg::itsolv::MetricKind metric_kind() const override {
+      return molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite;
+    }
+    bool diagonals(std::vector<double> &d) const override {
+      for (size_t i = 0; i < n; ++i)
+        d[i] = kernel(i);
+      return true;
+    }
+    bool metric_diagonals(std::vector<double> &d) const override {
+      for (size_t i = 0; i < n; ++i)
+        d[i] = metric(i);
+      return true;
+    }
+    void action(const molpro::linalg::itsolv::CVecRef<std::vector<double>> &parameters,
+                const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions) const override {
+      for (size_t k = 0; k < parameters.size(); ++k)
+        for (size_t i = 0; i < n; ++i)
+          actions[k].get()[i] = kernel(i) * parameters[k].get()[i];
+    }
+    void metric_action(const molpro::linalg::itsolv::CVecRef<std::vector<double>> &parameters,
+                       const molpro::linalg::itsolv::VecRef<std::vector<double>> &actions) const override {
+      for (size_t k = 0; k < parameters.size(); ++k)
+        for (size_t i = 0; i < n; ++i)
+          actions[k].get()[i] = metric(i) * parameters[k].get()[i];
+    }
+  } problem;
+  for (const double scale : {1., std::ldexp(1., -50), 1e-20}) {
+    SCOPED_TRACE("metric scale=" + std::to_string(scale));
+    problem.scale = scale;
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+    solver->set_n_roots(1);
+    solver->set_hermiticity(true);
+    std::vector<std::vector<double>> params(1, std::vector<double>(problem.n)), actions = params,
+                                                                                metric_actions = params;
+    EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
+    EXPECT_NEAR(solver->eigenvalues()[0] * scale, 1.2, 1e-12);
+  }
+}
+
 // A single root is found with a single set of buffers, which also hand the diagonal elements of kernel and metric to
 // the preconditioner
 TEST(LinearEigensystem, Davidson_generalized_single_root) {
