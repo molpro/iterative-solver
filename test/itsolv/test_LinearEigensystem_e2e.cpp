@@ -448,6 +448,35 @@ TEST(LinearEigensystem, Davidson_generalized_metric_scale) {
   }
 }
 
+// With the metric applied on the fly, a P space needs no function applying the metric to it, also not when no residual
+// is constructed
+TEST(LinearEigensystem, Davidson_generalized_pspace_stepwise_on_the_fly) {
+  using molpro::linalg::itsolv::cwrap;
+  using molpro::linalg::itsolv::wrap;
+  using P = GeneralizedProblem::P;
+  GeneralizedProblem problem;
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+  solver->set_n_roots(2);
+  solver->set_hermiticity(true);
+  solver->set_metric(
+      molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite, molpro::linalg::itsolv::MetricStorage::OnTheFly,
+      [&problem](const molpro::linalg::itsolv::CVecRef<std::vector<double>> &x,
+                 const molpro::linalg::itsolv::VecRef<std::vector<double>> &mx) { problem.metric_action(x, mx); });
+  std::vector<P> pspace;
+  for (size_t i = 0; i < 4; ++i)
+    pspace.push_back(P{{i, 1.}});
+  auto pp = problem.pp_action_matrix(pspace), mm = problem.pp_metric_matrix(pspace);
+  std::vector<std::vector<double>> x(2, std::vector<double>(problem.n)), r = x;
+  using PSpaceMetric = decltype(solver)::element_type::PSpaceMetric;
+  solver->add_p(
+      cwrap(pspace), molpro::linalg::array::Span<double>(pp.data(), pp.size()), wrap(x), wrap(r),
+      [&problem](const std::vector<std::vector<double>> &c, const molpro::linalg::itsolv::CVecRef<P> &p,
+                 const molpro::linalg::itsolv::VecRef<std::vector<double>> &a) { problem.p_action(c, p, a); },
+      PSpaceMetric{molpro::linalg::array::Span<double>(mm.data(), mm.size()), {}});
+  EXPECT_NO_THROW(solver->solution(std::vector<int>{}, x, r));
+  EXPECT_NO_THROW(solver->solution(std::vector<int>{0, 1}, x, r));
+}
+
 // The contributions of Q vectors to the solutions, which decide which Q vectors are deleted, and the norms of the
 // projections of the solutions that make up the D space are measured on solutions of unit length, so that trimming the
 // Q space, building the D space and resetting it do not depend on the scale of the metric either
