@@ -175,6 +175,7 @@ public:
 
   bool metric_is_cheap() const override { return cheap_metric; }
   bool provide_pp_metric_matrix = true;
+  bool provide_p_metric_action = true;
 
   using P = std::map<size_t, double>;
   std::vector<double> pp_action_matrix(const std::vector<P> &pparams) const override {
@@ -193,6 +194,8 @@ public:
   void p_metric_action(const std::vector<std::vector<double>> &p_coefficients,
                        const molpro::linalg::itsolv::CVecRef<P> &pparams,
                        const molpro::linalg::itsolv::VecRef<std::vector<double>> &metric_actions) const override {
+    if (not provide_p_metric_action)
+      return Problem::p_metric_action(p_coefficients, pparams, metric_actions);
     add_p_action([this](size_t i, size_t j) { return metric(i, j); }, p_coefficients, pparams, metric_actions);
   }
 
@@ -670,14 +673,19 @@ TEST(LinearEigensystem, Davidson_generalized_errors) {
   auto params = std::vector<std::vector<double>>(2, std::vector<double>(problem.n));
   auto actions = params, metric_actions = params;
   auto davidson = []() { return molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson"); };
-  {
-    // a P space needs the metric matrix in it
-    problem.provide_pp_metric_matrix = false;
+  // a P space needs the metric matrix in it and, where the actions of the metric are stored, its action, which are
+  // checked before the solver changes
+  for (const bool pp_metric_matrix : {false, true}) {
+    problem.provide_pp_metric_matrix = pp_metric_matrix;
+    problem.provide_p_metric_action = !pp_metric_matrix;
     auto solver = davidson();
     solver->set_max_p(10);
     EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::logic_error);
-    problem.provide_pp_metric_matrix = true;
+    EXPECT_EQ(solver->metric_kind(), molpro::linalg::itsolv::MetricKind::Identity);
+    EXPECT_EQ(solver->dimensions().nX(), 0);
   }
+  problem.provide_pp_metric_matrix = true;
+  problem.provide_p_metric_action = true;
   {
     // the P space of a problem with a metric is added with its metric matrix
     using P = GeneralizedProblem::P;
@@ -724,8 +732,16 @@ TEST(LinearEigensystem, Davidson_generalized_errors) {
     EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::invalid_argument);
   }
   {
+    // the right-hand sides of linear equations are not taken over from a problem that is rejected
+    struct RHSProblem : GeneralizedProblem {
+      bool RHS(std::vector<double> &rhs, unsigned int instance) const override {
+        std::fill(rhs.begin(), rhs.end(), 1.);
+        return instance == 0;
+      }
+    } rhs_problem;
     auto solver = molpro::linalg::itsolv::create_LinearEquations<std::vector<double>>("Davidson");
-    EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::invalid_argument);
+    EXPECT_THROW(solver->solve(params, actions, metric_actions, rhs_problem, true), std::invalid_argument);
+    EXPECT_EQ(solver->dimensions().nRHS, 0);
   }
 }
 

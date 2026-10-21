@@ -296,6 +296,9 @@ public:
    * @param p_coefficients The projection of the vectors onto to the P space
    * @param pparams Specification of the P space
    * @param metric_actions On exit, the computed action of the metric has been added to the original contents
+   *
+   * IterativeSolver::solve() calls it once with no vectors (empty p_coefficients and metric_actions) before it changes
+   * the solver, to make sure that it is available.
    */
   virtual void p_metric_action(const std::vector<std::vector<value_t>>& p_coefficients, const CVecRef<P>& pparams,
                                const VecRef<container_t>& metric_actions) const {
