@@ -198,15 +198,11 @@ public:
 
   void set_metric(MetricKind kind, MetricStorage storage = MetricStorage::Stored,
                   fapply_metric_type apply_metric = {}) override {
-    if (!supports_metric(kind))
-      throw std::invalid_argument("This solver does not support the requested kind of metric");
     if (kind == MetricKind::Identity)
       storage = MetricStorage::Stored;
+    check_metric_change(kind, storage);
     if (bool(apply_metric) != (kind != MetricKind::Identity && storage == MetricStorage::OnTheFly))
       throw std::invalid_argument("A function applying the metric has to be given exactly for MetricStorage::OnTheFly");
-    if (m_xspace->dimensions().nX() != 0 && (kind != m_metric_kind || storage != m_metric_storage))
-      throw std::logic_error("The metric, or how its actions are obtained, cannot be changed once the subspace is not "
-                             "empty");
     if (m_xspace->dimensions().nX() == 0)
       m_metric_checker.reset();
     m_metric_kind = kind;
@@ -491,19 +487,33 @@ public:
 
 protected:
   /*!
-   * @brief Implements both overloads of solve(), with empty metric_actions for a problem without a metric. Solvers
-   * that need to customise solve() override this.
+   * @brief Prepares solving problem in solve(), after the problem has been checked and before the solver changes, e.g.
+   * by taking over data of the problem
+   * @param problem the problem to be solved
+   * @param actions buffers that may be used as scratch space
    */
-  virtual bool solve_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
-                          const Problem<R>& problem, bool generate_initial_guess) {
+  virtual void prepare_solve(const Problem<R>& problem, const VecRef<R>& actions) {}
+
+  //! Implements both overloads of solve(), with empty metric_actions for a problem without a metric
+  bool solve_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
+                  const Problem<R>& problem, bool generate_initial_guess) {
     if (parameters.empty())
       throw std::runtime_error("Empty container passed to IterativeSolver::solve()");
     if (parameters.size() != actions.size())
       throw std::runtime_error("Inconsistent container sizes in IterativeSolver::solve()");
+    // applies the verbosity of the solver to its logger, which repeating does not change
+    if (this->m_verbosity == Verbosity::None) {
+      // Backwards compatibility
+      this->m_logger->set_verbosity(log::Verbosity::None);
+    }
+    if (this->m_verbosity == Verbosity::Detailed) {
+      this->m_logger->set_verbosity(log::Verbosity::Trace);
+      this->m_logger->enable_data_dumps(true);
+    }
     const auto kind = problem.metric_kind();
     const bool metric = kind != MetricKind::Identity;
-    if (not supports_metric(kind))
-      throw std::invalid_argument("This solver does not support the kind of metric of the problem");
+    const bool store_metric_actions = metric and not problem.metric_is_cheap();
+    check_metric_change(kind, store_metric_actions ? MetricStorage::Stored : MetricStorage::OnTheFly);
     // the problem is checked before the solver changes, using the buffers as scratch space
     bool use_diagonals = problem.diagonals(actions.at(0));
     if (generate_initial_guess and not use_diagonals)
@@ -518,21 +528,6 @@ protected:
                                     "default preconditioner would ignore the metric");
       metric_diagonals.reset(new Q{m_handlers->qr().copy(actions.at(0))});
     }
-    if (this->m_verbosity == Verbosity::None) {
-      // Backwards compatibility
-      this->m_logger->set_verbosity(log::Verbosity::None);
-    }
-    if (this->m_verbosity == Verbosity::Detailed) {
-      this->m_logger->set_verbosity(log::Verbosity::Trace);
-      this->m_logger->enable_data_dumps(true);
-    }
-    if (metric and problem.metric_is_cheap())
-      set_metric(kind, MetricStorage::OnTheFly,
-                 [&problem](const CVecRef<R>& parameters, const VecRef<R>& metric_actions) {
-                   problem.metric_action(parameters, metric_actions);
-                 });
-    else
-      set_metric(kind);
     // the initial guess and the P space are selected from the lowest of these values
     const Q* selection = diagonals.get();
     std::unique_ptr<Q> ratios;
@@ -545,15 +540,24 @@ protected:
       ratios.reset(new Q{m_handlers->qr().copy(parameters.at(0))});
       selection = ratios.get();
     }
-    int nwork = parameters.size();
     std::vector<P> pspace;
     if (use_diagonals and m_max_p > 0)
       pspace = select_pspace(*selection);
+    auto pspace_matrices = pspace_problem_matrices(pspace, problem, metric, store_metric_actions);
+    prepare_solve(problem, actions);
+    if (metric and not store_metric_actions)
+      set_metric(kind, MetricStorage::OnTheFly,
+                 [&problem](const CVecRef<R>& parameters, const VecRef<R>& metric_actions) {
+                   problem.metric_action(parameters, metric_actions);
+                 });
+    else
+      set_metric(kind);
+    int nwork = parameters.size();
     // a P space replaces any initial guess; without one, max_p > 0 still means the contents of parameters are not used
     if (pspace.empty() and (generate_initial_guess or (use_diagonals and m_max_p > 0)))
       generate_initial_guess_from_diagonals(parameters, *selection);
     if (!pspace.empty())
-      nwork = initialise_pspace(pspace, problem, parameters, actions);
+      nwork = initialise_pspace(pspace, problem, pspace_matrices, parameters, actions);
     for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
       // the logging context carries the errors as doubles: a log line only needs their magnitude
       m_logger->template info<log::NewIteration>("Iteration, Current errors", iter,
@@ -787,6 +791,17 @@ protected:
     return working_set;
   }
 
+  //! Throws if set_metric() with these arguments is not possible, apart from the function applying the metric
+  void check_metric_change(MetricKind kind, MetricStorage storage) const {
+    if (!supports_metric(kind))
+      throw std::invalid_argument("This solver does not support the requested kind of metric");
+    if (kind == MetricKind::Identity)
+      storage = MetricStorage::Stored;
+    if (m_xspace->dimensions().nX() != 0 && (kind != m_metric_kind || storage != m_metric_storage))
+      throw std::logic_error("The metric, or how its actions are obtained, cannot be changed once the subspace is not "
+                             "empty");
+  }
+
   //! For a positive (semi)definite metric, throws if the metric matrix shows that it is not, unless checks are off
   void check_metric_positive() const {
     if (m_check_metric && (m_metric_kind == MetricKind::HermitianPositiveDefinite ||
@@ -983,13 +998,33 @@ protected:
   }
 
   //! Adds the P space to the subspace using the P-space kernel provided by problem; returns the working-set size
-  size_t initialise_pspace(const std::vector<P>& pspace, const Problem<R>& problem, const VecRef<R>& parameters,
-                           const VecRef<R>& actions) {
+  /*!
+   * @brief The kernel and, for a problem with a metric, metric matrices of the problem in the P space, obtained before
+   * the solver changes, so that a problem without them is rejected first. Where the actions of the metric are stored,
+   * also checks that the problem provides p_metric_action(), by calling it without any vectors.
+   */
+  std::pair<std::vector<value_type>, std::vector<value_type>>
+  pspace_problem_matrices(const std::vector<P>& pspace, const Problem<R>& problem, const bool metric,
+                          const bool store_metric_actions) const {
+    if (pspace.empty())
+      return {};
+    auto matrices = std::make_pair(problem.pp_action_matrix(pspace), std::vector<value_type>{});
+    if (metric)
+      matrices.second = problem.pp_metric_matrix(pspace);
+    if (store_metric_actions)
+      problem.p_metric_action({}, cwrap(pspace), {});
+    return matrices;
+  }
+
+  //! Adds the P space to the subspace with the matrices of pspace_problem_matrices(); returns the working-set size
+  size_t initialise_pspace(const std::vector<P>& pspace, const Problem<R>& problem,
+                           std::pair<std::vector<value_type>, std::vector<value_type>>& matrices,
+                           const VecRef<R>& parameters, const VecRef<R>& actions) {
     fapply_on_p_type apply_on_p = [&problem](const std::vector<std::vector<value_type>>& pcoeff,
                                              const CVecRef<P>& pparams, const VecRef<R>& actions) {
       problem.p_action(pcoeff, pparams, actions);
     };
-    auto action_matrix = problem.pp_action_matrix(pspace);
+    auto& [action_matrix, metric_matrix] = matrices;
     const auto action_span = array::Span<value_type>(action_matrix.data(), action_matrix.size());
     if (m_metric_kind == MetricKind::Identity)
       return add_p(cwrap(pspace), action_span, parameters, actions, apply_on_p);
@@ -997,11 +1032,9 @@ protected:
                                                     const CVecRef<P>& pparams, const VecRef<R>& metric_actions) {
       problem.p_metric_action(pcoeff, pparams, metric_actions);
     };
-    auto metric_matrix = problem.pp_metric_matrix(pspace);
     return add_p(cwrap(pspace), action_span, parameters, actions, apply_on_p,
                  PSpaceMetric{array::Span<value_type>(metric_matrix.data(), metric_matrix.size()), apply_metric_on_p});
   }
-
 
   std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;                    //!< Array handlers
   std::shared_ptr<subspace::IXSpace<R, Q, P>> m_xspace;                  //!< manages the subspace and associated data
