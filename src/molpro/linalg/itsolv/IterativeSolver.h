@@ -456,7 +456,7 @@ public:
    * Problem::pp_metric_matrix() and, unless the metric is applied on the fly, Problem::p_metric_action().
    *
    * The solver keeps references to problem for later calls such as solution(), so problem has to outlive them; a
-   * further call of solve() replaces them.
+   * further call of solve() replaces them. A temporary problem is therefore rejected at compile time.
    */
   virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
                      const Problem<R>& problem, bool generate_initial_guess = false) {
@@ -472,6 +472,15 @@ public:
                      const Problem<R>& problem, bool generate_initial_guess = false) {
     return solve(wrap(parameters), wrap(actions), wrap(metric_actions), problem, generate_initial_guess);
   }
+  //! A temporary problem is rejected, as the solver keeps references to the problem beyond solve()
+  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
+             const Problem<R>&& problem, bool generate_initial_guess = false) = delete;
+  //! @copydoc solve(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&, const Problem<R>&&, bool)
+  bool solve(R& parameters, R& actions, R& metric_actions, const Problem<R>&& problem,
+             bool generate_initial_guess = false) = delete;
+  //! @copydoc solve(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&, const Problem<R>&&, bool)
+  bool solve(std::vector<R>& parameters, std::vector<R>& actions, std::vector<R>& metric_actions,
+             const Problem<R>&& problem, bool generate_initial_guess = false) = delete;
 
   /*!
    * @brief Whether the solver supports a metric of the given kind. MetricKind::Identity is always supported.
