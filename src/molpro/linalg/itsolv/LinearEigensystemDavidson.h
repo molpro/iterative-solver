@@ -246,6 +246,8 @@ public:
 protected:
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
                           const detail::MetricSolutions<R, Q>& metric_solutions) override {
+    if (roots.empty())
+      return;
     auto prof = this->profiler()->push("itsolv::construct_residual");
     assert(params.size() >= roots.size());
     const auto& eigvals = eigenvalues();
@@ -259,7 +261,7 @@ protected:
     // and D spaces and the action of the metric on the P space. The coefficients are collected in these matrices.
     const auto& xspace = *this->m_xspace;
     const bool metric = xspace.metric_kind() != MetricKind::Identity;
-    const bool on_the_fly = !metric_solutions.empty();
+    const bool on_the_fly = metric && xspace.metric_storage() == MetricStorage::OnTheFly;
     const bool stored = metric && !on_the_fly;
     const auto& dims = xspace.dimensions();
     const auto& solutions = this->m_subspace_solver->solutions();
