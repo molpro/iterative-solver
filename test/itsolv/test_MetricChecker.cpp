@@ -8,6 +8,7 @@
 #include <molpro/linalg/itsolv/wrap.h>
 
 #include <cmath>
+#include <complex>
 #include <map>
 #include <numeric>
 #include <random>
@@ -84,11 +85,20 @@ TEST(MetricChecker, positive_ill_conditioned_basis) {
   }
 }
 
-// The metric matrix in the P space has to be Hermitian
+// The metric matrix in the P space has to be Hermitian, up to a deviation such as that of approximate integrals, which
+// for complex elements includes real diagonal elements
 TEST(MetricChecker, hermitian_pspace) {
-  std::vector<double> hermitian{2, 0.5, 0.5, 1}, non_hermitian{2, 0.5, 0.4, 1};
+  std::vector<double> hermitian{2, 0.5, 0.5, 1}, approximate{2, 0.5, 0.5 + 1e-7, 1}, non_hermitian{2, 0.5, 0.4, 1};
   EXPECT_NO_THROW(Checker::check_hermitian(molpro::linalg::array::Span<double>(hermitian.data(), 4), 2));
+  EXPECT_NO_THROW(Checker::check_hermitian(molpro::linalg::array::Span<double>(approximate.data(), 4), 2));
   EXPECT_THROW(Checker::check_hermitian(molpro::linalg::array::Span<double>(non_hermitian.data(), 4), 2),
+               std::runtime_error);
+  using C = std::complex<double>;
+  using ComplexChecker =
+      molpro::linalg::itsolv::detail::MetricChecker<std::vector<C>, std::vector<C>, std::map<size_t, C>>;
+  std::vector<C> complex_hermitian{2, C(0.5, 0.1), C(0.5, -0.1), 1}, complex_diagonal{C(2, 0.1), 0.5, 0.5, 1};
+  EXPECT_NO_THROW(ComplexChecker::check_hermitian(molpro::linalg::array::Span<C>(complex_hermitian.data(), 4), 2));
+  EXPECT_THROW(ComplexChecker::check_hermitian(molpro::linalg::array::Span<C>(complex_diagonal.data(), 4), 2),
                std::runtime_error);
 }
 
@@ -96,7 +106,8 @@ TEST(MetricChecker, hermitian_pspace) {
 // whether the subspace keeps the actions of the metric or not
 TEST(MetricChecker, hermitian) {
   for (const auto storage : {MetricStorage::Stored, MetricStorage::OnTheFly}) {
-    for (const double non_hermiticity : {0., 0.5}) {
+    // a deviation like that of approximate integrals is tolerated
+    for (const double non_hermiticity : {0., 1e-6, 0.5}) {
       SCOPED_TRACE("on the fly=" + std::to_string(storage == MetricStorage::OnTheFly) +
                    " non-hermiticity=" + std::to_string(non_hermiticity));
       auto handlers = std::make_shared<ArrayHandlers<R, Q, P>>();
@@ -109,7 +120,7 @@ TEST(MetricChecker, hermitian) {
       EXPECT_NO_THROW(checker.check_hermitian(cwrap(x1), cwrap(m1), xspace, *handlers));
       xspace.update_qspace(cwrap(x1), cwrap(x1), cwrap(m1));
       checker.remember(cwrap(x1), cwrap(m1), xspace, *handlers);
-      if (non_hermiticity == 0)
+      if (non_hermiticity < 1e-5)
         EXPECT_NO_THROW(checker.check_hermitian(cwrap(x2), cwrap(m2), xspace, *handlers));
       else
         EXPECT_THROW(checker.check_hermitian(cwrap(x2), cwrap(m2), xspace, *handlers), std::runtime_error);

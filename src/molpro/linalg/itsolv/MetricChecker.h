@@ -20,8 +20,8 @@ namespace molpro::linalg::itsolv::detail {
  * @brief Checks that the metric of a generalised problem has the properties that its kind declares, as far as the
  * subspace shows them
  *
- * All checks throw std::runtime_error if they fail. They compare against tolerance() relative to the size of the
- * quantities involved.
+ * All checks throw std::runtime_error if they fail. They compare against hermiticity_tolerance() or
+ * positivity_tolerance() relative to the size of the quantities involved.
  */
 template <class R, class Q, class P>
 class MetricChecker {
@@ -29,8 +29,16 @@ public:
   using value_type = typename array::ArrayHandler<R, R>::value_type;
   using value_type_abs = typename array::ArrayHandler<R, R>::value_type_abs;
 
-  //! The relative tolerance of all checks, calibrated for double precision and rescaled to the working precision
-  static value_type_abs tolerance() { return precision_scaled<value_type>(1e-8); }
+  /*!
+   * @brief The relative tolerance of the checks of Hermiticity, calibrated for double precision and rescaled to the
+   * working precision. It is loose enough for actions of a metric that are only approximate, e.g. from screened
+   * integrals, but catches a metric that is not Hermitian at all.
+   */
+  static value_type_abs hermiticity_tolerance() { return precision_scaled<value_type>(1e-6); }
+
+  //! The relative tolerance of the check of positivity, calibrated for double precision and rescaled to the working
+  //! precision
+  static value_type_abs positivity_tolerance() { return precision_scaled<value_type>(1e-8); }
 
   //! Forgets the vectors kept for the check of Hermiticity, as when the subspace starts anew
   void reset() { m_reference.reset(); }
@@ -69,7 +77,7 @@ public:
       const auto norm_x = std::sqrt(std::abs(handlers.rr().dot(params[i], params[i])));
       const auto norm_metric_action_x = std::sqrt(std::abs(handlers.rr().dot(metric_actions[i], metric_actions[i])));
       const auto scale = (norm_x * norm_metric_action_q + norm_metric_action_x * norm_q) / 2;
-      if (std::abs(xmq - mxq) > tolerance() * scale)
+      if (std::abs(xmq - mxq) > hermiticity_tolerance() * scale)
         throw std::runtime_error(std::format("The metric is not Hermitian: <x|M q> = {:.6e} differs from <M x|q> = "
                                              "{:.6e} for a new parameter x and a subspace vector q",
                                              double(std::abs(xmq)), double(std::abs(mxq))));
@@ -93,10 +101,11 @@ public:
    * @param n its dimension
    */
   static void check_hermitian(const array::Span<value_type>& matrix, const size_t n) {
+    // the diagonal elements, which have to be real, are compared with themselves
     for (size_t i = 0; i < n; ++i)
-      for (size_t j = 0; j < i; ++j)
+      for (size_t j = 0; j <= i; ++j)
         if (std::abs(matrix[i * n + j] - conjugate(matrix[j * n + i])) >
-            tolerance() * std::sqrt(std::abs(matrix[i * n + i] * matrix[j * n + j])))
+            hermiticity_tolerance() * std::sqrt(std::abs(matrix[i * n + i] * matrix[j * n + j])))
           throw std::runtime_error("The metric is not Hermitian: its matrix in the P space is not");
   }
 
@@ -109,8 +118,8 @@ public:
    * decide. They are the eigenvalues of the metric matrix in the basis orthonormalised with the overlap
    * S_ij = <b_i|b_j>, leaving out nearly linearly dependent directions. Orthonormalising amplifies the rounding errors
    * of the metric matrix by up to the inverse of the smallest eigenvalue of the overlap that is kept, so the metric
-   * fails the check only if a Rayleigh quotient is negative by more than tolerance() times the largest plus these
-   * amplified rounding errors.
+   * fails the check only if a Rayleigh quotient is negative by more than positivity_tolerance() times the largest plus
+   * these amplified rounding errors.
    *
    * An indefinite metric is noticed only once one of its negative directions enters the subspace.
    * @param metric the metric matrix of the subspace
@@ -145,7 +154,7 @@ public:
     const value_type_abs largest = m_eigen.eigenvalues().cwiseAbs().maxCoeff();
     // the rounding errors of the elements of the metric matrix, amplified by the orthonormalisation
     const value_type_abs rounding = precision_scaled<value_type>(1e-13) * m.norm() / s_eigen.eigenvalues()(n - rank);
-    if (lowest < -tolerance() * largest - rounding)
+    if (lowest < -positivity_tolerance() * largest - rounding)
       throw std::runtime_error(std::format("The metric is not positive definite: it has the Rayleigh quotient {:.3e} "
                                            "on the subspace, against a largest one of {:.3e}",
                                            double(lowest), double(largest)));
