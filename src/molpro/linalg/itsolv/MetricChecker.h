@@ -107,8 +107,10 @@ public:
    * subspace vectors b_i, which a Cholesky factorisation confirms cheaply. Where it fails, which nearly linearly
    * dependent subspace vectors can cause as well, the Rayleigh quotients of M on the span of the subspace vectors
    * decide. They are the eigenvalues of the metric matrix in the basis orthonormalised with the overlap
-   * S_ij = <b_i|b_j>, leaving out nearly linearly dependent directions, and so do not depend on how well conditioned
-   * the basis is. The metric fails the check if one of them is negative by more than tolerance() times the largest.
+   * S_ij = <b_i|b_j>, leaving out nearly linearly dependent directions. Orthonormalising amplifies the rounding errors
+   * of the metric matrix by up to the inverse of the smallest eigenvalue of the overlap that is kept, so the metric
+   * fails the check only if a Rayleigh quotient is negative by more than tolerance() times the largest plus these
+   * amplified rounding errors.
    *
    * An indefinite metric is noticed only once one of its negative directions enters the subspace.
    * @param metric the metric matrix of the subspace
@@ -141,7 +143,9 @@ public:
                                                              Eigen::EigenvaluesOnly);
     const value_type_abs lowest = m_eigen.eigenvalues().minCoeff();
     const value_type_abs largest = m_eigen.eigenvalues().cwiseAbs().maxCoeff();
-    if (lowest < -tolerance() * largest)
+    // the rounding errors of the elements of the metric matrix, amplified by the orthonormalisation
+    const value_type_abs rounding = precision_scaled<value_type>(1e-13) * m.norm() / s_eigen.eigenvalues()(n - rank);
+    if (lowest < -tolerance() * largest - rounding)
       throw std::runtime_error(std::format("The metric is not positive definite: it has the Rayleigh quotient {:.3e} "
                                            "on the subspace, against a largest one of {:.3e}",
                                            double(lowest), double(largest)));
