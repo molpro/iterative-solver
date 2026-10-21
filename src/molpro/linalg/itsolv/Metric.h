@@ -6,7 +6,9 @@ namespace molpro::linalg::itsolv {
 /*!
  * @brief The kind of metric M of a generalised problem, such as the eigenproblem A v = lambda M v
  *
- * Which kinds are supported depends on the solver, see IterativeSolver::supports_metric().
+ * Which kinds are supported depends on the solver, see IterativeSolver::supports_metric(): LinearEigensystemDavidson
+ * supports Identity and HermitianPositiveDefinite, all other solvers only Identity. HermitianPositiveSemidefinite and
+ * HermitianIndefinite are reserved for future solvers.
  */
 enum class MetricKind {
   Identity,                      //!< M = 1, i.e. no metric
