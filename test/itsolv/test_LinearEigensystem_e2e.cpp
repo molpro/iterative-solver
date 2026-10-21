@@ -367,7 +367,10 @@ public:
   double metric_condition = 1;       //!< roughly the condition number of the metric
   bool cheap_metric = false;         //!< whether the metric is applied on the fly rather than its actions stored
 
-  bool metric_is_cheap() const override { return cheap_metric; }
+  molpro::linalg::itsolv::MetricStorage metric_storage() const override {
+    return cheap_metric ? molpro::linalg::itsolv::MetricStorage::OnTheFly
+                        : molpro::linalg::itsolv::MetricStorage::Stored;
+  }
   bool provide_pp_metric_matrix = true;
   bool provide_p_metric_action = true;
 

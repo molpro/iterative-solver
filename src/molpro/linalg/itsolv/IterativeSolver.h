@@ -206,11 +206,14 @@ public:
   virtual MetricKind metric_kind() const { return MetricKind::Identity; }
 
   /*!
-   * @brief Whether the metric is cheap to apply. If so, IterativeSolver::solve() uses MetricStorage::OnTheFly: it
-   * does not keep the actions of the metric on all subspace vectors, but calls metric_action() on the solutions
-   * whenever it constructs residuals; see IterativeSolver::set_metric().
+   * @brief How IterativeSolver::solve() obtains the actions of the metric on its subspace vectors, see
+   * IterativeSolver::set_metric(). With MetricStorage::Stored (the default) it keeps the action of the metric on
+   * every subspace vector; with MetricStorage::OnTheFly it keeps none, and calls metric_action() on the solutions
+   * whenever it constructs residuals instead. OnTheFly saves the memory or disk space of one vector per subspace vector
+   * at the cost of applying the metric once more per root and iteration, which pays off where the metric is cheap to
+   * apply, e.g. diagonal or sparse.
    */
-  virtual bool metric_is_cheap() const { return false; }
+  virtual MetricStorage metric_storage() const { return MetricStorage::Stored; }
 
   /*!
    * @brief Calculate the action of the metric on a set of parameters. Called only if metric_kind() is not
@@ -292,7 +295,7 @@ public:
 
   /*!
    * @brief Calculate the action of the metric on a set of vectors in the P space, for a problem with a metric
-   * (metric_kind()). Not used if the metric is applied on the fly (metric_is_cheap()).
+   * (metric_kind()). Not used if the metric is applied on the fly (metric_storage()).
    * @param p_coefficients The projection of the vectors onto to the P space
    * @param pparams Specification of the P space
    * @param metric_actions On exit, the computed action of the metric has been added to the original contents
@@ -428,7 +431,7 @@ public:
    *
    * Behaves like solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&, bool), and for a problem without a
    * metric exactly so. For a problem with a metric, set_metric() is called with Problem::metric_kind() (throwing if
-   * the solver does not support it) and, if Problem::metric_is_cheap(), MetricStorage::OnTheFly with a function
+   * the solver does not support it) and Problem::metric_storage(), with, for MetricStorage::OnTheFly, a function
    * calling Problem::metric_action(). The actions of kernel and metric are calculated together by
    * Problem::action_with_metric(). If the problem provides diagonals(), it has to provide metric_diagonals()
    * too; both are passed to the preconditioner, and a generated initial guess and the P space are selected from the
