@@ -7,7 +7,10 @@
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
 #include <molpro/linalg/itsolv/wrap.h>
 
+#include <cmath>
 #include <map>
+#include <numeric>
+#include <random>
 #include <vector>
 
 using molpro::linalg::itsolv::ArrayHandlers;
@@ -48,6 +51,37 @@ TEST(MetricChecker, positive) {
   // the metric itself is indefinite
   EXPECT_THROW(Checker::check_positive(matrix({1, 0, 0, -1}, 2), matrix({1, 0, 0, 1}, 2)), std::runtime_error);
   EXPECT_THROW(Checker::check_positive(matrix({-1, 0, 0, -2}, 2), matrix({1, 0, 0, 1}, 2)), std::runtime_error);
+}
+
+// A positive definite metric with a large condition number passes on nearly linearly dependent subspace vectors that
+// differ only along its smallest directions, where orthonormalising amplifies the rounding errors of the metric matrix
+TEST(MetricChecker, positive_ill_conditioned_basis) {
+  const size_t n = 400, k = 4;
+  std::vector<double> metric(n);
+  for (size_t i = 0; i < n; ++i)
+    metric[i] = std::pow(1e-10, double(i) / (n - 1));
+  std::mt19937 generator(7);
+  std::normal_distribution<double> distribution;
+  for (int trial = 0; trial < 20; ++trial) {
+    std::vector<std::vector<double>> b(k, std::vector<double>(n));
+    for (size_t j = 0; j < k; ++j) {
+      for (size_t i = 0; i < n; ++i) {
+        const auto random = distribution(generator);
+        b[j][i] = j == 0 ? random : b[j - 1][i] + (i >= n - n / 40 ? 2e-5 * random : 0.);
+      }
+      const auto norm = std::sqrt(std::inner_product(b[j].begin(), b[j].end(), b[j].begin(), 0.));
+      for (auto& x : b[j])
+        x /= norm;
+    }
+    Matrix<double> m({k, k}), s({k, k});
+    for (size_t i = 0; i < k; ++i)
+      for (size_t j = 0; j < k; ++j)
+        for (size_t l = 0; l < n; ++l) {
+          m(i, j) += b[i][l] * metric[l] * b[j][l];
+          s(i, j) += b[i][l] * b[j][l];
+        }
+    EXPECT_NO_THROW(Checker::check_positive(m, s)) << "trial " << trial;
+  }
 }
 
 // The metric matrix in the P space has to be Hermitian
