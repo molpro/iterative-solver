@@ -13,6 +13,8 @@
 #include <molpro/linalg/array/DistrArray.h>
 #include <molpro/linalg/array/util/Distribution.h>
 
+#include <functional>
+#include <map>
 #include <memory>
 #include <ostream>
 #include <vector>
@@ -322,6 +324,21 @@ public:
 };
 
 /*!
+ * @brief The metric of a problem in the P space, for IterativeSolver::add_p()
+ * @tparam R the type of container for solutions and residuals
+ * @tparam P the type of a P-space vector
+ */
+template <class R, class P = std::map<size_t, typename R::value_type>>
+struct PSpaceMetric {
+  using value_type = typename R::value_type;
+  //! the metric matrix in the P space, in the layout of the kernel matrix given to add_p(), which copies it
+  array::Span<value_type> pp_matrix;
+  //! adds the action of the metric on vectors in the P space, like the function for the kernel given to add_p(); needed
+  //! with MetricStorage::Stored, ignored with MetricStorage::OnTheFly, and kept by the solver
+  std::function<void(const std::vector<std::vector<value_type>>&, const CVecRef<P>&, const VecRef<R>&)> apply;
+};
+
+/*!
  * @brief Base class defining the interface common to all iterative solvers
  *
  * As well as through the interface, some behaviour (profiling, and tuning of BLAS operations)
@@ -352,13 +369,7 @@ public:
   using fapply_on_p_type = std::function<void(const std::vector<VectorP>&, const CVecRef<P>&, const VecRef<R>&)>;
   //! Function type for applying the metric to a set of vectors (first argument), writing the results into the second
   using fapply_metric_type = std::function<void(const CVecRef<R>&, const VecRef<R>&)>;
-  //! The metric of a problem in the P space, see add_p()
-  struct PSpaceMetric {
-    array::Span<value_type> pp_matrix; //!< the metric matrix in the P space, in the layout of the kernel matrix
-    //! adds the action of the metric on vectors in the P space, like the function for the kernel; needed unless the
-    //! metric is applied on the fly
-    fapply_on_p_type apply;
-  };
+  using PSpaceMetric = itsolv::PSpaceMetric<R, P>;
 
   virtual ~IterativeSolver() = default;
   IterativeSolver() = default;

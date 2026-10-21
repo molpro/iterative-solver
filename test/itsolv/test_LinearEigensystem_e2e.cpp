@@ -470,7 +470,7 @@ TEST(LinearEigensystem, Davidson_generalized_pspace_stepwise_on_the_fly) {
     pspace.push_back(P{{i, 1.}});
   auto pp = problem.pp_action_matrix(pspace), mm = problem.pp_metric_matrix(pspace);
   std::vector<std::vector<double>> x(2, std::vector<double>(problem.n)), r = x;
-  using PSpaceMetric = decltype(solver)::element_type::PSpaceMetric;
+  using PSpaceMetric = molpro::linalg::itsolv::PSpaceMetric<std::vector<double>>;
   solver->add_p(
       cwrap(pspace), molpro::linalg::array::Span<double>(pp.data(), pp.size()), wrap(x), wrap(r),
       [&problem](const std::vector<std::vector<double>> &c, const molpro::linalg::itsolv::CVecRef<P> &p,
@@ -731,7 +731,7 @@ TEST(LinearEigensystem, Davidson_generalized_errors) {
                  std::logic_error);
     // where the actions of the metric are stored, its action in the P space is needed
     auto mm = problem.pp_metric_matrix(pspace);
-    using PSpaceMetric = decltype(solver)::element_type::PSpaceMetric;
+    using PSpaceMetric = molpro::linalg::itsolv::PSpaceMetric<std::vector<double>>;
     EXPECT_THROW(solver->add_p(molpro::linalg::itsolv::cwrap(pspace),
                                molpro::linalg::array::Span<double>(pp.data(), pp.size()),
                                molpro::linalg::itsolv::wrap(params), molpro::linalg::itsolv::wrap(actions), {},
