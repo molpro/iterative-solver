@@ -423,6 +423,10 @@ public:
    *
    * A problem with a metric (Problem::metric_kind() other than MetricKind::Identity) has to be solved with the
    * overload taking buffers for the actions of the metric; this one throws for it.
+   *
+   * The solver may keep references to problem for later calls such as solution(), e.g. for a P space, so problem has
+   * to outlive them; a further call of solve() replaces them. A temporary problem is therefore rejected at compile
+   * time.
    */
   virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
                      bool generate_initial_guess = false) = 0;
@@ -431,6 +435,15 @@ public:
   //! @copydoc solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&, bool)
   virtual bool solve(std::vector<R>& parameters, std::vector<R>& actions, const Problem<R>& problem,
                      bool generate_initial_guess = false) = 0;
+  //! A temporary problem is rejected, as the solver may keep references to the problem beyond solve(), e.g. for a P
+  //! space
+  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>&& problem,
+             bool generate_initial_guess = false) = delete;
+  //! @copydoc solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&&, bool)
+  bool solve(R& parameters, R& actions, const Problem<R>&& problem, bool generate_initial_guess = false) = delete;
+  //! @copydoc solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&&, bool)
+  bool solve(std::vector<R>& parameters, std::vector<R>& actions, const Problem<R>&& problem,
+             bool generate_initial_guess = false) = delete;
 
   /*!
    * @brief Simplified one-call solver for problems that may have a metric, e.g. the generalised eigenproblem

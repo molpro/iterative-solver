@@ -575,14 +575,20 @@ TEST(LinearEigensystem, Davidson_generalized_guess_metric_scale) {
   }
 }
 
-// solve() for a problem with a metric keeps references to the problem, so it does not accept a temporary problem
+// solve() may keep references to the problem, so it does not accept a temporary problem, with or without buffers for
+// the actions of a metric
 template <class Solver, class Problem>
 constexpr bool solves_temporary =
-    requires(Solver &solver, std::vector<std::vector<double>> &v) { solver.solve(v, v, v, Problem{}); };
+    requires(Solver &solver, std::vector<std::vector<double>> &v) { solver.solve(v, v, v, Problem{}); } or
+    requires(Solver &solver, std::vector<std::vector<double>> &v) { solver.solve(v, v, Problem{}); } or
+    requires(Solver &solver, std::vector<double> &r) { solver.solve(r, r, Problem{}); };
 template <class Solver, class Problem>
-constexpr bool solves_lvalue = requires(Solver &solver, std::vector<std::vector<double>> &v, const Problem &problem) {
-  solver.solve(v, v, v, problem);
-};
+constexpr bool solves_lvalue =
+    requires(Solver &solver, std::vector<std::vector<double>> &v, std::vector<double> &r, const Problem &problem) {
+      solver.solve(v, v, v, problem);
+      solver.solve(v, v, problem);
+      solver.solve(r, r, problem);
+    };
 using LinearEigensystem =
     molpro::linalg::itsolv::LinearEigensystem<std::vector<double>, std::vector<double>, std::map<size_t, double>>;
 using LinearEigensystemDavidson = molpro::linalg::itsolv::LinearEigensystemDavidson<std::vector<double>>;
