@@ -408,7 +408,7 @@ public:
   bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions,
              const Problem<R>& problem, bool generate_initial_guess = false) override {
     if (parameters.size() != metric_actions.size())
-      throw std::runtime_error("Inconsistent container sizes in IterativeSolver::solve()");
+      throw std::invalid_argument("IterativeSolver::solve(): metric_actions has to hold as many vectors as parameters");
     return solve_impl(parameters, actions, metric_actions, problem, generate_initial_guess);
   }
 
