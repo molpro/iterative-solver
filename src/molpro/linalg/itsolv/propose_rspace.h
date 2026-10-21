@@ -367,7 +367,7 @@ auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CV
 template <class R, class Q, class P, typename value_type>
 subspace::Matrix<value_type> contribution_solutions(const subspace::Matrix<value_type>& solutions,
                                                     const subspace::IXSpace<R, Q, P>& xspace) {
-  if (!xspace.has_metric())
+  if (xspace.metric_kind() == MetricKind::Identity)
     return solutions;
   return subspace::util::unit_length_solutions(solutions, xspace.data.at(subspace::EqnData::S));
 }

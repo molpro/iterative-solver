@@ -53,8 +53,9 @@ protected:
     m_logger->trace("SubspaceSolverLinEig::solve_eigenvalue");
     auto h = xspace.data[EqnData::H];
     // the metric of a generalised eigenproblem replaces the overlap of the subspace vectors
-    auto s = xspace.data[xspace.has_metric() ? EqnData::M : EqnData::S];
-    m_logger->data_dump(xspace.has_metric() ? "M = " : "S = ", s);
+    const bool metric = xspace.metric_kind() != MetricKind::Identity;
+    auto s = xspace.data[metric ? EqnData::M : EqnData::S];
+    m_logger->data_dump(metric ? "M = " : "S = ", s);
     m_logger->data_dump<15>("H = ", h);
     auto dim = h.rows();
     auto evec = std::vector<value_type>{};

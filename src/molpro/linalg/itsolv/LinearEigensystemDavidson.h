@@ -247,7 +247,7 @@ protected:
     // where the metric is applied on the fly, and otherwise assembled from the stored actions of the metric on the Q
     // and D spaces and the action of the metric on the P space. The coefficients are collected in these matrices.
     const auto& xspace = *this->m_xspace;
-    const bool metric = xspace.has_metric();
+    const bool metric = xspace.metric_kind() != MetricKind::Identity;
     const bool on_the_fly = !metric_solutions.empty();
     const bool stored = metric && !on_the_fly;
     const auto& dims = xspace.dimensions();

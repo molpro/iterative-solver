@@ -222,7 +222,6 @@ public:
   using typename IXSpace<R, Q, P>::value_type;
   using typename IXSpace<R, Q, P>::value_type_abs;
   using IXSpace<R, Q, P>::data;
-  using IXSpace<R, Q, P>::has_metric;
   using IXSpace<R, Q, P>::stores_metric_actions;
 
   explicit XSpace(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers, const std::shared_ptr<Logger>& logger)
@@ -237,7 +236,7 @@ public:
       throw std::logic_error("XSpace::set_metric: the metric cannot be changed once the subspace is not empty");
     m_metric_kind = kind;
     m_metric_storage = storage;
-    if (has_metric())
+    if (metric_kind() != MetricKind::Identity)
       data[EqnData::M] = {};
     else
       data.erase(EqnData::M);
@@ -250,7 +249,7 @@ public:
   void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
                      const CVecRef<R>& metric_actions = {}) override {
     m_logger->trace("QSpace::update_qspace");
-    if (metric_actions.size() != (has_metric() ? params.size() : 0))
+    if (metric_actions.size() != (metric_kind() != MetricKind::Identity ? params.size() : 0))
       throw std::invalid_argument(
           "XSpace::update_qspace: actions of the metric must be given for every parameter exactly when there is a "
           "metric");
@@ -268,11 +267,11 @@ public:
     if (metric_actions.size() != (stores_metric_actions() ? params.size() : 0))
       throw std::invalid_argument(
           "XSpace::update_dspace: actions of the metric must be given exactly when they are stored");
-    if (has_metric() && !params.empty() &&
+    if (metric_kind() != MetricKind::Identity && !params.empty() &&
         (coefficients.rows() != params.size() || coefficients.cols() != q_delete.size() + m_dim.nD))
       throw std::invalid_argument("XSpace::update_dspace: the coefficients of the new D vectors are needed");
     // the metric matrix of the new subspace is transformed from the current one, before the subspace changes
-    const auto metric_matrix = has_metric() && !params.empty()
+    const auto metric_matrix = metric_kind() != MetricKind::Identity && !params.empty()
                                    ? xspace::metric_with_new_dspace(data.at(EqnData::M), m_dim, q_delete, coefficients)
                                    : Matrix<value_type>{};
     auto q_delete_descending = q_delete;
@@ -289,7 +288,7 @@ public:
     auto new_data_action = xspace::update_dspace_action_data(
         cparamsp(), cparamsq(), cactionsq(), cparamsd(), cactionsd(), m_handlers->qp(), m_handlers->qq(), *m_logger);
     xspace::copy_dspace_eqn_data(new_data_action, data, EqnData::H, m_dim);
-    if (has_metric() && m_dim.nD > 0)
+    if (metric_kind() != MetricKind::Identity && m_dim.nD > 0)
       data[EqnData::M] = metric_matrix;
     data[EqnData::rhs].resize({m_dim.nX(), m_dim.nRHS});
     data[EqnData::rhs].slice({m_dim.oD(), 0}, {m_dim.oD() + m_dim.nD, m_dim.nRHS}) = new_data.qq[EqnData::rhs].slice();
@@ -303,7 +302,7 @@ public:
     if (!m_hermitian)
       throw std::runtime_error("P space can only be used with hermitian kernels");
     const size_t nPnew = params.size();
-    if (pp_metric_matrix.size() != (has_metric() ? nPnew * nPnew : 0))
+    if (pp_metric_matrix.size() != (metric_kind() != MetricKind::Identity ? nPnew * nPnew : 0))
       throw std::invalid_argument("XSpace::update_pspace: the metric matrix in the P space must be given exactly when "
                                   "there is a metric");
     pspace.update(params, m_handlers->pp());
@@ -316,7 +315,7 @@ public:
     for (size_t i = 0, ij = 0; i < nP; ++i)
       for (size_t j = 0; j < nP; ++j, ++ij)
         data[EqnData::H](i, j) = pp_action_matrix[ij];
-    if (has_metric()) {
+    if (metric_kind() != MetricKind::Identity) {
       data[EqnData::M].resize({nP, nP});
       for (size_t i = 0, ij = 0; i < nP; ++i)
         for (size_t j = 0; j < nP; ++j, ++ij)

@@ -62,7 +62,9 @@ public:
   //! How the actions of the metric declared with set_metric() are obtained
   virtual MetricStorage metric_storage() const = 0;
   //! Whether the actions of the metric on the Q and D vectors are kept
-  bool stores_metric_actions() const { return has_metric() && metric_storage() == MetricStorage::Stored; }
+  bool stores_metric_actions() const {
+    return metric_kind() != MetricKind::Identity && metric_storage() == MetricStorage::Stored;
+  }
 
   /*!
    * @brief Adds parameters to the Q space
@@ -108,8 +110,6 @@ public:
   virtual CVecRef<Q> cmetric_actionsq() const = 0;
   //! Actions of the metric on the D space parameters, empty unless there is a metric
   virtual CVecRef<Q> cmetric_actionsd() const = 0;
-  //! Whether there is a metric other than the identity, whose matrix the subspace holds in EqnData::M
-  bool has_metric() const { return metric_kind() != MetricKind::Identity; }
 
   virtual const Dimensions& dimensions() const = 0;
 

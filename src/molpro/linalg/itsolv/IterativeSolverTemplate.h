@@ -846,7 +846,7 @@ protected:
       solution_impl(roots, parameters, action, scratch);
       auto errors = std::vector<value_type_abs>(roots.size(), 0);
       detail::update_errors(errors, cwrap(action), m_handlers->rr());
-      if (m_xspace->has_metric()) {
+      if (m_xspace->metric_kind() != MetricKind::Identity) {
         // The solutions are normalised in the metric, so their Euclidean length, and with it the length of the
         // residual, would depend on the scale of the metric. The error is that of the solution of unit length instead,
         // which is the same as without a metric.
