@@ -3,6 +3,7 @@
 
 #include <molpro/linalg/array/DistrArrayFile.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
+#include <molpro/linalg/itsolv/LinearEigensystemDavidson.h>
 #include <molpro/linalg/itsolv/SolverFactory.h>
 #include <molpro/mpi.h>
 
@@ -766,6 +767,22 @@ TEST(LinearEigensystem, Davidson_generalized_guess_metric_scale) {
     EXPECT_NEAR(solver->eigenvalues()[0] * scale, 1.2, 1e-12);
   }
 }
+
+// solve() for a problem with a metric keeps references to the problem, so it does not accept a temporary problem
+template <class Solver, class Problem>
+constexpr bool solves_temporary =
+    requires(Solver &solver, std::vector<std::vector<double>> &v) { solver.solve(v, v, v, Problem{}); };
+template <class Solver, class Problem>
+constexpr bool solves_lvalue = requires(Solver &solver, std::vector<std::vector<double>> &v, const Problem &problem) {
+  solver.solve(v, v, v, problem);
+};
+using LinearEigensystem =
+    molpro::linalg::itsolv::LinearEigensystem<std::vector<double>, std::vector<double>, std::map<size_t, double>>;
+using LinearEigensystemDavidson = molpro::linalg::itsolv::LinearEigensystemDavidson<std::vector<double>>;
+static_assert(not solves_temporary<LinearEigensystem, GeneralizedProblem>);
+static_assert(not solves_temporary<LinearEigensystemDavidson, GeneralizedProblem>);
+static_assert(solves_lvalue<LinearEigensystem, GeneralizedProblem>);
+static_assert(solves_lvalue<LinearEigensystemDavidson, GeneralizedProblem>);
 
 // A single root is found with a single set of buffers, which also hand the diagonal elements of kernel and metric to
 // the preconditioner

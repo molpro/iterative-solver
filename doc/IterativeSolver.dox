@@ -59,7 +59,7 @@ of the same size as the parameters, which it uses for the actions of M on the ne
 solver needs for the metric matrix of the subspace also when M is applied on the fly, then as scratch space for M x of
 the solutions, and for handing the diagonal elements of M to the preconditioner; the other overload throws for it.
 The solver keeps references to the problem, e.g. for applying M on the fly in a later IterativeSolver::solution(), so
-the problem has to outlive these calls.
+the problem has to outlive these calls; a temporary problem does not compile.
 
 The solutions are normalised in the metric, |<v|M|v>| = 1, and their residuals are A v - lambda M v. The errors are
 the norms of the residuals of the solutions scaled to unit length, |A v - lambda M v| / |v|, which do not depend on the
