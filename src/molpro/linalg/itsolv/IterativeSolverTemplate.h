@@ -537,9 +537,11 @@ protected:
     const Q* selection = diagonals.get();
     std::unique_ptr<Q> ratios;
     if (metric_diagonals and (generate_initial_guess or m_max_p > 0)) {
-      // the lowest eigenvalues of a generalised eigenproblem are expected at the lowest ratios of the diagonals
+      // the lowest eigenvalues of a generalised eigenproblem are expected at the lowest ratios of the diagonals, which
+      // are exact, as a regulariser would make them depend on the scale of the metric
       m_handlers->rq().copy(parameters.at(0), *diagonals);
-      precondition_default(wrap_arg(parameters.at(0).get()), std::vector<value_type>{0}, actions.at(0).get());
+      detail::precondition_default(wrap_arg(parameters.at(0).get()), std::vector<value_type>{0}, actions.at(0).get(),
+                                   static_cast<const R*>(nullptr), false);
       ratios.reset(new Q{m_handlers->qr().copy(parameters.at(0))});
       selection = ratios.get();
     }
