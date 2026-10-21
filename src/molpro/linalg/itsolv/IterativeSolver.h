@@ -168,6 +168,9 @@ public:
    * @param shift When called from LinearEigensystem, contains the corresponding current
    * eigenvalue estimates for each of the parameter vectors in the set. All other solvers
    * pass a vector of zeroes.
+   *
+   * Used if diagonals() is not provided. For a generalised eigenproblem A v = lambda M v, the preconditioner should
+   * approximate the inverse of A - shift M.
    */
   virtual void precondition(const VecRef<R>& residual, const std::vector<value_t>& shift) const { return; }
 
@@ -244,7 +247,7 @@ public:
   /*!
    * @brief Provide the diagonal elements of the metric. For a problem with a metric that provides diagonals(), this
    * is required too, so that the default preconditioner divides by diag(A) - lambda diag(M); IterativeSolver::solve()
-   * throws otherwise. The diagonal elements of the kernel and of the metric are then passed to
+   * throws otherwise. Approximate values are fine. The diagonal elements of the kernel and of the metric are then passed to
    * precondition_with_metric(), and an initial guess is generated from the lowest ratios of the diagonal elements of
    * the kernel and the metric, which needs a container supported by precondition_default().
    * @param d On exit, contains the diagonal elements of the metric
@@ -385,6 +388,8 @@ public:
    * Example for solving linear eigensystem, simultaneously tracking multiple roots
    * @example LinearEigensystemDistrArrayExample.cpp
    * Example for solving linear eigensystem, history vectors on disk, optional MPI
+   * @example GeneralizedEigensystemExample.cpp
+   * Example for solving a generalised eigensystem A v = lambda M v, with solve() and stepwise
    * @example LinearEquationsExample.cpp
    * Example for solving inhomogeneous linear equations
    * @example NonLinearEquationsExample.cpp
@@ -433,8 +438,9 @@ public:
    * @param parameters A set of scratch vectors, as for solve(const VecRef<R>&, const VecRef<R>&, const Problem<R>&,
    * bool)
    * @param actions A set of scratch vectors. It should have the same size as parameters.
-   * @param metric_actions A set of scratch vectors for the actions of the metric, of the same size as parameters. Their
-   * use by the solver is unspecified.
+   * @param metric_actions A set of scratch vectors, of the same size as parameters. The solver uses them for the actions
+   * of the metric on new expansion vectors, which it needs also when the metric is applied on the fly, as scratch space,
+   * and to hand the diagonal elements of the metric to the preconditioner.
    * @param problem A Problem object defining the problem to be solved
    * @param generate_initial_guess Whether to start with a guess based on diagonal elements (true) or on the contents
    * of parameters (false)
@@ -589,7 +595,12 @@ public:
   // FIXME Is this needed?
   virtual void clearP() = 0;
 
-  //! Construct solution and residual for a given set of roots
+  /*!
+   * @brief Construct solution and residual for a given set of roots
+   *
+   * For a problem solved with solve() whose metric is applied on the fly (Problem::metric_storage()), this applies the
+   * metric through the problem, which therefore has to be still alive.
+   */
   virtual void solution(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual) = 0;
 
   //! Constructs parameters of selected roots

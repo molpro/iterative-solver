@@ -82,9 +82,10 @@ solver->solution(parameters, actions);
 ```
 
 For a generalised eigenvalue problem A v = &lambda; M v with a Hermitian, positive definite metric M, the `Problem`
-additionally returns the kind of metric from `metric_kind()` and implements `metric_action()` (and `metric_diagonals()`
-if it provides `diagonals()`), and the problem is solved with the `solve()` overload that takes a third set of buffers,
-for the actions of the metric:
+additionally returns the kind of metric from `metric_kind()` and implements `metric_action()` (and `metric_diagonals()`,
+without which `solve()` throws, if it provides `diagonals()`), and the problem is solved with the `solve()` overload
+that takes a third set of buffers, for the actions of the metric; this is available in C++ only so far. See
+`examples/GeneralizedEigensystemExample.cpp` and the documentation of generalised eigenproblems for details:
 
 ```c++
 std::vector<Rvector> metric_actions(n_roots, Rvector(n));
