@@ -511,7 +511,7 @@ protected:
     }
     const auto kind = problem.metric_kind();
     const bool metric = kind != MetricKind::Identity;
-    const bool store_metric_actions = metric and not problem.metric_is_cheap();
+    const bool store_metric_actions = metric and problem.metric_storage() == MetricStorage::Stored;
     check_metric_change(kind, store_metric_actions ? MetricStorage::Stored : MetricStorage::OnTheFly);
     // the problem is checked before the solver changes, using the buffers as scratch space
     bool use_diagonals = problem.diagonals(actions.at(0));
