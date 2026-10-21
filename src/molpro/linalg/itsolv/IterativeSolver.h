@@ -541,7 +541,7 @@ public:
    * @return The size of the new working set.
    */
   virtual int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions) {
-    throw std::logic_error("This solver does not support a metric");
+    throw std::invalid_argument("This solver does not support a metric");
   }
   //! @copydoc add_vector(const VecRef<R>&, const VecRef<R>&, const VecRef<R>&)
   virtual int add_vector(std::vector<R>& parameters, std::vector<R>& actions, std::vector<R>& metric_actions) {
@@ -583,7 +583,7 @@ public:
   virtual size_t add_p(const CVecRef<P>& pparams, const array::Span<value_type>& pp_action_matrix,
                        const VecRef<R>& parameters, const VecRef<R>& action, fapply_on_p_type apply_p,
                        const PSpaceMetric& metric) {
-    throw std::logic_error("This solver does not support a metric");
+    throw std::invalid_argument("This solver does not support a metric");
   }
 
   // FIXME Is this needed?

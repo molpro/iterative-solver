@@ -748,7 +748,7 @@ TEST(LinearEigensystem, Davidson_generalized_errors) {
   EXPECT_THROW(davidson()->solve(params, actions, problem, true), std::invalid_argument);
   {
     auto too_few = std::vector<std::vector<double>>(1, std::vector<double>(problem.n));
-    EXPECT_THROW(davidson()->solve(params, actions, too_few, problem, true), std::runtime_error);
+    EXPECT_THROW(davidson()->solve(params, actions, too_few, problem, true), std::invalid_argument);
   }
   // the default preconditioner would ignore the metric without its diagonal elements
   problem.provide_metric_diagonals = false;
