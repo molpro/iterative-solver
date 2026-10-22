@@ -556,6 +556,9 @@ protected:
     // a P space replaces any initial guess; without one, max_p > 0 still means the contents of parameters are not used
     if (pspace.empty() and (generate_initial_guess or (use_diagonals and m_max_p > 0)))
       generate_initial_guess_from_diagonals(parameters, *selection);
+    // the ratios of the diagonal elements are not needed any more
+    selection = nullptr;
+    ratios.reset();
     if (!pspace.empty())
       nwork = initialise_pspace(pspace, problem, pspace_matrices, parameters, actions);
     for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
