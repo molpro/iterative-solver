@@ -399,6 +399,27 @@ TEST(LinearEigensystem, Davidson_generalized_cheap_metric) {
     }
 }
 
+// Applied on the fly, the metric is applied to the solutions in the buffers given to solve(), also once fewer roots are
+// in the working set than buffers, so that the solver creates no more Q vectors than the parameters and actions it
+// keeps, i.e. two thirds of those with stored actions of the metric
+TEST(LinearEigensystem, Davidson_generalized_on_the_fly_without_q_scratch) {
+  GeneralizedProblem problem;
+  auto q_creations = [&problem](bool cheap_metric) {
+    problem.cheap_metric = cheap_metric;
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+    solver->set_n_roots(3);
+    solver->set_hermiticity(true);
+    solver->set_convergence_threshold(1e-10);
+    auto params = std::vector<std::vector<double>>(3, std::vector<double>(problem.n));
+    auto actions = params, metric_actions = params;
+    EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
+    return std::make_pair(solver->statistics().q_creations, solver->statistics().iterations);
+  };
+  const auto stored = q_creations(false), on_the_fly = q_creations(true);
+  ASSERT_EQ(on_the_fly.second, stored.second);
+  EXPECT_EQ(3 * on_the_fly.first, 2 * stored.first);
+}
+
 // A P space together with a metric, whose actions are stored or applied on the fly, also when Q vectors are moved into
 // the D space
 TEST(LinearEigensystem, Davidson_generalized_pspace) {

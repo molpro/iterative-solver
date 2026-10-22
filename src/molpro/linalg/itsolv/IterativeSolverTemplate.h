@@ -191,7 +191,7 @@ public:
     const auto nW = n_added_vectors(parameters);
     if (metric_actions.size() < nW)
       throw std::invalid_argument("IterativeSolver::add_vector(): fewer actions of the metric than parameters");
-    return add_vector_impl(parameters, actions, wrap(begin(metric_actions), begin(metric_actions) + nW));
+    return add_vector_impl(parameters, actions, metric_actions);
   }
 
   bool supports_metric(MetricKind kind) const override { return kind == MetricKind::Identity; }
@@ -820,7 +820,7 @@ protected:
   /*!
    * @brief Implements add_vector()
    * @param metric_actions For a problem with a metric, the actions of the metric on the first n_added_vectors() of
-   * parameters, otherwise empty
+   * parameters, followed by any further vectors, which serve as scratch space, otherwise empty
    */
   int add_vector_impl(const VecRef<R>& parameters, const VecRef<R>& actions, const VecRef<R>& metric_actions) {
     auto outer = profiler()->push("itsolv::add_vector");
@@ -838,7 +838,9 @@ protected:
     auto cwparams = cwrap(begin(parameters), begin(parameters) + nW);
     auto cwactions = cwrap(begin(actions), begin(actions) + nW);
     m_stats->r_creations += nW;
-    const auto cwmetric_actions = cwrap(metric_actions);
+    // the actions of the metric beyond those of the added parameters are only scratch space
+    const auto cwmetric_actions =
+        metric_actions.empty() ? CVecRef<R>{} : cwrap(begin(metric_actions), begin(metric_actions) + nW);
     if (m_check_metric && m_metric_kind != MetricKind::Identity && cwmetric_actions.size() == nW)
       m_metric_checker.check_hermitian(cwparams, cwmetric_actions, *m_xspace, *m_handlers);
     prof->start("update_qspace");
