@@ -5,6 +5,7 @@
 #include <molpro/linalg/itsolv/ArrayHandlers.h>
 #include <molpro/linalg/itsolv/subspace/IXSpace.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
+#include <molpro/linalg/itsolv/subspace/util.h>
 #include <molpro/linalg/itsolv/wrap.h>
 #include <molpro/linalg/scalar_traits.h>
 
@@ -59,24 +60,29 @@ public:
                        const subspace::IXSpace<R, Q, P>& xspace, ArrayHandlers<R, Q, P>& handlers) const {
     const Q* q = nullptr;
     const Q* metric_action_q = nullptr;
+    value_type qmq = 0; // <q|M q>
     if (xspace.stores_metric_actions()) {
       if (xspace.dimensions().nQ == 0)
         return;
       q = &xspace.cparamsq().front().get();
       metric_action_q = &xspace.cmetric_actionsq().front().get();
+      qmq = xspace.data.at(subspace::EqnData::M)(xspace.dimensions().oQ(), xspace.dimensions().oQ());
     } else if (m_reference) {
-      q = &m_reference->first;
-      metric_action_q = &m_reference->second;
+      q = &m_reference->q;
+      metric_action_q = &m_reference->metric_action_q;
+      qmq = m_reference->qmq;
     } else
       return;
-    const auto norm_q = std::sqrt(std::abs(handlers.qq().dot(*q, *q)));
-    const auto norm_metric_action_q = std::sqrt(std::abs(handlers.qq().dot(*metric_action_q, *metric_action_q)));
+    // <x|M q> and <M x|q> from one pass over q and M q
+    auto left = params;
+    left.insert(left.end(), metric_actions.begin(), metric_actions.end());
+    const auto overlaps =
+        subspace::util::overlap(left, CVecRef<Q>{std::cref(*metric_action_q), std::cref(*q)}, handlers.rq());
     for (size_t i = 0; i < params.size(); ++i) {
-      const auto xmq = handlers.rq().dot(params[i], *metric_action_q);
-      const auto mxq = handlers.rq().dot(metric_actions[i], *q);
-      const auto norm_x = std::sqrt(std::abs(handlers.rr().dot(params[i], params[i])));
-      const auto norm_metric_action_x = std::sqrt(std::abs(handlers.rr().dot(metric_actions[i], metric_actions[i])));
-      const auto scale = (norm_x * norm_metric_action_q + norm_metric_action_x * norm_q) / 2;
+      const auto xmq = overlaps(i, 0);
+      const auto mxq = overlaps(params.size() + i, 1);
+      // the size of these elements, which the metric bounds with its values on x and q
+      const auto scale = std::sqrt(std::abs(handlers.rr().dot(params[i], metric_actions[i]) * qmq));
       if (std::abs(xmq - mxq) > hermiticity_tolerance() * scale)
         throw std::runtime_error(std::format("The metric is not Hermitian: <x|M q> = {:.6e} differs from <M x|q> = "
                                              "{:.6e} for a new parameter x and a subspace vector q",
@@ -86,13 +92,18 @@ public:
 
   /*!
    * @brief Keeps the first new parameter and its action of the metric for the next check_hermitian(), if the subspace
-   * does not keep the actions of the metric
+   * does not keep the actions of the metric, in the same Q vectors in every call
    */
   void remember(const CVecRef<R>& params, const CVecRef<R>& metric_actions, const subspace::IXSpace<R, Q, P>& xspace,
                 ArrayHandlers<R, Q, P>& handlers) {
     if (xspace.stores_metric_actions() || params.empty())
       return;
-    m_reference.emplace(handlers.qr().copy(params.front()), handlers.qr().copy(metric_actions.front()));
+    if (m_reference) {
+      handlers.qr().copy(m_reference->q, params.front());
+      handlers.qr().copy(m_reference->metric_action_q, metric_actions.front());
+    } else
+      m_reference.emplace(Reference{handlers.qr().copy(params.front()), handlers.qr().copy(metric_actions.front())});
+    m_reference->qmq = handlers.rr().dot(params.front(), metric_actions.front());
   }
 
   /*!
@@ -161,7 +172,13 @@ public:
   }
 
 private:
-  std::optional<std::pair<Q, Q>> m_reference; //!< a parameter and its action of the metric, see remember()
+  //! a parameter, its action of the metric and <q|M q>, see remember()
+  struct Reference {
+    Q q;
+    Q metric_action_q;
+    value_type qmq = 0;
+  };
+  std::optional<Reference> m_reference;
 };
 
 } // namespace molpro::linalg::itsolv::detail
