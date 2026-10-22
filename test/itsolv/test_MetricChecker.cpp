@@ -85,6 +85,34 @@ TEST(MetricChecker, positive_ill_conditioned_basis) {
   }
 }
 
+// With a P space, whose block of the metric matrix is kept factorised, the other vectors are checked through their
+// Schur complement, also as the subspace grows
+TEST(MetricChecker, positive_subspace) {
+  auto metric = [](size_t n, double last) {
+    Matrix<double> m({n, n});
+    for (size_t i = 0; i < n; ++i)
+      for (size_t j = 0; j < n; ++j)
+        m(i, j) = i == j ? (i + 1 == n ? last : 2.0 + i) : 0.1 / (1.0 + i + j);
+    return m;
+  };
+  auto identity = [](size_t n) {
+    Matrix<double> s({n, n});
+    for (size_t i = 0; i < n; ++i)
+      s(i, i) = 1;
+    return s;
+  };
+  Checker checker;
+  EXPECT_NO_THROW(checker.check_positive_subspace(metric(4, 1.), identity(4), 2));
+  EXPECT_NO_THROW(checker.check_positive_subspace(metric(5, 1.), identity(5), 2));
+  EXPECT_THROW(checker.check_positive_subspace(metric(6, -1.), identity(6), 2), std::runtime_error);
+  // a P space that is not positive definite is noticed as well
+  checker.reset_pspace();
+  EXPECT_THROW(checker.check_positive_subspace(metric(2, -1.), identity(2), 2), std::runtime_error);
+  checker.reset_pspace();
+  EXPECT_THROW(checker.check_positive_subspace(matrix({-1, 0, 0, 0, 2, 0, 0, 0, 3}, 3), identity(3), 2),
+               std::runtime_error);
+}
+
 // The metric matrix in the P space has to be Hermitian, up to a deviation such as that of approximate integrals, which
 // for complex elements includes real diagonal elements
 TEST(MetricChecker, hermitian_pspace) {

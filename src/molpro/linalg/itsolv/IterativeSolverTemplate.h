@@ -766,6 +766,7 @@ protected:
     if (apply_p)
       m_apply_p = std::move(apply_p);
     m_xspace->update_pspace(pparams, pp_action_matrix, pp_metric_matrix);
+    m_metric_checker.reset_pspace();
     auto working_set = solve_and_generate_working_set(parameters, actions);
     read_handler_counts(m_stats, m_handlers);
     return working_set;
@@ -805,11 +806,11 @@ protected:
   }
 
   //! For a positive (semi)definite metric, throws if the metric matrix shows that it is not, unless checks are off
-  void check_metric_positive() const {
+  void check_metric_positive() {
     if (m_check_metric && (m_metric_kind == MetricKind::HermitianPositiveDefinite ||
                            m_metric_kind == MetricKind::HermitianPositiveSemidefinite))
-      detail::MetricChecker<R, Q, P>::check_positive(m_xspace->data.at(subspace::EqnData::M),
-                                                     m_xspace->data.at(subspace::EqnData::S));
+      m_metric_checker.check_positive_subspace(m_xspace->data.at(subspace::EqnData::M),
+                                               m_xspace->data.at(subspace::EqnData::S), m_xspace->dimensions().nP);
   }
 
   //! The number of the given parameters that add_vector() takes up: no more than there are in the working set
