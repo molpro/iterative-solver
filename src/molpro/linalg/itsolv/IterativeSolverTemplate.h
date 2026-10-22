@@ -238,6 +238,7 @@ public:
     if (!pparams.empty() && m_xspace->stores_metric_actions() && !metric.apply)
       throw std::invalid_argument("A function applying the metric in the P space is needed unless the metric is "
                                   "applied on the fly");
+    check_pspace_metric(m_metric_kind, pparams, metric.pp_matrix);
     if (metric.apply)
       m_apply_metric_p = metric.apply;
     return add_p_impl(pparams, pp_action_matrix, metric.pp_matrix, parameters, actions, std::move(apply_p));
@@ -764,14 +765,32 @@ protected:
       throw std::runtime_error("P space must be empty or at least as large as number of roots sought");
     if (apply_p)
       m_apply_p = std::move(apply_p);
-    if (m_check_metric && m_metric_kind != MetricKind::Identity &&
-        pp_metric_matrix.size() == pparams.size() * pparams.size())
-      detail::MetricChecker<R, Q, P>::check_hermitian(pp_metric_matrix, pparams.size());
     m_xspace->update_pspace(pparams, pp_action_matrix, pp_metric_matrix);
-    check_metric_positive();
     auto working_set = solve_and_generate_working_set(parameters, actions);
     read_handler_counts(m_stats, m_handlers);
     return working_set;
+  }
+
+  /*!
+   * @brief Throws if the metric matrix in the P space is not given for a metric of this kind, or, unless checks are
+   * off, shows that the metric does not have the properties of its kind; checked before the P space is added
+   */
+  void check_pspace_metric(MetricKind kind, const CVecRef<P>& pparams,
+                           const array::Span<value_type>& pp_metric_matrix) const {
+    const auto n = pparams.size();
+    if (kind == MetricKind::Identity || n == 0)
+      return;
+    if (pp_metric_matrix.size() != n * n)
+      throw std::invalid_argument("The metric matrix in the P space must have as many rows and columns as there are "
+                                  "P-space vectors");
+    if (not m_check_metric)
+      return;
+    detail::MetricChecker<R, Q, P>::check_hermitian(pp_metric_matrix, n);
+    if (kind == MetricKind::HermitianPositiveDefinite || kind == MetricKind::HermitianPositiveSemidefinite)
+      detail::MetricChecker<R, Q, P>::check_positive(
+          subspace::Matrix<value_type>(
+              std::vector<value_type>(pp_metric_matrix.data(), pp_metric_matrix.data() + n * n), {n, n}),
+          subspace::util::overlap(pparams, m_handlers->pp()));
   }
 
   //! Throws if set_metric() with these arguments is not possible, apart from the function applying the metric
@@ -989,9 +1008,10 @@ protected:
 
   //! Adds the P space to the subspace using the P-space kernel provided by problem; returns the working-set size
   /*!
-   * @brief The kernel and, for a problem with a metric, metric matrices of the problem in the P space, obtained before
-   * the solver changes, so that a problem without them is rejected first. Where the actions of the metric are stored,
-   * also checks that the problem provides p_metric_action(), by calling it without any vectors.
+   * @brief The kernel and, for a problem with a metric, metric matrices of the problem in the P space, obtained and
+   * checked before the solver changes, so that a problem without them, or with an unsuitable metric, is rejected first.
+   * Where the actions of the metric are stored, also checks that the problem provides p_metric_action(), by calling it
+   * without any vectors.
    */
   std::pair<std::vector<value_type>, std::vector<value_type>>
   pspace_problem_matrices(const std::vector<P>& pspace, const Problem<R>& problem, const bool metric,
@@ -999,8 +1019,11 @@ protected:
     if (pspace.empty())
       return {};
     auto matrices = std::make_pair(problem.pp_action_matrix(pspace), std::vector<value_type>{});
-    if (metric)
+    if (metric) {
       matrices.second = problem.pp_metric_matrix(pspace);
+      check_pspace_metric(problem.metric_kind(), cwrap(pspace),
+                          array::Span<value_type>(matrices.second.data(), matrices.second.size()));
+    }
     if (store_metric_actions)
       problem.p_metric_action({}, cwrap(pspace), {});
     return matrices;
