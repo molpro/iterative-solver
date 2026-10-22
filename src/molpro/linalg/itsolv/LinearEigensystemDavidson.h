@@ -266,8 +266,10 @@ protected:
     const auto& dims = xspace.dimensions();
     const auto& solutions = this->m_subspace_solver->solutions();
     using coefficient_matrix = std::decay_t<decltype(solutions)>;
-    coefficient_matrix mp_coeff({stored ? dims.nP : 0, roots.size()}), mq_coeff({stored ? dims.nQ : 0, roots.size()}),
-        md_coeff({stored ? dims.nD : 0, roots.size()}), mx_coeff({on_the_fly ? roots.size() : 0, roots.size()});
+    // the coefficients of the Q and D vectors are in one matrix, with the Q vectors first
+    coefficient_matrix mp_coeff({stored ? dims.nP : 0, roots.size()}),
+        mqd_coeff({stored ? dims.nQ + dims.nD : 0, roots.size()}),
+        mx_coeff({on_the_fly ? roots.size() : 0, roots.size()});
     // adds weight times the action of the metric on the solution params[k], whose coefficients are in the given row of
     // coefficients, to the residual actions[i]
     auto add_metric_solution = [&](const scalar_type weight, const coefficient_matrix& coefficients, const int row,
@@ -278,9 +280,9 @@ protected:
         for (size_t j = 0; j < dims.nP; ++j)
           mp_coeff(j, i) += weight * coefficients(row, dims.oP() + j);
         for (size_t j = 0; j < dims.nQ; ++j)
-          mq_coeff(j, i) += weight * coefficients(row, dims.oQ() + j);
+          mqd_coeff(j, i) += weight * coefficients(row, dims.oQ() + j);
         for (size_t j = 0; j < dims.nD; ++j)
-          md_coeff(j, i) += weight * coefficients(row, dims.oD() + j);
+          mqd_coeff(dims.nQ + j, i) += weight * coefficients(row, dims.oD() + j);
       }
     };
 
@@ -347,8 +349,11 @@ protected:
             pvectors[i][j] = mp_coeff(j, i);
         this->m_apply_metric_p(pvectors, xspace.cparamsp(), residuals);
       }
-      this->m_handlers->rq().gemm_outer(mq_coeff, xspace.cmetric_actionsq(), residuals);
-      this->m_handlers->rq().gemm_outer(md_coeff, xspace.cmetric_actionsd(), residuals);
+      // one pass over the residuals for the actions of the metric on the Q and D vectors
+      auto qd_metric_actions = xspace.cmetric_actionsq();
+      const auto d_metric_actions = xspace.cmetric_actionsd();
+      qd_metric_actions.insert(qd_metric_actions.end(), d_metric_actions.begin(), d_metric_actions.end());
+      this->m_handlers->rq().gemm_outer(mqd_coeff, qd_metric_actions, residuals);
     } else if (on_the_fly && !metric_solutions.r.empty()) {
       this->m_handlers->rr().gemm_outer(mx_coeff, metric_solutions.r, residuals);
     } else if (on_the_fly) {
