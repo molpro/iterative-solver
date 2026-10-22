@@ -2,14 +2,18 @@
 
 #include <Eigen/Dense>
 #include <cmath>
+#include <complex>
 #include <fstream>
 #include <iomanip>
+#include <limits>
 #include <molpro/iostream.h>
 #include <numeric>
 #include <regex>
 #include <vector>
 
 #include "vector_types.h"
+#include <molpro/linalg/array/DistrArraySpan.h>
+#include <molpro/linalg/array/util/Distribution.h>
 #include <molpro/linalg/itsolv/CastOptions.h>
 #include <molpro/linalg/itsolv/SolverFactory.h>
 #include <molpro/linalg/itsolv/helper.h>
@@ -347,6 +351,105 @@ struct LinearEigensystemF : ::testing::Test {
       }
     }
   }
+
+  MatrixXdc mmat; //!< the metric of a generalised eigenproblem
+
+  //! A symmetric, positive definite, non-diagonal metric, which is the identity if scale is 0
+  void load_metric(double scale) {
+    mmat.resize(n, n);
+    for (size_t i = 0; i < n; i++)
+      for (size_t j = 0; j < n; j++)
+        mmat(i, j) = i == j ? 1 + scale * std::cos(double(i)) : 0.1 * scale / (1.0 + i + j);
+  }
+
+  void metric_action(const CVecRef<Rvector> &psx, const VecRef<Rvector> &outputs) {
+    for (size_t k = 0; k < psx.size(); k++) {
+      auto x = Eigen::Map<const Eigen::VectorXd>(psx.at(k).get().data(), n);
+      Eigen::Map<Eigen::VectorXd>(outputs.at(k).get().data(), n) = mmat * x;
+    }
+  }
+
+  /*!
+   * @brief Solves A x = lambda M x with the stepwise interface, preconditioning with diag(A) - lambda diag(M)
+   * @return the largest size of the D space during the iterations
+   */
+  size_t test_generalized_eigen(const size_t nroot, const size_t max_size_qspace = 1000, const size_t reset_D = 0,
+                                const bool on_the_fly = false) {
+    const bool hermitian = check_mat_hermiticity();
+    std::vector<double> hmat_row(n * n), mmat_row(n * n), eigenvectors, expected_eigenvalues;
+    for (size_t i = 0, ij = 0; i < n; ++i)
+      for (size_t j = 0; j < n; ++j, ++ij) {
+        hmat_row[ij] = hmat(i, j);
+        mmat_row[ij] = mmat(i, j);
+      }
+    molpro::linalg::itsolv::eigenproblem(eigenvectors, expected_eigenvalues, hmat_row, mmat_row, n, hermitian, 1e-14,
+                                         0);
+    std::sort(expected_eigenvalues.begin(), expected_eigenvalues.end());
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    auto options = CastOptions::LinearEigensystem(solver->get_options());
+    options->n_roots = nroot;
+    options->convergence_threshold = 1e-8;
+    options->max_size_qspace = max_size_qspace;
+    if (reset_D)
+      options->reset_D = reset_D;
+    options->hermiticity = hermitian;
+    solver->set_options(*options);
+    if (on_the_fly)
+      solver->set_metric(molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite,
+                         molpro::linalg::itsolv::MetricStorage::OnTheFly,
+                         [this](const CVecRef<Rvector> &x, const VecRef<Rvector> &mx) { metric_action(x, mx); });
+    else
+      solver->set_metric(molpro::linalg::itsolv::MetricKind::HermitianPositiveDefinite);
+    auto [x, g] = create_containers(nroot);
+    auto m = g;
+    // the initial guess from the lowest ratios of the diagonal elements
+    std::vector<double> ratios;
+    for (size_t i = 0; i < n; i++)
+      ratios.push_back(hmat(i, i) / mmat(i, i));
+    for (auto &xx : x) {
+      const auto i = std::min_element(ratios.begin(), ratios.end()) - ratios.begin();
+      xx[i] = 1;
+      ratios[i] = std::numeric_limits<double>::max();
+    }
+    size_t max_nD = 0;
+    for (auto iter = 0; iter < 100; iter++) {
+      action(cwrap(x), wrap(g));
+      metric_action(cwrap(x), wrap(m));
+      const auto nwork = solver->add_vector(wrap(x), wrap(g), wrap(m));
+      max_nD = std::max(max_nD, solver->dimensions().nD);
+      if (nwork == 0)
+        break;
+      const auto shift = solver->working_set_eigenvalues();
+      for (size_t k = 0; k < shift.size(); k++)
+        for (size_t i = 0; i < n; i++)
+          g[k][i] *= -1 / (1e-12 + hmat(i, i) - shift[k] * mmat(i, i));
+      if (solver->end_iteration(x, g) == 0)
+        break;
+    }
+    EXPECT_THAT(solver->errors(), ::testing::Each(::testing::Le(solver->convergence_threshold())));
+    EXPECT_THAT(solver->eigenvalues(), ::testing::Pointwise(::testing::DoubleNear(1e-9),
+                                                            std::vector<double>(expected_eigenvalues.begin(),
+                                                                                expected_eigenvalues.begin() + nroot)));
+    // the solutions are normalised in the metric, and their residuals are A x - lambda M x
+    auto [parameters, residuals] = create_containers(nroot);
+    std::vector<int> roots(nroot);
+    std::iota(roots.begin(), roots.end(), 0);
+    solver->solution(roots, parameters, residuals);
+    auto mx = residuals, ax = residuals;
+    metric_action(cwrap(parameters), wrap(mx));
+    action(cwrap(parameters), wrap(ax));
+    for (size_t k = 0; k < size_t(nroot); k++) {
+      EXPECT_NEAR(std::abs(dot(parameters[k], mx[k])), 1, 1e-10);
+      for (size_t i = 0; i < n; i++)
+        EXPECT_NEAR(residuals[k][i], ax[k][i] - solver->eigenvalues()[k] * mx[k][i], 1e-10);
+      auto r = ax[k];
+      for (size_t i = 0; i < n; i++)
+        r[i] -= solver->eigenvalues()[k] * mx[k][i];
+      // the convergence threshold applies to the residual of the solution scaled to unit length
+      EXPECT_LE(std::sqrt(dot(r, r) / dot(parameters[k], parameters[k])), solver->convergence_threshold());
+    }
+    return max_nD;
+  }
 };
 
 TEST_F(LinearEigensystemF, file_eigen) {
@@ -376,6 +479,97 @@ TEST_F(LinearEigensystemF, nonhermitian_eigen) {
       //      std::cout << "hmat\n"<<hmat<<std::endl;
       test_eigen(std::to_string(n) + "/" + std::to_string(param) + " non-hermiticy=" + std::to_string(non_hermiticity));
     }
+  }
+}
+
+// Generalised eigenproblems A x = lambda M x, hermitian and non-hermitian, including M = 1
+TEST_F(LinearEigensystemF, generalized_eigen) {
+  for (auto non_hermiticity : std::vector<double>{0, 0.1}) {
+    for (auto metric_scale : std::vector<double>{0, 0.5}) {
+      load_matrix(30, "", 1, non_hermiticity);
+      load_metric(metric_scale);
+      for (size_t nroot : {1, 3})
+        for (bool on_the_fly : {false, true}) {
+          SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) + " metric scale=" +
+                       std::to_string(metric_scale) + " nroot=" + std::to_string(nroot) +
+                       " on the fly=" + std::to_string(on_the_fly));
+          test_generalized_eigen(nroot, 1000, 0, on_the_fly);
+        }
+    }
+  }
+}
+
+// A small Q space moves vectors into the D space, which must take their actions of the metric along, also through D
+// space resets
+TEST_F(LinearEigensystemF, generalized_eigen_dspace) {
+  for (auto non_hermiticity : std::vector<double>{0, 0.1}) {
+    load_matrix(40, "", 1, non_hermiticity);
+    load_metric(0.5);
+    for (size_t reset_D : {0, 4})
+      for (bool on_the_fly : {false, true}) {
+        SCOPED_TRACE("non-hermiticity=" + std::to_string(non_hermiticity) + " reset_D=" + std::to_string(reset_D) +
+                     " on the fly=" + std::to_string(on_the_fly));
+        EXPECT_GT(test_generalized_eigen(2, 4, reset_D, on_the_fly), 0);
+      }
+  }
+}
+
+// Actions of the metric are given exactly when a metric was declared, the metric and how its actions are obtained
+// cannot be changed on a non-empty subspace, and only solvers that support a metric accept one
+TEST_F(LinearEigensystemF, generalized_eigen_errors) {
+  using molpro::linalg::itsolv::MetricKind;
+  using molpro::linalg::itsolv::MetricStorage;
+  load_matrix(10, "", 1);
+  load_metric(0.5);
+  auto [x, g] = create_containers(1);
+  auto m = g;
+  auto start = [&]() {
+    x[0].assign(n, 0);
+    x[0][0] = 1;
+    action(cwrap(x), wrap(g));
+    metric_action(cwrap(x), wrap(m));
+  };
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    EXPECT_TRUE(solver->supports_metric(MetricKind::HermitianPositiveDefinite));
+    EXPECT_FALSE(solver->supports_metric(MetricKind::HermitianIndefinite));
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianIndefinite), std::invalid_argument);
+    solver->set_metric(MetricKind::HermitianPositiveDefinite);
+    EXPECT_EQ(solver->metric_kind(), MetricKind::HermitianPositiveDefinite);
+    start();
+    EXPECT_THROW(solver->add_vector(x[0], g[0]), std::logic_error);
+    solver->add_vector(x[0], g[0], m[0]);
+    EXPECT_NO_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite));
+    EXPECT_THROW(solver->set_metric(MetricKind::Identity), std::logic_error);
+    // the storage cannot change either
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite, MetricStorage::OnTheFly,
+                                    [](const CVecRef<Rvector> &, const VecRef<Rvector> &) {}),
+                 std::logic_error);
+  }
+  {
+    // a function applying the metric is given exactly when it is applied on the fly
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    auto apply = [](const CVecRef<Rvector> &, const VecRef<Rvector> &) {};
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite, MetricStorage::OnTheFly),
+                 std::invalid_argument);
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite, MetricStorage::Stored, apply),
+                 std::invalid_argument);
+    solver->set_metric(MetricKind::HermitianPositiveDefinite, MetricStorage::OnTheFly, apply);
+    EXPECT_EQ(solver->metric_storage(), MetricStorage::OnTheFly);
+  }
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>();
+    start();
+    EXPECT_THROW(solver->add_vector(x[0], g[0], m[0]), std::logic_error);
+    solver->add_vector(x[0], g[0]);
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite), std::logic_error);
+  }
+  {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector, Pvector>("RSPT");
+    EXPECT_FALSE(solver->supports_metric(MetricKind::HermitianPositiveDefinite));
+    EXPECT_THROW(solver->set_metric(MetricKind::HermitianPositiveDefinite), std::invalid_argument);
+    start();
+    EXPECT_THROW(solver->add_vector(x[0], g[0], m[0]), std::logic_error);
   }
 }
 
@@ -465,3 +659,84 @@ TEST(LinearEigensystemFortran, supplied_range) {
   EXPECT_NE(test_supplied_rangef(m.data(), n, nroot, expected.data()), 0);
 }
 #endif
+
+namespace {
+//! Elements of the residuals, kernel diagonals and metric diagonals used in the precondition_default() tests
+double precondition_residual(size_t k, size_t i) { return std::cos(1.0 + k + 0.7 * i); }
+double precondition_diagonal(size_t i) { return 2.0 + i; }
+double precondition_metric(size_t i) { return 0.5 + 0.1 * i; }
+const std::vector<double> precondition_shifts{0.3, -1.1};
+} // namespace
+
+template <typename T>
+struct PreconditionDefault : ::testing::Test {};
+using PreconditionDefaultTypes = ::testing::Types<double, std::complex<double>, long double>;
+TYPED_TEST_SUITE(PreconditionDefault, PreconditionDefaultTypes);
+
+// The default preconditioner divides by (diagonals - shift) and, given the diagonals of a metric, by
+// (diagonals - shift * metric diagonals)
+TYPED_TEST(PreconditionDefault, vector) {
+  using value_type = TypeParam;
+  using molpro::linalg::itsolv::precondition_default;
+  const size_t n = 7;
+  const auto shift = std::vector<value_type>(precondition_shifts.begin(), precondition_shifts.end());
+  std::vector<value_type> diagonals(n), metric(n);
+  for (size_t i = 0; i < n; ++i) {
+    diagonals[i] = precondition_diagonal(i);
+    metric[i] = precondition_metric(i);
+  }
+  for (const bool with_metric : {false, true}) {
+    auto residuals = std::vector<std::vector<value_type>>(shift.size(), std::vector<value_type>(n));
+    for (size_t k = 0; k < shift.size(); ++k)
+      for (size_t i = 0; i < n; ++i)
+        residuals[k][i] = precondition_residual(k, i);
+    if (with_metric)
+      precondition_default(wrap(residuals), shift, diagonals, metric);
+    else
+      precondition_default(wrap(residuals), shift, diagonals);
+    for (size_t k = 0; k < shift.size(); ++k)
+      for (size_t i = 0; i < n; ++i) {
+        const auto denominator = diagonals[i] - shift[k] * (with_metric ? metric[i] : value_type(1));
+        EXPECT_NEAR(std::abs(residuals[k][i] - value_type(precondition_residual(k, i)) / denominator), 0, 1e-14)
+            << "with_metric=" << with_metric << " k=" << k << " i=" << i;
+      }
+  }
+}
+
+// The same for distributed arrays, which are preconditioned through their local buffers
+TEST(PreconditionDefault, DistrArray) {
+  using molpro::linalg::array::DistrArraySpan;
+  using molpro::linalg::itsolv::precondition_default;
+  using molpro::mpi::comm_global;
+  const size_t n = 7;
+  const auto [lo, hi] =
+      molpro::linalg::array::util::make_distribution_spread_remainder<size_t>(n, molpro::mpi::size_global())
+          .range(molpro::mpi::rank_global());
+  std::vector<double> diagonals_storage(hi - lo), metric_storage(hi - lo);
+  for (size_t i = lo; i < hi; ++i) {
+    diagonals_storage[i - lo] = precondition_diagonal(i);
+    metric_storage[i - lo] = precondition_metric(i);
+  }
+  const DistrArraySpan diagonals(n, Span<double>(diagonals_storage.data(), hi - lo), comm_global());
+  const DistrArraySpan metric(n, Span<double>(metric_storage.data(), hi - lo), comm_global());
+  for (const bool with_metric : {false, true}) {
+    auto storage = std::vector<std::vector<double>>(precondition_shifts.size(), std::vector<double>(hi - lo));
+    std::vector<DistrArraySpan> residuals;
+    for (size_t k = 0; k < precondition_shifts.size(); ++k) {
+      for (size_t i = lo; i < hi; ++i)
+        storage[k][i - lo] = precondition_residual(k, i);
+      residuals.emplace_back(n, Span<double>(storage[k].data(), hi - lo), comm_global());
+    }
+    if (with_metric)
+      precondition_default(wrap(residuals), precondition_shifts, diagonals, metric);
+    else
+      precondition_default(wrap(residuals), precondition_shifts, diagonals);
+    for (size_t k = 0; k < precondition_shifts.size(); ++k)
+      for (size_t i = lo; i < hi; ++i) {
+        const auto denominator =
+            precondition_diagonal(i) - precondition_shifts[k] * (with_metric ? precondition_metric(i) : 1.0);
+        EXPECT_NEAR(storage[k][i - lo], precondition_residual(k, i) / denominator, 1e-14)
+            << "with_metric=" << with_metric << " k=" << k << " i=" << i;
+      }
+  }
+}

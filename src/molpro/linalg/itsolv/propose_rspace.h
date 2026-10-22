@@ -360,6 +360,19 @@ auto append_overlap_with_r(const subspace::Matrix<value_type>& overlap, const CV
 }
 
 /*!
+ * @brief The solutions scaled to unit length, as needed wherever thresholds apply to their coefficients or to norms of
+ * their projections (limit_qspace_size(), construct_dspace(), D space resets): with a metric, the solutions are
+ * normalised in it, and the thresholds would otherwise depend on the scale of the metric
+ */
+template <class R, class Q, class P, typename value_type>
+subspace::Matrix<value_type> contribution_solutions(const subspace::Matrix<value_type>& solutions,
+                                                    const subspace::IXSpace<R, Q, P>& xspace) {
+  if (xspace.metric_kind() == MetricKind::Identity)
+    return solutions;
+  return subspace::util::unit_length_solutions(solutions, xspace.data.at(subspace::EqnData::S));
+}
+
+/*!
  * @brief Ensures that size Q space is within limit by proposing Q parameters for deletion
  * @param dims dimensions of current P+Q+D subspace
  * @param max_size_qspace maximum size of Q space
@@ -437,7 +450,9 @@ std::vector<std::size_t> limit_qspace_size(const subspace::Dimensions& dims, con
  * @param svd_thresh svd threshold for marking the null space
  * @param handler array handler
  * @param logger logger
- * @return D space parameters and actions
+ * @return D space parameters, actions, actions of the metric if the subspace stores them (otherwise empty), and the
+ * coefficients of the new D vectors in the deleted Q vectors (columns in the order of q_delete) followed by the old D
+ * vectors, one row per D vector
  */
 template <class R, class Q, class P, typename value_type, typename value_type_abs>
 auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subspace::IXSpace<R, Q, P>& xspace,
@@ -445,7 +460,7 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
                       const value_type_abs svd_thresh, array::ArrayHandler<Q, Q>& handler, Logger& logger) {
   const auto dims = xspace.dimensions();
   const auto overlap = xspace.data.at(subspace::EqnData::S);
-  const auto solutions_proj =
+  auto solutions_proj =
       dspace::stable_projected_solutions(solutions, overlap, dims, q_delete, norm_thresh, svd_thresh, logger);
 #ifndef NDEBUG
   // a decomposition of the whole subspace overlap, wanted only by this check
@@ -461,12 +476,40 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
   const auto& qactions = xspace.cactionsq();
   const auto& dparams = xspace.cparamsd();
   const auto& dactions = xspace.cactionsd();
-  std::vector<Q> dparams_new, dactions_new;
+  const bool metric = xspace.stores_metric_actions();
+  const auto& qmetric_actions = xspace.cmetric_actionsq();
+  const auto& dmetric_actions = xspace.cmetric_actionsd();
+  // The new D vectors are normalised by scaling their coefficients, with norms from the overlap of the vectors they are
+  // combinations of, so that no pass over the new vectors is needed for it.
+  {
+    auto basis = std::vector<size_t>{};
+    for (auto iq : q_delete)
+      basis.push_back(dims.oQ() + iq);
+    for (size_t k = 0; k < dims.nD; ++k)
+      basis.push_back(dims.oD() + k);
+    auto overlap_basis = subspace::Matrix<value_type>({basis.size(), basis.size()});
+    for (size_t j = 0; j < basis.size(); ++j)
+      for (size_t k = 0; k < basis.size(); ++k)
+        overlap_basis(j, k) = overlap(basis[j], basis[k]);
+    const auto norms = subspace::util::solution_norms(solutions_proj, overlap_basis);
+    for (size_t i = 0; i < nD; ++i) {
+      if (norms[i] < norm_thresh) {
+        logger.warn(std::format("construct_dspace: skipping normalisation of D vector {} with near-zero norm = {:.2e}",
+                                i, double(norms[i])));
+        continue;
+      }
+      for (size_t j = 0; j < solutions_proj.cols(); ++j)
+        solutions_proj(i, j) /= value_type(norms[i]);
+    }
+  }
+  std::vector<Q> dparams_new, dactions_new, dmetric_actions_new;
   if (nD > 0) {
     const Q& q = !qparams.empty() ? qparams.front().get() : dparams.front().get();
     for (size_t i = 0; i < nD; ++i) {
       dparams_new.emplace_back(util::construct_zeroed_copy(q, handler));
       dactions_new.emplace_back(util::construct_zeroed_copy(q, handler));
+      if (metric)
+        dmetric_actions_new.emplace_back(util::construct_zeroed_copy(q, handler));
     }
     // coefficient matrix with Q_{delete} and D vectors in rows and new D vectors in columns, as required by gemm_outer
     auto coeff = subspace::Matrix<value_type>({nQd + dims.nD, nD});
@@ -475,29 +518,27 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
         coeff(j, i) = solutions_proj(i, j);
     // Q_{delete} followed by D, as the columns of solutions_proj, so that one call per output passes over each new
     // vector only once
-    auto qd_params = CVecRef<Q>{}, qd_actions = CVecRef<Q>{};
+    auto qd_params = CVecRef<Q>{}, qd_actions = CVecRef<Q>{}, qd_metric_actions = CVecRef<Q>{};
     for (auto iq : q_delete) {
       qd_params.emplace_back(qparams.at(iq));
       qd_actions.emplace_back(qactions.at(iq));
+      if (metric)
+        qd_metric_actions.emplace_back(qmetric_actions.at(iq));
     }
     qd_params.insert(qd_params.end(), dparams.begin(), dparams.end());
     qd_actions.insert(qd_actions.end(), dactions.begin(), dactions.end());
+    qd_metric_actions.insert(qd_metric_actions.end(), dmetric_actions.begin(), dmetric_actions.end());
     const auto wdparams_new = wrap(dparams_new);
     const auto wdactions_new = wrap(dactions_new);
     handler.gemm_outer(coeff, qd_params, wdparams_new);
     handler.gemm_outer(coeff, qd_actions, wdactions_new);
-  }
-  for (size_t i = 0; i < nD; ++i) {
-    auto norm = std::sqrt(std::abs(handler.dot(dparams_new.at(i), dparams_new.at(i))));
-    if (norm < norm_thresh) {
-      logger.warn(
-          std::format("construct_dspace: skipping normalisation of D vector {} with near-zero norm = {:.2e}", i, norm));
-      continue;
+    if (metric) {
+      const auto wdmetric_actions_new = wrap(dmetric_actions_new);
+      handler.gemm_outer(coeff, qd_metric_actions, wdmetric_actions_new);
     }
-    handler.scal(1. / norm, dparams_new[i]);
-    handler.scal(1. / norm, dactions_new[i]);
   }
-  return std::make_tuple(std::move(dparams_new), std::move(dactions_new));
+  return std::make_tuple(std::move(dparams_new), std::move(dactions_new), std::move(dmetric_actions_new),
+                         std::move(solutions_proj));
 }
 
 /*!
@@ -639,16 +680,18 @@ auto propose_rspace(IterativeSolver<R, Q, P>& solver, const VecRef<R>& parameter
   profiler.start("itsolv::ISubspaceSolver::solutions");
   auto solutions = subspace_solver.solutions();
   profiler.stop();
-  auto q_delete = limit_qspace_size(xspace.dimensions(), q_opts, solutions, logger);
+  // the solutions scaled to unit length, so that thresholds on contributions and norms do not depend on their
+  // normalisation
+  const auto unit_solutions = contribution_solutions(solutions, xspace);
+  auto q_delete = limit_qspace_size(xspace.dimensions(), q_opts, unit_solutions, logger);
   logger.debug("delete Q parameter indices = ", q_delete);
   if (!q_delete.empty()) {
     auto prof = profiler.push("construct_dspace");
-    auto [dparams, dactions] =
-        construct_dspace(solutions, xspace, q_delete, r_opts.norm_thresh, r_opts.svd_thresh, handlers.qq(), logger);
-    erase_qspace(xspace, q_delete);
+    auto [dparams, dactions, dmetric_actions, dcoefficients] = construct_dspace(
+        unit_solutions, xspace, q_delete, r_opts.norm_thresh, r_opts.svd_thresh, handlers.qq(), logger);
     auto wdparams = wrap(dparams);
     auto wdactions = wrap(dactions);
-    xspace.update_dspace(wdparams, wdactions);
+    xspace.update_dspace(wdparams, wdactions, wrap(dmetric_actions), q_delete, dcoefficients);
     auto eigenvalues_ref = subspace_solver.eigenvalues();
     subspace_solver.solve(xspace, solutions.rows());
     const auto& eigenvalues_new = subspace_solver.eigenvalues();

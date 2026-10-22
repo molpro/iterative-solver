@@ -62,6 +62,11 @@ public:
 
   bool nonlinear() const override { return false; }
 
+  //! Supports generalised eigenproblems A v = lambda M v with a Hermitian, positive definite metric M
+  bool supports_metric(MetricKind kind) const override {
+    return kind == MetricKind::Identity || kind == MetricKind::HermitianPositiveDefinite;
+  }
+
   /*!
    * \brief Proposes new parameters for the subspace from the preconditioned residuals.
    *
@@ -228,7 +233,10 @@ public:
   }
 
 protected:
-  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
+  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
+                          const detail::MetricSolutions<R, Q>& metric_solutions) override {
+    if (roots.empty())
+      return;
     auto prof = this->profiler()->push("itsolv::construct_residual");
     assert(params.size() >= roots.size());
     const auto& eigvals = eigenvalues();
@@ -237,8 +245,38 @@ protected:
     assert(subspace_solver);
     const auto& imag_eigval_components = subspace_solver->imag_eigval_components();
 
+    // With a metric M, the residual contains M x rather than x for each solution x. M x is given in metric_solutions
+    // where the metric is applied on the fly, and otherwise assembled from the stored actions of the metric on the Q
+    // and D spaces and the action of the metric on the P space. The coefficients are collected in these matrices.
+    const auto& xspace = *this->m_xspace;
+    const bool metric = xspace.metric_kind() != MetricKind::Identity;
+    const bool on_the_fly = metric && xspace.metric_storage() == MetricStorage::OnTheFly;
+    const bool stored = metric && !on_the_fly;
+    const auto& dims = xspace.dimensions();
+    const auto& solutions = this->m_subspace_solver->solutions();
+    using coefficient_matrix = std::decay_t<decltype(solutions)>;
+    // the coefficients of the Q and D vectors are in one matrix, with the Q vectors first
+    coefficient_matrix mp_coeff({stored ? dims.nP : 0, roots.size()}),
+        mqd_coeff({stored ? dims.nQ + dims.nD : 0, roots.size()}),
+        mx_coeff({on_the_fly ? roots.size() : 0, roots.size()});
+    // adds weight times the solution params[k], or its action of the metric, to the residual actions[i]
+    auto add_solution = [&](const scalar_type weight, const size_t k, const size_t i) {
+      if (!metric) {
+        this->m_handlers->rr().axpy(weight, params.at(k), actions.at(i));
+      } else if (on_the_fly) {
+        mx_coeff(k, i) += weight;
+      } else {
+        for (size_t j = 0; j < dims.nP; ++j)
+          mp_coeff(j, i) += weight * solutions(roots[k], dims.oP() + j);
+        for (size_t j = 0; j < dims.nQ; ++j)
+          mqd_coeff(j, i) += weight * solutions(roots[k], dims.oQ() + j);
+        for (size_t j = 0; j < dims.nD; ++j)
+          mqd_coeff(dims.nQ + j, i) += weight * solutions(roots[k], dims.oD() + j);
+      }
+    };
+
     for (size_t i = 0; i < roots.size(); ++i) {
-      this->m_handlers->rr().axpy(-eigvals.at(roots[i]), params.at(i), actions.at(i));
+      add_solution(-eigvals.at(roots[i]), i, i);
 
       auto it = std::ranges::find(imag_eigval_components, roots[i], [](const auto& pair) { return pair.first; });
 
@@ -277,8 +315,28 @@ protected:
 
         // Note: The minus sign in above expression is implicitly taken into account as the
         // imaginary parts of the complex conjugate eigenvalue pair has flipped signs
-        this->m_handlers->rr().axpy(it->second, params.at(param_idx), actions.at(i));
+        add_solution(it->second, param_idx, i);
       }
+    }
+    const auto residuals = wrap(actions.begin(), actions.begin() + roots.size());
+    if (stored) {
+      if (dims.nP > 0) {
+        using VectorP = typename SolverTemplate::VectorP;
+        auto pvectors = std::vector<VectorP>(roots.size(), VectorP(dims.nP));
+        for (size_t i = 0; i < roots.size(); ++i)
+          for (size_t j = 0; j < dims.nP; ++j)
+            pvectors[i][j] = mp_coeff(j, i);
+        this->m_apply_metric_p(pvectors, xspace.cparamsp(), residuals);
+      }
+      // one pass over the residuals for the actions of the metric on the Q and D vectors
+      auto qd_metric_actions = xspace.cmetric_actionsq();
+      const auto d_metric_actions = xspace.cmetric_actionsd();
+      qd_metric_actions.insert(qd_metric_actions.end(), d_metric_actions.begin(), d_metric_actions.end());
+      this->m_handlers->rq().gemm_outer(mqd_coeff, qd_metric_actions, residuals);
+    } else if (on_the_fly && !metric_solutions.r.empty()) {
+      this->m_handlers->rr().gemm_outer(mx_coeff, metric_solutions.r, residuals);
+    } else if (on_the_fly) {
+      this->m_handlers->rq().gemm_outer(mx_coeff, metric_solutions.q, residuals);
     }
   }
 

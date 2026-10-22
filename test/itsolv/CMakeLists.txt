@@ -2,6 +2,7 @@ add_executable(test-${PROJECT_NAME}-itsolv.exe
     SolverFactory_implementation.cpp
     testDSpaceResetter.cpp
     test_Interpolate.cpp
+    test_MetricChecker.cpp
     test_Options.cpp
     test_RSPT.cpp
     test_SolverFactory.cpp

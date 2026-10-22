@@ -10,6 +10,7 @@
 #include <molpro/linalg/itsolv/Logger.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/PSpace.h>
+#include <molpro/linalg/itsolv/subspace/SubspaceData.h>
 #include <molpro/linalg/itsolv/wrap.h>
 #include <molpro/linalg/itsolv/util.h>
 #include <molpro/linalg/itsolv/helper-implementation.h>
@@ -22,9 +23,10 @@ namespace qspace {
  */
 template <class Q>
 struct QParam {
-  std::unique_ptr<Q> param;  //!< parameter
-  std::unique_ptr<Q> action; //!< corresponding action
-  size_t id;                 //!< unique id
+  std::unique_ptr<Q> param;         //!< parameter
+  std::unique_ptr<Q> action;        //!< corresponding action
+  size_t id;                        //!< unique id
+  std::unique_ptr<Q> metric_action; //!< corresponding action of the metric, null unless there is one
 };
 
 //! Generates vector of reference wrappers to param and action in a range of QParam objects
@@ -79,17 +81,22 @@ struct QSpace {
    * @param xq_in data block between current X space and the new Q parameters
    * @param dims current dimensions
    * @param old_data current data
+   * @param metric_actions new actions of the metric; empty unless there is a metric
    */
   template <typename T>
   void update(const CVecRef<R>& params, const CVecRef<R>& actions, const SubspaceData<T>& qq_in,
               const SubspaceData<T>& qx_in, const SubspaceData<T>& xq_in, const Dimensions& dims,
-              SubspaceData<T>& old_data) {
+              SubspaceData<T>& old_data, const CVecRef<R>& metric_actions = {}) {
     m_logger->trace("QSpace::update");
+    assert(metric_actions.empty() || metric_actions.size() == params.size());
     auto it_begin = m_params.begin();
     for (size_t i = 0; i < params.size(); ++i) {
-      m_params.emplace(it_begin,
-                       qspace::QParam<Q>{std::make_unique<Q>(m_handlers->qr().copy(params.at(i))),
-                                         std::make_unique<Q>(m_handlers->qr().copy(actions.at(i))), m_unique_id++});
+      m_params.emplace(
+          it_begin,
+          qspace::QParam<Q>{std::make_unique<Q>(m_handlers->qr().copy(params.at(i))),
+                            std::make_unique<Q>(m_handlers->qr().copy(actions.at(i))), m_unique_id++,
+                            metric_actions.empty() ? nullptr
+                                                   : std::make_unique<Q>(m_handlers->qr().copy(metric_actions.at(i)))});
     }
     size_t nQnew = params.size();
     auto qq = qq_in;
@@ -103,7 +110,7 @@ struct QSpace {
       std::sort(rp.begin(), rp.end(), std::greater<>());
       for (auto i : rp) {
         m_params.erase(std::next(m_params.begin(), i));
-        for (auto d : {EqnData::H, EqnData::S}) {
+        for (auto d : square_blocks(qq)) {
           qq.at(d).remove_row_col(i, i);
           qx.at(d).remove_row(i);
           xq.at(d).remove_col(i);
@@ -115,7 +122,7 @@ struct QSpace {
     }
     const auto nXnew = dims.nX() + nQnew;
     auto data = old_data;
-    for (auto d : {EqnData::H, EqnData::S}) {
+    for (auto d : square_blocks(qq)) {
       data[d].resize({dims.nX() + nQnew, dims.nX() + nQnew});
       data[d].slice({dims.oQ() + nQnew, dims.oQ() + nQnew}, {data[d].rows(), data[d].cols()}) =
           old_data[d].slice({dims.oQ(), dims.oQ()}, {dims.nX(), dims.nX()});
@@ -143,6 +150,8 @@ struct QSpace {
     }
     m_logger->data_dump("S = ", data.at(EqnData::S));
     m_logger->data_dump("H = ", data.at(EqnData::H));
+    if (data.count(EqnData::M))
+      m_logger->data_dump("M = ", data.at(EqnData::M));
     m_logger->data_dump("rhs = ", data.at(EqnData::rhs));
   }
 
@@ -180,6 +189,15 @@ struct QSpace {
   }
 
   CVecRef<Q> cactions() const { return actions(); }
+
+  //! Actions of the metric, empty unless there is a metric
+  CVecRef<Q> cmetric_actions() const {
+    auto metric_actions = CVecRef<Q>{};
+    for (const auto& p : m_params)
+      if (p.metric_action)
+        metric_actions.emplace_back(*p.metric_action);
+    return metric_actions;
+  }
 
 protected:
   std::shared_ptr<ArrayHandlers<R, Q, P>> m_handlers;
