@@ -177,25 +177,46 @@ Matrix<value_type> metric_with_new_dspace(const Matrix<value_type>& metric, cons
                                           const std::vector<std::size_t>& q_delete,
                                           const Matrix<value_type>& dcoefficients) {
   using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
-  using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
-  const auto nQnew = dims.nQ - q_delete.size();
-  const auto nXnew = dims.nP + nQnew + dcoefficients.rows();
-  // columns: the new subspace vectors in terms of the current ones
-  matrix_type transformation = matrix_type::Zero(dims.nX(), nXnew);
+  // the kept P and Q vectors, and the deleted Q and old D vectors that the new D vectors are combinations of
+  auto kept = std::vector<size_t>{}, combined = std::vector<size_t>{};
   for (size_t i = 0; i < dims.nP; ++i)
-    transformation(dims.oP() + i, i) = 1;
-  for (size_t i = 0, k = 0; i < dims.nQ; ++i)
+    kept.push_back(dims.oP() + i);
+  for (size_t i = 0; i < dims.nQ; ++i)
     if (std::find(q_delete.begin(), q_delete.end(), i) == q_delete.end())
-      transformation(dims.oQ() + i, dims.nP + k++) = 1;
-  for (size_t i = 0; i < dcoefficients.rows(); ++i) {
-    for (size_t j = 0; j < q_delete.size(); ++j)
-      transformation(dims.oQ() + q_delete[j], dims.nP + nQnew + i) = dcoefficients(i, j);
-    for (size_t j = 0; j < dims.nD; ++j)
-      transformation(dims.oD() + j, dims.nP + nQnew + i) = dcoefficients(i, q_delete.size() + j);
-  }
-  const matrix_type m = Eigen::Map<const row_major_type>(metric.data().data(), dims.nX(), dims.nX());
-  const row_major_type m_new = transformation.adjoint() * m * transformation;
-  return Matrix<value_type>(std::vector<value_type>(m_new.data(), m_new.data() + m_new.size()), {nXnew, nXnew});
+      kept.push_back(dims.oQ() + i);
+  for (auto iq : q_delete)
+    combined.push_back(dims.oQ() + iq);
+  for (size_t i = 0; i < dims.nD; ++i)
+    combined.push_back(dims.oD() + i);
+  const auto nK = kept.size(), nB = combined.size(), nDnew = dcoefficients.rows();
+  // only the blocks involving the new D vectors need multiplications, of cost nX * nB * nDnew
+  matrix_type m_kb(nK, nB), m_bb(nB, nB), c(nDnew, nB);
+  for (size_t k = 0; k < nK; ++k)
+    for (size_t j = 0; j < nB; ++j)
+      m_kb(k, j) = metric(kept[k], combined[j]);
+  for (size_t i = 0; i < nB; ++i)
+    for (size_t j = 0; j < nB; ++j)
+      m_bb(i, j) = metric(combined[i], combined[j]);
+  for (size_t i = 0; i < nDnew; ++i)
+    for (size_t j = 0; j < nB; ++j)
+      c(i, j) = dcoefficients(i, j);
+  // <k|M d_i> = sum_j <k|M b_j> c_ij, and <d_i|M d_l> = sum_jm conj(c_ij) <b_j|M b_m> c_lm
+  const matrix_type m_kd = m_kb * c.transpose();
+  const matrix_type m_dd = c.conjugate() * m_bb * c.transpose();
+  const auto nXnew = nK + nDnew;
+  auto m_new = Matrix<value_type>({nXnew, nXnew});
+  for (size_t k = 0; k < nK; ++k)
+    for (size_t l = 0; l < nK; ++l)
+      m_new(k, l) = metric(kept[k], kept[l]);
+  for (size_t k = 0; k < nK; ++k)
+    for (size_t i = 0; i < nDnew; ++i) {
+      m_new(k, nK + i) = m_kd(k, i);
+      m_new(nK + i, k) = conjugate(m_kd(k, i));
+    }
+  for (size_t i = 0; i < nDnew; ++i)
+    for (size_t l = 0; l < nDnew; ++l)
+      m_new(nK + i, nK + l) = m_dd(i, l);
+  return m_new;
 }
 
 template <typename T>
