@@ -41,8 +41,15 @@ public:
   //! precision
   static value_type_abs positivity_tolerance() { return precision_scaled<value_type>(1e-8); }
 
-  //! Forgets the vectors kept for the check of Hermiticity, as when the subspace starts anew
-  void reset() { m_reference.reset(); }
+  //! Forgets the vectors kept for the check of Hermiticity and the factor of the P space, as when the subspace starts
+  //! anew
+  void reset() {
+    m_reference.reset();
+    m_pp_factor.reset();
+  }
+
+  //! Forgets the factor of the metric matrix in the P space kept by check_positive_subspace(), for a new P space
+  void reset_pspace() { m_pp_factor.reset(); }
 
   /*!
    * @brief Checks that the metric is Hermitian on new parameters before they are added to the subspace
@@ -136,6 +143,37 @@ public:
    * @param metric the metric matrix of the subspace
    * @param overlap the overlap matrix of the subspace vectors
    */
+  /*!
+   * @brief Like check_positive(), for the metric matrix of the subspace, whose first nP rows and columns, those of the
+   * P space, do not change between calls until reset_pspace()
+   *
+   * The Cholesky factor of the P-space block is kept, so that only the Schur complement of the other vectors has to be
+   * factorised, at a cost of nP^2 times their number, rather than the whole matrix. If that fails, check_positive()
+   * decides.
+   */
+  void check_positive_subspace(const subspace::Matrix<value_type>& metric, const subspace::Matrix<value_type>& overlap,
+                               const size_t nP) {
+    using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
+    using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+    const auto n = Eigen::Index(metric.rows());
+    const auto np = Eigen::Index(nP);
+    if (np == 0 || np >= n)
+      return check_positive(metric, overlap);
+    const matrix_type m_rows = Eigen::Map<const row_major_type>(metric.data().data(), n, n);
+    const matrix_type m = (m_rows + m_rows.adjoint()) / value_type(2);
+    if (!m_pp_factor || m_pp_factor->rows() != np) {
+      const Eigen::LLT<matrix_type> llt(m.topLeftCorner(np, np));
+      if (llt.info() != Eigen::Success)
+        return check_positive(metric, overlap);
+      m_pp_factor = matrix_type(llt.matrixL());
+    }
+    const matrix_type y = m_pp_factor->template triangularView<Eigen::Lower>().solve(m.topRightCorner(np, n - np));
+    const matrix_type schur = m.bottomRightCorner(n - np, n - np) - y.adjoint() * y;
+    if (Eigen::LLT<matrix_type>(schur).info() == Eigen::Success)
+      return;
+    check_positive(metric, overlap);
+  }
+
   static void check_positive(const subspace::Matrix<value_type>& metric, const subspace::Matrix<value_type>& overlap) {
     using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
     using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
@@ -179,6 +217,8 @@ private:
     value_type qmq = 0;
   };
   std::optional<Reference> m_reference;
+  //! the Cholesky factor of the metric matrix in the P space, see check_positive_subspace()
+  std::optional<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> m_pp_factor;
 };
 
 } // namespace molpro::linalg::itsolv::detail
