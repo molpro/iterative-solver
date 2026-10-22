@@ -1,9 +1,14 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_UTIL_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_UTIL_H
+#include <Eigen/Dense>
 #include <limits>
 #include <molpro/linalg/itsolv/ArrayHandlers.h>
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/wrap.h>
+#include <molpro/linalg/scalar_traits.h>
+
+#include <cmath>
+#include <vector>
 
 namespace molpro::linalg::itsolv::subspace::util {
 namespace detail {
@@ -69,18 +74,25 @@ Matrix<typename array::ArrayHandler<R, R>::value_type> overlap(const CVecRef<R>&
 }
 
 /*!
- * @brief The Euclidean norm of the solution x = sum_j c_j b_j of a root, from its subspace coefficients c and the
- * overlap matrix S_jk = <b_j|b_k> of the subspace vectors, as sqrt(c^dagger S c)
+ * @brief The Euclidean norms of the solutions x_i = sum_j c_ij b_j, from their subspace coefficients c (one row per
+ * solution) and the overlap matrix S_jk = <b_j|b_k> of the subspace vectors, as sqrt((c S c^dagger)_ii), calculated
+ * together with one matrix product
  */
 template <typename T>
-auto solution_norm(const Matrix<T>& solutions, const size_t root, const Matrix<T>& overlap) {
-  T norm2 = 0;
-  for (size_t j = 0; j < overlap.rows(); ++j)
-    for (size_t k = 0; k < overlap.cols(); ++k)
-      norm2 += conjugate(solutions(root, j)) * overlap(j, k) * solutions(root, k);
+std::vector<real_type_t<T>> solution_norms(const Matrix<T>& solutions, const Matrix<T>& overlap) {
+  using row_major_type = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  const auto nsol = Eigen::Index(solutions.rows()), dim = Eigen::Index(solutions.cols());
+  auto norms = std::vector<real_type_t<T>>(nsol);
+  if (nsol == 0 || dim == 0)
+    return norms;
+  const auto c = Eigen::Map<const row_major_type>(solutions.data().data(), nsol, dim);
+  const auto s = Eigen::Map<const row_major_type>(overlap.data().data(), dim, dim);
+  const row_major_type cs = c.conjugate() * s;
   using std::abs;
   using std::sqrt;
-  return sqrt(abs(norm2));
+  for (Eigen::Index i = 0; i < nsol; ++i)
+    norms[i] = sqrt(abs(cs.row(i).dot(c.row(i).conjugate())));
+  return norms;
 }
 
 /*!
@@ -93,12 +105,11 @@ auto solution_norm(const Matrix<T>& solutions, const size_t root, const Matrix<T
 template <typename T>
 Matrix<T> unit_length_solutions(const Matrix<T>& solutions, const Matrix<T>& overlap) {
   auto scaled = solutions;
-  for (size_t i = 0; i < scaled.rows(); ++i) {
-    const auto norm = solution_norm(solutions, i, overlap);
-    if (norm > 0)
+  const auto norms = solution_norms(solutions, overlap);
+  for (size_t i = 0; i < scaled.rows(); ++i)
+    if (norms[i] > 0)
       for (size_t j = 0; j < scaled.cols(); ++j)
-        scaled(i, j) /= T(norm);
-  }
+        scaled(i, j) /= T(norms[i]);
   return scaled;
 }
 

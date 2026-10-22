@@ -384,8 +384,8 @@ protected:
    * the truncated partner, which is assembled from the subspace.
    */
   void compute_errors(const std::vector<int>& roots, const CVecRef<R>& params, const CVecRef<R>& residuals,
-                      std::vector<value_type_abs>& errors) override {
-    SolverTemplate::compute_errors(roots, params, residuals, errors);
+                      const std::vector<value_type_abs>& solution_norms, std::vector<value_type_abs>& errors) override {
+    SolverTemplate::compute_errors(roots, params, residuals, solution_norms, errors);
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
     assert(subspace_solver);
     const auto nroots = subspace_solver->size();
@@ -423,10 +423,10 @@ protected:
       this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
     }
     auto partner_error = std::sqrt(std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
-    if (this->m_xspace->metric_kind() != MetricKind::Identity)
+    if (!solution_norms.empty())
       // as in SolverTemplate::compute_errors(), the error of the partner of unit length
       partner_error /=
-          subspace::util::solution_norm(solutions, *partner, this->m_xspace->data.at(subspace::EqnData::S));
+          subspace::util::solution_norms(solutions, this->m_xspace->data.at(subspace::EqnData::S))[*partner];
     errors.at(i) = std::sqrt(errors.at(i) * errors.at(i) + partner_error * partner_error);
   }
 
