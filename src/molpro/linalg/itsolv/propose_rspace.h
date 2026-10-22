@@ -479,6 +479,29 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
   const bool metric = xspace.stores_metric_actions();
   const auto& qmetric_actions = xspace.cmetric_actionsq();
   const auto& dmetric_actions = xspace.cmetric_actionsd();
+  // The new D vectors are normalised by scaling their coefficients, with norms from the overlap of the vectors they are
+  // combinations of, so that no pass over the new vectors is needed for it.
+  {
+    auto basis = std::vector<size_t>{};
+    for (auto iq : q_delete)
+      basis.push_back(dims.oQ() + iq);
+    for (size_t k = 0; k < dims.nD; ++k)
+      basis.push_back(dims.oD() + k);
+    auto overlap_basis = subspace::Matrix<value_type>({basis.size(), basis.size()});
+    for (size_t j = 0; j < basis.size(); ++j)
+      for (size_t k = 0; k < basis.size(); ++k)
+        overlap_basis(j, k) = overlap(basis[j], basis[k]);
+    const auto norms = subspace::util::solution_norms(solutions_proj, overlap_basis);
+    for (size_t i = 0; i < nD; ++i) {
+      if (norms[i] < norm_thresh) {
+        logger.warn(std::format("construct_dspace: skipping normalisation of D vector {} with near-zero norm = {:.2e}",
+                                i, double(norms[i])));
+        continue;
+      }
+      for (size_t j = 0; j < solutions_proj.cols(); ++j)
+        solutions_proj(i, j) /= value_type(norms[i]);
+    }
+  }
   std::vector<Q> dparams_new, dactions_new, dmetric_actions_new;
   if (nD > 0) {
     const Q& q = !qparams.empty() ? qparams.front().get() : dparams.front().get();
@@ -513,20 +536,6 @@ auto construct_dspace(const subspace::Matrix<value_type>& solutions, const subsp
       const auto wdmetric_actions_new = wrap(dmetric_actions_new);
       handler.gemm_outer(coeff, qd_metric_actions, wdmetric_actions_new);
     }
-  }
-  for (size_t i = 0; i < nD; ++i) {
-    auto norm = std::sqrt(std::abs(handler.dot(dparams_new.at(i), dparams_new.at(i))));
-    if (norm < norm_thresh) {
-      logger.warn(
-          std::format("construct_dspace: skipping normalisation of D vector {} with near-zero norm = {:.2e}", i, norm));
-      continue;
-    }
-    handler.scal(1. / norm, dparams_new[i]);
-    handler.scal(1. / norm, dactions_new[i]);
-    if (metric)
-      handler.scal(1. / norm, dmetric_actions_new[i]);
-    for (size_t j = 0; j < solutions_proj.cols(); ++j)
-      solutions_proj(i, j) /= value_type(norm);
   }
   return std::make_tuple(std::move(dparams_new), std::move(dactions_new), std::move(dmetric_actions_new),
                          std::move(solutions_proj));
