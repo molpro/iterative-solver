@@ -878,6 +878,13 @@ protected:
     auto nsol = m_subspace_solver->size();
     std::vector<std::pair<Q, Q>> temp_solutions{};
     const auto batches = detail::parameter_batches(nsol, parameters.size());
+    // The solutions of a problem with a metric are normalised in the metric, so their Euclidean length, and with it
+    // the length of the residual, would depend on the scale of the metric. The error is that of the solution of unit
+    // length instead, which is the same as without a metric.
+    const auto solution_norms =
+        m_xspace->metric_kind() != MetricKind::Identity
+            ? subspace::util::solution_norms(m_subspace_solver->solutions(), m_xspace->data.at(subspace::EqnData::S))
+            : std::vector<value_type_abs>{};
     for (const auto& batch : batches) {
       auto [start_sol, end_sol] = batch;
       auto roots = std::vector<int>(end_sol - start_sol);
@@ -885,14 +892,9 @@ protected:
       solution_impl(roots, parameters, action, scratch);
       auto errors = std::vector<value_type_abs>(roots.size(), 0);
       detail::update_errors(errors, cwrap(action), m_handlers->rr());
-      if (m_xspace->metric_kind() != MetricKind::Identity) {
-        // The solutions are normalised in the metric, so their Euclidean length, and with it the length of the
-        // residual, would depend on the scale of the metric. The error is that of the solution of unit length instead,
-        // which is the same as without a metric.
+      if (!solution_norms.empty())
         for (size_t i = 0; i < roots.size(); ++i)
-          errors[i] /= subspace::util::solution_norm(m_subspace_solver->solutions(), roots[i],
-                                                     m_xspace->data.at(subspace::EqnData::S));
-      }
+          errors[i] /= solution_norms[roots[i]];
       if (batches.size() > 1) {
         for (size_t i = 0; i < roots.size(); ++i)
           temp_solutions.emplace_back(m_handlers->qr().copy(parameters[i]), m_handlers->qr().copy(action[i]));
