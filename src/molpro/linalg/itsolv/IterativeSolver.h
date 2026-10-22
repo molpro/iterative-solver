@@ -516,7 +516,8 @@ public:
    * for the positive (semi)definite kinds, that it is not positive (semi)definite, unless switched off with
    * set_check_metric(). These checks see the metric only on the subspace, so that, e.g., an indefinite metric is
    * noticed only once one of its negative directions enters the subspace; test_problem() checks the metric of a
-   * Problem more directly.
+   * Problem more directly. The metric matrix of the P space is checked before the P space is added, but the
+   * vectors given to add_vector() are part of the subspace when the check of positivity fails.
    * @param kind the kind of metric
    * @param storage how the solver obtains the actions of the metric on its subspace vectors: with
    * MetricStorage::Stored it keeps those given to add_vector(); with MetricStorage::OnTheFly, which is worthwhile where

@@ -374,6 +374,7 @@ public:
   }
   bool provide_pp_metric_matrix = true;
   bool provide_p_metric_action = true;
+  bool negative_pp_metric_matrix = false; //!< if true, pp_metric_matrix() is not positive definite
 
   using P = std::map<size_t, double>;
   std::vector<double> pp_action_matrix(const std::vector<P> &pparams) const override {
@@ -387,7 +388,8 @@ public:
   std::vector<double> pp_metric_matrix(const std::vector<P> &pparams) const override {
     if (not provide_pp_metric_matrix)
       return Problem::pp_metric_matrix(pparams);
-    return p_matrix([this](size_t i, size_t j) { return metric(i, j); }, pparams);
+    const double sign = negative_pp_metric_matrix ? -1 : 1;
+    return p_matrix([this, sign](size_t i, size_t j) { return sign * metric(i, j); }, pparams);
   }
   void p_metric_action(const std::vector<std::vector<double>> &p_coefficients,
                        const molpro::linalg::itsolv::CVecRef<P> &pparams,
@@ -934,6 +936,20 @@ TEST(LinearEigensystem, Davidson_generalized_errors) {
   }
   problem.provide_pp_metric_matrix = true;
   problem.provide_p_metric_action = true;
+  {
+    // a metric that is not positive definite in the P space is rejected before the solver changes, so that the
+    // solver can still solve the corrected problem
+    problem.negative_pp_metric_matrix = true;
+    auto solver = davidson();
+    solver->set_n_roots(2);
+    solver->set_hermiticity(true);
+    solver->set_max_p(6);
+    EXPECT_THROW(solver->solve(params, actions, metric_actions, problem, true), std::runtime_error);
+    EXPECT_EQ(solver->metric_kind(), molpro::linalg::itsolv::MetricKind::Identity);
+    EXPECT_EQ(solver->dimensions().nX(), 0);
+    problem.negative_pp_metric_matrix = false;
+    EXPECT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
+  }
   {
     // the P space of a problem with a metric is added with its metric matrix
     using P = GeneralizedProblem::P;
