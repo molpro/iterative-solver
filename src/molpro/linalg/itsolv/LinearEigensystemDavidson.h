@@ -283,8 +283,20 @@ protected:
           if (partner >= subspace_solver->retained_solutions().rows())
             throw std::logic_error("The complex conjugate partner of a root is not among the retained solutions");
           auto partner_param = this->m_handlers->rr().copy(actions.at(i));
-          this->construct_solutions_and_actions({int(partner)}, subspace_solver->retained_solutions(),
-                                                wrap_arg(partner_param), {});
+          if (partner < eigvals.size()) {
+            this->construct_solutions_and_actions({int(partner)}, subspace_solver->retained_solutions(),
+                                                  wrap_arg(partner_param), {});
+          } else {
+            // the residual of the truncated partner is the imaginary part of the residual of this root
+            auto partner_residual = this->m_handlers->rr().copy(actions.at(i));
+            this->construct_solutions_and_actions({int(partner)}, subspace_solver->retained_solutions(),
+                                                  wrap_arg(partner_param), wrap_arg(partner_residual));
+            // The imaginary part of the partner's eigenvalue is the negative of the one of this root
+            this->m_handlers->rr().axpy(-eigvals.at(roots[i]), partner_param, partner_residual);
+            this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
+            m_truncated_partner_residual_norm =
+                std::sqrt(std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
+          }
           this->m_handlers->rr().axpy(it->second, partner_param, actions.at(i));
         }
       }
@@ -316,38 +328,29 @@ protected:
    * residual
    *
    * The residual of that root is only the real part of the complex residual. The imaginary part is the residual of
-   * the truncated partner, which is assembled from the subspace.
+   * the truncated partner, whose norm construct_residual() has determined.
    */
   void compute_errors(const std::vector<int>& roots, const CVecRef<R>& params, const CVecRef<R>& residuals,
                       std::vector<value_type_abs>& errors) override {
-    SolverTemplate::compute_errors(roots, params, residuals, errors);
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
     assert(subspace_solver);
     const auto nroots = subspace_solver->size();
-    if (nroots == 0)
+    const auto partner = nroots > 0 ? subspace_solver->complex_partner(nroots - 1) : std::nullopt;
+    const auto root_it = std::ranges::find(roots, int(nroots) - 1);
+    const bool truncated_partner = partner && *partner >= nroots && root_it != roots.end();
+    if (truncated_partner && !m_truncated_partner_residual_norm)
+      throw std::logic_error("The residual of the truncated complex pair partner of the last root is not known");
+    SolverTemplate::compute_errors(roots, params, residuals, errors);
+    if (!truncated_partner)
       return;
-    const auto partner = subspace_solver->complex_partner(nroots - 1);
-    const auto root_it = std::ranges::find(roots, int(nroots - 1));
-    if (!partner || *partner < nroots || root_it == roots.end())
-      return;
-    const auto i = std::ranges::distance(roots.begin(), root_it);
-    const auto& imag_eigval_components = subspace_solver->imag_eigval_components();
-    const auto it = std::ranges::find(imag_eigval_components, nroots - 1, [](const auto& pair) { return pair.first; });
-    if (it == imag_eigval_components.end())
-      throw std::logic_error("The imaginary part of the eigenvalue of a complex pair member is missing");
-    const auto& solutions = subspace_solver->retained_solutions();
-    auto partner_param = this->m_handlers->rr().copy(params.at(i));
-    auto partner_residual = this->m_handlers->rr().copy(params.at(i));
-    this->construct_solutions_and_actions({int(*partner)}, solutions, wrap_arg(partner_param),
-                                          wrap_arg(partner_residual));
-    // The imaginary part of the partner's eigenvalue is the negative of the one of the last root
-    this->m_handlers->rr().axpy(-eigenvalues().at(nroots - 1), partner_param, partner_residual);
-    this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
-    errors.at(i) = std::sqrt(errors.at(i) * errors.at(i) +
-                             std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
+    auto& error = errors.at(std::ranges::distance(roots.begin(), root_it));
+    error = std::sqrt(error * error + *m_truncated_partner_residual_norm * *m_truncated_partner_residual_norm);
+    m_truncated_partner_residual_norm.reset();
   }
 
   detail::DSpaceResetter<Q> m_dspace_resetter; //!< resets D space
+  //! norm of the residual of the truncated complex pair partner of the last root, set by construct_residual()
+  std::optional<value_type_abs> m_truncated_partner_residual_norm;
   bool m_hermiticity = false;                  //!< whether the problem is hermitian or not
   std::vector<scalar_type> m_last_values;      //!< The values from the previous iteration
   bool m_resetting_in_progress = false;        //!< whether D space resetting is in progress
