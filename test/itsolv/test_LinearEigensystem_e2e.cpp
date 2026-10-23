@@ -257,6 +257,27 @@ TEST_P(Davidson_complex_pair_split_reduced_subspace, converges) {
 INSTANTIATE_TEST_SUITE_P(LinearEigensystem, Davidson_complex_pair_split_reduced_subspace,
                          ::testing::Values("max_size_qspace=4", "contrib_thresh=1e-3", "max_size_qspace=4,reset_D=3"));
 
+//! The working set holds only requested roots, also when a reset of the D space hands out a truncated pair partner
+TEST(LinearEigensystem, Davidson_complex_pair_split_working_set) {
+  molpro::mpi::init();
+  SplitComplexPairProblem problem;
+  auto solver = create_split_pair_solver(3, "max_size_qspace=4,reset_D=3");
+  // more parameter vectors than roots
+  auto params = std::vector<std::vector<double>>(solver->n_roots() + 1, std::vector<double>(problem.n));
+  auto actions = params;
+  for (size_t k = 0; k < params.size(); ++k)
+    params[k][k] = 1;
+  size_t nwork = solver->n_roots();
+  for (int iter = 0; iter < 30 && nwork > 0; ++iter) {
+    problem.action(molpro::linalg::itsolv::cwrap(params.begin(), params.begin() + nwork),
+                   molpro::linalg::itsolv::wrap(actions.begin(), actions.begin() + nwork));
+    solver->add_vector(params, actions);
+    nwork = solver->end_iteration(params, actions);
+    for (const auto root : solver->working_set())
+      EXPECT_LT(root, solver->n_roots()) << "iteration " << iter;
+  }
+}
+
 //! The two members of a complex pair end up in different batches of the solution when there are fewer parameter
 //! vectors than roots
 TEST(LinearEigensystem, Davidson_complex_pair_split_by_batches) {
