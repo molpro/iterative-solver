@@ -217,21 +217,8 @@ public:
     // auto prof = profiler()->push("itsolv::solution"); // FIXME two profilers
     auto prof = molpro::Profiler::single();
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
-    prof->start("construct_solution (parameters)");
-    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
-                               m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
-    prof->stop();
-    prof->start("construct_solution (residual)");
-    detail::construct_solution(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
-                               m_xspace->actionsd(), m_xspace->dimensions().oP(), m_xspace->dimensions().oQ(),
-                               m_xspace->dimensions().oD(), *m_handlers);
-    prof->stop();
+    construct_solutions_and_actions(roots, m_subspace_solver->solutions(), parameters, residual);
     prof->start("apply");
-    auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP(),
-                                              m_xspace->dimensions().nP);
-    if (m_apply_p)
-      m_apply_p(pvectors, m_xspace->cparamsp(), residual);
     construct_residual(roots, cwrap(parameters), residual);
     read_handler_counts(m_stats, m_handlers);
     prof->stop();
@@ -566,6 +553,33 @@ protected:
   virtual void combine_errors() {}
   //! Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)
   virtual void set_value_errors() {}
+  /*!
+   * @brief Constructs the subspace vectors with the coefficients in the given rows of solutions, and their actions
+   * @param rows rows of solutions
+   * @param solutions coefficients of subspace vectors in the current subspace, one vector per row
+   * @param parameters receives the subspace vectors
+   * @param actions receives the actions on the subspace vectors, unless it is empty
+   */
+  void construct_solutions_and_actions(const std::vector<int>& rows, const subspace::Matrix<value_type>& solutions,
+                                       const VecRef<R>& parameters, const VecRef<R>& actions) {
+    auto prof = molpro::Profiler::single();
+    const auto& dims = m_xspace->dimensions();
+    prof->start("construct_solution (parameters)");
+    detail::construct_solution(parameters, rows, solutions, m_xspace->paramsp(), m_xspace->paramsq(),
+                               m_xspace->paramsd(), dims.oP(), dims.oQ(), dims.oD(), *m_handlers);
+    prof->stop();
+    if (actions.empty())
+      return;
+    prof->start("construct_solution (residual)");
+    detail::construct_solution(actions, rows, solutions, {}, m_xspace->actionsq(), m_xspace->actionsd(), dims.oP(),
+                               dims.oQ(), dims.oD(), *m_handlers);
+    prof->stop();
+    prof->start("apply_p");
+    if (m_apply_p)
+      m_apply_p(detail::construct_vectorP(rows, solutions, dims.oP(), dims.nP), m_xspace->cparamsp(), actions);
+    prof->stop();
+  }
+
   //! Constructs residual for given roots provided their parameters and actions
   virtual void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params,
                                   const VecRef<R>& actions) = 0;

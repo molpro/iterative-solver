@@ -283,7 +283,8 @@ protected:
           if (partner >= subspace_solver->retained_solutions().rows())
             throw std::logic_error("The complex conjugate partner of a root is not among the retained solutions");
           auto partner_param = this->m_handlers->rr().copy(actions.at(i));
-          construct_subspace_vector(subspace_solver->retained_solutions(), int(partner), partner_param);
+          this->construct_solutions_and_actions({int(partner)}, subspace_solver->retained_solutions(),
+                                                wrap_arg(partner_param), {});
           this->m_handlers->rr().axpy(it->second, partner_param, actions.at(i));
         }
       }
@@ -337,32 +338,13 @@ protected:
     const auto& solutions = subspace_solver->retained_solutions();
     auto partner_param = this->m_handlers->rr().copy(params.at(i));
     auto partner_residual = this->m_handlers->rr().copy(params.at(i));
-    construct_subspace_vector(solutions, int(*partner), partner_param);
-    construct_subspace_action(solutions, int(*partner), partner_residual);
+    this->construct_solutions_and_actions({int(*partner)}, solutions, wrap_arg(partner_param),
+                                          wrap_arg(partner_residual));
     // The imaginary part of the partner's eigenvalue is the negative of the one of the last root
     this->m_handlers->rr().axpy(-eigenvalues().at(nroots - 1), partner_param, partner_residual);
     this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
     errors.at(i) = std::sqrt(errors.at(i) * errors.at(i) +
                              std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
-  }
-
-  //! Constructs in param the subspace vector with the coefficients in the given row of solutions
-  void construct_subspace_vector(const subspace::Matrix<scalar_type>& solutions, int row, R& param) {
-    const auto& dims = this->m_xspace->dimensions();
-    assert(solutions.cols() == dims.nX());
-    detail::construct_solution(wrap_arg(param), {row}, solutions, this->m_xspace->paramsp(), this->m_xspace->paramsq(),
-                               this->m_xspace->paramsd(), dims.oP(), dims.oQ(), dims.oD(), *this->m_handlers);
-  }
-
-  //! Constructs in action the action on the subspace vector with the coefficients in the given row of solutions
-  void construct_subspace_action(const subspace::Matrix<scalar_type>& solutions, int row, R& action) {
-    const auto& dims = this->m_xspace->dimensions();
-    assert(solutions.cols() == dims.nX());
-    detail::construct_solution(wrap_arg(action), {row}, solutions, {}, this->m_xspace->actionsq(),
-                               this->m_xspace->actionsd(), dims.oP(), dims.oQ(), dims.oD(), *this->m_handlers);
-    if (this->m_apply_p)
-      this->m_apply_p(detail::construct_vectorP({row}, solutions, dims.oP(), dims.nP), this->m_xspace->cparamsp(),
-                      wrap_arg(action));
   }
 
   detail::DSpaceResetter<Q> m_dspace_resetter; //!< resets D space
