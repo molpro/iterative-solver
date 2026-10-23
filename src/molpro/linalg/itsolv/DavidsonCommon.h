@@ -71,9 +71,13 @@ public:
       m_resetting_in_progress = false;
     } else if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
       m_resetting_in_progress = true;
+      // retained_solutions() can hold a truncated complex pair partner beyond the roots; with no more parameters than
+      // roots, it is handed out under the index of a root
+      const auto nparam = std::min(parameters.size(), this->n_roots());
       this->m_working_set =
-          m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->retained_solutions(),
-                                rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
+          m_dspace_resetter.run(VecRef<R>(parameters.begin(), parameters.begin() + nparam), *this->m_xspace,
+                                this->m_subspace_solver->retained_solutions(), rspace_opts.norm_thresh,
+                                rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
       this->m_solutions_outdated = true;
     } else {
       m_resetting_in_progress = false;
