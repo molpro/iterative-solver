@@ -5371,6 +5371,13 @@
       <anchor>af48f67e3ba6cac80659e0bb169d79b99</anchor>
       <arglist>() const =0</arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual const Matrix&lt; value_type &gt; &amp;</type>
+      <name>retained_solutions</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html</anchorfile>
+      <anchor>a86d267e8e8a6fe6ed682317fac51c7a0</anchor>
+      <arglist>() const</arglist>
+    </member>
     <member kind="function" virtualness="pure">
       <type>virtual const std::vector&lt; value_type &gt; &amp;</type>
       <name>eigenvalues</name>
@@ -6293,6 +6300,13 @@
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions)=0</arglist>
     </member>
     <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>compute_errors</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>ae118ba677af59836a9fd7dc1fea3e9c2</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const CVecRef&lt; R &gt; &amp;residuals, std::vector&lt; value_type_abs &gt; &amp;errors)</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
       <type>virtual bool</type>
       <name>linearEigensystem</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
@@ -7134,6 +7148,27 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>accbb21b9dc3c611e7bddd25d0750f972</anchor>
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions) override</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>compute_errors</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a777339de3aa70b3d5fd5f08d713091c9</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const CVecRef&lt; R &gt; &amp;residuals, std::vector&lt; value_type_abs &gt; &amp;errors) override</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>construct_subspace_vector</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a2963320f3561bd4446b3e329979ebd74</anchor>
+      <arglist>(const subspace::Matrix&lt; scalar_type &gt; &amp;solutions, int row, R &amp;param)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>construct_subspace_action</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a4727d9c7703b03a8ae17762896b3f3a0</anchor>
+      <arglist>(const subspace::Matrix&lt; scalar_type &gt; &amp;solutions, int row, R &amp;action)</arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>detail::DSpaceResetter&lt; Q &gt;</type>
@@ -11073,6 +11108,20 @@
       <arglist>() const</arglist>
     </member>
     <member kind="function">
+      <type>std::optional&lt; std::size_t &gt;</type>
+      <name>complex_partner</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
+      <anchor>a11296e83ae031f027ab110c2ee6efb2b</anchor>
+      <arglist>(std::size_t root) const</arglist>
+    </member>
+    <member kind="function">
+      <type>const Matrix&lt; value_type &gt; &amp;</type>
+      <name>retained_solutions</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
+      <anchor>a909f04b86e3f03fbcfcae52cba79b5f1</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
       <type>const std::vector&lt; value_type_abs &gt; &amp;</type>
       <name>errors</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
@@ -11168,6 +11217,20 @@
       <name>m_imag_eigval_comps</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
       <anchor>a8ac4785a5efc3e3cb88403f102c7d3d7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::map&lt; std::size_t, std::size_t &gt;</type>
+      <name>m_complex_partners</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
+      <anchor>a48ec8e792b5bacacb93c7f3cd28a1aa3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>Matrix&lt; value_type &gt;</type>
+      <name>m_retained_solutions</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html</anchorfile>
+      <anchor>af1330d9e4bfda869dfffb3a9c1c21520</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">

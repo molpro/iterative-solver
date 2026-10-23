@@ -159,6 +159,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af48f67e3ba6cac80659e0bb169d79b99" id="r_af48f67e3ba6cac80659e0bb169d79b99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a2a06a811f18cef5088037cafa4eceedc">value_type</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#af48f67e3ba6cac80659e0bb169d79b99">solutions</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> =0</td></tr>
 <tr class="memdesc:af48f67e3ba6cac80659e0bb169d79b99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access solutions from the last <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a35b9e44966f3b62ecdd402f330c5088b" title="Solve the subspace problem.">solve()</a> call.  <br /></td></tr>
 <tr class="separator:af48f67e3ba6cac80659e0bb169d79b99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86d267e8e8a6fe6ed682317fac51c7a0" id="r_a86d267e8e8a6fe6ed682317fac51c7a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a2a06a811f18cef5088037cafa4eceedc">value_type</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a86d267e8e8a6fe6ed682317fac51c7a0">retained_solutions</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a86d267e8e8a6fe6ed682317fac51c7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b03cf4a324c80cbbe5c746e5f728891" id="r_a7b03cf4a324c80cbbe5c746e5f728891"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a2a06a811f18cef5088037cafa4eceedc">value_type</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a7b03cf4a324c80cbbe5c746e5f728891">eigenvalues</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> =0</td></tr>
 <tr class="memdesc:a7b03cf4a324c80cbbe5c746e5f728891"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access eigenvalues from the last <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a35b9e44966f3b62ecdd402f330c5088b" title="Solve the subspace problem.">solve()</a> call.  <br /></td></tr>
 <tr class="separator:a7b03cf4a324c80cbbe5c746e5f728891"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -340,6 +342,36 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 <p>Access errors corresponding to each solution. </p>
 
 <p>Implemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverDIIS.html#a315e0f133942e01145f9bfb1978dfc17">molpro::linalg::itsolv::subspace::SubspaceSolverDIIS&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ac7350d5d571c9286f9a0f09f05c622ec">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptBFGS.html#aee72fc161a9d35754814919a8a4c5cca">molpro::linalg::itsolv::subspace::SubspaceSolverOptBFGS&lt; RT, QT, PT &gt;</a>, and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverOptSD.html#a5acedd1dd88000f0bee1f614a0c0afa4">molpro::linalg::itsolv::subspace::SubspaceSolverOptSD&lt; RT, QT, PT &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a86d267e8e8a6fe6ed682317fac51c7a0" name="a86d267e8e8a6fe6ed682317fac51c7a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86d267e8e8a6fe6ed682317fac51c7a0">&#9670;&#160;</a></span>retained_solutions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">RT</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">QT</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">PT</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a2a06a811f18cef5088037cafa4eceedc">value_type</a> &gt; &amp; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html">molpro::linalg::itsolv::subspace::ISubspaceSolver</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">RT</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">QT</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">PT</a> &gt;::retained_solutions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Solutions whose span has to be preserved when the subspace is reduced; these are the solutions themselves unless a solver keeps additional ones </p>
+
+<p>Reimplemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#a909f04b86e3f03fbcfcae52cba79b5f1">molpro::linalg::itsolv::subspace::SubspaceSolverLinEig&lt; RT, QT, PT &gt;</a>.</p>
 
 </div>
 </div>

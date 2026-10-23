@@ -2,7 +2,10 @@ var classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson =
 [
     [ "SolverTemplate", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ae0ec3d737bc94543b35dc4d0e3558470", null ],
     [ "LinearEigensystemDavidson", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ae1fcec228a6eaf28bab62636828e5483", null ],
+    [ "compute_errors", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a777339de3aa70b3d5fd5f08d713091c9", null ],
     [ "construct_residual", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#accbb21b9dc3c611e7bddd25d0750f972", null ],
+    [ "construct_subspace_action", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a4727d9c7703b03a8ae17762896b3f3a0", null ],
+    [ "construct_subspace_vector", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a2963320f3561bd4446b3e329979ebd74", null ],
     [ "eigenvalues", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a57e0b6fcfe3f0711b5c618f0660f2c3c", null ],
     [ "end_iteration", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a22ed76de01c073008465614a389df5c3", null ],
     [ "end_iteration", "classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aebcf854909acb92f11bb2ea33a596c64", null ],

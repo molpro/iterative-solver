@@ -8,6 +8,7 @@ var structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver =
     [ "~ISubspaceSolver", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#ad7cfefb4b20a24f38099ae54e43d7fbe", null ],
     [ "eigenvalues", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a7b03cf4a324c80cbbe5c746e5f728891", null ],
     [ "errors", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a2a9ce5a6199fa417a05d26ff517039a1", null ],
+    [ "retained_solutions", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a86d267e8e8a6fe6ed682317fac51c7a0", null ],
     [ "set_error", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#aaa8b93d2137e355b08e490922572a359", null ],
     [ "set_error", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a1a5b52ec31a14cc17015f51855c1121e", null ],
     [ "set_logger", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html#a7dac83911e1152462e1bfffe6f0a432a", null ],

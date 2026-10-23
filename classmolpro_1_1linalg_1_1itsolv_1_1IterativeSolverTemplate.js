@@ -11,6 +11,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate =
     [ "add_vector", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a91aaa9e988aa4524bed5a639314b6b2c", null ],
     [ "check_consistent_number_of_roots_and_solutions", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a54c5badcc785eede77893bfe2c8c8cb9", null ],
     [ "clearP", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aa72cab3838296b747e499d86682b3728", null ],
+    [ "compute_errors", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ae118ba677af59836a9fd7dc1fea3e9c2", null ],
     [ "construct_residual", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ac38e5b3cb441edb495c6084a72dbdac0", null ],
     [ "convergence_threshold", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a29558ab5af09c348c9526de338b0b77d", null ],
     [ "convergence_threshold_value", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a1f7ebfff7316bcfe85ff5a8e2d62e40d", null ],

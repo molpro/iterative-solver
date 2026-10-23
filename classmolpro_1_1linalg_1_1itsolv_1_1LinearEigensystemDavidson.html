@@ -314,6 +314,15 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:accbb21b9dc3c611e7bddd25d0750f972" id="r_accbb21b9dc3c611e7bddd25d0750f972"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#accbb21b9dc3c611e7bddd25d0750f972">construct_residual</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">roots</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="memdesc:accbb21b9dc3c611e7bddd25d0750f972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs residual for given roots provided their parameters and actions.  <br /></td></tr>
 <tr class="separator:accbb21b9dc3c611e7bddd25d0750f972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a777339de3aa70b3d5fd5f08d713091c9" id="r_a777339de3aa70b3d5fd5f08d713091c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a777339de3aa70b3d5fd5f08d713091c9">compute_errors</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">roots</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">residuals</a>, std::vector&lt; value_type_abs &gt; &amp;<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a96d6a4563e9c49c6ba4231d16b8b0007">errors</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:a777339de3aa70b3d5fd5f08d713091c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The error of the last root, whose complex pair partner was truncated away, is the norm of its complex residual.  <br /></td></tr>
+<tr class="separator:a777339de3aa70b3d5fd5f08d713091c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2963320f3561bd4446b3e329979ebd74" id="r_a2963320f3561bd4446b3e329979ebd74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a2963320f3561bd4446b3e329979ebd74">construct_subspace_vector</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; scalar_type &gt; &amp;solutions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> row, R &amp;param)</td></tr>
+<tr class="memdesc:a2963320f3561bd4446b3e329979ebd74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs in param the subspace vector with the coefficients in the given row of solutions.  <br /></td></tr>
+<tr class="separator:a2963320f3561bd4446b3e329979ebd74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4727d9c7703b03a8ae17762896b3f3a0" id="r_a4727d9c7703b03a8ae17762896b3f3a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a4727d9c7703b03a8ae17762896b3f3a0">construct_subspace_action</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; scalar_type &gt; &amp;solutions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> row, R &amp;action)</td></tr>
+<tr class="memdesc:a4727d9c7703b03a8ae17762896b3f3a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs in action the action on the subspace vector with the coefficients in the given row of solutions.  <br /></td></tr>
+<tr class="separator:a4727d9c7703b03a8ae17762896b3f3a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Solver, R, Q, P &gt;</a></td></tr>
 <tr class="memitem:a8ae64ca06a5a8ddf6099eead01f66c23 inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" id="r_a8ae64ca06a5a8ddf6099eead01f66c23"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a8ae64ca06a5a8ddf6099eead01f66c23">IterativeSolverTemplate</a> (std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html">subspace::IXSpace</a>&lt; R, Q, P &gt; &gt; xspace, std::shared_ptr&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html">subspace::ISubspaceSolver</a>&lt; R, Q, P &gt; &gt; solver, std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">handlers</a>, std::shared_ptr&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html">Statistics</a> &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">stats</a>, std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aed21354d1be1e79e8982e9b3e2036c9a">logger</a>)</td></tr>
 <tr class="separator:a8ae64ca06a5a8ddf6099eead01f66c23 inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -474,6 +483,61 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a777339de3aa70b3d5fd5f08d713091c9" name="a777339de3aa70b3d5fd5f08d713091c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a777339de3aa70b3d5fd5f08d713091c9">&#9670;&#160;</a></span>compute_errors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::compute_errors </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>roots</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>residuals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; value_type_abs &gt; &amp;&#160;</td>
+          <td class="paramname"><em>errors</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The error of the last root, whose complex pair partner was truncated away, is the norm of its complex residual. </p>
+<p>The residual of that root is only the real part of the complex residual. The imaginary part is the residual of the truncated partner, which is assembled from the subspace. </p>
+
+<p>Reimplemented from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ae118ba677af59836a9fd7dc1fea3e9c2">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Solver, R, Q, P &gt;</a>.</p>
+
+</div>
+</div>
 <a id="accbb21b9dc3c611e7bddd25d0750f972" name="accbb21b9dc3c611e7bddd25d0750f972"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#accbb21b9dc3c611e7bddd25d0750f972">&#9670;&#160;</a></span>construct_residual()</h2>
 
@@ -519,6 +583,98 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 <p>Constructs residual for given roots provided their parameters and actions. </p>
 
 <p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ac38e5b3cb441edb495c6084a72dbdac0">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Solver, R, Q, P &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a4727d9c7703b03a8ae17762896b3f3a0" name="a4727d9c7703b03a8ae17762896b3f3a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4727d9c7703b03a8ae17762896b3f3a0">&#9670;&#160;</a></span>construct_subspace_action()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::construct_subspace_action </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; scalar_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>solutions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>action</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs in action the action on the subspace vector with the coefficients in the given row of solutions. </p>
+
+</div>
+</div>
+<a id="a2963320f3561bd4446b3e329979ebd74" name="a2963320f3561bd4446b3e329979ebd74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2963320f3561bd4446b3e329979ebd74">&#9670;&#160;</a></span>construct_subspace_vector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::construct_subspace_vector </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; scalar_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>solutions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>param</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs in param the subspace vector with the coefficients in the given row of solutions. </p>
 
 </div>
 </div>
