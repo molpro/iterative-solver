@@ -467,9 +467,7 @@ public:
   }
 
   bool solve(R& parameters, R& actions, const Problem<R>& problem, bool generate_initial_guess = false) override {
-    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
-    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
-    return solve(wparams, wactions, problem, generate_initial_guess);
+    return solve(wrap_arg(parameters), wrap_arg(actions), problem, generate_initial_guess);
   }
   bool solve(std::vector<R>& parameters, std::vector<R>& actions, const Problem<R>& problem,
              bool generate_initial_guess = false) override {
