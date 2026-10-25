@@ -148,9 +148,6 @@ public:
     }
   }
 
-  //! Applies the Davidson preconditioner
-  void precondition(std::vector<R>& parameters, std::vector<R>& action) const {}
-
   std::vector<scalar_type> eigenvalues() const override { return this->m_subspace_solver->eigenvalues(); }
 
   virtual std::vector<scalar_type> working_set_eigenvalues() const override {
