@@ -188,7 +188,7 @@ public:
       auto& xdata = xspace->data;
       const auto& H = xdata[subspace::EqnData::H];
       BFGS_update_2(z, xspace, H);
-      const value_type_abs len_z = std::sqrt(std::abs(this->m_handlers->rr().dot(z, z)));
+      const value_type_abs len_z = util::norm(this->m_handlers->rr(), z);
       if (len_z > this->m_quasinewton_maximum_step)
         this->m_handlers->rr().scal(this->m_quasinewton_maximum_step / len_z, z);
       this->m_handlers->rr().axpy(-1, z, parameters.front());

@@ -5,14 +5,23 @@
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/wrap.h>
 
+#include <cmath>
 #include <ios>
 #include <locale>
 #include <map>
 #include <ostream>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 namespace molpro::linalg::itsolv::util {
+
+//! The length of x, sqrt(|<x|x>|), which is real also for complex values
+template <class R>
+auto norm(array::ArrayHandler<R, R>& handler, const std::type_identity_t<R>& x) ->
+    typename array::ArrayHandler<R, R>::value_type_abs {
+  return std::sqrt(std::abs(handler.dot(x, x)));
+}
 
 /*!
  * @brief Remove vectors considered null from the linear transformation matrix.
