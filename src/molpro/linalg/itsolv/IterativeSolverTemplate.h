@@ -34,40 +34,6 @@ inline std::vector<std::pair<size_t, size_t>> parameter_batches(const size_t nso
   return batches;
 }
 
-template <class R, class Q, class P, typename value_type>
-void construct_solution(const VecRef<R>& params, const std::vector<int>& roots,
-                        const subspace::Matrix<value_type>& solutions,
-                        const std::vector<std::reference_wrapper<P>>& pparams,
-                        const std::vector<std::reference_wrapper<Q>>& qparams,
-                        const std::vector<std::reference_wrapper<Q>>& dparams, size_t oP, size_t oQ, size_t oD,
-                        ArrayHandlers<R, Q, P>& handlers) {
-  if (roots.empty())
-    return;
-  auto prof = molpro::Profiler::single();
-  prof->start("get rd_mat");
-  assert(params.size() >= roots.size());
-  for (size_t i = 0; i < roots.size(); ++i) {
-    handlers.rr().fill(0, params.at(i));
-  }
-  subspace::Matrix<value_type> rp_mat(std::make_pair(pparams.size(), roots.size())),
-      rq_mat(std::make_pair(qparams.size(), roots.size())), rd_mat(std::make_pair(dparams.size(), roots.size()));
-  for (size_t i = 0; i < roots.size(); ++i) {
-    for (size_t j = 0; j < pparams.size(); ++j) {
-      rp_mat(j, i) = solutions(roots[i], oP + j);
-    }
-    for (size_t j = 0; j < qparams.size(); ++j) {
-      rq_mat(j, i) = solutions(roots[i], oQ + j);
-    }
-    for (size_t j = 0; j < dparams.size(); ++j) {
-      rd_mat(j, i) = solutions(roots[i], oD + j);
-    }
-  }
-  prof->stop();
-  handlers.rp().gemm_outer(rp_mat, cwrap(pparams), params);
-  handlers.rq().gemm_outer(rq_mat, cwrap(qparams), params);
-  handlers.rq().gemm_outer(rd_mat, cwrap(dparams), params);
-}
-
 template <typename T>
 std::vector<std::vector<T>> construct_vectorP(const std::vector<int>& roots, const subspace::Matrix<T>& solutions,
                                               const size_t oP, const size_t nP) {
@@ -218,14 +184,15 @@ public:
     auto prof = molpro::Profiler::single();
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
     prof->start("construct_solution (parameters)");
-    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
-                               m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
+    const auto& dims = m_xspace->dimensions();
+    util::construct_solutions(parameters, roots, m_subspace_solver->solutions(), m_xspace->cparamsp(),
+                              m_xspace->cparamsq(), m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(),
+                              m_handlers->rr(), m_handlers->rp(), m_handlers->rq());
     prof->stop();
     prof->start("construct_solution (residual)");
-    detail::construct_solution(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
-                               m_xspace->actionsd(), m_xspace->dimensions().oP(), m_xspace->dimensions().oQ(),
-                               m_xspace->dimensions().oD(), *m_handlers);
+    util::construct_solutions(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->cactionsq(),
+                              m_xspace->cactionsd(), dims.oP(), dims.oQ(), dims.oD(), m_handlers->rr(),
+                              m_handlers->rp(), m_handlers->rq());
     prof->stop();
     prof->start("apply");
     auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP(),
@@ -250,9 +217,10 @@ public:
 
   void solution_params(const std::vector<int>& roots, const VecRef<R>& parameters) override {
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
-    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
-                               m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
+    const auto& dims = m_xspace->dimensions();
+    util::construct_solutions(parameters, roots, m_subspace_solver->solutions(), m_xspace->cparamsp(),
+                              m_xspace->cparamsq(), m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(),
+                              m_handlers->rr(), m_handlers->rp(), m_handlers->rq());
   };
 
   void solution_params(R& parameters) override { return solution_params(std::vector<int>(1, 0), wrap_arg(parameters)); }

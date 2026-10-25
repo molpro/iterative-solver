@@ -236,16 +236,18 @@ protected:
   void construct_subspace_vector(const subspace::Matrix<scalar_type>& solutions, int row, R& param) {
     const auto& dims = this->m_xspace->dimensions();
     assert(solutions.cols() == dims.nX());
-    detail::construct_solution(wrap_arg(param), {row}, solutions, this->m_xspace->paramsp(), this->m_xspace->paramsq(),
-                               this->m_xspace->paramsd(), dims.oP(), dims.oQ(), dims.oD(), *this->m_handlers);
+    util::construct_solutions(wrap_arg(param), {row}, solutions, this->m_xspace->cparamsp(), this->m_xspace->cparamsq(),
+                              this->m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(), this->m_handlers->rr(),
+                              this->m_handlers->rp(), this->m_handlers->rq());
   }
 
   //! Constructs in action the action on the subspace vector with the coefficients in the given row of solutions
   void construct_subspace_action(const subspace::Matrix<scalar_type>& solutions, int row, R& action) {
     const auto& dims = this->m_xspace->dimensions();
     assert(solutions.cols() == dims.nX());
-    detail::construct_solution(wrap_arg(action), {row}, solutions, {}, this->m_xspace->actionsq(),
-                               this->m_xspace->actionsd(), dims.oP(), dims.oQ(), dims.oD(), *this->m_handlers);
+    util::construct_solutions(wrap_arg(action), {row}, solutions, {}, this->m_xspace->cactionsq(),
+                              this->m_xspace->cactionsd(), dims.oP(), dims.oQ(), dims.oD(), this->m_handlers->rr(),
+                              this->m_handlers->rp(), this->m_handlers->rq());
     if (this->m_apply_p)
       this->m_apply_p(detail::construct_vectorP({row}, solutions, dims.oP(), dims.nP), this->m_xspace->cparamsp(),
                       wrap_arg(action));
