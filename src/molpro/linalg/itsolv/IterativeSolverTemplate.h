@@ -716,13 +716,17 @@ protected:
     if (verbosity_at_least(Verbosity::Summary)) {
       summary_report();
     }
-    // without any errors (e.g. no iteration was done) nothing is known to have converged
-    const bool errors_converged =
-        !m_errors.empty() && *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
+    // without any errors (e.g. no iteration was done) nothing is known to have converged, and roots without a solution
+    // in the subspace have no error
+    const bool all_roots = m_errors.size() >= n_roots();
+    const bool errors_converged = all_roots && !m_errors.empty() &&
+                                  *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
     // roots also remain in the working set while their values change by more than the value threshold
     const bool converged = nwork == 0 and errors_converged;
     if (verbosity_at_least(Verbosity::Summary)) {
-      if (!errors_converged) {
+      if (!all_roots && !m_errors.empty()) {
+        this->m_logger->warn("Subspace holds solutions for only ", m_errors.size(), " of ", n_roots(), " roots");
+      } else if (!errors_converged) {
         this->m_logger->warn("Solver has not converged to threshold ", m_convergence_threshold);
       } else if (!converged) {
         this->m_logger->warn("Solver has not converged to value threshold ", m_convergence_threshold_value);
