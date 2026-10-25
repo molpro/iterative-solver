@@ -83,6 +83,7 @@ public:
                                  *this->m_handlers, *this->m_logger, rspace_opts, qspace_opts, *this->profiler());
     }
     this->m_stats->iterations++;
+    read_handler_counts(this->m_stats, this->m_handlers);
     this->m_end_iteration_needed = false;
     return this->working_set().size();
   }

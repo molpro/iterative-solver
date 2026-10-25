@@ -3,6 +3,7 @@
 
 #include <molpro/linalg/array/DistrArrayFile.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
+#include <molpro/linalg/itsolv/LinearEquationsDavidson.h>
 #include <molpro/linalg/itsolv/SolverFactory.h>
 #include <molpro/mpi.h>
 
@@ -482,4 +483,30 @@ TEST(LinearEigensystem, report_keeps_stream_format) {
     EXPECT_EQ(stream.flags(), flags) << method;
     EXPECT_EQ(stream.precision(), 3) << method;
   }
+}
+
+//! The statistics of LinearEquationsDavidson include the array operations done in end_iteration(); the Q vectors are
+//! on disk, as only their handlers count operations
+TEST(LinearEquations, statistics_after_end_iteration) {
+  molpro::mpi::init();
+  using R = std::vector<double>;
+  using Q = molpro::linalg::array::DistrArrayFile;
+  using P = std::map<size_t, double>;
+  SymmetricProblem problem;
+  auto handlers = std::make_shared<molpro::linalg::itsolv::ArrayHandlers<R, Q, P>>();
+  auto solver = molpro::linalg::itsolv::LinearEquationsDavidson<R, Q, P>(handlers);
+  R rhs(problem.n, 1.), parameters(problem.n), actions(problem.n);
+  solver.add_equations(rhs);
+  parameters[0] = 1;
+  problem.action(molpro::linalg::itsolv::cwrap_arg(parameters), molpro::linalg::itsolv::wrap_arg(actions));
+  ASSERT_EQ(solver.add_vector(parameters, actions), 1);
+  auto counts = [](const molpro::linalg::itsolv::Statistics &statistics) {
+    return statistics.qr_ops + statistics.rq_ops + statistics.qq_ops;
+  };
+  const auto counts_before = counts(solver.statistics());
+  ASSERT_EQ(solver.end_iteration(parameters, actions), 1);
+  auto current = std::make_shared<molpro::linalg::itsolv::Statistics>();
+  molpro::linalg::itsolv::read_handler_counts(current, handlers);
+  ASSERT_NE(counts(*current), counts_before) << "end_iteration() did no counted operations";
+  EXPECT_EQ(counts(solver.statistics()), counts(*current));
 }
