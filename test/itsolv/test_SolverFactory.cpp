@@ -10,6 +10,7 @@
 #include <molpro/linalg/itsolv/OptimizeBFGS.h>
 #include <molpro/linalg/itsolv/OptimizeSDOptions.h>
 #include <molpro/linalg/itsolv/SolverFactory.h>
+#include <stdexcept>
 
 using molpro::linalg::itsolv::Options;
 using molpro::linalg::itsolv::options_map;
@@ -124,4 +125,43 @@ TEST(SolverFactory, reset_D_max_Q_size) {
   EXPECT_EQ(equations.get_reset_D_maxQ_size(), std::numeric_limits<size_t>::max());
   equations.set_reset_D_maxQ_size(size);
   EXPECT_EQ(equations.get_reset_D_maxQ_size(), size);
+}
+
+namespace {
+//! The minimum size of the Q space must not exceed its maximum size, whichever way they are set
+template <class Solver, class SolverOptions>
+void check_qspace_size_limits() {
+  auto solver = Solver(std::make_shared<molpro::linalg::itsolv::ArrayHandlers<Rvector, Qvector, Pvector>>());
+  solver.set_max_size_qspace(5);
+  EXPECT_THROW(solver.set_min_size_qspace(6), std::invalid_argument);
+  solver.set_min_size_qspace(3);
+  EXPECT_THROW(solver.set_max_size_qspace(2), std::invalid_argument);
+  EXPECT_EQ(solver.get_min_size_qspace(), 3);
+  EXPECT_EQ(solver.get_max_size_qspace(), 5);
+
+  auto options = SolverOptions{};
+  options.n_roots = 7;
+  options.max_size_qspace = 4;
+  options.min_size_qspace = 5;
+  EXPECT_THROW(solver.set_options(options), std::invalid_argument);
+  options.min_size_qspace.reset();
+  options.max_size_qspace = 2;
+  EXPECT_THROW(solver.set_options(options), std::invalid_argument);
+  EXPECT_NE(solver.n_roots(), 7) << "options were set before they were checked";
+  EXPECT_EQ(solver.get_min_size_qspace(), 3);
+  EXPECT_EQ(solver.get_max_size_qspace(), 5);
+
+  // both limits lowered at once, with the new maximum below the old minimum
+  options.min_size_qspace = 1;
+  solver.set_options(options);
+  EXPECT_EQ(solver.get_min_size_qspace(), 1);
+  EXPECT_EQ(solver.get_max_size_qspace(), 2);
+}
+} // namespace
+
+TEST(SolverFactory, qspace_size_limits) {
+  check_qspace_size_limits<molpro::linalg::itsolv::LinearEigensystemDavidson<Rvector, Qvector, Pvector>,
+                           molpro::linalg::itsolv::LinearEigensystemDavidsonOptions>();
+  check_qspace_size_limits<molpro::linalg::itsolv::LinearEquationsDavidson<Rvector, Qvector, Pvector>,
+                           molpro::linalg::itsolv::LinearEquationsDavidsonOptions>();
 }

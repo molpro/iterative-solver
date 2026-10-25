@@ -1,5 +1,6 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LINEAREQUATIONSDAVIDSON_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LINEAREQUATIONSDAVIDSON_H
+#include <limits>
 #include <molpro/linalg/itsolv/CastOptions.h>
 #include <molpro/linalg/itsolv/DSpaceResetter.h>
 #include <molpro/linalg/itsolv/IterativeSolverTemplate.h>
@@ -8,7 +9,8 @@
 #include <molpro/linalg/itsolv/rspace_options.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceSolverLinEig.h>
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
-#include <limits>
+#include <stdexcept>
+#include <string>
 
 namespace molpro::linalg::itsolv {
 /*!
@@ -124,16 +126,11 @@ public:
   void set_reset_D_maxQ_size(size_t n) { m_dspace_resetter.set_max_Qsize(n); }
   size_t get_reset_D_maxQ_size() const { return m_dspace_resetter.get_max_Qsize(); }
   //! Set a limit on the maximum size of Q space. This does not include the size of the working space (R) and the D
-  //! space
-  void set_max_size_qspace(std::size_t n) {
-    qspace_opts.max_size = n;
-    if (m_dspace_resetter.get_max_Qsize() > qspace_opts.max_size)
-      m_dspace_resetter.set_max_Qsize(qspace_opts.max_size);
-  }
+  //! space. It must not be less than the minimum size
+  void set_max_size_qspace(std::size_t n) { set_qspace_size_limits(get_min_size_qspace(), n); }
   std::size_t get_max_size_qspace() const { return qspace_opts.max_size; }
-  void set_min_size_qspace(std::size_t n) {
-    qspace_opts.min_size = n;
-  }
+  //! Set the minimum size of Q space when it is truncated, which must not exceed the maximum size
+  void set_min_size_qspace(std::size_t n) { set_qspace_size_limits(n, get_max_size_qspace()); }
   std::size_t get_min_size_qspace() const { return qspace_opts.min_size; }
   void set_hermiticity(bool hermitian) override {
     m_hermiticity = hermitian;
@@ -155,16 +152,17 @@ public:
   }
 
   void set_options(const Options& options) override {
-    SolverTemplate::set_options(options);
     auto opt = CastOptions::LinearEquations(options);
+    const auto min_size_qspace = opt.min_size_qspace.value_or(get_min_size_qspace());
+    const auto max_size_qspace = opt.max_size_qspace.value_or(get_max_size_qspace());
+    check_qspace_size_limits(min_size_qspace, max_size_qspace);
+    SolverTemplate::set_options(options);
     if (opt.reset_D)
       set_reset_D(opt.reset_D.value());
     if (opt.reset_D_max_Q_size)
       set_reset_D_maxQ_size(opt.reset_D_max_Q_size.value());
-    if (opt.max_size_qspace)
-      set_max_size_qspace(opt.max_size_qspace.value());
-    if (opt.min_size_qspace)
-      set_min_size_qspace(opt.min_size_qspace.value());
+    if (opt.max_size_qspace or opt.min_size_qspace)
+      set_qspace_size_limits(min_size_qspace, max_size_qspace);
     if (opt.contrib_thresh)
       qspace_opts.contrib_thresh = opt.contrib_thresh.value();
     if (opt.norm_thresh)
@@ -203,6 +201,21 @@ public:
   }
 
 protected:
+  //! Throws std::invalid_argument if the minimum size of the Q space exceeds its maximum size
+  static void check_qspace_size_limits(std::size_t min_size, std::size_t max_size) {
+    if (min_size > max_size)
+      throw std::invalid_argument("minimum size of the Q space (" + std::to_string(min_size) +
+                                  ") exceeds its maximum size (" + std::to_string(max_size) + ")");
+  }
+  //! Sets the minimum and maximum size of the Q space, after checking that the minimum does not exceed the maximum
+  void set_qspace_size_limits(std::size_t min_size, std::size_t max_size) {
+    check_qspace_size_limits(min_size, max_size);
+    qspace_opts.min_size = min_size;
+    qspace_opts.max_size = max_size;
+    if (m_dspace_resetter.get_max_Qsize() > qspace_opts.max_size)
+      m_dspace_resetter.set_max_Qsize(qspace_opts.max_size);
+  }
+
   //! The values chi_ii = <b_i|x_i> of the current solutions, or with the augmented Hessian the subspace eigenvalues
   std::vector<value_type> values() const {
     if (get_augmented_hessian() > 0)
