@@ -190,7 +190,7 @@ public:
   size_t get_reset_D() const { return m_dspace_resetter.get_nreset(); }
   //! Set the maximum size of Q space after resetting the D space
   void set_reset_D_maxQ_size(size_t n) { m_dspace_resetter.set_max_Qsize(n); }
-  int get_reset_D_maxQ_size() const { return m_dspace_resetter.get_max_Qsize(); }
+  size_t get_reset_D_maxQ_size() const { return m_dspace_resetter.get_max_Qsize(); }
   std::size_t get_max_size_qspace() const { return qspace_opts.max_size; }
   void set_max_size_qspace(std::size_t n) {
     qspace_opts.max_size = n;

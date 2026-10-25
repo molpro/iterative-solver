@@ -2,12 +2,14 @@
 #include <gtest/gtest.h>
 
 #include "vector_types.h"
-#include <molpro/linalg/itsolv/SolverFactory.h>
+#include <limits>
+#include <memory>
 #include <molpro/linalg/itsolv/LinearEigensystemDavidson.h>
 #include <molpro/linalg/itsolv/LinearEquationsDavidson.h>
 #include <molpro/linalg/itsolv/NonLinearEquationsDIIS.h>
 #include <molpro/linalg/itsolv/OptimizeBFGS.h>
 #include <molpro/linalg/itsolv/OptimizeSDOptions.h>
+#include <molpro/linalg/itsolv/SolverFactory.h>
 
 using molpro::linalg::itsolv::Options;
 using molpro::linalg::itsolv::options_map;
@@ -107,4 +109,19 @@ TEST(SolverFactory, create_all_kinds) {
   EXPECT_NE(generic(OptimizeSDOptions{opts}), nullptr);
 
   EXPECT_THROW(factory.create("NoSuchMethod", opts, handlers), std::runtime_error);
+}
+
+//! The maximum size of the Q space after a D-space reset is reported unchanged, also beyond the range of int
+TEST(SolverFactory, reset_D_max_Q_size) {
+  const size_t size = size_t(std::numeric_limits<int>::max()) + 2;
+  auto eigensystem = molpro::linalg::itsolv::LinearEigensystemDavidson<Rvector, Qvector, Pvector>(
+      std::make_shared<molpro::linalg::itsolv::ArrayHandlers<Rvector, Qvector, Pvector>>());
+  EXPECT_EQ(eigensystem.get_reset_D_maxQ_size(), std::numeric_limits<size_t>::max());
+  eigensystem.set_reset_D_maxQ_size(size);
+  EXPECT_EQ(eigensystem.get_reset_D_maxQ_size(), size);
+  auto equations = molpro::linalg::itsolv::LinearEquationsDavidson<Rvector, Qvector, Pvector>(
+      std::make_shared<molpro::linalg::itsolv::ArrayHandlers<Rvector, Qvector, Pvector>>());
+  EXPECT_EQ(equations.get_reset_D_maxQ_size(), std::numeric_limits<size_t>::max());
+  equations.set_reset_D_maxQ_size(size);
+  EXPECT_EQ(equations.get_reset_D_maxQ_size(), size);
 }
