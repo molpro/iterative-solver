@@ -12,6 +12,7 @@ LibraryManager_Append(${PROJECT_NAME}
         NonLinearEquationsDIISOptions.cpp
     PUBLIC_HEADER
         CastOptions.h
+        DavidsonCommon.h
         DavidsonOptions.h
         DSpaceResetter.h
         IterativeSolverTemplate.h
