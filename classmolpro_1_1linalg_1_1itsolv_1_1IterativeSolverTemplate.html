@@ -252,6 +252,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a8ae64ca06a5a8ddf6099eead01f66c23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8da70aeae03caac6b144251c0d402d4c" id="r_a8da70aeae03caac6b144251c0d402d4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a8da70aeae03caac6b144251c0d402d4c">~IterativeSolverTemplate</a> ()</td></tr>
 <tr class="separator:a8da70aeae03caac6b144251c0d402d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad01a2dd16a012e2c66adbe4ad40664f2" id="r_ad01a2dd16a012e2c66adbe4ad40664f2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad01a2dd16a012e2c66adbe4ad40664f2">combine_errors</a> ()</td></tr>
+<tr class="memdesc:ad01a2dd16a012e2c66adbe4ad40664f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation class can overload this to combine the errors of solutions, once those of all are known.  <br /></td></tr>
+<tr class="separator:ad01a2dd16a012e2c66adbe4ad40664f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf9774c4ebf5d2ac8f670236d417ceb6" id="r_abf9774c4ebf5d2ac8f670236d417ceb6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#abf9774c4ebf5d2ac8f670236d417ceb6">set_value_errors</a> ()</td></tr>
 <tr class="memdesc:abf9774c4ebf5d2ac8f670236d417ceb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)  <br /></td></tr>
 <tr class="separator:abf9774c4ebf5d2ac8f670236d417ceb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -748,6 +751,37 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad01a2dd16a012e2c66adbe4ad40664f2" name="ad01a2dd16a012e2c66adbe4ad40664f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad01a2dd16a012e2c66adbe4ad40664f2">&#9670;&#160;</a></span>combine_errors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">template</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> &gt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Solver, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate</a>&lt; Solver, R, Q, P &gt;::combine_errors </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implementation class can overload this to combine the errors of solutions, once those of all are known. </p>
+
+<p>Reimplemented in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ab770873d2c1535aee400e8b2f83ddd2d">molpro::linalg::itsolv::LinearEigensystemDavidson&lt; R, Q, P &gt;</a>.</p>
 
 </div>
 </div>
