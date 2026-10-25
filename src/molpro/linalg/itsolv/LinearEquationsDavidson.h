@@ -191,11 +191,11 @@ public:
   }
 
   void report(std::ostream& cout, bool endl = true) const override {
+    const util::StreamFormatGuard format_guard(cout);
     SolverTemplate::report(cout, false);
     cout << ", errors " << std::scientific;
     auto& err = this->m_errors;
     std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(cout, ", "));
-    cout << std::defaultfloat;
     if (endl)
       cout << std::endl;
   }

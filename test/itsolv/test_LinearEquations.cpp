@@ -3,8 +3,10 @@
 #include <Eigen/Eigenvalues>
 #include <complex>
 #include <deque>
+#include <iomanip>
 #include <map>
 #include <numeric>
+#include <sstream>
 #include <string>
 
 #include "vector_types.h"
@@ -281,4 +283,22 @@ TYPED_TEST(LinearEquations_reset_D, not_done_after_convergence) {
     EXPECT_EQ(reset->statistics().r_creations, reference->statistics().r_creations) << "nrhs = " << nrhs;
     EXPECT_EQ(reset->dimensions().nD, reference->dimensions().nD) << "nrhs = " << nrhs;
   }
+}
+
+//! report() leaves the format of the stream as it was
+TEST(LinearEquation, report_keeps_stream_format) {
+  using R = std::vector<double>;
+  HermitianEquations<double> problem(1);
+  auto solver = molpro::linalg::itsolv::create_LinearEquations<R, std::deque<double>, std::map<size_t, double>>();
+  solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+  R parameters(problem.n), actions(problem.n);
+  parameters[0] = 1;
+  solver->solve(parameters, actions, problem);
+  ASSERT_FALSE(solver->errors().empty());
+  std::ostringstream stream;
+  stream << std::fixed << std::setprecision(3);
+  const auto flags = stream.flags();
+  solver->report(stream);
+  EXPECT_EQ(stream.flags(), flags);
+  EXPECT_EQ(stream.precision(), 3);
 }

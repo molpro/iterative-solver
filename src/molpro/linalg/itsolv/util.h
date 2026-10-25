@@ -5,8 +5,10 @@
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/wrap.h>
 
+#include <ios>
 #include <locale>
 #include <map>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -131,6 +133,24 @@ public:
 
 private:
   const std::ctype<char>& facet = std::use_facet<std::ctype<char>>(std::locale());
+};
+
+//! Restores the format flags and precision of a stream when it goes out of scope
+class StreamFormatGuard {
+public:
+  explicit StreamFormatGuard(std::ostream& stream)
+      : m_stream(stream), m_flags(stream.flags()), m_precision(stream.precision()) {}
+  ~StreamFormatGuard() {
+    m_stream.flags(m_flags);
+    m_stream.precision(m_precision);
+  }
+  StreamFormatGuard(const StreamFormatGuard&) = delete;
+  StreamFormatGuard& operator=(const StreamFormatGuard&) = delete;
+
+private:
+  std::ostream& m_stream;
+  std::ios_base::fmtflags m_flags;
+  std::streamsize m_precision;
 };
 
 } // namespace molpro::linalg::itsolv::util

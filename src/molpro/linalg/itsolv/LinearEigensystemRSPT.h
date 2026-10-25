@@ -110,10 +110,10 @@ public:
     //    cout << std::endl;
     //    cout << "eigenvalues ";
     //    auto ev = eigenvalues();
+    const util::StreamFormatGuard format_guard(cout);
     cout << "Perturbed energies ";
     cout << std::fixed << std::setprecision(8);
     std::copy(begin(m_rspt_values), end(m_rspt_values), std::ostream_iterator<scalar_type>(cout, ", "));
-    cout << std::defaultfloat;
     if (endl)
       cout << std::endl;
   }

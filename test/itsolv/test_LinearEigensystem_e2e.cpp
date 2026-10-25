@@ -12,8 +12,10 @@
 #include <cmath>
 #include <complex>
 #include <deque>
+#include <iomanip>
 #include <map>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -459,4 +461,25 @@ TYPED_TEST(LinearEigensystem_convergence, needs_all_roots) {
   parameters[0] = 1;
   EXPECT_FALSE(solver->solve(parameters, actions, problem));
   EXPECT_EQ(solver->errors().size(), 1);
+}
+
+//! report() leaves the format of the stream as it was
+TEST(LinearEigensystem, report_keeps_stream_format) {
+  using R = std::vector<double>;
+  HermitianProblem<double> problem;
+  for (const std::string method : {"Davidson", "RSPT"}) {
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<R>(method);
+    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    solver->set_max_iter(3);
+    R parameters(problem.n), actions(problem.n);
+    parameters[0] = 1;
+    solver->solve(parameters, actions, problem);
+    ASSERT_FALSE(solver->errors().empty()) << method;
+    std::ostringstream stream;
+    stream << std::fixed << std::setprecision(3);
+    const auto flags = stream.flags();
+    solver->report(stream);
+    EXPECT_EQ(stream.flags(), flags) << method;
+    EXPECT_EQ(stream.precision(), 3) << method;
+  }
 }

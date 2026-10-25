@@ -304,6 +304,7 @@ public:
   const Statistics& statistics() const override { return *m_stats; }
 
   void report(std::ostream& cout, bool endl = true) const override {
+    const util::StreamFormatGuard format_guard(cout);
     cout << "iteration " << m_stats->iterations;
     if (not m_errors.empty()) {
       auto it_max_error = std::max_element(m_errors.cbegin(), m_errors.cend());
@@ -311,7 +312,7 @@ public:
         cout << ", |residual[" << std::distance(m_errors.cbegin(), it_max_error) << "]| = ";
       else
         cout << ", |residual| = ";
-      cout << std::scientific << *it_max_error << std::defaultfloat;
+      cout << std::scientific << *it_max_error;
     }
     if (endl)
       cout << std::endl;
