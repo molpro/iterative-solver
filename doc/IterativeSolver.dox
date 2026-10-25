@@ -18,7 +18,9 @@ The different kinds of spaces used by the solvers are described in @ref TopicSpa
 
 There is significant overlap between different solvers and all common functionalities are declared in IterativeSolver
 base class and implemented in IterativeSolverTemplate. This makes it easy to extend the library with new solvers.
-See LinearEigensystemDavidson for an example of the structure.
+See LinearEigensystemDavidson for an example of the structure. The management of the subspace that the linear
+eigensystem and linear equations solvers have in common is implemented in DavidsonCommon, between
+IterativeSolverTemplate and the two solvers.
 
 */
 }
