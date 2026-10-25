@@ -90,7 +90,7 @@ public:
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     auto prof = this->profiler()->push("itsolv::add_vector");
     auto& residual = actions.front().get();
-    const value_type_abs error = std::sqrt(std::abs(this->m_handlers->rr().dot(residual, residual)));
+    const value_type_abs error = util::norm(this->m_handlers->rr(), residual);
     m_converged = error < this->m_convergence_threshold;
     using namespace subspace;
     auto& xspace = this->m_xspace;

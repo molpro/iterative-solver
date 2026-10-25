@@ -322,7 +322,7 @@ protected:
       this->m_handlers->rr().axpy(-eigenvalues().at(nroots - 1), partner_param, partner_residual);
       this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
     }
-    auto partner_error = std::sqrt(std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
+    auto partner_error = util::norm(this->m_handlers->rr(), partner_residual);
     if (!solution_norms.empty())
       // as in SolverTemplate::compute_errors(), the error of the partner of unit length
       partner_error /=

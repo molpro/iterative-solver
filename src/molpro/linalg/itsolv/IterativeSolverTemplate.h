@@ -58,10 +58,8 @@ std::vector<std::vector<T>> construct_vectorP(const std::vector<int>& roots, con
 template <class R, typename T>
 void update_errors(std::vector<T>& errors, const CVecRef<R>& residual, array::ArrayHandler<R, R>& handler) {
   assert(residual.size() >= errors.size());
-  for (size_t i = 0; i < errors.size(); ++i) {
-    auto a = handler.dot(residual[i], residual[i]);
-    errors[i] = std::sqrt(std::abs(a));
-  }
+  for (size_t i = 0; i < errors.size(); ++i)
+    errors[i] = util::norm(handler, residual[i]);
 }
 
 template <typename T>
@@ -484,7 +482,7 @@ public:
       Q residual0 = m_handlers->qr().copy(v1);
       for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
         m_handlers->rq().axpy(-1.0, parameters0, v0);
-        m_handlers->rr().scal(1 / std::sqrt(std::abs(m_handlers->rr().dot(v0, v0))), v0);
+        m_handlers->rr().scal(1 / util::norm(m_handlers->rr(), v0), v0);
         Q step1 = m_handlers->qr().copy(v0);
         auto residual_analytic = m_handlers->rq().dot(v0, residual0);
         m_handlers->rq().copy(v0, parameters0);
@@ -510,12 +508,12 @@ public:
       auto check_scaling = [&](const auto& apply, const std::string& name) {
         apply(v0, v1);
         Q residual = m_handlers->qr().copy(v1);
-        auto norm2_residual = std::sqrt(m_handlers->rr().dot(v1, v1));
+        auto norm2_residual = util::norm(m_handlers->rr(), v1);
         const value_type_abs scale_factor{10.0};
         m_handlers->rr().scal(scale_factor, v0);
         apply(v0, v1);
         m_handlers->rq().axpy(-scale_factor, residual, v1);
-        auto norm2 = std::sqrt(m_handlers->rr().dot(v1, v1));
+        auto norm2 = util::norm(m_handlers->rr(), v1);
         success = success && std::abs(norm2 / norm2_residual) < threshold;
         if (verbosity > 0 or (verbosity > -1 and not success))
           std::cout << "Length of " << name << ": " << norm2_residual << ", scaling defect: " << norm2 << std::endl;
@@ -807,8 +805,8 @@ protected:
     std::optional<std::pair<Q, Q>> u; // the first test parameter and its action of the metric
     for (int instance = 0; instance < 2 && problem.test_parameters(instance, v0); ++instance) {
       problem.metric_action({v0}, {v1});
-      const auto norm = std::sqrt(std::abs(m_handlers->rr().dot(v0, v0)));
-      const auto norm_metric_action = std::sqrt(std::abs(m_handlers->rr().dot(v1, v1)));
+      const auto norm = util::norm(m_handlers->rr(), v0);
+      const auto norm_metric_action = util::norm(m_handlers->rr(), v1);
       const auto vmv = m_handlers->rr().dot(v0, v1);
       if (std::abs(vmv - conjugate(vmv)) / 2 > threshold * norm * norm_metric_action or
           (positive and real_part(vmv) < -threshold * norm * norm_metric_action)) {
