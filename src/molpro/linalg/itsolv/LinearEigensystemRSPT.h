@@ -72,6 +72,8 @@ public:
     auto n = this->m_xspace->size();
     if (n == 1)
       this->m_handlers->rr().fill(0, parameters);
+    else // parameters may have been overwritten since add_vector(), e.g. by solve()
+      this->solution_params(parameters);
     this->m_handlers->rr().axpy(-1, actions, parameters);
 
     this->m_end_iteration_needed = false;
