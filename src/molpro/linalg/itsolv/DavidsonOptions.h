@@ -23,7 +23,7 @@ struct DavidsonOptions {
   //! prevent convergence altogether, so set reset_D (e.g. 10) together with it. For linear equations with an indefinite
   //! matrix, a limited Q space can make the projected problem nearly singular, so that the solution diverges (#628).
   std::optional<std::size_t> max_size_qspace;
-  //! Minimum number of vectors kept in the Q space when it is truncated. Default: 0.
+  //! Minimum number of vectors kept in the Q space when it is truncated; must not exceed max_size_qspace. Default: 0.
   std::optional<std::size_t> min_size_qspace;
   std::optional<double> contrib_thresh;
   std::optional<double> norm_thresh;
