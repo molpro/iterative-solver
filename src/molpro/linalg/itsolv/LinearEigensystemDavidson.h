@@ -75,9 +75,11 @@ public:
    * function to propose new Q space parameters orthonormal to the old space. They are returned in parameters so that
    * corresponding actions can be calculated and used in add_vector in the next iteration.
    *
-   * Every n_reset_D iterations, unless n_reset_D is 0 (the default), the D space is reset. If working set does not
-   * cover all solutions than resetting is done over multiple iterations. During this time, there are no deletions from
-   * the Q space. This is done by temporarily increasing maximum allowed size of Q space.
+   * Every reset_D iterations, unless reset_D is 0 (the default) or there is no D space, the D space is reset instead
+   * (see detail::DSpaceResetter): the current solutions are returned in parameters as the new parameters, the D space
+   * is cleared, and for each returned solution the Q vector with the largest overlap with it is deleted. The Q space is
+   * then reduced to at most reset_D_max_Q_size vectors, including the returned solutions. If there are more solutions
+   * than parameters, the reset is spread over several iterations.
    *
    * Once all roots have converged, the subspace is left unchanged.
    *
