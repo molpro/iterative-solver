@@ -78,6 +78,8 @@ public:
    * cover all solutions than resetting is done over multiple iterations. During this time, there are no deletions from
    * the Q space. This is done by temporarily increasing maximum allowed size of Q space.
    *
+   * Once all roots have converged, the subspace is left unchanged.
+   *
    * @param parameters output new parameters for the subspace.
    * @param residual preconditioned residuals.
    * @return number of significant parameters to calculate the action for
@@ -85,7 +87,10 @@ public:
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
     auto prof = this->profiler();
     auto m_prof = prof->push("itsolv::end_iteration");
-    if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
+    if (this->m_working_set.empty() && !m_dspace_resetter.in_progress()) {
+      // all roots have converged: the subspace is left as it is
+      m_resetting_in_progress = false;
+    } else if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
       m_resetting_in_progress = true;
       this->m_working_set =
           m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->retained_solutions(),

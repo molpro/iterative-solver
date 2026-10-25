@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <cmath>
 #include <complex>
+#include <deque>
+#include <map>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -352,3 +354,71 @@ template class molpro::linalg::itsolv::SolverFactory<std::vector<double>, std::v
                                                      std::map<size_t, double>>;
 template class molpro::linalg::itsolv::SolverFactory<std::vector<double>, molpro::linalg::array::DistrArrayFile,
                                                      std::map<size_t, double>>;
+
+//! A hermitian, diagonally dominant matrix in any value type
+template <typename scalar>
+class HermitianProblem : public molpro::linalg::itsolv::Problem<std::vector<scalar>> {
+public:
+  using R = std::vector<scalar>;
+  static constexpr size_t n = 60;
+  scalar element(size_t i, size_t j) const {
+    if (i == j)
+      return scalar(1. + i);
+    const double re = 0.1 / (1. + std::abs(double(i) - double(j)));
+    if constexpr (molpro::linalg::itsolv::is_complex<scalar>{})
+      return scalar(re, i < j ? 0.05 * re : -0.05 * re);
+    else
+      return scalar(re);
+  }
+
+  bool diagonals(R &d) const override {
+    for (size_t i = 0; i < n; ++i)
+      d[i] = element(i, i);
+    return true;
+  }
+
+  void action(const molpro::linalg::itsolv::CVecRef<R> &parameters,
+              const molpro::linalg::itsolv::VecRef<R> &actions) const override {
+    for (size_t k = 0; k < parameters.size(); ++k)
+      for (size_t i = 0; i < n; ++i) {
+        actions[k].get()[i] = 0;
+        for (size_t j = 0; j < n; ++j)
+          actions[k].get()[i] += element(i, j) * parameters[k].get()[j];
+      }
+  }
+};
+
+template <typename scalar>
+class Davidson_reset_D : public ::testing::Test {};
+using value_types = ::testing::Types<double, std::complex<double>, long double>;
+TYPED_TEST_SUITE(Davidson_reset_D, value_types);
+
+//! A D-space reset that falls due once all roots have converged leaves the converged subspace alone
+TYPED_TEST(Davidson_reset_D, not_done_after_convergence) {
+  using R = std::vector<TypeParam>;
+  HermitianProblem<TypeParam> problem;
+  for (size_t nroot = 1; nroot <= 3; ++nroot) {
+    auto run = [&](const std::string &options) {
+      auto solver =
+          molpro::linalg::itsolv::create_LinearEigensystem<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
+              "Davidson", options);
+      solver->set_n_roots(nroot);
+      solver->set_convergence_threshold(1e-9);
+      solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+      auto params = std::vector<R>(nroot, R(problem.n));
+      for (size_t i = 0; i < nroot; ++i)
+        params[i][i] = 1; // select() of the diagonal guess is not implemented for complex values
+      auto actions = params;
+      EXPECT_TRUE(solver->solve(params, actions, problem));
+      return solver;
+    };
+    const auto reference = run("max_size_qspace=3");
+    ASSERT_GT(reference->dimensions().nD, 0) << "no D space to reset";
+    // the reset falls due in the iteration that converges
+    const auto iterations = reference->statistics().iterations;
+    const auto reset = run("max_size_qspace=3,reset_D=" + std::to_string(iterations));
+    EXPECT_EQ(reset->statistics().iterations, iterations) << "nroot = " << nroot;
+    EXPECT_EQ(reset->statistics().r_creations, reference->statistics().r_creations) << "nroot = " << nroot;
+    EXPECT_EQ(reset->dimensions().nD, reference->dimensions().nD) << "nroot = " << nroot;
+  }
+}

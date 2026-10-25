@@ -103,7 +103,8 @@ Because the D space is built from linear combinations of stored vectors, numeric
 iterations. It can therefore be reset periodically (`reset_D` option, `detail::DSpaceResetter`): the full current
 solutions are moved into the Q space as new parameters, the Q vectors that overlap most with them are deleted, and
 the D space is cleared. If the working set is smaller than the number of solutions, the reset is spread over several
-iterations. The size of the Q space after a reset can be limited separately with `reset_D_max_Q_size`.
+iterations. A reset that falls due once all solutions have converged is not done. The size of the Q space after a
+reset can be limited separately with `reset_D_max_Q_size`.
 
 @section SpacesX X space (full subspace)
 
@@ -138,6 +139,8 @@ For the linear Davidson solvers, a single iteration involves the spaces as follo
 5. If the Q space is too large, Q vectors are deleted and a new D space is constructed from the current solutions
    (or the D space is reset if requested).
 6. The preconditioned residuals are orthonormalised against P+Q+D and returned as the new R parameters.
+
+Once all solutions have converged, steps 5 and 6 are skipped and the subspace is left unchanged.
 
 */
 }

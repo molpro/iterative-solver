@@ -66,12 +66,16 @@ public:
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
     auto prof = this->profiler()->push("itsolv::end_iteration");
-    m_resetting_in_progress = m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions());
-    if (m_resetting_in_progress) {
+    if (this->m_working_set.empty() && !m_dspace_resetter.in_progress()) {
+      // all roots have converged: the subspace is left as it is
+      m_resetting_in_progress = false;
+    } else if (m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions())) {
+      m_resetting_in_progress = true;
       this->m_working_set =
           m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
                                 rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
     } else {
+      m_resetting_in_progress = false;
       this->m_working_set =
           detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
                                  *this->m_handlers, *this->m_logger, rspace_opts, qspace_opts, *this->profiler());

@@ -98,8 +98,11 @@ public:
 
   //! Whether reset operation should be run
   bool do_reset(size_t iter, const subspace::Dimensions& dims) {
-    return (m_nreset != 0 && (iter + 1) % m_nreset == 0 && dims.nD > 0) || !solution_params.empty();
+    return (m_nreset != 0 && (iter + 1) % m_nreset == 0 && dims.nD > 0) || in_progress();
   }
+
+  //! Whether a reset has started and not all solutions have been moved into the Q space yet
+  bool in_progress() const { return !solution_params.empty(); }
 
   void set_nreset(size_t i) { m_nreset = i; }
   auto get_nreset() const { return m_nreset; }
