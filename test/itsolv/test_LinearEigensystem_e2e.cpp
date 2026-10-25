@@ -422,3 +422,41 @@ TYPED_TEST(Davidson_reset_D, not_done_after_convergence) {
     EXPECT_EQ(reset->dimensions().nD, reference->dimensions().nD) << "nroot = " << nroot;
   }
 }
+
+//! A diagonal matrix in any value type
+template <typename scalar>
+class DiagonalProblem : public molpro::linalg::itsolv::Problem<std::vector<scalar>> {
+public:
+  using R = std::vector<scalar>;
+  static constexpr size_t n = 10;
+  bool diagonals(R &d) const override {
+    for (size_t i = 0; i < n; ++i)
+      d[i] = scalar(1. + i);
+    return true;
+  }
+  void action(const molpro::linalg::itsolv::CVecRef<R> &parameters,
+              const molpro::linalg::itsolv::VecRef<R> &actions) const override {
+    for (size_t k = 0; k < parameters.size(); ++k)
+      for (size_t i = 0; i < n; ++i)
+        actions[k].get()[i] = scalar(1. + i) * parameters[k].get()[i];
+  }
+};
+
+template <typename scalar>
+class LinearEigensystem_convergence : public ::testing::Test {};
+TYPED_TEST_SUITE(LinearEigensystem_convergence, value_types);
+
+//! solve() does not report convergence while the subspace holds solutions for fewer than all roots
+TYPED_TEST(LinearEigensystem_convergence, needs_all_roots) {
+  using R = std::vector<TypeParam>;
+  DiagonalProblem<TypeParam> problem;
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
+      "Davidson");
+  solver->set_n_roots(2);
+  solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+  // an exact eigenvector, whose residual offers no direction to find the second root in
+  R parameters(problem.n), actions(problem.n);
+  parameters[0] = 1;
+  EXPECT_FALSE(solver->solve(parameters, actions, problem));
+  EXPECT_EQ(solver->errors().size(), 1);
+}

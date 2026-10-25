@@ -251,7 +251,7 @@ public:
    * @param problem A Problem object defining the problem to be solved
    * @param generate_initial_guess Whether to start with a guess based on diagonal
    * elements (true) or on the contents of parameters (false)
-   * @return true if the solution was found
+   * @return true if solutions for all n_roots() roots were found and have converged
    *
    * If a P space is used (max_p > 0, diagonal elements are available and the selected P space is at least as large as
    * the number of roots), the initial subspace is the P space alone, and neither the contents of parameters on entry
