@@ -18,6 +18,7 @@
 #include <numeric>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -573,6 +574,60 @@ TEST(LinearEigensystem, Davidson_generalized_complex_pair) {
     problem.complex_pair = true;
     problem.cheap_metric = cheap_metric;
     solve_generalized_problem<std::vector<double>>(problem, 3, 3);
+  }
+}
+
+// A complex conjugate pair split by the number of roots, or by batches of fewer parameter vectors than roots, also with a
+// reduced subspace: the residual of the root whose partner is not among those at hand contains the action of the metric
+// on the partner, which is assembled from the stored actions of the metric or obtained by applying the metric on the fly
+TEST(LinearEigensystem, Davidson_generalized_complex_pair_split) {
+  GeneralizedProblem problem;
+  problem.complex_pair = true;
+  for (const bool cheap_metric : {false, true})
+    for (const auto& [nroot, nparams, max_size_qspace] : {std::tuple<size_t, size_t, size_t>{1, 1, 100},
+                                                          {1, 1, 4},
+                                                          {2, 1, 100}}) {
+      SCOPED_TRACE("cheap=" + std::to_string(cheap_metric) + " nroot=" + std::to_string(nroot) +
+                   " nparams=" + std::to_string(nparams) + " max_size_qspace=" + std::to_string(max_size_qspace));
+      problem.cheap_metric = cheap_metric;
+      solve_generalized_problem<std::vector<double>>(problem, nroot, nparams, max_size_qspace);
+    }
+}
+
+// The convergence of a root whose complex pair partner is truncated covers the imaginary part of its residual, also
+// with a metric
+TEST(LinearEigensystem, Davidson_generalized_complex_pair_split_imaginary_residual) {
+  GeneralizedProblem problem;
+  problem.complex_pair = true;
+  Eigen::MatrixXd a(problem.n, problem.n), m(problem.n, problem.n);
+  for (size_t i = 0; i < problem.n; ++i)
+    for (size_t j = 0; j < problem.n; ++j) {
+      a(i, j) = problem.kernel(i, j);
+      m(i, j) = problem.metric(i, j);
+    }
+  const Eigen::VectorXcd values = Eigen::GeneralizedEigenSolver<Eigen::MatrixXd>(a, m).eigenvalues();
+  const auto lowest = *std::ranges::min_element(values, [](const auto& x, const auto& y) {
+    return std::pair{x.real(), x.imag()} < std::pair{y.real(), y.imag()};
+  });
+  for (const bool cheap_metric : {false, true}) {
+    SCOPED_TRACE("cheap=" + std::to_string(cheap_metric));
+    problem.cheap_metric = cheap_metric;
+    auto solver = molpro::linalg::itsolv::create_LinearEigensystem<std::vector<double>>("Davidson");
+    solver->set_n_roots(1);
+    solver->set_hermiticity(false);
+    solver->set_convergence_threshold(1e-8);
+    auto params = std::vector<std::vector<double>>(1, std::vector<double>(problem.n));
+    auto actions = params, metric_actions = params;
+    ASSERT_TRUE(solver->solve(params, actions, metric_actions, problem, true));
+    solver->solution({0}, params, actions);
+    // With the residuals r = B x + e_imag M y and r_imag = B y - e_imag M x of the real and imaginary part x and y of
+    // the complex eigenvector, where B = A - e_real M, y and r_imag follow from x and r
+    const Eigen::Map<const Eigen::VectorXd> x(params[0].data(), problem.n), r(actions[0].data(), problem.n);
+    const Eigen::MatrixXd b = a - lowest.real() * m;
+    const Eigen::VectorXd y = m.lu().solve(r - b * x) / lowest.imag();
+    const Eigen::VectorXd r_imag = b * y - lowest.imag() * m * x;
+    EXPECT_LT(std::sqrt((r.squaredNorm() + r_imag.squaredNorm()) / (x.squaredNorm() + y.squaredNorm())),
+              solver->convergence_threshold());
   }
 }
 
