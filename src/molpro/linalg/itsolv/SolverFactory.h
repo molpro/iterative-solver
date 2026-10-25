@@ -178,8 +178,7 @@ auto Solve_LinearEquations(R& parameters, R& actions, const Problem<R>& problem,
                            const std::string& options = "",
                            const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers =
                                std::make_shared<molpro::linalg::itsolv::ArrayHandlers<R, Q, P>>()) {
-  return Solve_LinearEquations<R, Q, P>(std::vector<std::reference_wrapper<R>>{std::ref(parameters)},
-                                        std::vector<std::reference_wrapper<R>>{std::ref(actions)}, problem, verbosity,
+  return Solve_LinearEquations<R, Q, P>(wrap_arg(parameters), wrap_arg(actions), problem, verbosity,
                                         generate_initial_guess, method, options, handlers);
 }
 
