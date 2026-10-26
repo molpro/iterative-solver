@@ -16,6 +16,7 @@
 #include <iomanip>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -423,6 +424,105 @@ TYPED_TEST(Davidson_reset_D, not_done_after_convergence) {
     EXPECT_EQ(reset->statistics().iterations, iterations) << "nroot = " << nroot;
     EXPECT_EQ(reset->statistics().r_creations, reference->statistics().r_creations) << "nroot = " << nroot;
     EXPECT_EQ(reset->dimensions().nD, reference->dimensions().nD) << "nroot = " << nroot;
+  }
+}
+
+//! Between an end_iteration() that resets the D space and the next add_vector(), solution() throws without touching its
+//! arguments, while eigenvalues() are still those from before the reset; the next add_vector() takes up the solutions
+TYPED_TEST(Davidson_reset_D, solution_after_reset) {
+  using R = std::vector<TypeParam>;
+  using molpro::linalg::itsolv::cwrap;
+  using molpro::linalg::itsolv::wrap;
+  HermitianProblem<TypeParam> problem;
+  R diagonals(problem.n);
+  problem.diagonals(diagonals);
+  // a Q space of 3 is too small to keep vectors for the solutions after the reset
+  for (size_t nroot = 2; nroot <= 3; ++nroot) {
+    auto solver =
+        molpro::linalg::itsolv::create_LinearEigensystem<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
+            "Davidson", "max_size_qspace=3,reset_D=4");
+    solver->set_n_roots(nroot);
+    solver->set_convergence_threshold(1e-9);
+    auto roots = std::vector<int>(nroot);
+    std::iota(roots.begin(), roots.end(), 0);
+    auto params = std::vector<R>(nroot, R(problem.n));
+    auto actions = params;
+    for (size_t i = 0; i < nroot; ++i)
+      params[i][i] = 1;
+    int nreset = 0;
+    std::vector<TypeParam> eigenvalues_before_reset;
+    for (int iter = 0, nwork = nroot; iter < 20 && nwork > 0; ++iter) {
+      problem.action(cwrap(params.begin(), params.begin() + nwork), wrap(actions.begin(), actions.begin() + nwork));
+      nwork = solver->add_vector(params, actions);
+      if (!eigenvalues_before_reset.empty()) {
+        // the subspace holds the solutions from before the reset again
+        const auto eigenvalues = solver->eigenvalues();
+        ASSERT_EQ(eigenvalues.size(), nroot);
+        for (size_t k = 0; k < nroot; ++k)
+          EXPECT_LE(std::real(eigenvalues[k]), std::real(eigenvalues_before_reset[k]) + 1e-10)
+              << "nroot " << nroot << ", root " << k;
+        eigenvalues_before_reset.clear();
+      }
+      const auto nD = solver->dimensions().nD;
+      const auto eigenvalues = solver->eigenvalues();
+      if (nwork > 0)
+        problem.precondition(wrap(actions.begin(), actions.begin() + nwork), solver->working_set_eigenvalues(),
+                             diagonals);
+      nwork = solver->end_iteration(params, actions);
+      if (nD == 0 or solver->dimensions().nD > 0)
+        continue;
+      ++nreset;
+      EXPECT_EQ(solver->eigenvalues(), eigenvalues);
+      auto x = std::vector<R>(nroot, R(problem.n, TypeParam(7)));
+      auto residual = x;
+      EXPECT_THROW(solver->solution(roots, x, residual), std::logic_error);
+      EXPECT_THROW(solver->solution_params(roots, x), std::logic_error);
+      EXPECT_EQ(x, std::vector<R>(nroot, R(problem.n, TypeParam(7))));
+      EXPECT_EQ(residual, x);
+      eigenvalues_before_reset = eigenvalues;
+    }
+    EXPECT_GT(nreset, 0) << "nroot " << nroot;
+  }
+}
+
+//! solve() does not end right after an iteration that resets the D space, so that it can return the solutions
+TYPED_TEST(Davidson_reset_D, solve_ends_after_reset) {
+  using R = std::vector<TypeParam>;
+  using molpro::linalg::itsolv::cwrap;
+  using molpro::linalg::itsolv::wrap;
+  HermitianProblem<TypeParam> problem;
+  for (size_t nroot = 2; nroot <= 3; ++nroot) {
+    auto solver =
+        molpro::linalg::itsolv::create_LinearEigensystem<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
+            "Davidson", "max_size_qspace=3,reset_D=4");
+    solver->set_n_roots(nroot);
+    solver->set_convergence_threshold(1e-9);
+    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    // the reset falls due in the last allowed iteration
+    solver->set_max_iter(4);
+    auto params = std::vector<R>(nroot, R(problem.n));
+    auto actions = params;
+    for (size_t i = 0; i < nroot; ++i)
+      params[i][i] = 1;
+    solver->solve(params, actions, problem);
+    EXPECT_EQ(solver->statistics().iterations, 5) << "nroot " << nroot;
+    const auto eigenvalues = solver->eigenvalues();
+    ASSERT_EQ(eigenvalues.size(), nroot);
+    auto roots = std::vector<int>(nroot);
+    std::iota(roots.begin(), roots.end(), 0);
+    auto x = std::vector<R>(nroot, R(problem.n));
+    auto residual = x;
+    solver->solution(roots, x, residual);
+    problem.action(cwrap(x), wrap(residual));
+    for (size_t k = 0; k < nroot; ++k) {
+      TypeParam xr = 0, xx = 0;
+      for (size_t i = 0; i < problem.n; ++i) {
+        residual[k][i] -= eigenvalues[k] * x[k][i];
+        xr += molpro::linalg::conjugate(x[k][i]) * residual[k][i];
+        xx += molpro::linalg::conjugate(x[k][i]) * x[k][i];
+      }
+      EXPECT_NEAR(std::abs(xr / xx), 0, 1e-12) << "nroot " << nroot << ", root " << k;
+    }
   }
 }
 

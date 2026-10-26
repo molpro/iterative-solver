@@ -377,7 +377,9 @@ public:
       generate_initial_guess_from_diagonals(parameters, *diagonals);
     if (!pspace.empty())
       nwork = initialise_pspace(pspace, problem, parameters, actions);
-    for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
+    // an iteration that resets the D space is followed by one that takes up its vectors, even beyond max_iter, as
+    // there are no solutions to return in between
+    for (auto iter = 0; (iter < this->m_max_iter || m_solutions_outdated) && nwork > 0; iter++) {
       // the logging context carries the errors as doubles: a log line only needs their magnitude
       m_logger->template info<log::NewIteration>("Iteration, Current errors", iter,
                                         std::vector<double>(m_errors.begin(), m_errors.end()));
@@ -557,6 +559,7 @@ protected:
     auto p = prof->push("itsolv::solve_and_generate_working_set");
     prof->start("itsolv::solve");
     m_subspace_solver->solve(*m_xspace, n_roots());
+    m_solutions_outdated = false;
     prof->stop();
     prof->start("itsolv::temp_solutions");
     auto nsol = m_subspace_solver->size();
@@ -602,6 +605,9 @@ protected:
 
   template <typename TTT>
   void check_consistent_number_of_roots_and_solutions(const std::vector<TTT>& roots, const size_t nparams) {
+    if (m_solutions_outdated)
+      throw std::logic_error("solutions are not available after an end_iteration() that reset the D space; they are "
+                             "returned in its parameters and available again after the next add_vector()");
     if (roots.size() > nparams)
       throw std::runtime_error("asking for more roots than parameters");
     if (!roots.empty() &&
@@ -720,6 +726,7 @@ private:
   int m_profiler_saved_depth; //!< max_depth of molpro::Profiler::single() before this object changed it
 protected:
   bool m_end_iteration_needed = true; //!< whether end_iteration should be called after any preconditioner
+  bool m_solutions_outdated = false; //!< whether the subspace was changed since the solutions of its problem were found
 };
 
 } // namespace molpro::linalg::itsolv
