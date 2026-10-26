@@ -240,3 +240,16 @@ TEST(Optimize, SD_solve) {
   for (size_t i = 0; i < c.size(); ++i)
     EXPECT_NEAR(c[i], 1. / (i + 1), 1e-7) << "i = " << i;
 }
+
+// The non-linear solvers look for a single solution, so solve() reports their convergence whatever n_roots is set to
+TEST(Optimize, solve_converged_with_n_roots) {
+  auto solve = [](auto&& solver) {
+    solver->set_n_roots(2);
+    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    Rvector c(10, 0), g(10);
+    return solver->solve(c, g, DiagonalQuadratic{});
+  };
+  for (const std::string method : {"BFGS", "SD"})
+    EXPECT_TRUE(solve(molpro::linalg::itsolv::create_Optimize<Rvector, Qvector>(method))) << method;
+  EXPECT_TRUE(solve(molpro::linalg::itsolv::create_NonLinearEquations<Rvector, Qvector>("DIIS")));
+}

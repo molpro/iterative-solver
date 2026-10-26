@@ -418,8 +418,8 @@ public:
       summary_report();
     }
     // without any errors (e.g. no iteration was done) nothing is known to have converged, and roots without a solution
-    // in the subspace have no error
-    const bool all_roots = m_errors.size() >= n_roots();
+    // in the subspace have no error; the non-linear solvers look for a single solution, whatever n_roots() is
+    const bool all_roots = m_errors.size() >= (this->nonlinear() ? 1 : n_roots());
     const bool errors_converged = all_roots && !m_errors.empty() &&
                                   *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
     if (verbosity_at_least(Verbosity::Summary)) {
