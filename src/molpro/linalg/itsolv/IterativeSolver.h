@@ -427,6 +427,10 @@ public:
    * The solver may keep references to problem for later calls such as solution(), e.g. for a P space, so problem has
    * to outlive them; a further call of solve() replaces them. A temporary problem is therefore rejected at compile
    * time.
+   *
+   * An iteration that resets the D space leaves no solutions to return (see solution()). If this happens in the last
+   * of max_iter iterations, solve() goes on until the vectors of the reset are in the subspace, which takes one more
+   * action per root.
    */
   virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
                      bool generate_initial_guess = false) = 0;
@@ -623,10 +627,13 @@ public:
    *
    * For a problem solved with solve() whose metric is applied on the fly (Problem::metric_storage()), this applies the
    * metric through the problem, which therefore has to be still alive.
+   *
+   * @throws std::logic_error if called between an end_iteration() that reset the D space and the next add_vector(),
+   * when the subspace does not hold the solutions; they are in the parameters returned by end_iteration() instead
    */
   virtual void solution(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual) = 0;
 
-  //! Constructs parameters of selected roots
+  //! Constructs parameters of selected roots; throws like solution()
   virtual void solution_params(const std::vector<int>& roots, const VecRef<R>& parameters) = 0;
 
   //! Behaviour depends on the solver

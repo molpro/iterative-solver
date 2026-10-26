@@ -52,7 +52,9 @@ public:
    * (see detail::DSpaceResetter): the current solutions are returned in parameters as the new parameters, the D space
    * is cleared, and for each returned solution the Q vector with the largest overlap with it is deleted. The Q space is
    * then reduced to at most reset_D_max_Q_size vectors, including the returned solutions. If there are more solutions
-   * than parameters, the reset is spread over several iterations.
+   * than parameters, the reset is spread over several iterations. Until the next add_vector() takes up the returned
+   * solutions, solution() is not available, as the subspace left may be too small to hold them; eigenvalues() and
+   * errors() still refer to the solutions before the reset.
    *
    * Once all roots have converged, the subspace is left unchanged.
    *
@@ -71,6 +73,7 @@ public:
       this->m_working_set =
           m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->retained_solutions(),
                                 rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
+      this->m_solutions_outdated = true;
     } else {
       m_resetting_in_progress = false;
       prof->start("end_iteration (propose_rspace)");
