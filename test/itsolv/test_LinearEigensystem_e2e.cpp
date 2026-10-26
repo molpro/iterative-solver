@@ -526,6 +526,34 @@ TYPED_TEST(Davidson_reset_D, solve_ends_after_reset) {
   }
 }
 
+template <typename scalar>
+class LinearEigensystem_solution : public ::testing::Test {};
+TYPED_TEST_SUITE(LinearEigensystem_solution, value_types);
+
+//! solution() refuses roots without a solution in a subspace smaller than the number of roots, before touching its
+//! arguments
+TYPED_TEST(LinearEigensystem_solution, more_roots_than_subspace) {
+  using R = std::vector<TypeParam>;
+  HermitianProblem<TypeParam> problem;
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
+      "Davidson");
+  solver->set_n_roots(3);
+  auto params = std::vector<R>(2, R(problem.n));
+  for (size_t i = 0; i < params.size(); ++i)
+    params[i][i] = 1;
+  auto actions = params;
+  problem.action(molpro::linalg::itsolv::cwrap(params), molpro::linalg::itsolv::wrap(actions));
+  solver->add_vector(params, actions);
+  ASSERT_EQ(solver->eigenvalues().size(), 2);
+  const auto filled = std::vector<R>(3, R(problem.n, TypeParam(7)));
+  auto x = filled, residual = filled;
+  EXPECT_THROW(solver->solution({0, 1, 2}, x, residual), std::runtime_error);
+  EXPECT_THROW(solver->solution_params({0, 1, 2}, x), std::runtime_error);
+  EXPECT_EQ(x, filled);
+  EXPECT_EQ(residual, filled);
+  EXPECT_NO_THROW(solver->solution({0, 1}, x, residual));
+}
+
 //! A diagonal matrix in any value type
 template <typename scalar>
 class DiagonalProblem : public molpro::linalg::itsolv::Problem<std::vector<scalar>> {

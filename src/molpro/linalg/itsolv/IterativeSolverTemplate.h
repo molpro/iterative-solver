@@ -610,8 +610,9 @@ protected:
                              "returned in its parameters and available again after the next add_vector()");
     if (roots.size() > nparams)
       throw std::runtime_error("asking for more roots than parameters");
+    // there is a row of the solutions matrix for each solution
     if (!roots.empty() &&
-        size_t(*std::max_element(roots.begin(), roots.end())) >= m_subspace_solver->solutions().size())
+        size_t(*std::max_element(roots.begin(), roots.end())) >= m_subspace_solver->solutions().rows())
       throw std::runtime_error("asking for more roots than there are solutions");
   }
 
