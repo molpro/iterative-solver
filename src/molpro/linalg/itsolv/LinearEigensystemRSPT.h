@@ -58,8 +58,11 @@ public:
   /*!
    * \brief constructs next perturbed wavefunction
    *
+   * The wavefunction of the previous order is constructed from the subspace, so the content of parameters on entry is
+   * not used.
+   *
    * @param parameters output new parameters for the subspace.
-   * @param residual preconditioned residuals.
+   * @param action preconditioned residuals.
    * @return number of significant parameters to calculate the action for
    */
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
@@ -76,6 +79,8 @@ public:
       this->solution_params(parameters);
     this->m_handlers->rr().axpy(-1, actions, parameters);
 
+    this->m_stats->iterations++;
+    read_handler_counts(this->m_stats, this->m_handlers);
     this->m_end_iteration_needed = false;
     return this->m_errors.front() < this->m_convergence_threshold ? 0 : 1;
   }

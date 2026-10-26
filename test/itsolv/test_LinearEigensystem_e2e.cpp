@@ -3,6 +3,7 @@
 
 #include <molpro/linalg/array/DistrArrayFile.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
+#include <molpro/linalg/itsolv/LinearEigensystemRSPT.h>
 #include <molpro/linalg/itsolv/LinearEquationsDavidson.h>
 #include <molpro/linalg/itsolv/SolverFactory.h>
 #include <molpro/mpi.h>
@@ -637,4 +638,33 @@ TEST(LinearEquations, statistics_after_end_iteration) {
   molpro::linalg::itsolv::read_handler_counts(current, handlers);
   ASSERT_NE(counts(*current), counts_before) << "end_iteration() did no counted operations";
   EXPECT_EQ(counts(solver.statistics()), counts(*current));
+}
+
+//! LinearEigensystemRSPT counts its iterations and the array operations done in end_iteration(); the Q vectors are on
+//! disk, as only their handlers count operations
+TEST(LinearEigensystemRSPT, statistics_after_end_iteration) {
+  molpro::mpi::init();
+  using R = std::vector<double>;
+  using Q = molpro::linalg::array::DistrArrayFile;
+  using P = std::map<size_t, double>;
+  SymmetricProblem problem;
+  auto handlers = std::make_shared<molpro::linalg::itsolv::ArrayHandlers<R, Q, P>>();
+  auto solver = molpro::linalg::itsolv::LinearEigensystemRSPT<R, Q, P>(handlers);
+  R parameters(problem.n), actions(problem.n);
+  parameters[0] = 1;
+  auto counts = [](const molpro::linalg::itsolv::Statistics &statistics) {
+    return statistics.qr_ops + statistics.rq_ops + statistics.qq_ops;
+  };
+  for (int iter = 0; iter < 3; ++iter) {
+    problem.action(molpro::linalg::itsolv::cwrap_arg(parameters), molpro::linalg::itsolv::wrap_arg(actions));
+    solver.add_vector(parameters, actions);
+    const auto counts_before = counts(solver.statistics());
+    solver.end_iteration(parameters, actions);
+    EXPECT_EQ(solver.statistics().iterations, iter + 1);
+    auto current = std::make_shared<molpro::linalg::itsolv::Statistics>();
+    molpro::linalg::itsolv::read_handler_counts(current, handlers);
+    if (iter > 0)
+      ASSERT_NE(counts(*current), counts_before) << "end_iteration() did no counted operations";
+    EXPECT_EQ(counts(solver.statistics()), counts(*current)) << "iteration " << iter;
+  }
 }
