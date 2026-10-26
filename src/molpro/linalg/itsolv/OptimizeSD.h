@@ -36,6 +36,7 @@ public:
   bool nonlinear() const override { return true; }
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
+    this->m_end_iteration_needed = false;
     this->solution_params(this->m_working_set, parameters);
     if (this->m_errors.front() < this->m_convergence_threshold) {
       this->m_working_set.clear();
