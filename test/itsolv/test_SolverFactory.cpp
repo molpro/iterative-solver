@@ -156,6 +156,17 @@ void check_qspace_size_limits() {
   solver.set_options(options);
   EXPECT_EQ(solver.get_min_size_qspace(), 1);
   EXPECT_EQ(solver.get_max_size_qspace(), 2);
+
+  // only setting the maximum limits the size of the Q space after a reset
+  solver.set_reset_D_maxQ_size(10);
+  solver.set_min_size_qspace(2);
+  EXPECT_EQ(solver.get_reset_D_maxQ_size(), 10);
+  options = SolverOptions{};
+  options.min_size_qspace = 1;
+  solver.set_options(options);
+  EXPECT_EQ(solver.get_reset_D_maxQ_size(), 10);
+  solver.set_max_size_qspace(6);
+  EXPECT_EQ(solver.get_reset_D_maxQ_size(), 6);
 }
 } // namespace
 
