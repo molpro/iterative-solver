@@ -15,8 +15,8 @@ distributed arrays for HPC. The solvers are specialised to work with specific da
 container allowing for easy integration into existing software.
 
 List of key features:
-* Implements iterative solvers for eigenvalue problem, linear equations, optimisation (L-BFGS) and non-linear equations 
-(DIIS)
+* Implements iterative solvers for eigenvalue problem (including generalised eigenvalue problems A v = &lambda; M v),
+linear equations, optimisation (L-BFGS) and non-linear equations (DIIS)
 * Novel algorithms including P-space and D-space (see paper)
 * Structured to allow easy addition of new solvers or modification of the current ones without changes to the user's 
 code
@@ -79,6 +79,17 @@ if (!solver->solve(parameters, actions, problem, /*generate_initial_guess=*/true
     // deal with the unconverged case
 }
 solver->solution(parameters, actions);
+```
+
+For a generalised eigenvalue problem A v = &lambda; M v with a Hermitian, positive definite metric M, the `Problem`
+additionally returns the kind of metric from `metric_kind()` and implements `metric_action()` (and `metric_diagonals()`,
+without which `solve()` throws, if it provides `diagonals()`), and the problem is solved with the `solve()` overload
+that takes a third set of buffers, for the actions of the metric; this is available in C++ only so far. See
+`examples/GeneralizedEigensystemExample.cpp` and the documentation of generalised eigenproblems for details:
+
+```c++
+std::vector<Rvector> metric_actions(n_roots, Rvector(n));
+solver->solve(parameters, actions, metric_actions, problem, /*generate_initial_guess=*/true);
 ```
 
 More advanced users can copy and modify the code in `solve()` to tailor it for their own use, see implementation in `molpro/linalg/itsolv/IterativeSolverTemplate.h`.

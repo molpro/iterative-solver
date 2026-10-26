@@ -11,7 +11,8 @@ There are four types of systems that iterative-solver can solve:
 
 The interface for different solvers is declared in ``molpro/linalg/itsolv/IterativeSolver.h``.
 
-Linear eigensystem solver is implemented in ``molpro/linalg/itsolv/LinearEigensystemDavidson.h``.
+Linear eigensystem solver is implemented in ``molpro/linalg/itsolv/LinearEigensystemDavidson.h``. It also solves
+generalised eigenproblems, see @ref TopicGeneralisedEigenproblems.
 
 Linear eigensystem and linear equations use a novel P space and D space algorithm described in the paper (WIP).
 The different kinds of spaces used by the solvers are described in @ref TopicSpaces.
@@ -19,6 +20,63 @@ The different kinds of spaces used by the solvers are described in @ref TopicSpa
 There is significant overlap between different solvers and all common functionalities are declared in IterativeSolver
 base class and implemented in IterativeSolverTemplate. This makes it easy to extend the library with new solvers.
 See LinearEigensystemDavidson for an example of the structure.
+
+@section TopicGeneralisedEigenproblems Generalised eigenproblems
+
+LinearEigensystemDavidson solves generalised eigenproblems A v = lambda M v with a Hermitian, positive definite metric
+M, e.g. the overlap matrix of a non-orthogonal basis. The metric is only available through C++ so far; the C, Fortran
+and Python interfaces do not support it yet. @ref GeneralizedEigensystemExample.cpp shows a complete example.
+
+@subsection TopicGeneralisedProblem The problem
+
+A Problem for a generalised eigenproblem provides, in addition to what it provides without a metric:
+- Problem::metric_kind(), returning MetricKind::HermitianPositiveDefinite. Which kinds a solver supports is reported by
+  IterativeSolver::supports_metric(): LinearEigensystemDavidson supports MetricKind::Identity and
+  MetricKind::HermitianPositiveDefinite; all other solvers only MetricKind::Identity. The other kinds are reserved
+  for future solvers, e.g. MetricKind::HermitianIndefinite for RPA, TDHF or Bethe-Salpeter equations.
+- Problem::metric_action(), the action of M on a set of vectors. Problem::action_with_metric(), which solve() uses,
+  calculates the actions of A and M together, and can be overridden where that is cheaper than two separate calls.
+- Problem::metric_diagonals(), the diagonal elements of M, which are required if Problem::diagonals() is provided;
+  approximate values are fine, as they serve only the preconditioner and the selection of the initial guess and P
+  space, which use the lowest ratios of the diagonal elements of A and M.
+- Problem::metric_storage(): with MetricStorage::Stored (the default) the solver keeps the action of M on every
+  subspace vector; with MetricStorage::OnTheFly it keeps none, and applies M to the solutions in every iteration
+  instead. OnTheFly saves the memory or disk space of one vector per subspace vector at the cost of applying M once
+  more per root and iteration, which pays off where M is cheap to apply, e.g. diagonal or sparse.
+- For a P space, Problem::pp_metric_matrix() and, with MetricStorage::Stored, Problem::p_metric_action(), like
+  Problem::pp_action_matrix() and Problem::p_action().
+
+The preconditioner that solve() calls depends on what the problem provides:
+- With Problem::diagonals() (and so Problem::metric_diagonals()), Problem::precondition_with_metric(), which by
+  default divides the residuals by diag(A) - lambda diag(M). An override of Problem::precondition() is not used then.
+- Without Problem::diagonals(), Problem::precondition(residual, shift), where shift holds the eigenvalues lambda; a
+  preconditioner of a generalised eigenproblem should approximate the inverse of A - lambda M.
+
+@subsection TopicGeneralisedSolve Solving
+
+A problem with a metric is solved with the overload of IterativeSolver::solve() that takes a third set of buffers,
+of the same size as the parameters, which it uses for the actions of M on the new expansion vectors, which the
+solver needs for the metric matrix of the subspace also when M is applied on the fly, then as scratch space for M x of
+the solutions, and for handing the diagonal elements of M to the preconditioner; the other overload throws for it.
+The solver keeps references to the problem, e.g. for applying M on the fly in a later IterativeSolver::solution(), so
+the problem has to outlive these calls; a temporary problem does not compile.
+
+The solutions are normalised in the metric, |<v|M|v>| = 1, and their residuals are A v - lambda M v. The errors are
+the norms of the residuals of the solutions scaled to unit length, |A v - lambda M v| / |v|, which do not depend on the
+scale of M, and which are the same as without a metric if M is the identity, so that the convergence threshold has the
+same meaning with and without a metric. The eigenvalues, and so the value errors and the P-space threshold, scale
+inversely with M.
+
+The solver throws if the metric is found not to be Hermitian (to a relative accuracy of 1e-6) or not to be positive
+definite on the subspace, unless the checks are switched off with the option `check_metric`
+(IterativeSolver::set_check_metric()); IterativeSolver::test_problem() checks these properties on test vectors.
+
+@subsection TopicGeneralisedStepwise The stepwise interface
+
+With the stepwise interface, the metric is declared with IterativeSolver::set_metric() before the first vector is
+added, and the actions of M are given to every IterativeSolver::add_vector(parameters, actions, metric_actions). For
+MetricStorage::OnTheFly, set_metric() also takes a function applying M. A P space is added with the overload of
+IterativeSolver::add_p() taking a PSpaceMetric.
 
 */
 }

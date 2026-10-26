@@ -182,7 +182,8 @@ public:
 
 protected:
   // for non-linear problems, actions already contains the residual
-  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {}
+  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
+                          const detail::MetricSolutions<R, Q>& metric_solutions) override {}
 
   //! vectors with norm less than threshold can be considered null (rescaled to the working precision)
   value_type_abs m_norm_thresh = precision_scaled<value_type_abs>(1e-10);

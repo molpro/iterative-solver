@@ -223,6 +223,31 @@ TEST_F(simplified, LinearEquations) {
   EXPECT_THAT(g, ::testing::Pointwise(::testing::DoubleNear(1e-10), Rvector(problem.n, 0)));
   problem.action(molpro::linalg::itsolv::cwrap_arg(c), molpro::linalg::itsolv::wrap_arg(g));
 }
+// Right-hand sides provided by the problem are added by both overloads of solve(), the one taking buffers for the
+// actions of a metric included
+TEST_F(simplified, LinearEquations_RHS_from_problem) {
+  struct RHSProblem : simplified::MyProblem {
+    using MyProblem::MyProblem;
+    bool RHS(Rvector &rhs, unsigned int instance) const override {
+      if (instance > 0)
+        return false;
+      const Rvector ones(n, 1);
+      action(molpro::linalg::itsolv::cwrap_arg(ones), molpro::linalg::itsolv::wrap_arg(rhs));
+      return true;
+    }
+  };
+  const auto problem = RHSProblem(10);
+  for (const bool metric_buffers : {false, true}) {
+    SCOPED_TRACE("metric buffers=" + std::to_string(metric_buffers));
+    auto solver = molpro::linalg::itsolv::create_LinearEquations<Rvector, Qvector>("Davidson");
+    solver->set_convergence_threshold(1e-10);
+    Rvector c(problem.n), g(problem.n), m(problem.n);
+    EXPECT_TRUE(metric_buffers ? solver->solve(c, g, m, problem, true) : solver->solve(c, g, problem, true));
+    solver->solution(c, g);
+    EXPECT_THAT(c, ::testing::Pointwise(::testing::DoubleNear(1e-9), Rvector(problem.n, 1)));
+  }
+}
+
 TEST_F(simplified, LinearEigensystem_max_iter_zero) {
   auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector>("Davidson");
   solver->set_max_iter(0);
