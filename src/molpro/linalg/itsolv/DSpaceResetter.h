@@ -109,7 +109,11 @@ public:
   void set_max_Qsize(size_t i) { m_max_Qsize_after_reset = i; }
   auto get_max_Qsize() const { return m_max_Qsize_after_reset; }
 
-  //! Run the reset operation
+  /*!
+   * @brief Run the reset operation
+   * @return the working set for the solutions returned in rparams, which numbers them 0, 1, ... in each batch: in a
+   * reset spread over several iterations, the later batches hold solutions of other roots than these numbers
+   */
   template <class R, class P, typename value_type, typename value_type_abs>
   std::vector<int> run(const VecRef<R>& rparams, subspace::IXSpace<R, Q, P>& xspace,
                        const subspace::Matrix<value_type>& solutions, const value_type_abs norm_thresh,

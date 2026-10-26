@@ -54,7 +54,8 @@ public:
    * then reduced to at most reset_D_max_Q_size vectors, including the returned solutions. If there are more solutions
    * than parameters, the reset is spread over several iterations. Until the next add_vector() takes up the returned
    * solutions, solution() is not available, as the subspace left may be too small to hold them; eigenvalues() and
-   * errors() still refer to the solutions before the reset.
+   * errors() still refer to the solutions before the reset. working_set() numbers the returned solutions 0, 1, ...,
+   * which in the later steps of a reset spread over several iterations are not the roots they belong to.
    *
    * Once all roots have converged, the subspace is left unchanged.
    *
