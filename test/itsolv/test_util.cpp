@@ -1,10 +1,14 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <molpro/linalg/array/ArrayHandlerIterable.h>
+#include <molpro/linalg/itsolv/helper.h>
 #include <molpro/linalg/itsolv/util.h>
 
+#include <complex>
 #include <map>
 #include <numeric>
+#include <type_traits>
 #include <vector>
 
 using molpro::linalg::itsolv::util::construct_solutions;
@@ -139,4 +143,21 @@ TEST(StringFacet, parse_keyval_string) {
   EXPECT_EQ(sgood["key3"], "");
   EXPECT_EQ(sgood["key4"], "value4");
   EXPECT_THROW(auto sbad = StringFacet::parse_keyval_string(bad), std::runtime_error);
+}
+template <typename T>
+class itsolv_util_norm : public ::testing::Test {};
+using norm_value_types = ::testing::Types<double, std::complex<double>, long double>;
+TYPED_TEST_SUITE(itsolv_util_norm, norm_value_types);
+
+//! The norm is the real length of the vector, also for complex values
+TYPED_TEST(itsolv_util_norm, length) {
+  using R = std::vector<TypeParam>;
+  auto handler = molpro::linalg::array::ArrayHandlerIterable<R>{};
+  R x{TypeParam(3), TypeParam(0), TypeParam(4)};
+  if constexpr (molpro::linalg::itsolv::is_complex<TypeParam>{})
+    x[1] = TypeParam(0, 12);
+  const auto norm = molpro::linalg::itsolv::util::norm(handler, x);
+  static_assert(std::is_same_v<std::remove_const_t<decltype(norm)>,
+                               typename molpro::linalg::array::ArrayHandler<R, R>::value_type_abs>);
+  EXPECT_NEAR(double(norm), molpro::linalg::itsolv::is_complex<TypeParam>{} ? 13. : 5., 1e-14);
 }

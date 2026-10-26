@@ -4,6 +4,11 @@
 #include <molpro/linalg/itsolv/LinearEigensystemDavidsonOptions.h>
 #include <molpro/linalg/itsolv/LinearEquationsDavidsonOptions.h>
 #include <molpro/linalg/itsolv/Options.h>
+#include <molpro/linalg/itsolv/util.h>
+
+#include <limits>
+#include <stdexcept>
+#include <string>
 
 using molpro::linalg::itsolv::LinearEigensystemDavidsonOptions;
 using molpro::linalg::itsolv::LinearEquationsDavidsonOptions;
@@ -55,6 +60,29 @@ TEST(LinearEigensystemOptions, constructor_string) {
   ASSERT_DOUBLE_EQ(opt.norm_thresh.value(), 1.3e-4);
   ASSERT_DOUBLE_EQ(opt.svd_thresh.value(), 7.123e-11);
   ASSERT_TRUE(opt.hermiticity.value());
+}
+
+// The sizes in the Davidson options are read as std::size_t, and invalid values are reported with the option
+TEST(LinearEigensystemOptions, constructor_string_sizes) {
+  const auto large = std::to_string(std::numeric_limits<std::size_t>::max());
+  for (const std::string key : {"reset_D", "reset_D_max_Q_size", "max_size_qspace", "min_size_qspace"}) {
+    auto opt = LinearEigensystemDavidsonOptions(options_map{{key, " " + large + " "}});
+    const auto& value = key == "reset_D"              ? opt.reset_D
+                        : key == "reset_D_max_Q_size" ? opt.reset_D_max_Q_size
+                        : key == "max_size_qspace"    ? opt.max_size_qspace
+                                                      : opt.min_size_qspace;
+    EXPECT_EQ(value, std::numeric_limits<std::size_t>::max()) << key;
+    for (const std::string invalid :
+         {large + "0", std::string("-1"), std::string("3x"), std::string(), std::string("x")}) {
+      try {
+        LinearEigensystemDavidsonOptions(options_map{{key, invalid}});
+        ADD_FAILURE() << key << " = " << invalid << " was accepted";
+      } catch (const std::invalid_argument& e) {
+        EXPECT_THAT(e.what(), ::testing::HasSubstr(molpro::linalg::itsolv::util::StringFacet{}.toupper(key)))
+            << key << " = " << invalid;
+      }
+    }
+  }
 }
 
 TEST(LinearEquationsOptions, constructor_options_map) {

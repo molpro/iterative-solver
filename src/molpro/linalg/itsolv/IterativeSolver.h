@@ -251,7 +251,7 @@ public:
    * @param problem A Problem object defining the problem to be solved
    * @param generate_initial_guess Whether to start with a guess based on diagonal
    * elements (true) or on the contents of parameters (false)
-   * @return true if the solution was found
+   * @return true if solutions for all n_roots() roots were found and have converged
    *
    * If a P space is used (max_p > 0, diagonal elements are available and the selected P space is at least as large as
    * the number of roots), the initial subspace is the P space alone, and neither the contents of parameters on entry
@@ -263,6 +263,10 @@ public:
    * Starting vectors, whether generated or taken from parameters, are only used for the roots in the working set, at
    * most one per root. On a solver that is used again after an earlier solve(), roots that have already converged are
    * not in the working set, so fewer guesses, or none at all, are generated.
+   *
+   * An iteration that resets the D space leaves no solutions to return (see solution()). If this happens in the last
+   * of max_iter iterations, solve() goes on until the vectors of the reset are in the subspace, which takes one more
+   * action per root.
    */
   virtual bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
                      bool generate_initial_guess = false) = 0;
@@ -308,10 +312,14 @@ public:
   // FIXME Is this needed?
   virtual void clearP() = 0;
 
-  //! Construct solution and residual for a given set of roots
+  /*!
+   * @brief Construct solution and residual for a given set of roots
+   * @throws std::logic_error if called between an end_iteration() that reset the D space and the next add_vector(),
+   * when the subspace does not hold the solutions; they are in the parameters returned by end_iteration() instead
+   */
   virtual void solution(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual) = 0;
 
-  //! Constructs parameters of selected roots
+  //! Constructs parameters of selected roots; throws like solution()
   virtual void solution_params(const std::vector<int>& roots, const VecRef<R>& parameters) = 0;
 
   //! Behaviour depends on the solver

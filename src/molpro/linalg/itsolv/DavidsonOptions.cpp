@@ -6,16 +6,16 @@ DavidsonOptions::DavidsonOptions(const std::map<std::string, std::string>& opt) 
   auto facet = util::StringFacet{};
   auto opt_upper = util::capitalize_keys(opt, facet);
   if (auto key = facet.toupper("reset_D"); opt_upper.count(key)) {
-    reset_D = std::stoi(opt_upper.at(key));
+    reset_D = util::tosize(key, opt_upper.at(key));
   };
   if (auto key = facet.toupper("reset_D_max_Q_size"); opt_upper.count(key)) {
-    reset_D_max_Q_size = std::stoi(opt_upper.at(key));
+    reset_D_max_Q_size = util::tosize(key, opt_upper.at(key));
   }
   if (auto key = facet.toupper("max_size_qspace"); opt_upper.count(key)) {
-    max_size_qspace = std::stoi(opt_upper.at(key));
+    max_size_qspace = util::tosize(key, opt_upper.at(key));
   }
   if (auto key = facet.toupper("min_size_qspace"); opt_upper.count(key)) {
-    min_size_qspace = std::stoi(opt_upper.at(key));
+    min_size_qspace = util::tosize(key, opt_upper.at(key));
   }
   if (auto key = facet.toupper("contrib_thresh"); opt_upper.count(key)) {
     contrib_thresh = std::stod(opt_upper.at(key));

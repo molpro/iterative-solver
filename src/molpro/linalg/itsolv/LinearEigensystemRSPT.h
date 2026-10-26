@@ -58,8 +58,11 @@ public:
   /*!
    * \brief constructs next perturbed wavefunction
    *
+   * The wavefunction of the previous order is constructed from the subspace, so the content of parameters on entry is
+   * not used.
+   *
    * @param parameters output new parameters for the subspace.
-   * @param residual preconditioned residuals.
+   * @param action preconditioned residuals.
    * @return number of significant parameters to calculate the action for
    */
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
@@ -72,14 +75,15 @@ public:
     auto n = this->m_xspace->size();
     if (n == 1)
       this->m_handlers->rr().fill(0, parameters);
+    else // parameters may have been overwritten since add_vector(), e.g. by solve()
+      this->solution_params(parameters);
     this->m_handlers->rr().axpy(-1, actions, parameters);
 
+    this->m_stats->iterations++;
+    read_handler_counts(this->m_stats, this->m_handlers);
     this->m_end_iteration_needed = false;
     return this->m_errors.front() < this->m_convergence_threshold ? 0 : 1;
   }
-
-  //! Applies the Davidson preconditioner
-  void precondition(std::vector<R>& parameters, std::vector<R>& action) const {}
 
   std::vector<scalar_type> eigenvalues() const override { return this->m_subspace_solver->eigenvalues(); }
 
@@ -108,10 +112,10 @@ public:
     //    cout << std::endl;
     //    cout << "eigenvalues ";
     //    auto ev = eigenvalues();
+    const util::StreamFormatGuard format_guard(cout);
     cout << "Perturbed energies ";
     cout << std::fixed << std::setprecision(8);
     std::copy(begin(m_rspt_values), end(m_rspt_values), std::ostream_iterator<scalar_type>(cout, ", "));
-    cout << std::defaultfloat;
     if (endl)
       cout << std::endl;
   }

@@ -1,14 +1,15 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LINEAREQUATIONSDAVIDSON_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LINEAREQUATIONSDAVIDSON_H
 #include <molpro/linalg/itsolv/CastOptions.h>
-#include <molpro/linalg/itsolv/DSpaceResetter.h>
+#include <molpro/linalg/itsolv/DavidsonCommon.h>
 #include <molpro/linalg/itsolv/IterativeSolverTemplate.h>
-#include <molpro/linalg/itsolv/propose_rspace.h>
-#include <molpro/linalg/itsolv/qspace_options.h>
-#include <molpro/linalg/itsolv/rspace_options.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceSolverLinEig.h>
 #include <molpro/linalg/itsolv/subspace/XSpace.h>
-#include <limits>
+
+#include <algorithm>
+#include <iterator>
+#include <memory>
+#include <vector>
 
 namespace molpro::linalg::itsolv {
 /*!
@@ -37,7 +38,7 @@ namespace molpro::linalg::itsolv {
  * @todo Explain some of the theory
  */
 template <class R, class Q = R, class P = std::map<size_t, typename R::value_type>>
-class LinearEquationsDavidson : public IterativeSolverTemplate<LinearEquations, R, Q, P> {
+class LinearEquationsDavidson : public DavidsonCommon<LinearEquations, R, Q, P> {
 public:
   using SolverTemplate = IterativeSolverTemplate<LinearEquations, R, Q, P>;
   using SolverTemplate ::report;
@@ -46,12 +47,7 @@ public:
 
   explicit LinearEquationsDavidson(const std::shared_ptr<ArrayHandlers<R, Q, P>>& handlers,
                                    const std::shared_ptr<Logger>& logger_ = std::make_shared<Logger>())
-      : SolverTemplate(std::make_shared<subspace::XSpace<R, Q, P>>(handlers, logger_),
-                       std::static_pointer_cast<subspace::ISubspaceSolver<R, Q, P>>(
-                           std::make_shared<subspace::SubspaceSolverLinEig<R, Q, P>>(logger_)),
-                       handlers, std::make_shared<Statistics>(), logger_) {
-    set_hermiticity(m_hermiticity);
-  }
+      : DavidsonCommon<LinearEquations, R, Q, P>(handlers, logger_, true) {}
 
   bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
              bool generate_initial_guess = false) override {
@@ -60,35 +56,6 @@ public:
       add_equations(vector);
     return IterativeSolverTemplate<LinearEquations, R, Q, P>::solve(parameters, actions, problem,
                                                                     generate_initial_guess);
-  }
-
-  bool nonlinear() const override { return false; }
-
-  size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
-    auto prof = this->profiler()->push("itsolv::end_iteration");
-    m_resetting_in_progress = m_dspace_resetter.do_reset(this->m_stats->iterations, this->m_xspace->dimensions());
-    if (m_resetting_in_progress) {
-      this->m_working_set =
-          m_dspace_resetter.run(parameters, *this->m_xspace, this->m_subspace_solver->solutions(),
-                                rspace_opts.norm_thresh, rspace_opts.svd_thresh, *this->m_handlers, *this->m_logger);
-    } else {
-      this->m_working_set =
-          detail::propose_rspace(*this, parameters, action, *this->m_xspace, *this->m_subspace_solver,
-                                 *this->m_handlers, *this->m_logger, rspace_opts, qspace_opts, *this->profiler());
-    }
-    this->m_stats->iterations++;
-    this->m_end_iteration_needed = false;
-    return this->working_set().size();
-  }
-
-  // FIXME move this to the template
-  size_t end_iteration(std::vector<R>& parameters, std::vector<R>& action) override {
-    return end_iteration(wrap(parameters), wrap(action));
-  }
-  size_t end_iteration(R& parameters, R& actions) override {
-    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
-    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
-    return end_iteration(wparams, wactions);
   }
 
   void add_equations(const CVecRef<R>& rhs) override {
@@ -106,39 +73,6 @@ public:
     return xspace->rhs();
   }
 
-  //! Set threshold on the norm of parameters that should be considered null
-  void set_norm_thresh(value_type_abs thresh) { rspace_opts.norm_thresh = thresh; }
-  value_type_abs get_norm_thresh() const { return rspace_opts.norm_thresh; }
-  //! Set the smallest singular value in the subspace that can be allowed when
-  //! constructing the working set. Smaller singular values will lead to deletion of parameters
-  void set_svd_thresh(value_type_abs thresh) { rspace_opts.svd_thresh = thresh; }
-  value_type_abs get_svd_thresh() const { return rspace_opts.svd_thresh; }
-  //! Set the period in iterations for resetting the D space, 0 for never
-  void set_reset_D(size_t n) { m_dspace_resetter.set_nreset(n); }
-  size_t get_reset_D() const { return m_dspace_resetter.get_nreset(); }
-  //! Set the maximum size of Q space after resetting the D space
-  void set_reset_D_maxQ_size(size_t n) { m_dspace_resetter.set_max_Qsize(n); }
-  int get_reset_D_maxQ_size() const { return m_dspace_resetter.get_max_Qsize(); }
-  //! Set a limit on the maximum size of Q space. This does not include the size of the working space (R) and the D
-  //! space
-  void set_max_size_qspace(std::size_t n) {
-    qspace_opts.max_size = n;
-    if (m_dspace_resetter.get_max_Qsize() > qspace_opts.max_size)
-      m_dspace_resetter.set_max_Qsize(qspace_opts.max_size);
-  }
-  std::size_t get_max_size_qspace() const { return qspace_opts.max_size; }
-  void set_min_size_qspace(std::size_t n) {
-    qspace_opts.min_size = n;
-  }
-  std::size_t get_min_size_qspace() const { return qspace_opts.min_size; }
-  void set_hermiticity(bool hermitian) override {
-    m_hermiticity = hermitian;
-    auto xspace = std::dynamic_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace);
-    xspace->set_hermiticity(hermitian);
-    auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
-    subspace_solver->set_hermiticity(hermitian);
-  }
-  bool get_hermiticity() const override { return m_hermiticity; }
   //!@copydoc subspace::SubspaceSolverLinEig::set_augmented_hessian()
   void set_augmented_hessian(const value_type_abs parameter) {
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
@@ -151,56 +85,31 @@ public:
   }
 
   void set_options(const Options& options) override {
-    SolverTemplate::set_options(options);
-    auto opt = CastOptions::LinearEquations(options);
-    if (opt.reset_D)
-      set_reset_D(opt.reset_D.value());
-    if (opt.reset_D_max_Q_size)
-      set_reset_D_maxQ_size(opt.reset_D_max_Q_size.value());
-    if (opt.max_size_qspace)
-      set_max_size_qspace(opt.max_size_qspace.value());
-    if (opt.min_size_qspace)
-      set_min_size_qspace(opt.min_size_qspace.value());
-    if (opt.contrib_thresh)
-      qspace_opts.contrib_thresh = opt.contrib_thresh.value();
-    if (opt.norm_thresh)
-      set_norm_thresh(opt.norm_thresh.value());
-    if (opt.svd_thresh)
-      set_svd_thresh(opt.svd_thresh.value());
-    if (opt.hermiticity)
-      set_hermiticity(opt.hermiticity.value());
+    const auto opt = CastOptions::LinearEquations(options);
+    this->set_davidson_options(options, opt);
     if (opt.augmented_hessian)
       set_augmented_hessian(opt.augmented_hessian.value());
   }
 
   std::shared_ptr<Options> get_options() const override {
-    auto opt = std::make_shared<LinearEquationsDavidsonOptions>();
-    opt->copy(*SolverTemplate::get_options());
-    opt->reset_D = get_reset_D();
-    opt->reset_D_max_Q_size = get_reset_D_maxQ_size();
-    opt->max_size_qspace = get_max_size_qspace();
-    opt->min_size_qspace = get_min_size_qspace();
-    opt->contrib_thresh = qspace_opts.contrib_thresh;
-    opt->norm_thresh = get_norm_thresh();
-    opt->svd_thresh = get_svd_thresh();
-    opt->hermiticity = get_hermiticity();
+    auto opt = this->template get_davidson_options<LinearEquationsDavidsonOptions>();
     opt->augmented_hessian = get_augmented_hessian();
     return opt;
   }
 
   void report(std::ostream& cout, bool endl = true) const override {
+    const util::StreamFormatGuard format_guard(cout);
     SolverTemplate::report(cout, false);
     cout << ", errors " << std::scientific;
     auto& err = this->m_errors;
     std::copy(begin(err), end(err), std::ostream_iterator<value_type_abs>(cout, ", "));
-    cout << std::defaultfloat;
     if (endl)
       cout << std::endl;
   }
 
 protected:
   //! The values chi_ii = <b_i|x_i> of the current solutions, or with the augmented Hessian the subspace eigenvalues
-  std::vector<value_type> values() const {
+  std::vector<value_type> values() const override {
     if (get_augmented_hessian() > 0)
       return this->m_subspace_solver->eigenvalues();
     const auto& solutions = this->m_subspace_solver->solutions(); // c(i, k): root i, subspace vector k
@@ -210,16 +119,6 @@ protected:
       for (size_t k = 0; k < std::min(solutions.cols(), rhs.rows()); ++k)
         chi[i] += solutions(i, k) * molpro::linalg::conjugate(rhs(k, i));
     return chi;
-  }
-
-  void set_value_errors() override {
-    const auto current_values = values();
-    this->m_value_errors.assign(current_values.size(), std::numeric_limits<value_type_abs>::max());
-    for (size_t i = 0; i < std::min(m_last_values.size(), current_values.size()); i++)
-      this->m_value_errors[i] = std::abs(current_values[i] - m_last_values[i]);
-    // resetting the D space does not change the solutions, so the change measured across it would be meaningless
-    if (!m_resetting_in_progress)
-      m_last_values = current_values;
   }
 
   // FIXME The scale is fixed by the norm of RHS, but if RHS=0 there is no reference. We could use the norm of params
@@ -240,13 +139,6 @@ protected:
       }
     }
   }
-
-  RSpaceOptions<value_type_abs> rspace_opts;   //!< Options concerning R-space handling
-  QSpaceOptions qspace_opts;                   //!< Options concerning Q-space handling
-  detail::DSpaceResetter<Q> m_dspace_resetter; //!< resets D space
-  bool m_hermiticity = true;                   //!< whether the problem is hermitian or not
-  std::vector<value_type> m_last_values;       //!< the values from the previous iteration
-  bool m_resetting_in_progress = false;        //!< whether D space resetting is in progress
 };
 
 } // namespace molpro::linalg::itsolv

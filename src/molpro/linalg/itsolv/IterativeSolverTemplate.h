@@ -34,40 +34,6 @@ inline std::vector<std::pair<size_t, size_t>> parameter_batches(const size_t nso
   return batches;
 }
 
-template <class R, class Q, class P, typename value_type>
-void construct_solution(const VecRef<R>& params, const std::vector<int>& roots,
-                        const subspace::Matrix<value_type>& solutions,
-                        const std::vector<std::reference_wrapper<P>>& pparams,
-                        const std::vector<std::reference_wrapper<Q>>& qparams,
-                        const std::vector<std::reference_wrapper<Q>>& dparams, size_t oP, size_t oQ, size_t oD,
-                        ArrayHandlers<R, Q, P>& handlers) {
-  if (roots.empty())
-    return;
-  auto prof = molpro::Profiler::single();
-  prof->start("get rd_mat");
-  assert(params.size() >= roots.size());
-  for (size_t i = 0; i < roots.size(); ++i) {
-    handlers.rr().fill(0, params.at(i));
-  }
-  subspace::Matrix<value_type> rp_mat(std::make_pair(pparams.size(), roots.size())),
-      rq_mat(std::make_pair(qparams.size(), roots.size())), rd_mat(std::make_pair(dparams.size(), roots.size()));
-  for (size_t i = 0; i < roots.size(); ++i) {
-    for (size_t j = 0; j < pparams.size(); ++j) {
-      rp_mat(j, i) = solutions(roots[i], oP + j);
-    }
-    for (size_t j = 0; j < qparams.size(); ++j) {
-      rq_mat(j, i) = solutions(roots[i], oQ + j);
-    }
-    for (size_t j = 0; j < dparams.size(); ++j) {
-      rd_mat(j, i) = solutions(roots[i], oD + j);
-    }
-  }
-  prof->stop();
-  handlers.rp().gemm_outer(rp_mat, cwrap(pparams), params);
-  handlers.rq().gemm_outer(rq_mat, cwrap(qparams), params);
-  handlers.rq().gemm_outer(rd_mat, cwrap(dparams), params);
-}
-
 template <typename T>
 std::vector<std::vector<T>> construct_vectorP(const std::vector<int>& roots, const subspace::Matrix<T>& solutions,
                                               const size_t oP, const size_t nP) {
@@ -83,10 +49,8 @@ std::vector<std::vector<T>> construct_vectorP(const std::vector<int>& roots, con
 template <class R, typename T>
 void update_errors(std::vector<T>& errors, const CVecRef<R>& residual, array::ArrayHandler<R, R>& handler) {
   assert(residual.size() >= errors.size());
-  for (size_t i = 0; i < errors.size(); ++i) {
-    auto a = handler.dot(residual[i], residual[i]);
-    errors[i] = std::sqrt(std::abs(a));
-  }
+  for (size_t i = 0; i < errors.size(); ++i)
+    errors[i] = util::norm(handler, residual[i]);
 }
 
 template <typename T>
@@ -218,14 +182,15 @@ public:
     auto prof = molpro::Profiler::single();
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
     prof->start("construct_solution (parameters)");
-    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
-                               m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
+    const auto& dims = m_xspace->dimensions();
+    util::construct_solutions(parameters, roots, m_subspace_solver->solutions(), m_xspace->cparamsp(),
+                              m_xspace->cparamsq(), m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(),
+                              m_handlers->rr(), m_handlers->rp(), m_handlers->rq());
     prof->stop();
     prof->start("construct_solution (residual)");
-    detail::construct_solution(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->actionsq(),
-                               m_xspace->actionsd(), m_xspace->dimensions().oP(), m_xspace->dimensions().oQ(),
-                               m_xspace->dimensions().oD(), *m_handlers);
+    util::construct_solutions(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->cactionsq(),
+                              m_xspace->cactionsd(), dims.oP(), dims.oQ(), dims.oD(), m_handlers->rr(),
+                              m_handlers->rp(), m_handlers->rq());
     prof->stop();
     prof->start("apply");
     auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP(),
@@ -250,9 +215,10 @@ public:
 
   void solution_params(const std::vector<int>& roots, const VecRef<R>& parameters) override {
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
-    detail::construct_solution(parameters, roots, m_subspace_solver->solutions(), m_xspace->paramsp(),
-                               m_xspace->paramsq(), m_xspace->paramsd(), m_xspace->dimensions().oP(),
-                               m_xspace->dimensions().oQ(), m_xspace->dimensions().oD(), *m_handlers);
+    const auto& dims = m_xspace->dimensions();
+    util::construct_solutions(parameters, roots, m_subspace_solver->solutions(), m_xspace->cparamsp(),
+                              m_xspace->cparamsq(), m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(),
+                              m_handlers->rr(), m_handlers->rp(), m_handlers->rq());
   };
 
   void solution_params(R& parameters) override { return solution_params(std::vector<int>(1, 0), wrap_arg(parameters)); }
@@ -304,6 +270,7 @@ public:
   const Statistics& statistics() const override { return *m_stats; }
 
   void report(std::ostream& cout, bool endl = true) const override {
+    const util::StreamFormatGuard format_guard(cout);
     cout << "iteration " << m_stats->iterations;
     if (not m_errors.empty()) {
       auto it_max_error = std::max_element(m_errors.cbegin(), m_errors.cend());
@@ -311,7 +278,7 @@ public:
         cout << ", |residual[" << std::distance(m_errors.cbegin(), it_max_error) << "]| = ";
       else
         cout << ", |residual| = ";
-      cout << std::scientific << *it_max_error << std::defaultfloat;
+      cout << std::scientific << *it_max_error;
     }
     if (endl)
       cout << std::endl;
@@ -410,7 +377,9 @@ public:
       generate_initial_guess_from_diagonals(parameters, *diagonals);
     if (!pspace.empty())
       nwork = initialise_pspace(pspace, problem, parameters, actions);
-    for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
+    // an iteration that resets the D space is followed by one that takes up its vectors, even beyond max_iter, as
+    // there are no solutions to return in between
+    for (auto iter = 0; (iter < this->m_max_iter || m_solutions_outdated) && nwork > 0; iter++) {
       // the logging context carries the errors as doubles: a log line only needs their magnitude
       m_logger->template info<log::NewIteration>("Iteration, Current errors", iter,
                                         std::vector<double>(m_errors.begin(), m_errors.end()));
@@ -448,11 +417,15 @@ public:
     if (verbosity_at_least(Verbosity::Summary)) {
       summary_report();
     }
-    // without any errors (e.g. no iteration was done) nothing is known to have converged
-    const bool errors_converged =
-        !m_errors.empty() && *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
+    // without any errors (e.g. no iteration was done) nothing is known to have converged, and roots without a solution
+    // in the subspace have no error; the non-linear solvers look for a single solution, whatever n_roots() is
+    const bool all_roots = m_errors.size() >= (this->nonlinear() ? 1 : n_roots());
+    const bool errors_converged = all_roots && !m_errors.empty() &&
+                                  *std::max_element(m_errors.begin(), m_errors.end()) <= m_convergence_threshold;
     if (verbosity_at_least(Verbosity::Summary)) {
-      if (!errors_converged) {
+      if (!all_roots && !m_errors.empty()) {
+        this->m_logger->warn("Subspace holds solutions for only ", m_errors.size(), " of ", n_roots(), " roots");
+      } else if (!errors_converged) {
         this->m_logger->warn("Solver has not converged to threshold ", m_convergence_threshold);
       } else {
         this->m_logger->info("Solver converged");
@@ -462,9 +435,7 @@ public:
   }
 
   bool solve(R& parameters, R& actions, const Problem<R>& problem, bool generate_initial_guess = false) override {
-    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
-    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
-    return solve(wparams, wactions, problem, generate_initial_guess);
+    return solve(wrap_arg(parameters), wrap_arg(actions), problem, generate_initial_guess);
   }
   bool solve(std::vector<R>& parameters, std::vector<R>& actions, const Problem<R>& problem,
              bool generate_initial_guess = false) override {
@@ -487,7 +458,7 @@ public:
       Q residual0 = m_handlers->qr().copy(v1);
       for (int instance = 1; problem.test_parameters(instance, v0); ++instance) {
         m_handlers->rq().axpy(-1.0, parameters0, v0);
-        m_handlers->rr().scal(1 / std::sqrt(std::abs(m_handlers->rr().dot(v0, v0))), v0);
+        m_handlers->rr().scal(1 / util::norm(m_handlers->rr(), v0), v0);
         Q step1 = m_handlers->qr().copy(v0);
         auto residual_analytic = m_handlers->rq().dot(v0, residual0);
         m_handlers->rq().copy(v0, parameters0);
@@ -512,12 +483,12 @@ public:
       for (int instance = 0; problem.test_parameters(instance, v0); ++instance) {
         problem.action({v0}, {v1});
         Q residual = m_handlers->qr().copy(v1);
-        auto norm2_residual = std::sqrt(m_handlers->rr().dot(v1, v1));
+        auto norm2_residual = util::norm(m_handlers->rr(), v1);
         const value_type_abs scale_factor{10.0};
         m_handlers->rr().scal(scale_factor, v0);
         problem.action({v0}, {v1});
         m_handlers->rq().axpy(-scale_factor, residual, v1);
-        auto norm2 = std::sqrt(m_handlers->rr().dot(v1, v1));
+        auto norm2 = util::norm(m_handlers->rr(), v1);
         success = success && std::abs(norm2 / norm2_residual) < threshold;
         if (verbosity > 0 or (verbosity > -1 and not success))
           std::cout << "Length of residual: " << norm2_residual << ", scaling defect: " << norm2 << std::endl;
@@ -588,6 +559,7 @@ protected:
     auto p = prof->push("itsolv::solve_and_generate_working_set");
     prof->start("itsolv::solve");
     m_subspace_solver->solve(*m_xspace, n_roots());
+    m_solutions_outdated = false;
     prof->stop();
     prof->start("itsolv::temp_solutions");
     auto nsol = m_subspace_solver->size();
@@ -633,10 +605,14 @@ protected:
 
   template <typename TTT>
   void check_consistent_number_of_roots_and_solutions(const std::vector<TTT>& roots, const size_t nparams) {
+    if (m_solutions_outdated)
+      throw std::logic_error("solutions are not available after an end_iteration() that reset the D space; they are "
+                             "returned in its parameters and available again after the next add_vector()");
     if (roots.size() > nparams)
       throw std::runtime_error("asking for more roots than parameters");
+    // there is a row of the solutions matrix for each solution
     if (!roots.empty() &&
-        size_t(*std::max_element(roots.begin(), roots.end())) >= m_subspace_solver->solutions().size())
+        size_t(*std::max_element(roots.begin(), roots.end())) >= m_subspace_solver->solutions().rows())
       throw std::runtime_error("asking for more roots than there are solutions");
   }
 
@@ -751,6 +727,7 @@ private:
   int m_profiler_saved_depth; //!< max_depth of molpro::Profiler::single() before this object changed it
 protected:
   bool m_end_iteration_needed = true; //!< whether end_iteration should be called after any preconditioner
+  bool m_solutions_outdated = false; //!< whether the subspace was changed since the solutions of its problem were found
 };
 
 } // namespace molpro::linalg::itsolv

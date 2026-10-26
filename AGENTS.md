@@ -9,6 +9,8 @@ Guidance for AI agents (and humans) working on the iterative-solver repository.
     - `IterativeSolver.h` – abstract interfaces (`IterativeSolver`, `LinearEigensystem`, `LinearEquations`,
       `Optimize`, `NonLinearEquations`) and `Problem`.
     - `IterativeSolverTemplate.h` – shared implementation of the interfaces, including the `solve()` driver.
+    - `DavidsonCommon.h` – implementation shared by the two linear Davidson solvers (subspace management between
+      iterations, D-space reset and their options), between `IterativeSolverTemplate` and the solvers.
     - One header per solver implementation (`LinearEigensystemDavidson.h`, `OptimizeBFGS.h`, ...), each paired with
       an options class (`<Solver>Options.{h,cpp}`) whose hierarchy mirrors the solver hierarchy.
     - `SolverFactory.h` / `SolverFactory-implementation.h` – dynamic creation of solvers from options.

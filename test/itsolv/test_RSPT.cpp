@@ -1,16 +1,20 @@
 #include "test.h"
 #include <Eigen/Dense>
 #include <cmath>
+#include <complex>
+#include <deque>
 #include <fstream>
 #include <iomanip>
+#include <map>
 #include <molpro/iostream.h>
 #include <numeric>
 #include <regex>
+#include <sstream>
 #include <vector>
 
 #include "vector_types.h"
 #include <molpro/linalg/itsolv/CastOptions.h>
-#include <molpro/linalg/itsolv/SolverFactory.h>
+#include <molpro/linalg/itsolv/SolverFactory-implementation.h>
 #include <molpro/linalg/itsolv/helper.h>
 
 // Find lowest eigensolution of a matrix obtained from an external file
@@ -20,8 +24,10 @@ using molpro::linalg::array::Span;
 using molpro::linalg::itsolv::CastOptions;
 using molpro::linalg::itsolv::CVecRef;
 using molpro::linalg::itsolv::cwrap;
+using molpro::linalg::itsolv::cwrap_arg;
 using molpro::linalg::itsolv::VecRef;
 using molpro::linalg::itsolv::wrap;
+using molpro::linalg::itsolv::wrap_arg;
 
 struct RSPT : ::testing::Test {
   using MatrixXdr = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
@@ -209,3 +215,89 @@ TEST_F(RSPT, file_Hylleraas_BFGS) {
     //        test_Hylleraas_BFGS<DIIS>(file,0,false, expected);
   }
 }
+
+namespace {
+//! Hermitian matrix with H0 its diagonal, to be solved by perturbation theory in any value type
+template <typename scalar>
+struct PerturbedProblem : molpro::linalg::itsolv::Problem<std::vector<scalar>> {
+  using R = std::vector<scalar>;
+  size_t n;
+  explicit PerturbedProblem(size_t n) : n(n) {}
+
+  scalar matrix(size_t i, size_t j) const {
+    if (i == j)
+      return scalar(i + 1);
+    const double re = 0.02 * (double(i) + double(j));
+    if constexpr (molpro::linalg::itsolv::is_complex<scalar>{})
+      return scalar(re, 0.01 * (double(j) - double(i)));
+    else
+      return scalar(re);
+  }
+
+  bool diagonals(R &d) const override {
+    for (size_t i = 0; i < n; i++)
+      d[i] = matrix(i, i);
+    return true;
+  }
+
+  void action(const CVecRef<R> &parameters, const VecRef<R> &actions) const override {
+    for (size_t k = 0; k < parameters.size(); k++) {
+      const auto &v = parameters[k].get();
+      auto &a = actions[k].get();
+      for (size_t i = 0; i < n; i++) {
+        a[i] = 0;
+        for (size_t j = 0; j < n; j++)
+          a[i] += matrix(i, j) * v[j];
+      }
+    }
+  }
+
+  //! Applies the zeroth-order resolvent (H0 - E0)^-1, whatever the shift
+  void precondition(const VecRef<R> &residual, const std::vector<scalar> &shift, const R &diagonals) const override {
+    for (auto &r : residual)
+      for (size_t i = 0; i < n; i++)
+        r.get()[i] /= (diagonals[i] - matrix(0, 0) + scalar(1e-12));
+  }
+};
+
+//! The perturbation series from solve() matches the one from driving add_vector() and end_iteration() by hand
+template <typename scalar>
+void check_solve_matches_manual_iterations() {
+  using R = std::vector<scalar>;
+  const size_t n = 12;
+  const int niter = 6;
+  PerturbedProblem<scalar> problem(n);
+
+  auto manual =
+      molpro::linalg::itsolv::create_LinearEigensystem<R, std::deque<scalar>, std::map<size_t, scalar>>("RSPT");
+  R x(n, scalar(0)), g(n, scalar(0)), diagonals(n, scalar(0));
+  x[0] = 1;
+  problem.diagonals(diagonals);
+  for (int iter = 0; iter < niter; iter++) {
+    problem.action(cwrap_arg(x), wrap_arg(g));
+    manual->add_vector(x, g);
+    problem.precondition(wrap_arg(g), {}, diagonals);
+    manual->end_iteration(x, g);
+  }
+
+  auto driven =
+      molpro::linalg::itsolv::create_LinearEigensystem<R, std::deque<scalar>, std::map<size_t, scalar>>("RSPT");
+  driven->set_max_iter(niter);
+  driven->set_convergence_threshold(0);
+  driven->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+  R y(n, scalar(0)), h(n, scalar(0));
+  y[0] = 1;
+  driven->solve(y, h, problem);
+
+  std::ostringstream manual_energies, driven_energies;
+  manual->report(manual_energies);
+  driven->report(driven_energies);
+  EXPECT_EQ(driven_energies.str(), manual_energies.str());
+  for (size_t i = 0; i < n; i++)
+    EXPECT_NEAR(std::abs(y[i] - x[i]), 0, 1e-12) << "element " << i;
+}
+} // namespace
+
+TEST(RSPT_solve, matches_manual_iterations_double) { check_solve_matches_manual_iterations<double>(); }
+TEST(RSPT_solve, matches_manual_iterations_complex) { check_solve_matches_manual_iterations<std::complex<double>>(); }
+TEST(RSPT_solve, matches_manual_iterations_long_double) { check_solve_matches_manual_iterations<long double>(); }

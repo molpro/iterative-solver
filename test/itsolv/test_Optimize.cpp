@@ -213,3 +213,43 @@ TEST(Optimize, tight_threshold_consistency) {
     EXPECT_LE(solver->statistics().iterations, 20) << "threshold=" << threshold;
   }
 }
+
+//! f = sum_i ((i+1) x_i^2 / 2 - x_i), minimised by x_i = 1/(i+1)
+struct DiagonalQuadratic : molpro::linalg::itsolv::Problem<Rvector> {
+  value_t residual(const Rvector& parameters, Rvector& residual) const override {
+    value_t value = 0;
+    for (size_t i = 0; i < parameters.size(); ++i) {
+      residual[i] = (i + 1) * parameters[i] - 1;
+      value += 0.5 * (i + 1) * parameters[i] * parameters[i] - parameters[i];
+    }
+    return value;
+  }
+  bool diagonals(Rvector& d) const override {
+    for (size_t i = 0; i < d.size(); ++i)
+      d[i] = i + 1;
+    return true;
+  }
+};
+
+// solve() calls end_iteration() for as long as end_iteration_needed()
+TEST(Optimize, SD_solve) {
+  auto solver = molpro::linalg::itsolv::create_Optimize<Rvector, Qvector>("SD");
+  solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+  Rvector c(10, 0), g(10);
+  EXPECT_TRUE(solver->solve(c, g, DiagonalQuadratic{}));
+  for (size_t i = 0; i < c.size(); ++i)
+    EXPECT_NEAR(c[i], 1. / (i + 1), 1e-7) << "i = " << i;
+}
+
+// The non-linear solvers look for a single solution, so solve() reports their convergence whatever n_roots is set to
+TEST(Optimize, solve_converged_with_n_roots) {
+  auto solve = [](auto&& solver) {
+    solver->set_n_roots(2);
+    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    Rvector c(10, 0), g(10);
+    return solver->solve(c, g, DiagonalQuadratic{});
+  };
+  for (const std::string method : {"BFGS", "SD"})
+    EXPECT_TRUE(solve(molpro::linalg::itsolv::create_Optimize<Rvector, Qvector>(method))) << method;
+  EXPECT_TRUE(solve(molpro::linalg::itsolv::create_NonLinearEquations<Rvector, Qvector>("DIIS")));
+}

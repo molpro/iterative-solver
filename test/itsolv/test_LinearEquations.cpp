@@ -1,11 +1,17 @@
 #include "test.h"
 
 #include <Eigen/Eigenvalues>
+#include <complex>
+#include <deque>
+#include <iomanip>
+#include <map>
 #include <numeric>
+#include <sstream>
+#include <string>
 
 #include "vector_types.h"
 #include <molpro/linalg/itsolv/CastOptions.h>
-#include <molpro/linalg/itsolv/SolverFactory.h>
+#include <molpro/linalg/itsolv/SolverFactory-implementation.h>
 #include <molpro/linalg/itsolv/helper.h>
 
 using molpro::linalg::itsolv::CastOptions;
@@ -200,4 +206,204 @@ TEST(LinearEquation, value_threshold) {
   }
   EXPECT_LT(iterations[0], iterations[1]);
   EXPECT_LE(iterations[1], iterations[2]);
+}
+
+//! A hermitian, diagonally dominant system in any value type
+template <typename scalar>
+class HermitianEquations : public molpro::linalg::itsolv::Problem<std::vector<scalar>> {
+public:
+  using R = std::vector<scalar>;
+  static constexpr size_t n = 60;
+  size_t nrhs;
+  explicit HermitianEquations(size_t nrhs) : nrhs(nrhs) {}
+  scalar element(size_t i, size_t j) const {
+    if (i == j)
+      return scalar(1. + i);
+    const double re = 0.1 / (1. + std::abs(double(i) - double(j)));
+    if constexpr (molpro::linalg::itsolv::is_complex<scalar>{})
+      return scalar(re, i < j ? 0.05 * re : -0.05 * re);
+    else
+      return scalar(re);
+  }
+
+  bool diagonals(R& d) const override {
+    for (size_t i = 0; i < n; ++i)
+      d[i] = element(i, i);
+    return true;
+  }
+
+  void action(const molpro::linalg::itsolv::CVecRef<R>& parameters,
+              const molpro::linalg::itsolv::VecRef<R>& actions) const override {
+    for (size_t k = 0; k < parameters.size(); ++k)
+      for (size_t i = 0; i < n; ++i) {
+        actions[k].get()[i] = 0;
+        for (size_t j = 0; j < n; ++j)
+          actions[k].get()[i] += element(i, j) * parameters[k].get()[j];
+      }
+  }
+
+  bool RHS(R& r, unsigned int instance) const override {
+    if (instance >= nrhs)
+      return false;
+    for (size_t i = 0; i < n; ++i)
+      r[i] = scalar(1. / (1. + i + instance));
+    return true;
+  }
+};
+
+template <typename scalar>
+class LinearEquations_reset_D : public ::testing::Test {};
+using value_types = ::testing::Types<double, std::complex<double>, long double>;
+TYPED_TEST_SUITE(LinearEquations_reset_D, value_types);
+
+//! A D-space reset that falls due once all equations have converged leaves the converged subspace alone
+TYPED_TEST(LinearEquations_reset_D, not_done_after_convergence) {
+  using R = std::vector<TypeParam>;
+  for (size_t nrhs = 1; nrhs <= 3; ++nrhs) {
+    HermitianEquations<TypeParam> problem(nrhs);
+    auto run = [&](const std::string& options) {
+      auto solver =
+          molpro::linalg::itsolv::create_LinearEquations<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
+              "Davidson", options);
+      solver->set_convergence_threshold(1e-9);
+      solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+      auto params = std::vector<R>(nrhs, R(problem.n));
+      for (size_t i = 0; i < nrhs; ++i)
+        params[i][i] = 1; // select() of the diagonal guess is not implemented for complex values
+      auto actions = params;
+      EXPECT_TRUE(solver->solve(params, actions, problem));
+      return solver;
+    };
+    const auto reference = run("max_size_qspace=3");
+    ASSERT_GT(reference->dimensions().nD, 0) << "no D space to reset";
+    // the reset falls due in the iteration that converges
+    const auto iterations = reference->statistics().iterations;
+    const auto reset = run("max_size_qspace=3,reset_D=" + std::to_string(iterations));
+    EXPECT_EQ(reset->statistics().iterations, iterations) << "nrhs = " << nrhs;
+    EXPECT_EQ(reset->statistics().r_creations, reference->statistics().r_creations) << "nrhs = " << nrhs;
+    EXPECT_EQ(reset->dimensions().nD, reference->dimensions().nD) << "nrhs = " << nrhs;
+  }
+}
+
+//! Between an end_iteration() that resets the D space and the next add_vector(), solution() throws without touching its
+//! arguments; the next add_vector() takes up the solutions
+TYPED_TEST(LinearEquations_reset_D, solution_after_reset) {
+  using R = std::vector<TypeParam>;
+  using molpro::linalg::itsolv::cwrap;
+  using molpro::linalg::itsolv::wrap;
+  // a Q space of 3 is too small to keep vectors for the solutions after the reset
+  for (size_t nrhs = 2; nrhs <= 3; ++nrhs) {
+    HermitianEquations<TypeParam> problem(nrhs);
+    R diagonals(problem.n);
+    problem.diagonals(diagonals);
+    auto solver = molpro::linalg::itsolv::create_LinearEquations<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
+        "Davidson", "max_size_qspace=3,reset_D=4");
+    solver->set_convergence_threshold(1e-9);
+    auto rhs = std::vector<R>(nrhs, R(problem.n));
+    for (size_t k = 0; k < nrhs; ++k)
+      problem.RHS(rhs[k], k);
+    solver->add_equations(rhs);
+    auto roots = std::vector<int>(nrhs);
+    std::iota(roots.begin(), roots.end(), 0);
+    auto params = std::vector<R>(nrhs, R(problem.n));
+    auto actions = params;
+    for (size_t i = 0; i < nrhs; ++i)
+      params[i][i] = 1;
+    int nreset = 0;
+    bool after_reset = false;
+    for (int iter = 0, nwork = nrhs; iter < 20 && nwork > 0; ++iter) {
+      problem.action(cwrap(params.begin(), params.begin() + nwork), wrap(actions.begin(), actions.begin() + nwork));
+      nwork = solver->add_vector(params, actions);
+      if (after_reset) {
+        // the solutions are the Galerkin solutions in the subspace again
+        auto x = std::vector<R>(nrhs, R(problem.n));
+        auto residual = x;
+        solver->solution(roots, x, residual);
+        problem.action(cwrap(x), wrap(residual));
+        for (size_t k = 0; k < nrhs; ++k) {
+          TypeParam xr = 0, xx = 0;
+          for (size_t i = 0; i < problem.n; ++i) {
+            residual[k][i] -= rhs[k][i];
+            xr += molpro::linalg::conjugate(x[k][i]) * residual[k][i];
+            xx += molpro::linalg::conjugate(x[k][i]) * x[k][i];
+          }
+          EXPECT_NEAR(std::abs(xr / xx), 0, 1e-12) << "nrhs " << nrhs << ", equation " << k;
+        }
+        after_reset = false;
+      }
+      const auto nD = solver->dimensions().nD;
+      if (nwork > 0)
+        problem.precondition(wrap(actions.begin(), actions.begin() + nwork), std::vector<TypeParam>(nwork, 0),
+                             diagonals);
+      nwork = solver->end_iteration(params, actions);
+      if (nD == 0 or solver->dimensions().nD > 0)
+        continue;
+      ++nreset;
+      auto x = std::vector<R>(nrhs, R(problem.n, TypeParam(7)));
+      auto residual = x;
+      EXPECT_THROW(solver->solution(roots, x, residual), std::logic_error);
+      EXPECT_THROW(solver->solution_params(roots, x), std::logic_error);
+      EXPECT_EQ(x, std::vector<R>(nrhs, R(problem.n, TypeParam(7))));
+      EXPECT_EQ(residual, x);
+      after_reset = true;
+    }
+    EXPECT_GT(nreset, 0) << "nrhs " << nrhs;
+  }
+}
+
+//! solve() does not end right after an iteration that resets the D space, so that it can return the solutions
+TYPED_TEST(LinearEquations_reset_D, solve_ends_after_reset) {
+  using R = std::vector<TypeParam>;
+  using molpro::linalg::itsolv::cwrap;
+  using molpro::linalg::itsolv::wrap;
+  for (size_t nrhs = 2; nrhs <= 3; ++nrhs) {
+    HermitianEquations<TypeParam> problem(nrhs);
+    auto solver = molpro::linalg::itsolv::create_LinearEquations<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
+        "Davidson", "max_size_qspace=3,reset_D=4");
+    solver->set_convergence_threshold(1e-9);
+    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    // the reset falls due in the last allowed iteration
+    solver->set_max_iter(4);
+    auto params = std::vector<R>(nrhs, R(problem.n));
+    auto actions = params;
+    for (size_t i = 0; i < nrhs; ++i)
+      params[i][i] = 1;
+    solver->solve(params, actions, problem);
+    EXPECT_EQ(solver->statistics().iterations, 5) << "nrhs " << nrhs;
+    auto roots = std::vector<int>(nrhs);
+    std::iota(roots.begin(), roots.end(), 0);
+    auto x = std::vector<R>(nrhs, R(problem.n));
+    auto residual = x;
+    solver->solution(roots, x, residual);
+    problem.action(cwrap(x), wrap(residual));
+    for (size_t k = 0; k < nrhs; ++k) {
+      TypeParam xr = 0, xx = 0;
+      R rhs(problem.n);
+      problem.RHS(rhs, k);
+      for (size_t i = 0; i < problem.n; ++i) {
+        residual[k][i] -= rhs[i];
+        xr += molpro::linalg::conjugate(x[k][i]) * residual[k][i];
+        xx += molpro::linalg::conjugate(x[k][i]) * x[k][i];
+      }
+      EXPECT_NEAR(std::abs(xr / xx), 0, 1e-12) << "nrhs " << nrhs << ", equation " << k;
+    }
+  }
+}
+
+//! report() leaves the format of the stream as it was
+TEST(LinearEquation, report_keeps_stream_format) {
+  using R = std::vector<double>;
+  HermitianEquations<double> problem(1);
+  auto solver = molpro::linalg::itsolv::create_LinearEquations<R, std::deque<double>, std::map<size_t, double>>();
+  solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+  R parameters(problem.n), actions(problem.n);
+  parameters[0] = 1;
+  solver->solve(parameters, actions, problem);
+  ASSERT_FALSE(solver->errors().empty());
+  std::ostringstream stream;
+  stream << std::fixed << std::setprecision(3);
+  const auto flags = stream.flags();
+  solver->report(stream);
+  EXPECT_EQ(stream.flags(), flags);
+  EXPECT_EQ(stream.precision(), 3);
 }

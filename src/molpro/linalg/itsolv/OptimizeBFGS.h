@@ -188,7 +188,7 @@ public:
       auto& xdata = xspace->data;
       const auto& H = xdata[subspace::EqnData::H];
       BFGS_update_2(z, xspace, H);
-      const value_type_abs len_z = std::sqrt(std::abs(this->m_handlers->rr().dot(z, z)));
+      const value_type_abs len_z = util::norm(this->m_handlers->rr(), z);
       if (len_z > this->m_quasinewton_maximum_step)
         this->m_handlers->rr().scal(this->m_quasinewton_maximum_step / len_z, z);
       this->m_handlers->rr().axpy(-1, z, parameters.front());
@@ -209,9 +209,7 @@ public:
   }
 
   size_t end_iteration(R& parameters, R& actions) override {
-    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
-    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
-    return end_iteration(wparams, wactions);
+    return end_iteration(wrap_arg(parameters), wrap_arg(actions));
   }
 
   void set_value_errors() override {

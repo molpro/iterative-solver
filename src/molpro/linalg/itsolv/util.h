@@ -5,12 +5,23 @@
 #include <molpro/linalg/itsolv/subspace/Matrix.h>
 #include <molpro/linalg/itsolv/wrap.h>
 
+#include <cmath>
+#include <ios>
 #include <locale>
 #include <map>
+#include <ostream>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 namespace molpro::linalg::itsolv::util {
+
+//! The length of x, sqrt(|<x|x>|), which is real also for complex values
+template <class R>
+auto norm(array::ArrayHandler<R, R>& handler, const std::type_identity_t<R>& x) ->
+    typename array::ArrayHandler<R, R>::value_type_abs {
+  return std::sqrt(std::abs(handler.dot(x, x)));
+}
 
 /*!
  * @brief Remove vectors considered null from the linear transformation matrix.
@@ -131,6 +142,32 @@ public:
 
 private:
   const std::ctype<char>& facet = std::use_facet<std::ctype<char>>(std::locale());
+};
+
+/*!
+ * @brief Converts the value of an option to a size
+ * @param key name of the option, for the error message
+ * @param value the value, a non-negative integer, optionally surrounded by white space
+ * @throws std::invalid_argument if value is not a non-negative integer that fits into std::size_t
+ */
+std::size_t tosize(const std::string& key, const std::string& value);
+
+//! Restores the format flags and precision of a stream when it goes out of scope
+class StreamFormatGuard {
+public:
+  explicit StreamFormatGuard(std::ostream& stream)
+      : m_stream(stream), m_flags(stream.flags()), m_precision(stream.precision()) {}
+  ~StreamFormatGuard() {
+    m_stream.flags(m_flags);
+    m_stream.precision(m_precision);
+  }
+  StreamFormatGuard(const StreamFormatGuard&) = delete;
+  StreamFormatGuard& operator=(const StreamFormatGuard&) = delete;
+
+private:
+  std::ostream& m_stream;
+  std::ios_base::fmtflags m_flags;
+  std::streamsize m_precision;
 };
 
 } // namespace molpro::linalg::itsolv::util

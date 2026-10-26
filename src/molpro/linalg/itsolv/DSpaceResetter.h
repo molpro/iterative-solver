@@ -98,15 +98,22 @@ public:
 
   //! Whether reset operation should be run
   bool do_reset(size_t iter, const subspace::Dimensions& dims) {
-    return (m_nreset != 0 && (iter + 1) % m_nreset == 0 && dims.nD > 0) || !solution_params.empty();
+    return (m_nreset != 0 && (iter + 1) % m_nreset == 0 && dims.nD > 0) || in_progress();
   }
+
+  //! Whether a reset has started and not all solutions have been moved into the Q space yet
+  bool in_progress() const { return !solution_params.empty(); }
 
   void set_nreset(size_t i) { m_nreset = i; }
   auto get_nreset() const { return m_nreset; }
   void set_max_Qsize(size_t i) { m_max_Qsize_after_reset = i; }
   auto get_max_Qsize() const { return m_max_Qsize_after_reset; }
 
-  //! Run the reset operation
+  /*!
+   * @brief Run the reset operation
+   * @return the working set for the solutions returned in rparams, which numbers them 0, 1, ... in each batch: in a
+   * reset spread over several iterations, the later batches hold solutions of other roots than these numbers
+   */
   template <class R, class P, typename value_type, typename value_type_abs>
   std::vector<int> run(const VecRef<R>& rparams, subspace::IXSpace<R, Q, P>& xspace,
                        const subspace::Matrix<value_type>& solutions, const value_type_abs norm_thresh,

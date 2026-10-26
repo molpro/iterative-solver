@@ -36,6 +36,7 @@ public:
   bool nonlinear() const override { return true; }
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
+    this->m_end_iteration_needed = false;
     this->solution_params(this->m_working_set, parameters);
     if (this->m_errors.front() < this->m_convergence_threshold) {
       this->m_working_set.clear();
@@ -92,9 +93,7 @@ public:
   }
 
   size_t end_iteration(R& parameters, R& actions) override {
-    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
-    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
-    return end_iteration(wparams, wactions);
+    return end_iteration(wrap_arg(parameters), wrap_arg(actions));
   }
 
 protected:
