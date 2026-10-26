@@ -144,6 +144,14 @@ private:
   const std::ctype<char>& facet = std::use_facet<std::ctype<char>>(std::locale());
 };
 
+/*!
+ * @brief Converts the value of an option to a size
+ * @param key name of the option, for the error message
+ * @param value the value, a non-negative integer, optionally surrounded by white space
+ * @throws std::invalid_argument if value is not a non-negative integer that fits into std::size_t
+ */
+std::size_t tosize(const std::string& key, const std::string& value);
+
 //! Restores the format flags and precision of a stream when it goes out of scope
 class StreamFormatGuard {
 public:
