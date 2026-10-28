@@ -3,6 +3,7 @@
 
 #include <molpro/linalg/array/DistrArrayFile.h>
 #include <molpro/linalg/itsolv/IterativeSolver.h>
+#include <molpro/linalg/itsolv/LinearEigensystemDavidson.h>
 #include <molpro/linalg/itsolv/SolverFactory.h>
 #include <molpro/mpi.h>
 
@@ -11,6 +12,7 @@
 #include <algorithm>
 #include <cmath>
 #include <complex>
+#include <map>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -257,25 +259,48 @@ TEST_P(Davidson_complex_pair_split_reduced_subspace, converges) {
 INSTANTIATE_TEST_SUITE_P(LinearEigensystem, Davidson_complex_pair_split_reduced_subspace,
                          ::testing::Values("max_size_qspace=4", "contrib_thresh=1e-3", "max_size_qspace=4,reset_D=3"));
 
+//! A Davidson solver that tells whether the partner of the last root is truncated and whether a reset is in progress
+class SplitPairDavidson : public molpro::linalg::itsolv::LinearEigensystemDavidson<std::vector<double>> {
+public:
+  bool partner_truncated() const {
+    const auto partner = std::dynamic_pointer_cast<molpro::linalg::itsolv::subspace::SubspaceSolverLinEig<
+        std::vector<double>, std::vector<double>, std::map<size_t, double>>>(m_subspace_solver)
+                             ->complex_partner(n_roots() - 1);
+    return partner && *partner >= n_roots();
+  }
+  bool resetting() const { return m_resetting_in_progress; }
+};
+
 //! The working set holds only requested roots, also when a reset of the D space hands out a truncated pair partner
 TEST(LinearEigensystem, Davidson_complex_pair_split_working_set) {
   molpro::mpi::init();
   SplitComplexPairProblem problem;
-  auto solver = create_split_pair_solver(3, "max_size_qspace=4,reset_D=3");
+  SplitPairDavidson solver;
+  solver.set_n_roots(3);
+  solver.set_hermiticity(false);
+  solver.set_convergence_threshold(1e-8);
+  solver.set_max_size_qspace(4);
+  solver.set_reset_D(3);
   // more parameter vectors than roots
-  auto params = std::vector<std::vector<double>>(solver->n_roots() + 1, std::vector<double>(problem.n));
+  auto params = std::vector<std::vector<double>>(solver.n_roots() + 1, std::vector<double>(problem.n));
   auto actions = params;
   for (size_t k = 0; k < params.size(); ++k)
     params[k][k] = 1;
-  size_t nwork = solver->n_roots();
-  for (int iter = 0; iter < 30 && nwork > 0; ++iter) {
+  size_t nwork = solver.n_roots();
+  int split_resets = 0;
+  for (int iter = 0; iter < 100 && nwork > 0; ++iter) {
     problem.action(molpro::linalg::itsolv::cwrap(params.begin(), params.begin() + nwork),
                    molpro::linalg::itsolv::wrap(actions.begin(), actions.begin() + nwork));
-    solver->add_vector(params, actions);
-    nwork = solver->end_iteration(params, actions);
-    for (const auto root : solver->working_set())
-      EXPECT_LT(root, solver->n_roots()) << "iteration " << iter;
+    solver.add_vector(params, actions);
+    const bool partner_truncated = solver.partner_truncated();
+    nwork = solver.end_iteration(params, actions);
+    if (partner_truncated && solver.resetting())
+      ++split_resets;
+    for (const auto root : solver.working_set())
+      EXPECT_LT(root, solver.n_roots()) << "iteration " << iter;
   }
+  EXPECT_GT(split_resets, 0) << "no reset of the D space happened while the pair was split";
+  EXPECT_EQ(nwork, 0) << "not converged";
 }
 
 //! The two members of a complex pair end up in different batches of the solution when there are fewer parameter
