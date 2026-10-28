@@ -244,6 +244,41 @@ public:
 
 protected:
   void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
+    construct_residual(roots, params, actions, nullptr);
+  }
+
+  /*!
+   * @brief Constructs the parameters and residuals of roots and their errors
+   *
+   * The error of the last root, whose complex pair partner was truncated away, is the norm of its complex residual. The
+   * residual of that root is only the real part of the complex residual; the imaginary part is the residual of the
+   * truncated partner.
+   */
+  void solution_with_errors(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual,
+                            std::vector<value_type_abs>& errors) override {
+    auto prof = molpro::Profiler::single();
+    this->check_consistent_number_of_roots_and_solutions(roots, parameters.size());
+    this->construct_solutions_and_actions(roots, this->m_subspace_solver->solutions(), parameters, residual);
+    prof->start("apply");
+    auto truncated_partner_residual_norm = std::optional<value_type_abs>{};
+    construct_residual(roots, cwrap(parameters), residual, &truncated_partner_residual_norm);
+    read_handler_counts(this->m_stats, this->m_handlers);
+    prof->stop();
+    SolverTemplate::compute_errors(roots, cwrap(parameters), cwrap(residual), errors);
+    if (!truncated_partner_residual_norm)
+      return;
+    const auto root_it = std::ranges::find(roots, int(this->m_subspace_solver->size()) - 1);
+    auto& error = errors.at(std::ranges::distance(roots.begin(), root_it));
+    error = std::sqrt(error * error + *truncated_partner_residual_norm * *truncated_partner_residual_norm);
+  }
+
+  /*!
+   * @brief Constructs residual for given roots provided their parameters and actions
+   * @param truncated_partner_residual_norm receives the norm of the residual of the truncated complex pair partner of
+   * the last root, if it is among roots, unless it is null
+   */
+  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
+                          std::optional<value_type_abs>* truncated_partner_residual_norm) {
     auto prof = this->profiler()->push("itsolv::construct_residual");
     assert(params.size() >= roots.size());
     const auto& eigvals = eigenvalues();
@@ -287,7 +322,7 @@ protected:
           if (partner >= subspace_solver->retained_solutions().rows())
             throw std::logic_error("The complex conjugate partner of a root is not among the retained solutions");
           auto partner_param = this->m_handlers->rr().copy(actions.at(i));
-          if (partner < eigvals.size()) {
+          if (partner < eigvals.size() || !truncated_partner_residual_norm) {
             this->construct_solutions_and_actions({int(partner)}, subspace_solver->retained_solutions(),
                                                   wrap_arg(partner_param), {});
           } else {
@@ -298,7 +333,7 @@ protected:
             // The imaginary part of the partner's eigenvalue is the negative of the one of this root
             this->m_handlers->rr().axpy(-eigvals.at(roots[i]), partner_param, partner_residual);
             this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
-            m_truncated_partner_residual_norm =
+            *truncated_partner_residual_norm =
                 std::sqrt(std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
           }
           this->m_handlers->rr().axpy(it->second, partner_param, actions.at(i));
@@ -311,7 +346,7 @@ protected:
    * @brief The error of both members of a complex pair is the norm of their complex residual
    *
    * The residuals of the two members are the real and imaginary part of the complex residual. A pair whose second
-   * member was truncated away is handled by compute_errors().
+   * member was truncated away is handled by solution_with_errors().
    */
   void combine_errors() override {
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
@@ -327,34 +362,7 @@ protected:
     }
   }
 
-  /*!
-   * @brief The error of the last root, whose complex pair partner was truncated away, is the norm of its complex
-   * residual
-   *
-   * The residual of that root is only the real part of the complex residual. The imaginary part is the residual of
-   * the truncated partner, whose norm construct_residual() has determined.
-   */
-  void compute_errors(const std::vector<int>& roots, const CVecRef<R>& params, const CVecRef<R>& residuals,
-                      std::vector<value_type_abs>& errors) override {
-    auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
-    assert(subspace_solver);
-    const auto nroots = subspace_solver->size();
-    const auto partner = nroots > 0 ? subspace_solver->complex_partner(nroots - 1) : std::nullopt;
-    const auto root_it = std::ranges::find(roots, int(nroots) - 1);
-    const bool truncated_partner = partner && *partner >= nroots && root_it != roots.end();
-    if (truncated_partner && !m_truncated_partner_residual_norm)
-      throw std::logic_error("The residual of the truncated complex pair partner of the last root is not known");
-    SolverTemplate::compute_errors(roots, params, residuals, errors);
-    if (!truncated_partner)
-      return;
-    auto& error = errors.at(std::ranges::distance(roots.begin(), root_it));
-    error = std::sqrt(error * error + *m_truncated_partner_residual_norm * *m_truncated_partner_residual_norm);
-    m_truncated_partner_residual_norm.reset();
-  }
-
   detail::DSpaceResetter<Q> m_dspace_resetter; //!< resets D space
-  //! norm of the residual of the truncated complex pair partner of the last root, set by construct_residual()
-  std::optional<value_type_abs> m_truncated_partner_residual_norm;
   bool m_hermiticity = false;                  //!< whether the problem is hermitian or not
   std::vector<scalar_type> m_last_values;      //!< The values from the previous iteration
   bool m_resetting_in_progress = false;        //!< whether D space resetting is in progress

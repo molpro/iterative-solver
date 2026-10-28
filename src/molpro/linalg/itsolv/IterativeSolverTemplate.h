@@ -588,6 +588,12 @@ protected:
                               std::vector<value_type_abs>& errors) {
     detail::update_errors(errors, residuals, m_handlers->rr());
   }
+  //! Constructs the parameters and residuals of roots, as solution() does, and computes their errors
+  virtual void solution_with_errors(const std::vector<int>& roots, const VecRef<R>& parameters,
+                                    const VecRef<R>& residual, std::vector<value_type_abs>& errors) {
+    solution(roots, parameters, residual);
+    compute_errors(roots, cwrap(parameters), cwrap(residual), errors);
+  }
   virtual bool linearEigensystem() const { return false; }
   /*!
    * @brief Solves the subspace problems and selects the working set of roots, returning their parameters and residual
@@ -611,9 +617,8 @@ protected:
       auto [start_sol, end_sol] = batch;
       auto roots = std::vector<int>(end_sol - start_sol);
       std::iota(begin(roots), end(roots), start_sol);
-      solution(roots, parameters, action);
       auto errors = std::vector<value_type_abs>(roots.size(), 0);
-      compute_errors(roots, cwrap(parameters), cwrap(action), errors);
+      solution_with_errors(roots, parameters, action, errors);
       if (batches.size() > 1) {
         for (size_t i = 0; i < roots.size(); ++i)
           temp_solutions.emplace_back(m_handlers->qr().copy(parameters[i]), m_handlers->qr().copy(action[i]));
