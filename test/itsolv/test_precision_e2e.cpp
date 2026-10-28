@@ -65,23 +65,64 @@ struct DiagonallyDominantProblem : molpro::linalg::itsolv::Problem<typename cont
   }
 };
 
+//! A non-symmetric matrix whose second and third eigenvalue are a complex pair
+template <typename scalar>
+struct ComplexPairProblem : molpro::linalg::itsolv::Problem<typename containers<scalar>::R> {
+  using R = typename containers<scalar>::R;
+
+  size_t n;
+  explicit ComplexPairProblem(size_t n) : n(n) {}
+
+  scalar matrix(size_t i, size_t j) const {
+    if (i == 1 and j == 2)
+      return 1;
+    if (i == 2 and j == 1)
+      return -1;
+    return i == j ? scalar(i + 1) : scalar(0.01L) / scalar(1 + (i > j ? i - j : j - i));
+  }
+
+  bool diagonals(R& d) const override {
+    for (size_t i = 0; i < d.size(); i++)
+      d[i] = matrix(i, i);
+    return true;
+  }
+
+  void action(const molpro::linalg::itsolv::CVecRef<R>& parameters,
+              const molpro::linalg::itsolv::VecRef<R>& actions) const override {
+    for (size_t k = 0; k < parameters.size(); k++) {
+      const auto& v = parameters[k].get();
+      auto& a = actions[k].get();
+      for (size_t i = 0; i < a.size(); i++) {
+        a[i] = 0;
+        for (size_t j = 0; j < a.size(); j++)
+          a[i] += matrix(i, j) * v[j];
+      }
+    }
+  }
+};
+
 struct Outcome {
   bool converged;
   std::vector<long double> eigenvalues;
   long double largest_error;
 };
 
-template <typename scalar>
-Outcome solve(size_t n, size_t nroot, long double convergence_threshold) {
+//! Solves Problem for nroot roots with nparam parameter vectors, or nroot if nparam is 0
+template <typename scalar, template <typename> class Problem = DiagonallyDominantProblem>
+Outcome solve(size_t n, size_t nroot, long double convergence_threshold, bool hermitian = true, size_t nparam = 0) {
   using C = containers<scalar>;
+  if (nparam == 0)
+    nparam = nroot;
   auto solver =
       molpro::linalg::itsolv::create_LinearEigensystem<typename C::R, typename C::Q, typename C::P>("Davidson");
   solver->set_n_roots(nroot);
+  solver->set_hermiticity(hermitian);
+  solver->set_max_iter(100);
   solver->set_convergence_threshold(scalar(convergence_threshold));
   solver->set_verbosity(0);
-  DiagonallyDominantProblem<scalar> problem(n);
-  std::vector<typename C::R> params(nroot, typename C::R(n, 0)), actions(nroot, typename C::R(n, 0));
-  for (size_t i = 0; i < nroot; ++i)
+  Problem<scalar> problem(n);
+  std::vector<typename C::R> params(nparam, typename C::R(n, 0)), actions(nparam, typename C::R(n, 0));
+  for (size_t i = 0; i < nparam; ++i)
     params[i][i] = 1; // initial guess: unit vectors on the lowest diagonal elements
   Outcome outcome{};
   outcome.converged = solver->solve(params, actions, problem);
@@ -215,46 +256,6 @@ TEST(precision_e2e, davidson_precisions_agree) {
     EXPECT_NEAR(double(in_double.eigenvalues[i]), double(in_long_double.eigenvalues[i]), 1e-11);
 }
 
-namespace {
-
-//! A non-symmetric matrix whose second and third eigenvalue are a complex pair
-template <typename scalar>
-struct ComplexPairProblem : molpro::linalg::itsolv::Problem<typename containers<scalar>::R> {
-  using R = typename containers<scalar>::R;
-
-  size_t n;
-  explicit ComplexPairProblem(size_t n) : n(n) {}
-
-  scalar matrix(size_t i, size_t j) const {
-    if (i == 1 and j == 2)
-      return 1;
-    if (i == 2 and j == 1)
-      return -1;
-    return i == j ? scalar(i + 1) : scalar(0.01L) / scalar(1 + (i > j ? i - j : j - i));
-  }
-
-  bool diagonals(R& d) const override {
-    for (size_t i = 0; i < d.size(); i++)
-      d[i] = matrix(i, i);
-    return true;
-  }
-
-  void action(const molpro::linalg::itsolv::CVecRef<R>& parameters,
-              const molpro::linalg::itsolv::VecRef<R>& actions) const override {
-    for (size_t k = 0; k < parameters.size(); k++) {
-      const auto& v = parameters[k].get();
-      auto& a = actions[k].get();
-      for (size_t i = 0; i < a.size(); i++) {
-        a[i] = 0;
-        for (size_t j = 0; j < a.size(); j++)
-          a[i] += matrix(i, j) * v[j];
-      }
-    }
-  }
-};
-
-} // namespace
-
 //! Both members of a complex pair have the same error, the norm of their complex residual, in long double too
 TEST(precision_e2e, davidson_long_double_complex_pair_errors) {
   using C = containers<long double>;
@@ -279,34 +280,11 @@ TEST(precision_e2e, davidson_long_double_complex_pair_errors) {
 
 namespace {
 
-//! Solves ComplexPairProblem non-hermitian for nroot roots with nparam parameter vectors
-template <typename scalar>
-Outcome solve_complex_pair(size_t nroot, size_t nparam, long double convergence_threshold) {
-  using C = containers<scalar>;
-  auto solver =
-      molpro::linalg::itsolv::create_LinearEigensystem<typename C::R, typename C::Q, typename C::P>("Davidson");
-  solver->set_n_roots(nroot);
-  solver->set_hermiticity(false);
-  solver->set_max_iter(100);
-  solver->set_convergence_threshold(scalar(convergence_threshold));
-  solver->set_verbosity(0);
-  ComplexPairProblem<scalar> problem(n);
-  std::vector<typename C::R> params(nparam, typename C::R(n, 0)), actions(nparam, typename C::R(n, 0));
-  Outcome outcome{};
-  outcome.converged = solver->solve(params, actions, problem, true);
-  for (size_t i = 0; i < nroot; ++i)
-    outcome.eigenvalues.push_back(static_cast<long double>(solver->eigenvalues()[i]));
-  outcome.largest_error = 0;
-  for (auto e : solver->errors())
-    outcome.largest_error = std::max(outcome.largest_error, static_cast<long double>(e));
-  return outcome;
-}
-
 //! Solves ComplexPairProblem in double and long double, which must converge and agree
 void expect_complex_pair_precisions_agree(size_t nroot, size_t nparam) {
-  const auto in_double = solve_complex_pair<double>(nroot, nparam, 1e-10L);
+  const auto in_double = solve<double, ComplexPairProblem>(n, nroot, 1e-10L, false, nparam);
   const long double threshold = long_double_is_extended ? 1e-14L : 1e-10L;
-  const auto in_long_double = solve_complex_pair<long double>(nroot, nparam, threshold);
+  const auto in_long_double = solve<long double, ComplexPairProblem>(n, nroot, threshold, false, nparam);
   EXPECT_TRUE(in_double.converged);
   EXPECT_TRUE(in_long_double.converged);
   EXPECT_LT(in_long_double.largest_error, threshold);
