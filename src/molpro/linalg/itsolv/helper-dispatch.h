@@ -392,7 +392,9 @@ bool eigenvalues_certainly_above(std::span<const value_type> matrix, size_t dime
     real_t rcond = 0;
     if (lapack::pocon(LAPACK_COL_MAJOR, store_lower_triangle, n, factor.data(), n, anorm, &rcond) != 0)
       return false;
-    return rcond * anorm > margin * threshold;
+    // margin >= 1, so dividing by it cannot overflow, unlike margin * threshold for a threshold as large as
+    // numeric_limits::max(), which callers pass to ask for every eigenpair
+    return rcond * anorm / margin > threshold;
   }
 #endif
   return false;

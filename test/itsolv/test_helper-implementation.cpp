@@ -4,7 +4,9 @@
 #include <molpro/linalg/itsolv/helper-implementation.h>
 
 #include <algorithm>
+#include <cfenv>
 #include <cmath>
+#include <limits>
 #include <list>
 #include <vector>
 
@@ -622,6 +624,12 @@ TEST(helper_implementation, eigenvalues_certainly_above) {
   for (int i = 0; i < n; ++i)
     identity[i * n + i] = 1;
   EXPECT_FALSE(eigenvalues_certainly_above<long double>(identity, n, 1e-12));
+  // a threshold of numeric_limits::max() asks for every eigenpair, and must not raise an overflow on the way
+  // Cmp.: https://github.com/molpro/iterative-solver/issues/699
+  spectrum(3) = 3;
+  std::feclearexcept(FE_OVERFLOW);
+  EXPECT_FALSE(decide(with_spectrum(spectrum), std::numeric_limits<double>::max()));
+  EXPECT_FALSE(std::fetestexcept(FE_OVERFLOW));
 }
 
 //! The null space svd_system reports for a hermitian matrix must not depend on whether the shortcut decided it
@@ -641,4 +649,20 @@ TEST(helper_implementation, svd_system_hermitian_null_space) {
   const auto svd = null_space(with_spectrum(spectrum));
   ASSERT_EQ(svd.size(), 1u);
   EXPECT_NEAR(svd.front().value, 1e-14, 1e-13);
+}
+
+//! A threshold of numeric_limits::max(), as remove_null_projected_solutions passes, keeps every eigenpair, and must
+//! not raise an overflow. Cmp.: https://github.com/molpro/iterative-solver/issues/699
+TEST(helper_implementation, svd_system_hermitian_threshold_max) {
+  constexpr int n = 15;
+  Eigen::VectorXd spectrum(n);
+  for (int i = 0; i < n; ++i)
+    spectrum(i) = 0.5 + i;
+  auto buffer = row_major(with_spectrum(spectrum));
+  std::feclearexcept(FE_OVERFLOW);
+  const auto svd = molpro::linalg::itsolv::svd_system(size_t(n), size_t(n),
+                                                      molpro::linalg::array::Span<double>(buffer.data(), buffer.size()),
+                                                      std::numeric_limits<double>::max(), true);
+  EXPECT_FALSE(std::fetestexcept(FE_OVERFLOW));
+  EXPECT_EQ(svd.size(), size_t(n));
 }
