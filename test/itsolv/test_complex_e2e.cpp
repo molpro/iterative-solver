@@ -396,3 +396,43 @@ TEST(complex_e2e, bfgs_real_objective_of_complex_parameters) {
   solver->solve(x, g, problem);
   EXPECT_LT(distance_from_ones(x), 1e-6);
 }
+
+//! The iteration events of a complex solver carry complex values and real errors, and are distinct from the real ones
+TEST(complex_e2e, iteration_events) {
+  using scalar = std::complex<double>;
+  namespace log = molpro::linalg::itsolv::log;
+  using C = containers<scalar>;
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<C::R, C::Q, C::P>("Davidson");
+  solver->set_n_roots(nroot);
+  solver->set_convergence_threshold(1e-10);
+  auto logger = std::make_shared<molpro::linalg::itsolv::Logger>();
+  logger->set_default_output(false);
+  static_assert(std::is_same_v<log::real_t<scalar>, double>);
+  std::vector<scalar> values;
+  std::vector<double> errors;
+  int n_complex = 0, n_real = 0;
+  logger->on<log::IterationCompleted<scalar>>(
+      [&](const molpro::linalg::itsolv::log::Record&, const log::IterationCompleted<scalar>::Payload& p) {
+        ++n_complex;
+        values = p.values;
+        errors = p.errors;
+      });
+  logger->on<log::IterationCompleted<double>>(
+      [&](const molpro::linalg::itsolv::log::Record&, const log::IterationCompleted<double>::Payload&) { ++n_real; });
+  solver->set_logger(logger);
+  HermitianProblem<scalar> problem(n, true);
+  std::vector<C::R> params(nroot, C::R(n, scalar(0))), actions(nroot, C::R(n, scalar(0)));
+  for (size_t i = 0; i < nroot; ++i)
+    params[i][i] = scalar(1);
+  EXPECT_TRUE(solver->solve(params, actions, problem));
+  EXPECT_GT(n_complex, 0);
+  EXPECT_EQ(n_real, 0);
+  const auto reference = reference_eigenvalues(n, nroot, true);
+  ASSERT_EQ(values.size(), nroot);
+  ASSERT_EQ(errors.size(), nroot);
+  for (size_t i = 0; i < nroot; ++i) {
+    EXPECT_NEAR(values[i].real(), reference[i], 1e-8);
+    EXPECT_NEAR(values[i].imag(), 0, 1e-8);
+    EXPECT_LE(errors[i], 1e-10);
+  }
+}

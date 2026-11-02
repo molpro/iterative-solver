@@ -69,6 +69,9 @@ struct QSpace {
   explicit QSpace(std::shared_ptr<ArrayHandlers<R, Q, P>> handlers, std::shared_ptr<Logger> logger)
       : m_handlers(std::move(handlers)), m_logger(std::move(logger)) {}
 
+  //! Replaces the logger
+  void set_logger(std::shared_ptr<Logger> logger) { m_logger = std::move(logger); }
+
   /*!
    * @brief Prepends parameters to the start of Q space
    *

@@ -19,19 +19,31 @@
 #include <iterator>
 #include <map>
 #include <optional>
+#include <span>
 #include <stdexcept>
 
 namespace molpro::linalg::itsolv {
 
 namespace log {
 
-template< typename value_type >
-struct ComplexRootsDavidson : ContextBase<ComplexRootsDavidson<value_type>, true, std::vector<std::pair<std::size_t, value_type>>> {
-	static const char *name;
+/*!
+ * Context emitted (as a warning) when the Davidson solver of a real, non-hermitian problem finds complex eigenvalues
+ */
+template <typename Scalar>
+struct ComplexRootsDavidson {
+  static constexpr std::string_view name = "ComplexRootsDavidson";
+  struct Payload {
+    //! pairs of (0-based) root index and imaginary part of the eigenvalue, one per complex root
+    std::span<const std::pair<std::size_t, Scalar>> roots;
+  };
+  //! Prints 1-based root indices
+  static std::string format(const Payload& p) {
+    std::vector<std::pair<std::size_t, Scalar>> one_based(p.roots.begin(), p.roots.end());
+    for (auto& pair : one_based)
+      ++pair.first;
+    return stringify(one_based);
+  }
 };
-template<typename value_type>
-const char *ComplexRootsDavidson<value_type>::name = "ComplexRootsDavidson";
-static_assert(context<ComplexRootsDavidson<double>>);
 
 }
 
@@ -129,15 +141,12 @@ public:
         return;
       }
 
-      // Convert to 1-based indexing for printout
-      for (auto& pair : imag_eigval_components) {
-        pair.first += 1;
-      }
-
-      this->m_logger->template warn<log::ComplexRootsDavidson<typename R::value_type>>(
+      using Ctx = log::ComplexRootsDavidson<typename IterativeSolverTemplate<LinearEigensystem, R, Q, P>::scalar_type>;
+      this->m_logger->template emit<Ctx>(
+          log::Severity::Warning, log::Verbosity::None,
           "The following roots are complex-valued. Associated eigenvectors are the real and imaginary part "
           "of the pairs and the imaginary parts of the eigenvalues are ",
-          imag_eigval_components);
+          [&] { return typename Ctx::Payload{imag_eigval_components}; });
 
       const auto nroots = subspace_solver->size();
       if (const auto partner = subspace_solver->complex_partner(nroots - 1); partner && *partner >= nroots)

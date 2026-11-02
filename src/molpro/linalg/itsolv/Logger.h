@@ -1,31 +1,65 @@
 #ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LOGGER_H
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_LOGGER_H
-#include <array>
+#include <cmath>
+#include <complex>
+#include <concepts>
+#include <cstddef>
 #include <format>
+#include <functional>
 #include <iomanip>
-#include <iterator>
 #include <limits>
+#include <optional>
 #include <ranges>
 #include <sstream>
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <typeinfo>
-#include <tuple>
 #include <utility>
+#include <vector>
 
 #include <molpro/iostream.h>
 
-
-namespace molpro::linalg::itsolv {
-  class Logger;
-}
+/*!
+ * @file
+ * @brief Logging facilities of the iterative solvers.
+ *
+ * Everything that is logged is an *event*. An event belongs to a *context*, a tag type that names the
+ * event and describes the data (the *payload*) that comes with it:
+ *
+ * @code
+ * struct MyEvent {
+ *   static constexpr std::string_view name = "MyEvent";
+ *   struct Payload { int iter; std::vector<double> errors; };
+ *   static std::string format(const Payload &p); // optional: text appended to the message
+ * };
+ * @endcode
+ *
+ * Free-text messages (Logger::info(), Logger::debug(), ...) use the log::Generic context, whose payload is empty
+ * and whose message already contains the stringified arguments.
+ *
+ * Downstream code observes events through *sinks* registered on a Logger instance at runtime:
+ *  - Logger::on<Ctx>(f) calls f(record, payload) for every event of context Ctx, giving access to the raw payload.
+ *    Typed subscriptions are not subject to the logger's verbosity/severity thresholds or the data-dump flag.
+ *  - Logger::add_sink(f, filter) calls f(record) for every event passing the filter; log::Record::text() yields the
+ *    formatted message and log::Record::get<Ctx>() the payload, if the event is of context Ctx.
+ *  - The built-in text output calls the virtual Logger::default_message_handler() with the formatted message. It
+ *    obeys the logger's thresholds and the data-dump flag and can be switched off with
+ *    Logger::set_default_output().
+ *
+ * Context identity is the C++ type: events of log::IterationCompleted<double> are not delivered to a subscription
+ * for log::IterationCompleted<float>. Contexts carrying floating-point data are templated on the scalar type of
+ * the solver, so they also work for single-precision and complex-valued problems.
+ *
+ * Payloads may refer to data owned by the emitter and are only valid during the call of the sink. Sinks must copy
+ * whatever they want to keep. Sinks must not add or remove sinks of the logger that is calling them.
+ */
 
 namespace molpro::linalg::itsolv::log {
 
 /*!
-* @brief Different levels of logging
-*/
+ * @brief Different levels of logging
+ */
 enum class Verbosity : short {
   Trace,
   Debug,
@@ -33,10 +67,9 @@ enum class Verbosity : short {
   None,
 };
 
-
 /*!
-* @brief Severity of a given message
-*/
+ * @brief Severity of a given message
+ */
 enum class Severity : short {
   Normal,
   Warning,
@@ -44,92 +77,29 @@ enum class Severity : short {
   Fatal,
 };
 
+/*!
+ * Constant indicating that formatting should be done with default precision
+ */
+constexpr const std::size_t default_precision = std::numeric_limits<std::size_t>::max();
 
 /*!
- * Concept to check for a nested static variable 'name' whose type is convertible to const char *
+ * The real type associated with a (possibly complex) scalar type, e.g. the type of norms and errors
+ */
+template <typename Scalar>
+using real_t = decltype(std::abs(std::declval<Scalar>()));
+
+namespace detail {
+template <typename T>
+struct is_complex : std::false_type {};
+template <typename T>
+struct is_complex<std::complex<T>> : std::true_type {};
+} // namespace detail
+
+/*!
+ * Concept checking that a type is a complex number type
  */
 template <typename T>
-concept name_tagged = requires {
-  { T::name } -> std::convertible_to<const char *>;
-};
-
-
-/*!
- * Base class for all context classes, which serve as a compile-time identifiable log contextss.
- */
-template< typename CRTP, bool fixed_args, typename ...Args >
-struct ContextBase {
-  /*!
-   * The name of this logging context
-   */
-  static constexpr const char *name = []() {
-    if constexpr (name_tagged<CRTP>) {
-      return CRTP::name;
-    }
-    return typeid(CRTP).name();
-  };
-
-  /*!
-   * Whether calls using this log context use a fixed set of arguments
-   */
-  static constexpr bool uses_fixed_arguments = fixed_args;
-
-  // Used only as a store for the arg type list
-  using arg_types_tuple = std::tuple<std::remove_cvref_t<Args>...>;
-
-  /*!
-   * Number of arguments calls using this log context will use (if using a fixed argument set)
-   */
-  static constexpr std::size_t num_args = sizeof...(Args);
-
-  /*!
-   * Converts the given object to the type it should be handled as in downstream log handlers.
-   * For non-ranges that means ensuring the type is const a const reference whereas for ranges,
-   * we convert them to a view (as const ranges can't be iterated over in the general case).
-   */
-  template<typename T>
-  static constexpr decltype(auto) to_arg(T &&arg) {
-    if constexpr (std::ranges::view<T>) {
-      return std::forward<T>(arg);
-    } else if constexpr (std::ranges::range<std::remove_cvref_t<T>>) {
-      return std::ranges::views::all(arg);
-    } else {
-      return std::as_const(arg);
-    }
-  }
-
-  /*!
-   * The type if the Idx-th argument that uses of this log context imply. Only applies if the context
-   * actually uses a fixed argument set.
-   */
-  template<std::size_t Idx>
-  requires(Idx < num_args && uses_fixed_arguments)
-  using arg_t = decltype(to_arg(std::declval<std::tuple_element_t<Idx, arg_types_tuple>>()));
-
-  /*!
-   * Extracts the requested argument from the provided argument pack
-   */
-  template<std::size_t Idx, typename ...Ts>
-  static arg_t<Idx> get_arg(Ts &&...args) {
-    return to_arg(std::get<Idx>(std::forward_as_tuple(std::forward<Ts>(args)...)));
-  }
-};
-
-
-/*!
- * Concept checking whether a given type is considered a Context.
- */
-template< typename T >
-concept context = requires(const T &t) {
-  // If this lambda can be called, T must inherit from ContextBase (with arbitrary template parameter)
-  []<bool b, typename...Ts>(const ContextBase<T, b, Ts...> &){}(t);
-};
-
-/*!
- * Concept checking that the provided arguments match with the ones specified in the logging context
- */
-template< typename Ctx, typename ...Args >
-concept context_uses_correct_arg_types = context<Ctx> && std::derived_from<Ctx, ContextBase<Ctx, Ctx::uses_fixed_arguments, Args...>>;
+concept complex_number = detail::is_complex<std::remove_cvref_t<T>>::value;
 
 /*!
  * Concept checking that a given type is pair-like object
@@ -143,402 +113,390 @@ concept pair_like = requires(const std::remove_cvref_t<T> &t) {
 /*!
  * Concept checking that a given type supports operator<< into an output stream
  */
-template<typename T>
-concept streamable = requires (std::ostream &stream, const std::remove_cvref_t<T> &t) {
-  stream << t;
-};
+template <typename T>
+concept streamable = requires(std::ostream &stream, const std::remove_cvref_t<T> &t) { stream << t; };
 
 /*!
  * Concept checking that a given type can be formatted via std::format
  */
-template<typename T>
-concept formattable = requires (const std::remove_cvref_t<T> &t, std::format_context ctx) {
+template <typename T>
+concept formattable = requires(const std::remove_cvref_t<T> &t, std::format_context ctx) {
   std::formatter<std::remove_cvref_t<T>>().format(t, ctx);
 };
 
 /*!
- * Concept checking that the provided range can be converted into a string by either
- * using std::format or operator<<
+ * Concept checking that a type is string-like, i.e. it is printed as is
  */
 template <typename T>
-concept string_convertible_range =
-    std::ranges::range<T> && (formattable<std::ranges::range_value_t<T>> || streamable<std::ranges::range_value_t<T>> ||
-                              pair_like<std::ranges::range_value_t<T>>);
+concept string_like = std::convertible_to<const std::remove_cvref_t<T> &, std::string_view>;
+
+namespace detail {
+template <typename T>
+consteval bool is_stringifiable() {
+  using U = std::remove_cvref_t<T>;
+  if constexpr (string_like<U> || formattable<U> || streamable<U>) {
+    return true;
+  } else if constexpr (pair_like<U>) {
+    return is_stringifiable<decltype(std::declval<const U &>().first)>() &&
+           is_stringifiable<decltype(std::declval<const U &>().second)>();
+  } else if constexpr (std::ranges::input_range<const U>) {
+    using E = std::ranges::range_reference_t<const U>;
+    if constexpr (std::same_as<std::remove_cvref_t<E>, U>)
+      return false;
+    else
+      return is_stringifiable<E>();
+  } else {
+    return false;
+  }
+}
+} // namespace detail
+
+namespace detail {
+//! Whether T is a range whose elements are of a different type than T (to exclude e.g. std::filesystem::path)
+template <typename T>
+consteval bool is_printable_range() {
+  if constexpr (std::ranges::input_range<const T>)
+    return !std::same_as<std::remove_cvref_t<std::ranges::range_reference_t<const T>>, T>;
+  else
+    return false;
+}
+} // namespace detail
 
 /*!
- * Compile-time, constexpr-capable (fixed-size) string-like object
+ * Concept checking that a type can be converted into a string by stringify()
  */
-template<std::size_t MaxSize>
-requires(MaxSize > 0)
-class ConstexprString {
+template <typename T>
+concept stringifiable = detail::is_stringifiable<T>();
+
+/*!
+ * @brief Converts the given object into a string
+ *
+ * Ranges are printed as [a, b, ...], pair-like objects as { first: second }. Anything else is formatted via
+ * std::format or, failing that, operator<<.
+ *
+ * @param precision Number of significant digits for floating-point values (and complex numbers of them). Types
+ * whose std::formatter understands a ".N" precision specification (e.g. subspace::Matrix) receive it as well.
+ */
+template <typename T>
+  requires stringifiable<T>
+std::string stringify(const T &t, std::size_t precision = default_precision) {
+  using U = std::remove_cvref_t<T>;
+  const bool precise = precision != default_precision;
+
+  if constexpr (string_like<U>) {
+    return std::string(std::string_view(t));
+  } else if constexpr (complex_number<U> || (std::floating_point<U> && !formattable<U>)) {
+    std::ostringstream stream;
+    if (precise)
+      stream << std::setprecision(static_cast<int>(precision));
+    stream << t;
+    return stream.str();
+  } else if constexpr (std::floating_point<U>) {
+    return precise ? std::format("{:.{}}", t, precision) : std::format("{}", t);
+  } else if constexpr (pair_like<U>) {
+    return "{ " + stringify(t.first, precision) + ": " + stringify(t.second, precision) + " }";
+  } else if constexpr (detail::is_printable_range<U>()) {
+    std::string result = "[";
+    bool first = true;
+    for (auto &&element : t) {
+      if (!first)
+        result += ", ";
+      first = false;
+      result += stringify(element, precision);
+    }
+    return result + "]";
+  } else if constexpr (formattable<U>) {
+    if (precise) {
+      try {
+        return std::vformat("{:." + std::to_string(precision) + "}", std::make_format_args(t));
+      } catch (const std::format_error &) {
+        // the type's formatter has no notion of precision
+      }
+    }
+    return std::format("{}", t);
+  } else {
+    std::ostringstream stream;
+    if (precise)
+      stream << std::setprecision(static_cast<int>(precision));
+    stream << t;
+    return stream.str();
+  }
+}
+
+/*!
+ * Concept checking whether a given type is an event context: it has a name and a payload type
+ */
+template <typename Ctx>
+concept event_context = requires {
+  { Ctx::name } -> std::convertible_to<std::string_view>;
+  typename Ctx::Payload;
+};
+
+/*!
+ * Concept checking whether a context provides a text representation of its payload
+ */
+template <typename Ctx>
+concept formattable_context = event_context<Ctx> && requires(const typename Ctx::Payload &p) {
+  { Ctx::format(p) } -> std::convertible_to<std::string>;
+};
+
+/*!
+ * Concept checking whether a context represents a data dump (which is subject to Logger::data_dumps_enabled())
+ */
+template <typename Ctx>
+concept data_dump_context = event_context<Ctx> && requires {
+  requires Ctx::is_data_dump;
+};
+
+/*!
+ * Context for free-text messages. Its message already contains all stringified arguments.
+ */
+struct Generic {
+  static constexpr std::string_view name = "Generic";
+  struct Payload {};
+};
+
+/*!
+ * Context used when dumping data of type T
+ */
+template <typename T>
+struct DataDump {
+  static constexpr std::string_view name = "DataDump";
+  static constexpr bool is_data_dump = true;
+  struct Payload {
+    const T &data;         //!< The dumped data
+    std::size_t precision; //!< Requested precision (default_precision if unspecified)
+  };
+  static std::string format(const Payload &p)
+    requires stringifiable<T>
+  {
+    return stringify(p.data, p.precision);
+  }
+};
+
+/*!
+ * @returns message with the given suffix appended. A separator is inserted if the message doesn't end in a blank.
+ */
+inline std::string compose(std::string_view message, std::string_view suffix) {
+  if (suffix.empty())
+    return std::string(message);
+  if (!message.empty() && message.back() != ' ')
+    return std::string(message) + "  ->  " + std::string(suffix);
+  return std::string(message) + std::string(suffix);
+}
+
+/*!
+ * @brief A single logged event, as passed to sinks
+ */
+class Record {
 public:
-  constexpr ConstexprString() : m_data(), m_size(0) {
-    m_data.fill('\0');
-  }
-  template<std::size_t N>
-  requires(N - 1 <= MaxSize)
-  constexpr ConstexprString(const char (&literal)[N]) : ConstexprString() {
-    // -1 as we don't want to copy the terminating null character
-    for (std::size_t i = 0; i < N - 1; ++i) {
-      push_back(literal[i]);
-    }
-  }
-  constexpr ~ConstexprString() {}
+  std::string_view context; //!< Name of the context
+  Severity severity;
+  Verbosity verbosity;
+  std::string_view message; //!< The message without the payload's text representation
 
-  constexpr void push_back(char c) {
-    if (m_size == MaxSize) {
-      throw std::out_of_range("Maximum capacity has been reached - can't append further chars");
-    }
+  /*!
+   * @returns the type of the event's context
+   */
+  const std::type_info &type() const { return *m_type; }
 
-    m_data.at(m_size) = c;
-    ++m_size;
+  /*!
+   * @returns Whether this event is of context Ctx
+   */
+  template <event_context Ctx>
+  bool is() const {
+    return *m_type == typeid(Ctx);
   }
 
-  constexpr std::size_t size() const { return m_size; }
-
-  constexpr char &operator[](std::size_t idx) {
-    if (idx >= m_size) {
-      throw std::out_of_range("Requested index is out of range");
-    }
-
-    return m_data.at(idx);
+  /*!
+   * @returns The event's payload if the event is of context Ctx, nullptr otherwise
+   */
+  template <event_context Ctx>
+  const typename Ctx::Payload *get() const {
+    return is<Ctx>() ? static_cast<const typename Ctx::Payload *>(m_payload) : nullptr;
   }
 
-  constexpr std::string_view as_view() const {
-    return {m_data.data(), m_size};
-  }
+  /*!
+   * @returns The message followed by the text representation of the payload (if its context provides one)
+   */
+  std::string text() const { return m_format ? compose(message, m_format(m_payload)) : std::string(message); }
 
-  constexpr operator std::string_view() const {
-    return as_view();
+  /*!
+   * @returns Whether this event is a data dump
+   */
+  bool is_data_dump() const { return m_data_dump; }
+
+  template <event_context Ctx>
+  static Record make(Severity severity, Verbosity verbosity, std::string_view message,
+                     const typename Ctx::Payload &payload) {
+    Record record{Ctx::name, severity, verbosity, message};
+    record.m_type = &typeid(Ctx);
+    record.m_payload = &payload;
+    record.m_data_dump = data_dump_context<Ctx>;
+    if constexpr (formattable_context<Ctx>)
+      record.m_format = [](const void *p) {
+        return std::string(Ctx::format(*static_cast<const typename Ctx::Payload *>(p)));
+      };
+    return record;
   }
 
 private:
-  std::array<char, MaxSize> m_data;
-  std::size_t m_size = 0;
-};
+  Record(std::string_view context, Severity severity, Verbosity verbosity, std::string_view message)
+      : context(context), severity(severity), verbosity(verbosity), message(message) {}
 
-
-/*!
- * @returns Number of digits required to represent the given value in base 10
- */
-constexpr std::size_t num_digits(std::size_t val) {
-  if (val == 0) {
-    return 1;
-  }
-
-  std::size_t num = 0;
-
-  while (val > 0){
-    val /= 10;
-    ++num;
-  }
-
-  return num;
-}
-
-
-/*!
- * Creates a format string that contains instruction to use the given precision while formatting.
- * The selling point is that this is suitable to be used in a constexpr/consteval context.
- */
-template<std::size_t precision>
-constexpr ConstexprString<num_digits(precision) + 4> create_fmt_string_for_precision() {
-  ConstexprString<num_digits(precision) + 4> str;
-
-  str.push_back('{');
-  str.push_back(':');
-  str.push_back('.');
-
-  if (precision == 0) {
-    str.push_back('0');
-  } else {
-    std::size_t begin = str.size();
-
-    // This create the digits in reverse order
-    std::size_t prec_val = precision;
-    while (prec_val > 0) {
-      std::size_t tmp = prec_val / 10;
-      std::size_t digit = prec_val - tmp * 10;
-      prec_val = tmp;
-
-      str.push_back('0' + static_cast<char>(digit));
-    }
-
-    std::size_t num_digits = str.size() - begin;
-
-    // Reverse order of digits in-place
-    for (std::size_t i = 0; i < num_digits / 2; ++i) {
-      std::swap(str[i + begin], str[str.size() - i - 1]);
-    }
-  }
-
-  str.push_back('}');
-
-  return str;
-}
-
-
-/*!
-* Constant indicating that formatting should be done with default precision
-*/
-constexpr const std::size_t default_precision = std::numeric_limits<std::size_t>::max();
-
-
-/*!
- * Customization point for controlling how exactly a type is formatted
- *
- * @tparam Context The context in which the formatting is happening
- * @tparam T The type to format
- * @tparam precision The requested precision (default_precision indicates unspecified/default precision)
- */
-template<context Context, typename T, std::size_t precision = default_precision>
-struct FormatOption {
-  /*!
-   * Yields the format string to be used with std::format
-   */
-  static constexpr auto format_string() {
-    if constexpr (precision != default_precision) {
-      return create_fmt_string_for_precision<precision>();
-    } else {
-      return ConstexprString<2>{"{}"};
-    }
-  }
-  /*!
-   * @returns String to be inserted at the beginning of a range
-   */
-  static constexpr std::string_view range_begin_mark() { return "["; }
-  /*!
-   * @returns String to be inserted at the end of a range
-   */
-  static constexpr std::string_view range_end_mark() { return "]"; }
-  /*!
-   * @returns Separator that shall be used when formatting a range of T
-   */
-  static constexpr std::string_view range_separator() { return ", "; }
-  /*!
-   * Sets the stream's properties when using operator<< to yield a string representation
-   */
-  static constexpr void prepare_stream(std::ostream &stream) {
-    if constexpr (precision != default_precision) {
-      stream << std::setprecision(precision);
-    }
-  }
+  const std::type_info *m_type = nullptr;
+  const void *m_payload = nullptr;
+  std::string (*m_format)(const void *) = nullptr;
+  bool m_data_dump = false;
 };
 
 /*!
- * Converts the given type into a string
+ * @brief Selects which events an untyped sink receives. Unset fields inherit the logger's current settings.
  */
-template <context Context, std::size_t precision = default_precision, typename T>
-  requires(formattable<T> || streamable<T> || string_convertible_range<T> || pair_like<T>)
-static std::string stringify(T &&t) {
-  using FOpts = FormatOption<Context, std::remove_cvref_t<T>, precision>;
+struct Filter {
+  std::optional<Severity> min_severity; //!< Lowest severity that is passed on
+  std::optional<Verbosity> verbosity;   //!< Lowest verbosity that is passed on
+  std::optional<bool> data_dumps;       //!< Whether data dumps are passed on
 
-  if constexpr (formattable<T>) {
-    static constexpr auto fmt = FOpts::format_string();
-    // std::format's format string is a consteval std::format_string, which a string_view
-    // out of a constexpr object does not satisfy; std::vformat is the runtime-string form.
-    return std::vformat(fmt.as_view(), std::make_format_args(t));
-  } else if constexpr (streamable<T>) {
-    std::stringstream sstream;
-    FOpts::prepare_stream(sstream);
-    sstream << t;
-    return sstream.str();
-  } else if constexpr (pair_like<T>) {
-    std::stringstream sstream;
-
-    sstream << "{ " << stringify<Context, precision>(t.first) << ": " << stringify<Context, precision>(t.second)
-            << " }";
-
-    return sstream.str();
-  } else {
-    std::stringstream sstream;
-
-    using std::ranges::begin;
-    using std::ranges::end;
-
-    sstream << FOpts::range_begin_mark();
-
-    for (auto it = begin(t); it != end(t); ++it) {
-      sstream << stringify<Context, precision>(*it);
-
-      if (it + 1 != end(t)) {
-        sstream << FOpts::range_separator();
-      }
-    }
-
-    sstream << FOpts::range_end_mark();
-
-    return sstream.str();
-  }
-}
-
-
-/*!
- * Concept checking that the stringify function can be called on this
- * context-precision-type combination
- */
-template<typename Context, std::size_t precision, typename T>
-concept stringify_supported = requires (std::remove_cvref_t<T> &t) {
-  { stringify<Context, precision>(t) } -> std::same_as<std::string>;
+  //! A filter that lets everything pass
+  static Filter all() { return {Severity::Normal, Verbosity::Trace, true}; }
 };
-
-
-
-// Declaring some default logging contexts
-
-/*!
- * Default context for logging - used if we don't have a more specific context
- */
-struct Generic : ContextBase<Generic, false> { static constexpr const char *name = "Generic"; };
-static_assert(context<Generic>);
-/*!
- * Context used when dumping data
- */
-struct DataDump : ContextBase<DataDump, false> { static constexpr const char *name = "DataDump"; };
-static_assert(context<DataDump>);
-
-
-
-/*!
- * Customization point for logging in case one needs direct access to the data instead of
- * its stringified form. If a suitable template specialization exists, this will be called
- * instead of the default handler in the logger object (for which the data is previously
- * converted into string format).
- */
-template< context Context >
-struct LogHandler {
-  template<typename ...Ts>
-  static void handle(const Logger &logger, Severity severity, Verbosity verbosity, std::string_view message, Ts...args) = delete;
-
-  template<typename ...Ts>
-  void handle(Severity severity, Verbosity verbosity, std::string_view message, Ts...args) = delete;
-};
-
-template< typename Context, typename ...Args >
-concept static_handler_exists = requires (const Logger &logger, Args ...args) {
-  LogHandler<Context>::handle(logger, std::declval<Severity>(), std::declval<Verbosity>(),
-      std::declval<std::string_view>(), args...);
-};
-template< typename Context, typename ...Args >
-concept member_handler_exists = requires (const LogHandler<Context> &handler, Args ...args) {
-  handler.handle(std::declval<Severity>(), std::declval<Verbosity>(),
-      std::declval<std::string_view>(), args...);
-};
-
-/*!
- * Concept checking whether there exists a suitable specialization of the LogHandler class
- */
-template< typename Context, typename ...Args >
-concept handler_exists = static_handler_exists<Context, Args...> || member_handler_exists<Context, Args...>;
-
 
 } // namespace molpro::linalg::itsolv::log
-
-
 
 namespace molpro::linalg::itsolv {
 
 /*!
- * Logger class implementation. Provides (customizable) logging functionalities.
+ * @brief Logger class implementation. Provides (customizable) logging functionalities.
+ *
+ * See Logger.h for an overview of how to observe logged events.
  */
 class Logger {
 public:
-  Logger(log::Severity min_severity = log::Severity::Normal, log::Verbosity verbosity = log::Verbosity::Info, bool enable_data_dumps = false)
-    : m_min_severity(min_severity), m_verbosity(verbosity), m_dump_data(enable_data_dumps) {}
+  using Sink = std::function<void(const log::Record &)>;
+  using SinkId = std::size_t;
+
+  Logger(log::Severity min_severity = log::Severity::Normal, log::Verbosity verbosity = log::Verbosity::Info,
+         bool enable_data_dumps = false)
+      : m_verbosity(verbosity), m_min_severity(min_severity), m_dump_data(enable_data_dumps) {}
+  virtual ~Logger() = default;
 
   /*!
-   * General logging function - generally, you will want to use one of the convenience wrappers around this function
+   * @brief Registers a sink receiving all events that pass the given filter
+   * @returns An id that can be passed to remove_sink()
    */
-  template< log::context Context = log::Generic, std::size_t precision = log::default_precision, typename ...Ts >
-  void msg(log::Severity severity, log::Verbosity verbosity, std::string_view message, Ts && ...args) const {
-    log_ctx(Context::name, sizeof...(args));
+  SinkId add_sink(Sink sink, log::Filter filter = {}) {
+    m_sinks.push_back({m_next_id, filter, nullptr, std::move(sink)});
+    return m_next_id++;
+  }
 
-    if (verbosity < m_verbosity || severity < m_min_severity) {
+  /*!
+   * @brief Registers f(const log::Record &, const Ctx::Payload &) to be called for every event of context Ctx
+   *
+   * The subscription is not subject to the logger's thresholds or its data-dump flag.
+   * @returns An id that can be passed to remove_sink()
+   */
+  template <log::event_context Ctx, typename F>
+    requires std::invocable<F &, const log::Record &, const typename Ctx::Payload &>
+  SinkId on(F &&f) {
+    m_sinks.push_back({m_next_id, log::Filter::all(), &typeid(Ctx),
+                       [f = std::forward<F>(f)](const log::Record &record) mutable { f(record, *record.get<Ctx>()); }});
+    return m_next_id++;
+  }
+
+  /*!
+   * @brief Removes a previously registered sink
+   */
+  void remove_sink(SinkId id) {
+    std::erase_if(m_sinks, [id](const SinkEntry &entry) { return entry.id == id; });
+  }
+
+  /*!
+   * @brief Emits an event of context Ctx
+   *
+   * @param make Callable creating the payload. It is only invoked if some sink is interested in the event.
+   */
+  template <log::event_context Ctx, typename MakePayload>
+    requires std::invocable<MakePayload &>
+  void emit(log::Severity severity, log::Verbosity verbosity, std::string_view message, MakePayload &&make) const {
+    if (!wants(typeid(Ctx), severity, verbosity, log::data_dump_context<Ctx>))
       return;
-    }
+    const typename Ctx::Payload payload = make();
+    dispatch(log::Record::make<Ctx>(severity, verbosity, message, payload));
+  }
 
-    static_assert((log::stringify_supported<Context, precision, Ts> && ...), "All types passed to logger must be stringify-able");
-    if constexpr (Context::uses_fixed_arguments) {
-      static_assert(log::context_uses_correct_arg_types<Context, std::remove_cvref_t<Ts>...>, "Log function called with parameters that are inconsistent with associated context");
-    }
+  /*!
+   * @brief Emits an event of a context whose payload is default-constructible (usually empty)
+   */
+  template <log::event_context Ctx>
+    requires std::default_initializable<typename Ctx::Payload>
+  void emit(log::Severity severity, log::Verbosity verbosity, std::string_view message) const {
+    emit<Ctx>(severity, verbosity, message, [] { return typename Ctx::Payload{}; });
+  }
 
-    if constexpr (log::handler_exists<Context, Ts...>) {
-      using Handler = log::LogHandler<Context>;
-      if constexpr (log::static_handler_exists<Context, Ts...> && log::member_handler_exists<Context, Ts...>) {
-        // Need to figure out whether to call static or member function
-        const Handler *handler = dynamic_cast<const Handler *>(this);
-        if (handler) {
-          handler->handle(severity, verbosity, message, std::forward<Ts>(args)...);
-        } else {
-          Handler::handle(*this, severity, verbosity, message, std::forward<Ts>(args)...);
-        }
-      } else if constexpr (log::member_handler_exists<Context, Ts...>) {
-        dynamic_cast<const Handler &>(*this).handle(severity, verbosity, message, std::forward<Ts>(args)...);
-      } else {
-        static_assert(log::static_handler_exists<Context, Ts...>);
-        Handler::handle(*this, severity, verbosity, message, std::forward<Ts>(args)...);
-      }
-    } else if constexpr (sizeof...(args) > 0) {
-      std::string arg_str = ((log::stringify<Context, precision>(std::forward<Ts>(args)) + ", ") + ...);
-
-      if (!message.empty() && message.back() != ' ') {
-        // If message doesn't end with a blank, we assume simply concatenating the argument string
-        // to it would produce a nonsense message. Hopefully a generic separator will do better.
-        arg_str = "  ->  " + arg_str;
-      }
-
-      default_message_handler(Context::name, severity, verbosity, std::string(message) + arg_str);
+  /*!
+   * @brief Logs a free-text message (context log::Generic). The arguments are stringified and appended.
+   */
+  template <typename... Ts>
+  void msg(log::Severity severity, log::Verbosity verbosity, std::string_view message, const Ts &...args) const {
+    static_assert((log::stringifiable<Ts> && ...), "All types passed to logger must be stringify-able");
+    if (!wants(typeid(log::Generic), severity, verbosity, false))
+      return;
+    const log::Generic::Payload payload{};
+    if constexpr (sizeof...(args) > 0) {
+      std::string arg_str;
+      ((arg_str += (arg_str.empty() ? "" : ", ") + log::stringify(args)), ...);
+      const std::string text = log::compose(message, arg_str);
+      dispatch(log::Record::make<log::Generic>(severity, verbosity, text, payload));
     } else {
-      default_message_handler(Context::name, severity, verbosity, message);
+      dispatch(log::Record::make<log::Generic>(severity, verbosity, message, payload));
     }
   }
 
-  template< log::context Context = log::Generic, typename ...Ts>
-  void trace(std::string_view message, Ts && ...args) const {
-    msg<Context>(log::Severity::Normal, log::Verbosity::Trace, message, std::forward<Ts>(args)...);
+  template <typename... Ts>
+  void trace(std::string_view message, const Ts &...args) const {
+    msg(log::Severity::Normal, log::Verbosity::Trace, message, args...);
   }
 
-  template< log::context Context = log::Generic, typename ...Ts>
-  void debug(std::string_view message, Ts && ...args) const {
-    msg<Context>(log::Severity::Normal, log::Verbosity::Debug, message, std::forward<Ts>(args)...);
+  template <typename... Ts>
+  void debug(std::string_view message, const Ts &...args) const {
+    msg(log::Severity::Normal, log::Verbosity::Debug, message, args...);
   }
 
-  template< log::context Context = log::Generic, typename ...Ts>
-  void info(std::string_view message, Ts && ...args) const {
-    msg<Context>(log::Severity::Normal, log::Verbosity::Info, message, std::forward<Ts>(args)...);
+  template <typename... Ts>
+  void info(std::string_view message, const Ts &...args) const {
+    msg(log::Severity::Normal, log::Verbosity::Info, message, args...);
   }
 
-  template< log::context Context = log::Generic, typename ...Ts>
-  void warn(std::string_view message, Ts && ...args) const {
-    msg<Context>(log::Severity::Warning, log::Verbosity::None, message, std::forward<Ts>(args)...);
+  template <typename... Ts>
+  void warn(std::string_view message, const Ts &...args) const {
+    msg(log::Severity::Warning, log::Verbosity::None, message, args...);
   }
 
-  template< log::context Context = log::Generic, typename ...Ts>
-  void error(std::string_view message, Ts && ...args) const {
-    msg<Context>(log::Severity::Error, log::Verbosity::None, message, std::forward<Ts>(args)...);
+  template <typename... Ts>
+  void error(std::string_view message, const Ts &...args) const {
+    msg(log::Severity::Error, log::Verbosity::None, message, args...);
   }
 
-  template< log::context Context = log::Generic, typename ...Ts>
-  void fatal(std::string_view message, Ts && ...args) const {
-    msg<Context>(log::Severity::Fatal, log::Verbosity::None, message, std::forward<Ts>(args)...);
+  template <typename... Ts>
+  void fatal(std::string_view message, const Ts &...args) const {
+    msg(log::Severity::Fatal, log::Verbosity::None, message, args...);
   }
 
-
-  template<std::size_t precision = log::default_precision, typename ...Ts>
-  void data_dump(std::string_view what, Ts...data) const {
-    if (!m_dump_data) {
-      log_ctx(log::DataDump::name, sizeof...(data));
-      return;
-    }
-
-    msg<log::DataDump, precision>(log::Severity::Normal, log::Verbosity::Trace, what, data...);
+  /*!
+   * @brief Dumps data (context log::DataDump<T>, verbosity Trace). Nothing is copied.
+   */
+  template <std::size_t precision = log::default_precision, typename T>
+  void data_dump(std::string_view what, const T &data) const {
+    emit<log::DataDump<T>>(log::Severity::Normal, log::Verbosity::Trace, what,
+                           [&] { return typename log::DataDump<T>::Payload{data, precision}; });
   }
 
-  log::Severity min_severity() const { return  m_min_severity; }
+  log::Severity min_severity() const { return m_min_severity; }
 
   void set_min_severity(log::Severity severity) { m_min_severity = severity; }
 
-  log::Verbosity verbosity() const { return  m_verbosity; }
+  log::Verbosity verbosity() const { return m_verbosity; }
 
   void set_verbosity(log::Verbosity verbosity) { m_verbosity = verbosity; }
 
@@ -546,42 +504,53 @@ public:
 
   void enable_data_dumps(bool enable) { m_dump_data = enable; }
 
-protected:
-  // These functions are the traditional customization points by means of subclassing and overwriting
+  bool default_output() const { return m_default_output; }
 
-  virtual void default_message_handler(std::string_view ctx, log::Severity severity, log::Verbosity verbosity, std::string_view msg) const {
+  /*!
+   * @brief Switches the built-in text output (default_message_handler()) on or off
+   */
+  void set_default_output(bool enable) { m_default_output = enable; }
+
+protected:
+  /*!
+   * @brief Built-in text output. Receives every event passing the logger's thresholds and data-dump flag.
+   *
+   * Override this to redirect the text output.
+   */
+  virtual void default_message_handler(std::string_view ctx, log::Severity severity, log::Verbosity verbosity,
+                                       std::string_view msg) const {
     bool add_colon = false;
     switch (severity) {
     case log::Severity::Normal:
-        break;
+      break;
     case log::Severity::Warning:
-        molpro::cout << "[WARNING]";
-        add_colon = true;
-        break;
+      molpro::cout << "[WARNING]";
+      add_colon = true;
+      break;
     case log::Severity::Error:
-        molpro::cout << "[ERROR]:";
-        add_colon = true;
-        break;
+      molpro::cout << "[ERROR]:";
+      add_colon = true;
+      break;
     case log::Severity::Fatal:
-        molpro::cout << "[FATAL]:";
-        add_colon = true;
-        break;
+      molpro::cout << "[FATAL]:";
+      add_colon = true;
+      break;
     }
     switch (verbosity) {
     case log::Verbosity::None:
-        break;
+      break;
     case log::Verbosity::Info:
-        molpro::cout << "[INFO]";
-        add_colon = true;
-        break;
+      molpro::cout << "[INFO]";
+      add_colon = true;
+      break;
     case log::Verbosity::Debug:
-        molpro::cout << "[DEBUG]";
-        add_colon = true;
-        break;
+      molpro::cout << "[DEBUG]";
+      add_colon = true;
+      break;
     case log::Verbosity::Trace:
-        molpro::cout << "[TRACE]";
-        add_colon = true;
-        break;
+      molpro::cout << "[TRACE]";
+      add_colon = true;
+      break;
     };
 
     if (ctx != log::Generic::name) {
@@ -597,17 +566,50 @@ protected:
     }
   }
 
-  virtual void log_ctx(std::string_view ctx, std::size_t num_args) const {
-    // By default we don't do anything
+private:
+  struct SinkEntry {
+    SinkId id;
+    log::Filter filter;
+    const std::type_info *context; //!< only events of this context are passed on, unless nullptr
+    Sink sink;
+  };
+
+  bool passes(const log::Filter &filter, log::Severity severity, log::Verbosity verbosity, bool data_dump) const {
+    return severity >= filter.min_severity.value_or(m_min_severity) &&
+           verbosity >= filter.verbosity.value_or(m_verbosity) &&
+           (!data_dump || filter.data_dumps.value_or(m_dump_data));
   }
 
-private:
-  /// Highest verbosity that will still be logged
+  bool wants(const std::type_info &context, log::Severity severity, log::Verbosity verbosity, bool data_dump) const {
+    if (m_default_output && passes({}, severity, verbosity, data_dump))
+      return true;
+    for (const auto &entry : m_sinks)
+      if ((!entry.context || *entry.context == context) && passes(entry.filter, severity, verbosity, data_dump))
+        return true;
+    return false;
+  }
+
+  void dispatch(const log::Record &record) const {
+    const bool data_dump = record.is_data_dump();
+    for (const auto &entry : m_sinks)
+      if ((!entry.context || *entry.context == record.type()) &&
+          passes(entry.filter, record.severity, record.verbosity, data_dump))
+        entry.sink(record);
+    if (m_default_output && passes({}, record.severity, record.verbosity, data_dump))
+      default_message_handler(record.context, record.severity, record.verbosity, record.text());
+  }
+
+  /// Lowest verbosity that will still be logged
   log::Verbosity m_verbosity = log::Verbosity::Info;
-  /// Highest severity that will still be logged
+  /// Lowest severity that will still be logged
   log::Severity m_min_severity = log::Severity::Normal;
   /// Whether data dumps shall be performed
   bool m_dump_data = false;
+  /// Whether the built-in text output is active
+  bool m_default_output = true;
+  /// Registered sinks
+  std::vector<SinkEntry> m_sinks;
+  SinkId m_next_id = 1;
 };
 
 } // namespace molpro::linalg::itsolv
