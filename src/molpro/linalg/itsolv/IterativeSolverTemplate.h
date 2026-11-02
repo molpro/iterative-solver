@@ -649,8 +649,13 @@ protected:
                                                                   n_roots(), this->m_max_iter, m_convergence_threshold,
                                                                   pspace.size(), initial_guess};
                                                             });
-    int iterations = 0;
-    for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++, iterations++) {
+    // the roots worked on in the current iteration, only recorded if the iteration events are wanted
+    std::vector<int> roots;
+    const bool record_roots =
+        m_logger->template is_wanted<log::NewIteration<scalar_type>>(log::Severity::Normal, log::Verbosity::Debug) ||
+        m_logger->template is_wanted<log::IterationCompleted<scalar_type>>(log::Severity::Normal, log::Verbosity::Info);
+    int iter = 0;
+    for (; iter < this->m_max_iter && nwork > 0; iter++) {
       // the vectors worked on in this iteration: add_vector() takes up no more vectors than there are in the working
       // set, and in the first iteration after initialising a P space the actions are already known
       std::size_t naction = 0;
@@ -659,7 +664,8 @@ protected:
       else if (iter > 0 or pspace.empty())
         naction = std::min(size_t(nwork), m_working_set.size());
       // add_vector() replaces the working set, so it is recorded beforehand
-      const std::vector<int> roots(m_working_set.begin(), m_working_set.begin() + naction);
+      if (record_roots)
+        roots.assign(m_working_set.begin(), m_working_set.begin() + naction);
       m_logger->template emit<log::NewIteration<scalar_type>>(
           log::Severity::Normal, log::Verbosity::Debug, "Iteration ",
           [&] { return typename log::NewIteration<scalar_type>::Payload{iter, roots}; });
@@ -696,7 +702,7 @@ protected:
         nwork = this->end_iteration(parameters, actions);
       }
       m_logger->template emit<log::IterationCompleted<scalar_type>>(
-          log::Severity::Normal, log::Verbosity::Debug, "Iteration completed ", [&] {
+          log::Severity::Normal, log::Verbosity::Info, "Iteration completed ", [&] {
             return typename log::IterationCompleted<scalar_type>::Payload{iter, roots, {m_errors.begin(), m_errors.end()}, current_values(),
                                                                           std::size_t(std::max(nwork, 0))};
           });
@@ -726,7 +732,7 @@ protected:
     }
     m_logger->template emit<log::SolveFinished<scalar_type>>(
         log::Severity::Normal, log::Verbosity::Debug, "Solve finished ", [&] {
-          return typename log::SolveFinished<scalar_type>::Payload{iterations, nwork == 0 and errors_converged,
+          return typename log::SolveFinished<scalar_type>::Payload{iter, nwork == 0 and errors_converged,
                                                                    {m_errors.begin(), m_errors.end()},
                                                                    current_values()};
         });

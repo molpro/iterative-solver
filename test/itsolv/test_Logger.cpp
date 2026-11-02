@@ -177,6 +177,12 @@ TEST(Logger, remove_sink) {
   EXPECT_EQ(n, 1);
 }
 
+TEST(Logger, empty_argument_keeps_separator) {
+  TextRecorder logger;
+  logger.info("x ", std::string(""), 5);
+  EXPECT_THAT(logger.texts, ElementsAre("x , 5"));
+}
+
 TEST(Logger, default_message_handler_override) {
   TextRecorder logger;
   logger.info("value ", 1, 2.5);
@@ -196,6 +202,8 @@ TEST(Logger, stringify) {
   EXPECT_EQ(itlog::stringify(std::complex<double>(1.23456, 2), 3), "(1.23,2)");
   EXPECT_EQ(itlog::stringify(std::vector<std::pair<std::size_t, double>>{{1, 0.5}}), "[{ 1: 0.5 }]");
   EXPECT_EQ(itlog::stringify(std::string("text"), 3), "text");
+  static_assert(itlog::stringifiable<std::vector<std::pair<int, double>>>);
+  static_assert(!itlog::stringifiable<std::vector<std::vector<itlog::Generic::Payload>>>);
   molpro::linalg::itsolv::subspace::Matrix<double> m({1, 2});
   m(0, 0) = 1.23456;
   m(0, 1) = 2;
@@ -317,4 +325,19 @@ TEST(Logger, solver_lifecycle_events) {
   EXPECT_THAT(new_iteration_roots.front(), ElementsAre(0, 1, 2));
   EXPECT_LT(new_iteration_roots[1].size(), nroots);
   EXPECT_THAT(new_iteration_roots[1], ::testing::Not(::testing::Contains(0)));
+}
+
+//! At the default verbosity, the text output shows the completed iterations but not the Debug lifecycle events
+TEST(Logger, iteration_completed_in_default_text_output) {
+  molpro::mpi::init();
+  auto solver = molpro::linalg::itsolv::create_LinearEigensystem<Rvector, Qvector>("Davidson");
+  solver->set_n_roots(2);
+  auto logger = std::make_shared<TextRecorder>();
+  solver->set_logger(logger);
+  DecoupledProblem problem(10);
+  std::vector<Rvector> c(2, Rvector(problem.n)), g(2, Rvector(problem.n));
+  EXPECT_TRUE(solver->solve(c, g, problem, true));
+  EXPECT_THAT(logger->contexts, ::testing::Contains("IterationCompleted"));
+  EXPECT_THAT(logger->contexts, ::testing::Not(::testing::Contains("NewIteration")));
+  EXPECT_THAT(logger->contexts, ::testing::Not(::testing::Contains("SolveStarted")));
 }

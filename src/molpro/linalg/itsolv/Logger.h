@@ -130,26 +130,6 @@ concept formattable = requires(const std::remove_cvref_t<T> &t, std::format_cont
 template <typename T>
 concept string_like = std::convertible_to<const std::remove_cvref_t<T> &, std::string_view>;
 
-namespace detail {
-template <typename T>
-consteval bool is_stringifiable() {
-  using U = std::remove_cvref_t<T>;
-  if constexpr (string_like<U> || formattable<U> || streamable<U>) {
-    return true;
-  } else if constexpr (pair_like<U>) {
-    return is_stringifiable<decltype(std::declval<const U &>().first)>() &&
-           is_stringifiable<decltype(std::declval<const U &>().second)>();
-  } else if constexpr (std::ranges::input_range<const U>) {
-    using E = std::ranges::range_reference_t<const U>;
-    if constexpr (std::same_as<std::remove_cvref_t<E>, U>)
-      return false;
-    else
-      return is_stringifiable<E>();
-  } else {
-    return false;
-  }
-}
-} // namespace detail
 
 namespace detail {
 //! Whether T is a range whose elements are of a different type than T (to exclude e.g. std::filesystem::path)
@@ -159,6 +139,22 @@ consteval bool is_printable_range() {
     return !std::same_as<std::remove_cvref_t<std::ranges::range_reference_t<const T>>, T>;
   else
     return false;
+}
+
+//! Mirrors the branches of stringify(), in the same order
+template <typename T>
+consteval bool is_stringifiable() {
+  using U = std::remove_cvref_t<T>;
+  if constexpr (string_like<U> || complex_number<U> || std::floating_point<U>) {
+    return true;
+  } else if constexpr (pair_like<U>) {
+    return is_stringifiable<decltype(std::declval<const U &>().first)>() &&
+           is_stringifiable<decltype(std::declval<const U &>().second)>();
+  } else if constexpr (is_printable_range<U>()) {
+    return is_stringifiable<std::ranges::range_reference_t<const U>>();
+  } else {
+    return formattable<U> || streamable<U>;
+  }
 }
 } // namespace detail
 
@@ -426,6 +422,15 @@ public:
   }
 
   /*!
+   * @returns Whether an event of context Ctx with the given severity and verbosity would reach any sink. Emitters can
+   * use this to skip preparing data that only goes into the payload.
+   */
+  template <log::event_context Ctx>
+  bool is_wanted(log::Severity severity, log::Verbosity verbosity) const {
+    return wants(typeid(Ctx), severity, verbosity, log::data_dump_context<Ctx>);
+  }
+
+  /*!
    * @brief Emits an event of a context whose payload is default-constructible (usually empty)
    */
   template <log::event_context Ctx>
@@ -445,7 +450,8 @@ public:
     const log::Generic::Payload payload{};
     if constexpr (sizeof...(args) > 0) {
       std::string arg_str;
-      ((arg_str += (arg_str.empty() ? "" : ", ") + log::stringify(args)), ...);
+      bool first = true;
+      ((arg_str += (first ? "" : ", ") + log::stringify(args), first = false), ...);
       const std::string text = log::compose(message, arg_str);
       dispatch(log::Record::make<log::Generic>(severity, verbosity, text, payload));
     } else {
