@@ -7,9 +7,10 @@ var searchData=
   ['parent_4',['parent',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Node.html#a87140036a8602a54fab125a88f7b32b0',1,'molpro::profiler::Node']]],
   ['path_5',['path',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1detail_1_1TreePath.html#aed5c02639d52ec44aa114b973fa04e98',1,'molpro::profiler::detail::TreePath']]],
   ['pp_6',['pp',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#a297b6cbd16b811019b4e3bb3a5a9702a',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
-  ['precision_7',['precision',['../structstd_1_1formatter_3_01molpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_3_01T_01_4_01_4.html#ac7b8b0f0ae64a455509dfbd3a8ea6755',1,'std::formatter&lt; molpro::linalg::itsolv::subspace::Matrix&lt; T &gt; &gt;']]],
-  ['prof_8',['prof',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1Profiler_1_1Proxy.html#a070687ea3da0dbc7d8f419132aa57d78',1,'molpro::profiler::Profiler::Proxy']]],
-  ['propose_5frspace_5fnorm_5fthresh_9',['propose_rspace_norm_thresh',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#aa51e64a078f65b8e0da3b41b780ecc9e',1,'molpro::linalg::itsolv::LinearEigensystemRSPT']]],
-  ['propose_5frspace_5fsvd_5fthresh_10',['propose_rspace_svd_thresh',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a42f2b7ab450d859463093a04931ccb21',1,'molpro::linalg::itsolv::LinearEigensystemRSPT']]],
-  ['pspace_11',['pspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a6a08f34eb3f54264bcd9f5917e522d22',1,'molpro::linalg::itsolv::subspace::XSpace']]]
+  ['pp_5fmatrix_7',['pp_matrix',['../structmolpro_1_1linalg_1_1itsolv_1_1PSpaceMetric.html#a157034fafb8511b05ff029f4310a1950',1,'molpro::linalg::itsolv::PSpaceMetric']]],
+  ['precision_8',['precision',['../structstd_1_1formatter_3_01molpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_3_01T_01_4_01_4.html#ac7b8b0f0ae64a455509dfbd3a8ea6755',1,'std::formatter&lt; molpro::linalg::itsolv::subspace::Matrix&lt; T &gt; &gt;']]],
+  ['prof_9',['prof',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1Profiler_1_1Proxy.html#a070687ea3da0dbc7d8f419132aa57d78',1,'molpro::profiler::Profiler::Proxy']]],
+  ['propose_5frspace_5fnorm_5fthresh_10',['propose_rspace_norm_thresh',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#aa51e64a078f65b8e0da3b41b780ecc9e',1,'molpro::linalg::itsolv::LinearEigensystemRSPT']]],
+  ['propose_5frspace_5fsvd_5fthresh_11',['propose_rspace_svd_thresh',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a42f2b7ab450d859463093a04931ccb21',1,'molpro::linalg::itsolv::LinearEigensystemRSPT']]],
+  ['pspace_12',['pspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a6a08f34eb3f54264bcd9f5917e522d22',1,'molpro::linalg::itsolv::subspace::XSpace']]]
 ];

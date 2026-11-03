@@ -55,7 +55,13 @@ var NAVTREE =
       [ "Suggested PR shape", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md30", null ],
       [ "What to expect from the LLM", "md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md31", null ]
     ] ],
-    [ "Iterative solvers", "TopicIterativeSolver.html", null ],
+    [ "Iterative solvers", "TopicIterativeSolver.html", [
+      [ "Generalised eigenproblems", "TopicIterativeSolver.html#TopicGeneralisedEigenproblems", [
+        [ "The problem", "TopicIterativeSolver.html#TopicGeneralisedProblem", null ],
+        [ "Solving", "TopicIterativeSolver.html#TopicGeneralisedSolve", null ],
+        [ "The stepwise interface", "TopicIterativeSolver.html#TopicGeneralisedStepwise", null ]
+      ] ]
+    ] ],
     [ "Spaces", "TopicSpaces.html", [
       [ "The container types R, Q and P", "TopicSpaces.html#SpacesContainers", null ],
       [ "R space (working set)", "TopicSpaces.html#SpacesR", null ],
@@ -92,21 +98,22 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "ExampleProblemDistrArray_8h-example.html",
-"classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrDDisk.html#a3ad1dab6c3d9845044cf0d646ec9b8d9",
-"classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a2a4ce8069d27031d26fad2ad7e4671dd",
-"classmolpro_1_1linalg_1_1array_1_1DistrArrayGA.html#aa62e16ad1b8b7fb61f272616388d002e",
-"classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#aa9594956602678fdad99d87de70bbff1",
-"classmolpro_1_1linalg_1_1array_1_1util_1_1ScopeLock.html#a88960f9abaefc06403a2b80f07d5827b",
-"classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a13d873368ab4f4a1862f9fa92a4c0b2c",
-"classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a340cd13fa9e2d978e896595086001e52",
-"classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#aa5742f7d0b8086265ee5259ffade5a10",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html#a17a61a1afe2eea41c68b135597914f09",
-"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverLinEig.html#ae3e779ff0db09d996d79546c3e1f6148",
-"classmolpro_1_1profiler_1_1Profiler.html#a92b04f4d8fb586675c205025c7af71b9",
-"namespacemolpro_1_1linalg_1_1array_1_1util.html#a1dfc512e3766ca80665fcd51104d5ae6",
-"namespacemolpro_1_1profiler_1_1dotgraph.html#a3642a4c9eb27db3c082b371b3edfed75",
-"structmolpro_1_1linalg_1_1array_1_1util_1_1DistrChunks.html#a24fa5526435f22f971dede8936ce2dde",
-"structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#afc80d997e12454aa6ea3b96e59f433a8"
+"classmolpro_1_1linalg_1_1array_1_1ArrayHandlerDistrDDisk.html#a020a538eea512191129c6d7532263fce",
+"classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a2545957d3297b23695193a23b5f5c583",
+"classmolpro_1_1linalg_1_1array_1_1DistrArrayGA.html#a8ea4d47f7fea173f44bf3b3e5eeb43da",
+"classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a85ddb4ea7a0c899fa40e4dd19e56a162",
+"classmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3.html#afcbde5f212701bfe2f935be5017b1efa",
+"classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acc90c71218893490dbf3ef515c1a9b14",
+"classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aee2db71ececd5ee2e7eea21c4bc8f58a",
+"classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a5fe4e96d8c075f3ac16f2cb44eec05d2",
+"classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricChecker.html#afeec81fcb0b82a69d8ac705a07dc45a0",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html#a155b5568d037955ce1be7c7bd3bf4d8d",
+"classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1SubspaceSolverRSPT.html#a7b1a72e28e82f7fc93edc4fa89b68492",
+"interfaceiterative__solver_1_1mpi__rank__global.html#acb24420e0ae6b03b3028bd4b8c803064",
+"namespacemolpro_1_1linalg_1_1itsolv.html#a81d731957693dbb73bc153797a651c8f",
+"structiterative__solver__pspace_1_1pspace.html#a31ded964a3790fad6862674ec5822a14",
+"structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html#a3f5559d2847d2741bd5defb453b1a438",
+"structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

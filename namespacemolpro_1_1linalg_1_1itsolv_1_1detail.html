@@ -116,6 +116,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html">eigenvalue_order</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Orders eigenvalues by non-descending real part, then by imaginary part.  <a href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricChecker.html">MetricChecker</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks that the metric of a generalised problem has the properties that its kind declares, as far as the subspace shows them.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricChecker.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricSolutions.html">MetricSolutions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The actions of a metric applied on the fly on solutions, in R vectors or, if there are not enough of them, Q vectors.  <a href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricSolutions.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html">orthogonalised_subspace</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A generalised eigenproblem reduced to a standard one by symmetric orthogonalisation of the metric.  <a href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,6 +201,10 @@ Functions</h2></td></tr>
 <tr class="memitem:ad63c6172e8baa3a325c27a4e5314c203"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad63c6172e8baa3a325c27a4e5314c203">append_overlap_with_r</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;overlap, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; P &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">pparams</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; Q &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">qparams</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; Q &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">dparams</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">handlers</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger)</td></tr>
 <tr class="memdesc:ad63c6172e8baa3a325c27a4e5314c203"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs overlap of the full subspace by appending overlap with new parameters to the overlap of previous subspace.  <br /></td></tr>
 <tr class="separator:ad63c6172e8baa3a325c27a4e5314c203"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a821ec085b57bcce17ea1943520e956ab" id="r_a821ec085b57bcce17ea1943520e956ab"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </td></tr>
+<tr class="memitem:a821ec085b57bcce17ea1943520e956ab"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a821ec085b57bcce17ea1943520e956ab">contribution_solutions</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;solutions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html">subspace::IXSpace</a>&lt; R, Q, P &gt; &amp;xspace)</td></tr>
+<tr class="memdesc:a821ec085b57bcce17ea1943520e956ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">The solutions scaled to unit length, as needed wherever thresholds apply to their coefficients or to norms of their projections (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ae0698882c0bfc722096198ab20683b20" title="Ensures that size Q space is within limit by proposing Q parameters for deletion.">limit_qspace_size()</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aaf70adb15e11786f878400d6a794df3e" title="Constructs the new D space by projecting the solutions onto Qd+D subspace and ensuring they are well ...">construct_dspace()</a>, D space resets): with a metric, the solutions are normalised in it, and the thresholds would otherwise depend on the scale of the metric.  <br /></td></tr>
+<tr class="separator:a821ec085b57bcce17ea1943520e956ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0698882c0bfc722096198ab20683b20" id="r_ae0698882c0bfc722096198ab20683b20"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </td></tr>
 <tr class="memitem:ae0698882c0bfc722096198ab20683b20"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ae0698882c0bfc722096198ab20683b20">limit_qspace_size</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html">subspace::Dimensions</a> &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">dims</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">QSpaceOptions</a> &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">opts</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;solutions, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger)</td></tr>
 <tr class="memdesc:ae0698882c0bfc722096198ab20683b20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures that size Q space is within limit by proposing Q parameters for deletion.  <br /></td></tr>
@@ -215,6 +225,15 @@ Functions</h2></td></tr>
 <tr class="memitem:aac72611a8065b403ca5a5c83511e2e92"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aac72611a8065b403ca5a5c83511e2e92">propose_rspace</a> (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">IterativeSolver</a>&lt; R, Q, P &gt; &amp;solver, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">residuals</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html">subspace::IXSpace</a>&lt; R, Q, P &gt; &amp;xspace, <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1ISubspaceSolver.html">subspace::ISubspaceSolver</a>&lt; R, Q, P &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">subspace_solver</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">handlers</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &amp;logger, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">RSpaceOptions</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt;::value_type_abs &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">r_opts</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">QSpaceOptions</a> &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">q_opts</a>, <a class="elRef" href="https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Profiler.html">molpro::profiler::Profiler</a> &amp;profiler)</td></tr>
 <tr class="memdesc:aac72611a8065b403ca5a5c83511e2e92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proposes new parameters for the subspace from the preconditioned residuals.  <br /></td></tr>
 <tr class="separator:aac72611a8065b403ca5a5c83511e2e92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebbc4b42ee8d868fa4bc81c06c7b82a8" id="r_aebbc4b42ee8d868fa4bc81c06c7b82a8"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a>  = std::enable_if_t&lt;std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;&gt; </td></tr>
+<tr class="memitem:aebbc4b42ee8d868fa4bc81c06c7b82a8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aebbc4b42ee8d868fa4bc81c06c7b82a8">precondition_default</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;action, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">shift</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;diagonals, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> *metric_diagonals, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">regularise</a>)</td></tr>
+<tr class="separator:aebbc4b42ee8d868fa4bc81c06c7b82a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fa8f4745fe20bd40551f15572fbf7a2" id="r_a5fa8f4745fe20bd40551f15572fbf7a2"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S &gt; </td></tr>
+<tr class="memitem:a5fa8f4745fe20bd40551f15572fbf7a2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a5fa8f4745fe20bd40551f15572fbf7a2">precondition_default</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;action, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">shift</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;diagonals, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> *metric_diagonals, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">regularise</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> T::iterator *=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nullptr</a>)</td></tr>
+<tr class="separator:a5fa8f4745fe20bd40551f15572fbf7a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcb3b8f67af20fc5d7534fe6b5b06b10" id="r_afcb3b8f67af20fc5d7534fe6b5b06b10"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a>  = std::enable_if_t&lt;!std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a>  = void&gt; </td></tr>
+<tr class="memitem:afcb3b8f67af20fc5d7534fe6b5b06b10"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#afcb3b8f67af20fc5d7534fe6b5b06b10">precondition_default</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;action, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">shift</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;diagonals, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> *metric_diagonals, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">regularise</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> std::enable_if&lt;!<a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html">has_iterator</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt;::value, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> * &gt;::type=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nullptr</a>)</td></tr>
+<tr class="separator:afcb3b8f67af20fc5d7534fe6b5b06b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ad63c6172e8baa3a325c27a4e5314c203" name="ad63c6172e8baa3a325c27a4e5314c203"></a>
@@ -361,7 +380,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>D space parameters and actions </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>D space parameters, actions, actions of the metric if the subspace stores them (otherwise empty), and the coefficients of the new D vectors in the deleted Q vectors (columns in the order of q_delete) followed by the old D vectors, one row per D vector </dd></dl>
 
 </div>
 </div>
@@ -482,6 +501,38 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a821ec085b57bcce17ea1943520e956ab" name="a821ec085b57bcce17ea1943520e956ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a821ec085b57bcce17ea1943520e956ab">&#9670;&#160;</a></span>contribution_solutions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; molpro::linalg::itsolv::detail::contribution_solutions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; value_type &gt; &amp;&#160;</td>
+          <td class="paramname"><em>solutions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html">subspace::IXSpace</a>&lt; R, Q, P &gt; &amp;&#160;</td>
+          <td class="paramname"><em>xspace</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The solutions scaled to unit length, as needed wherever thresholds apply to their coefficients or to norms of their projections (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ae0698882c0bfc722096198ab20683b20" title="Ensures that size Q space is within limit by proposing Q parameters for deletion.">limit_qspace_size()</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aaf70adb15e11786f878400d6a794df3e" title="Constructs the new D space by projecting the solutions onto Qd+D subspace and ensuring they are well ...">construct_dspace()</a>, D space resets): with a metric, the solutions are normalised in it, and the thresholds would otherwise depend on the scale of the metric. </p>
 
 </div>
 </div>
@@ -1057,6 +1108,162 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="aebbc4b42ee8d868fa4bc81c06c7b82a8" name="aebbc4b42ee8d868fa4bc81c06c7b82a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebbc4b42ee8d868fa4bc81c06c7b82a8">&#9670;&#160;</a></span>precondition_default() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a>  = std::enable_if_t&lt;std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::detail::precondition_default </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;&#160;</td>
+          <td class="paramname"><em>shift</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;&#160;</td>
+          <td class="paramname"><em>diagonals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> *&#160;</td>
+          <td class="paramname"><em>metric_diagonals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>regularise</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afcb3b8f67af20fc5d7534fe6b5b06b10" name="afcb3b8f67af20fc5d7534fe6b5b06b10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcb3b8f67af20fc5d7534fe6b5b06b10">&#9670;&#160;</a></span>precondition_default() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a>  = std::enable_if_t&lt;!std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a>  = void&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::detail::precondition_default </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;&#160;</td>
+          <td class="paramname"><em>shift</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;&#160;</td>
+          <td class="paramname"><em>diagonals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> *&#160;</td>
+          <td class="paramname"><em>metric_diagonals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>regularise</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> std::enable_if&lt;!<a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html">has_iterator</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt;::value, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> * &gt;::type&#160;</td>
+          <td class="paramname"> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nullptr</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5fa8f4745fe20bd40551f15572fbf7a2" name="a5fa8f4745fe20bd40551f15572fbf7a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fa8f4745fe20bd40551f15572fbf7a2">&#9670;&#160;</a></span>precondition_default() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::detail::precondition_default </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;&#160;</td>
+          <td class="paramname"><em>shift</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;&#160;</td>
+          <td class="paramname"><em>diagonals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> *&#160;</td>
+          <td class="paramname"><em>metric_diagonals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>regularise</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> T::iterator *&#160;</td>
+          <td class="paramname"> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nullptr</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab2d77d711dbe941b3e7a318e1f0d1976" name="ab2d77d711dbe941b3e7a318e1f0d1976"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab2d77d711dbe941b3e7a318e1f0d1976">&#9670;&#160;</a></span>project_out_and_orthonormalise()</h2>
 
@@ -1361,6 +1568,12 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Removes Q parameters that have smallest contribution to any solution until Q space size is within limit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">solutions</td><td>the solutions whose coefficients measure the contributions (see <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a821ec085b57bcce17ea1943520e956ab" title="The solutions scaled to unit length, as needed wherever thresholds apply to their coefficients or to ...">contribution_solutions()</a>), with columns for the current subspace </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

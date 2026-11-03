@@ -4,7 +4,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD =
     [ "SubspaceSolver", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a2fee82c5ea4b4dc66f9e0173ba1c7339", null ],
     [ "OptimizeSD", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#aa083792a8df576412f41879fbad9a164", null ],
     [ "add_vector", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a8976b993c5c2a8fe53a9b40898ea4626", null ],
-    [ "construct_residual", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a2a0132a2b2e6a29edf87f68f514e426d", null ],
+    [ "construct_residual", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a01ed3970d40b23e366f9978571fbcebd", null ],
     [ "end_iteration", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a59977558b57c095960ca116bb7b1f3c7", null ],
     [ "end_iteration", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a200c4935c6e218cf3e7bf80bb70e4646", null ],
     [ "end_iteration", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeSD.html#a713f270c65bfedc5aa91fe096aa25d79", null ],

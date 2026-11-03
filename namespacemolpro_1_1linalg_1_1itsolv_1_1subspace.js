@@ -21,10 +21,12 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1subspace =
       [ "H", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195ac1d9f50f86825a1a2302ec2449c17196", null ],
       [ "S", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195a5dbc98dcc983a70728bd082d1a47546e", null ],
       [ "rhs", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195a83ff9f9e3dd7561d3dd91204cf546b7e", null ],
-      [ "value", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195a2063c1608d6e0baf80249c42e2be5804", null ]
+      [ "value", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195a2063c1608d6e0baf80249c42e2be5804", null ],
+      [ "M", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195a69691c7bdcc3ce6d5d8a1361f22d04ac", null ]
     ] ],
     [ "as_string", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30dacede15a934f3b97b759ae1d2a7e3", null ],
     [ "conjugate_transpose_copy", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a6c39133f62bc149f9fe265657f208fb9", null ],
     [ "null_data", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#adb021336569d672f0bdb3fb44f10e6af", null ],
+    [ "square_blocks", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#ad674a62d292643883c786302821ac683", null ],
     [ "transpose_copy", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a48f71d3d15b8de9d41b31ed27a679f6f", null ]
 ];

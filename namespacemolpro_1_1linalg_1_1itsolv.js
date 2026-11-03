@@ -38,6 +38,7 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "OptimizeSDOptions", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeSDOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeSDOptions" ],
     [ "Options", "structmolpro_1_1linalg_1_1itsolv_1_1Options.html", "structmolpro_1_1linalg_1_1itsolv_1_1Options" ],
     [ "Problem", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html", "classmolpro_1_1linalg_1_1itsolv_1_1Problem" ],
+    [ "PSpaceMetric", "structmolpro_1_1linalg_1_1itsolv_1_1PSpaceMetric.html", "structmolpro_1_1linalg_1_1itsolv_1_1PSpaceMetric" ],
     [ "SolverFactory", "classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html", "classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory" ],
     [ "Statistics", "structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html", "structmolpro_1_1linalg_1_1itsolv_1_1Statistics" ],
     [ "SVD", "structmolpro_1_1linalg_1_1itsolv_1_1SVD.html", "structmolpro_1_1linalg_1_1itsolv_1_1SVD" ],
@@ -46,6 +47,16 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "Interpolate", "namespacemolpro_1_1linalg_1_1itsolv.html#ab03401c5cf0d0e3494964e960b960a7d", null ],
     [ "options_map", "namespacemolpro_1_1linalg_1_1itsolv.html#a784351a2599ca33773a9809818edb5a1", null ],
     [ "VecRef", "namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab", null ],
+    [ "MetricKind", "namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b", [
+      [ "Identity", "namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189", null ],
+      [ "HermitianPositiveDefinite", "namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138ba94606c58e7b813e73a829beb3c6fa604", null ],
+      [ "HermitianPositiveSemidefinite", "namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138ba0b102c79f6ad0a8829b8a4b5a5fd2aa0", null ],
+      [ "HermitianIndefinite", "namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138ba980cbaed356150f95d977df19b5b9927", null ]
+    ] ],
+    [ "MetricStorage", "namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5", [
+      [ "Stored", "namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7", null ],
+      [ "OnTheFly", "namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a90454013d6adfb8285ad4af579a064cd", null ]
+    ] ],
     [ "Verbosity", "namespacemolpro_1_1linalg_1_1itsolv.html#ac8246e59286ac3630c4c80231d6ed172", [
       [ "None", "namespacemolpro_1_1linalg_1_1itsolv.html#ac8246e59286ac3630c4c80231d6ed172a6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Summary", "namespacemolpro_1_1linalg_1_1itsolv.html#ac8246e59286ac3630c4c80231d6ed172a290612199861c31d1036b185b4e69b75", null ],
@@ -92,9 +103,8 @@ var namespacemolpro_1_1linalg_1_1itsolv =
     [ "operator<<", "namespacemolpro_1_1linalg_1_1itsolv.html#ae523c6ae5b58ddbf94d495325572c024", null ],
     [ "operator==", "namespacemolpro_1_1linalg_1_1itsolv.html#ad845d8e72c3518d938b7c0250c70de87", null ],
     [ "operator==", "namespacemolpro_1_1linalg_1_1itsolv.html#abb5e82e092066d4c7ff6124bb7664b58", null ],
-    [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#a2793bd32c0d81903b49d00c2c7421f6f", null ],
-    [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#abad4c61deaadee8b5f2b60e73a670d5e", null ],
-    [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#a559c1a0864d054c8d288f3fefb1b55e6", null ],
+    [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#ab127531d759030a015b27c126e4c8db7", null ],
+    [ "precondition_default", "namespacemolpro_1_1linalg_1_1itsolv.html#af02bf63c3c4b552302a340dabadaba84", null ],
     [ "printMatrix", "namespacemolpro_1_1linalg_1_1itsolv.html#ae7c8c4790146512e2ce34c7c45432411", null ],
     [ "printMatrix< double >", "namespacemolpro_1_1linalg_1_1itsolv.html#a42ef971868a57bfead245c92f65cd675", null ],
     [ "printMatrix< long double >", "namespacemolpro_1_1linalg_1_1itsolv.html#aacd2b235922f65d05a2954ef05cbae1c", null ],

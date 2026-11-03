@@ -6,7 +6,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS =
     [ "add_vector", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a06006188007b3f5240f089a813019b39", null ],
     [ "BFGS_update_1", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a3ef9a1f4fffae9f8af48b3fef2e3aa70", null ],
     [ "BFGS_update_2", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#aa5742f7d0b8086265ee5259ffade5a10", null ],
-    [ "construct_residual", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#ab20fe2bb9557a3d2c1f41ce3f87ebe87", null ],
+    [ "construct_residual", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a11b2cdfa142b7ed642b3cb03676809ed", null ],
     [ "end_iteration", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#aadfaf83aa684dac364076cd1a593c77f", null ],
     [ "end_iteration", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a129cec6f2f2ad88a8ee2df0b18659991", null ],
     [ "end_iteration", "classmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGS.html#a5e182b874043a52cc77b1acc0ef02e0e", null ],

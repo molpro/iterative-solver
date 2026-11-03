@@ -4,6 +4,7 @@ var structmolpro_1_1linalg_1_1itsolv_1_1Options =
     [ "Options", "structmolpro_1_1linalg_1_1itsolv_1_1Options.html#a37831f7f1c9e8ca25231cf360b9dadc1", null ],
     [ "Options", "structmolpro_1_1linalg_1_1itsolv_1_1Options.html#adf4361108ecfcb3699596d68b348af59", null ],
     [ "copy", "structmolpro_1_1linalg_1_1itsolv_1_1Options.html#a2b3e52ac368db1f195ee7b1f437967d5", null ],
+    [ "check_metric", "structmolpro_1_1linalg_1_1itsolv_1_1Options.html#acf8ed28a822ab69d964617f997574183", null ],
     [ "convergence_threshold", "structmolpro_1_1linalg_1_1itsolv_1_1Options.html#a8301b90cd1b614ee591695e194d40bfd", null ],
     [ "max_iter", "structmolpro_1_1linalg_1_1itsolv_1_1Options.html#ad2c23ab9becc59f81d30b10080deb732", null ],
     [ "max_p", "structmolpro_1_1linalg_1_1itsolv_1_1Options.html#afefb3302ebe4c1a16c43fb4168d47246", null ],

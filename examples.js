@@ -5,6 +5,7 @@ var examples =
     [ "LinearEigensystemExample.cpp", "LinearEigensystemExample_8cpp-example.html", null ],
     [ "LinearEigensystemMultirootExample.cpp", "LinearEigensystemMultirootExample_8cpp-example.html", null ],
     [ "LinearEigensystemDistrArrayExample.cpp", "LinearEigensystemDistrArrayExample_8cpp-example.html", null ],
+    [ "GeneralizedEigensystemExample.cpp", "GeneralizedEigensystemExample_8cpp-example.html", null ],
     [ "LinearEquationsExample.cpp", "LinearEquationsExample_8cpp-example.html", null ],
     [ "NonLinearEquationsExample.cpp", "NonLinearEquationsExample_8cpp-example.html", null ],
     [ "OptimizeExample.cpp", "OptimizeExample_8cpp-example.html", null ],

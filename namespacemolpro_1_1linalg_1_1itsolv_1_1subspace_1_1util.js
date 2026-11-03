@@ -8,5 +8,7 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util =
     [ "max_element_index", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a79bbc77614a73eb3bfbfabae065e8ba9", null ],
     [ "modified_gram_schmidt", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a84fae4b760805b4b3e0b31eb13fb0ce2", null ],
     [ "overlap", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#ac0dd4d58842e4944c982bed2cf3816ce", null ],
-    [ "overlap", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a46075f91ae876b661a01a219963a317d", null ]
+    [ "overlap", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a46075f91ae876b661a01a219963a317d", null ],
+    [ "solution_norms", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#af43a3802ba6342af33eb84436decbac5", null ],
+    [ "unit_length_solutions", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a796720cf47e1575a9e87ed58630bc594", null ]
 ];

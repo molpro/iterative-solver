@@ -213,6 +213,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract class defining the problem-specific interface for the simplified solver interface to <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html" title="Base class defining the interface common to all iterative solvers.">IterativeSolver</a>.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1PSpaceMetric.html">PSpaceMetric</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The metric of a problem in the P space, for <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a9f2cb71b3bc51e8163c0658113fb2929" title="Add P-space vectors to the expansion set for linear methods.">IterativeSolver::add_p()</a>  <a href="structmolpro_1_1linalg_1_1itsolv_1_1PSpaceMetric.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html">SolverFactory</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory for creating instances of specific solver implementations from the corresponding <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> object.  <a href="classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -254,6 +257,26 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ac8246e59286ac3630c4c80231d6ed172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies how much detail <code>IterativeSolver::solve</code> should write to output.  <a href="namespacemolpro_1_1linalg_1_1itsolv.html#ac8246e59286ac3630c4c80231d6ed172">More...</a><br /></td></tr>
 <tr class="separator:ac8246e59286ac3630c4c80231d6ed172"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad919129e9410e49e8f2ded4da9b9138b" id="r_ad919129e9410e49e8f2ded4da9b9138b"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a> { <br />
+&#160;&#160;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189">Identity</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138ba94606c58e7b813e73a829beb3c6fa604">HermitianPositiveDefinite</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138ba0b102c79f6ad0a8829b8a4b5a5fd2aa0">HermitianPositiveSemidefinite</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138ba980cbaed356150f95d977df19b5b9927">HermitianIndefinite</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:ad919129e9410e49e8f2ded4da9b9138b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The kind of metric M of a generalised problem, such as the eigenproblem A v = lambda M v.  <a href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">More...</a><br /></td></tr>
+<tr class="separator:ad919129e9410e49e8f2ded4da9b9138b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab18d8ced82b65255f63d1efcfed9bde5" id="r_ab18d8ced82b65255f63d1efcfed9bde5"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a> { <br />
+&#160;&#160;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7">Stored</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a90454013d6adfb8285ad4af579a064cd">OnTheFly</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:ab18d8ced82b65255f63d1efcfed9bde5"><td class="mdescLeft">&#160;</td><td class="mdescRight">How a solver obtains the actions of a metric on its subspace vectors, see IterativeSolver::set_metric()  <a href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">More...</a><br /></td></tr>
+<tr class="separator:ab18d8ced82b65255f63d1efcfed9bde5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -401,15 +424,14 @@ Functions</h2></td></tr>
 <tr class="memitem:aa2245800026088096803c477ba48f674"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">auto</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aa2245800026088096803c477ba48f674">remove_elements</a> (std::vector&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">U</a> &gt; &amp;indices)</td></tr>
 <tr class="memdesc:aa2245800026088096803c477ba48f674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes indices from a vector.  <br /></td></tr>
 <tr class="separator:aa2245800026088096803c477ba48f674"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2793bd32c0d81903b49d00c2c7421f6f" id="r_a2793bd32c0d81903b49d00c2c7421f6f"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a>  = std::enable_if_t&lt;std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;&gt; </td></tr>
-<tr class="memitem:a2793bd32c0d81903b49d00c2c7421f6f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a2793bd32c0d81903b49d00c2c7421f6f">precondition_default</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;action, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">shift</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;diagonals)</td></tr>
-<tr class="separator:a2793bd32c0d81903b49d00c2c7421f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a559c1a0864d054c8d288f3fefb1b55e6" id="r_a559c1a0864d054c8d288f3fefb1b55e6"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S &gt; </td></tr>
-<tr class="memitem:a559c1a0864d054c8d288f3fefb1b55e6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a559c1a0864d054c8d288f3fefb1b55e6">precondition_default</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;action, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">shift</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;diagonals, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> T::iterator *=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nullptr</a>)</td></tr>
-<tr class="separator:a559c1a0864d054c8d288f3fefb1b55e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abad4c61deaadee8b5f2b60e73a670d5e" id="r_abad4c61deaadee8b5f2b60e73a670d5e"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a>  = std::enable_if_t&lt;!std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a>  = void&gt; </td></tr>
-<tr class="memitem:abad4c61deaadee8b5f2b60e73a670d5e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#abad4c61deaadee8b5f2b60e73a670d5e">precondition_default</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;action, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">shift</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;diagonals, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> std::enable_if&lt;!<a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html">has_iterator</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt;::value, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> * &gt;::type=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nullptr</a>)</td></tr>
-<tr class="separator:abad4c61deaadee8b5f2b60e73a670d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab127531d759030a015b27c126e4c8db7" id="r_ab127531d759030a015b27c126e4c8db7"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S &gt; </td></tr>
+<tr class="memitem:ab127531d759030a015b27c126e4c8db7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab127531d759030a015b27c126e4c8db7">precondition_default</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;action, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">shift</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;diagonals)</td></tr>
+<tr class="memdesc:ab127531d759030a015b27c126e4c8db7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Davidson preconditioner: divides each action[k] elementwise by (diagonals - shift[k])  <br /></td></tr>
+<tr class="separator:ab127531d759030a015b27c126e4c8db7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af02bf63c3c4b552302a340dabadaba84" id="r_af02bf63c3c4b552302a340dabadaba84"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S &gt; </td></tr>
+<tr class="memitem:af02bf63c3c4b552302a340dabadaba84"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#af02bf63c3c4b552302a340dabadaba84">precondition_default</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;action, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">shift</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;diagonals, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;metric_diagonals)</td></tr>
+<tr class="memdesc:af02bf63c3c4b552302a340dabadaba84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Davidson preconditioner for a generalised eigenproblem: divides each action[k] elementwise by (diagonals - shift[k] * metric_diagonals)  <br /></td></tr>
+<tr class="separator:af02bf63c3c4b552302a340dabadaba84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb5e82e092066d4c7ff6124bb7664b58" id="r_abb5e82e092066d4c7ff6124bb7664b58"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> value_type &gt; </td></tr>
 <tr class="memitem:abb5e82e092066d4c7ff6124bb7664b58"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#abb5e82e092066d4c7ff6124bb7664b58">operator==</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html">Interpolator</a>&lt; value_type &gt;::point &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">lhs</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Interpolator.html">Interpolator</a>&lt; value_type &gt;::point &amp;rhs)</td></tr>
 <tr class="separator:abb5e82e092066d4c7ff6124bb7664b58"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -559,6 +581,71 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div>
 </div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ad919129e9410e49e8f2ded4da9b9138b" name="ad919129e9410e49e8f2ded4da9b9138b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad919129e9410e49e8f2ded4da9b9138b">&#9670;&#160;</a></span>MetricKind</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">enum</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">molpro::linalg::itsolv::MetricKind</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The kind of metric M of a generalised problem, such as the eigenproblem A v = lambda M v. </p>
+<p>Which kinds are supported depends on the solver, see <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#ae2fb71d72da6de348ca58bd6460f23b6" title="Whether the solver supports a metric of the given kind. MetricKind::Identity is always supported.">IterativeSolver::supports_metric()</a>: <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html" title="One specific implementation of LinearEigensystem using Davidson&#39;s algorithm with modifications to man...">LinearEigensystemDavidson</a> supports Identity and HermitianPositiveDefinite, all other solvers only Identity. HermitianPositiveSemidefinite and HermitianIndefinite are reserved for future solvers. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189" name="ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189"></a>Identity&#160;</td><td class="fielddoc"><p>M = 1, i.e. no metric. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad919129e9410e49e8f2ded4da9b9138ba94606c58e7b813e73a829beb3c6fa604" name="ad919129e9410e49e8f2ded4da9b9138ba94606c58e7b813e73a829beb3c6fa604"></a>HermitianPositiveDefinite&#160;</td><td class="fielddoc"><p>Hermitian and positive definite, e.g. the overlap matrix of a non-orthogonal basis. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad919129e9410e49e8f2ded4da9b9138ba0b102c79f6ad0a8829b8a4b5a5fd2aa0" name="ad919129e9410e49e8f2ded4da9b9138ba0b102c79f6ad0a8829b8a4b5a5fd2aa0"></a>HermitianPositiveSemidefinite&#160;</td><td class="fielddoc"><p>Hermitian and positive semidefinite, i.e. possibly singular. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad919129e9410e49e8f2ded4da9b9138ba980cbaed356150f95d977df19b5b9927" name="ad919129e9410e49e8f2ded4da9b9138ba980cbaed356150f95d977df19b5b9927"></a>HermitianIndefinite&#160;</td><td class="fielddoc"><p>Hermitian and indefinite, e.g. in RPA, TDHF or Bethe-Salpeter equations. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ab18d8ced82b65255f63d1efcfed9bde5" name="ab18d8ced82b65255f63d1efcfed9bde5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab18d8ced82b65255f63d1efcfed9bde5">&#9670;&#160;</a></span>MetricStorage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">enum</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">molpro::linalg::itsolv::MetricStorage</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How a solver obtains the actions of a metric on its subspace vectors, see <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">IterativeSolver::set_metric()</a> </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7" name="ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7"></a>Stored&#160;</td><td class="fielddoc"><p>the actions of the metric on all subspace vectors are kept </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab18d8ced82b65255f63d1efcfed9bde5a90454013d6adfb8285ad4af579a064cd" name="ab18d8ced82b65255f63d1efcfed9bde5a90454013d6adfb8285ad4af579a064cd"></a>OnTheFly&#160;</td><td class="fielddoc"><p>the metric is applied to the solutions whenever residuals are constructed </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="ac8246e59286ac3630c4c80231d6ed172" name="ac8246e59286ac3630c4c80231d6ed172"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac8246e59286ac3630c4c80231d6ed172">&#9670;&#160;</a></span>Verbosity</h2>
 
@@ -689,7 +776,7 @@ template&lt;class R , class Q  = R, class P  = std::map&lt;size_t, typename R::v
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="LinearEigensystemDistrArrayExample_8cpp-example.html#a1">LinearEigensystemDistrArrayExample.cpp</a>, <a class="el" href="LinearEigensystemExample_8cpp-example.html#a1">LinearEigensystemExample.cpp</a>, <a class="el" href="LinearEigensystemMultirootExample_8cpp-example.html#a1">LinearEigensystemMultirootExample.cpp</a>, <a class="el" href="LinearEquationsExample_8cpp-example.html#a1">LinearEquationsExample.cpp</a>, <a class="el" href="NonLinearEquationsExample_8cpp-example.html#a1">NonLinearEquationsExample.cpp</a>, <a class="el" href="OptimizeDistrArrayExample_8cpp-example.html#a1">OptimizeDistrArrayExample.cpp</a>, and <a class="el" href="OptimizeExample_8cpp-example.html#a1">OptimizeExample.cpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="GeneralizedEigensystemExample_8cpp-example.html#a4">GeneralizedEigensystemExample.cpp</a>, <a class="el" href="LinearEigensystemDistrArrayExample_8cpp-example.html#a1">LinearEigensystemDistrArrayExample.cpp</a>, <a class="el" href="LinearEigensystemExample_8cpp-example.html#a1">LinearEigensystemExample.cpp</a>, <a class="el" href="LinearEigensystemMultirootExample_8cpp-example.html#a1">LinearEigensystemMultirootExample.cpp</a>, <a class="el" href="LinearEquationsExample_8cpp-example.html#a1">LinearEquationsExample.cpp</a>, <a class="el" href="NonLinearEquationsExample_8cpp-example.html#a1">NonLinearEquationsExample.cpp</a>, <a class="el" href="OptimizeDistrArrayExample_8cpp-example.html#a1">OptimizeDistrArrayExample.cpp</a>, and <a class="el" href="OptimizeExample_8cpp-example.html#a1">OptimizeExample.cpp</a>.</dd>
 </dl>
 
 </div>
@@ -957,6 +1044,8 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Takes a begin and end iterators and returns a vector of references to each element. </p>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="GeneralizedEigensystemExample_8cpp-example.html#a5">GeneralizedEigensystemExample.cpp</a>.</dd>
+</dl>
 
 </div>
 </div>
@@ -2341,13 +2430,13 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
-<a id="a2793bd32c0d81903b49d00c2c7421f6f" name="a2793bd32c0d81903b49d00c2c7421f6f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2793bd32c0d81903b49d00c2c7421f6f">&#9670;&#160;</a></span>precondition_default() <span class="overload">[1/3]</span></h2>
+<a id="ab127531d759030a015b27c126e4c8db7" name="ab127531d759030a015b27c126e4c8db7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab127531d759030a015b27c126e4c8db7">&#9670;&#160;</a></span>precondition_default() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a>  = std::enable_if_t&lt;std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;&gt; </div>
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::precondition_default </td>
@@ -2375,15 +2464,25 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
       </table>
 </div><div class="memdoc">
 
+<p>Davidson preconditioner: divides each action[k] elementwise by (diagonals - shift[k]) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">action</td><td>On entry, the residuals; on exit, the preconditioned residuals </td></tr>
+    <tr><td class="paramname">shift</td><td>The shift for each of the residuals </td></tr>
+    <tr><td class="paramname">diagonals</td><td>The diagonal elements of the kernel </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="abad4c61deaadee8b5f2b60e73a670d5e" name="abad4c61deaadee8b5f2b60e73a670d5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abad4c61deaadee8b5f2b60e73a670d5e">&#9670;&#160;</a></span>precondition_default() <span class="overload">[2/3]</span></h2>
+<a id="af02bf63c3c4b552302a340dabadaba84" name="af02bf63c3c4b552302a340dabadaba84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af02bf63c3c4b552302a340dabadaba84">&#9670;&#160;</a></span>precondition_default() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a>  = std::enable_if_t&lt;!std::is_base_of&lt;molpro::linalg::array::DistrArray, T&gt;::value&gt;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a>  = void&gt; </div>
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::precondition_default </td>
@@ -2406,50 +2505,8 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> std::enable_if&lt;!<a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1has__iterator.html">has_iterator</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt;::value, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> * &gt;::type&#160;</td>
-          <td class="paramname"> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nullptr</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a559c1a0864d054c8d288f3fefb1b55e6" name="a559c1a0864d054c8d288f3fefb1b55e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a559c1a0864d054c8d288f3fefb1b55e6">&#9670;&#160;</a></span>precondition_default() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> S &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::precondition_default </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>action</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; S &gt; &amp;&#160;</td>
-          <td class="paramname"><em>shift</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;&#160;</td>
-          <td class="paramname"><em>diagonals</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> T::iterator *&#160;</td>
-          <td class="paramname"> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>metric_diagonals</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2458,6 +2515,17 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Davidson preconditioner for a generalised eigenproblem: divides each action[k] elementwise by (diagonals - shift[k] * metric_diagonals) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">action</td><td>On entry, the residuals; on exit, the preconditioned residuals </td></tr>
+    <tr><td class="paramname">shift</td><td>The shift for each of the residuals </td></tr>
+    <tr><td class="paramname">diagonals</td><td>The diagonal elements of the kernel </td></tr>
+    <tr><td class="paramname">metric_diagonals</td><td>The diagonal elements of the metric </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -4106,6 +4174,8 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Takes a begin and end iterators and returns a vector of references to each element. </p>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="GeneralizedEigensystemExample_8cpp-example.html#a6">GeneralizedEigensystemExample.cpp</a>.</dd>
+</dl>
 
 </div>
 </div>

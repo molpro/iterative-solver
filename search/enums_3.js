@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['rmatype_0',['RMAType',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3.html#a43e14b96f07b56ed6865773c6c5fdcdb',1,'molpro::linalg::array::DistrArrayMPI3']]]
+  ['metrickind_0',['MetricKind',['../namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b',1,'molpro::linalg::itsolv']]],
+  ['metricstorage_1',['MetricStorage',['../namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5',1,'molpro::linalg::itsolv']]]
 ];

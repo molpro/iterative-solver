@@ -107,6 +107,8 @@ var annotated =
           [ "detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html", [
             [ "DSpaceResetter", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter" ],
             [ "eigenvalue_order", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order" ],
+            [ "MetricChecker", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricChecker.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricChecker" ],
+            [ "MetricSolutions", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricSolutions.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricSolutions" ],
             [ "orthogonalised_subspace", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace" ]
           ] ],
           [ "interpolate_detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail.html", [
@@ -191,6 +193,7 @@ var annotated =
           [ "OptimizeSDOptions", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeSDOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1OptimizeSDOptions" ],
           [ "Options", "structmolpro_1_1linalg_1_1itsolv_1_1Options.html", "structmolpro_1_1linalg_1_1itsolv_1_1Options" ],
           [ "Problem", "classmolpro_1_1linalg_1_1itsolv_1_1Problem.html", "classmolpro_1_1linalg_1_1itsolv_1_1Problem" ],
+          [ "PSpaceMetric", "structmolpro_1_1linalg_1_1itsolv_1_1PSpaceMetric.html", "structmolpro_1_1linalg_1_1itsolv_1_1PSpaceMetric" ],
           [ "SolverFactory", "classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html", "classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory" ],
           [ "Statistics", "structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html", "structmolpro_1_1linalg_1_1itsolv_1_1Statistics" ],
           [ "SVD", "structmolpro_1_1linalg_1_1itsolv_1_1SVD.html", "structmolpro_1_1linalg_1_1itsolv_1_1SVD" ]

@@ -129,6 +129,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a46075f91ae876b661a01a219963a317d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt;::value_type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a46075f91ae876b661a01a219963a317d">overlap</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, <a class="el" href="classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html">array::ArrayHandler</a>&lt; R, R &gt; &amp;handler)</td></tr>
 <tr class="memdesc:a46075f91ae876b661a01a219963a317d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates overlap matrix for a parameter set. <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html" title="Matrix container that allows simple data access, slicing, copying and resizing without loosing data.">Matrix</a> is hermitian by construction.  <br /></td></tr>
 <tr class="separator:a46075f91ae876b661a01a219963a317d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af43a3802ba6342af33eb84436decbac5" id="r_af43a3802ba6342af33eb84436decbac5"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; </td></tr>
+<tr class="memitem:af43a3802ba6342af33eb84436decbac5"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; real_type_t&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#af43a3802ba6342af33eb84436decbac5">solution_norms</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;solutions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#ac0dd4d58842e4944c982bed2cf3816ce">overlap</a>)</td></tr>
+<tr class="memdesc:af43a3802ba6342af33eb84436decbac5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Euclidean norms of the solutions x_i = sum_j c_ij b_j, from their subspace coefficients c (one row per solution) and the overlap matrix S_jk = &lt;b_j|b_k&gt; of the subspace vectors, as sqrt((c S c^dagger)_ii), calculated together with one matrix product.  <br /></td></tr>
+<tr class="separator:af43a3802ba6342af33eb84436decbac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a796720cf47e1575a9e87ed58630bc594" id="r_a796720cf47e1575a9e87ed58630bc594"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; </td></tr>
+<tr class="memitem:a796720cf47e1575a9e87ed58630bc594"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a796720cf47e1575a9e87ed58630bc594">unit_length_solutions</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;solutions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#ac0dd4d58842e4944c982bed2cf3816ce">overlap</a>)</td></tr>
+<tr class="memdesc:a796720cf47e1575a9e87ed58630bc594"><td class="mdescLeft">&#160;</td><td class="mdescRight">The subspace coefficients of the solutions scaled to unit Euclidean length, so that their sizes can be compared with thresholds whatever the normalisation of the solutions (e.g. in the metric of a generalised eigenproblem)  <br /></td></tr>
+<tr class="separator:a796720cf47e1575a9e87ed58630bc594"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acca5cd45efff25ad75678b06382128e7" id="r_acca5cd45efff25ad75678b06382128e7"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; </td></tr>
 <tr class="memitem:acca5cd45efff25ad75678b06382128e7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#acca5cd45efff25ad75678b06382128e7">matrix_symmetrize</a> (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;mat)</td></tr>
 <tr class="memdesc:acca5cd45efff25ad75678b06382128e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces a matrix by its hermitian part, which for a real element type is its symmetric part.  <br /></td></tr>
@@ -218,7 +226,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 <div class="line"><span class="keywordflow">for</span>( <span class="keywordtype">size_t</span> <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">i</a> = 0; <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">i</a> &lt; <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n_rows</a>; ++<a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">i</a>){</div>
 <div class="line">  <a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">mat_new</a>.row(<a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">i</a>) = mat.row(<a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">order</a>[<a class="code hl_function" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">i</a>]);</div>
 <div class="line">}</div>
-<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_html_a96296abbb9a7e19d170b8af1628a2685"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a96296abbb9a7e19d170b8af1628a2685">molpro::linalg::itsolv::subspace::util::eye_order</a></div><div class="ttdeci">std::vector&lt; size_t &gt; eye_order(const Slice &amp;mat)</div><div class="ttdoc">Returns order of rows in a matrix slice that brings it closest to identity.</div><div class="ttdef"><b>Definition</b> util.h:113</div></div>
+<div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_html_a96296abbb9a7e19d170b8af1628a2685"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html#a96296abbb9a7e19d170b8af1628a2685">molpro::linalg::itsolv::subspace::util::eye_order</a></div><div class="ttdeci">std::vector&lt; size_t &gt; eye_order(const Slice &amp;mat)</div><div class="ttdoc">Returns order of rows in a matrix slice that brings it closest to identity.</div><div class="ttdef"><b>Definition</b> util.h:158</div></div>
 <div class="ttc" id="anamespacemolpro_1_1linalg_1_1itsolv_html_a616a52291a7ab62bf83431afe0d0b24f"><div class="ttname"><a href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">molpro::linalg::itsolv::create_LinearEigensystem</a></div><div class="ttdeci">std::unique_ptr&lt; LinearEigensystem&lt; R, Q, P &gt; &gt; create_LinearEigensystem(const LinearEigensystemOptions &amp;options, const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers=std::make_shared&lt; molpro::linalg::itsolv::ArrayHandlers&lt; R, Q, P &gt; &gt;())</div><div class="ttdef"><b>Definition</b> SolverFactory.h:111</div></div>
 </div><!-- fragment --> <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -471,6 +479,77 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Calculates overlap matrix for a parameter set. <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html" title="Matrix container that allows simple data access, slicing, copying and resizing without loosing data.">Matrix</a> is hermitian by construction. </p>
+
+</div>
+</div>
+<a id="af43a3802ba6342af33eb84436decbac5" name="af43a3802ba6342af33eb84436decbac5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af43a3802ba6342af33eb84436decbac5">&#9670;&#160;</a></span>solution_norms()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; real_type_t&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &gt; molpro::linalg::itsolv::subspace::util::solution_norms </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>solutions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>overlap</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The Euclidean norms of the solutions x_i = sum_j c_ij b_j, from their subspace coefficients c (one row per solution) and the overlap matrix S_jk = &lt;b_j|b_k&gt; of the subspace vectors, as sqrt((c S c^dagger)_ii), calculated together with one matrix product. </p>
+
+</div>
+</div>
+<a id="a796720cf47e1575a9e87ed58630bc594" name="a796720cf47e1575a9e87ed58630bc594"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a796720cf47e1575a9e87ed58630bc594">&#9670;&#160;</a></span>unit_length_solutions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; molpro::linalg::itsolv::subspace::util::unit_length_solutions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>solutions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>overlap</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The subspace coefficients of the solutions scaled to unit Euclidean length, so that their sizes can be compared with thresholds whatever the normalisation of the solutions (e.g. in the metric of a generalised eigenproblem) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">solutions</td><td>coefficients of the solutions, one row per solution </td></tr>
+    <tr><td class="paramname">overlap</td><td>overlap matrix of the subspace vectors </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -149,6 +149,11 @@ Public Types</h2></td></tr>
 <tr class="separator:a83cc580bb3f1dfab899fa9b4cd68babf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64287edfda9bc2abbdafd958b6cfe682" id="r_a64287edfda9bc2abbdafd958b6cfe682"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a64287edfda9bc2abbdafd958b6cfe682">fapply_on_p_type</a> = std::function&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>(<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a83cc580bb3f1dfab899fa9b4cd68babf">VectorP</a> &gt; &amp;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; P &gt; &amp;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;)&gt;</td></tr>
 <tr class="separator:a64287edfda9bc2abbdafd958b6cfe682"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90f900eebb92c50e12d128114ef22354" id="r_a90f900eebb92c50e12d128114ef22354"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a90f900eebb92c50e12d128114ef22354">fapply_metric_type</a> = std::function&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>(<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;)&gt;</td></tr>
+<tr class="memdesc:a90f900eebb92c50e12d128114ef22354"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function type for applying the metric to a set of vectors (first argument), writing the results into the second.  <br /></td></tr>
+<tr class="separator:a90f900eebb92c50e12d128114ef22354"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5c920484a60ef6b5e50ca316033f1e8" id="r_af5c920484a60ef6b5e50ca316033f1e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#af5c920484a60ef6b5e50ca316033f1e8">PSpaceMetric</a> = <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1PSpaceMetric.html">itsolv::PSpaceMetric</a>&lt; R, P &gt;</td></tr>
+<tr class="separator:af5c920484a60ef6b5e50ca316033f1e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -173,6 +178,48 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac87a7c8e687fb61521e51daed48b1ba5" id="r_ac87a7c8e687fb61521e51daed48b1ba5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#ac87a7c8e687fb61521e51daed48b1ba5">solve</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)=0</td></tr>
 <tr class="memdesc:ac87a7c8e687fb61521e51daed48b1ba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplified one-call solver.    <br /></td></tr>
 <tr class="separator:ac87a7c8e687fb61521e51daed48b1ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcbf1270846ee380eb3253803580360c" id="r_adcbf1270846ee380eb3253803580360c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#adcbf1270846ee380eb3253803580360c">solve</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">delete</a></td></tr>
+<tr class="separator:adcbf1270846ee380eb3253803580360c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e3cf8bb95ad44c559540e78e621ba7d" id="r_a5e3cf8bb95ad44c559540e78e621ba7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a5e3cf8bb95ad44c559540e78e621ba7d">solve</a> (R &amp;parameters, R &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">delete</a></td></tr>
+<tr class="separator:a5e3cf8bb95ad44c559540e78e621ba7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38deeb713e9c0b888c95f9d87db74421" id="r_a38deeb713e9c0b888c95f9d87db74421"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a38deeb713e9c0b888c95f9d87db74421">solve</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">delete</a></td></tr>
+<tr class="separator:a38deeb713e9c0b888c95f9d87db74421"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad716e4cb4e214124ab5d60c22ffc9c4a" id="r_ad716e4cb4e214124ab5d60c22ffc9c4a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#ad716e4cb4e214124ab5d60c22ffc9c4a">solve</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)</td></tr>
+<tr class="memdesc:ad716e4cb4e214124ab5d60c22ffc9c4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplified one-call solver for problems that may have a metric, e.g. the generalised eigenproblem A v = lambda M v.  <br /></td></tr>
+<tr class="separator:ad716e4cb4e214124ab5d60c22ffc9c4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a963393cba444d8f6488861ebe084862b" id="r_a963393cba444d8f6488861ebe084862b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a963393cba444d8f6488861ebe084862b">solve</a> (R &amp;parameters, R &amp;actions, R &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)</td></tr>
+<tr class="memdesc:a963393cba444d8f6488861ebe084862b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplified one-call solver for problems that may have a metric, e.g. the generalised eigenproblem A v = lambda M v.    <br /></td></tr>
+<tr class="separator:a963393cba444d8f6488861ebe084862b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae83e6055bfd126e79f96ef4bdfd37ac3" id="r_ae83e6055bfd126e79f96ef4bdfd37ac3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#ae83e6055bfd126e79f96ef4bdfd37ac3">solve</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, std::vector&lt; R &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)</td></tr>
+<tr class="memdesc:ae83e6055bfd126e79f96ef4bdfd37ac3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplified one-call solver for problems that may have a metric, e.g. the generalised eigenproblem A v = lambda M v.    <br /></td></tr>
+<tr class="separator:ae83e6055bfd126e79f96ef4bdfd37ac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83d663a14f196e110c1880025bc0a75b" id="r_a83d663a14f196e110c1880025bc0a75b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a83d663a14f196e110c1880025bc0a75b">solve</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">delete</a></td></tr>
+<tr class="memdesc:a83d663a14f196e110c1880025bc0a75b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A temporary problem is rejected, as the solver keeps references to the problem beyond <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>  <br /></td></tr>
+<tr class="separator:a83d663a14f196e110c1880025bc0a75b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb380c129045e0806d55b5817dd25762" id="r_afb380c129045e0806d55b5817dd25762"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#afb380c129045e0806d55b5817dd25762">solve</a> (R &amp;parameters, R &amp;actions, R &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">delete</a></td></tr>
+<tr class="memdesc:afb380c129045e0806d55b5817dd25762"><td class="mdescLeft">&#160;</td><td class="mdescRight">A temporary problem is rejected, as the solver keeps references to the problem beyond <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>    <br /></td></tr>
+<tr class="separator:afb380c129045e0806d55b5817dd25762"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56965f83ab5635a3f66f2b94bea4d053" id="r_a56965f83ab5635a3f66f2b94bea4d053"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a56965f83ab5635a3f66f2b94bea4d053">solve</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, std::vector&lt; R &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">generate_initial_guess</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">delete</a></td></tr>
+<tr class="memdesc:a56965f83ab5635a3f66f2b94bea4d053"><td class="mdescLeft">&#160;</td><td class="mdescRight">A temporary problem is rejected, as the solver keeps references to the problem beyond <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>    <br /></td></tr>
+<tr class="separator:a56965f83ab5635a3f66f2b94bea4d053"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2fb71d72da6de348ca58bd6460f23b6" id="r_ae2fb71d72da6de348ca58bd6460f23b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#ae2fb71d72da6de348ca58bd6460f23b6">supports_metric</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">kind</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:ae2fb71d72da6de348ca58bd6460f23b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the solver supports a metric of the given kind. <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189" title="M = 1, i.e. no metric.">MetricKind::Identity</a> is always supported.  <br /></td></tr>
+<tr class="separator:ae2fb71d72da6de348ca58bd6460f23b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeae7103481586c8ec34c018eb3435414" id="r_aeae7103481586c8ec34c018eb3435414"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414">set_metric</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">kind</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">storage</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7">MetricStorage::Stored</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a90f900eebb92c50e12d128114ef22354">fapply_metric_type</a> apply_metric={})</td></tr>
+<tr class="memdesc:aeae7103481586c8ec34c018eb3435414"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v, for the stepwise interface. <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> calls it itself.  <br /></td></tr>
+<tr class="separator:aeae7103481586c8ec34c018eb3435414"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc1d89da27d49910ccd444d1ac2c89d6" id="r_acc1d89da27d49910ccd444d1ac2c89d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acc1d89da27d49910ccd444d1ac2c89d6">metric_kind</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:acc1d89da27d49910ccd444d1ac2c89d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The kind of metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a>  <br /></td></tr>
+<tr class="separator:acc1d89da27d49910ccd444d1ac2c89d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd695373e1ee8143982b9943b379a2df" id="r_abd695373e1ee8143982b9943b379a2df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#abd695373e1ee8143982b9943b379a2df">metric_storage</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:abd695373e1ee8143982b9943b379a2df"><td class="mdescLeft">&#160;</td><td class="mdescRight">How the actions of the metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a> are obtained.  <br /></td></tr>
+<tr class="separator:abd695373e1ee8143982b9943b379a2df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02cafe839997d219b3eaed5d6dc639d0" id="r_a02cafe839997d219b3eaed5d6dc639d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a02cafe839997d219b3eaed5d6dc639d0">set_check_metric</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">check</a>)</td></tr>
+<tr class="memdesc:a02cafe839997d219b3eaed5d6dc639d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a9f2cb71b3bc51e8163c0658113fb2929" title="Add P-space vectors to the expansion set for linear methods.">add_p()</a> and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector()</a> check that the metric is Hermitian and, for the positive (semi)definite kinds, positive (semi)definite on the subspace (default: true). The checks cost a few operations on vectors in every iteration.  <br /></td></tr>
+<tr class="separator:a02cafe839997d219b3eaed5d6dc639d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d9eccb6a80de2a082dc6ba76b81bf69" id="r_a0d9eccb6a80de2a082dc6ba76b81bf69"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a0d9eccb6a80de2a082dc6ba76b81bf69">get_check_metric</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:a0d9eccb6a80de2a082dc6ba76b81bf69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the metric is checked, see <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a02cafe839997d219b3eaed5d6dc639d0" title="Sets whether add_p() and add_vector() check that the metric is Hermitian and, for the positive (semi)...">set_check_metric()</a>  <br /></td></tr>
+<tr class="separator:a0d9eccb6a80de2a082dc6ba76b81bf69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76529da2bee144bb54981e0350702554" id="r_a76529da2bee144bb54981e0350702554"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554">add_vector</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions)=0</td></tr>
 <tr class="memdesc:a76529da2bee144bb54981e0350702554"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take, typically, a current solution and residual, and add it to the solution space.  <br /></td></tr>
 <tr class="separator:a76529da2bee144bb54981e0350702554"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,9 +227,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9a83c4f944907a2a74f115d99062a073"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a35595f2fb582a71f2b9fbe7164af4a" id="r_a2a35595f2fb582a71f2b9fbe7164af4a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a2a35595f2fb582a71f2b9fbe7164af4a">add_vector</a> (R &amp;parameters, R &amp;action, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a027b41582a1fff9ebb679e6ae6e2fe5f">value_type</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a1a1d0c58c9e41e405bfa1cfff8179e1e">value</a>=0)=0</td></tr>
 <tr class="separator:a2a35595f2fb582a71f2b9fbe7164af4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d74f630c5484395f49e5c08fcf502c5" id="r_a7d74f630c5484395f49e5c08fcf502c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a7d74f630c5484395f49e5c08fcf502c5">add_vector</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>)</td></tr>
+<tr class="memdesc:a7d74f630c5484395f49e5c08fcf502c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;)</a>, for a problem with a metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a>  <br /></td></tr>
+<tr class="separator:a7d74f630c5484395f49e5c08fcf502c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a825c2bb1fb6d02b93c60b8de9715450c" id="r_a825c2bb1fb6d02b93c60b8de9715450c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a825c2bb1fb6d02b93c60b8de9715450c">add_vector</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;actions, std::vector&lt; R &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>)</td></tr>
+<tr class="memdesc:a825c2bb1fb6d02b93c60b8de9715450c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;)</a>, for a problem with a metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a>    <br /></td></tr>
+<tr class="separator:a825c2bb1fb6d02b93c60b8de9715450c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15614ea774454db6b42842a125ab9154" id="r_a15614ea774454db6b42842a125ab9154"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a15614ea774454db6b42842a125ab9154">add_vector</a> (R &amp;parameters, R &amp;actions, R &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>)</td></tr>
+<tr class="memdesc:a15614ea774454db6b42842a125ab9154"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;)</a>, for a problem with a metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a>    <br /></td></tr>
+<tr class="separator:a15614ea774454db6b42842a125ab9154"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f2cb71b3bc51e8163c0658113fb2929" id="r_a9f2cb71b3bc51e8163c0658113fb2929"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a9f2cb71b3bc51e8163c0658113fb2929">add_p</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; P &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">pparams</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a027b41582a1fff9ebb679e6ae6e2fe5f">value_type</a> &gt; &amp;pp_action_matrix, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;action, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a64287edfda9bc2abbdafd958b6cfe682">fapply_on_p_type</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">apply_p</a>)=0</td></tr>
 <tr class="memdesc:a9f2cb71b3bc51e8163c0658113fb2929"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add P-space vectors to the expansion set for linear methods.  <br /></td></tr>
 <tr class="separator:a9f2cb71b3bc51e8163c0658113fb2929"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c2c04c40ee5e919acd459791a1e49ba" id="r_a1c2c04c40ee5e919acd459791a1e49ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a1c2c04c40ee5e919acd459791a1e49ba">add_p</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; P &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">pparams</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a027b41582a1fff9ebb679e6ae6e2fe5f">value_type</a> &gt; &amp;pp_action_matrix, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;action, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a64287edfda9bc2abbdafd958b6cfe682">fapply_on_p_type</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">apply_p</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#af5c920484a60ef6b5e50ca316033f1e8">PSpaceMetric</a> &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric</a>)</td></tr>
+<tr class="memdesc:a1c2c04c40ee5e919acd459791a1e49ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like add_p(const CVecRef.  <br /></td></tr>
+<tr class="separator:a1c2c04c40ee5e919acd459791a1e49ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2720fd380825d896d248c1a45a2f5b01" id="r_a2720fd380825d896d248c1a45a2f5b01"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a2720fd380825d896d248c1a45a2f5b01">clearP</a> ()=0</td></tr>
 <tr class="separator:a2720fd380825d896d248c1a45a2f5b01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a520b858fe56b45bf13090a62854f2586" id="r_a520b858fe56b45bf13090a62854f2586"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a520b858fe56b45bf13090a62854f2586">solution</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">roots</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;residual)=0</td></tr>
@@ -294,6 +353,24 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a61bef6701d26a46fc551457392aff3d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a90f900eebb92c50e12d128114ef22354" name="a90f900eebb92c50e12d128114ef22354"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90f900eebb92c50e12d128114ef22354">&#9670;&#160;</a></span>fapply_metric_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::fapply_metric_type =  std::function&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>(<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt;R&gt;&amp;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt;R&gt;&amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function type for applying the metric to a set of vectors (first argument), writing the results into the second. </p>
+
+</div>
+</div>
 <a id="a64287edfda9bc2abbdafd958b6cfe682" name="a64287edfda9bc2abbdafd958b6cfe682"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a64287edfda9bc2abbdafd958b6cfe682">&#9670;&#160;</a></span>fapply_on_p_type</h2>
 
@@ -308,6 +385,22 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
       </table>
 </div><div class="memdoc">
 <p>Function type for applying matrix to the P space vectors and accumulating result in a residual </p>
+
+</div>
+</div>
+<a id="af5c920484a60ef6b5e50ca316033f1e8" name="af5c920484a60ef6b5e50ca316033f1e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5c920484a60ef6b5e50ca316033f1e8">&#9670;&#160;</a></span>PSpaceMetric</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::PSpaceMetric =  <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1PSpaceMetric.html">itsolv::PSpaceMetric</a>&lt;R, P&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -492,7 +585,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9f2cb71b3bc51e8163c0658113fb2929" name="a9f2cb71b3bc51e8163c0658113fb2929"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f2cb71b3bc51e8163c0658113fb2929">&#9670;&#160;</a></span>add_p()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f2cb71b3bc51e8163c0658113fb2929">&#9670;&#160;</a></span>add_p() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -561,8 +654,84 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="a1c2c04c40ee5e919acd459791a1e49ba" name="a1c2c04c40ee5e919acd459791a1e49ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c2c04c40ee5e919acd459791a1e49ba">&#9670;&#160;</a></span>add_p() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::add_p </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; P &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pparams</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a027b41582a1fff9ebb679e6ae6e2fe5f">value_type</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pp_action_matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a64287edfda9bc2abbdafd958b6cfe682">fapply_on_p_type</a>&#160;</td>
+          <td class="paramname"><em>apply_p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#af5c920484a60ef6b5e50ca316033f1e8">PSpaceMetric</a> &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Like add_p(const CVecRef. </p>
+<p>&amp;, const array::Span&lt;value_type&gt;&amp;, const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;, fapply_on_p_type), for a problem with a metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a>, which this overload requires. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pparams</td><td>the vectors to add, as for the other overload </td></tr>
+    <tr><td class="paramname">pp_action_matrix</td><td>the kernel matrix in the P space, as for the other overload </td></tr>
+    <tr><td class="paramname">parameters</td><td>Used as scratch working space </td></tr>
+    <tr><td class="paramname">action</td><td>On exit, the residual of the interpolated solution, missing the contributions from the P space </td></tr>
+    <tr><td class="paramname">apply_p</td><td>A function that adds the action of the kernel on vectors in the P space </td></tr>
+    <tr><td class="paramname">metric</td><td>the metric in the P space </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of vectors contained in parameters, action, parametersP </dd></dl>
+
+</div>
+</div>
 <a id="a76529da2bee144bb54981e0350702554" name="a76529da2bee144bb54981e0350702554"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76529da2bee144bb54981e0350702554">&#9670;&#160;</a></span>add_vector() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a76529da2bee144bb54981e0350702554">&#9670;&#160;</a></span>add_vector() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -610,8 +779,63 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="a7d74f630c5484395f49e5c08fcf502c5" name="a7d74f630c5484395f49e5c08fcf502c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d74f630c5484395f49e5c08fcf502c5">&#9670;&#160;</a></span>add_vector() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::add_vector </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Like <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;)</a>, for a problem with a metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameters</td><td>On input, the current solution or expansion vector. On exit, undefined. </td></tr>
+    <tr><td class="paramname">actions</td><td>On input, the action of the kernel on parameters. On exit, a vector set that should be preconditioned before returning to <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acfce319e750a3e3a925c489b91dbf7e2" title="Behaviour depends on the solver.">end_iteration()</a>. </td></tr>
+    <tr><td class="paramname">metric_actions</td><td>On input, the action of the metric on parameters. On exit, undefined. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The size of the new working set. </dd></dl>
+
+</div>
+</div>
 <a id="a2a35595f2fb582a71f2b9fbe7164af4a" name="a2a35595f2fb582a71f2b9fbe7164af4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a35595f2fb582a71f2b9fbe7164af4a">&#9670;&#160;</a></span>add_vector() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a35595f2fb582a71f2b9fbe7164af4a">&#9670;&#160;</a></span>add_vector() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -654,8 +878,63 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="a15614ea774454db6b42842a125ab9154" name="a15614ea774454db6b42842a125ab9154"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15614ea774454db6b42842a125ab9154">&#9670;&#160;</a></span>add_vector() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::add_vector </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Like <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;)</a>, for a problem with a metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a>   </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameters</td><td>On input, the current solution or expansion vector. On exit, undefined. </td></tr>
+    <tr><td class="paramname">actions</td><td>On input, the action of the kernel on parameters. On exit, a vector set that should be preconditioned before returning to <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acfce319e750a3e3a925c489b91dbf7e2" title="Behaviour depends on the solver.">end_iteration()</a>. </td></tr>
+    <tr><td class="paramname">metric_actions</td><td>On input, the action of the metric on parameters. On exit, undefined. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The size of the new working set.   </dd></dl>
+
+</div>
+</div>
 <a id="a9a83c4f944907a2a74f115d99062a073" name="a9a83c4f944907a2a74f115d99062a073"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a83c4f944907a2a74f115d99062a073">&#9670;&#160;</a></span>add_vector() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a83c4f944907a2a74f115d99062a073">&#9670;&#160;</a></span>add_vector() <span class="overload">[5/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -689,6 +968,61 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a825c2bb1fb6d02b93c60b8de9715450c" name="a825c2bb1fb6d02b93c60b8de9715450c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a825c2bb1fb6d02b93c60b8de9715450c">&#9670;&#160;</a></span>add_vector() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::add_vector </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Like <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;)</a>, for a problem with a metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a>   </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameters</td><td>On input, the current solution or expansion vector. On exit, undefined. </td></tr>
+    <tr><td class="paramname">actions</td><td>On input, the action of the kernel on parameters. On exit, a vector set that should be preconditioned before returning to <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#acfce319e750a3e3a925c489b91dbf7e2" title="Behaviour depends on the solver.">end_iteration()</a>. </td></tr>
+    <tr><td class="paramname">metric_actions</td><td>On input, the action of the metric on parameters. On exit, undefined. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The size of the new working set.   </dd></dl>
 
 </div>
 </div>
@@ -1006,6 +1340,35 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="a0d9eccb6a80de2a082dc6ba76b81bf69" name="a0d9eccb6a80de2a082dc6ba76b81bf69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d9eccb6a80de2a082dc6ba76b81bf69">&#9670;&#160;</a></span>get_check_metric()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::get_check_metric </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether the metric is checked, see <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a02cafe839997d219b3eaed5d6dc639d0" title="Sets whether add_p() and add_vector() check that the metric is Hermitian and, for the positive (semi)...">set_check_metric()</a> </p>
+
+</div>
+</div>
 <a id="ae39e8d02193ed8d5690723433f5be0b8" name="ae39e8d02193ed8d5690723433f5be0b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae39e8d02193ed8d5690723433f5be0b8">&#9670;&#160;</a></span>get_max_iter()</h2>
 
@@ -1166,6 +1529,64 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc1d89da27d49910ccd444d1ac2c89d6" name="acc1d89da27d49910ccd444d1ac2c89d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc1d89da27d49910ccd444d1ac2c89d6">&#9670;&#160;</a></span>metric_kind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::metric_kind </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The kind of metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a> </p>
+
+</div>
+</div>
+<a id="abd695373e1ee8143982b9943b379a2df" name="abd695373e1ee8143982b9943b379a2df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd695373e1ee8143982b9943b379a2df">&#9670;&#160;</a></span>metric_storage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::metric_storage </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How the actions of the metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a> are obtained. </p>
 
 </div>
 </div>
@@ -1379,6 +1800,36 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="a02cafe839997d219b3eaed5d6dc639d0" name="a02cafe839997d219b3eaed5d6dc639d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02cafe839997d219b3eaed5d6dc639d0">&#9670;&#160;</a></span>set_check_metric()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::set_check_metric </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>check</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets whether <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a9f2cb71b3bc51e8163c0658113fb2929" title="Add P-space vectors to the expansion set for linear methods.">add_p()</a> and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector()</a> check that the metric is Hermitian and, for the positive (semi)definite kinds, positive (semi)definite on the subspace (default: true). The checks cost a few operations on vectors in every iteration. </p>
+
+</div>
+</div>
 <a id="a60e0c4b8bc55a1c746aecbc04aaec2f1" name="a60e0c4b8bc55a1c746aecbc04aaec2f1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a60e0c4b8bc55a1c746aecbc04aaec2f1">&#9670;&#160;</a></span>set_convergence_threshold()</h2>
 
@@ -1528,6 +1979,62 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeae7103481586c8ec34c018eb3435414" name="aeae7103481586c8ec34c018eb3435414"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeae7103481586c8ec34c018eb3435414">&#9670;&#160;</a></span>set_metric()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::set_metric </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a>&#160;</td>
+          <td class="paramname"><em>kind</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a>&#160;</td>
+          <td class="paramname"><em>storage</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7">MetricStorage::Stored</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a90f900eebb92c50e12d128114ef22354">fapply_metric_type</a>&#160;</td>
+          <td class="paramname"><em>apply_metric</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v, for the stepwise interface. <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> calls it itself. </p>
+<p>It has to be called before the first <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a9f2cb71b3bc51e8163c0658113fb2929" title="Add P-space vectors to the expansion set for linear methods.">add_p()</a> or <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector()</a>. On a non-empty subspace it may only be called again with the same kind and storage, replacing apply_metric. Throws if the solver does not support kind.</p>
+<p>Once a metric other than the identity is declared, every <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector()</a> has to give the actions of the metric. Solutions are then normalised such that |&lt;x|M|x&gt;| = 1, and their residuals are A x - lambda M x. The errors are the norms of the residuals of the solutions scaled to unit length, |A x - lambda M x| / |x|, which do not depend on the scale of M and are the same as without a metric if M is the identity.</p>
+<p><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a9f2cb71b3bc51e8163c0658113fb2929" title="Add P-space vectors to the expansion set for linear methods.">add_p()</a> and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector()</a> throw std::runtime_error if the actions of the metric show that it is not Hermitian or, for the positive (semi)definite kinds, that it is not positive (semi)definite, unless switched off with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a02cafe839997d219b3eaed5d6dc639d0" title="Sets whether add_p() and add_vector() check that the metric is Hermitian and, for the positive (semi)...">set_check_metric()</a>. These checks see the metric only on the subspace, so that, e.g., an indefinite metric is noticed only once one of its negative directions enters the subspace; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a61bef6701d26a46fc551457392aff3d8" title="Test a supplied problem class.">test_problem()</a> checks the metric of a <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html" title="Abstract class defining the problem-specific interface for the simplified solver interface to Iterati...">Problem</a> more directly. The metric matrix of the P space is checked before the P space is added, but the vectors given to <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector()</a> are part of the subspace when the check of positivity fails. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>the kind of metric </td></tr>
+    <tr><td class="paramname">storage</td><td>how the solver obtains the actions of the metric on its subspace vectors: with <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7" title="the actions of the metric on all subspace vectors are kept">MetricStorage::Stored</a> it keeps those given to <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a76529da2bee144bb54981e0350702554" title="Take, typically, a current solution and residual, and add it to the solution space.">add_vector()</a>; with <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a90454013d6adfb8285ad4af579a064cd" title="the metric is applied to the solutions whenever residuals are constructed">MetricStorage::OnTheFly</a>, which is worthwhile where the metric is cheap to apply, it keeps none, and calls apply_metric on the solutions whenever it constructs residuals instead. Irrelevant for <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189" title="M = 1, i.e. no metric.">MetricKind::Identity</a>. </td></tr>
+    <tr><td class="paramname">apply_metric</td><td>applies the metric, given exactly for <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a90454013d6adfb8285ad4af579a064cd" title="the metric is applied to the solutions whenever residuals are constructed">MetricStorage::OnTheFly</a>; it has to remain valid as long as residuals are constructed </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1787,6 +2294,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Construct solution and residual for a given set of roots. </p>
+<p>For a problem solved with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> whose metric is applied on the fly (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a2a97f2cb5d97be2f62808ecb59ca8255" title="How IterativeSolver::solve() obtains the actions of the metric on its subspace vectors,...">Problem::metric_storage()</a>), this applies the metric through the problem, which therefore has to be still alive. </p>
 
 </div>
 </div>
@@ -1978,8 +2486,59 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="adcbf1270846ee380eb3253803580360c" name="adcbf1270846ee380eb3253803580360c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcbf1270846ee380eb3253803580360c">&#9670;&#160;</a></span>solve() <span class="overload">[1/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>A temporary problem is rejected, as the solver may keep references to the problem beyond <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>, e.g. for a P space </p>
+
+</div>
+</div>
 <a id="a527854d92a5f67f6bee487f46ea02524" name="a527854d92a5f67f6bee487f46ea02524"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a527854d92a5f67f6bee487f46ea02524">&#9670;&#160;</a></span>solve() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a527854d92a5f67f6bee487f46ea02524">&#9670;&#160;</a></span>solve() <span class="overload">[2/12]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2038,12 +2597,197 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the solution was found</dd></dl>
 <p>If a P space is used (max_p &gt; 0, diagonal elements are available and the selected P space is at least as large as the number of roots), the initial subspace is the P space alone, and neither the contents of parameters on entry nor a generated initial guess are used. If max_p &gt; 0 and diagonal elements are available but the selected P space is smaller than the number of roots, no P space is used and the initial guess is generated from the diagonal elements, irrespective of generate_initial_guess; the contents of parameters on entry are not used in this case either.</p>
-<p>Starting vectors, whether generated or taken from parameters, are only used for the roots in the working set, at most one per root. On a solver that is used again after an earlier <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>, roots that have already converged are not in the working set, so fewer guesses, or none at all, are generated. </p>
+<p>Starting vectors, whether generated or taken from parameters, are only used for the roots in the working set, at most one per root. On a solver that is used again after an earlier <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>, roots that have already converged are not in the working set, so fewer guesses, or none at all, are generated.</p>
+<p>A problem with a metric (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a00085da3f395932692cbd453a1adf41c" title="The kind of metric M of the problem. Anything other than MetricKind::Identity turns the eigenproblem ...">Problem::metric_kind()</a> other than <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189" title="M = 1, i.e. no metric.">MetricKind::Identity</a>) has to be solved with the overload taking buffers for the actions of the metric; this one throws for it.</p>
+<p>The solver may keep references to problem for later calls such as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a520b858fe56b45bf13090a62854f2586" title="Construct solution and residual for a given set of roots.">solution()</a>, e.g. for a P space, so problem has to outlive them; a further call of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> replaces them. A temporary problem is therefore rejected at compile time. </p>
+
+</div>
+</div>
+<a id="a83d663a14f196e110c1880025bc0a75b" name="a83d663a14f196e110c1880025bc0a75b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83d663a14f196e110c1880025bc0a75b">&#9670;&#160;</a></span>solve() <span class="overload">[3/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A temporary problem is rejected, as the solver keeps references to the problem beyond <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> </p>
+
+</div>
+</div>
+<a id="ad716e4cb4e214124ab5d60c22ffc9c4a" name="ad716e4cb4e214124ab5d60c22ffc9c4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad716e4cb4e214124ab5d60c22ffc9c4a">&#9670;&#160;</a></span>solve() <span class="overload">[4/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Simplified one-call solver for problems that may have a metric, e.g. the generalised eigenproblem A v = lambda M v. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameters</td><td>A set of scratch vectors, as for <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;, const Problem&lt;R&gt;&amp;,
+bool)</a> </td></tr>
+    <tr><td class="paramname">actions</td><td>A set of scratch vectors. It should have the same size as parameters. </td></tr>
+    <tr><td class="paramname">metric_actions</td><td>A set of scratch vectors, of the same size as parameters. The solver uses them for the actions of the metric on new expansion vectors, which it needs also when the metric is applied on the fly, as scratch space, and to hand the diagonal elements of the metric to the preconditioner. </td></tr>
+    <tr><td class="paramname">problem</td><td>A <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html" title="Abstract class defining the problem-specific interface for the simplified solver interface to Iterati...">Problem</a> object defining the problem to be solved </td></tr>
+    <tr><td class="paramname">generate_initial_guess</td><td>Whether to start with a guess based on diagonal elements (true) or on the contents of parameters (false) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the solution was found</dd></dl>
+<p>Behaves like <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;, const Problem&lt;R&gt;&amp;, bool)</a>, and for a problem without a metric exactly so. For a problem with a metric, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a> is called with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a00085da3f395932692cbd453a1adf41c" title="The kind of metric M of the problem. Anything other than MetricKind::Identity turns the eigenproblem ...">Problem::metric_kind()</a> (throwing if the solver does not support it) and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a2a97f2cb5d97be2f62808ecb59ca8255" title="How IterativeSolver::solve() obtains the actions of the metric on its subspace vectors,...">Problem::metric_storage()</a>, with, for <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a90454013d6adfb8285ad4af579a064cd" title="the metric is applied to the solutions whenever residuals are constructed">MetricStorage::OnTheFly</a>, a function calling <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ac7b6effbc236ec0f28abc7f950698bd5" title="Calculate the action of the metric on a set of parameters. Called only if metric_kind() is not Metric...">Problem::metric_action()</a>. The actions of kernel and metric are calculated together by <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#aaf1e66f7be7da7552dda8c8118c23fef" title="Calculate the actions of the kernel and of the metric on a set of parameters together....">Problem::action_with_metric()</a>. If the problem provides diagonals(), it has to provide metric_diagonals() too; both are passed to the preconditioner, and a generated initial guess and the P space are selected from the lowest ratios of the diagonal elements of the kernel and the metric. A P space additionally needs <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#afa36cefff0b4e34617f97f9d26ab09e4" title="Calculate the metric matrix in the P space, for a problem with a metric (metric_kind())">Problem::pp_metric_matrix()</a> and, unless the metric is applied on the fly, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a673866a310ba3f360bdfa951c5787798" title="Calculate the action of the metric on a set of vectors in the P space, for a problem with a metric (m...">Problem::p_metric_action()</a>.</p>
+<p>The solver keeps references to problem for later calls such as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a520b858fe56b45bf13090a62854f2586" title="Construct solution and residual for a given set of roots.">solution()</a>, so problem has to outlive them; a further call of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> replaces them. A temporary problem is therefore rejected at compile time. </p>
+
+</div>
+</div>
+<a id="a5e3cf8bb95ad44c559540e78e621ba7d" name="a5e3cf8bb95ad44c559540e78e621ba7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e3cf8bb95ad44c559540e78e621ba7d">&#9670;&#160;</a></span>solve() <span class="overload">[5/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p></p>
+<p>A temporary problem is rejected, as the solver may keep references to the problem beyond <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>, e.g. for a P space   </p>
 
 </div>
 </div>
 <a id="a15457ee3cf4ffe270f869a3bedae6ef3" name="a15457ee3cf4ffe270f869a3bedae6ef3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15457ee3cf4ffe270f869a3bedae6ef3">&#9670;&#160;</a></span>solve() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a15457ee3cf4ffe270f869a3bedae6ef3">&#9670;&#160;</a></span>solve() <span class="overload">[6/12]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2102,12 +2846,197 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the solution was found</dd></dl>
 <p>If a P space is used (max_p &gt; 0, diagonal elements are available and the selected P space is at least as large as the number of roots), the initial subspace is the P space alone, and neither the contents of parameters on entry nor a generated initial guess are used. If max_p &gt; 0 and diagonal elements are available but the selected P space is smaller than the number of roots, no P space is used and the initial guess is generated from the diagonal elements, irrespective of generate_initial_guess; the contents of parameters on entry are not used in this case either.</p>
-<p>Starting vectors, whether generated or taken from parameters, are only used for the roots in the working set, at most one per root. On a solver that is used again after an earlier <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>, roots that have already converged are not in the working set, so fewer guesses, or none at all, are generated.   </p>
+<p>Starting vectors, whether generated or taken from parameters, are only used for the roots in the working set, at most one per root. On a solver that is used again after an earlier <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>, roots that have already converged are not in the working set, so fewer guesses, or none at all, are generated.</p>
+<p>A problem with a metric (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a00085da3f395932692cbd453a1adf41c" title="The kind of metric M of the problem. Anything other than MetricKind::Identity turns the eigenproblem ...">Problem::metric_kind()</a> other than <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189" title="M = 1, i.e. no metric.">MetricKind::Identity</a>) has to be solved with the overload taking buffers for the actions of the metric; this one throws for it.</p>
+<p>The solver may keep references to problem for later calls such as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a520b858fe56b45bf13090a62854f2586" title="Construct solution and residual for a given set of roots.">solution()</a>, e.g. for a P space, so problem has to outlive them; a further call of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> replaces them. A temporary problem is therefore rejected at compile time.   </p>
+
+</div>
+</div>
+<a id="afb380c129045e0806d55b5817dd25762" name="afb380c129045e0806d55b5817dd25762"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb380c129045e0806d55b5817dd25762">&#9670;&#160;</a></span>solve() <span class="overload">[7/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A temporary problem is rejected, as the solver keeps references to the problem beyond <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>   </p>
+
+</div>
+</div>
+<a id="a963393cba444d8f6488861ebe084862b" name="a963393cba444d8f6488861ebe084862b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a963393cba444d8f6488861ebe084862b">&#9670;&#160;</a></span>solve() <span class="overload">[8/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">R &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Simplified one-call solver for problems that may have a metric, e.g. the generalised eigenproblem A v = lambda M v.   </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameters</td><td>A set of scratch vectors, as for <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;, const Problem&lt;R&gt;&amp;,
+bool)</a> </td></tr>
+    <tr><td class="paramname">actions</td><td>A set of scratch vectors. It should have the same size as parameters. </td></tr>
+    <tr><td class="paramname">metric_actions</td><td>A set of scratch vectors, of the same size as parameters. The solver uses them for the actions of the metric on new expansion vectors, which it needs also when the metric is applied on the fly, as scratch space, and to hand the diagonal elements of the metric to the preconditioner. </td></tr>
+    <tr><td class="paramname">problem</td><td>A <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html" title="Abstract class defining the problem-specific interface for the simplified solver interface to Iterati...">Problem</a> object defining the problem to be solved </td></tr>
+    <tr><td class="paramname">generate_initial_guess</td><td>Whether to start with a guess based on diagonal elements (true) or on the contents of parameters (false) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the solution was found</dd></dl>
+<p>Behaves like <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;, const Problem&lt;R&gt;&amp;, bool)</a>, and for a problem without a metric exactly so. For a problem with a metric, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a> is called with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a00085da3f395932692cbd453a1adf41c" title="The kind of metric M of the problem. Anything other than MetricKind::Identity turns the eigenproblem ...">Problem::metric_kind()</a> (throwing if the solver does not support it) and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a2a97f2cb5d97be2f62808ecb59ca8255" title="How IterativeSolver::solve() obtains the actions of the metric on its subspace vectors,...">Problem::metric_storage()</a>, with, for <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a90454013d6adfb8285ad4af579a064cd" title="the metric is applied to the solutions whenever residuals are constructed">MetricStorage::OnTheFly</a>, a function calling <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ac7b6effbc236ec0f28abc7f950698bd5" title="Calculate the action of the metric on a set of parameters. Called only if metric_kind() is not Metric...">Problem::metric_action()</a>. The actions of kernel and metric are calculated together by <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#aaf1e66f7be7da7552dda8c8118c23fef" title="Calculate the actions of the kernel and of the metric on a set of parameters together....">Problem::action_with_metric()</a>. If the problem provides diagonals(), it has to provide metric_diagonals() too; both are passed to the preconditioner, and a generated initial guess and the P space are selected from the lowest ratios of the diagonal elements of the kernel and the metric. A P space additionally needs <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#afa36cefff0b4e34617f97f9d26ab09e4" title="Calculate the metric matrix in the P space, for a problem with a metric (metric_kind())">Problem::pp_metric_matrix()</a> and, unless the metric is applied on the fly, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a673866a310ba3f360bdfa951c5787798" title="Calculate the action of the metric on a set of vectors in the P space, for a problem with a metric (m...">Problem::p_metric_action()</a>.</p>
+<p>The solver keeps references to problem for later calls such as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a520b858fe56b45bf13090a62854f2586" title="Construct solution and residual for a given set of roots.">solution()</a>, so problem has to outlive them; a further call of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> replaces them. A temporary problem is therefore rejected at compile time.   </p>
+
+</div>
+</div>
+<a id="a38deeb713e9c0b888c95f9d87db74421" name="a38deeb713e9c0b888c95f9d87db74421"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38deeb713e9c0b888c95f9d87db74421">&#9670;&#160;</a></span>solve() <span class="overload">[9/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p></p>
+<p>A temporary problem is rejected, as the solver may keep references to the problem beyond <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>, e.g. for a P space   </p>
 
 </div>
 </div>
 <a id="ac87a7c8e687fb61521e51daed48b1ba5" name="ac87a7c8e687fb61521e51daed48b1ba5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac87a7c8e687fb61521e51daed48b1ba5">&#9670;&#160;</a></span>solve() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac87a7c8e687fb61521e51daed48b1ba5">&#9670;&#160;</a></span>solve() <span class="overload">[10/12]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2166,7 +3095,139 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the solution was found</dd></dl>
 <p>If a P space is used (max_p &gt; 0, diagonal elements are available and the selected P space is at least as large as the number of roots), the initial subspace is the P space alone, and neither the contents of parameters on entry nor a generated initial guess are used. If max_p &gt; 0 and diagonal elements are available but the selected P space is smaller than the number of roots, no P space is used and the initial guess is generated from the diagonal elements, irrespective of generate_initial_guess; the contents of parameters on entry are not used in this case either.</p>
-<p>Starting vectors, whether generated or taken from parameters, are only used for the roots in the working set, at most one per root. On a solver that is used again after an earlier <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>, roots that have already converged are not in the working set, so fewer guesses, or none at all, are generated.   </p>
+<p>Starting vectors, whether generated or taken from parameters, are only used for the roots in the working set, at most one per root. On a solver that is used again after an earlier <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>, roots that have already converged are not in the working set, so fewer guesses, or none at all, are generated.</p>
+<p>A problem with a metric (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a00085da3f395932692cbd453a1adf41c" title="The kind of metric M of the problem. Anything other than MetricKind::Identity turns the eigenproblem ...">Problem::metric_kind()</a> other than <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189" title="M = 1, i.e. no metric.">MetricKind::Identity</a>) has to be solved with the overload taking buffers for the actions of the metric; this one throws for it.</p>
+<p>The solver may keep references to problem for later calls such as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a520b858fe56b45bf13090a62854f2586" title="Construct solution and residual for a given set of roots.">solution()</a>, e.g. for a P space, so problem has to outlive them; a further call of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> replaces them. A temporary problem is therefore rejected at compile time.   </p>
+
+</div>
+</div>
+<a id="a56965f83ab5635a3f66f2b94bea4d053" name="a56965f83ab5635a3f66f2b94bea4d053"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56965f83ab5635a3f66f2b94bea4d053">&#9670;&#160;</a></span>solve() <span class="overload">[11/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A temporary problem is rejected, as the solver keeps references to the problem beyond <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a>   </p>
+
+</div>
+</div>
+<a id="ae83e6055bfd126e79f96ef4bdfd37ac3" name="ae83e6055bfd126e79f96ef4bdfd37ac3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae83e6055bfd126e79f96ef4bdfd37ac3">&#9670;&#160;</a></span>solve() <span class="overload">[12/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;&#160;</td>
+          <td class="paramname"><em>problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>generate_initial_guess</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Simplified one-call solver for problems that may have a metric, e.g. the generalised eigenproblem A v = lambda M v.   </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameters</td><td>A set of scratch vectors, as for <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;, const Problem&lt;R&gt;&amp;,
+bool)</a> </td></tr>
+    <tr><td class="paramname">actions</td><td>A set of scratch vectors. It should have the same size as parameters. </td></tr>
+    <tr><td class="paramname">metric_actions</td><td>A set of scratch vectors, of the same size as parameters. The solver uses them for the actions of the metric on new expansion vectors, which it needs also when the metric is applied on the fly, as scratch space, and to hand the diagonal elements of the metric to the preconditioner. </td></tr>
+    <tr><td class="paramname">problem</td><td>A <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html" title="Abstract class defining the problem-specific interface for the simplified solver interface to Iterati...">Problem</a> object defining the problem to be solved </td></tr>
+    <tr><td class="paramname">generate_initial_guess</td><td>Whether to start with a guess based on diagonal elements (true) or on the contents of parameters (false) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the solution was found</dd></dl>
+<p>Behaves like <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve(const VecRef&lt;R&gt;&amp;, const VecRef&lt;R&gt;&amp;, const Problem&lt;R&gt;&amp;, bool)</a>, and for a problem without a metric exactly so. For a problem with a metric, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#aeae7103481586c8ec34c018eb3435414" title="Declares the metric M of a generalised problem, e.g. the eigenproblem A v = lambda M v,...">set_metric()</a> is called with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a00085da3f395932692cbd453a1adf41c" title="The kind of metric M of the problem. Anything other than MetricKind::Identity turns the eigenproblem ...">Problem::metric_kind()</a> (throwing if the solver does not support it) and <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a2a97f2cb5d97be2f62808ecb59ca8255" title="How IterativeSolver::solve() obtains the actions of the metric on its subspace vectors,...">Problem::metric_storage()</a>, with, for <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a90454013d6adfb8285ad4af579a064cd" title="the metric is applied to the solutions whenever residuals are constructed">MetricStorage::OnTheFly</a>, a function calling <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#ac7b6effbc236ec0f28abc7f950698bd5" title="Calculate the action of the metric on a set of parameters. Called only if metric_kind() is not Metric...">Problem::metric_action()</a>. The actions of kernel and metric are calculated together by <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#aaf1e66f7be7da7552dda8c8118c23fef" title="Calculate the actions of the kernel and of the metric on a set of parameters together....">Problem::action_with_metric()</a>. If the problem provides diagonals(), it has to provide metric_diagonals() too; both are passed to the preconditioner, and a generated initial guess and the P space are selected from the lowest ratios of the diagonal elements of the kernel and the metric. A P space additionally needs <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#afa36cefff0b4e34617f97f9d26ab09e4" title="Calculate the metric matrix in the P space, for a problem with a metric (metric_kind())">Problem::pp_metric_matrix()</a> and, unless the metric is applied on the fly, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a673866a310ba3f360bdfa951c5787798" title="Calculate the action of the metric on a set of vectors in the P space, for a problem with a metric (m...">Problem::p_metric_action()</a>.</p>
+<p>The solver keeps references to problem for later calls such as <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a520b858fe56b45bf13090a62854f2586" title="Construct solution and residual for a given set of roots.">solution()</a>, so problem has to outlive them; a further call of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html#a527854d92a5f67f6bee487f46ea02524" title="Simplified one-call solver.">solve()</a> replaces them. A temporary problem is therefore rejected at compile time.   </p>
 
 </div>
 </div>
@@ -2259,6 +3320,36 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="ae2fb71d72da6de348ca58bd6460f23b6" name="ae2fb71d72da6de348ca58bd6460f23b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2fb71d72da6de348ca58bd6460f23b6">&#9670;&#160;</a></span>supports_metric()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolver.html">molpro::linalg::itsolv::IterativeSolver</a>&lt; R, Q, P &gt;::supports_metric </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a>&#160;</td>
+          <td class="paramname"><em>kind</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether the solver supports a metric of the given kind. <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189" title="M = 1, i.e. no metric.">MetricKind::Identity</a> is always supported. </p>
+
+</div>
+</div>
 <a id="a61bef6701d26a46fc551457392aff3d8" name="a61bef6701d26a46fc551457392aff3d8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a61bef6701d26a46fc551457392aff3d8">&#9670;&#160;</a></span>test_problem()</h2>
 
@@ -2314,7 +3405,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Test a supplied problem class. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>For a linear problem, checks that the actions of the kernel and, if there is one, of the metric are linear, and that the metric is Hermitian and, for the positive (semi)definite kinds, positive (semi)definite on the test parameters. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">problem</td><td></td></tr>
     <tr><td class="paramname">v0</td><td></td></tr>

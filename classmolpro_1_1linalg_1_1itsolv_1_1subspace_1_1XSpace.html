@@ -139,14 +139,23 @@ Collaboration diagram for molpro::linalg::itsolv::subspace::XSpace&lt; R, Q, P &
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aefe44c3b84f05eea1dc1cd03c10b0bef" id="r_aefe44c3b84f05eea1dc1cd03c10b0bef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aefe44c3b84f05eea1dc1cd03c10b0bef">XSpace</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">handlers</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt; &amp;logger)</td></tr>
 <tr class="separator:aefe44c3b84f05eea1dc1cd03c10b0bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dcb242fbc0afca00d2b44f666702932" id="r_a2dcb242fbc0afca00d2b44f666702932"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a2dcb242fbc0afca00d2b44f666702932">update_qspace</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> &gt; &amp;actions) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="memdesc:a2dcb242fbc0afca00d2b44f666702932"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update parameters in Q space and corresponding equation data.  <br /></td></tr>
-<tr class="separator:a2dcb242fbc0afca00d2b44f666702932"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40c82457423bf5663ed83a213484e955" id="r_a40c82457423bf5663ed83a213484e955"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a40c82457423bf5663ed83a213484e955">update_dspace</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt; &amp;actions) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="memdesc:a40c82457423bf5663ed83a213484e955"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears old D space container and stores new params and actions.  <br /></td></tr>
-<tr class="separator:a40c82457423bf5663ed83a213484e955"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64639a8ee6c512fcc860875eb76cede7" id="r_a64639a8ee6c512fcc860875eb76cede7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a64639a8ee6c512fcc860875eb76cede7">update_pspace</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aa60e8f6f63ff781d8877ea06a8bf116f">value_type</a> &gt; &amp;pp_action_matrix) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="separator:a64639a8ee6c512fcc860875eb76cede7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac518703bb2e6cf54ac8437d32f3db15" id="r_aac518703bb2e6cf54ac8437d32f3db15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aac518703bb2e6cf54ac8437d32f3db15">set_metric</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">kind</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">storage</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7">MetricStorage::Stored</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:aac518703bb2e6cf54ac8437d32f3db15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declares the metric of the subspace. Anything other than <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189" title="M = 1, i.e. no metric.">MetricKind::Identity</a> creates the metric matrix <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195a69691c7bdcc3ce6d5d8a1361f22d04ac">EqnData::M</a>. Only possible while the subspace is empty, unless it does not change anything.  <br /></td></tr>
+<tr class="separator:aac518703bb2e6cf54ac8437d32f3db15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9dbb216702f3038ef5d50aadce2d8fd" id="r_af9dbb216702f3038ef5d50aadce2d8fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#af9dbb216702f3038ef5d50aadce2d8fd">metric_kind</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:af9dbb216702f3038ef5d50aadce2d8fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The kind of metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aac518703bb2e6cf54ac8437d32f3db15" title="Declares the metric of the subspace. Anything other than MetricKind::Identity creates the metric matr...">set_metric()</a>  <br /></td></tr>
+<tr class="separator:af9dbb216702f3038ef5d50aadce2d8fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc5742adbddb60fbfa512981c89b6928" id="r_afc5742adbddb60fbfa512981c89b6928"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#afc5742adbddb60fbfa512981c89b6928">metric_storage</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:afc5742adbddb60fbfa512981c89b6928"><td class="mdescLeft">&#160;</td><td class="mdescRight">How the actions of the metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aac518703bb2e6cf54ac8437d32f3db15" title="Declares the metric of the subspace. Anything other than MetricKind::Identity creates the metric matr...">set_metric()</a> are obtained.  <br /></td></tr>
+<tr class="separator:afc5742adbddb60fbfa512981c89b6928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d78147a0022404f5faf8dfc4e8e7686" id="r_a1d78147a0022404f5faf8dfc4e8e7686"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a1d78147a0022404f5faf8dfc4e8e7686">update_qspace</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> &gt; &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>={}) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:a1d78147a0022404f5faf8dfc4e8e7686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update parameters in Q space and corresponding equation data.  <br /></td></tr>
+<tr class="separator:a1d78147a0022404f5faf8dfc4e8e7686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d739531d79b96b454d0dcf98a7f3631" id="r_a3d739531d79b96b454d0dcf98a7f3631"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a3d739531d79b96b454d0dcf98a7f3631">update_dspace</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt; &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_actions</a>={}, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">q_delete</a>={}, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aa60e8f6f63ff781d8877ea06a8bf116f">value_type</a> &gt; &amp;coefficients={}) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:a3d739531d79b96b454d0dcf98a7f3631"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces the old D space and the Q vectors q_delete by new D vectors, see <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a7b8c5a845ca92adf31e186727b1d4d5f" title="Replaces the old D space and the Q vectors q_delete by new D vectors, which are linear combinations o...">IXSpace::update_dspace()</a>  <br /></td></tr>
+<tr class="separator:a3d739531d79b96b454d0dcf98a7f3631"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb443da8004a1f9292bc91649d197baf" id="r_aeb443da8004a1f9292bc91649d197baf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aeb443da8004a1f9292bc91649d197baf">update_pspace</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aa60e8f6f63ff781d8877ea06a8bf116f">value_type</a> &gt; &amp;pp_action_matrix, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aa60e8f6f63ff781d8877ea06a8bf116f">value_type</a> &gt; &amp;pp_metric_matrix={}) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="separator:aeb443da8004a1f9292bc91649d197baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e5656317e00535ceca0becaa1179fcd" id="r_a3e5656317e00535ceca0becaa1179fcd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a3e5656317e00535ceca0becaa1179fcd">add_rhs_equations</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> &gt; &amp;<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a702fb6e7fdaac322789caa8b31e6d861">rhs</a>)</td></tr>
 <tr class="memdesc:a3e5656317e00535ceca0becaa1179fcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a system of linear equations Ax=b, adds rhs vectors b.  <br /></td></tr>
 <tr class="separator:a3e5656317e00535ceca0becaa1179fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -200,6 +209,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2579086ced8a22bc5361ab0839ccd4f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae378fcf056b142b82dc6e6decd34e14a" id="r_ae378fcf056b142b82dc6e6decd34e14a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ae378fcf056b142b82dc6e6decd34e14a">cactionsd</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:ae378fcf056b142b82dc6e6decd34e14a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5922118e4885e48b85084cb16e295bb7" id="r_a5922118e4885e48b85084cb16e295bb7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a5922118e4885e48b85084cb16e295bb7">cmetric_actionsq</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:a5922118e4885e48b85084cb16e295bb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actions of the metric on the Q space parameters, empty unless there is a metric.  <br /></td></tr>
+<tr class="separator:a5922118e4885e48b85084cb16e295bb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6e05fc4c6780e706b684ec2adedb5be" id="r_aa6e05fc4c6780e706b684ec2adedb5be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aa6e05fc4c6780e706b684ec2adedb5be">cmetric_actionsd</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:aa6e05fc4c6780e706b684ec2adedb5be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actions of the metric on the D space parameters, empty unless there is a metric.  <br /></td></tr>
+<tr class="separator:aa6e05fc4c6780e706b684ec2adedb5be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad99657d1bb050c231ac2c15ba01761e3" id="r_ad99657d1bb050c231ac2c15ba01761e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ad99657d1bb050c231ac2c15ba01761e3">set_logger</a> (std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt; logger) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:ad99657d1bb050c231ac2c15ba01761e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9ba904dede4be6bb48b35329c85fb4a" id="r_af9ba904dede4be6bb48b35329c85fb4a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#af9ba904dede4be6bb48b35329c85fb4a">set_hermiticity</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">hermitian</a>)</td></tr>
@@ -217,6 +232,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5f90338e4f03d9298641a4ad3f603522 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace" id="r_a5f90338e4f03d9298641a4ad3f603522"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5f90338e4f03d9298641a4ad3f603522">size</a> () const</td></tr>
 <tr class="memdesc:a5f90338e4f03d9298641a4ad3f603522 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of vectors forming the subspace.  <br /></td></tr>
 <tr class="separator:a5f90338e4f03d9298641a4ad3f603522 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab091a3b9d537cb4e1f6c34d9f9f3f8d4 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace" id="r_ab091a3b9d537cb4e1f6c34d9f9f3f8d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#ab091a3b9d537cb4e1f6c34d9f9f3f8d4">stores_metric_actions</a> () const</td></tr>
+<tr class="memdesc:ab091a3b9d537cb4e1f6c34d9f9f3f8d4 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the actions of the metric on the Q and D vectors are kept.  <br /></td></tr>
+<tr class="separator:ab091a3b9d537cb4e1f6c34d9f9f3f8d4 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -261,6 +279,12 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ae3aaee00e6ced3b00c3ac3f68aec4fb1" id="r_ae3aaee00e6ced3b00c3ac3f68aec4fb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ae3aaee00e6ced3b00c3ac3f68aec4fb1">m_action_dot_action</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></td></tr>
 <tr class="memdesc:ae3aaee00e6ced3b00c3ac3f68aec4fb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the H matrix is action.action instead of action.parameter  <br /></td></tr>
 <tr class="separator:ae3aaee00e6ced3b00c3ac3f68aec4fb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf1a85573600b80305ed7187f06fe46d" id="r_adf1a85573600b80305ed7187f06fe46d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#adf1a85573600b80305ed7187f06fe46d">m_metric_kind</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189">MetricKind::Identity</a></td></tr>
+<tr class="memdesc:adf1a85573600b80305ed7187f06fe46d"><td class="mdescLeft">&#160;</td><td class="mdescRight">the metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aac518703bb2e6cf54ac8437d32f3db15" title="Declares the metric of the subspace. Anything other than MetricKind::Identity creates the metric matr...">set_metric()</a>  <br /></td></tr>
+<tr class="separator:adf1a85573600b80305ed7187f06fe46d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c325945b6edbba97650c5abf49f07ce" id="r_a0c325945b6edbba97650c5abf49f07ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#a0c325945b6edbba97650c5abf49f07ce">m_metric_storage</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7">MetricStorage::Stored</a></td></tr>
+<tr class="memdesc:a0c325945b6edbba97650c5abf49f07ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the actions of the metric are kept  <br /></td></tr>
+<tr class="separator:a0c325945b6edbba97650c5abf49f07ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -517,6 +541,68 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a8c2d7979c2aecd18ac9453fc9fa9f971">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
+
+</div>
+</div>
+<a id="aa6e05fc4c6780e706b684ec2adedb5be" name="aa6e05fc4c6780e706b684ec2adedb5be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6e05fc4c6780e706b684ec2adedb5be">&#9670;&#160;</a></span>cmetric_actionsd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">molpro::linalg::itsolv::subspace::XSpace</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt;::cmetric_actionsd </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Actions of the metric on the D space parameters, empty unless there is a metric. </p>
+
+<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aa355416d0305a396e877a5c2b67aa329">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a5922118e4885e48b85084cb16e295bb7" name="a5922118e4885e48b85084cb16e295bb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5922118e4885e48b85084cb16e295bb7">&#9670;&#160;</a></span>cmetric_actionsq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">molpro::linalg::itsolv::subspace::XSpace</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt;::cmetric_actionsq </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Actions of the metric on the Q space parameters, empty unless there is a metric. </p>
+
+<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#af3305d97ee8a91cdc5f97baf09c306c6">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
 
 </div>
 </div>
@@ -788,6 +874,68 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="af9dbb216702f3038ef5d50aadce2d8fd" name="af9dbb216702f3038ef5d50aadce2d8fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9dbb216702f3038ef5d50aadce2d8fd">&#9670;&#160;</a></span>metric_kind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">molpro::linalg::itsolv::subspace::XSpace</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt;::metric_kind </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The kind of metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aac518703bb2e6cf54ac8437d32f3db15" title="Declares the metric of the subspace. Anything other than MetricKind::Identity creates the metric matr...">set_metric()</a> </p>
+
+<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a4639dc08674368b6d25550fa754b6ee5">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
+
+</div>
+</div>
+<a id="afc5742adbddb60fbfa512981c89b6928" name="afc5742adbddb60fbfa512981c89b6928"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc5742adbddb60fbfa512981c89b6928">&#9670;&#160;</a></span>metric_storage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">molpro::linalg::itsolv::subspace::XSpace</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt;::metric_storage </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How the actions of the metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aac518703bb2e6cf54ac8437d32f3db15" title="Declares the metric of the subspace. Anything other than MetricKind::Identity creates the metric matr...">set_metric()</a> are obtained. </p>
+
+<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#ae04f49220250fe6eceec4e3813a62b5d">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
 
 </div>
 </div>
@@ -1138,6 +1286,55 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="aac518703bb2e6cf54ac8437d32f3db15" name="aac518703bb2e6cf54ac8437d32f3db15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac518703bb2e6cf54ac8437d32f3db15">&#9670;&#160;</a></span>set_metric()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">molpro::linalg::itsolv::subspace::XSpace</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt;::set_metric </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a>&#160;</td>
+          <td class="paramname"><em>kind</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a>&#160;</td>
+          <td class="paramname"><em>storage</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7">MetricStorage::Stored</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Declares the metric of the subspace. Anything other than <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189" title="M = 1, i.e. no metric.">MetricKind::Identity</a> creates the metric matrix <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html#a30629fcb646a0a617c8b85a098a8b195a69691c7bdcc3ce6d5d8a1361f22d04ac">EqnData::M</a>. Only possible while the subspace is empty, unless it does not change anything. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kind</td><td>the kind of metric </td></tr>
+    <tr><td class="paramname">storage</td><td>whether the actions of the metric on the Q and D vectors are kept </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a900d0508e7497304aae4d761e6acc747">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
+
+</div>
+</div>
 <a id="a1960d0b465eb5313667fcdd66f6a2a58" name="a1960d0b465eb5313667fcdd66f6a2a58"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1960d0b465eb5313667fcdd66f6a2a58">&#9670;&#160;</a></span>update_dimensions()</h2>
 
@@ -1165,8 +1362,8 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
-<a id="a40c82457423bf5663ed83a213484e955" name="a40c82457423bf5663ed83a213484e955"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40c82457423bf5663ed83a213484e955">&#9670;&#160;</a></span>update_dspace()</h2>
+<a id="a3d739531d79b96b454d0dcf98a7f3631" name="a3d739531d79b96b454d0dcf98a7f3631"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d739531d79b96b454d0dcf98a7f3631">&#9670;&#160;</a></span>update_dspace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1186,7 +1383,25 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>actions</em>&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>q_delete</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">Matrix</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aa60e8f6f63ff781d8877ea06a8bf116f">value_type</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>coefficients</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1201,20 +1416,14 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </table>
 </div><div class="memdoc">
 
-<p>Clears old D space container and stores new params and actions. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">lin_trans_only_R</td><td>R space component of D </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Replaces the old D space and the Q vectors q_delete by new D vectors, see <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a7b8c5a845ca92adf31e186727b1d4d5f" title="Replaces the old D space and the Q vectors q_delete by new D vectors, which are linear combinations o...">IXSpace::update_dspace()</a> </p>
 
-<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#afb897ccb015c8d42dbe57a6f0c92ae62">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
+<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a7b8c5a845ca92adf31e186727b1d4d5f">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a64639a8ee6c512fcc860875eb76cede7" name="a64639a8ee6c512fcc860875eb76cede7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64639a8ee6c512fcc860875eb76cede7">&#9670;&#160;</a></span>update_pspace()</h2>
+<a id="aeb443da8004a1f9292bc91649d197baf" name="aeb443da8004a1f9292bc91649d197baf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb443da8004a1f9292bc91649d197baf">&#9670;&#160;</a></span>update_pspace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1234,7 +1443,13 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aa60e8f6f63ff781d8877ea06a8bf116f">value_type</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>pp_action_matrix</em>&#160;</td>
+          <td class="paramname"><em>pp_action_matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html">array::Span</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aa60e8f6f63ff781d8877ea06a8bf116f">value_type</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pp_metric_matrix</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1250,12 +1465,12 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 <dl class="section warning"><dt>Warning</dt><dd>Subspace should be empty </dd></dl>
 
-<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a90ffba67ffb0262cf996e73d0cd95354">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
+<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a0da73359f61f356bb70d3e3329227758">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a2dcb242fbc0afca00d2b44f666702932" name="a2dcb242fbc0afca00d2b44f666702932"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2dcb242fbc0afca00d2b44f666702932">&#9670;&#160;</a></span>update_qspace()</h2>
+<a id="a1d78147a0022404f5faf8dfc4e8e7686" name="a1d78147a0022404f5faf8dfc4e8e7686"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d78147a0022404f5faf8dfc4e8e7686">&#9670;&#160;</a></span>update_qspace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1275,7 +1490,13 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>actions</em>&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metric_actions</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1292,7 +1513,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 <p>Update parameters in Q space and corresponding equation data. </p>
 
-<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#aea25a4672a5baaeba2fcb36ad9b09b2e">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
+<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a73f78b9157a7cca16e4176ada4af28ef">molpro::linalg::itsolv::subspace::IXSpace&lt; R, Q, P &gt;</a>.</p>
 
 </div>
 </div>
@@ -1464,6 +1685,58 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="adf1a85573600b80305ed7187f06fe46d" name="adf1a85573600b80305ed7187f06fe46d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf1a85573600b80305ed7187f06fe46d">&#9670;&#160;</a></span>m_metric_kind</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">molpro::linalg::itsolv::subspace::XSpace</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt;::m_metric_kind = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138bac9c5c65fb4af9cf90eb99b3b84424189">MetricKind::Identity</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>the metric declared with <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aac518703bb2e6cf54ac8437d32f3db15" title="Declares the metric of the subspace. Anything other than MetricKind::Identity creates the metric matr...">set_metric()</a> </p>
+
+</div>
+</div>
+<a id="a0c325945b6edbba97650c5abf49f07ce" name="a0c325945b6edbba97650c5abf49f07ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c325945b6edbba97650c5abf49f07ce">&#9670;&#160;</a></span>m_metric_storage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a> , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5">MetricStorage</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html">molpro::linalg::itsolv::subspace::XSpace</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a540ac7d74ec919e172526e788f3c0f85">R</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a9396cdc6e084fc7f1b5c27490a43b6b0">Q</a>, <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a5a96c31c79c2c0981fae16714099ae55">P</a> &gt;::m_metric_storage = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab18d8ced82b65255f63d1efcfed9bde5a7bf2d26eab899c413218b729d4d914b7">MetricStorage::Stored</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>whether the actions of the metric are kept </p>
 
 </div>
 </div>
