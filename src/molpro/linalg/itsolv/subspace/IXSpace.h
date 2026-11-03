@@ -2,11 +2,13 @@
 #define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_SUBSPACE_IXSPACE_H
 #include <molpro/linalg/array/ArrayHandler.h>
 #include <molpro/linalg/array/Span.h>
+#include <molpro/linalg/itsolv/Metric.h>
 #include <molpro/linalg/itsolv/subspace/Dimensions.h>
 #include <molpro/linalg/itsolv/subspace/SubspaceData.h>
 #include <molpro/linalg/itsolv/wrap.h>
 
 #include <memory>
+#include <vector>
 
 namespace molpro::linalg::itsolv {
 
@@ -39,14 +41,52 @@ public:
   //! Removes parameter i from D subspace
   virtual void erased(size_t i) = 0;
 
-  //! Adds parameters to the P space
-  virtual void update_pspace(const CVecRef<P>& params, const array::Span<value_type>& pp_action_matrix) = 0;
+  /*!
+   * @brief Adds parameters to the P space
+   * @param params the P space vectors
+   * @param pp_action_matrix the kernel matrix in the P space
+   * @param pp_metric_matrix the metric matrix in the P space, given exactly if there is a metric
+   */
+  virtual void update_pspace(const CVecRef<P>& params, const array::Span<value_type>& pp_action_matrix,
+                             const array::Span<value_type>& pp_metric_matrix = {}) = 0;
 
-  //! Adds parameters to the Q space
-  virtual void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions) = 0;
+  /*!
+   * @brief Declares the metric of the subspace. Anything other than MetricKind::Identity creates the metric matrix
+   * EqnData::M. Only possible while the subspace is empty, unless it does not change anything.
+   * @param kind the kind of metric
+   * @param storage whether the actions of the metric on the Q and D vectors are kept
+   */
+  virtual void set_metric(MetricKind kind, MetricStorage storage = MetricStorage::Stored) = 0;
+  //! The kind of metric declared with set_metric()
+  virtual MetricKind metric_kind() const = 0;
+  //! How the actions of the metric declared with set_metric() are obtained
+  virtual MetricStorage metric_storage() const = 0;
+  //! Whether the actions of the metric on the Q and D vectors are kept
+  bool stores_metric_actions() const {
+    return metric_kind() != MetricKind::Identity && metric_storage() == MetricStorage::Stored;
+  }
 
-  //! Updates D space with the new parameters
-  virtual void update_dspace(VecRef<Q>& params, VecRef<Q>& actions) = 0;
+  /*!
+   * @brief Adds parameters to the Q space
+   * @param params new parameters
+   * @param actions their actions
+   * @param metric_actions their actions of the metric, given exactly if there is a metric
+   */
+  virtual void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
+                             const CVecRef<R>& metric_actions = {}) = 0;
+
+  /*!
+   * @brief Replaces the old D space and the Q vectors q_delete by new D vectors, which are linear combinations of them
+   * @param params the new D vectors
+   * @param actions their actions
+   * @param metric_actions their actions of the metric, given exactly if they are stored
+   * @param q_delete indices of the Q vectors to delete
+   * @param coefficients if there is a metric and there are new D vectors, the coefficients of the new D vectors (rows)
+   * in the deleted Q vectors (in the order of q_delete) followed by the old D vectors, from which their metric matrix
+   * elements are obtained without operations on vectors
+   */
+  virtual void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {},
+                             const std::vector<size_t>& q_delete = {}, const Matrix<value_type>& coefficients = {}) = 0;
 
   virtual VecRef<P> paramsp() = 0;
   virtual VecRef<Q> paramsq() = 0;
@@ -65,6 +105,11 @@ public:
   virtual CVecRef<Q> cactionsq() const = 0;
   virtual CVecRef<Q> cparamsd() const = 0;
   virtual CVecRef<Q> cactionsd() const = 0;
+
+  //! Actions of the metric on the Q space parameters, empty unless there is a metric
+  virtual CVecRef<Q> cmetric_actionsq() const = 0;
+  //! Actions of the metric on the D space parameters, empty unless there is a metric
+  virtual CVecRef<Q> cmetric_actionsd() const = 0;
 
   virtual const Dimensions& dimensions() const = 0;
 

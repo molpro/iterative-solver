@@ -10,6 +10,7 @@ void Options::copy(const Options& options) {
   max_iter = options.max_iter;
   max_p = options.max_p;
   p_threshold = options.p_threshold;
+  check_metric = options.check_metric;
 }
 
 Options::Options(const options_map& opt) {
@@ -32,6 +33,9 @@ Options::Options(const options_map& opt) {
   }
   if (auto key = facet.toupper("p_threshold"); opt_upper.count(key)) {
     p_threshold = std::stod(opt_upper.at(key));
+  }
+  if (auto key = facet.toupper("check_metric"); opt_upper.count(key)) {
+    check_metric = facet.tobool(opt_upper.at(key));
   }
 }
 

@@ -27,14 +27,22 @@ struct DummyXSpace : public molpro::linalg::itsolv::subspace::IXSpace<R, Q, P> {
   void erased(size_t i) override {}
 
   //! Adds parameters to the Q space
-  void update_pspace(const CVecRef<P>& params,
-                     const molpro::linalg::array::Span<value_type>& pp_action_matrix) override {}
+  void update_pspace(const CVecRef<P>& params, const molpro::linalg::array::Span<value_type>& pp_action_matrix,
+                     const molpro::linalg::array::Span<value_type>& pp_metric_matrix = {}) override {}
+
+  using MetricKind = molpro::linalg::itsolv::MetricKind;
+  using MetricStorage = molpro::linalg::itsolv::MetricStorage;
+  void set_metric(MetricKind kind, MetricStorage storage = MetricStorage::Stored) override {}
+  MetricKind metric_kind() const override { return MetricKind::Identity; }
+  MetricStorage metric_storage() const override { return MetricStorage::Stored; }
 
   //! Adds parameters to the Q space
-  void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions) override {}
+  void update_qspace(const CVecRef<R>& params, const CVecRef<R>& actions,
+                     const CVecRef<R>& metric_actions = {}) override {}
 
   //! Updates D space with the new parameters
-  void update_dspace(VecRef<Q>& params, VecRef<Q>& actions) override {}
+  void update_dspace(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {},
+                     const std::vector<size_t>& q_delete = {}, const Matrix<value_type>& coefficients = {}) override {}
 
   VecRef<P> paramsp() override { return VecRef<P>{}; }
   VecRef<Q> paramsq() override { return VecRef<Q>{}; }
@@ -53,6 +61,8 @@ struct DummyXSpace : public molpro::linalg::itsolv::subspace::IXSpace<R, Q, P> {
   CVecRef<Q> cactionsq() const override { return CVecRef<Q>{}; }
   CVecRef<Q> cparamsd() const override { return CVecRef<Q>{}; }
   CVecRef<Q> cactionsd() const override { return CVecRef<Q>{}; }
+  CVecRef<Q> cmetric_actionsq() const override { return CVecRef<Q>{}; }
+  CVecRef<Q> cmetric_actionsd() const override { return CVecRef<Q>{}; }
 
   const molpro::linalg::itsolv::subspace::Dimensions& dimensions() const override { return dims; }
 

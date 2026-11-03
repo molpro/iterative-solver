@@ -1,0 +1,226 @@
+#ifndef LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_METRICCHECKER_H
+#define LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_METRICCHECKER_H
+#include <Eigen/Dense>
+#include <molpro/linalg/array/Span.h>
+#include <molpro/linalg/itsolv/ArrayHandlers.h>
+#include <molpro/linalg/itsolv/subspace/IXSpace.h>
+#include <molpro/linalg/itsolv/subspace/Matrix.h>
+#include <molpro/linalg/itsolv/subspace/util.h>
+#include <molpro/linalg/itsolv/wrap.h>
+#include <molpro/linalg/scalar_traits.h>
+
+#include <cmath>
+#include <format>
+#include <optional>
+#include <stdexcept>
+#include <utility>
+
+namespace molpro::linalg::itsolv::detail {
+
+/*!
+ * @brief Checks that the metric of a generalised problem has the properties that its kind declares, as far as the
+ * subspace shows them
+ *
+ * All checks throw std::runtime_error if they fail. They compare against hermiticity_tolerance() or
+ * positivity_tolerance() relative to the size of the quantities involved.
+ */
+template <class R, class Q, class P>
+class MetricChecker {
+public:
+  using value_type = typename array::ArrayHandler<R, R>::value_type;
+  using value_type_abs = typename array::ArrayHandler<R, R>::value_type_abs;
+
+  /*!
+   * @brief The relative tolerance of the checks of Hermiticity, calibrated for double precision and rescaled to the
+   * working precision. It is loose enough for actions of a metric that are only approximate, e.g. from screened
+   * integrals, but catches a metric that is not Hermitian at all.
+   */
+  static value_type_abs hermiticity_tolerance() { return precision_scaled<value_type>(1e-6); }
+
+  //! The relative tolerance of the check of positivity, calibrated for double precision and rescaled to the working
+  //! precision
+  static value_type_abs positivity_tolerance() { return precision_scaled<value_type>(1e-8); }
+
+  //! Forgets the vectors kept for the check of Hermiticity and the factor of the P space, as when the subspace starts
+  //! anew
+  void reset() {
+    m_reference.reset();
+    m_pp_factor.reset();
+  }
+
+  //! Forgets the factor of the metric matrix in the P space kept by check_positive_subspace(), for a new P space
+  void reset_pspace() { m_pp_factor.reset(); }
+
+  /*!
+   * @brief Checks that the metric is Hermitian on new parameters before they are added to the subspace
+   *
+   * The metric matrix is calculated from the actions of the metric on new parameters only, assuming that it is
+   * Hermitian. This compares <x|M q> with <M x|q> for the new parameters x and a vector q of an earlier update: the
+   * most recent Q vector if the subspace keeps the actions of the metric, otherwise the first parameter of the
+   * previous update, kept by remember().
+   * @param params the new parameters x
+   * @param metric_actions the actions of the metric on params
+   * @param xspace the subspace, before the update
+   * @param handlers array handlers
+   */
+  void check_hermitian(const CVecRef<R>& params, const CVecRef<R>& metric_actions,
+                       const subspace::IXSpace<R, Q, P>& xspace, ArrayHandlers<R, Q, P>& handlers) const {
+    const Q* q = nullptr;
+    const Q* metric_action_q = nullptr;
+    value_type qmq = 0; // <q|M q>
+    if (xspace.stores_metric_actions()) {
+      if (xspace.dimensions().nQ == 0)
+        return;
+      q = &xspace.cparamsq().front().get();
+      metric_action_q = &xspace.cmetric_actionsq().front().get();
+      qmq = xspace.data.at(subspace::EqnData::M)(xspace.dimensions().oQ(), xspace.dimensions().oQ());
+    } else if (m_reference) {
+      q = &m_reference->q;
+      metric_action_q = &m_reference->metric_action_q;
+      qmq = m_reference->qmq;
+    } else
+      return;
+    // <x|M q> and <M x|q> from one pass over q and M q
+    auto left = params;
+    left.insert(left.end(), metric_actions.begin(), metric_actions.end());
+    const auto overlaps =
+        subspace::util::overlap(left, CVecRef<Q>{std::cref(*metric_action_q), std::cref(*q)}, handlers.rq());
+    for (size_t i = 0; i < params.size(); ++i) {
+      const auto xmq = overlaps(i, 0);
+      const auto mxq = overlaps(params.size() + i, 1);
+      // the size of these elements, which the metric bounds with its values on x and q
+      const auto scale = std::sqrt(std::abs(handlers.rr().dot(params[i], metric_actions[i]) * qmq));
+      if (std::abs(xmq - mxq) > hermiticity_tolerance() * scale)
+        throw std::runtime_error(std::format("The metric is not Hermitian: <x|M q> = {:.6e} differs from <M x|q> = "
+                                             "{:.6e} for a new parameter x and a subspace vector q",
+                                             double(std::abs(xmq)), double(std::abs(mxq))));
+    }
+  }
+
+  /*!
+   * @brief Keeps the first new parameter and its action of the metric for the next check_hermitian(), if the subspace
+   * does not keep the actions of the metric, in the same Q vectors in every call
+   */
+  void remember(const CVecRef<R>& params, const CVecRef<R>& metric_actions, const subspace::IXSpace<R, Q, P>& xspace,
+                ArrayHandlers<R, Q, P>& handlers) {
+    if (xspace.stores_metric_actions() || params.empty())
+      return;
+    if (m_reference) {
+      handlers.qr().copy(m_reference->q, params.front());
+      handlers.qr().copy(m_reference->metric_action_q, metric_actions.front());
+    } else
+      m_reference.emplace(Reference{handlers.qr().copy(params.front()), handlers.qr().copy(metric_actions.front())});
+    m_reference->qmq = handlers.rr().dot(params.front(), metric_actions.front());
+  }
+
+  /*!
+   * @brief Checks that the metric matrix in the P space is Hermitian
+   * @param matrix the matrix, with the second index running fastest
+   * @param n its dimension
+   */
+  static void check_hermitian(const array::Span<value_type>& matrix, const size_t n) {
+    // the diagonal elements, which have to be real, are compared with themselves
+    for (size_t i = 0; i < n; ++i)
+      for (size_t j = 0; j <= i; ++j)
+        if (std::abs(matrix[i * n + j] - conjugate(matrix[j * n + i])) >
+            hermiticity_tolerance() * std::sqrt(std::abs(matrix[i * n + i] * matrix[j * n + j])))
+          throw std::runtime_error("The metric is not Hermitian: its matrix in the P space is not");
+  }
+
+  /*!
+   * @brief Checks that the metric matrix of the subspace is consistent with a positive (semi)definite metric
+   *
+   * The metric matrix M_ij = <b_i|M b_j> of a positive definite metric M is positive definite for linearly independent
+   * subspace vectors b_i, which a Cholesky factorisation confirms cheaply. Where it fails, which nearly linearly
+   * dependent subspace vectors can cause as well, the Rayleigh quotients of M on the span of the subspace vectors
+   * decide. They are the eigenvalues of the metric matrix in the basis orthonormalised with the overlap
+   * S_ij = <b_i|b_j>, leaving out nearly linearly dependent directions. Orthonormalising amplifies the rounding errors
+   * of the metric matrix by up to the inverse of the smallest eigenvalue of the overlap that is kept, so the metric
+   * fails the check only if a Rayleigh quotient is negative by more than positivity_tolerance() times the largest plus
+   * these amplified rounding errors.
+   *
+   * An indefinite metric is noticed only once one of its negative directions enters the subspace.
+   * @param metric the metric matrix of the subspace
+   * @param overlap the overlap matrix of the subspace vectors
+   */
+  /*!
+   * @brief Like check_positive(), for the metric matrix of the subspace, whose first nP rows and columns, those of the
+   * P space, do not change between calls until reset_pspace()
+   *
+   * The Cholesky factor of the P-space block is kept, so that only the Schur complement of the other vectors has to be
+   * factorised, at a cost of nP^2 times their number, rather than the whole matrix. If that fails, check_positive()
+   * decides.
+   */
+  void check_positive_subspace(const subspace::Matrix<value_type>& metric, const subspace::Matrix<value_type>& overlap,
+                               const size_t nP) {
+    using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
+    using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+    const auto n = Eigen::Index(metric.rows());
+    const auto np = Eigen::Index(nP);
+    if (np == 0 || np >= n)
+      return check_positive(metric, overlap);
+    const matrix_type m_rows = Eigen::Map<const row_major_type>(metric.data().data(), n, n);
+    const matrix_type m = (m_rows + m_rows.adjoint()) / value_type(2);
+    if (!m_pp_factor || m_pp_factor->rows() != np) {
+      const Eigen::LLT<matrix_type> llt(m.topLeftCorner(np, np));
+      if (llt.info() != Eigen::Success)
+        return check_positive(metric, overlap);
+      m_pp_factor = matrix_type(llt.matrixL());
+    }
+    const matrix_type y = m_pp_factor->template triangularView<Eigen::Lower>().solve(m.topRightCorner(np, n - np));
+    const matrix_type schur = m.bottomRightCorner(n - np, n - np) - y.adjoint() * y;
+    if (Eigen::LLT<matrix_type>(schur).info() == Eigen::Success)
+      return;
+    check_positive(metric, overlap);
+  }
+
+  static void check_positive(const subspace::Matrix<value_type>& metric, const subspace::Matrix<value_type>& overlap) {
+    using matrix_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>;
+    using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+    const auto n = Eigen::Index(metric.rows());
+    if (n == 0)
+      return;
+    const matrix_type m_rows = Eigen::Map<const row_major_type>(metric.data().data(), n, n);
+    const matrix_type m = (m_rows + m_rows.adjoint()) / value_type(2);
+    if (Eigen::LLT<matrix_type>(m).info() == Eigen::Success)
+      return;
+    const matrix_type s = Eigen::Map<const row_major_type>(overlap.data().data(), n, n);
+    const Eigen::SelfAdjointEigenSolver<matrix_type> s_eigen(s);
+    const value_type_abs s_threshold = precision_scaled<value_type>(1e-10) * s_eigen.eigenvalues().maxCoeff();
+    Eigen::Index rank = 0;
+    for (Eigen::Index i = 0; i < n; ++i)
+      if (s_eigen.eigenvalues()(i) > s_threshold)
+        ++rank;
+    if (rank == 0)
+      return;
+    // the eigenvalues come in ascending order, so the retained directions are the trailing ones
+    const auto retained = s_eigen.eigenvectors().rightCols(rank);
+    const matrix_type orthonormal =
+        retained * s_eigen.eigenvalues().tail(rank).cwiseSqrt().cwiseInverse().template cast<value_type>().asDiagonal();
+    const Eigen::SelfAdjointEigenSolver<matrix_type> m_eigen(orthonormal.adjoint() * m * orthonormal,
+                                                             Eigen::EigenvaluesOnly);
+    const value_type_abs lowest = m_eigen.eigenvalues().minCoeff();
+    const value_type_abs largest = m_eigen.eigenvalues().cwiseAbs().maxCoeff();
+    // the rounding errors of the elements of the metric matrix, amplified by the orthonormalisation
+    const value_type_abs rounding = precision_scaled<value_type>(1e-13) * m.norm() / s_eigen.eigenvalues()(n - rank);
+    if (lowest < -positivity_tolerance() * largest - rounding)
+      throw std::runtime_error(std::format("The metric is not positive definite: it has the Rayleigh quotient {:.3e} "
+                                           "on the subspace, against a largest one of {:.3e}",
+                                           double(lowest), double(largest)));
+  }
+
+private:
+  //! a parameter, its action of the metric and <q|M q>, see remember()
+  struct Reference {
+    Q q;
+    Q metric_action_q;
+    value_type qmq = 0;
+  };
+  std::optional<Reference> m_reference;
+  //! the Cholesky factor of the metric matrix in the P space, see check_positive_subspace()
+  std::optional<Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic>> m_pp_factor;
+};
+
+} // namespace molpro::linalg::itsolv::detail
+
+#endif // LINEARALGEBRA_SRC_MOLPRO_LINALG_ITSOLV_METRICCHECKER_H

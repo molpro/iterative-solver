@@ -66,6 +66,11 @@ public:
 
   bool nonlinear() const override { return false; }
 
+  //! Supports generalised eigenproblems A v = lambda M v with a Hermitian, positive definite metric M
+  bool supports_metric(MetricKind kind) const override {
+    return kind == MetricKind::Identity || kind == MetricKind::HermitianPositiveDefinite;
+  }
+
   /*!
    * \brief Proposes new parameters for the subspace from the preconditioned residuals.
    *
@@ -239,7 +244,10 @@ public:
   }
 
 protected:
-  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
+  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
+                          const detail::MetricSolutions<R, Q>& metric_solutions) override {
+    if (roots.empty())
+      return;
     auto prof = this->profiler()->push("itsolv::construct_residual");
     assert(params.size() >= roots.size());
     const auto& eigvals = eigenvalues();
@@ -248,8 +256,41 @@ protected:
     assert(subspace_solver);
     const auto& imag_eigval_components = subspace_solver->imag_eigval_components();
 
+    // With a metric M, the residual contains M x rather than x for each solution x. M x is given in metric_solutions
+    // where the metric is applied on the fly, and otherwise assembled from the stored actions of the metric on the Q
+    // and D spaces and the action of the metric on the P space. The coefficients are collected in these matrices.
+    const auto& xspace = *this->m_xspace;
+    const bool metric = xspace.metric_kind() != MetricKind::Identity;
+    const bool on_the_fly = metric && xspace.metric_storage() == MetricStorage::OnTheFly;
+    const bool stored = metric && !on_the_fly;
+    const auto& dims = xspace.dimensions();
+    const auto& solutions = this->m_subspace_solver->solutions();
+    using coefficient_matrix = std::decay_t<decltype(solutions)>;
+    // the coefficients of the Q and D vectors are in one matrix, with the Q vectors first
+    coefficient_matrix mp_coeff({stored ? dims.nP : 0, roots.size()}),
+        mqd_coeff({stored ? dims.nQ + dims.nD : 0, roots.size()}),
+        mx_coeff({on_the_fly ? roots.size() : 0, roots.size()});
+    // adds weight times the action of the metric on the solution params[k], whose coefficients are in the given row of
+    // coefficients, to the residual actions[i]
+    auto add_metric_solution = [&](const scalar_type weight, const coefficient_matrix& coefficients, const int row,
+                                   const size_t k, const size_t i) {
+      if (on_the_fly) {
+        mx_coeff(k, i) += weight;
+      } else {
+        for (size_t j = 0; j < dims.nP; ++j)
+          mp_coeff(j, i) += weight * coefficients(row, dims.oP() + j);
+        for (size_t j = 0; j < dims.nQ; ++j)
+          mqd_coeff(j, i) += weight * coefficients(row, dims.oQ() + j);
+        for (size_t j = 0; j < dims.nD; ++j)
+          mqd_coeff(dims.nQ + j, i) += weight * coefficients(row, dims.oD() + j);
+      }
+    };
+
     for (size_t i = 0; i < roots.size(); ++i) {
-      this->m_handlers->rr().axpy(-eigvals.at(roots[i]), params.at(i), actions.at(i));
+      if (metric)
+        add_metric_solution(-eigvals.at(roots[i]), solutions, roots[i], i, i);
+      else
+        this->m_handlers->rr().axpy(-eigvals.at(roots[i]), params.at(i), actions.at(i));
 
       auto it = std::ranges::find(imag_eigval_components, roots[i], [](const auto& pair) { return pair.first; });
 
@@ -275,18 +316,48 @@ protected:
         // imaginary parts of the complex conjugate eigenvalue pair has flipped signs
         const auto partner = subspace_solver->complex_partner(roots[i]).value();
         const auto root_it = std::ranges::find(roots, int(partner));
-        if (root_it != roots.end()) {
-          this->m_handlers->rr().axpy(it->second, params.at(std::ranges::distance(roots.begin(), root_it)),
-                                      actions.at(i));
+        if (root_it != roots.end() && (!metric || on_the_fly)) {
+          const auto k = std::ranges::distance(roots.begin(), root_it);
+          if (metric)
+            add_metric_solution(it->second, solutions, int(partner), k, i);
+          else
+            this->m_handlers->rr().axpy(it->second, params.at(k), actions.at(i));
+        } else if (stored) {
+          // The partner's coefficients are among the retained solutions also if it is not among roots
+          if (partner >= subspace_solver->retained_solutions().rows())
+            throw std::logic_error("The complex conjugate partner of a root is not among the retained solutions");
+          add_metric_solution(it->second, subspace_solver->retained_solutions(), int(partner), 0, i);
         } else {
           // The partner is not among roots, or was truncated away, so its vector is assembled from the subspace
           if (partner >= subspace_solver->retained_solutions().rows())
             throw std::logic_error("The complex conjugate partner of a root is not among the retained solutions");
           auto partner_param = this->m_handlers->rr().copy(actions.at(i));
           construct_subspace_vector(subspace_solver->retained_solutions(), int(partner), partner_param);
+          if (on_the_fly)
+            apply_metric(partner_param);
           this->m_handlers->rr().axpy(it->second, partner_param, actions.at(i));
         }
       }
+    }
+    const auto residuals = wrap(actions.begin(), actions.begin() + roots.size());
+    if (stored) {
+      if (dims.nP > 0) {
+        using VectorP = typename SolverTemplate::VectorP;
+        auto pvectors = std::vector<VectorP>(roots.size(), VectorP(dims.nP));
+        for (size_t i = 0; i < roots.size(); ++i)
+          for (size_t j = 0; j < dims.nP; ++j)
+            pvectors[i][j] = mp_coeff(j, i);
+        this->m_apply_metric_p(pvectors, xspace.cparamsp(), residuals);
+      }
+      // one pass over the residuals for the actions of the metric on the Q and D vectors
+      auto qd_metric_actions = xspace.cmetric_actionsq();
+      const auto d_metric_actions = xspace.cmetric_actionsd();
+      qd_metric_actions.insert(qd_metric_actions.end(), d_metric_actions.begin(), d_metric_actions.end());
+      this->m_handlers->rq().gemm_outer(mqd_coeff, qd_metric_actions, residuals);
+    } else if (on_the_fly && !metric_solutions.r.empty()) {
+      this->m_handlers->rr().gemm_outer(mx_coeff, metric_solutions.r, residuals);
+    } else if (on_the_fly) {
+      this->m_handlers->rq().gemm_outer(mx_coeff, metric_solutions.q, residuals);
     }
   }
 
@@ -318,8 +389,8 @@ protected:
    * the truncated partner, which is assembled from the subspace.
    */
   void compute_errors(const std::vector<int>& roots, const CVecRef<R>& params, const CVecRef<R>& residuals,
-                      std::vector<value_type_abs>& errors) override {
-    SolverTemplate::compute_errors(roots, params, residuals, errors);
+                      const std::vector<value_type_abs>& solution_norms, std::vector<value_type_abs>& errors) override {
+    SolverTemplate::compute_errors(roots, params, residuals, solution_norms, errors);
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
     assert(subspace_solver);
     const auto nroots = subspace_solver->size();
@@ -339,11 +410,29 @@ protected:
     auto partner_residual = this->m_handlers->rr().copy(params.at(i));
     construct_subspace_vector(solutions, int(*partner), partner_param);
     construct_subspace_action(solutions, int(*partner), partner_residual);
-    // The imaginary part of the partner's eigenvalue is the negative of the one of the last root
-    this->m_handlers->rr().axpy(-eigenvalues().at(nroots - 1), partner_param, partner_residual);
-    this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
-    errors.at(i) = std::sqrt(errors.at(i) * errors.at(i) +
-                             std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
+    if (this->m_xspace->metric_kind() != MetricKind::Identity) {
+      // With a metric, the residual contains the actions of the metric on the partner and on the last root
+      auto metric_param = this->m_handlers->rr().copy(params.at(i));
+      if (this->m_xspace->stores_metric_actions()) {
+        construct_subspace_metric_action(solutions, int(*partner), partner_param);
+        construct_subspace_metric_action(solutions, int(nroots - 1), metric_param);
+      } else {
+        apply_metric(partner_param);
+        apply_metric(metric_param);
+      }
+      this->m_handlers->rr().axpy(-eigenvalues().at(nroots - 1), partner_param, partner_residual);
+      this->m_handlers->rr().axpy(-it->second, metric_param, partner_residual);
+    } else {
+      // The imaginary part of the partner's eigenvalue is the negative of the one of the last root
+      this->m_handlers->rr().axpy(-eigenvalues().at(nroots - 1), partner_param, partner_residual);
+      this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
+    }
+    auto partner_error = std::sqrt(std::abs(this->m_handlers->rr().dot(partner_residual, partner_residual)));
+    if (!solution_norms.empty())
+      // as in SolverTemplate::compute_errors(), the error of the partner of unit length
+      partner_error /=
+          subspace::util::solution_norms(solutions, this->m_xspace->data.at(subspace::EqnData::S))[*partner];
+    errors.at(i) = std::sqrt(errors.at(i) * errors.at(i) + partner_error * partner_error);
   }
 
   //! Constructs in param the subspace vector with the coefficients in the given row of solutions
@@ -363,6 +452,26 @@ protected:
     if (this->m_apply_p)
       this->m_apply_p(detail::construct_vectorP({row}, solutions, dims.oP(), dims.nP), this->m_xspace->cparamsp(),
                       wrap_arg(action));
+  }
+
+  //! Replaces param by the action of the metric on it, with the metric applied on the fly
+  void apply_metric(R& param) {
+    auto metric_action = this->m_handlers->rr().copy(param);
+    this->m_apply_metric(cwrap_arg(param), wrap_arg(metric_action));
+    this->m_handlers->rr().copy(param, metric_action);
+  }
+
+  //! Constructs in metric_action the action of the metric on the subspace vector with the given row of coefficients
+  void construct_subspace_metric_action(const subspace::Matrix<scalar_type>& solutions, int row, R& metric_action) {
+    const auto& dims = this->m_xspace->dimensions();
+    assert(solutions.cols() == dims.nX());
+    util::construct_solutions(wrap_arg(metric_action), {row}, solutions, CVecRef<P>{},
+                              this->m_xspace->cmetric_actionsq(), this->m_xspace->cmetric_actionsd(), dims.oP(),
+                              dims.oQ(), dims.oD(), this->m_handlers->rr(), this->m_handlers->rp(),
+                              this->m_handlers->rq());
+    if (dims.nP > 0)
+      this->m_apply_metric_p(detail::construct_vectorP({row}, solutions, dims.oP(), dims.nP),
+                             this->m_xspace->cparamsp(), wrap_arg(metric_action));
   }
 
   detail::DSpaceResetter<Q> m_dspace_resetter; //!< resets D space

@@ -53,15 +53,6 @@ public:
     set_hermiticity(m_hermiticity);
   }
 
-  bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
-             bool generate_initial_guess = false) override {
-    R& vector = actions[0];
-    for (unsigned int instance = 0; problem.RHS(vector, instance); ++instance)
-      add_equations(vector);
-    return IterativeSolverTemplate<LinearEquations, R, Q, P>::solve(parameters, actions, problem,
-                                                                    generate_initial_guess);
-  }
-
   bool nonlinear() const override { return false; }
 
   size_t end_iteration(const VecRef<R>& parameters, const VecRef<R>& action) override {
@@ -199,6 +190,13 @@ public:
   }
 
 protected:
+  //! Adds the right-hand sides provided by problem
+  void prepare_solve(const Problem<R>& problem, const VecRef<R>& actions) override {
+    R& vector = actions[0];
+    for (unsigned int instance = 0; problem.RHS(vector, instance); ++instance)
+      add_equations(vector);
+  }
+
   //! The values chi_ii = <b_i|x_i> of the current solutions, or with the augmented Hessian the subspace eigenvalues
   std::vector<value_type> values() const {
     if (get_augmented_hessian() > 0)
@@ -223,7 +221,8 @@ protected:
   }
 
   // FIXME The scale is fixed by the norm of RHS, but if RHS=0 there is no reference. We could use the norm of params
-  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {
+  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
+                          const detail::MetricSolutions<R, Q>& metric_solutions) override {
     assert(params.size() >= roots.size());
     const auto& norm = std::dynamic_pointer_cast<subspace::XSpace<R, Q, P>>(this->m_xspace)->rhs_norm();
     // With the augmented Hessian the subspace solution satisfies (H - lambda) x = rhs, with lambda the subspace

@@ -17,7 +17,11 @@
 #include <limits>
 
 namespace molpro::linalg::itsolv::detail {
-//! Removes Q parameters that have smallest contribution to any solution until Q space size is within limit
+/*!
+ * @brief Removes Q parameters that have smallest contribution to any solution until Q space size is within limit
+ * @param solutions the solutions whose coefficients measure the contributions (see contribution_solutions()), with
+ * columns for the current subspace
+ */
 template <class R, class Q, class P, typename value_type>
 void resize_qspace(subspace::IXSpace<R, Q, P>& xspace, const subspace::Matrix<value_type>& solutions,
                    std::size_t max_size, Logger& logger) {
@@ -114,16 +118,18 @@ public:
     logger.trace("DSpaceResetter::run()");
     logger.trace("dimensions {nP, nQ, nD, nR} = ", xspace.dimensions().nP, xspace.dimensions().nQ,
                  xspace.dimensions().nD, rparams.size());
-    // solutions with columns kept in step with the changes to xspace below
-    auto solutions_xspace = solutions;
+    // the solutions scaled to unit length, as in construct_dspace(), so that thresholds on norms and contributions do not
+    // depend on how the solutions are normalised; this has to happen before the subspace changes. Their columns are kept
+    // in step with the changes to xspace below.
+    auto solutions_xspace = contribution_solutions(solutions, xspace);
     if (solution_params.empty() && !rparams.empty()) {
       logger.debug("constructing solutions");
       const auto dims = xspace.dimensions();
       const auto overlap = xspace.data.at(subspace::EqnData::S);
       auto q_indices = std::vector<std::size_t>(xspace.dimensions().nQ);
       std::iota(q_indices.begin(), q_indices.end(), 0);
-      const auto solutions_proj =
-          dspace::stable_projected_solutions(solutions, overlap, dims, q_indices, norm_thresh, svd_thresh, logger);
+      const auto solutions_proj = dspace::stable_projected_solutions(solutions_xspace, overlap, dims, q_indices,
+                                                                     norm_thresh, svd_thresh, logger);
       const auto nC = solutions_proj.rows();
       for (size_t i = 0; i < nC; ++i)
         solution_params.emplace_back(util::construct_zeroed_copy(rparams.front().get(), handlers.qr()));

@@ -14,6 +14,7 @@ set(EXAMPLES
 		LinearEigensystemSpanExample.cpp
         LinearEigensystemDistrArrayExample.cpp
         LinearEigensystemMultirootExample.cpp
+        GeneralizedEigensystemExample.cpp
         LinearEquationsExample.cpp
         NonLinearEquationsExample.cpp
         OptimizeExample.cpp

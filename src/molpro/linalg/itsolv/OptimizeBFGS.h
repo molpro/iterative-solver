@@ -274,7 +274,8 @@ protected:
 
 protected:
   // for non-linear problems, actions already contains the residual
-  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions) override {}
+  void construct_residual(const std::vector<int>& roots, const CVecRef<R>& params, const VecRef<R>& actions,
+                          const detail::MetricSolutions<R, Q>& metric_solutions) override {}
 
   int m_max_size_qspace = 20; //!< maximum size of Q space
   bool m_strong_Wolfe = true;                              //!< Whether to use strong or weak Wolfe conditions

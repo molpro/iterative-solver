@@ -642,3 +642,43 @@ TEST(helper_implementation, svd_system_hermitian_null_space) {
   ASSERT_EQ(svd.size(), 1u);
   EXPECT_NEAR(svd.front().value, 1e-14, 1e-13);
 }
+
+// The metric of a generalised eigenproblem may be of any scale: scaling it scales the eigenvalues inversely, also when
+// its eigenvalues are far below one, and directions of small metric are not mistaken for null ones
+TEST(helper_implementation, eigenproblem_metric_scale) {
+  constexpr int n = 12;
+  Eigen::VectorXd spectrum(n);
+  for (int i = 0; i < n; ++i)
+    spectrum(i) = 0.5 + 1.5 * i / (n - 1);
+  const Eigen::MatrixXd metric = with_spectrum(spectrum);
+  Eigen::MatrixXd non_hermitian = coupled_hamiltonian(n);
+  for (int i = 0; i < n; ++i)
+    for (int j = 0; j < i; ++j)
+      non_hermitian(i, j) *= 0.8;
+  for (const bool hermitian : {true, false}) {
+    const Eigen::MatrixXd H = hermitian ? coupled_hamiltonian(n) : non_hermitian;
+    for (const size_t nroots : {size_t(3), size_t(n)}) {
+      std::vector<double> evecs, evals_reference, evals;
+      molpro::linalg::itsolv::eigenproblem<double>(evecs, evals_reference, row_major(H), row_major(metric), n,
+                                                   hermitian, 1e-10, 0, nullptr, nroots);
+      for (const double scale : {1e-15, 1e-20, 1e15}) {
+        SCOPED_TRACE("hermitian=" + std::to_string(hermitian) + " nroots=" + std::to_string(nroots) +
+                     " scale=" + std::to_string(scale));
+        molpro::linalg::itsolv::eigenproblem<double>(evecs, evals, row_major(H), row_major(Eigen::MatrixXd(scale * metric)),
+                                                     n, hermitian, 1e-10, 0, nullptr, nroots);
+        ASSERT_EQ(evals.size(), evals_reference.size());
+        for (size_t k = 0; k < evals.size(); ++k)
+          EXPECT_NEAR(evals[k] * scale, evals_reference[k], 1e-10 * std::abs(evals_reference[k])) << "root " << k;
+      }
+    }
+  }
+  // a direction of much smaller metric than the others gives a large eigenvalue, not a zero one
+  Eigen::MatrixXd H = Eigen::MatrixXd::Zero(4, 4), m = Eigen::MatrixXd::Zero(4, 4);
+  for (int i = 0; i < 4; ++i) {
+    H(i, i) = 1. + i;
+    m(i, i) = i < 3 ? 1e-3 : 5e-15;
+  }
+  std::vector<double> evecs, evals;
+  molpro::linalg::itsolv::eigenproblem<double>(evecs, evals, row_major(H), row_major(m), 4, true, 1e-14, 0, nullptr, 2);
+  EXPECT_THAT(evals, ::testing::Pointwise(::testing::DoubleNear(1e-8), std::vector<double>{1000, 2000}));
+}

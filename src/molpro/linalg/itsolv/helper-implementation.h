@@ -336,7 +336,7 @@ orthogonalised_subspace<value_type> orthogonalise_subspace(const std::vector<val
   using real_t = real_type_t<value_type>;
   using matrix_type = typename orthogonalised_subspace<value_type>::matrix_type;
   using row_major_type = Eigen::Matrix<value_type, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
-  // a metric eigenvalue below this marks a singular direction; calibrated for double precision
+  // a metric eigenvalue below this fraction of the largest marks a singular direction; calibrated for double precision
   const real_t null_metric_eigenvalue_tol = precision_scaled<value_type>(1e-14);
 
   orthogonalised_subspace<value_type> result;
@@ -365,11 +365,15 @@ orthogonalised_subspace<value_type> orthogonalise_subspace(const std::vector<val
   // Transform H into a symmetrically orthogonalized basis via (S^{-1/2})^\dagger H S^{-1/2}
   // taking into account the possibility of rank-deficiency of S (aka: zero SV).
   // The eigenvalues come out in ascending order, so the retained directions are the trailing block.
+  // The thresholds are relative to the largest eigenvalue, as the metric may be of any scale, e.g. that of a
+  // generalised eigenproblem rather than the overlap of normalised vectors.
   Eigen::Vector<value_type, Eigen::Dynamic> svmh(rank);
+  const real_t largest = dimension > 0 ? metricEvals(dimension - 1) : real_t(0);
   for (int k = 0; k < rank; k++) {
     const real_t lambda = metricEvals(dimension - rank + k);
-    assert(abs(lambda) <= svdThreshold || lambda >= 0); // metric is supposed to be positive (semi-)definite
-    svmh(k) = lambda > null_metric_eigenvalue_tol ? value_type(1 / sqrt(lambda)) : value_type(0);
+    // metric is supposed to be positive (semi-)definite
+    assert(abs(lambda) <= svdThreshold * largest || lambda >= 0);
+    svmh(k) = lambda > null_metric_eigenvalue_tol * largest ? value_type(1 / sqrt(lambda)) : value_type(0);
   }
   const auto retained = metricEvecs.rightCols(rank);
   result.Hbar = svmh.asDiagonal() * retained.adjoint() * H * retained * svmh.asDiagonal();
