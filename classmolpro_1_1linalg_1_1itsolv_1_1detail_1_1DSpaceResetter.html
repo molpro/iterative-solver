@@ -128,6 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9d1181f8c9d6d03cb504b1f72af063a2" id="r_a9d1181f8c9d6d03cb504b1f72af063a2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#a9d1181f8c9d6d03cb504b1f72af063a2">do_reset</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> iter, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Dimensions.html">subspace::Dimensions</a> &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">dims</a>)</td></tr>
 <tr class="memdesc:a9d1181f8c9d6d03cb504b1f72af063a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether reset operation should be run.  <br /></td></tr>
 <tr class="separator:a9d1181f8c9d6d03cb504b1f72af063a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc13ee028bc85bd74ff127b84714b2d6" id="r_abc13ee028bc85bd74ff127b84714b2d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#abc13ee028bc85bd74ff127b84714b2d6">in_progress</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:abc13ee028bc85bd74ff127b84714b2d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a reset has started and not all solutions have been moved into the Q space yet.  <br /></td></tr>
+<tr class="separator:abc13ee028bc85bd74ff127b84714b2d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae19f0aaa545096962daa3379661d77c2" id="r_ae19f0aaa545096962daa3379661d77c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#ae19f0aaa545096962daa3379661d77c2">set_nreset</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">i</a>)</td></tr>
 <tr class="separator:ae19f0aaa545096962daa3379661d77c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27b03a2d4922c913b5c7725b2fe8b8e3" id="r_a27b03a2d4922c913b5c7725b2fe8b8e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html#a27b03a2d4922c913b5c7725b2fe8b8e3">get_nreset</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
@@ -314,6 +317,35 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="abc13ee028bc85bd74ff127b84714b2d6" name="abc13ee028bc85bd74ff127b84714b2d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc13ee028bc85bd74ff127b84714b2d6">&#9670;&#160;</a></span>in_progress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html">molpro::linalg::itsolv::detail::DSpaceResetter</a>&lt; Q &gt;::in_progress </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether a reset has started and not all solutions have been moved into the Q space yet. </p>
+
+</div>
+</div>
 <a id="acef5af805bc31f9d4cd8fb6a8191f0d0" name="acef5af805bc31f9d4cd8fb6a8191f0d0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acef5af805bc31f9d4cd8fb6a8191f0d0">&#9670;&#160;</a></span>run()</h2>
 
@@ -383,6 +415,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>Run the reset operation. </p>
+<dl class="section return"><dt>Returns</dt><dd>the working set for the solutions returned in rparams, which numbers them 0, 1, ... in each batch: in a reset spread over several iterations, the later batches hold solutions of other roots than these numbers </dd></dl>
 
 </div>
 </div>

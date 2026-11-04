@@ -156,7 +156,7 @@ Q space</h1>
 D space</h1>
 <p>Deleting Q vectors from the subspace would change the solutions of the subspace problem and lose the progress made so far. To prevent this, the linear Davidson solvers keep a D space (<code>subspace::DSpace</code>), which stores the complement of the P+Q+R subspace that is needed to reproduce the previous solutions exactly.</p>
 <p>When Q vectors are deleted (<code>detail::construct_dspace()</code>), the current solutions, scaled to unit length, are projected onto the space spanned by the deleted Q vectors and the old D vectors. After removing null and linearly dependent combinations, the projections are normalised and become the new D space; the old D space is discarded. D vectors and their actions (and actions of the metric, if they are stored) are stored in <code>Q</code> containers. As a result the D space never holds more vectors than there are solutions, and the subspace still contains the previous solutions, even though the Q vectors that contributed to them are gone.</p>
-<p>Because the D space is built from linear combinations of stored vectors, numerical noise accumulates in it over many iterations. It can therefore be reset periodically (<code>reset_D</code> option, <code>detail::DSpaceResetter</code>): the full current solutions are moved into the Q space as new parameters, the Q vectors that overlap most with them are deleted, and the D space is cleared. If the working set is smaller than the number of solutions, the reset is spread over several iterations. The size of the Q space after a reset can be limited separately with <code>reset_D_max_Q_size</code>.</p>
+<p>Because the D space is built from linear combinations of stored vectors, numerical noise accumulates in it over many iterations. It can therefore be reset periodically (<code>reset_D</code> option, <code>detail::DSpaceResetter</code>): the full current solutions are moved into the Q space as new parameters, the Q vectors that overlap most with them are deleted, and the D space is cleared. If the working set is smaller than the number of solutions, the reset is spread over several iterations. Between such a step and the next <code>add_vector()</code>, which takes up the returned solutions, <code>solution()</code> throws: the subspace left may be too small to hold the solutions. <code>solve()</code> therefore does not stop right after a reset step, even if this means going beyond <code>max_iter</code>. A reset that falls due once all solutions have converged is not done. The size of the Q space after a reset can be limited separately with <code>reset_D_max_Q_size</code>.</p>
 <h1><a class="anchor" id="SpacesX"></a>
 X space (full subspace)</h1>
 <p>The X space is the union of the P, Q and D spaces, in which the subspace problem is solved (<code>subspace::IXSpace</code>, <code>subspace::XSpace</code>). It owns the containers of the individual spaces as well as the equation data projected onto the subspace (<code>subspace::SubspaceData</code>):</p>
@@ -179,8 +179,9 @@ Overview of an iteration</h1>
 <li>The subspace problem is solved in X = P+Q+D, and solutions and residuals are constructed in the R vectors.</li>
 <li>The user preconditions the residuals and calls <code>end_iteration()</code>.</li>
 <li>If the Q space is too large, Q vectors are deleted and a new D space is constructed from the current solutions (or the D space is reset if requested).</li>
-<li>The preconditioned residuals are orthonormalised against P+Q+D and returned as the new R parameters. </li>
+<li>The preconditioned residuals are orthonormalised against P+Q+D and returned as the new R parameters.</li>
 </ol>
+<p>Once all solutions have converged, steps 5 and 6 are skipped and the subspace is left unchanged. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

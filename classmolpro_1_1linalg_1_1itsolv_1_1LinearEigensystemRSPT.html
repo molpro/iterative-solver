@@ -164,9 +164,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3e730f56ae36aa0980112b33bf949594"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adac97ddb9bf7d21e541789a4277fd2e4" id="r_adac97ddb9bf7d21e541789a4277fd2e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#adac97ddb9bf7d21e541789a4277fd2e4">end_iteration</a> (R &amp;parameters, R &amp;actions) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:adac97ddb9bf7d21e541789a4277fd2e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac053cd110d99cd935aa22be81bb836c0" id="r_ac053cd110d99cd935aa22be81bb836c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#ac053cd110d99cd935aa22be81bb836c0">precondition</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="memdesc:ac053cd110d99cd935aa22be81bb836c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the Davidson preconditioner.  <br /></td></tr>
-<tr class="separator:ac053cd110d99cd935aa22be81bb836c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bf7934d86cb16fd036e14239b0f3fc2" id="r_a8bf7934d86cb16fd036e14239b0f3fc2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; scalar_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#a8bf7934d86cb16fd036e14239b0f3fc2">eigenvalues</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:a8bf7934d86cb16fd036e14239b0f3fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab66f2816ddfbdcaa81f5987a449222da" id="r_ab66f2816ddfbdcaa81f5987a449222da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> std::vector&lt; scalar_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html#ab66f2816ddfbdcaa81f5987a449222da">working_set_eigenvalues</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
@@ -472,6 +469,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a9ee1b0fd61900d12fcaa7ba7663c55e1 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" id="r_a9ee1b0fd61900d12fcaa7ba7663c55e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a9ee1b0fd61900d12fcaa7ba7663c55e1">m_end_iteration_needed</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">true</a></td></tr>
 <tr class="memdesc:a9ee1b0fd61900d12fcaa7ba7663c55e1 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether end_iteration should be called after any preconditioner  <br /></td></tr>
 <tr class="separator:a9ee1b0fd61900d12fcaa7ba7663c55e1 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70f2341eee56a40187f748648cfa4f74 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" id="r_a70f2341eee56a40187f748648cfa4f74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a70f2341eee56a40187f748648cfa4f74">m_solutions_outdated</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></td></tr>
+<tr class="memdesc:a70f2341eee56a40187f748648cfa4f74 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the subspace was changed since the solutions of its problem were found  <br /></td></tr>
+<tr class="separator:a70f2341eee56a40187f748648cfa4f74 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a9706701d165b289d50d3c9790c257a6a" name="a9706701d165b289d50d3c9790c257a6a"></a>
@@ -654,10 +654,11 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 </div><div class="memdoc">
 
 <p>constructs next perturbed wavefunction </p>
+<p>The wavefunction of the previous order is constructed from the subspace, so the content of parameters on entry is not used.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">parameters</td><td>output new parameters for the subspace. </td></tr>
-    <tr><td class="paramname">residual</td><td>preconditioned residuals. </td></tr>
+    <tr><td class="paramname">action</td><td>preconditioned residuals. </td></tr>
   </table>
   </dd>
 </dl>
@@ -848,46 +849,6 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac053cd110d99cd935aa22be81bb836c0" name="ac053cd110d99cd935aa22be81bb836c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac053cd110d99cd935aa22be81bb836c0">&#9670;&#160;</a></span>precondition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html">molpro::linalg::itsolv::LinearEigensystemRSPT</a>&lt; R, Q, P &gt;::precondition </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
-          <td class="paramname"><em>parameters</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
-          <td class="paramname"><em>action</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Applies the Davidson preconditioner. </p>
 
 </div>
 </div>

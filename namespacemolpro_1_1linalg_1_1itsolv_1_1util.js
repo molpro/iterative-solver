@@ -1,11 +1,14 @@
 var namespacemolpro_1_1linalg_1_1itsolv_1_1util =
 [
     [ "ArrayHandlersError", "structmolpro_1_1linalg_1_1itsolv_1_1util_1_1ArrayHandlersError.html", null ],
+    [ "StreamFormatGuard", "classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard.html", "classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard" ],
     [ "StringFacet", "classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StringFacet.html", "classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StringFacet" ],
     [ "capitalize_keys", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#a7c7ffb21f5167c22282fa2e82c2c83cc", null ],
     [ "construct_solutions", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#a9fbbecfaf738a7d9e82dcc95d35ac082", null ],
     [ "construct_zeroed_copy", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#a4c3019057e313770b3fb9ffe4dfc9b11", null ],
     [ "delete_parameters", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#aacd4867e14db45ec690217f59c7cff99", null ],
     [ "is_iota", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#a5a4f2c1ef2abe57c4594e20de21736ba", null ],
-    [ "remove_null_vectors", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#a24df5019a548240f08f2d6ae28f6f348", null ]
+    [ "norm", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#aabd36464d3e9408304ee31e1e7ec253a", null ],
+    [ "remove_null_vectors", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#a24df5019a548240f08f2d6ae28f6f348", null ],
+    [ "tosize", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html#ac0bacf18c027192016f7aa6dd5fc077d", null ]
 ];

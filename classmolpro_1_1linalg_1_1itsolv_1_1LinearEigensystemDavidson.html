@@ -99,7 +99,6 @@ $(document).ready(function(){initNavTree('classmolpro_1_1linalg_1_1itsolv_1_1Lin
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">molpro::linalg::itsolv::LinearEigensystemDavidson&lt; R, Q, P &gt; Class Template Reference</div></div>
 </div><!--header-->
@@ -114,7 +113,9 @@ Inheritance diagram for molpro::linalg::itsolv::LinearEigensystemDavidson&lt; R,
 <div class="dyncontent">
 <div class="center"><img src="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson__inherit__graph.png" border="0" usemap="#amolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson_3_01R_00_01Q_00_01P_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="amolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson_3_01R_00_01Q_00_01P_01_4_inherit__map" id="amolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson_3_01R_00_01Q_00_01P_01_4_inherit__map">
-<area shape="rect" title="One specific implementation of LinearEigensystem using Davidson&#39;s algorithm with modifications to man..." alt="" coords="5,108,220,163"/>
+<area shape="rect" title="One specific implementation of LinearEigensystem using Davidson&#39;s algorithm with modifications to man..." alt="" coords="5,211,220,265"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html" title="Implementation shared by the linear Davidson solvers, LinearEigensystemDavidson and LinearEquationsDa..." alt="" coords="7,108,218,163"/>
+<area shape="poly" title=" " alt="" coords="115,176,115,211,110,211,110,176"/>
 <area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html" title="Implements IterativeSolver interface that is common to all solvers." alt="" coords="19,5,206,60"/>
 <area shape="poly" title=" " alt="" coords="115,74,115,108,110,108,110,74"/>
 </map>
@@ -124,11 +125,11 @@ Collaboration diagram for molpro::linalg::itsolv::LinearEigensystemDavidson&lt; 
 <div class="dyncontent">
 <div class="center"><img src="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson__coll__graph.png" border="0" usemap="#amolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson_3_01R_00_01Q_00_01P_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="amolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson_3_01R_00_01Q_00_01P_01_4_coll__map" id="amolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson_3_01R_00_01Q_00_01P_01_4_coll__map">
-<area shape="rect" title="One specific implementation of LinearEigensystem using Davidson&#39;s algorithm with modifications to man..." alt="" coords="401,41,616,96"/>
-<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html" title="Implements IterativeSolver interface that is common to all solvers." alt="" coords="21,5,208,60"/>
-<area shape="poly" title=" " alt="" coords="222,40,401,56,401,62,222,45"/>
-<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html" title=" " alt="" coords="5,85,224,125"/>
-<area shape="poly" title=" " alt="" coords="238,91,401,76,401,81,239,96"/>
+<area shape="rect" title="One specific implementation of LinearEigensystem using Davidson&#39;s algorithm with modifications to man..." alt="" coords="5,211,220,265"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html" title="Implementation shared by the linear Davidson solvers, LinearEigensystemDavidson and LinearEquationsDa..." alt="" coords="7,108,218,163"/>
+<area shape="poly" title=" " alt="" coords="115,176,115,211,110,211,110,176"/>
+<area shape="rect" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html" title="Implements IterativeSolver interface that is common to all solvers." alt="" coords="19,5,206,60"/>
+<area shape="poly" title=" " alt="" coords="115,74,115,108,110,108,110,74"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -148,63 +149,77 @@ class molpro::linalg::itsolv::LinearEigensystemDavidson&lt; R, Q, P &gt;</div><p
 Public Types</h2></td></tr>
 <tr class="memitem:ae0ec3d737bc94543b35dc4d0e3558470" id="r_ae0ec3d737bc94543b35dc4d0e3558470"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ae0ec3d737bc94543b35dc4d0e3558470">SolverTemplate</a> = <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">IterativeSolverTemplate</a>&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystem.html">LinearEigensystem</a>, R, Q, P &gt;</td></tr>
 <tr class="separator:ae0ec3d737bc94543b35dc4d0e3558470"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html">molpro::linalg::itsolv::DavidsonCommon&lt; Solver, R, Q, P &gt;</a></td></tr>
+<tr class="memitem:a00a55a5aca45db5d5c90f34028bd7f65 inherit pub_types_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a00a55a5aca45db5d5c90f34028bd7f65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a00a55a5aca45db5d5c90f34028bd7f65">SolverTemplate</a> = <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">IterativeSolverTemplate</a>&lt; Solver, R, Q, P &gt;</td></tr>
+<tr class="separator:a00a55a5aca45db5d5c90f34028bd7f65 inherit pub_types_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae1fcec228a6eaf28bab62636828e5483" id="r_ae1fcec228a6eaf28bab62636828e5483"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ae1fcec228a6eaf28bab62636828e5483">LinearEigensystemDavidson</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">handlers</a>=std::make_shared&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">molpro::linalg::itsolv::ArrayHandlers</a>&lt; R, Q, P &gt; &gt;(), <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">logger_</a>=std::make_shared&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt;())</td></tr>
 <tr class="separator:ae1fcec228a6eaf28bab62636828e5483"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a262897f82aa5a3ed099646e05ab73372" id="r_a262897f82aa5a3ed099646e05ab73372"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a262897f82aa5a3ed099646e05ab73372">nonlinear</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="separator:a262897f82aa5a3ed099646e05ab73372"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcf5942654c425f0bb7048e19f8276c2" id="r_abcf5942654c425f0bb7048e19f8276c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#abcf5942654c425f0bb7048e19f8276c2">supports_metric</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ad919129e9410e49e8f2ded4da9b9138b">MetricKind</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">kind</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="memdesc:abcf5942654c425f0bb7048e19f8276c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Supports generalised eigenproblems A v = lambda M v with a Hermitian, positive definite metric M.  <br /></td></tr>
 <tr class="separator:abcf5942654c425f0bb7048e19f8276c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22ed76de01c073008465614a389df5c3" id="r_a22ed76de01c073008465614a389df5c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a22ed76de01c073008465614a389df5c3">end_iteration</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;action) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="memdesc:a22ed76de01c073008465614a389df5c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proposes new parameters for the subspace from the preconditioned residuals.  <br /></td></tr>
-<tr class="separator:a22ed76de01c073008465614a389df5c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f3c0bb3e790c82ffebbfbe62d1d3a9c" id="r_a5f3c0bb3e790c82ffebbfbe62d1d3a9c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a5f3c0bb3e790c82ffebbfbe62d1d3a9c">end_iteration</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="separator:a5f3c0bb3e790c82ffebbfbe62d1d3a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebcf854909acb92f11bb2ea33a596c64" id="r_aebcf854909acb92f11bb2ea33a596c64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aebcf854909acb92f11bb2ea33a596c64">end_iteration</a> (R &amp;parameters, R &amp;actions) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="separator:aebcf854909acb92f11bb2ea33a596c64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f5529dc43728aec055ba927acadd064" id="r_a0f5529dc43728aec055ba927acadd064"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a0f5529dc43728aec055ba927acadd064">finalize</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:a0f5529dc43728aec055ba927acadd064"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66a707d2bc8900f8b0478c881ef99cf4" id="r_a66a707d2bc8900f8b0478c881ef99cf4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a66a707d2bc8900f8b0478c881ef99cf4">precondition</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="memdesc:a66a707d2bc8900f8b0478c881ef99cf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the Davidson preconditioner.  <br /></td></tr>
-<tr class="separator:a66a707d2bc8900f8b0478c881ef99cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57e0b6fcfe3f0711b5c618f0660f2c3c" id="r_a57e0b6fcfe3f0711b5c618f0660f2c3c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; scalar_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a57e0b6fcfe3f0711b5c618f0660f2c3c">eigenvalues</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:a57e0b6fcfe3f0711b5c618f0660f2c3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0cc61ce681e6c9f07a4a869d1caf33d" id="r_ad0cc61ce681e6c9f07a4a869d1caf33d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> std::vector&lt; scalar_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ad0cc61ce681e6c9f07a4a869d1caf33d">working_set_eigenvalues</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:ad0cc61ce681e6c9f07a4a869d1caf33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8358829492685415686f92b83d7962fc" id="r_a8358829492685415686f92b83d7962fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a8358829492685415686f92b83d7962fc">set_value_errors</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="memdesc:a8358829492685415686f92b83d7962fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)  <br /></td></tr>
-<tr class="separator:a8358829492685415686f92b83d7962fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac264beb56a500ce1a90edd391ad16b87" id="r_ac264beb56a500ce1a90edd391ad16b87"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ac264beb56a500ce1a90edd391ad16b87">report</a> (std::ostream &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">cout</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">endl</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">true</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:ac264beb56a500ce1a90edd391ad16b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4e8f66aaaa54da8eb41e2a5733ece1d" id="r_ab4e8f66aaaa54da8eb41e2a5733ece1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ab4e8f66aaaa54da8eb41e2a5733ece1d">set_reset_D</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n</a>)</td></tr>
-<tr class="memdesc:ab4e8f66aaaa54da8eb41e2a5733ece1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the period in iterations for resetting the D space, 0 for never.  <br /></td></tr>
-<tr class="separator:ab4e8f66aaaa54da8eb41e2a5733ece1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a925f70a6fb1a01ede8dd5a6dc0b7dedb" id="r_a925f70a6fb1a01ede8dd5a6dc0b7dedb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a925f70a6fb1a01ede8dd5a6dc0b7dedb">get_reset_D</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a925f70a6fb1a01ede8dd5a6dc0b7dedb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a241caed8a5b1e346fc978729892f6260" id="r_a241caed8a5b1e346fc978729892f6260"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a241caed8a5b1e346fc978729892f6260">set_reset_D_maxQ_size</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n</a>)</td></tr>
-<tr class="memdesc:a241caed8a5b1e346fc978729892f6260"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the maximum size of Q space after resetting the D space.  <br /></td></tr>
-<tr class="separator:a241caed8a5b1e346fc978729892f6260"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dabbe4326a656e6cb8f9a1018ceca3d" id="r_a1dabbe4326a656e6cb8f9a1018ceca3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a1dabbe4326a656e6cb8f9a1018ceca3d">get_reset_D_maxQ_size</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a1dabbe4326a656e6cb8f9a1018ceca3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c9ea163e72cf27e597ab9bba12da0d6" id="r_a5c9ea163e72cf27e597ab9bba12da0d6"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a5c9ea163e72cf27e597ab9bba12da0d6">get_max_size_qspace</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a5c9ea163e72cf27e597ab9bba12da0d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8556c5df53eadb5802ade2ad7da9993a" id="r_a8556c5df53eadb5802ade2ad7da9993a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a8556c5df53eadb5802ade2ad7da9993a">set_max_size_qspace</a> (std::size_t <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n</a>)</td></tr>
-<tr class="separator:a8556c5df53eadb5802ade2ad7da9993a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b56a6d2619c42b602f47a141b0d5278" id="r_a9b56a6d2619c42b602f47a141b0d5278"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a9b56a6d2619c42b602f47a141b0d5278">get_min_size_qspace</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a9b56a6d2619c42b602f47a141b0d5278"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a202691a5613686bafcdbb41b95c055dd" id="r_a202691a5613686bafcdbb41b95c055dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a202691a5613686bafcdbb41b95c055dd">set_min_size_qspace</a> (std::size_t <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n</a>)</td></tr>
-<tr class="separator:a202691a5613686bafcdbb41b95c055dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30cfe987c737da469e7a86a8725586a4" id="r_a30cfe987c737da469e7a86a8725586a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a30cfe987c737da469e7a86a8725586a4">set_hermiticity</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">hermitian</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="separator:a30cfe987c737da469e7a86a8725586a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a0109d914fa9d1c4f40fdc54b835efa" id="r_a3a0109d914fa9d1c4f40fdc54b835efa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a3a0109d914fa9d1c4f40fdc54b835efa">get_hermiticity</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
-<tr class="separator:a3a0109d914fa9d1c4f40fdc54b835efa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa46edad2cecdac0a051062435a7188f1" id="r_aa46edad2cecdac0a051062435a7188f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aa46edad2cecdac0a051062435a7188f1">set_options</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html">Options</a> &amp;<a class="el" href="namespacemolpro_1_1linalg.html#abd04a7feed3604605815d55678fc2369">options</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:aa46edad2cecdac0a051062435a7188f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea95c0b3b85e393fac9d39c931463c03" id="r_aea95c0b3b85e393fac9d39c931463c03"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html">Options</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aea95c0b3b85e393fac9d39c931463c03">get_options</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="separator:aea95c0b3b85e393fac9d39c931463c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2586061786c83f40ee932189f6a59353" id="r_a2586061786c83f40ee932189f6a59353"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a2586061786c83f40ee932189f6a59353">report</a> (std::ostream &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">cout</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">endl</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">true</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="separator:a2586061786c83f40ee932189f6a59353"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4748964a82d882be6cfebd7c158511e" id="r_ab4748964a82d882be6cfebd7c158511e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ab4748964a82d882be6cfebd7c158511e">report</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="separator:ab4748964a82d882be6cfebd7c158511e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html">molpro::linalg::itsolv::DavidsonCommon&lt; Solver, R, Q, P &gt;</a></td></tr>
+<tr class="memitem:a2391875bb9b30473294903c7c4e6d9eb inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a2391875bb9b30473294903c7c4e6d9eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a2391875bb9b30473294903c7c4e6d9eb">nonlinear</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="separator:a2391875bb9b30473294903c7c4e6d9eb inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57e8a747bf0b7042aa493ce1d1f0281c inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a57e8a747bf0b7042aa493ce1d1f0281c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a57e8a747bf0b7042aa493ce1d1f0281c">end_iteration</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;parameters, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;action) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:a57e8a747bf0b7042aa493ce1d1f0281c inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proposes new parameters for the subspace from the preconditioned residuals.  <br /></td></tr>
+<tr class="separator:a57e8a747bf0b7042aa493ce1d1f0281c inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73bcae095dc119d289bf81621eec81fc inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a73bcae095dc119d289bf81621eec81fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a73bcae095dc119d289bf81621eec81fc">end_iteration</a> (std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:a73bcae095dc119d289bf81621eec81fc inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proposes new parameters for the subspace from the preconditioned residuals.    <br /></td></tr>
+<tr class="separator:a73bcae095dc119d289bf81621eec81fc inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa762971e8bcb33a447a2154c5c905579 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_aa762971e8bcb33a447a2154c5c905579"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#aa762971e8bcb33a447a2154c5c905579">end_iteration</a> (R &amp;parameters, R &amp;actions) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:aa762971e8bcb33a447a2154c5c905579 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proposes new parameters for the subspace from the preconditioned residuals.    <br /></td></tr>
+<tr class="separator:aa762971e8bcb33a447a2154c5c905579 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1955989f43beb28098fb187ca4ffb6dd inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a1955989f43beb28098fb187ca4ffb6dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a1955989f43beb28098fb187ca4ffb6dd">set_norm_thresh</a> (value_type_abs <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">thresh</a>)</td></tr>
+<tr class="memdesc:a1955989f43beb28098fb187ca4ffb6dd inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set threshold on the norm of parameters that should be considered null.  <br /></td></tr>
+<tr class="separator:a1955989f43beb28098fb187ca4ffb6dd inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65e8ae8783f0253c994f4425debfd3af inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a65e8ae8783f0253c994f4425debfd3af"><td class="memItemLeft" align="right" valign="top">value_type_abs&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a65e8ae8783f0253c994f4425debfd3af">get_norm_thresh</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a65e8ae8783f0253c994f4425debfd3af inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad24c34054e750a5e90cc1415df2aca59 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_ad24c34054e750a5e90cc1415df2aca59"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#ad24c34054e750a5e90cc1415df2aca59">set_svd_thresh</a> (value_type_abs <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">thresh</a>)</td></tr>
+<tr class="separator:ad24c34054e750a5e90cc1415df2aca59 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabfffd0a044230fc8f7d32e055dc7ac0 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_aabfffd0a044230fc8f7d32e055dc7ac0"><td class="memItemLeft" align="right" valign="top">value_type_abs&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#aabfffd0a044230fc8f7d32e055dc7ac0">get_svd_thresh</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:aabfffd0a044230fc8f7d32e055dc7ac0 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa83919ef962216b8c62495d85244adcb inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_aa83919ef962216b8c62495d85244adcb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#aa83919ef962216b8c62495d85244adcb">set_reset_D</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n</a>)</td></tr>
+<tr class="memdesc:aa83919ef962216b8c62495d85244adcb inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the period in iterations for resetting the D space, 0 for never.  <br /></td></tr>
+<tr class="separator:aa83919ef962216b8c62495d85244adcb inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeef6b74e78c82e22e4080ffea0274910 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_aeef6b74e78c82e22e4080ffea0274910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#aeef6b74e78c82e22e4080ffea0274910">get_reset_D</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:aeef6b74e78c82e22e4080ffea0274910 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8eba5e1ea4801e517c254a469c824b2 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_af8eba5e1ea4801e517c254a469c824b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#af8eba5e1ea4801e517c254a469c824b2">set_reset_D_maxQ_size</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n</a>)</td></tr>
+<tr class="memdesc:af8eba5e1ea4801e517c254a469c824b2 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the maximum size of Q space after resetting the D space.  <br /></td></tr>
+<tr class="separator:af8eba5e1ea4801e517c254a469c824b2 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a955e5cee6c60d466824fd88a9df84843 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a955e5cee6c60d466824fd88a9df84843"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a955e5cee6c60d466824fd88a9df84843">get_reset_D_maxQ_size</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a955e5cee6c60d466824fd88a9df84843 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5904c115361e37a39df7d516db96c367 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a5904c115361e37a39df7d516db96c367"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a5904c115361e37a39df7d516db96c367">set_max_size_qspace</a> (std::size_t <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n</a>)</td></tr>
+<tr class="separator:a5904c115361e37a39df7d516db96c367 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad92b9e9a5ab9fea4c5f41e8430418f9b inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_ad92b9e9a5ab9fea4c5f41e8430418f9b"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#ad92b9e9a5ab9fea4c5f41e8430418f9b">get_max_size_qspace</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:ad92b9e9a5ab9fea4c5f41e8430418f9b inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91ba31fe3193ae7ec0b96e0eb5122c56 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a91ba31fe3193ae7ec0b96e0eb5122c56"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a91ba31fe3193ae7ec0b96e0eb5122c56">set_min_size_qspace</a> (std::size_t <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n</a>)</td></tr>
+<tr class="memdesc:a91ba31fe3193ae7ec0b96e0eb5122c56 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the minimum size of Q space when it is truncated, which must not exceed the maximum size.  <br /></td></tr>
+<tr class="separator:a91ba31fe3193ae7ec0b96e0eb5122c56 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6431089cf8409de640ab8d7079a3356 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_ac6431089cf8409de640ab8d7079a3356"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#ac6431089cf8409de640ab8d7079a3356">get_min_size_qspace</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:ac6431089cf8409de640ab8d7079a3356 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36b4611cfc0200df2687287c4213f38f inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a36b4611cfc0200df2687287c4213f38f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a36b4611cfc0200df2687287c4213f38f">set_hermiticity</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">hermitian</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="separator:a36b4611cfc0200df2687287c4213f38f inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad59cbbee0f238c7f86b3fb28c7306a16 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_ad59cbbee0f238c7f86b3fb28c7306a16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#ad59cbbee0f238c7f86b3fb28c7306a16">get_hermiticity</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="separator:ad59cbbee0f238c7f86b3fb28c7306a16 inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Solver, R, Q, P &gt;</a></td></tr>
 <tr class="memitem:acd19351fb4f3e8e98507cf0ec6b0032a inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" id="r_acd19351fb4f3e8e98507cf0ec6b0032a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#acd19351fb4f3e8e98507cf0ec6b0032a">IterativeSolverTemplate</a> ()=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">delete</a></td></tr>
 <tr class="separator:acd19351fb4f3e8e98507cf0ec6b0032a inherit pub_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -335,6 +350,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:a1d47a4e3c6b1d31024ef64b546135fac" id="r_a1d47a4e3c6b1d31024ef64b546135fac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; value_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a1d47a4e3c6b1d31024ef64b546135fac">values</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:a1d47a4e3c6b1d31024ef64b546135fac"><td class="mdescLeft">&#160;</td><td class="mdescRight">The values of the current solutions, whose changes between iterations are the value errors.  <br /></td></tr>
+<tr class="separator:a1d47a4e3c6b1d31024ef64b546135fac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa87ad0dcb21bf39be31a88455b0cc370" id="r_aa87ad0dcb21bf39be31a88455b0cc370"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aa87ad0dcb21bf39be31a88455b0cc370">construct_residual</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::vector&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> &gt; &amp;roots, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89">CVecRef</a>&lt; R &gt; &amp;params, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricSolutions.html">detail::MetricSolutions</a>&lt; R, Q &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">metric_solutions</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
 <tr class="memdesc:aa87ad0dcb21bf39be31a88455b0cc370"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs residual for given roots provided their parameters and actions.  <br /></td></tr>
 <tr class="separator:aa87ad0dcb21bf39be31a88455b0cc370"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -356,6 +374,22 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aeff3b900f346324b12e5eea68a2cff5e" id="r_aeff3b900f346324b12e5eea68a2cff5e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aeff3b900f346324b12e5eea68a2cff5e">construct_subspace_metric_action</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html">subspace::Matrix</a>&lt; scalar_type &gt; &amp;solutions, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> row, R &amp;metric_action)</td></tr>
 <tr class="memdesc:aeff3b900f346324b12e5eea68a2cff5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs in metric_action the action of the metric on the subspace vector with the given row of coefficients.  <br /></td></tr>
 <tr class="separator:aeff3b900f346324b12e5eea68a2cff5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html">molpro::linalg::itsolv::DavidsonCommon&lt; Solver, R, Q, P &gt;</a></td></tr>
+<tr class="memitem:a14a0ec625dfd17b72ae8cc3c32af03a8 inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a14a0ec625dfd17b72ae8cc3c32af03a8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a14a0ec625dfd17b72ae8cc3c32af03a8">DavidsonCommon</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &gt; &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">handlers</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> &gt; &amp;<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aed21354d1be1e79e8982e9b3e2036c9a">logger</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> hermiticity)</td></tr>
+<tr class="separator:a14a0ec625dfd17b72ae8cc3c32af03a8 inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d5452d9eeb7d3c431bbe4422595dc5c inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a7d5452d9eeb7d3c431bbe4422595dc5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a7d5452d9eeb7d3c431bbe4422595dc5c">set_davidson_options</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html">Options</a> &amp;<a class="el" href="namespacemolpro_1_1linalg.html#abd04a7feed3604605815d55678fc2369">options</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html">DavidsonOptions</a> &amp;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">opt</a>)</td></tr>
+<tr class="memdesc:a7d5452d9eeb7d3c431bbe4422595dc5c inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the general options and those of the Davidson solvers, after checking them.  <br /></td></tr>
+<tr class="separator:a7d5452d9eeb7d3c431bbe4422595dc5c inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bb93b6e7a02b1491895dd081ef973fc inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a8bb93b6e7a02b1491895dd081ef973fc"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">SolverOptions</a> &gt; </td></tr>
+<tr class="memitem:a8bb93b6e7a02b1491895dd081ef973fc inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">SolverOptions</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a8bb93b6e7a02b1491895dd081ef973fc">get_davidson_options</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:a8bb93b6e7a02b1491895dd081ef973fc inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the general options and those of the Davidson solvers in an options object of type SolverOptions.  <br /></td></tr>
+<tr class="separator:a8bb93b6e7a02b1491895dd081ef973fc inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2de8f8e0c6e32a196c5d09d271f7caf6 inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a2de8f8e0c6e32a196c5d09d271f7caf6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a2de8f8e0c6e32a196c5d09d271f7caf6">assign_max_size_qspace</a> (std::size_t <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">n</a>)</td></tr>
+<tr class="memdesc:a2de8f8e0c6e32a196c5d09d271f7caf6 inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the maximum size of the Q space, without checking it, and lowers that after a D-space reset to it.  <br /></td></tr>
+<tr class="separator:a2de8f8e0c6e32a196c5d09d271f7caf6 inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62e220c0c978ff9c4aee40b952f6d8cd inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a62e220c0c978ff9c4aee40b952f6d8cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a62e220c0c978ff9c4aee40b952f6d8cd">set_value_errors</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">override</a></td></tr>
+<tr class="memdesc:a62e220c0c978ff9c4aee40b952f6d8cd inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues)  <br /></td></tr>
+<tr class="separator:a62e220c0c978ff9c4aee40b952f6d8cd inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Solver, R, Q, P &gt;</a></td></tr>
 <tr class="memitem:a5d28bcc81bc90140c85815ef5449352c inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" id="r_a5d28bcc81bc90140c85815ef5449352c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a5d28bcc81bc90140c85815ef5449352c">prepare_solve</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Problem.html">Problem</a>&lt; R &gt; &amp;problem, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;actions)</td></tr>
 <tr class="memdesc:a5d28bcc81bc90140c85815ef5449352c inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares solving problem in <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad86a191289fae16f2d6df34f3b3ddad4">solve()</a>, after the problem has been checked and before the solver changes, e.g. by taking over data of the problem.  <br /></td></tr>
@@ -419,26 +453,31 @@ Protected Member Functions</h2></td></tr>
 <tr class="memdesc:a2f2e0093e6f1116cda0d98bae8e7858f inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the P space to the subspace with the matrices of <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aa48ceb96fcb5384472280af0d4bc2c37" title="Adds the P space to the subspace using the P-space kernel provided by problem; returns the working-se...">pspace_problem_matrices()</a>; returns the working-set size.  <br /></td></tr>
 <tr class="separator:a2f2e0093e6f1116cda0d98bae8e7858f inherit pro_methods_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a54f58e57011e81a3649959d5bf900b59" id="r_a54f58e57011e81a3649959d5bf900b59"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html">detail::DSpaceResetter</a>&lt; Q &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a54f58e57011e81a3649959d5bf900b59">m_dspace_resetter</a></td></tr>
-<tr class="memdesc:a54f58e57011e81a3649959d5bf900b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">resets D space  <br /></td></tr>
-<tr class="separator:a54f58e57011e81a3649959d5bf900b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bf051b5bc298da49a9046af0feb0104" id="r_a9bf051b5bc298da49a9046af0feb0104"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a9bf051b5bc298da49a9046af0feb0104">m_hermiticity</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></td></tr>
-<tr class="memdesc:a9bf051b5bc298da49a9046af0feb0104"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the problem is hermitian or not  <br /></td></tr>
-<tr class="separator:a9bf051b5bc298da49a9046af0feb0104"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac197a4ae4b4e7280c98688d01bff3526" id="r_ac197a4ae4b4e7280c98688d01bff3526"><td class="memItemLeft" align="right" valign="top">std::vector&lt; scalar_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#ac197a4ae4b4e7280c98688d01bff3526">m_last_values</a></td></tr>
-<tr class="memdesc:ac197a4ae4b4e7280c98688d01bff3526"><td class="mdescLeft">&#160;</td><td class="mdescRight">The values from the previous iteration.  <br /></td></tr>
-<tr class="separator:ac197a4ae4b4e7280c98688d01bff3526"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f8b13cbdbd2dc723312d0d640c31917" id="r_a4f8b13cbdbd2dc723312d0d640c31917"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a4f8b13cbdbd2dc723312d0d640c31917">m_resetting_in_progress</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></td></tr>
-<tr class="memdesc:a4f8b13cbdbd2dc723312d0d640c31917"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether D space resetting is in progress  <br /></td></tr>
-<tr class="separator:a4f8b13cbdbd2dc723312d0d640c31917"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8013c9d242b144c46886f8d16a02457" id="r_aa8013c9d242b144c46886f8d16a02457"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">RSpaceOptions</a>&lt; value_type_abs &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#aa8013c9d242b144c46886f8d16a02457">rspace_opts</a></td></tr>
-<tr class="memdesc:aa8013c9d242b144c46886f8d16a02457"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning R-space handling.  <br /></td></tr>
-<tr class="separator:aa8013c9d242b144c46886f8d16a02457"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2de5adb607fb5300a2f30c41f4ae297b" id="r_a2de5adb607fb5300a2f30c41f4ae297b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">QSpaceOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a2de5adb607fb5300a2f30c41f4ae297b">qspace_opts</a></td></tr>
-<tr class="memdesc:a2de5adb607fb5300a2f30c41f4ae297b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning Q-space handling.  <br /></td></tr>
-<tr class="separator:a2de5adb607fb5300a2f30c41f4ae297b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_static_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html">molpro::linalg::itsolv::DavidsonCommon&lt; Solver, R, Q, P &gt;</a></td></tr>
+<tr class="memitem:a91cd001ebff8868e884cd86805ebe305 inherit pro_static_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a91cd001ebff8868e884cd86805ebe305"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">static</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a91cd001ebff8868e884cd86805ebe305">check_qspace_size_limits</a> (std::size_t <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">min_size</a>, std::size_t <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">max_size</a>)</td></tr>
+<tr class="memdesc:a91cd001ebff8868e884cd86805ebe305 inherit pro_static_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">Throws std::invalid_argument if the minimum size of the Q space exceeds its maximum size.  <br /></td></tr>
+<tr class="separator:a91cd001ebff8868e884cd86805ebe305 inherit pro_static_methods_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html">molpro::linalg::itsolv::DavidsonCommon&lt; Solver, R, Q, P &gt;</a></td></tr>
+<tr class="memitem:acb2c0945db5cdbefb849d100602a91c2 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_acb2c0945db5cdbefb849d100602a91c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">RSpaceOptions</a>&lt; value_type_abs &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#acb2c0945db5cdbefb849d100602a91c2">rspace_opts</a></td></tr>
+<tr class="memdesc:acb2c0945db5cdbefb849d100602a91c2 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning R-space handling.  <br /></td></tr>
+<tr class="separator:acb2c0945db5cdbefb849d100602a91c2 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f582b2bd8531d5ffec3cbdf5ad40a6 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_ac6f582b2bd8531d5ffec3cbdf5ad40a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">QSpaceOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#ac6f582b2bd8531d5ffec3cbdf5ad40a6">qspace_opts</a></td></tr>
+<tr class="memdesc:ac6f582b2bd8531d5ffec3cbdf5ad40a6 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning Q-space handling.  <br /></td></tr>
+<tr class="separator:ac6f582b2bd8531d5ffec3cbdf5ad40a6 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4efb7780dd469c870949dfa59dc138d6 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a4efb7780dd469c870949dfa59dc138d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html">detail::DSpaceResetter</a>&lt; Q &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a4efb7780dd469c870949dfa59dc138d6">m_dspace_resetter</a></td></tr>
+<tr class="memdesc:a4efb7780dd469c870949dfa59dc138d6 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">resets D space  <br /></td></tr>
+<tr class="separator:a4efb7780dd469c870949dfa59dc138d6 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4e1ff1d97dcb31ee16a9d4fb2432f62 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_ae4e1ff1d97dcb31ee16a9d4fb2432f62"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#ae4e1ff1d97dcb31ee16a9d4fb2432f62">m_hermiticity</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></td></tr>
+<tr class="memdesc:ae4e1ff1d97dcb31ee16a9d4fb2432f62 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the problem is hermitian or not  <br /></td></tr>
+<tr class="separator:ae4e1ff1d97dcb31ee16a9d4fb2432f62 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8233994aab242ed987e83b1ce40a55b inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_ac8233994aab242ed987e83b1ce40a55b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; value_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#ac8233994aab242ed987e83b1ce40a55b">m_last_values</a></td></tr>
+<tr class="memdesc:ac8233994aab242ed987e83b1ce40a55b inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">the values from the previous iteration  <br /></td></tr>
+<tr class="separator:ac8233994aab242ed987e83b1ce40a55b inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65220f37e20c7dbc5a1292f821ce5603 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" id="r_a65220f37e20c7dbc5a1292f821ce5603"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a65220f37e20c7dbc5a1292f821ce5603">m_resetting_in_progress</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></td></tr>
+<tr class="memdesc:a65220f37e20c7dbc5a1292f821ce5603 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether D space resetting is in progress  <br /></td></tr>
+<tr class="separator:a65220f37e20c7dbc5a1292f821ce5603 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Solver, R, Q, P &gt;</a></td></tr>
 <tr class="memitem:a3a9fde47c295d0370ba3d65b91bc9b95 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" id="r_a3a9fde47c295d0370ba3d65b91bc9b95"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html">ArrayHandlers</a>&lt; R, Q, P &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a3a9fde47c295d0370ba3d65b91bc9b95">m_handlers</a></td></tr>
 <tr class="memdesc:a3a9fde47c295d0370ba3d65b91bc9b95 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array handlers.  <br /></td></tr>
@@ -509,6 +548,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a9ee1b0fd61900d12fcaa7ba7663c55e1 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" id="r_a9ee1b0fd61900d12fcaa7ba7663c55e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a9ee1b0fd61900d12fcaa7ba7663c55e1">m_end_iteration_needed</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">true</a></td></tr>
 <tr class="memdesc:a9ee1b0fd61900d12fcaa7ba7663c55e1 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether end_iteration should be called after any preconditioner  <br /></td></tr>
 <tr class="separator:a9ee1b0fd61900d12fcaa7ba7663c55e1 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70f2341eee56a40187f748648cfa4f74 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate" id="r_a70f2341eee56a40187f748648cfa4f74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a70f2341eee56a40187f748648cfa4f74">m_solutions_outdated</a> = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></td></tr>
+<tr class="memdesc:a70f2341eee56a40187f748648cfa4f74 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether the subspace was changed since the solutions of its problem were found  <br /></td></tr>
+<tr class="separator:a70f2341eee56a40187f748648cfa4f74 inherit pro_attribs_classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ae0ec3d737bc94543b35dc4d0e3558470" name="ae0ec3d737bc94543b35dc4d0e3558470"></a>
@@ -915,132 +957,6 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
-<a id="a22ed76de01c073008465614a389df5c3" name="a22ed76de01c073008465614a389df5c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22ed76de01c073008465614a389df5c3">&#9670;&#160;</a></span>end_iteration() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::end_iteration </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
-          <td class="paramname"><em>parameters</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#ab44c7c7dfce88d39d260d1f5c7b70fab">VecRef</a>&lt; R &gt; &amp;&#160;</td>
-          <td class="paramname"><em>action</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Proposes new parameters for the subspace from the preconditioned residuals. </p>
-<p>After add_vector solves the subspace problem it returns the new solution and residual. The residual should be preconditioned, i.e. using Davidson method, to accelerate convergence. The updated residual is used in this function to propose new Q space parameters orthonormal to the old space. They are returned in parameters so that corresponding actions can be calculated and used in add_vector in the next iteration.</p>
-<p>Every n_reset_D iterations, unless n_reset_D is 0 (the default), the D space is reset. If working set does not cover all solutions than resetting is done over multiple iterations. During this time, there are no deletions from the Q space. This is done by temporarily increasing maximum allowed size of Q space.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">parameters</td><td>output new parameters for the subspace. </td></tr>
-    <tr><td class="paramname">residual</td><td>preconditioned residuals. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>number of significant parameters to calculate the action for </dd></dl>
-
-</div>
-</div>
-<a id="aebcf854909acb92f11bb2ea33a596c64" name="aebcf854909acb92f11bb2ea33a596c64"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aebcf854909acb92f11bb2ea33a596c64">&#9670;&#160;</a></span>end_iteration() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::end_iteration </td>
-          <td>(</td>
-          <td class="paramtype">R &amp;&#160;</td>
-          <td class="paramname"><em>parameters</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">R &amp;&#160;</td>
-          <td class="paramname"><em>actions</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5f3c0bb3e790c82ffebbfbe62d1d3a9c" name="a5f3c0bb3e790c82ffebbfbe62d1d3a9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f3c0bb3e790c82ffebbfbe62d1d3a9c">&#9670;&#160;</a></span>end_iteration() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::end_iteration </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
-          <td class="paramname"><em>parameters</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
-          <td class="paramname"><em>action</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a0f5529dc43728aec055ba927acadd064" name="a0f5529dc43728aec055ba927acadd064"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0f5529dc43728aec055ba927acadd064">&#9670;&#160;</a></span>finalize()</h2>
 
@@ -1062,87 +978,6 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3a0109d914fa9d1c4f40fdc54b835efa" name="a3a0109d914fa9d1c4f40fdc54b835efa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a0109d914fa9d1c4f40fdc54b835efa">&#9670;&#160;</a></span>get_hermiticity()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::get_hermiticity </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5c9ea163e72cf27e597ab9bba12da0d6" name="a5c9ea163e72cf27e597ab9bba12da0d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c9ea163e72cf27e597ab9bba12da0d6">&#9670;&#160;</a></span>get_max_size_qspace()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::get_max_size_qspace </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9b56a6d2619c42b602f47a141b0d5278" name="a9b56a6d2619c42b602f47a141b0d5278"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b56a6d2619c42b602f47a141b0d5278">&#9670;&#160;</a></span>get_min_size_qspace()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::get_min_size_qspace </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1176,8 +1011,8 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
-<a id="a925f70a6fb1a01ede8dd5a6dc0b7dedb" name="a925f70a6fb1a01ede8dd5a6dc0b7dedb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a925f70a6fb1a01ede8dd5a6dc0b7dedb">&#9670;&#160;</a></span>get_reset_D()</h2>
+<a id="ab4748964a82d882be6cfebd7c158511e" name="ab4748964a82d882be6cfebd7c158511e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4748964a82d882be6cfebd7c158511e">&#9670;&#160;</a></span>report() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1188,61 +1023,7 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::get_reset_D </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1dabbe4326a656e6cb8f9a1018ceca3d" name="a1dabbe4326a656e6cb8f9a1018ceca3d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1dabbe4326a656e6cb8f9a1018ceca3d">&#9670;&#160;</a></span>get_reset_D_maxQ_size()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">int</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::get_reset_D_maxQ_size </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a262897f82aa5a3ed099646e05ab73372" name="a262897f82aa5a3ed099646e05ab73372"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a262897f82aa5a3ed099646e05ab73372">&#9670;&#160;</a></span>nonlinear()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::nonlinear </td>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate</a>&lt; Solver, R, Q, P &gt;::report </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1257,8 +1038,8 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
-<a id="a66a707d2bc8900f8b0478c881ef99cf4" name="a66a707d2bc8900f8b0478c881ef99cf4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66a707d2bc8900f8b0478c881ef99cf4">&#9670;&#160;</a></span>precondition()</h2>
+<a id="a2586061786c83f40ee932189f6a59353" name="a2586061786c83f40ee932189f6a59353"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2586061786c83f40ee932189f6a59353">&#9670;&#160;</a></span>report() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1269,16 +1050,16 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::precondition </td>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html">molpro::linalg::itsolv::IterativeSolverTemplate</a>&lt; Solver, R, Q, P &gt;::report </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
-          <td class="paramname"><em>parameters</em>, </td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>cout</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; R &gt; &amp;&#160;</td>
-          <td class="paramname"><em>action</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>endl</em> = <code><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">true</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1288,17 +1069,15 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Applies the Davidson preconditioner. </p>
-
 </div>
 </div>
 <a id="ac264beb56a500ce1a90edd391ad16b87" name="ac264beb56a500ce1a90edd391ad16b87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac264beb56a500ce1a90edd391ad16b87">&#9670;&#160;</a></span>report()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac264beb56a500ce1a90edd391ad16b87">&#9670;&#160;</a></span>report() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1335,90 +1114,6 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
-<a id="a30cfe987c737da469e7a86a8725586a4" name="a30cfe987c737da469e7a86a8725586a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30cfe987c737da469e7a86a8725586a4">&#9670;&#160;</a></span>set_hermiticity()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::set_hermiticity </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
-          <td class="paramname"><em>hermitian</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8556c5df53eadb5802ade2ad7da9993a" name="a8556c5df53eadb5802ade2ad7da9993a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8556c5df53eadb5802ade2ad7da9993a">&#9670;&#160;</a></span>set_max_size_qspace()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::set_max_size_qspace </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>n</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a202691a5613686bafcdbb41b95c055dd" name="a202691a5613686bafcdbb41b95c055dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a202691a5613686bafcdbb41b95c055dd">&#9670;&#160;</a></span>set_min_size_qspace()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::set_min_size_qspace </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>n</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa46edad2cecdac0a051062435a7188f1" name="aa46edad2cecdac0a051062435a7188f1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa46edad2cecdac0a051062435a7188f1">&#9670;&#160;</a></span>set_options()</h2>
 
@@ -1444,97 +1139,6 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab4e8f66aaaa54da8eb41e2a5733ece1d" name="ab4e8f66aaaa54da8eb41e2a5733ece1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4e8f66aaaa54da8eb41e2a5733ece1d">&#9670;&#160;</a></span>set_reset_D()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::set_reset_D </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td>
-          <td class="paramname"><em>n</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Set the period in iterations for resetting the D space, 0 for never. </p>
-
-</div>
-</div>
-<a id="a241caed8a5b1e346fc978729892f6260" name="a241caed8a5b1e346fc978729892f6260"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a241caed8a5b1e346fc978729892f6260">&#9670;&#160;</a></span>set_reset_D_maxQ_size()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::set_reset_D_maxQ_size </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">size_t</a>&#160;</td>
-          <td class="paramname"><em>n</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Set the maximum size of Q space after resetting the D space. </p>
-
-</div>
-</div>
-<a id="a8358829492685415686f92b83d7962fc" name="a8358829492685415686f92b83d7962fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8358829492685415686f92b83d7962fc">&#9670;&#160;</a></span>set_value_errors()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::set_value_errors </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implementation class should overload this to set errors in the current values (e.g. change in eigenvalues) </p>
-
-<p>Reimplemented from <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#abf9774c4ebf5d2ac8f670236d417ceb6">molpro::linalg::itsolv::IterativeSolverTemplate&lt; Solver, R, Q, P &gt;</a>.</p>
 
 </div>
 </div>
@@ -1568,6 +1172,37 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
 
 </div>
 </div>
+<a id="a1d47a4e3c6b1d31024ef64b546135fac" name="a1d47a4e3c6b1d31024ef64b546135fac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d47a4e3c6b1d31024ef64b546135fac">&#9670;&#160;</a></span>values()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; value_type &gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::values </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The values of the current solutions, whose changes between iterations are the value errors. </p>
+
+<p>Implements <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#a99e7c5254365d03b9bdb928c02656e80">molpro::linalg::itsolv::DavidsonCommon&lt; Solver, R, Q, P &gt;</a>.</p>
+
+</div>
+</div>
 <a id="ad0cc61ce681e6c9f07a4a869d1caf33d" name="ad0cc61ce681e6c9f07a4a869d1caf33d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad0cc61ce681e6c9f07a4a869d1caf33d">&#9670;&#160;</a></span>working_set_eigenvalues()</h2>
 
@@ -1592,163 +1227,6 @@ template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a54f58e57011e81a3649959d5bf900b59" name="a54f58e57011e81a3649959d5bf900b59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a54f58e57011e81a3649959d5bf900b59">&#9670;&#160;</a></span>m_dspace_resetter</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html">detail::DSpaceResetter</a>&lt;Q&gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::m_dspace_resetter</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>resets D space </p>
-
-</div>
-</div>
-<a id="a9bf051b5bc298da49a9046af0feb0104" name="a9bf051b5bc298da49a9046af0feb0104"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bf051b5bc298da49a9046af0feb0104">&#9670;&#160;</a></span>m_hermiticity</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::m_hermiticity = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>whether the problem is hermitian or not </p>
-
-</div>
-</div>
-<a id="ac197a4ae4b4e7280c98688d01bff3526" name="ac197a4ae4b4e7280c98688d01bff3526"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac197a4ae4b4e7280c98688d01bff3526">&#9670;&#160;</a></span>m_last_values</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;scalar_type&gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::m_last_values</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The values from the previous iteration. </p>
-
-</div>
-</div>
-<a id="a4f8b13cbdbd2dc723312d0d640c31917" name="a4f8b13cbdbd2dc723312d0d640c31917"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f8b13cbdbd2dc723312d0d640c31917">&#9670;&#160;</a></span>m_resetting_in_progress</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::m_resetting_in_progress = <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>whether D space resetting is in progress </p>
-
-</div>
-</div>
-<a id="a2de5adb607fb5300a2f30c41f4ae297b" name="a2de5adb607fb5300a2f30c41f4ae297b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2de5adb607fb5300a2f30c41f4ae297b">&#9670;&#160;</a></span>qspace_opts</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">QSpaceOptions</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::qspace_opts</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning Q-space handling. </p>
-
-</div>
-</div>
-<a id="aa8013c9d242b144c46886f8d16a02457" name="aa8013c9d242b144c46886f8d16a02457"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8013c9d242b144c46886f8d16a02457">&#9670;&#160;</a></span>rspace_opts</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> R , <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> Q  = R, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">class</a> P  = std::map&lt;size_t, typename R::value_type&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">RSpaceOptions</a>&lt;value_type_abs&gt; <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html">molpro::linalg::itsolv::LinearEigensystemDavidson</a>&lt; R, Q, P &gt;::rspace_opts</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1Options.html" title="Access point for different options in iterative solvers.">Options</a> concerning R-space handling. </p>
 
 </div>
 </div>

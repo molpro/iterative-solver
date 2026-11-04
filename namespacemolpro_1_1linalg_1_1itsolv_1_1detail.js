@@ -18,7 +18,6 @@ var namespacemolpro_1_1linalg_1_1itsolv_1_1detail =
     [ "orthogonalised_subspace", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace" ],
     [ "append_overlap_with_r", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#ad63c6172e8baa3a325c27a4e5314c203", null ],
     [ "construct_dspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#aaf70adb15e11786f878400d6a794df3e", null ],
-    [ "construct_solution", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a2cccc7d2dde83ef8809e836a62064e27", null ],
     [ "construct_vectorP", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a3af95639074feb491b36180e8c6ef36c", null ],
     [ "contribution_solutions", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a821ec085b57bcce17ea1943520e956ab", null ],
     [ "eigensolver_hermitian_kernel", "namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html#a02c4aabef5937a3c16d034c2efd976b3", null ],

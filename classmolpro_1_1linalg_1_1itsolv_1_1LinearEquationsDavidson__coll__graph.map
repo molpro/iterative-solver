@@ -1,7 +1,7 @@
 <map id="molpro::linalg::itsolv::LinearEquationsDavidson&lt; R, Q, P &gt;" name="molpro::linalg::itsolv::LinearEquationsDavidson&lt; R, Q, P &gt;">
-<area shape="rect" id="Node000001" title="Solves a system of linear equation, A x = b." alt="" coords="401,41,596,96"/>
-<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html" title="Implements IterativeSolver interface that is common to all solvers." alt="" coords="21,5,208,60"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,40,401,57,401,62,222,45"/>
-<area shape="rect" id="Node000003" href="$classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html" title=" " alt="" coords="5,85,224,125"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,91,401,75,401,80,238,96"/>
+<area shape="rect" id="Node000001" title="Solves a system of linear equation, A x = b." alt="" coords="13,211,208,265"/>
+<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html" title="Implementation shared by the linear Davidson solvers, LinearEigensystemDavidson and LinearEquationsDa..." alt="" coords="5,108,216,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,176,113,211,108,211,108,176"/>
+<area shape="rect" id="Node000003" href="$classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html" title="Implements IterativeSolver interface that is common to all solvers." alt="" coords="17,5,204,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,74,113,108,108,108,108,74"/>
 </map>

@@ -2037,6 +2037,239 @@
       <arglist></arglist>
     </member>
   </compound>
+  <compound kind="class">
+    <name>molpro::linalg::itsolv::DavidsonCommon</name>
+    <filename>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</filename>
+    <templarg>template&lt; class, class, class &gt; class Solver</templarg>
+    <templarg>class R</templarg>
+    <templarg>class Q</templarg>
+    <templarg>class P</templarg>
+    <base>molpro::linalg::itsolv::IterativeSolverTemplate</base>
+    <member kind="typedef">
+      <type>IterativeSolverTemplate&lt; Solver, R, Q, P &gt;</type>
+      <name>SolverTemplate</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a00a55a5aca45db5d5c90f34028bd7f65</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>nonlinear</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a2391875bb9b30473294903c7c4e6d9eb</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>end_iteration</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a57e8a747bf0b7042aa493ce1d1f0281c</anchor>
+      <arglist>(const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;action) override</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>end_iteration</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a73bcae095dc119d289bf81621eec81fc</anchor>
+      <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) override</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>end_iteration</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>aa762971e8bcb33a447a2154c5c905579</anchor>
+      <arglist>(R &amp;parameters, R &amp;actions) override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_norm_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a1955989f43beb28098fb187ca4ffb6dd</anchor>
+      <arglist>(value_type_abs thresh)</arglist>
+    </member>
+    <member kind="function">
+      <type>value_type_abs</type>
+      <name>get_norm_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a65e8ae8783f0253c994f4425debfd3af</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_svd_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>ad24c34054e750a5e90cc1415df2aca59</anchor>
+      <arglist>(value_type_abs thresh)</arglist>
+    </member>
+    <member kind="function">
+      <type>value_type_abs</type>
+      <name>get_svd_thresh</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>aabfffd0a044230fc8f7d32e055dc7ac0</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_reset_D</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>aa83919ef962216b8c62495d85244adcb</anchor>
+      <arglist>(size_t n)</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>get_reset_D</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>aeef6b74e78c82e22e4080ffea0274910</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_reset_D_maxQ_size</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>af8eba5e1ea4801e517c254a469c824b2</anchor>
+      <arglist>(size_t n)</arglist>
+    </member>
+    <member kind="function">
+      <type>size_t</type>
+      <name>get_reset_D_maxQ_size</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a955e5cee6c60d466824fd88a9df84843</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_max_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a5904c115361e37a39df7d516db96c367</anchor>
+      <arglist>(std::size_t n)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>get_max_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>ad92b9e9a5ab9fea4c5f41e8430418f9b</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_min_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a91ba31fe3193ae7ec0b96e0eb5122c56</anchor>
+      <arglist>(std::size_t n)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>get_min_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>ac6431089cf8409de640ab8d7079a3356</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_hermiticity</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a36b4611cfc0200df2687287c4213f38f</anchor>
+      <arglist>(bool hermitian) override</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>get_hermiticity</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>ad59cbbee0f238c7f86b3fb28c7306a16</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type></type>
+      <name>DavidsonCommon</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a14a0ec625dfd17b72ae8cc3c32af03a8</anchor>
+      <arglist>(const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers, const std::shared_ptr&lt; Logger &gt; &amp;logger, bool hermiticity)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>set_davidson_options</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a7d5452d9eeb7d3c431bbe4422595dc5c</anchor>
+      <arglist>(const Options &amp;options, const DavidsonOptions &amp;opt)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>std::shared_ptr&lt; SolverOptions &gt;</type>
+      <name>get_davidson_options</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a8bb93b6e7a02b1491895dd081ef973fc</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>assign_max_size_qspace</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a2de8f8e0c6e32a196c5d09d271f7caf6</anchor>
+      <arglist>(std::size_t n)</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="pure">
+      <type>virtual std::vector&lt; value_type &gt;</type>
+      <name>values</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a99e7c5254365d03b9bdb928c02656e80</anchor>
+      <arglist>() const =0</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>set_value_errors</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a62e220c0c978ff9c4aee40b952f6d8cd</anchor>
+      <arglist>() override</arglist>
+    </member>
+    <member kind="function" protection="protected" static="yes">
+      <type>static void</type>
+      <name>check_qspace_size_limits</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a91cd001ebff8868e884cd86805ebe305</anchor>
+      <arglist>(std::size_t min_size, std::size_t max_size)</arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>RSpaceOptions&lt; value_type_abs &gt;</type>
+      <name>rspace_opts</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>acb2c0945db5cdbefb849d100602a91c2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>QSpaceOptions</type>
+      <name>qspace_opts</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>ac6f582b2bd8531d5ffec3cbdf5ad40a6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>detail::DSpaceResetter&lt; Q &gt;</type>
+      <name>m_dspace_resetter</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a4efb7780dd469c870949dfa59dc138d6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>bool</type>
+      <name>m_hermiticity</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>ae4e1ff1d97dcb31ee16a9d4fb2432f62</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; value_type &gt;</type>
+      <name>m_last_values</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>ac8233994aab242ed987e83b1ce40a55b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>bool</type>
+      <name>m_resetting_in_progress</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html</anchorfile>
+      <anchor>a65220f37e20c7dbc5a1292f821ce5603</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
   <compound kind="struct">
     <name>molpro::linalg::itsolv::DavidsonOptions</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html</filename>
@@ -4866,6 +5099,13 @@
       <arglist>(size_t iter, const subspace::Dimensions &amp;dims)</arglist>
     </member>
     <member kind="function">
+      <type>bool</type>
+      <name>in_progress</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html</anchorfile>
+      <anchor>abc13ee028bc85bd74ff127b84714b2d6</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>set_nreset</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1DSpaceResetter.html</anchorfile>
@@ -6777,6 +7017,13 @@
       <anchor>a9ee1b0fd61900d12fcaa7ba7663c55e1</anchor>
       <arglist></arglist>
     </member>
+    <member kind="variable" protection="protected">
+      <type>bool</type>
+      <name>m_solutions_outdated</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a70f2341eee56a40187f748648cfa4f74</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="struct">
     <name>molpro::linalg::array::util::BufferManager::Iterator</name>
@@ -7304,7 +7551,7 @@
     <templarg>class R</templarg>
     <templarg>class Q</templarg>
     <templarg>class P</templarg>
-    <base>molpro::linalg::itsolv::IterativeSolverTemplate</base>
+    <base>molpro::linalg::itsolv::DavidsonCommon</base>
     <member kind="typedef">
       <type>IterativeSolverTemplate&lt; LinearEigensystem, R, Q, P &gt;</type>
       <name>SolverTemplate</name>
@@ -7321,38 +7568,10 @@
     </member>
     <member kind="function">
       <type>bool</type>
-      <name>nonlinear</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a262897f82aa5a3ed099646e05ab73372</anchor>
-      <arglist>() const override</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
       <name>supports_metric</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>abcf5942654c425f0bb7048e19f8276c2</anchor>
       <arglist>(MetricKind kind) const override</arglist>
-    </member>
-    <member kind="function">
-      <type>size_t</type>
-      <name>end_iteration</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a22ed76de01c073008465614a389df5c3</anchor>
-      <arglist>(const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;action) override</arglist>
-    </member>
-    <member kind="function">
-      <type>size_t</type>
-      <name>end_iteration</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a5f3c0bb3e790c82ffebbfbe62d1d3a9c</anchor>
-      <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) override</arglist>
-    </member>
-    <member kind="function">
-      <type>size_t</type>
-      <name>end_iteration</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>aebcf854909acb92f11bb2ea33a596c64</anchor>
-      <arglist>(R &amp;parameters, R &amp;actions) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -7360,13 +7579,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>a0f5529dc43728aec055ba927acadd064</anchor>
       <arglist>() override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>precondition</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a66a707d2bc8900f8b0478c881ef99cf4</anchor>
-      <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) const</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; scalar_type &gt;</type>
@@ -7384,87 +7596,10 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>set_value_errors</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a8358829492685415686f92b83d7962fc</anchor>
-      <arglist>() override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
       <name>report</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>ac264beb56a500ce1a90edd391ad16b87</anchor>
       <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_reset_D</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>ab4e8f66aaaa54da8eb41e2a5733ece1d</anchor>
-      <arglist>(size_t n)</arglist>
-    </member>
-    <member kind="function">
-      <type>size_t</type>
-      <name>get_reset_D</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a925f70a6fb1a01ede8dd5a6dc0b7dedb</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_reset_D_maxQ_size</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a241caed8a5b1e346fc978729892f6260</anchor>
-      <arglist>(size_t n)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>get_reset_D_maxQ_size</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a1dabbe4326a656e6cb8f9a1018ceca3d</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>std::size_t</type>
-      <name>get_max_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a5c9ea163e72cf27e597ab9bba12da0d6</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_max_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a8556c5df53eadb5802ade2ad7da9993a</anchor>
-      <arglist>(std::size_t n)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::size_t</type>
-      <name>get_min_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a9b56a6d2619c42b602f47a141b0d5278</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_min_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a202691a5613686bafcdbb41b95c055dd</anchor>
-      <arglist>(std::size_t n)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_hermiticity</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a30cfe987c737da469e7a86a8725586a4</anchor>
-      <arglist>(bool hermitian) override</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>get_hermiticity</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a3a0109d914fa9d1c4f40fdc54b835efa</anchor>
-      <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -7478,6 +7613,27 @@
       <name>get_options</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>aea95c0b3b85e393fac9d39c931463c03</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>report</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a2586061786c83f40ee932189f6a59353</anchor>
+      <arglist>(std::ostream &amp;cout, bool endl=true) const override</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>report</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>ab4748964a82d882be6cfebd7c158511e</anchor>
+      <arglist>() const override</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>std::vector&lt; value_type &gt;</type>
+      <name>values</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a1d47a4e3c6b1d31024ef64b546135fac</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function" protection="protected">
@@ -7528,48 +7684,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>aeff3b900f346324b12e5eea68a2cff5e</anchor>
       <arglist>(const subspace::Matrix&lt; scalar_type &gt; &amp;solutions, int row, R &amp;metric_action)</arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>detail::DSpaceResetter&lt; Q &gt;</type>
-      <name>m_dspace_resetter</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a54f58e57011e81a3649959d5bf900b59</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>bool</type>
-      <name>m_hermiticity</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a9bf051b5bc298da49a9046af0feb0104</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>std::vector&lt; scalar_type &gt;</type>
-      <name>m_last_values</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>ac197a4ae4b4e7280c98688d01bff3526</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>bool</type>
-      <name>m_resetting_in_progress</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a4f8b13cbdbd2dc723312d0d640c31917</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>RSpaceOptions&lt; value_type_abs &gt;</type>
-      <name>rspace_opts</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>aa8013c9d242b144c46886f8d16a02457</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>QSpaceOptions</type>
-      <name>qspace_opts</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a2de5adb607fb5300a2f30c41f4ae297b</anchor>
-      <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -7666,13 +7780,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html</anchorfile>
       <anchor>adac97ddb9bf7d21e541789a4277fd2e4</anchor>
       <arglist>(R &amp;parameters, R &amp;actions) override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>precondition</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemRSPT.html</anchorfile>
-      <anchor>ac053cd110d99cd935aa22be81bb836c0</anchor>
-      <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) const</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; scalar_type &gt;</type>
@@ -7848,7 +7955,7 @@
     <templarg>class R</templarg>
     <templarg>class Q</templarg>
     <templarg>class P</templarg>
-    <base>molpro::linalg::itsolv::IterativeSolverTemplate</base>
+    <base>molpro::linalg::itsolv::DavidsonCommon</base>
     <member kind="typedef">
       <type>IterativeSolverTemplate&lt; LinearEquations, R, Q, P &gt;</type>
       <name>SolverTemplate</name>
@@ -7862,34 +7969,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
       <anchor>a56310ff60c45992c5dc838b171138e2a</anchor>
       <arglist>(const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers, const std::shared_ptr&lt; Logger &gt; &amp;logger_=std::make_shared&lt; Logger &gt;())</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>nonlinear</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a6bf15f4b37f912dc22393997154cdca7</anchor>
-      <arglist>() const override</arglist>
-    </member>
-    <member kind="function">
-      <type>size_t</type>
-      <name>end_iteration</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a22f10085590a24aebefad82536a7c7a3</anchor>
-      <arglist>(const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;action) override</arglist>
-    </member>
-    <member kind="function">
-      <type>size_t</type>
-      <name>end_iteration</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a6ebb83d95a1f6130a1aa2847f53196c8</anchor>
-      <arglist>(std::vector&lt; R &gt; &amp;parameters, std::vector&lt; R &gt; &amp;action) override</arglist>
-    </member>
-    <member kind="function">
-      <type>size_t</type>
-      <name>end_iteration</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a465dbaaf2cab15ca07f1d662de6675c9</anchor>
-      <arglist>(R &amp;parameters, R &amp;actions) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -7917,104 +7996,6 @@
       <name>rhs</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
       <anchor>a8e3f14d5cd05418e40e614a20ffc4053</anchor>
-      <arglist>() const override</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_norm_thresh</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a4863602c2a6566461a4c92ab45f8ce2f</anchor>
-      <arglist>(value_type_abs thresh)</arglist>
-    </member>
-    <member kind="function">
-      <type>value_type_abs</type>
-      <name>get_norm_thresh</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a913906c3d2ef808a309592d0e88a271c</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_svd_thresh</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a4b5fcf951900e328afc7ad971cdc6d3f</anchor>
-      <arglist>(value_type_abs thresh)</arglist>
-    </member>
-    <member kind="function">
-      <type>value_type_abs</type>
-      <name>get_svd_thresh</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a0708628024a4d58bb5e5e237656f1422</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_reset_D</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>aa18de07639b2a59f4aab0fa00b3336ed</anchor>
-      <arglist>(size_t n)</arglist>
-    </member>
-    <member kind="function">
-      <type>size_t</type>
-      <name>get_reset_D</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a02ef4c76e400651eef9805a20a3e2350</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_reset_D_maxQ_size</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>ad70a9b4f851fc510bdf189a107ab68e2</anchor>
-      <arglist>(size_t n)</arglist>
-    </member>
-    <member kind="function">
-      <type>int</type>
-      <name>get_reset_D_maxQ_size</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a64c70aa7cafca66228994805f913fa91</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_max_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a6bb03d5e134072d7f6c1a3e838894919</anchor>
-      <arglist>(std::size_t n)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::size_t</type>
-      <name>get_max_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a36c15d7a9a568f2eb6604679accd345a</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_min_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a4a04313066e00ac6d298adc71a06bde5</anchor>
-      <arglist>(std::size_t n)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::size_t</type>
-      <name>get_min_size_qspace</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a250ca63ddbad14ccb559aaa76d26e4c6</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>set_hermiticity</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a1a13c94801544066f87353fb5ec6e692</anchor>
-      <arglist>(bool hermitian) override</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>get_hermiticity</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>aad9d42bd1b1b22ac1b6b0957d00a6cdc</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
@@ -8063,15 +8044,8 @@
       <type>std::vector&lt; value_type &gt;</type>
       <name>values</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>ad5240207d872bc8ecafd622f40e22fb1</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function" protection="protected">
-      <type>void</type>
-      <name>set_value_errors</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>ab7c1a475a4d305d7ea0bfbf9b6a39000</anchor>
-      <arglist>() override</arglist>
+      <anchor>a4099578b8bcd79634bee094fb9e9a07e</anchor>
+      <arglist>() const override</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
@@ -8079,48 +8053,6 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
       <anchor>a90a1bc8c448f1a5360b478d3349cb41c</anchor>
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions, const detail::MetricSolutions&lt; R, Q &gt; &amp;metric_solutions) override</arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>RSpaceOptions&lt; value_type_abs &gt;</type>
-      <name>rspace_opts</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a328f0a5f6fb9acbe5995e32432b37a32</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>QSpaceOptions</type>
-      <name>qspace_opts</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a663a6f57bded1e6c8a78f0123262d112</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>detail::DSpaceResetter&lt; Q &gt;</type>
-      <name>m_dspace_resetter</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a0472ab791f0ddb7074cec65c3dbbca0e</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>bool</type>
-      <name>m_hermiticity</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a7a816bb027c4409f79fbe2f616350a1e</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>std::vector&lt; value_type &gt;</type>
-      <name>m_last_values</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a8b9b9c71d1b33a1fdb2660dab09bf544</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>bool</type>
-      <name>m_resetting_in_progress</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html</anchorfile>
-      <anchor>a40cfc0874ef45b7e258ba07bb438b724</anchor>
-      <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -11753,6 +11685,38 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>molpro::linalg::itsolv::util::StreamFormatGuard</name>
+    <filename>classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>StreamFormatGuard</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard.html</anchorfile>
+      <anchor>a6bb17bd384105ee0146b3e19cdff5a9b</anchor>
+      <arglist>(std::ostream &amp;stream)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>~StreamFormatGuard</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard.html</anchorfile>
+      <anchor>af5b0c829d6542ed2cd2bafc5e0e5b55b</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>StreamFormatGuard</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard.html</anchorfile>
+      <anchor>ad861abe231157ab548b41b5b06c3d3db</anchor>
+      <arglist>(const StreamFormatGuard &amp;)=delete</arglist>
+    </member>
+    <member kind="function">
+      <type>StreamFormatGuard &amp;</type>
+      <name>operator=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard.html</anchorfile>
+      <anchor>adbe4e2cc402ac671d226e97b8ac264f3</anchor>
+      <arglist>(const StreamFormatGuard &amp;)=delete</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>molpro::linalg::itsolv::util::StringFacet</name>
     <filename>classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StringFacet.html</filename>
     <member kind="function">
@@ -14015,6 +13979,7 @@
     <namespace>molpro::linalg::itsolv::util</namespace>
     <class kind="class">molpro::linalg::itsolv::ArrayHandlers</class>
     <class kind="struct">molpro::linalg::itsolv::CastOptions</class>
+    <class kind="class">molpro::linalg::itsolv::DavidsonCommon</class>
     <class kind="struct">molpro::linalg::itsolv::DavidsonOptions</class>
     <class kind="struct">molpro::linalg::itsolv::decay</class>
     <class kind="struct">molpro::linalg::itsolv::decay&lt; std::reference_wrapper&lt; T &gt; &gt;</class>
@@ -14736,13 +14701,6 @@
       <arglist>(const size_t nsol, const size_t nparam)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>construct_solution</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a2cccc7d2dde83ef8809e836a62064e27</anchor>
-      <arglist>(const VecRef&lt; R &gt; &amp;params, const std::vector&lt; int &gt; &amp;roots, const subspace::Matrix&lt; value_type &gt; &amp;solutions, const std::vector&lt; std::reference_wrapper&lt; P &gt; &gt; &amp;pparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;qparams, const std::vector&lt; std::reference_wrapper&lt; Q &gt; &gt; &amp;dparams, size_t oP, size_t oQ, size_t oD, ArrayHandlers&lt; R, Q, P &gt; &amp;handlers)</arglist>
-    </member>
-    <member kind="function">
       <type>std::vector&lt; std::vector&lt; T &gt; &gt;</type>
       <name>construct_vectorP</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
@@ -15241,6 +15199,7 @@
     <name>molpro::linalg::itsolv::util</name>
     <filename>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</filename>
     <class kind="struct">molpro::linalg::itsolv::util::ArrayHandlersError</class>
+    <class kind="class">molpro::linalg::itsolv::util::StreamFormatGuard</class>
     <class kind="class">molpro::linalg::itsolv::util::StringFacet</class>
     <member kind="function">
       <type>std::map&lt; std::string, std::string &gt;</type>
@@ -15248,6 +15207,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</anchorfile>
       <anchor>a7c7ffb21f5167c22282fa2e82c2c83cc</anchor>
       <arglist>(const options_map &amp;options, const SFacet &amp;facet)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>norm</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</anchorfile>
+      <anchor>aabd36464d3e9408304ee31e1e7ec253a</anchor>
+      <arglist>(array::ArrayHandler&lt; R, R &gt; &amp;handler, const std::type_identity_t&lt; R &gt; &amp;x) -&gt; typename array::ArrayHandler&lt; R, R &gt;::value_type_abs</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -15283,6 +15249,13 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</anchorfile>
       <anchor>aacd4867e14db45ec690217f59c7cff99</anchor>
       <arglist>(std::vector&lt; int &gt; indices, Container &amp;params)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::size_t</type>
+      <name>tosize</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1util.html</anchorfile>
+      <anchor>ac0bacf18c027192016f7aa6dd5fc077d</anchor>
+      <arglist>(const std::string &amp;key, const std::string &amp;value)</arglist>
     </member>
   </compound>
   <compound kind="page">

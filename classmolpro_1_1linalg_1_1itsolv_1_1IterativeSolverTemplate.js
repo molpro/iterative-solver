@@ -105,6 +105,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate =
     [ "m_metric_storage", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ab45945e1a82871139456271ddf0a242a", null ],
     [ "m_nroots", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a9b5c7aee955bf41e7ad1d7a1889ce6e0", null ],
     [ "m_p_threshold", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a1bb9539f81b481c6ca77884c6cd1074f", null ],
+    [ "m_solutions_outdated", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a70f2341eee56a40187f748648cfa4f74", null ],
     [ "m_stats", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ae24be2854a659d0b3c5a3fe8db922e5e", null ],
     [ "m_subspace_solver", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a61e18e30ed35370994bb53003a5d4642", null ],
     [ "m_value_errors", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a003a067365d989bca5aa008668a8c8b1", null ],

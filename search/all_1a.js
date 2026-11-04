@@ -26,5 +26,6 @@ var searchData=
   ['_7eslice_23',['~Slice',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html#af3ec7003179e40a9341a6713303131a1',1,'molpro::linalg::itsolv::subspace::Matrix::Slice']]],
   ['_7esolverfactory_24',['~SolverFactory',['../classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html#a9df8895d7401f31ea43f324538bddcd3',1,'molpro::linalg::itsolv::SolverFactory']]],
   ['_7espan_25',['~Span',['../classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a349c7ea95f10e82b45e5133ec194e094',1,'molpro::linalg::array::span::Span']]],
-  ['_7etask_26',['~Task',['../classmolpro_1_1linalg_1_1array_1_1util_1_1Task.html#ae8707b142be02a1a9ea6ac24cae4c4af',1,'molpro::linalg::array::util::Task']]]
+  ['_7estreamformatguard_26',['~StreamFormatGuard',['../classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard.html#af5b0c829d6542ed2cd2bafc5e0e5b55b',1,'molpro::linalg::itsolv::util::StreamFormatGuard']]],
+  ['_7etask_27',['~Task',['../classmolpro_1_1linalg_1_1array_1_1util_1_1Task.html#ae8707b142be02a1a9ea6ac24cae4c4af',1,'molpro::linalg::array::util::Task']]]
 ];

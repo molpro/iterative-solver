@@ -163,10 +163,12 @@ var annotated =
           ] ],
           [ "util", "namespacemolpro_1_1linalg_1_1itsolv_1_1util.html", [
             [ "ArrayHandlersError", "structmolpro_1_1linalg_1_1itsolv_1_1util_1_1ArrayHandlersError.html", null ],
+            [ "StreamFormatGuard", "classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard.html", "classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StreamFormatGuard" ],
             [ "StringFacet", "classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StringFacet.html", "classmolpro_1_1linalg_1_1itsolv_1_1util_1_1StringFacet" ]
           ] ],
           [ "ArrayHandlers", "classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers.html", "classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers" ],
           [ "CastOptions", "structmolpro_1_1linalg_1_1itsolv_1_1CastOptions.html", null ],
+          [ "DavidsonCommon", "classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html", "classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon" ],
           [ "DavidsonOptions", "structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions.html", "structmolpro_1_1linalg_1_1itsolv_1_1DavidsonOptions" ],
           [ "decay", "structmolpro_1_1linalg_1_1itsolv_1_1decay.html", "structmolpro_1_1linalg_1_1itsolv_1_1decay" ],
           [ "decay< std::reference_wrapper< T > >", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4.html", "structmolpro_1_1linalg_1_1itsolv_1_1decay_3_01std_1_1reference__wrapper_3_01T_01_4_01_4" ],

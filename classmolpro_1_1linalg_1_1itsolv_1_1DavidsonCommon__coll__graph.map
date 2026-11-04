@@ -1,0 +1,5 @@
+<map id="molpro::linalg::itsolv::DavidsonCommon&lt; Solver, R, Q, P &gt;" name="molpro::linalg::itsolv::DavidsonCommon&lt; Solver, R, Q, P &gt;">
+<area shape="rect" id="Node000001" title="Implementation shared by the linear Davidson solvers, LinearEigensystemDavidson and LinearEquationsDa..." alt="" coords="5,108,216,163"/>
+<area shape="rect" id="Node000002" href="$classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html" title="Implements IterativeSolver interface that is common to all solvers." alt="" coords="17,5,204,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,74,113,108,108,108,108,74"/>
+</map>

@@ -1,16 +1,5 @@
 var NAVTREEINDEX17 =
 {
-"structmolpro_1_1profiler_1_1detail_1_1AccessCPU.html#a5bd501ceac97b99963f876daefdc8226":[14,0,4,1,0,1,0],
-"structmolpro_1_1profiler_1_1detail_1_1AccessCalls.html":[14,0,4,1,0,0],
-"structmolpro_1_1profiler_1_1detail_1_1AccessCalls.html#a0e1d9458d1d8e25ef508498ca1e1d04c":[14,0,4,1,0,0,0],
-"structmolpro_1_1profiler_1_1detail_1_1AccessOperations.html":[14,0,4,1,0,2],
-"structmolpro_1_1profiler_1_1detail_1_1AccessOperations.html#af135568aa0e88453beefea0de64f077e":[14,0,4,1,0,2,0],
-"structmolpro_1_1profiler_1_1detail_1_1AccessWall.html":[14,0,4,1,0,3],
-"structmolpro_1_1profiler_1_1detail_1_1AccessWall.html#a780881aebc4449dee7f3329bf59e6269":[14,0,4,1,0,3,0],
-"structmolpro_1_1profiler_1_1detail_1_1Compare.html":[14,0,4,1,0,4],
-"structmolpro_1_1profiler_1_1detail_1_1Compare.html#a7b20b0e27a091b98f54acfc5b5da4e50":[14,0,4,1,0,4,0],
-"structmolpro_1_1profiler_1_1detail_1_1None.html":[14,0,4,1,0,5],
-"structmolpro_1_1profiler_1_1detail_1_1None.html#aa1a693d3482687c05a1fb7b05a0de804":[14,0,4,1,0,5,0],
 "structmolpro_1_1profiler_1_1detail_1_1None.html#aa45256fef921ad5f3f7712ecd78a4c6e":[14,0,4,1,0,5,1],
 "structmolpro_1_1profiler_1_1detail_1_1TreePath.html":[14,0,4,1,0,6],
 "structmolpro_1_1profiler_1_1detail_1_1TreePath.html#a2b542c4f02b397509df19d6e8d6a3a1b":[14,0,4,1,0,6,2],

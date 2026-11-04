@@ -10,7 +10,7 @@ var searchData=
   ['qr_7',['qr',['../classmolpro_1_1linalg_1_1itsolv_1_1ArrayHandlers_1_1Builder.html#ad939522fa33168f18c57e576cd134e75',1,'molpro::linalg::itsolv::ArrayHandlers::Builder']]],
   ['qr_5fops_8',['qr_ops',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#abd2e9fa234e44677bb31e1c4bdf20953',1,'molpro::linalg::itsolv::Statistics']]],
   ['qspace_9',['qspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#ad4d634f34be831eb4dbf09514069cf8a',1,'molpro::linalg::itsolv::subspace::XSpace']]],
-  ['qspace_5fopts_10',['qspace_opts',['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html#a2de5adb607fb5300a2f30c41f4ae297b',1,'molpro::linalg::itsolv::LinearEigensystemDavidson::qspace_opts'],['../classmolpro_1_1linalg_1_1itsolv_1_1LinearEquationsDavidson.html#a663a6f57bded1e6c8a78f0123262d112',1,'molpro::linalg::itsolv::LinearEquationsDavidson::qspace_opts']]],
+  ['qspace_5fopts_10',['qspace_opts',['../classmolpro_1_1linalg_1_1itsolv_1_1DavidsonCommon.html#ac6f582b2bd8531d5ffec3cbdf5ad40a6',1,'molpro::linalg::itsolv::DavidsonCommon']]],
   ['quasinewton_5fmaximum_5fstep_11',['quasinewton_maximum_step',['../structmolpro_1_1linalg_1_1itsolv_1_1OptimizeBFGSOptions.html#a10077924e329f444e1e18b30441734ef',1,'molpro::linalg::itsolv::OptimizeBFGSOptions']]],
   ['qx_12',['qx',['../structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace_1_1NewData.html#a4a13a9dc9bebad72fe07dfcae3b25e97',1,'molpro::linalg::itsolv::subspace::xspace::NewData']]]
 ];
