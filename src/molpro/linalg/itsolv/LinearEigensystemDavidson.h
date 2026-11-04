@@ -211,6 +211,8 @@ protected:
         // imaginary parts of the complex conjugate eigenvalue pair has flipped signs
         const auto partner = subspace_solver->complex_partner(roots[i]).value();
         const auto root_it = std::ranges::find(roots, int(partner));
+        // the partner's vector, or the action of the metric on it applied on the fly, if it is assembled
+        auto partner_param = std::optional<R>{};
         if (root_it != roots.end() && (!metric || on_the_fly)) {
           const auto k = std::ranges::distance(roots.begin(), root_it);
           if (metric)
@@ -226,11 +228,37 @@ protected:
           // The partner is not among roots, or was truncated away, so its vector is assembled from the subspace
           if (partner >= subspace_solver->retained_solutions().rows())
             throw std::logic_error("The complex conjugate partner of a root is not among the retained solutions");
-          auto partner_param = this->m_handlers->rr().copy(actions.at(i));
-          this->construct_solutions({int(partner)}, subspace_solver->retained_solutions(), wrap_arg(partner_param));
+          partner_param.emplace(this->m_handlers->rr().copy(actions.at(i)));
+          this->construct_solutions({int(partner)}, subspace_solver->retained_solutions(), wrap_arg(*partner_param));
           if (on_the_fly)
-            apply_metric(partner_param);
-          this->m_handlers->rr().axpy(it->second, partner_param, actions.at(i));
+            apply_metric(*partner_param);
+          this->m_handlers->rr().axpy(it->second, *partner_param, actions.at(i));
+        }
+        if (partner >= eigvals.size()) {
+          // The residual of the truncated partner p is the imaginary part of the residual of this root x. It is
+          // A p - e M p - f M x, where e and f are the real and imaginary parts of the eigenvalue of x, the imaginary
+          // part of the eigenvalue of p being -f, and M is the identity without a metric.
+          const auto& retained = subspace_solver->retained_solutions();
+          auto partner_residual = this->m_handlers->rr().copy(actions.at(i));
+          this->construct_actions({int(partner)}, retained, wrap_arg(partner_residual));
+          if (stored) {
+            auto metric_action = this->m_handlers->rr().copy(actions.at(i));
+            construct_subspace_metric_action(retained, int(partner), metric_action);
+            this->m_handlers->rr().axpy(-eigvals.at(roots[i]), metric_action, partner_residual);
+            construct_subspace_metric_action(retained, roots[i], metric_action);
+            this->m_handlers->rr().axpy(-it->second, metric_action, partner_residual);
+          } else {
+            this->m_handlers->rr().axpy(-eigvals.at(roots[i]), *partner_param, partner_residual);
+            if (!metric) {
+              this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
+            } else if (!metric_solutions.r.empty()) {
+              this->m_handlers->rr().axpy(-it->second, metric_solutions.r.at(i), partner_residual);
+            } else {
+              assert(metric_solutions.q.size() > i);
+              this->m_handlers->rq().axpy(-it->second, metric_solutions.q.at(i), partner_residual);
+            }
+          }
+          m_truncated_partner_residual_norm = util::norm(this->m_handlers->rr(), partner_residual);
         }
       }
     }
@@ -281,53 +309,29 @@ protected:
    * residual
    *
    * The residual of that root is only the real part of the complex residual. The imaginary part is the residual of
-   * the truncated partner, which is assembled from the subspace.
+   * the truncated partner, whose norm construct_residual() has determined.
    */
   void compute_errors(const std::vector<int>& roots, const CVecRef<R>& params, const CVecRef<R>& residuals,
                       const std::vector<value_type_abs>& solution_norms, std::vector<value_type_abs>& errors) override {
-    SolverTemplate::compute_errors(roots, params, residuals, solution_norms, errors);
     auto subspace_solver = std::dynamic_pointer_cast<subspace::SubspaceSolverLinEig<R, Q, P>>(this->m_subspace_solver);
     assert(subspace_solver);
     const auto nroots = subspace_solver->size();
-    if (nroots == 0)
+    const auto partner = nroots > 0 ? subspace_solver->complex_partner(nroots - 1) : std::nullopt;
+    const auto root_it = std::ranges::find(roots, int(nroots) - 1);
+    const bool truncated_partner = partner && *partner >= nroots && root_it != roots.end();
+    if (truncated_partner && !m_truncated_partner_residual_norm)
+      throw std::logic_error("The residual of the truncated complex pair partner of the last root is not known");
+    SolverTemplate::compute_errors(roots, params, residuals, solution_norms, errors);
+    if (!truncated_partner)
       return;
-    const auto partner = subspace_solver->complex_partner(nroots - 1);
-    const auto root_it = std::ranges::find(roots, int(nroots - 1));
-    if (!partner || *partner < nroots || root_it == roots.end())
-      return;
-    const auto i = std::ranges::distance(roots.begin(), root_it);
-    const auto& imag_eigval_components = subspace_solver->imag_eigval_components();
-    const auto it = std::ranges::find(imag_eigval_components, nroots - 1, [](const auto& pair) { return pair.first; });
-    if (it == imag_eigval_components.end())
-      throw std::logic_error("The imaginary part of the eigenvalue of a complex pair member is missing");
-    const auto& solutions = subspace_solver->retained_solutions();
-    auto partner_param = this->m_handlers->rr().copy(params.at(i));
-    auto partner_residual = this->m_handlers->rr().copy(params.at(i));
-    this->construct_solutions({int(*partner)}, solutions, wrap_arg(partner_param));
-    this->construct_actions({int(*partner)}, solutions, wrap_arg(partner_residual));
-    if (this->m_xspace->metric_kind() != MetricKind::Identity) {
-      // With a metric, the residual contains the actions of the metric on the partner and on the last root
-      auto metric_param = this->m_handlers->rr().copy(params.at(i));
-      if (this->m_xspace->stores_metric_actions()) {
-        construct_subspace_metric_action(solutions, int(*partner), partner_param);
-        construct_subspace_metric_action(solutions, int(nroots - 1), metric_param);
-      } else {
-        apply_metric(partner_param);
-        apply_metric(metric_param);
-      }
-      this->m_handlers->rr().axpy(-eigenvalues().at(nroots - 1), partner_param, partner_residual);
-      this->m_handlers->rr().axpy(-it->second, metric_param, partner_residual);
-    } else {
-      // The imaginary part of the partner's eigenvalue is the negative of the one of the last root
-      this->m_handlers->rr().axpy(-eigenvalues().at(nroots - 1), partner_param, partner_residual);
-      this->m_handlers->rr().axpy(-it->second, params.at(i), partner_residual);
-    }
-    auto partner_error = util::norm(this->m_handlers->rr(), partner_residual);
+    auto partner_error = *m_truncated_partner_residual_norm;
+    m_truncated_partner_residual_norm.reset();
     if (!solution_norms.empty())
       // as in SolverTemplate::compute_errors(), the error of the partner of unit length
-      partner_error /=
-          subspace::util::solution_norms(solutions, this->m_xspace->data.at(subspace::EqnData::S))[*partner];
-    errors.at(i) = std::sqrt(errors.at(i) * errors.at(i) + partner_error * partner_error);
+      partner_error /= subspace::util::solution_norms(subspace_solver->retained_solutions(),
+                                                      this->m_xspace->data.at(subspace::EqnData::S))[*partner];
+    auto& error = errors.at(std::ranges::distance(roots.begin(), root_it));
+    error = std::sqrt(error * error + partner_error * partner_error);
   }
 
   //! Replaces param by the action of the metric on it, with the metric applied on the fly
@@ -350,6 +354,8 @@ protected:
                              this->m_xspace->cparamsp(), wrap_arg(metric_action));
   }
 
+  //! norm of the residual of the truncated complex pair partner of the last root, set by construct_residual()
+  std::optional<value_type_abs> m_truncated_partner_residual_norm;
 };
 
 } // namespace molpro::linalg::itsolv
