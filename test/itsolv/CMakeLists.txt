@@ -1,3 +1,9 @@
+# Each of these factories instantiates every solver, which takes several GB of compiler memory under the sanitizers.
+# Compiled once here and declared extern in SolverFactory_value_types.h for the tests that use them.
+add_library(test-${PROJECT_NAME}-itsolv-factories OBJECT
+        SolverFactory_double.cpp SolverFactory_complex.cpp SolverFactory_long_double.cpp)
+target_link_libraries(test-${PROJECT_NAME}-itsolv-factories PUBLIC molpro::${PROJECT_NAME})
+
 add_executable(test-${PROJECT_NAME}-itsolv.exe
     SolverFactory_implementation.cpp
     testDSpaceResetter.cpp
@@ -20,7 +26,8 @@ add_executable(test-${PROJECT_NAME}-itsolv.exe
     test_util.cpp
     test_wrap.cpp
 )
-target_link_libraries(test-${PROJECT_NAME}-itsolv.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)
+target_link_libraries(test-${PROJECT_NAME}-itsolv.exe PUBLIC molpro::${PROJECT_NAME} gmock_main
+        test-${PROJECT_NAME}-itsolv-factories)
 gtest_discover_tests(test-${PROJECT_NAME}-itsolv.exe)
 
 foreach (example bh hf phenol he)
@@ -67,6 +74,9 @@ foreach (t test_LinearEigensystem test_LinearEquations test_Optimize test_NonLin
     endif ()
     target_link_libraries(${t}.exe PUBLIC molpro::${PROJECT_NAME} gmock_main)# ${MPI_CXX_LIBRARIES})
     target_link_libraries(${t}.exe PUBLIC Eigen3::Eigen)
+    if (t STREQUAL "test_LinearEquations" OR t STREQUAL "test_LinearEigensystem_e2e")
+        target_link_libraries(${t}.exe PUBLIC test-${PROJECT_NAME}-itsolv-factories)
+    endif ()
     gtest_discover_tests(${t}.exe)
     if (MPI)
         # in principle this should be configured at runtime but it seems cmake/ctest support is not yet there to do it simply

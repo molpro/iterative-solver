@@ -14,6 +14,7 @@
 
 #include "vector_types.h"
 #include <molpro/linalg/itsolv/CastOptions.h>
+#include "SolverFactory_value_types.h"
 #include <molpro/linalg/itsolv/SolverFactory-implementation.h>
 #include <molpro/linalg/itsolv/helper.h>
 

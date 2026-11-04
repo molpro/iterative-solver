@@ -9,6 +9,8 @@
 #include <molpro/linalg/itsolv/SolverFactory.h>
 #include <molpro/mpi.h>
 
+#include "SolverFactory_value_types.h"
+
 #include <Eigen/Dense>
 
 #include <algorithm>
@@ -1090,11 +1092,6 @@ TEST(LinearEigensystem, Davidson_generalized_errors) {
   }
 }
 
-#include <molpro/linalg/itsolv/SolverFactory-implementation.h>
-template class molpro::linalg::itsolv::SolverFactory<std::vector<double>, std::vector<double>,
-                                                     std::map<size_t, double>>;
-template class molpro::linalg::itsolv::SolverFactory<std::vector<double>, molpro::linalg::array::DistrArrayFile,
-                                                     std::map<size_t, double>>;
 
 //! A hermitian, diagonally dominant matrix in any value type
 template <typename scalar>
