@@ -284,7 +284,7 @@ void check_solve_matches_manual_iterations() {
       molpro::linalg::itsolv::create_LinearEigensystem<R, std::deque<scalar>, std::map<size_t, scalar>>("RSPT");
   driven->set_max_iter(niter);
   driven->set_convergence_threshold(0);
-  driven->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+  driven->set_verbosity(0);
   R y(n, scalar(0)), h(n, scalar(0));
   y[0] = 1;
   driven->solve(y, h, problem);

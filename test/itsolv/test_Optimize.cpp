@@ -203,7 +203,7 @@ TEST(Optimize, tight_threshold_consistency) {
   for (const double threshold : {1e-9, 1e-11, 1e-13}) {
     auto solver = molpro::linalg::itsolv::create_Optimize<Rvector, Qvector>("BFGS");
     solver->set_convergence_threshold(threshold);
-    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    solver->set_verbosity(0);
     Rvector c(n, 0), g(n);
     EXPECT_TRUE(solver->solve(c, g, problem)) << "threshold=" << threshold;
     EXPECT_LE(solver->errors().front(), threshold) << "threshold=" << threshold;
@@ -234,7 +234,7 @@ struct DiagonalQuadratic : molpro::linalg::itsolv::Problem<Rvector> {
 // solve() calls end_iteration() for as long as end_iteration_needed()
 TEST(Optimize, SD_solve) {
   auto solver = molpro::linalg::itsolv::create_Optimize<Rvector, Qvector>("SD");
-  solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+  solver->set_verbosity(0);
   Rvector c(10, 0), g(10);
   const DiagonalQuadratic problem;
   EXPECT_TRUE(solver->solve(c, g, problem));
@@ -246,7 +246,7 @@ TEST(Optimize, SD_solve) {
 TEST(Optimize, solve_converged_with_n_roots) {
   auto solve = [](auto&& solver) {
     solver->set_n_roots(2);
-    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    solver->set_verbosity(0);
     Rvector c(10, 0), g(10);
     const DiagonalQuadratic problem;
     return solver->solve(c, g, problem);

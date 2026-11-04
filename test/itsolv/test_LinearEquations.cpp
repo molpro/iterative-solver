@@ -266,7 +266,7 @@ TYPED_TEST(LinearEquations_reset_D, not_done_after_convergence) {
           molpro::linalg::itsolv::create_LinearEquations<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
               "Davidson", options);
       solver->set_convergence_threshold(1e-9);
-      solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+      solver->set_verbosity(0);
       auto params = std::vector<R>(nrhs, R(problem.n));
       for (size_t i = 0; i < nrhs; ++i)
         params[i][i] = 1; // select() of the diagonal guess is not implemented for complex values
@@ -361,7 +361,7 @@ TYPED_TEST(LinearEquations_reset_D, solve_ends_after_reset) {
     auto solver = molpro::linalg::itsolv::create_LinearEquations<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
         "Davidson", "max_size_qspace=3,reset_D=4");
     solver->set_convergence_threshold(1e-9);
-    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    solver->set_verbosity(0);
     // the reset falls due in the last allowed iteration
     solver->set_max_iter(4);
     auto params = std::vector<R>(nrhs, R(problem.n));
@@ -395,7 +395,7 @@ TEST(LinearEquation, report_keeps_stream_format) {
   using R = std::vector<double>;
   HermitianEquations<double> problem(1);
   auto solver = molpro::linalg::itsolv::create_LinearEquations<R, std::deque<double>, std::map<size_t, double>>();
-  solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+  solver->set_verbosity(0);
   R parameters(problem.n), actions(problem.n);
   parameters[0] = 1;
   solver->solve(parameters, actions, problem);

@@ -1145,7 +1145,7 @@ TYPED_TEST(Davidson_reset_D, not_done_after_convergence) {
               "Davidson", options);
       solver->set_n_roots(nroot);
       solver->set_convergence_threshold(1e-9);
-      solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+      solver->set_verbosity(0);
       auto params = std::vector<R>(nroot, R(problem.n));
       for (size_t i = 0; i < nroot; ++i)
         params[i][i] = 1; // select() of the diagonal guess is not implemented for complex values
@@ -1234,7 +1234,7 @@ TYPED_TEST(Davidson_reset_D, solve_ends_after_reset) {
             "Davidson", "max_size_qspace=3,reset_D=4");
     solver->set_n_roots(nroot);
     solver->set_convergence_threshold(1e-9);
-    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    solver->set_verbosity(0);
     // the reset falls due in the last allowed iteration
     solver->set_max_iter(4);
     auto params = std::vector<R>(nroot, R(problem.n));
@@ -1321,7 +1321,7 @@ TYPED_TEST(LinearEigensystem_convergence, needs_all_roots) {
   auto solver = molpro::linalg::itsolv::create_LinearEigensystem<R, std::deque<TypeParam>, std::map<size_t, TypeParam>>(
       "Davidson");
   solver->set_n_roots(2);
-  solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+  solver->set_verbosity(0);
   // an exact eigenvector, whose residual offers no direction to find the second root in
   R parameters(problem.n), actions(problem.n);
   parameters[0] = 1;
@@ -1335,7 +1335,7 @@ TEST(LinearEigensystem, report_keeps_stream_format) {
   HermitianProblem<double> problem;
   for (const std::string method : {"Davidson", "RSPT"}) {
     auto solver = molpro::linalg::itsolv::create_LinearEigensystem<R>(method);
-    solver->set_verbosity(molpro::linalg::itsolv::Verbosity::None);
+    solver->set_verbosity(0);
     solver->set_max_iter(3);
     R parameters(problem.n), actions(problem.n);
     parameters[0] = 1;
