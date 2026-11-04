@@ -719,12 +719,7 @@ protected:
     // auto prof = profiler()->push("itsolv::solution"); // FIXME two profilers
     auto prof = molpro::Profiler::single();
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
-    prof->start("construct_solution (parameters)");
-    const auto& dims = m_xspace->dimensions();
-    util::construct_solutions(parameters, roots, m_subspace_solver->solutions(), m_xspace->cparamsp(),
-                              m_xspace->cparamsq(), m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(),
-                              m_handlers->rr(), m_handlers->rp(), m_handlers->rq());
-    prof->stop();
+    construct_solutions(roots, m_subspace_solver->solutions(), parameters);
     auto metric_solutions = detail::MetricSolutions<R, Q>{};
     auto metric_solutions_q = std::vector<Q>{};
     if (m_metric_kind != MetricKind::Identity && m_metric_storage == MetricStorage::OnTheFly && !roots.empty()) {
@@ -745,18 +740,47 @@ protected:
       }
       prof->stop();
     }
-    prof->start("construct_solution (residual)");
-    util::construct_solutions(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->cactionsq(),
-                              m_xspace->cactionsd(), dims.oP(), dims.oQ(), dims.oD(), m_handlers->rr(),
-                              m_handlers->rp(), m_handlers->rq());
-    prof->stop();
+    construct_actions(roots, m_subspace_solver->solutions(), residual);
     prof->start("apply");
-    auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP(),
-                                              m_xspace->dimensions().nP);
-    if (m_apply_p)
-      m_apply_p(pvectors, m_xspace->cparamsp(), residual);
     construct_residual(roots, cwrap(parameters), residual, metric_solutions);
     read_handler_counts(m_stats, m_handlers);
+    prof->stop();
+  }
+
+  /*!
+   * @brief Constructs the subspace vectors with the coefficients in the given rows of solutions
+   * @param rows rows of solutions
+   * @param solutions coefficients of subspace vectors in the current subspace, one vector per row
+   * @param parameters receives the subspace vectors
+   */
+  void construct_solutions(const std::vector<int>& rows, const subspace::Matrix<value_type>& solutions,
+                           const VecRef<R>& parameters) {
+    auto prof = molpro::Profiler::single();
+    const auto& dims = m_xspace->dimensions();
+    prof->start("construct_solution (parameters)");
+    util::construct_solutions(parameters, rows, solutions, m_xspace->cparamsp(), m_xspace->cparamsq(),
+                              m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(), m_handlers->rr(),
+                              m_handlers->rp(), m_handlers->rq());
+    prof->stop();
+  }
+
+  /*!
+   * @brief Constructs the actions on the subspace vectors with the coefficients in the given rows of solutions
+   * @param rows rows of solutions
+   * @param solutions coefficients of subspace vectors in the current subspace, one vector per row
+   * @param actions receives the actions on the subspace vectors
+   */
+  void construct_actions(const std::vector<int>& rows, const subspace::Matrix<value_type>& solutions,
+                         const VecRef<R>& actions) {
+    auto prof = molpro::Profiler::single();
+    const auto& dims = m_xspace->dimensions();
+    prof->start("construct_solution (residual)");
+    util::construct_solutions(actions, rows, solutions, {}, m_xspace->cactionsq(), m_xspace->cactionsd(), dims.oP(),
+                              dims.oQ(), dims.oD(), m_handlers->rr(), m_handlers->rp(), m_handlers->rq());
+    prof->stop();
+    prof->start("apply_p");
+    if (m_apply_p)
+      m_apply_p(detail::construct_vectorP(rows, solutions, dims.oP(), dims.nP), m_xspace->cparamsp(), actions);
     prof->stop();
   }
 

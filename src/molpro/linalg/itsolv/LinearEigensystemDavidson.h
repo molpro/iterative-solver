@@ -227,7 +227,7 @@ protected:
           if (partner >= subspace_solver->retained_solutions().rows())
             throw std::logic_error("The complex conjugate partner of a root is not among the retained solutions");
           auto partner_param = this->m_handlers->rr().copy(actions.at(i));
-          construct_subspace_vector(subspace_solver->retained_solutions(), int(partner), partner_param);
+          this->construct_solutions({int(partner)}, subspace_solver->retained_solutions(), wrap_arg(partner_param));
           if (on_the_fly)
             apply_metric(partner_param);
           this->m_handlers->rr().axpy(it->second, partner_param, actions.at(i));
@@ -303,8 +303,8 @@ protected:
     const auto& solutions = subspace_solver->retained_solutions();
     auto partner_param = this->m_handlers->rr().copy(params.at(i));
     auto partner_residual = this->m_handlers->rr().copy(params.at(i));
-    construct_subspace_vector(solutions, int(*partner), partner_param);
-    construct_subspace_action(solutions, int(*partner), partner_residual);
+    this->construct_solutions({int(*partner)}, solutions, wrap_arg(partner_param));
+    this->construct_actions({int(*partner)}, solutions, wrap_arg(partner_residual));
     if (this->m_xspace->metric_kind() != MetricKind::Identity) {
       // With a metric, the residual contains the actions of the metric on the partner and on the last root
       auto metric_param = this->m_handlers->rr().copy(params.at(i));
@@ -328,27 +328,6 @@ protected:
       partner_error /=
           subspace::util::solution_norms(solutions, this->m_xspace->data.at(subspace::EqnData::S))[*partner];
     errors.at(i) = std::sqrt(errors.at(i) * errors.at(i) + partner_error * partner_error);
-  }
-
-  //! Constructs in param the subspace vector with the coefficients in the given row of solutions
-  void construct_subspace_vector(const subspace::Matrix<scalar_type>& solutions, int row, R& param) {
-    const auto& dims = this->m_xspace->dimensions();
-    assert(solutions.cols() == dims.nX());
-    util::construct_solutions(wrap_arg(param), {row}, solutions, this->m_xspace->cparamsp(), this->m_xspace->cparamsq(),
-                              this->m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(), this->m_handlers->rr(),
-                              this->m_handlers->rp(), this->m_handlers->rq());
-  }
-
-  //! Constructs in action the action on the subspace vector with the coefficients in the given row of solutions
-  void construct_subspace_action(const subspace::Matrix<scalar_type>& solutions, int row, R& action) {
-    const auto& dims = this->m_xspace->dimensions();
-    assert(solutions.cols() == dims.nX());
-    util::construct_solutions(wrap_arg(action), {row}, solutions, {}, this->m_xspace->cactionsq(),
-                              this->m_xspace->cactionsd(), dims.oP(), dims.oQ(), dims.oD(), this->m_handlers->rr(),
-                              this->m_handlers->rp(), this->m_handlers->rq());
-    if (this->m_apply_p)
-      this->m_apply_p(detail::construct_vectorP({row}, solutions, dims.oP(), dims.nP), this->m_xspace->cparamsp(),
-                      wrap_arg(action));
   }
 
   //! Replaces param by the action of the metric on it, with the metric applied on the fly
