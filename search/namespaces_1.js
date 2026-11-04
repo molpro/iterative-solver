@@ -12,13 +12,14 @@ var searchData=
   ['molpro_3a_3alinalg_3a_3aitsolv_3a_3adetail_3a_3adspace_9',['dspace',['../namespacemolpro_1_1linalg_1_1itsolv_1_1detail_1_1dspace.html',1,'molpro::linalg::itsolv::detail']]],
   ['molpro_3a_3alinalg_3a_3aitsolv_3a_3ainterpolate_5fdetail_10',['interpolate_detail',['../namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail.html',1,'molpro::linalg::itsolv']]],
   ['molpro_3a_3alinalg_3a_3aitsolv_3a_3alog_11',['log',['../namespacemolpro_1_1linalg_1_1itsolv_1_1log.html',1,'molpro::linalg::itsolv']]],
-  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_12',['subspace',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html',1,'molpro::linalg::itsolv']]],
-  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_3a_3aqspace_13',['qspace',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1qspace.html',1,'molpro::linalg::itsolv::subspace']]],
-  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_3a_3autil_14',['util',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html',1,'molpro::linalg::itsolv::subspace']]],
-  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_3a_3autil_3a_3adetail_15',['detail',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail.html',1,'molpro::linalg::itsolv::subspace::util']]],
-  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_3a_3axspace_16',['xspace',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace.html',1,'molpro::linalg::itsolv::subspace']]],
-  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3autil_17',['util',['../namespacemolpro_1_1linalg_1_1itsolv_1_1util.html',1,'molpro::linalg::itsolv']]],
-  ['molpro_3a_3aprofiler_18',['profiler',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler.html',1,'molpro']]],
-  ['molpro_3a_3aprofiler_3a_3adetail_19',['detail',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1detail.html',1,'molpro::profiler']]],
-  ['molpro_3a_3aprofiler_3a_3adotgraph_20',['dotgraph',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1dotgraph.html',1,'molpro::profiler']]]
+  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3alog_3a_3adetail_12',['detail',['../namespacemolpro_1_1linalg_1_1itsolv_1_1log_1_1detail.html',1,'molpro::linalg::itsolv::log']]],
+  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_13',['subspace',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html',1,'molpro::linalg::itsolv']]],
+  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_3a_3aqspace_14',['qspace',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1qspace.html',1,'molpro::linalg::itsolv::subspace']]],
+  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_3a_3autil_15',['util',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util.html',1,'molpro::linalg::itsolv::subspace']]],
+  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_3a_3autil_3a_3adetail_16',['detail',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1util_1_1detail.html',1,'molpro::linalg::itsolv::subspace::util']]],
+  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3asubspace_3a_3axspace_17',['xspace',['../namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1xspace.html',1,'molpro::linalg::itsolv::subspace']]],
+  ['molpro_3a_3alinalg_3a_3aitsolv_3a_3autil_18',['util',['../namespacemolpro_1_1linalg_1_1itsolv_1_1util.html',1,'molpro::linalg::itsolv']]],
+  ['molpro_3a_3aprofiler_19',['profiler',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler.html',1,'molpro']]],
+  ['molpro_3a_3aprofiler_3a_3adetail_20',['detail',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1detail.html',1,'molpro::profiler']]],
+  ['molpro_3a_3aprofiler_3a_3adotgraph_21',['dotgraph',['https://molpro.github.io/profiler/namespacemolpro_1_1profiler_1_1dotgraph.html',1,'molpro::profiler']]]
 ];

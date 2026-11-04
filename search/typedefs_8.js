@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['mapped_5for_5fvalue_5ftype_5ft_0',['mapped_or_value_type_t',['../namespacemolpro_1_1linalg_1_1array.html#a5aeb80119c6ea1e4cd9155b6fb025344',1,'molpro::linalg::array']]],
-  ['matrix_5ftype_1',['matrix_type',['../structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html#a472891b774200604f564d1bbbb215431',1,'molpro::linalg::itsolv::detail::orthogonalised_subspace']]]
+  ['op_0',['OP',['../structmolpro_1_1linalg_1_1array_1_1util_1_1OperationRegister.html#adec453c471eab2cf48d7c8c43a9e31c2',1,'molpro::linalg::array::util::OperationRegister']]],
+  ['options_5fmap_1',['options_map',['../namespacemolpro_1_1linalg_1_1itsolv.html#a784351a2599ca33773a9809818edb5a1',1,'molpro::linalg::itsolv']]]
 ];

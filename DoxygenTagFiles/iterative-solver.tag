@@ -1873,130 +1873,20 @@
   <compound kind="struct">
     <name>molpro::linalg::itsolv::log::ComplexRootsDavidson</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html</filename>
-    <templarg>typename value_type</templarg>
-    <base>ContextBase&lt; ComplexRootsDavidson&lt; value_type &gt;, true, std::vector&lt; std::pair&lt; std::size_t, value_type &gt; &gt; &gt;</base>
+    <templarg>typename Scalar</templarg>
+    <class kind="struct">molpro::linalg::itsolv::log::ComplexRootsDavidson::Payload</class>
+    <member kind="function" static="yes">
+      <type>static std::string</type>
+      <name>format</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html</anchorfile>
+      <anchor>ac9d9ac02df36741dd29397a3a6590abd</anchor>
+      <arglist>(const Payload &amp;p)</arglist>
+    </member>
     <member kind="variable" static="yes">
-      <type>static const char *</type>
+      <type>static constexpr std::string_view</type>
       <name>name</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html</anchorfile>
-      <anchor>a319ac42946ba86635eda7408de2f77ed</anchor>
-      <arglist></arglist>
-    </member>
-  </compound>
-  <compound kind="class">
-    <name>molpro::linalg::itsolv::log::ConstexprString</name>
-    <filename>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</filename>
-    <templarg>std::size_t MaxSize</templarg>
-    <member kind="function">
-      <type>constexpr</type>
-      <name>ConstexprString</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</anchorfile>
-      <anchor>a777fa2d09fb2ae3b7261c6e54a4f7104</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr</type>
-      <name>ConstexprString</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</anchorfile>
-      <anchor>a797015db6399a7ef116378808d08b2e4</anchor>
-      <arglist>(const char(&amp;literal)[N])</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr</type>
-      <name>~ConstexprString</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</anchorfile>
-      <anchor>a5625092b4f5e885ea0e6f9968029c586</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr void</type>
-      <name>push_back</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</anchorfile>
-      <anchor>a9ed183b0e7b5427d3579dffa5f806a2d</anchor>
-      <arglist>(char c)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr std::size_t</type>
-      <name>size</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</anchorfile>
-      <anchor>aca9cdf34ced9daabbc9c8a9c3e3ec7af</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr char &amp;</type>
-      <name>operator[]</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</anchorfile>
-      <anchor>aa8150d9ddcd01801e6114ad943185561</anchor>
-      <arglist>(std::size_t idx)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr std::string_view</type>
-      <name>as_view</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</anchorfile>
-      <anchor>ae9cb1bf8947dd96fafc1062b7aa48046</anchor>
-      <arglist>() const</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr</type>
-      <name>operator std::string_view</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html</anchorfile>
-      <anchor>a5bdb81c9aea8ce48adb3b63bf3f107b4</anchor>
-      <arglist>() const</arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>molpro::linalg::itsolv::log::ContextBase</name>
-    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html</filename>
-    <templarg>typename CRTP</templarg>
-    <templarg>bool fixed_args</templarg>
-    <templarg>typename ... Args</templarg>
-    <member kind="typedef">
-      <type>std::tuple&lt; std::remove_cvref_t&lt; Args &gt;... &gt;</type>
-      <name>arg_types_tuple</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html</anchorfile>
-      <anchor>a8598d57ca57079ba514fa9f66b1c7ee5</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="typedef">
-      <type>decltype(to_arg(std::declval&lt; std::tuple_element_t&lt; Idx, arg_types_tuple &gt; &gt;()))</type>
-      <name>arg_t</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html</anchorfile>
-      <anchor>aba65551e6047f1aebcce0204b72da9d4</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function" static="yes">
-      <type>static constexpr decltype(auto)</type>
-      <name>to_arg</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html</anchorfile>
-      <anchor>ade3ca055bd401ff87cfacd1606d28930</anchor>
-      <arglist>(T &amp;&amp;arg)</arglist>
-    </member>
-    <member kind="function" static="yes">
-      <type>static arg_t&lt; Idx &gt;</type>
-      <name>get_arg</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html</anchorfile>
-      <anchor>a37c2b7580bd50be8f49b242b2b91eba9</anchor>
-      <arglist>(Ts &amp;&amp;...args)</arglist>
-    </member>
-    <member kind="variable" static="yes">
-      <type>static constexpr const char *</type>
-      <name>name</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html</anchorfile>
-      <anchor>a3413b9862cd9a7a6d57724e7434683af</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" static="yes">
-      <type>static constexpr bool</type>
-      <name>uses_fixed_arguments</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html</anchorfile>
-      <anchor>ac342a2a8ab55f014afe878af52e9f34c</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" static="yes">
-      <type>static constexpr std::size_t</type>
-      <name>num_args</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html</anchorfile>
-      <anchor>af8e6a9e8c3c20e6572f5c6b52d2f339a</anchor>
+      <anchor>a249c3dbacc74de6c09e6bc566dccc772</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -2123,12 +2013,27 @@
   <compound kind="struct">
     <name>molpro::linalg::itsolv::log::DataDump</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump.html</filename>
-    <base>ContextBase&lt; DataDump, false &gt;</base>
+    <templarg>typename T</templarg>
+    <class kind="struct">molpro::linalg::itsolv::log::DataDump::Payload</class>
+    <member kind="function" static="yes">
+      <type>static std::string</type>
+      <name>format</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump.html</anchorfile>
+      <anchor>a66df88074e156525f9784dd8a3ded58d</anchor>
+      <arglist>(const Payload &amp;p)</arglist>
+    </member>
     <member kind="variable" static="yes">
-      <type>static constexpr const char *</type>
+      <type>static constexpr std::string_view</type>
       <name>name</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump.html</anchorfile>
-      <anchor>a16473466c7ea852523e4169fc6b5b915</anchor>
+      <anchor>ae0ac5ef4f0cc1f6747dfc58c8c5b413c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr bool</type>
+      <name>is_data_dump</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump.html</anchorfile>
+      <anchor>a1f2b84b27ba130dbf63bc39d630aafc8</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -4824,6 +4729,13 @@
     </member>
     <member kind="function">
       <type>void</type>
+      <name>set_logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html</anchorfile>
+      <anchor>a8bfe3e2ccf9dd333abc6376f8c08f84c</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
       <name>update</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html</anchorfile>
       <anchor>a54e5bcba3e87d0b386076459974abcfd</anchor>
@@ -5023,45 +4935,35 @@
     </member>
   </compound>
   <compound kind="struct">
-    <name>molpro::linalg::itsolv::log::FormatOption</name>
-    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1FormatOption.html</filename>
-    <templarg>context Context</templarg>
-    <templarg>typename T</templarg>
-    <templarg>std::size_t precision</templarg>
+    <name>molpro::linalg::itsolv::log::Filter</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter.html</filename>
     <member kind="function" static="yes">
-      <type>static constexpr auto</type>
-      <name>format_string</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1FormatOption.html</anchorfile>
-      <anchor>a626974d8c1dc394b91204aa5ab606909</anchor>
+      <type>static Filter</type>
+      <name>all</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter.html</anchorfile>
+      <anchor>ae0effd0433266c986125c8aebd49012d</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function" static="yes">
-      <type>static constexpr std::string_view</type>
-      <name>range_begin_mark</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1FormatOption.html</anchorfile>
-      <anchor>ab19f2d1f00759854be0235e5ffd7ada4</anchor>
-      <arglist>()</arglist>
+    <member kind="variable">
+      <type>std::optional&lt; Severity &gt;</type>
+      <name>min_severity</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter.html</anchorfile>
+      <anchor>af19def75c75a98b18014db9908f4a72d</anchor>
+      <arglist></arglist>
     </member>
-    <member kind="function" static="yes">
-      <type>static constexpr std::string_view</type>
-      <name>range_end_mark</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1FormatOption.html</anchorfile>
-      <anchor>abb5fbf1fefbc6a522941c766a4f78bc6</anchor>
-      <arglist>()</arglist>
+    <member kind="variable">
+      <type>std::optional&lt; Verbosity &gt;</type>
+      <name>verbosity</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter.html</anchorfile>
+      <anchor>af8fd3fb49cfba1df7ce98043dfe798f0</anchor>
+      <arglist></arglist>
     </member>
-    <member kind="function" static="yes">
-      <type>static constexpr std::string_view</type>
-      <name>range_separator</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1FormatOption.html</anchorfile>
-      <anchor>a3de3145e6f6c54ba800a5b9d77aab8cc</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function" static="yes">
-      <type>static constexpr void</type>
-      <name>prepare_stream</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1FormatOption.html</anchorfile>
-      <anchor>a14e866d33fe60bfe7fe84a480d4d0606</anchor>
-      <arglist>(std::ostream &amp;stream)</arglist>
+    <member kind="variable">
+      <type>std::optional&lt; bool &gt;</type>
+      <name>data_dumps</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter.html</anchorfile>
+      <anchor>ae895aa25780cdffe6244136699aeb5ac</anchor>
+      <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -5100,12 +5002,12 @@
   <compound kind="struct">
     <name>molpro::linalg::itsolv::log::Generic</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic.html</filename>
-    <base>ContextBase&lt; Generic, false &gt;</base>
+    <class kind="struct">molpro::linalg::itsolv::log::Generic::Payload</class>
     <member kind="variable" static="yes">
-      <type>static constexpr const char *</type>
+      <type>static constexpr std::string_view</type>
       <name>name</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic.html</anchorfile>
-      <anchor>aeb8a150dd79618b2151ac04dcba2e112</anchor>
+      <anchor>a37c39c11addc93b36c633ab4be7417ab</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -5223,8 +5125,18 @@
     <templarg>typename T</templarg>
   </compound>
   <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::detail::is_complex</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1detail_1_1is__complex.html</filename>
+    <templarg>typename T</templarg>
+  </compound>
+  <compound kind="struct">
     <name>molpro::linalg::is_complex&lt; std::complex&lt; T &gt; &gt;</name>
     <filename>structmolpro_1_1linalg_1_1is__complex_3_01std_1_1complex_3_01T_01_4_01_4.html</filename>
+    <templarg>typename T</templarg>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::detail::is_complex&lt; std::complex&lt; T &gt; &gt;</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1detail_1_1is__complex_3_01std_1_1complex_3_01T_01_4_01_4.html</filename>
     <templarg>typename T</templarg>
   </compound>
   <compound kind="struct">
@@ -5422,14 +5334,34 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::IterationCompleted</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted.html</filename>
+    <templarg>typename Scalar</templarg>
+    <class kind="struct">molpro::linalg::itsolv::log::IterationCompleted::Payload</class>
+    <member kind="function" static="yes">
+      <type>static std::string</type>
+      <name>format</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted.html</anchorfile>
+      <anchor>abf2ede2db88fb567c0112c7c0b32fb13</anchor>
+      <arglist>(const Payload &amp;p)</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr std::string_view</type>
+      <name>name</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted.html</anchorfile>
+      <anchor>ae8de8fe29aa23cfb0c139992eed63686</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>molpro::linalg::itsolv::log::IterationReport</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationReport.html</filename>
-    <base>ContextBase&lt; IterationReport, true &gt;</base>
+    <class kind="struct">molpro::linalg::itsolv::log::IterationReport::Payload</class>
     <member kind="variable" static="yes">
-      <type>static constexpr const char *</type>
+      <type>static constexpr std::string_view</type>
       <name>name</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationReport.html</anchorfile>
-      <anchor>ae60e453be6879c07329b3f9058070fb8</anchor>
+      <anchor>a8f14c017270a0b1459638347182169d6</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -6459,6 +6391,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
       <anchor>a7b76f421dedacaaaac6d4da01b80e3cd</anchor>
       <arglist>() const override</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; scalar_type &gt;</type>
+      <name>current_values</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a358a0149cdfd90191f9f3df52bd48e77</anchor>
+      <arglist>() const</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
@@ -8405,6 +8344,20 @@
   <compound kind="class">
     <name>molpro::linalg::itsolv::Logger</name>
     <filename>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</filename>
+    <member kind="typedef">
+      <type>std::function&lt; void(const log::Record &amp;)&gt;</type>
+      <name>Sink</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>a371f0e82408c8d867644db30b604be1b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::size_t</type>
+      <name>SinkId</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>aabbd51bc6d5ad8ae164140fbd273785f</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function">
       <type></type>
       <name>Logger</name>
@@ -8412,61 +8365,110 @@
       <anchor>a1ccfe737d8b2164d098562cc90faabd8</anchor>
       <arglist>(log::Severity min_severity=log::Severity::Normal, log::Verbosity verbosity=log::Verbosity::Info, bool enable_data_dumps=false)</arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual</type>
+      <name>~Logger</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>afb9be23c22751f751d95608ebd4e5225</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type>SinkId</type>
+      <name>add_sink</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>a55603cd21b4118d3ccf7fa09084952a3</anchor>
+      <arglist>(Sink sink, log::Filter filter={})</arglist>
+    </member>
+    <member kind="function">
+      <type>SinkId</type>
+      <name>on</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>ae45a355f2550bbf1cf0232c0b14e8828</anchor>
+      <arglist>(F &amp;&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>remove_sink</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>a6c144dc60a14594de14a278d3825dec7</anchor>
+      <arglist>(SinkId id)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>emit</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>a65e2671710bdac6b327c0853552fe0c6</anchor>
+      <arglist>(log::Severity severity, log::Verbosity verbosity, std::string_view message, MakePayload &amp;&amp;make) const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_wanted</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>a07ccdec1e7dc7878107ecef14f8e8a60</anchor>
+      <arglist>(log::Severity severity, log::Verbosity verbosity) const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>emit</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>a2a99f84382fd7070d7b6a9d540ee7065</anchor>
+      <arglist>(log::Severity severity, log::Verbosity verbosity, std::string_view message) const</arglist>
+    </member>
     <member kind="function">
       <type>void</type>
       <name>msg</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
-      <anchor>a53781ee8e06705d089207ada15c3fa57</anchor>
-      <arglist>(log::Severity severity, log::Verbosity verbosity, std::string_view message, Ts &amp;&amp;...args) const</arglist>
+      <anchor>a1b028f5882ef8772d32b74518041f3b7</anchor>
+      <arglist>(log::Severity severity, log::Verbosity verbosity, std::string_view message, const Ts &amp;...args) const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>trace</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
-      <anchor>ae8eff4a439b5d86e7fe9ebd299ece821</anchor>
-      <arglist>(std::string_view message, Ts &amp;&amp;...args) const</arglist>
+      <anchor>a3df7077f2163301abf7ef86caff77ef0</anchor>
+      <arglist>(std::string_view message, const Ts &amp;...args) const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>debug</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
-      <anchor>a31c65c1f5ba802102ec8a132a99d8ad8</anchor>
-      <arglist>(std::string_view message, Ts &amp;&amp;...args) const</arglist>
+      <anchor>adbe4c58e620f2acb8a7873d7528ed973</anchor>
+      <arglist>(std::string_view message, const Ts &amp;...args) const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>info</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
-      <anchor>a165cbf0829ddd542abd540b276598095</anchor>
-      <arglist>(std::string_view message, Ts &amp;&amp;...args) const</arglist>
+      <anchor>a1eedc897b9be68d3d342e9538330c4c8</anchor>
+      <arglist>(std::string_view message, const Ts &amp;...args) const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>warn</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
-      <anchor>a21558b50ca669f738657d62ea9253863</anchor>
-      <arglist>(std::string_view message, Ts &amp;&amp;...args) const</arglist>
+      <anchor>a270e9a005cd9eb2eec2dbf5fd661dca7</anchor>
+      <arglist>(std::string_view message, const Ts &amp;...args) const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>error</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
-      <anchor>a5fe4e96d8c075f3ac16f2cb44eec05d2</anchor>
-      <arglist>(std::string_view message, Ts &amp;&amp;...args) const</arglist>
+      <anchor>a515c01d6095b6a182bb3d4765620d89a</anchor>
+      <arglist>(std::string_view message, const Ts &amp;...args) const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>fatal</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
-      <anchor>a96ab51ac8c39856501ca3a085372a404</anchor>
-      <arglist>(std::string_view message, Ts &amp;&amp;...args) const</arglist>
+      <anchor>a02e66ede277f95dca334f449c392f758</anchor>
+      <arglist>(std::string_view message, const Ts &amp;...args) const</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>data_dump</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
-      <anchor>a716e08cb3b362c2d6a9fcabd9263fc9d</anchor>
-      <arglist>(std::string_view what, Ts...data) const</arglist>
+      <anchor>ae1329674ad8b8905863da43a3e018c7c</anchor>
+      <arglist>(std::string_view what, const T &amp;data) const</arglist>
     </member>
     <member kind="function">
       <type>log::Severity</type>
@@ -8510,38 +8512,26 @@
       <anchor>ae9ac1481a4dac8e59741d4526c1dfe8f</anchor>
       <arglist>(bool enable)</arglist>
     </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>default_output</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>a787b03d97f31c4d43c0ccc5ec25f0d2b</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>set_default_output</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
+      <anchor>ab64b9f715b13f7d891730854376bf971</anchor>
+      <arglist>(bool enable)</arglist>
+    </member>
     <member kind="function" protection="protected" virtualness="virtual">
       <type>virtual void</type>
       <name>default_message_handler</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
       <anchor>a8b679520aaf2b0747021d2d416d36962</anchor>
       <arglist>(std::string_view ctx, log::Severity severity, log::Verbosity verbosity, std::string_view msg) const</arglist>
-    </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void</type>
-      <name>log_ctx</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1Logger.html</anchorfile>
-      <anchor>af9a15cea50f9f74da872f54393f6afc0</anchor>
-      <arglist>(std::string_view ctx, std::size_t num_args) const</arglist>
-    </member>
-  </compound>
-  <compound kind="struct">
-    <name>molpro::linalg::itsolv::log::LogHandler</name>
-    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html</filename>
-    <templarg>context Context</templarg>
-    <member kind="function">
-      <type>void</type>
-      <name>handle</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html</anchorfile>
-      <anchor>a81e3ea5cdfe2c1fb17b21b9ae74c049b</anchor>
-      <arglist>(Severity severity, Verbosity verbosity, std::string_view message, Ts...args)=delete</arglist>
-    </member>
-    <member kind="function" static="yes">
-      <type>static void</type>
-      <name>handle</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html</anchorfile>
-      <anchor>ae85e4139a2e2212cb2eefe6a0d978919</anchor>
-      <arglist>(const Logger &amp;logger, Severity severity, Verbosity verbosity, std::string_view message, Ts...args)=delete</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -9143,26 +9133,20 @@
   <compound kind="struct">
     <name>molpro::linalg::itsolv::log::NewIteration</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration.html</filename>
-    <base>ContextBase&lt; NewIteration, true, int, std::vector&lt; double &gt; &gt;</base>
+    <templarg>typename Scalar</templarg>
+    <class kind="struct">molpro::linalg::itsolv::log::NewIteration::Payload</class>
+    <member kind="function" static="yes">
+      <type>static std::string</type>
+      <name>format</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration.html</anchorfile>
+      <anchor>a15c6cf07fa840c8901100c78843734ed</anchor>
+      <arglist>(const Payload &amp;p)</arglist>
+    </member>
     <member kind="variable" static="yes">
-      <type>static constexpr const char *</type>
+      <type>static constexpr std::string_view</type>
       <name>name</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration.html</anchorfile>
-      <anchor>aecb3ebba15b108e88384a175878c5cf1</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" static="yes">
-      <type>static constexpr std::size_t</type>
-      <name>iter</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration.html</anchorfile>
-      <anchor>a02a74137f6f2ad199b694b666d8d3e38</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" static="yes">
-      <type>static constexpr std::size_t</type>
-      <name>errors</name>
-      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration.html</anchorfile>
-      <anchor>a29e2739560e3b3ebdb4b80823ee0b5e7</anchor>
+      <anchor>a3b44111ea359b222a4c925ca260de3f7</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -10029,6 +10013,175 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::ComplexRootsDavidson::Payload</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson_1_1Payload.html</filename>
+    <member kind="variable">
+      <type>std::span&lt; const std::pair&lt; std::size_t, Scalar &gt; &gt;</type>
+      <name>roots</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson_1_1Payload.html</anchorfile>
+      <anchor>ae072165f17e125ce56bd2d9fe1741626</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::DataDump::Payload</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump_1_1Payload.html</filename>
+    <member kind="variable">
+      <type>const T &amp;</type>
+      <name>data</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump_1_1Payload.html</anchorfile>
+      <anchor>a4150bd3518cdcf31761e6dc02ae8dda5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::size_t</type>
+      <name>precision</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump_1_1Payload.html</anchorfile>
+      <anchor>a27068222984d0a755d12723911c8b8aa</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::Generic::Payload</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic_1_1Payload.html</filename>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::IterationCompleted::Payload</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted_1_1Payload.html</filename>
+    <member kind="variable">
+      <type>int</type>
+      <name>iter</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted_1_1Payload.html</anchorfile>
+      <anchor>a90461cc93e48136e3f25bb0ec37be330</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; int &gt;</type>
+      <name>roots</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted_1_1Payload.html</anchorfile>
+      <anchor>a3a2f5e3dc81e806afd4afbabab5ae185</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; real_t&lt; Scalar &gt; &gt;</type>
+      <name>errors</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted_1_1Payload.html</anchorfile>
+      <anchor>a07da6bd9f0d28537ad0d39fb6c6df26b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; Scalar &gt;</type>
+      <name>values</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted_1_1Payload.html</anchorfile>
+      <anchor>aaa8e16ce7326b51e212090c643726a15</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::size_t</type>
+      <name>n_next</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted_1_1Payload.html</anchorfile>
+      <anchor>ad7a93ab05682b4c591921d7366f80029</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::IterationReport::Payload</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationReport_1_1Payload.html</filename>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::NewIteration::Payload</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration_1_1Payload.html</filename>
+    <member kind="variable">
+      <type>int</type>
+      <name>iter</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration_1_1Payload.html</anchorfile>
+      <anchor>af29b2b0f0004835605166e0126aa3cf5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; int &gt;</type>
+      <name>roots</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration_1_1Payload.html</anchorfile>
+      <anchor>a741bfbe74746dc0de3210e626762c71a</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::SolveFinished::Payload</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished_1_1Payload.html</filename>
+    <member kind="variable">
+      <type>int</type>
+      <name>iterations</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished_1_1Payload.html</anchorfile>
+      <anchor>ae4a9922e934b1eb66721ad45cb61abf2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>bool</type>
+      <name>converged</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished_1_1Payload.html</anchorfile>
+      <anchor>a78cf5f3f7cb97f12afe7036870f61299</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; real_t&lt; Scalar &gt; &gt;</type>
+      <name>errors</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished_1_1Payload.html</anchorfile>
+      <anchor>a7dfe05e23dbaeac5f381235cd3848a81</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; Scalar &gt;</type>
+      <name>values</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished_1_1Payload.html</anchorfile>
+      <anchor>a3bd81957df42572fa17be2969f189400</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::SolveStarted::Payload</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted_1_1Payload.html</filename>
+    <member kind="variable">
+      <type>std::size_t</type>
+      <name>n_roots</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted_1_1Payload.html</anchorfile>
+      <anchor>ac728866958c99e87aa81887e6291cd30</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>max_iter</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted_1_1Payload.html</anchorfile>
+      <anchor>ac6959cf9278ed706822d893f0ae500e8</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>real_t&lt; Scalar &gt;</type>
+      <name>convergence_threshold</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted_1_1Payload.html</anchorfile>
+      <anchor>a049e0cf26abcfae489ac92e6a0f15c6b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::size_t</type>
+      <name>pspace_size</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted_1_1Payload.html</anchorfile>
+      <anchor>ae5a5984f500fa2401f231b5ad6e96711</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>bool</type>
+      <name>initial_guess_generated</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted_1_1Payload.html</anchorfile>
+      <anchor>af6a5ca930aa5b7f69617b86754ce522a</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::SummaryReport::Payload</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SummaryReport_1_1Payload.html</filename>
+  </compound>
+  <compound kind="struct">
     <name>molpro::linalg::itsolv::Interpolator::point</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1Interpolator_1_1point.html</filename>
     <member kind="variable">
@@ -10768,6 +10921,13 @@
     </member>
     <member kind="function">
       <type>void</type>
+      <name>set_logger</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html</anchorfile>
+      <anchor>af8a22ce364f0a7f91006b1113737e8c5</anchor>
+      <arglist>(std::shared_ptr&lt; Logger &gt; logger)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
       <name>update</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html</anchorfile>
       <anchor>a0568fc9e678b0606101ddca38bc526e0</anchor>
@@ -10893,6 +11053,80 @@
       <name>type</name>
       <anchorfile>structmolpro_1_1linalg_1_1real__type_3_01std_1_1complex_3_01T_01_4_01_4.html</anchorfile>
       <anchor>a744882fc345499652adf8cc7013f016b</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>molpro::linalg::itsolv::log::Record</name>
+    <filename>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</filename>
+    <member kind="function">
+      <type>const std::type_info &amp;</type>
+      <name>type</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>a84be2c1ca8036db52022aac51da0b165</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>a5e299af894ba82dc066b9271fca50b13</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>const Ctx::Payload *</type>
+      <name>get</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>a313ebe48a835704d9ed834df52b5a101</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>std::string</type>
+      <name>text</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>aab6eb053ad7e7c573ae063aa7dd15c6a</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>is_data_dump</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>a2204e206952413cbeeeabac03b5189b6</anchor>
+      <arglist>() const</arglist>
+    </member>
+    <member kind="function" static="yes">
+      <type>static Record</type>
+      <name>make</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>a39041eb66434b95e9c2c4d0cd91ad023</anchor>
+      <arglist>(Severity severity, Verbosity verbosity, std::string_view message, const typename Ctx::Payload &amp;payload)</arglist>
+    </member>
+    <member kind="variable">
+      <type>std::string_view</type>
+      <name>context</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>afb176e9477359f62b9358c50d85792d0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Severity</type>
+      <name>severity</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>a304b68d70046f2497055e8d56bbc4b44</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Verbosity</type>
+      <name>verbosity</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>ae88766db08786e67b47522e7add83970</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::string_view</type>
+      <name>message</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html</anchorfile>
+      <anchor>a0db70ad9865f46b75185acb3db68c8e7</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -11084,6 +11318,26 @@
       <arglist></arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::SolveFinished</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished.html</filename>
+    <templarg>typename Scalar</templarg>
+    <class kind="struct">molpro::linalg::itsolv::log::SolveFinished::Payload</class>
+    <member kind="function" static="yes">
+      <type>static std::string</type>
+      <name>format</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished.html</anchorfile>
+      <anchor>a6e491d14ad3b5bc7d8b8302f193b2e2d</anchor>
+      <arglist>(const Payload &amp;p)</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr std::string_view</type>
+      <name>name</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished.html</anchorfile>
+      <anchor>ad44812dd5b26f3f7c981b147630d5c3e</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
   <compound kind="class">
     <name>molpro::linalg::itsolv::SolverFactory</name>
     <filename>classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html</filename>
@@ -11138,6 +11392,26 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html</anchorfile>
       <anchor>a564027dd4f9d2e325fb8b785a5347aef</anchor>
       <arglist>(const std::string &amp;method, const options_map &amp;options, const std::shared_ptr&lt; ArrayHandlers&lt; R, Q, P &gt; &gt; &amp;handlers=std::make_shared&lt; molpro::linalg::itsolv::ArrayHandlers&lt; R, Q, P &gt; &gt;())</arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>molpro::linalg::itsolv::log::SolveStarted</name>
+    <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted.html</filename>
+    <templarg>typename Scalar</templarg>
+    <class kind="struct">molpro::linalg::itsolv::log::SolveStarted::Payload</class>
+    <member kind="function" static="yes">
+      <type>static std::string</type>
+      <name>format</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted.html</anchorfile>
+      <anchor>ada64c74f304c69463aa20064b93c1ad9</anchor>
+      <arglist>(const Payload &amp;p)</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr std::string_view</type>
+      <name>name</name>
+      <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted.html</anchorfile>
+      <anchor>a928c74c44e7ab603f35b56ca8bc33c20</anchor>
+      <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
@@ -12218,12 +12492,12 @@
   <compound kind="struct">
     <name>molpro::linalg::itsolv::log::SummaryReport</name>
     <filename>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SummaryReport.html</filename>
-    <base>ContextBase&lt; SummaryReport, true &gt;</base>
+    <class kind="struct">molpro::linalg::itsolv::log::SummaryReport::Payload</class>
     <member kind="variable" static="yes">
-      <type>static constexpr const char *</type>
+      <type>static constexpr std::string_view</type>
       <name>name</name>
       <anchorfile>structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SummaryReport.html</anchorfile>
-      <anchor>aad38817bf0cbbf0ca19eb0a136eeefbd</anchor>
+      <anchor>a636caed4821641399ec410c682191d62</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -12746,48 +13020,40 @@
     </member>
   </compound>
   <compound kind="concept">
-    <name>molpro::linalg::itsolv::log::context</name>
-    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1context.html</filename>
+    <name>molpro::linalg::itsolv::log::complex_number</name>
+    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1complex__number.html</filename>
   </compound>
   <compound kind="concept">
-    <name>molpro::linalg::itsolv::log::context_uses_correct_arg_types</name>
-    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1context__uses__correct__arg__types.html</filename>
+    <name>molpro::linalg::itsolv::log::data_dump_context</name>
+    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1data__dump__context.html</filename>
+  </compound>
+  <compound kind="concept">
+    <name>molpro::linalg::itsolv::log::event_context</name>
+    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1event__context.html</filename>
   </compound>
   <compound kind="concept">
     <name>molpro::linalg::itsolv::log::formattable</name>
     <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1formattable.html</filename>
   </compound>
   <compound kind="concept">
-    <name>molpro::linalg::itsolv::log::handler_exists</name>
-    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1handler__exists.html</filename>
-  </compound>
-  <compound kind="concept">
-    <name>molpro::linalg::itsolv::log::member_handler_exists</name>
-    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1member__handler__exists.html</filename>
-  </compound>
-  <compound kind="concept">
-    <name>molpro::linalg::itsolv::log::name_tagged</name>
-    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1name__tagged.html</filename>
+    <name>molpro::linalg::itsolv::log::formattable_context</name>
+    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1formattable__context.html</filename>
   </compound>
   <compound kind="concept">
     <name>molpro::linalg::itsolv::log::pair_like</name>
     <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1pair__like.html</filename>
   </compound>
   <compound kind="concept">
-    <name>molpro::linalg::itsolv::log::static_handler_exists</name>
-    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1static__handler__exists.html</filename>
-  </compound>
-  <compound kind="concept">
     <name>molpro::linalg::itsolv::log::streamable</name>
     <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1streamable.html</filename>
   </compound>
   <compound kind="concept">
-    <name>molpro::linalg::itsolv::log::string_convertible_range</name>
-    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1string__convertible__range.html</filename>
+    <name>molpro::linalg::itsolv::log::string_like</name>
+    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1string__like.html</filename>
   </compound>
   <compound kind="concept">
-    <name>molpro::linalg::itsolv::log::stringify_supported</name>
-    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1stringify__supported.html</filename>
+    <name>molpro::linalg::itsolv::log::stringifiable</name>
+    <filename>conceptmolpro_1_1linalg_1_1itsolv_1_1log_1_1stringifiable.html</filename>
   </compound>
   <compound kind="namespace">
     <name>iterative_solver</name>
@@ -14664,16 +14930,25 @@
   <compound kind="namespace">
     <name>molpro::linalg::itsolv::log</name>
     <filename>namespacemolpro_1_1linalg_1_1itsolv_1_1log.html</filename>
+    <namespace>molpro::linalg::itsolv::log::detail</namespace>
     <class kind="struct">molpro::linalg::itsolv::log::ComplexRootsDavidson</class>
-    <class kind="class">molpro::linalg::itsolv::log::ConstexprString</class>
-    <class kind="struct">molpro::linalg::itsolv::log::ContextBase</class>
     <class kind="struct">molpro::linalg::itsolv::log::DataDump</class>
-    <class kind="struct">molpro::linalg::itsolv::log::FormatOption</class>
+    <class kind="struct">molpro::linalg::itsolv::log::Filter</class>
     <class kind="struct">molpro::linalg::itsolv::log::Generic</class>
+    <class kind="struct">molpro::linalg::itsolv::log::IterationCompleted</class>
     <class kind="struct">molpro::linalg::itsolv::log::IterationReport</class>
-    <class kind="struct">molpro::linalg::itsolv::log::LogHandler</class>
     <class kind="struct">molpro::linalg::itsolv::log::NewIteration</class>
+    <class kind="class">molpro::linalg::itsolv::log::Record</class>
+    <class kind="struct">molpro::linalg::itsolv::log::SolveFinished</class>
+    <class kind="struct">molpro::linalg::itsolv::log::SolveStarted</class>
     <class kind="struct">molpro::linalg::itsolv::log::SummaryReport</class>
+    <member kind="typedef">
+      <type>decltype(std::abs(std::declval&lt; Scalar &gt;()))</type>
+      <name>real_t</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1log.html</anchorfile>
+      <anchor>a1a93ab446e2bcfcefb53b194476a8b8a</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="enumeration">
       <type></type>
       <name>Verbosity</name>
@@ -14697,18 +14972,18 @@
       <enumvalue file="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html" anchor="aefd57e6c9d903a9ebdf9c5328931baf0a882384ec38ce8d9582b57e70861730e4">Fatal</enumvalue>
     </member>
     <member kind="function">
-      <type>constexpr std::size_t</type>
-      <name>num_digits</name>
+      <type>std::string</type>
+      <name>stringify</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1log.html</anchorfile>
-      <anchor>a57ee158b4d2f05f9a8e94b11869c6f42</anchor>
-      <arglist>(std::size_t val)</arglist>
+      <anchor>ab23d512c60928eabcb4124a494c20649</anchor>
+      <arglist>(const T &amp;t, std::size_t precision=default_precision)</arglist>
     </member>
     <member kind="function">
-      <type>constexpr ConstexprString&lt; num_digits(precision)+4 &gt;</type>
-      <name>create_fmt_string_for_precision</name>
+      <type>std::string</type>
+      <name>compose</name>
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1log.html</anchorfile>
-      <anchor>ac70ab2e80d1290423912509a803ba173</anchor>
-      <arglist>()</arglist>
+      <anchor>a544ecd5ea5374e5239ea787e21d803b4</anchor>
+      <arglist>(std::string_view message, std::string_view suffix)</arglist>
     </member>
     <member kind="variable">
       <type>constexpr const std::size_t</type>
@@ -14716,6 +14991,26 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1log.html</anchorfile>
       <anchor>a01797cc9fe37ece277e8804a11c24519</anchor>
       <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="namespace">
+    <name>molpro::linalg::itsolv::log::detail</name>
+    <filename>namespacemolpro_1_1linalg_1_1itsolv_1_1log_1_1detail.html</filename>
+    <class kind="struct">molpro::linalg::itsolv::log::detail::is_complex</class>
+    <class kind="struct">molpro::linalg::itsolv::log::detail::is_complex&lt; std::complex&lt; T &gt; &gt;</class>
+    <member kind="function">
+      <type>consteval bool</type>
+      <name>is_printable_range</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1log_1_1detail.html</anchorfile>
+      <anchor>ae681bed56d26f0008401c25b88fcba31</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>consteval bool</type>
+      <name>is_stringifiable</name>
+      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1log_1_1detail.html</anchorfile>
+      <anchor>a98a2885c20ee858585763716c68d4174</anchor>
+      <arglist>()</arglist>
     </member>
   </compound>
   <compound kind="namespace">

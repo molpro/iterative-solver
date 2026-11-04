@@ -96,6 +96,7 @@ $(document).ready(function(){initNavTree('classmolpro_1_1linalg_1_1itsolv_1_1Log
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classmolpro_1_1linalg_1_1itsolv_1_1Logger-members.html">List of all members</a>  </div>
@@ -103,41 +104,80 @@ $(document).ready(function(){initNavTree('classmolpro_1_1linalg_1_1itsolv_1_1Log
 </div><!--header-->
 <div class="contents">
 
+<p><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html" title="Logger class implementation. Provides (customizable) logging functionalities.">Logger</a> class implementation. Provides (customizable) logging functionalities.  
+ <a href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="Logger_8h_source.html">Logger.h</a>&gt;</code></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html">Logger</a> class implementation. Provides (customizable) logging functionalities. </p>
+<div class="textblock"><p><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html" title="Logger class implementation. Provides (customizable) logging functionalities.">Logger</a> class implementation. Provides (customizable) logging functionalities. </p>
+<p>See <a class="el" href="Logger_8h_source.html">Logger.h</a> for an overview of how to observe logged events. </p>
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a371f0e82408c8d867644db30b604be1b" id="r_a371f0e82408c8d867644db30b604be1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a371f0e82408c8d867644db30b604be1b">Sink</a> = std::function&lt; <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>(<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html">log::Record</a> &amp;)&gt;</td></tr>
+<tr class="separator:a371f0e82408c8d867644db30b604be1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabbd51bc6d5ad8ae164140fbd273785f" id="r_aabbd51bc6d5ad8ae164140fbd273785f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#aabbd51bc6d5ad8ae164140fbd273785f">SinkId</a> = std::size_t</td></tr>
+<tr class="separator:aabbd51bc6d5ad8ae164140fbd273785f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1ccfe737d8b2164d098562cc90faabd8" id="r_a1ccfe737d8b2164d098562cc90faabd8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a1ccfe737d8b2164d098562cc90faabd8">Logger</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#abd38e80ae9e78fdb0879590b5d8be3bc">min_severity</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0a960b44c579bc2f6818d2daaf9e4c16f0">log::Severity::Normal</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a40f771e181e6fa67a1c92318f2af584e">verbosity</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cda4059b0251f66a18cb56f544728796875">log::Verbosity::Info</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#ae9ac1481a4dac8e59741d4526c1dfe8f">enable_data_dumps</a>=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">false</a>)</td></tr>
 <tr class="separator:a1ccfe737d8b2164d098562cc90faabd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53781ee8e06705d089207ada15c3fa57" id="r_a53781ee8e06705d089207ada15c3fa57"><td class="memTemplParams" colspan="2">template&lt;log::context Context = log::Generic, std::size_t precision = log::default_precision, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </td></tr>
-<tr class="memitem:a53781ee8e06705d089207ada15c3fa57"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a53781ee8e06705d089207ada15c3fa57">msg</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">severity</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a40f771e181e6fa67a1c92318f2af584e">verbosity</a>, std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">message</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a53781ee8e06705d089207ada15c3fa57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8eff4a439b5d86e7fe9ebd299ece821" id="r_ae8eff4a439b5d86e7fe9ebd299ece821"><td class="memTemplParams" colspan="2">template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </td></tr>
-<tr class="memitem:ae8eff4a439b5d86e7fe9ebd299ece821"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#ae8eff4a439b5d86e7fe9ebd299ece821">trace</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">message</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:ae8eff4a439b5d86e7fe9ebd299ece821"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31c65c1f5ba802102ec8a132a99d8ad8" id="r_a31c65c1f5ba802102ec8a132a99d8ad8"><td class="memTemplParams" colspan="2">template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </td></tr>
-<tr class="memitem:a31c65c1f5ba802102ec8a132a99d8ad8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a31c65c1f5ba802102ec8a132a99d8ad8">debug</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">message</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a31c65c1f5ba802102ec8a132a99d8ad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a165cbf0829ddd542abd540b276598095" id="r_a165cbf0829ddd542abd540b276598095"><td class="memTemplParams" colspan="2">template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </td></tr>
-<tr class="memitem:a165cbf0829ddd542abd540b276598095"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a165cbf0829ddd542abd540b276598095">info</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">message</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a165cbf0829ddd542abd540b276598095"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21558b50ca669f738657d62ea9253863" id="r_a21558b50ca669f738657d62ea9253863"><td class="memTemplParams" colspan="2">template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </td></tr>
-<tr class="memitem:a21558b50ca669f738657d62ea9253863"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a21558b50ca669f738657d62ea9253863">warn</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">message</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a21558b50ca669f738657d62ea9253863"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fe4e96d8c075f3ac16f2cb44eec05d2" id="r_a5fe4e96d8c075f3ac16f2cb44eec05d2"><td class="memTemplParams" colspan="2">template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </td></tr>
-<tr class="memitem:a5fe4e96d8c075f3ac16f2cb44eec05d2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a5fe4e96d8c075f3ac16f2cb44eec05d2">error</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">message</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a5fe4e96d8c075f3ac16f2cb44eec05d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96ab51ac8c39856501ca3a085372a404" id="r_a96ab51ac8c39856501ca3a085372a404"><td class="memTemplParams" colspan="2">template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </td></tr>
-<tr class="memitem:a96ab51ac8c39856501ca3a085372a404"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a96ab51ac8c39856501ca3a085372a404">fatal</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">message</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a96ab51ac8c39856501ca3a085372a404"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a716e08cb3b362c2d6a9fcabd9263fc9d" id="r_a716e08cb3b362c2d6a9fcabd9263fc9d"><td class="memTemplParams" colspan="2">template&lt;std::size_t precision = log::default_precision, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </td></tr>
-<tr class="memitem:a716e08cb3b362c2d6a9fcabd9263fc9d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a716e08cb3b362c2d6a9fcabd9263fc9d">data_dump</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">what</a>, Ts...data) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:a716e08cb3b362c2d6a9fcabd9263fc9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb9be23c22751f751d95608ebd4e5225" id="r_afb9be23c22751f751d95608ebd4e5225"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#afb9be23c22751f751d95608ebd4e5225">~Logger</a> ()=<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">default</a></td></tr>
+<tr class="separator:afb9be23c22751f751d95608ebd4e5225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55603cd21b4118d3ccf7fa09084952a3" id="r_a55603cd21b4118d3ccf7fa09084952a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#aabbd51bc6d5ad8ae164140fbd273785f">SinkId</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a55603cd21b4118d3ccf7fa09084952a3">add_sink</a> (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a371f0e82408c8d867644db30b604be1b">Sink</a> sink, <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter.html">log::Filter</a> filter={})</td></tr>
+<tr class="memdesc:a55603cd21b4118d3ccf7fa09084952a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a sink receiving all events that pass the given filter.  <br /></td></tr>
+<tr class="separator:a55603cd21b4118d3ccf7fa09084952a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae45a355f2550bbf1cf0232c0b14e8828" id="r_ae45a355f2550bbf1cf0232c0b14e8828"><td class="memTemplParams" colspan="2">template&lt;log::event_context Ctx, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">F</a> &gt; <br />
+requires std::invocable&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">F</a> &amp;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html">log::Record</a> &amp;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> Ctx::Payload &amp;&gt;</td></tr>
+<tr class="memitem:ae45a355f2550bbf1cf0232c0b14e8828"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#aabbd51bc6d5ad8ae164140fbd273785f">SinkId</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#ae45a355f2550bbf1cf0232c0b14e8828">on</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">F</a> &amp;&amp;f)</td></tr>
+<tr class="memdesc:ae45a355f2550bbf1cf0232c0b14e8828"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers f(const log::Record &amp;, const Ctx::Payload &amp;) to be called for every event of context Ctx.  <br /></td></tr>
+<tr class="separator:ae45a355f2550bbf1cf0232c0b14e8828"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c144dc60a14594de14a278d3825dec7" id="r_a6c144dc60a14594de14a278d3825dec7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a6c144dc60a14594de14a278d3825dec7">remove_sink</a> (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#aabbd51bc6d5ad8ae164140fbd273785f">SinkId</a> id)</td></tr>
+<tr class="memdesc:a6c144dc60a14594de14a278d3825dec7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a previously registered sink.  <br /></td></tr>
+<tr class="separator:a6c144dc60a14594de14a278d3825dec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65e2671710bdac6b327c0853552fe0c6" id="r_a65e2671710bdac6b327c0853552fe0c6"><td class="memTemplParams" colspan="2">template&lt;log::event_context Ctx, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">MakePayload</a> &gt; <br />
+requires std::invocable&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">MakePayload</a> &amp;&gt;</td></tr>
+<tr class="memitem:a65e2671710bdac6b327c0853552fe0c6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a65e2671710bdac6b327c0853552fe0c6">emit</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> severity, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a40f771e181e6fa67a1c92318f2af584e">verbosity</a>, std::string_view message, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">MakePayload</a> &amp;&amp;make) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:a65e2671710bdac6b327c0853552fe0c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emits an event of context Ctx.  <br /></td></tr>
+<tr class="separator:a65e2671710bdac6b327c0853552fe0c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07ccdec1e7dc7878107ecef14f8e8a60" id="r_a07ccdec1e7dc7878107ecef14f8e8a60"><td class="memTemplParams" colspan="2">template&lt;log::event_context Ctx&gt; </td></tr>
+<tr class="memitem:a07ccdec1e7dc7878107ecef14f8e8a60"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a07ccdec1e7dc7878107ecef14f8e8a60">is_wanted</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> severity, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a40f771e181e6fa67a1c92318f2af584e">verbosity</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a07ccdec1e7dc7878107ecef14f8e8a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a99f84382fd7070d7b6a9d540ee7065" id="r_a2a99f84382fd7070d7b6a9d540ee7065"><td class="memTemplParams" colspan="2">template&lt;log::event_context Ctx&gt; <br />
+requires std::default_initializable&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> Ctx::Payload&gt;</td></tr>
+<tr class="memitem:a2a99f84382fd7070d7b6a9d540ee7065"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a2a99f84382fd7070d7b6a9d540ee7065">emit</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> severity, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a40f771e181e6fa67a1c92318f2af584e">verbosity</a>, std::string_view message) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:a2a99f84382fd7070d7b6a9d540ee7065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emits an event of a context whose payload is default-constructible (usually empty)  <br /></td></tr>
+<tr class="separator:a2a99f84382fd7070d7b6a9d540ee7065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b028f5882ef8772d32b74518041f3b7" id="r_a1b028f5882ef8772d32b74518041f3b7"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:a1b028f5882ef8772d32b74518041f3b7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a1b028f5882ef8772d32b74518041f3b7">msg</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> severity, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a40f771e181e6fa67a1c92318f2af584e">verbosity</a>, std::string_view message, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:a1b028f5882ef8772d32b74518041f3b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logs a free-text message (context <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic.html">log::Generic</a>). The arguments are stringified and appended.  <br /></td></tr>
+<tr class="separator:a1b028f5882ef8772d32b74518041f3b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3df7077f2163301abf7ef86caff77ef0" id="r_a3df7077f2163301abf7ef86caff77ef0"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:a3df7077f2163301abf7ef86caff77ef0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a3df7077f2163301abf7ef86caff77ef0">trace</a> (std::string_view message, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a3df7077f2163301abf7ef86caff77ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbe4c58e620f2acb8a7873d7528ed973" id="r_adbe4c58e620f2acb8a7873d7528ed973"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:adbe4c58e620f2acb8a7873d7528ed973"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#adbe4c58e620f2acb8a7873d7528ed973">debug</a> (std::string_view message, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:adbe4c58e620f2acb8a7873d7528ed973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eedc897b9be68d3d342e9538330c4c8" id="r_a1eedc897b9be68d3d342e9538330c4c8"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:a1eedc897b9be68d3d342e9538330c4c8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a1eedc897b9be68d3d342e9538330c4c8">info</a> (std::string_view message, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a1eedc897b9be68d3d342e9538330c4c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a270e9a005cd9eb2eec2dbf5fd661dca7" id="r_a270e9a005cd9eb2eec2dbf5fd661dca7"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:a270e9a005cd9eb2eec2dbf5fd661dca7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a270e9a005cd9eb2eec2dbf5fd661dca7">warn</a> (std::string_view message, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a270e9a005cd9eb2eec2dbf5fd661dca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a515c01d6095b6a182bb3d4765620d89a" id="r_a515c01d6095b6a182bb3d4765620d89a"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:a515c01d6095b6a182bb3d4765620d89a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a515c01d6095b6a182bb3d4765620d89a">error</a> (std::string_view message, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a515c01d6095b6a182bb3d4765620d89a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02e66ede277f95dca334f449c392f758" id="r_a02e66ede277f95dca334f449c392f758"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:a02e66ede277f95dca334f449c392f758"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a02e66ede277f95dca334f449c392f758">fatal</a> (std::string_view message, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">args</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a02e66ede277f95dca334f449c392f758"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1329674ad8b8905863da43a3e018c7c" id="r_ae1329674ad8b8905863da43a3e018c7c"><td class="memTemplParams" colspan="2">template&lt;std::size_t precision = log::default_precision, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; </td></tr>
+<tr class="memitem:ae1329674ad8b8905863da43a3e018c7c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#ae1329674ad8b8905863da43a3e018c7c">data_dump</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">what</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;data) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:ae1329674ad8b8905863da43a3e018c7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps data (context log::DataDump&lt;T&gt;, verbosity Trace). Nothing is copied.  <br /></td></tr>
+<tr class="separator:ae1329674ad8b8905863da43a3e018c7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd38e80ae9e78fdb0879590b5d8be3bc" id="r_abd38e80ae9e78fdb0879590b5d8be3bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#abd38e80ae9e78fdb0879590b5d8be3bc">min_severity</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
 <tr class="separator:abd38e80ae9e78fdb0879590b5d8be3bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a012ce4039a1651dcdfb9d602bc131733" id="r_a012ce4039a1651dcdfb9d602bc131733"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a012ce4039a1651dcdfb9d602bc131733">set_min_severity</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">severity</a>)</td></tr>
+<tr class="memitem:a012ce4039a1651dcdfb9d602bc131733" id="r_a012ce4039a1651dcdfb9d602bc131733"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a012ce4039a1651dcdfb9d602bc131733">set_min_severity</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> severity)</td></tr>
 <tr class="separator:a012ce4039a1651dcdfb9d602bc131733"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40f771e181e6fa67a1c92318f2af584e" id="r_a40f771e181e6fa67a1c92318f2af584e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a40f771e181e6fa67a1c92318f2af584e">verbosity</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
 <tr class="separator:a40f771e181e6fa67a1c92318f2af584e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,14 +187,47 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa4123a65af4d3eee009e9f58860f1022"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9ac1481a4dac8e59741d4526c1dfe8f" id="r_ae9ac1481a4dac8e59741d4526c1dfe8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#ae9ac1481a4dac8e59741d4526c1dfe8f">enable_data_dumps</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">enable</a>)</td></tr>
 <tr class="separator:ae9ac1481a4dac8e59741d4526c1dfe8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a787b03d97f31c4d43c0ccc5ec25f0d2b" id="r_a787b03d97f31c4d43c0ccc5ec25f0d2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a787b03d97f31c4d43c0ccc5ec25f0d2b">default_output</a> () <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="separator:a787b03d97f31c4d43c0ccc5ec25f0d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab64b9f715b13f7d891730854376bf971" id="r_ab64b9f715b13f7d891730854376bf971"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#ab64b9f715b13f7d891730854376bf971">set_default_output</a> (<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">enable</a>)</td></tr>
+<tr class="memdesc:ab64b9f715b13f7d891730854376bf971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switches the built-in text output (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a8b679520aaf2b0747021d2d416d36962" title="Built-in text output. Receives every event passing the logger&#39;s thresholds and data-dump flag.">default_message_handler()</a>) on or off.  <br /></td></tr>
+<tr class="separator:ab64b9f715b13f7d891730854376bf971"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a8b679520aaf2b0747021d2d416d36962" id="r_a8b679520aaf2b0747021d2d416d36962"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a8b679520aaf2b0747021d2d416d36962">default_message_handler</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">ctx</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">severity</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a40f771e181e6fa67a1c92318f2af584e">verbosity</a>, std::string_view <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a53781ee8e06705d089207ada15c3fa57">msg</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memitem:a8b679520aaf2b0747021d2d416d36962" id="r_a8b679520aaf2b0747021d2d416d36962"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a8b679520aaf2b0747021d2d416d36962">default_message_handler</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">ctx</a>, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a> severity, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a40f771e181e6fa67a1c92318f2af584e">verbosity</a>, std::string_view <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a1b028f5882ef8772d32b74518041f3b7">msg</a>) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
+<tr class="memdesc:a8b679520aaf2b0747021d2d416d36962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Built-in text output. Receives every event passing the logger's thresholds and data-dump flag.  <br /></td></tr>
 <tr class="separator:a8b679520aaf2b0747021d2d416d36962"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9a15cea50f9f74da872f54393f6afc0" id="r_af9a15cea50f9f74da872f54393f6afc0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#af9a15cea50f9f74da872f54393f6afc0">log_ctx</a> (std::string_view <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">ctx</a>, std::size_t num_args) <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a></td></tr>
-<tr class="separator:af9a15cea50f9f74da872f54393f6afc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a371f0e82408c8d867644db30b604be1b" name="a371f0e82408c8d867644db30b604be1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a371f0e82408c8d867644db30b604be1b">&#9670;&#160;</a></span>Sink</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a371f0e82408c8d867644db30b604be1b">molpro::linalg::itsolv::Logger::Sink</a> =  std::function&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a>(<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html">log::Record</a> &amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aabbd51bc6d5ad8ae164140fbd273785f" name="aabbd51bc6d5ad8ae164140fbd273785f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabbd51bc6d5ad8ae164140fbd273785f">&#9670;&#160;</a></span>SinkId</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">using</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#aabbd51bc6d5ad8ae164140fbd273785f">molpro::linalg::itsolv::Logger::SinkId</a> =  std::size_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1ccfe737d8b2164d098562cc90faabd8" name="a1ccfe737d8b2164d098562cc90faabd8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1ccfe737d8b2164d098562cc90faabd8">&#9670;&#160;</a></span>Logger()</h2>
@@ -198,14 +271,78 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="afb9be23c22751f751d95608ebd4e5225" name="afb9be23c22751f751d95608ebd4e5225"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb9be23c22751f751d95608ebd4e5225">&#9670;&#160;</a></span>~Logger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> molpro::linalg::itsolv::Logger::~Logger </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a716e08cb3b362c2d6a9fcabd9263fc9d" name="a716e08cb3b362c2d6a9fcabd9263fc9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a716e08cb3b362c2d6a9fcabd9263fc9d">&#9670;&#160;</a></span>data_dump()</h2>
+<a id="a55603cd21b4118d3ccf7fa09084952a3" name="a55603cd21b4118d3ccf7fa09084952a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55603cd21b4118d3ccf7fa09084952a3">&#9670;&#160;</a></span>add_sink()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#aabbd51bc6d5ad8ae164140fbd273785f">SinkId</a> molpro::linalg::itsolv::Logger::add_sink </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a371f0e82408c8d867644db30b604be1b">Sink</a>&#160;</td>
+          <td class="paramname"><em>sink</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter.html">log::Filter</a>&#160;</td>
+          <td class="paramname"><em>filter</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Registers a sink receiving all events that pass the given filter. </p>
+<dl class="section return"><dt>Returns</dt><dd>An id that can be passed to <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a6c144dc60a14594de14a278d3825dec7" title="Removes a previously registered sink.">remove_sink()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ae1329674ad8b8905863da43a3e018c7c" name="ae1329674ad8b8905863da43a3e018c7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1329674ad8b8905863da43a3e018c7c">&#9670;&#160;</a></span>data_dump()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t precision = log::default_precision, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </div>
+template&lt;std::size_t precision = log::default_precision, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -219,7 +356,7 @@ template&lt;std::size_t precision = log::default_precision, <a class="el" href="
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Ts...&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">T</a> &amp;&#160;</td>
           <td class="paramname"><em>data</em>&#160;</td>
         </tr>
         <tr>
@@ -234,6 +371,8 @@ template&lt;std::size_t precision = log::default_precision, <a class="el" href="
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Dumps data (context log::DataDump&lt;T&gt;, verbosity Trace). Nothing is copied. </p>
 
 </div>
 </div>
@@ -262,13 +401,13 @@ template&lt;std::size_t precision = log::default_precision, <a class="el" href="
 
 </div>
 </div>
-<a id="a31c65c1f5ba802102ec8a132a99d8ad8" name="a31c65c1f5ba802102ec8a132a99d8ad8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31c65c1f5ba802102ec8a132a99d8ad8">&#9670;&#160;</a></span>debug()</h2>
+<a id="adbe4c58e620f2acb8a7873d7528ed973" name="adbe4c58e620f2acb8a7873d7528ed973"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbe4c58e620f2acb8a7873d7528ed973">&#9670;&#160;</a></span>debug()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </div>
+template&lt;typename... Ts&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -282,7 +421,7 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...&#160;</td>
           <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>
@@ -346,6 +485,140 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
 </table>
 </div><div class="memdoc">
 
+<p>Built-in text output. Receives every event passing the logger's thresholds and data-dump flag. </p>
+<p>Override this to redirect the text output. </p>
+
+</div>
+</div>
+<a id="a787b03d97f31c4d43c0ccc5ec25f0d2b" name="a787b03d97f31c4d43c0ccc5ec25f0d2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a787b03d97f31c4d43c0ccc5ec25f0d2b">&#9670;&#160;</a></span>default_output()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> molpro::linalg::itsolv::Logger::default_output </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2a99f84382fd7070d7b6a9d540ee7065" name="a2a99f84382fd7070d7b6a9d540ee7065"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a99f84382fd7070d7b6a9d540ee7065">&#9670;&#160;</a></span>emit() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;log::event_context Ctx&gt; <br />
+requires std::default_initializable&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> Ctx::Payload&gt;</div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::Logger::emit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a>&#160;</td>
+          <td class="paramname"><em>severity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a>&#160;</td>
+          <td class="paramname"><em>verbosity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>message</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Emits an event of a context whose payload is default-constructible (usually empty) </p>
+
+</div>
+</div>
+<a id="a65e2671710bdac6b327c0853552fe0c6" name="a65e2671710bdac6b327c0853552fe0c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65e2671710bdac6b327c0853552fe0c6">&#9670;&#160;</a></span>emit() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;log::event_context Ctx, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">MakePayload</a> &gt; <br />
+requires std::invocable&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">MakePayload</a> &amp;&gt;</div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::Logger::emit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a>&#160;</td>
+          <td class="paramname"><em>severity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a>&#160;</td>
+          <td class="paramname"><em>verbosity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>message</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">MakePayload</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>make</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Emits an event of context Ctx. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">make</td><td>Callable creating the payload. It is only invoked if some sink is interested in the event. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ae9ac1481a4dac8e59741d4526c1dfe8f" name="ae9ac1481a4dac8e59741d4526c1dfe8f"></a>
@@ -374,13 +647,13 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
 
 </div>
 </div>
-<a id="a5fe4e96d8c075f3ac16f2cb44eec05d2" name="a5fe4e96d8c075f3ac16f2cb44eec05d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5fe4e96d8c075f3ac16f2cb44eec05d2">&#9670;&#160;</a></span>error()</h2>
+<a id="a515c01d6095b6a182bb3d4765620d89a" name="a515c01d6095b6a182bb3d4765620d89a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a515c01d6095b6a182bb3d4765620d89a">&#9670;&#160;</a></span>error()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </div>
+template&lt;typename... Ts&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -394,7 +667,7 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...&#160;</td>
           <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>
@@ -412,13 +685,13 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
 
 </div>
 </div>
-<a id="a96ab51ac8c39856501ca3a085372a404" name="a96ab51ac8c39856501ca3a085372a404"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96ab51ac8c39856501ca3a085372a404">&#9670;&#160;</a></span>fatal()</h2>
+<a id="a02e66ede277f95dca334f449c392f758" name="a02e66ede277f95dca334f449c392f758"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02e66ede277f95dca334f449c392f758">&#9670;&#160;</a></span>fatal()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </div>
+template&lt;typename... Ts&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -432,7 +705,7 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...&#160;</td>
           <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>
@@ -450,13 +723,13 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
 
 </div>
 </div>
-<a id="a165cbf0829ddd542abd540b276598095" name="a165cbf0829ddd542abd540b276598095"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a165cbf0829ddd542abd540b276598095">&#9670;&#160;</a></span>info()</h2>
+<a id="a1eedc897b9be68d3d342e9538330c4c8" name="a1eedc897b9be68d3d342e9538330c4c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1eedc897b9be68d3d342e9538330c4c8">&#9670;&#160;</a></span>info()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </div>
+template&lt;typename... Ts&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -470,7 +743,7 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...&#160;</td>
           <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>
@@ -488,26 +761,28 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
 
 </div>
 </div>
-<a id="af9a15cea50f9f74da872f54393f6afc0" name="af9a15cea50f9f74da872f54393f6afc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9a15cea50f9f74da872f54393f6afc0">&#9670;&#160;</a></span>log_ctx()</h2>
+<a id="a07ccdec1e7dc7878107ecef14f8e8a60" name="a07ccdec1e7dc7878107ecef14f8e8a60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07ccdec1e7dc7878107ecef14f8e8a60">&#9670;&#160;</a></span>is_wanted()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;log::event_context Ctx&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">virtual</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::Logger::log_ctx </td>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a> molpro::linalg::itsolv::Logger::is_wanted </td>
           <td>(</td>
-          <td class="paramtype">std::string_view&#160;</td>
-          <td class="paramname"><em>ctx</em>, </td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0">log::Severity</a>&#160;</td>
+          <td class="paramname"><em>severity</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>num_args</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#ab708267764ed3a7421489fb0aaabc1cd">log::Verbosity</a>&#160;</td>
+          <td class="paramname"><em>verbosity</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -517,10 +792,11 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Whether an event of context Ctx with the given severity and verbosity would reach any sink. Emitters can use this to skip preparing data that only goes into the payload. </dd></dl>
 
 </div>
 </div>
@@ -549,13 +825,13 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
 
 </div>
 </div>
-<a id="a53781ee8e06705d089207ada15c3fa57" name="a53781ee8e06705d089207ada15c3fa57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53781ee8e06705d089207ada15c3fa57">&#9670;&#160;</a></span>msg()</h2>
+<a id="a1b028f5882ef8772d32b74518041f3b7" name="a1b028f5882ef8772d32b74518041f3b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b028f5882ef8772d32b74518041f3b7">&#9670;&#160;</a></span>msg()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;log::context Context = log::Generic, std::size_t precision = log::default_precision, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </div>
+template&lt;typename... Ts&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -581,7 +857,7 @@ template&lt;log::context Context = log::Generic, std::size_t precision = log::de
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...&#160;</td>
           <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>
@@ -596,7 +872,96 @@ template&lt;log::context Context = log::Generic, std::size_t precision = log::de
   </tr>
 </table>
 </div><div class="memdoc">
-<p>General logging function - generally, you will want to use one of the convenience wrappers around this function </p>
+
+<p>Logs a free-text message (context <a class="el" href="structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic.html">log::Generic</a>). The arguments are stringified and appended. </p>
+
+</div>
+</div>
+<a id="ae45a355f2550bbf1cf0232c0b14e8828" name="ae45a355f2550bbf1cf0232c0b14e8828"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae45a355f2550bbf1cf0232c0b14e8828">&#9670;&#160;</a></span>on()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;log::event_context Ctx, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">F</a> &gt; <br />
+requires std::invocable&lt;<a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">F</a> &amp;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html">log::Record</a> &amp;, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> Ctx::Payload &amp;&gt;</div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#aabbd51bc6d5ad8ae164140fbd273785f">SinkId</a> molpro::linalg::itsolv::Logger::on </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">F</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>f</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Registers f(const log::Record &amp;, const Ctx::Payload &amp;) to be called for every event of context Ctx. </p>
+<p>The subscription is not subject to the logger's thresholds or its data-dump flag. </p><dl class="section return"><dt>Returns</dt><dd>An id that can be passed to <a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a6c144dc60a14594de14a278d3825dec7" title="Removes a previously registered sink.">remove_sink()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a6c144dc60a14594de14a278d3825dec7" name="a6c144dc60a14594de14a278d3825dec7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c144dc60a14594de14a278d3825dec7">&#9670;&#160;</a></span>remove_sink()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::Logger::remove_sink </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#aabbd51bc6d5ad8ae164140fbd273785f">SinkId</a>&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes a previously registered sink. </p>
+
+</div>
+</div>
+<a id="ab64b9f715b13f7d891730854376bf971" name="ab64b9f715b13f7d891730854376bf971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab64b9f715b13f7d891730854376bf971">&#9670;&#160;</a></span>set_default_output()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">void</a> molpro::linalg::itsolv::Logger::set_default_output </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">bool</a>&#160;</td>
+          <td class="paramname"><em>enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Switches the built-in text output (<a class="el" href="classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a8b679520aaf2b0747021d2d416d36962" title="Built-in text output. Receives every event passing the logger&#39;s thresholds and data-dump flag.">default_message_handler()</a>) on or off. </p>
 
 </div>
 </div>
@@ -652,13 +1017,13 @@ template&lt;log::context Context = log::Generic, std::size_t precision = log::de
 
 </div>
 </div>
-<a id="ae8eff4a439b5d86e7fe9ebd299ece821" name="ae8eff4a439b5d86e7fe9ebd299ece821"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8eff4a439b5d86e7fe9ebd299ece821">&#9670;&#160;</a></span>trace()</h2>
+<a id="a3df7077f2163301abf7ef86caff77ef0" name="a3df7077f2163301abf7ef86caff77ef0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3df7077f2163301abf7ef86caff77ef0">&#9670;&#160;</a></span>trace()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </div>
+template&lt;typename... Ts&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -672,7 +1037,7 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...&#160;</td>
           <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>
@@ -715,13 +1080,13 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
 
 </div>
 </div>
-<a id="a21558b50ca669f738657d62ea9253863" name="a21558b50ca669f738657d62ea9253863"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21558b50ca669f738657d62ea9253863">&#9670;&#160;</a></span>warn()</h2>
+<a id="a270e9a005cd9eb2eec2dbf5fd661dca7" name="a270e9a005cd9eb2eec2dbf5fd661dca7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a270e9a005cd9eb2eec2dbf5fd661dca7">&#9670;&#160;</a></span>warn()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;log::context Context = log::Generic, <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">typename</a> ... Ts&gt; </div>
+template&lt;typename... Ts&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -735,7 +1100,7 @@ template&lt;log::context Context = log::Generic, <a class="el" href="namespacemo
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;&amp;...&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">const</a> <a class="el" href="namespacemolpro_1_1linalg_1_1itsolv.html#a616a52291a7ab62bf83431afe0d0b24f">Ts</a> &amp;...&#160;</td>
           <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>

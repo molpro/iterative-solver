@@ -1,9 +1,10 @@
 var searchData=
 [
   ['d_5fcreations_0',['d_creations',['../structmolpro_1_1linalg_1_1itsolv_1_1Statistics.html#a0f4582c7717868ac6f6ab978e5d0eddc',1,'molpro::linalg::itsolv::Statistics']]],
-  ['data_1',['data',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a0972903f5ee14f9881aacc0f8ebbc9de',1,'molpro::linalg::itsolv::subspace::IXSpace']]],
-  ['default_5fprecision_2',['default_precision',['../namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#a01797cc9fe37ece277e8804a11c24519',1,'molpro::linalg::itsolv::log']]],
-  ['depth_3',['depth',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1detail_1_1TreePath.html#a2b542c4f02b397509df19d6e8d6a3a1b',1,'molpro::profiler::detail::TreePath']]],
-  ['dot_4',['dot',['../structmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1Counter.html#a5ad2b6f45fd33ca55ec7c1b110f2066e',1,'molpro::linalg::array::ArrayHandler::Counter']]],
-  ['dspace_5',['dspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aed025f24be0da38d83446600863fcf5d',1,'molpro::linalg::itsolv::subspace::XSpace']]]
+  ['data_1',['data',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump_1_1Payload.html#a4150bd3518cdcf31761e6dc02ae8dda5',1,'molpro::linalg::itsolv::log::DataDump::Payload::data'],['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1IXSpace.html#a0972903f5ee14f9881aacc0f8ebbc9de',1,'molpro::linalg::itsolv::subspace::IXSpace::data']]],
+  ['data_5fdumps_2',['data_dumps',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter.html#ae895aa25780cdffe6244136699aeb5ac',1,'molpro::linalg::itsolv::log::Filter']]],
+  ['default_5fprecision_3',['default_precision',['../namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#a01797cc9fe37ece277e8804a11c24519',1,'molpro::linalg::itsolv::log']]],
+  ['depth_4',['depth',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1detail_1_1TreePath.html#a2b542c4f02b397509df19d6e8d6a3a1b',1,'molpro::profiler::detail::TreePath']]],
+  ['dot_5',['dot',['../structmolpro_1_1linalg_1_1array_1_1ArrayHandler_1_1Counter.html#a5ad2b6f45fd33ca55ec7c1b110f2066e',1,'molpro::linalg::array::ArrayHandler::Counter']]],
+  ['dspace_6',['dspace',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1XSpace.html#aed025f24be0da38d83446600863fcf5d',1,'molpro::linalg::itsolv::subspace::XSpace']]]
 ];

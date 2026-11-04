@@ -16,6 +16,5 @@ var searchData=
   ['upl_13',['upl',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_1_1Slice.html#a0769807933c25ef3dffa52ccfd16b832',1,'molpro::linalg::itsolv::subspace::Matrix::Slice']]],
   ['usage_14',['Usage',['../index.html#autotoc_md10',1,'']]],
   ['use_20cases_15',['Use cases',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandler.html#autotoc_md7',1,'']]],
-  ['uses_5ffixed_5farguments_16',['uses_fixed_arguments',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html#ac342a2a8ab55f014afe878af52e9f34c',1,'molpro::linalg::itsolv::log::ContextBase']]],
-  ['using_20the_20factory_17',['Using the factory',['../classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html#autotoc_md6',1,'']]]
+  ['using_20the_20factory_16',['Using the factory',['../classmolpro_1_1linalg_1_1itsolv_1_1SolverFactory.html#autotoc_md6',1,'']]]
 ];

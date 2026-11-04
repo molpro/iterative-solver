@@ -13,6 +13,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace =
     [ "erase", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html#ab2d0f4616ea1f8746de71a8040de8de1", null ],
     [ "params", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html#a71ea048ac9313c9a8c6501bbe5aaaebd", null ],
     [ "params", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html#ac539ec628352901dedc593b0a814ba3a", null ],
+    [ "set_logger", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html#a8bfe3e2ccf9dd333abc6376f8c08f84c", null ],
     [ "size", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html#a9ccb71e2aa6afca0ef7c9b1719a70bef", null ],
     [ "update", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html#a54e5bcba3e87d0b386076459974abcfd", null ],
     [ "m_actions", "classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1DSpace.html#a60bbd0ac2db6b46c3b825bf070bffffc", null ],

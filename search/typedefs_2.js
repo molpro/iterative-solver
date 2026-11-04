@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['const_5fiterator_0',['const_iterator',['../classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a2aadc87f78023f963bd48b6898517cf1',1,'molpro::linalg::array::span::Span']]],
-  ['const_5freference_1',['const_reference',['../classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a78ef507281d967bfe6c9d7821256ea09',1,'molpro::linalg::array::span::Span::const_reference'],['../classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html#ab0854090ee737a8fd49cb470ef2394fe',1,'molpro::linalg::array::util::DistrArrayIteratorImpl::const_reference']]],
-  ['container_5ft_2',['container_t',['../classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a10aafe6ea77b7b593ae4803b65adbe63',1,'molpro::linalg::itsolv::Problem']]],
-  ['coord_5ftype_3',['coord_type',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html#a41a73fef3548a5477eb9bb6c45838b05',1,'molpro::linalg::itsolv::subspace::Matrix']]],
-  ['copy_5ffunc_5ftype_4',['copy_func_type',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html#a5bb36613442f0f8b270af5c557922bc5',1,'molpro::linalg::array::ArrayHandlerWithCopyFunc']]],
-  ['cvecref_5',['CVecRef',['../namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89',1,'molpro::linalg::itsolv']]]
+  ['decay_5ft_0',['decay_t',['../namespacemolpro_1_1linalg_1_1itsolv.html#a2541a0dfd2575a25a8d4976899b63e1d',1,'molpro::linalg::itsolv']]],
+  ['default_5fhandler_5ft_1',['default_handler_t',['../namespacemolpro_1_1linalg_1_1array.html#a80c986e4a5d6be516962254af8ddb585',1,'molpro::linalg::array']]],
+  ['difference_5ftype_2',['difference_type',['../classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#afd7dc63bf284ae849ea34adc5ba6b822',1,'molpro::linalg::array::span::Span::difference_type'],['../classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html#af3dab7e85db4a7b39f1dc49da563a18f',1,'molpro::linalg::array::util::DistrArrayIteratorImpl::difference_type'],['../structmolpro_1_1linalg_1_1array_1_1util_1_1BufferManager_1_1Iterator.html#a43308df88cca249fdf84c45a844e3770',1,'molpro::linalg::array::util::BufferManager::Iterator::difference_type']]],
+  ['disk_5farray_3',['disk_array',['../classmolpro_1_1linalg_1_1array_1_1DistrArrayDisk.html#a3b7d0a28a47e1f354506704c5050ec39',1,'molpro::linalg::array::DistrArrayDisk']]],
+  ['distrarrayconstiterator_4',['DistrArrayConstIterator',['../namespacemolpro_1_1linalg_1_1array.html#a68ea531ea69cb728234add16dca49e92',1,'molpro::linalg::array']]],
+  ['distrarrayiterator_5',['DistrArrayIterator',['../namespacemolpro_1_1linalg_1_1array.html#af5edebff1c079cf834e719032a8c2ea2',1,'molpro::linalg::array']]],
+  ['distributed_5farray_6',['distributed_array',['../classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a134005a9cacb96ab592211c9c5e75d77',1,'molpro::linalg::array::DistrArray']]],
+  ['distribution_7',['Distribution',['../classmolpro_1_1linalg_1_1array_1_1DistrArray.html#a1ff2572f6537752365b0d0354015a850',1,'molpro::linalg::array::DistrArray']]]
 ];

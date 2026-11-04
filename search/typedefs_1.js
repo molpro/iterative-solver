@@ -1,4 +1,9 @@
 var searchData=
 [
-  ['base_0',['Base',['../structstd_1_1formatter_3_01molpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_3_01T_01_4_01_4.html#a86829c18e6b8b9b9b57ebb0d474a1f37',1,'std::formatter&lt; molpro::linalg::itsolv::subspace::Matrix&lt; T &gt; &gt;']]]
+  ['const_5fiterator_0',['const_iterator',['../classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a2aadc87f78023f963bd48b6898517cf1',1,'molpro::linalg::array::span::Span']]],
+  ['const_5freference_1',['const_reference',['../classmolpro_1_1linalg_1_1array_1_1span_1_1Span.html#a78ef507281d967bfe6c9d7821256ea09',1,'molpro::linalg::array::span::Span::const_reference'],['../classmolpro_1_1linalg_1_1array_1_1util_1_1DistrArrayIteratorImpl.html#ab0854090ee737a8fd49cb470ef2394fe',1,'molpro::linalg::array::util::DistrArrayIteratorImpl::const_reference']]],
+  ['container_5ft_2',['container_t',['../classmolpro_1_1linalg_1_1itsolv_1_1Problem.html#a10aafe6ea77b7b593ae4803b65adbe63',1,'molpro::linalg::itsolv::Problem']]],
+  ['coord_5ftype_3',['coord_type',['../classmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix.html#a41a73fef3548a5477eb9bb6c45838b05',1,'molpro::linalg::itsolv::subspace::Matrix']]],
+  ['copy_5ffunc_5ftype_4',['copy_func_type',['../classmolpro_1_1linalg_1_1array_1_1ArrayHandlerWithCopyFunc.html#a5bb36613442f0f8b270af5c557922bc5',1,'molpro::linalg::array::ArrayHandlerWithCopyFunc']]],
+  ['cvecref_5',['CVecRef',['../namespacemolpro_1_1linalg_1_1itsolv.html#aafd1821a97ea122d56be347e38e90a89',1,'molpro::linalg::itsolv']]]
 ];

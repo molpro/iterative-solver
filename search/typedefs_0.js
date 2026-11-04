@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['arg_5ft_0',['arg_t',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html#aba65551e6047f1aebcce0204b72da9d4',1,'molpro::linalg::itsolv::log::ContextBase']]],
-  ['arg_5ftypes_5ftuple_1',['arg_types_tuple',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html#a8598d57ca57079ba514fa9f66b1c7ee5',1,'molpro::linalg::itsolv::log::ContextBase']]]
+  ['base_0',['Base',['../structstd_1_1formatter_3_01molpro_1_1linalg_1_1itsolv_1_1subspace_1_1Matrix_3_01T_01_4_01_4.html#a86829c18e6b8b9b9b57ebb0d474a1f37',1,'std::formatter&lt; molpro::linalg::itsolv::subspace::Matrix&lt; T &gt; &gt;']]]
 ];

@@ -115,16 +115,21 @@ var annotated =
             [ "Morse_problem", "classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem.html", "classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem" ]
           ] ],
           [ "log", "namespacemolpro_1_1linalg_1_1itsolv_1_1log.html", [
-            [ "ComplexRootsDavidson", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html", null ],
-            [ "ConstexprString", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString.html", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1ConstexprString" ],
-            [ "ContextBase", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ContextBase" ],
-            [ "DataDump", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump.html", null ],
-            [ "FormatOption", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1FormatOption.html", null ],
-            [ "Generic", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic.html", null ],
-            [ "IterationReport", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationReport.html", null ],
-            [ "LogHandler", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler" ],
-            [ "NewIteration", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration.html", null ],
-            [ "SummaryReport", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SummaryReport.html", null ]
+            [ "detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1log_1_1detail.html", [
+              [ "is_complex", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1detail_1_1is__complex.html", null ],
+              [ "is_complex< std::complex< T > >", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1detail_1_1is__complex_3_01std_1_1complex_3_01T_01_4_01_4.html", null ]
+            ] ],
+            [ "ComplexRootsDavidson", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1ComplexRootsDavidson" ],
+            [ "DataDump", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1DataDump" ],
+            [ "Filter", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Filter" ],
+            [ "Generic", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1Generic" ],
+            [ "IterationCompleted", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationCompleted" ],
+            [ "IterationReport", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationReport.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1IterationReport" ],
+            [ "NewIteration", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1NewIteration" ],
+            [ "Record", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record.html", "classmolpro_1_1linalg_1_1itsolv_1_1log_1_1Record" ],
+            [ "SolveFinished", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveFinished" ],
+            [ "SolveStarted", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SolveStarted" ],
+            [ "SummaryReport", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SummaryReport.html", "structmolpro_1_1linalg_1_1itsolv_1_1log_1_1SummaryReport" ]
           ] ],
           [ "subspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace.html", [
             [ "qspace", "namespacemolpro_1_1linalg_1_1itsolv_1_1subspace_1_1qspace.html", [

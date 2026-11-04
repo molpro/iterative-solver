@@ -4,7 +4,7 @@ var searchData=
   ['walk_1',['walk',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Node.html#a19f49c5027c223af3e229c50c592b261',1,'molpro::profiler::Node::walk(ForwardIt start_name, ForwardIt end_name)'],['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Node.html#a0c14484f400e493fc13b14d96c06c12f',1,'molpro::profiler::Node::walk(const std::list&lt; std::string &gt; &amp;path_to_node)']]],
   ['walk_5fup_2',['walk_up',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Node.html#ad21e99b5ef2e90fa9fd461c0489a0114',1,'molpro::profiler::Node']]],
   ['wall_3',['wall',['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Counter.html#a99620a5bacd3e931858d4656c50aecf7',1,'molpro::profiler::Counter::wall'],['https://molpro.github.io/profiler/classmolpro_1_1profiler_1_1Timer.html#afba52e6cbab6bd528476f2f43d98fda8aba4095fd99d7a4aa7c3ce9a377a7d6ce',1,'molpro::profiler::Timer::wall']]],
-  ['warn_4',['warn',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a21558b50ca669f738657d62ea9253863',1,'molpro::linalg::itsolv::Logger']]],
+  ['warn_4',['warn',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html#a270e9a005cd9eb2eec2dbf5fd661dca7',1,'molpro::linalg::itsolv::Logger']]],
   ['warning_5',['Warning',['../namespacemolpro_1_1linalg_1_1itsolv_1_1log.html#aefd57e6c9d903a9ebdf9c5328931baf0a0eaadb4fcb48a0a0ed7bc9868be9fbaa',1,'molpro::linalg::itsolv::log']]],
   ['weaksingleton_6',['WeakSingleton',['https://molpro.github.io/profiler/structmolpro_1_1profiler_1_1WeakSingleton.html',1,'molpro::profiler']]],
   ['what_20to_20expect_20from_20the_20llm_7',['What to expect from the LLM',['../md__2____w_2iterative-solver_2iterative-solver_2doc_2contributing_2ConsistencyAudit.html#autotoc_md31',1,'']]],

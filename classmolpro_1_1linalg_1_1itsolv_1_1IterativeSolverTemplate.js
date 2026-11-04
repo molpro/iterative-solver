@@ -23,6 +23,7 @@ var classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate =
     [ "construct_residual", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#ad1b010112ca78d0fcb5122e691d0e66b", null ],
     [ "convergence_threshold", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a29558ab5af09c348c9526de338b0b77d", null ],
     [ "convergence_threshold_value", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a1f7ebfff7316bcfe85ff5a8e2d62e40d", null ],
+    [ "current_values", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a358a0149cdfd90191f9f3df52bd48e77", null ],
     [ "dimensions", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a7a83306888d70445233f01d4020d111a", null ],
     [ "end_iteration_needed", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#aaabdae7c67ee909b5e7ddfc40fb46e0e", null ],
     [ "errors", "classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html#a96d6a4563e9c49c6ba4231d16b8b0007", null ],

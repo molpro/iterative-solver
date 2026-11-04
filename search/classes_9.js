@@ -16,6 +16,5 @@ var searchData=
   ['localbuffermpi3_13',['LocalBufferMPI3',['../structmolpro_1_1linalg_1_1array_1_1DistrArrayMPI3_1_1LocalBufferMPI3.html',1,'molpro::linalg::array::DistrArrayMPI3']]],
   ['localbufferspan_14',['LocalBufferSpan',['../structmolpro_1_1linalg_1_1array_1_1DistrArraySpan_1_1LocalBufferSpan.html',1,'molpro::linalg::array::DistrArraySpan']]],
   ['lockmpi3_15',['LockMPI3',['../classmolpro_1_1linalg_1_1array_1_1util_1_1LockMPI3.html',1,'molpro::linalg::array::util']]],
-  ['logger_16',['Logger',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html',1,'molpro::linalg::itsolv']]],
-  ['loghandler_17',['LogHandler',['../structmolpro_1_1linalg_1_1itsolv_1_1log_1_1LogHandler.html',1,'molpro::linalg::itsolv::log']]]
+  ['logger_16',['Logger',['../classmolpro_1_1linalg_1_1itsolv_1_1Logger.html',1,'molpro::linalg::itsolv']]]
 ];

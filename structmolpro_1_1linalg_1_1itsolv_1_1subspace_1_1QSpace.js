@@ -15,6 +15,7 @@ var structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace =
     [ "erase", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#a8ef0f75cf99589420689978b0c48b839", null ],
     [ "params", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#a35528d743c7bd9cf3e54226acae82eb3", null ],
     [ "params", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#ae3f19d0ffcc348a9c3ec5209d9c82afb", null ],
+    [ "set_logger", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#af8a22ce364f0a7f91006b1113737e8c5", null ],
     [ "size", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#a643496b7f661c75d58fe7f708ad54d62", null ],
     [ "update", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#a0568fc9e678b0606101ddca38bc526e0", null ],
     [ "m_handlers", "structmolpro_1_1linalg_1_1itsolv_1_1subspace_1_1QSpace.html#a2c537128d066ee283b8d047b21706a52", null ],
