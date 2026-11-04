@@ -716,6 +716,16 @@ protected:
    */
   void solution_impl(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual,
                      const VecRef<R>& scratch) {
+    solution_impl(roots, parameters, residual, scratch, [this](const auto&... args) { construct_residual(args...); });
+  }
+
+  /*!
+   * @brief Implements solution(), with the residuals constructed by the given function in place of
+   * construct_residual(), which takes the same arguments
+   */
+  template <typename ConstructResidual>
+  void solution_impl(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual,
+                     const VecRef<R>& scratch, ConstructResidual&& construct_residual_with) {
     // auto prof = profiler()->push("itsolv::solution"); // FIXME two profilers
     auto prof = molpro::Profiler::single();
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
@@ -742,7 +752,7 @@ protected:
     }
     construct_actions(roots, m_subspace_solver->solutions(), residual);
     prof->start("apply");
-    construct_residual(roots, cwrap(parameters), residual, metric_solutions);
+    construct_residual_with(roots, cwrap(parameters), residual, metric_solutions);
     read_handler_counts(m_stats, m_handlers);
     prof->stop();
   }
@@ -882,6 +892,17 @@ protected:
       for (size_t i = 0; i < roots.size(); ++i)
         errors[i] /= solution_norms[roots[i]];
   }
+  /*!
+   * @brief Constructs the parameters and residuals of roots, as solution_impl() does, and computes their errors, as
+   * compute_errors() does
+   */
+  virtual void solution_with_errors(const std::vector<int>& roots, const VecRef<R>& parameters,
+                                    const VecRef<R>& residual, const VecRef<R>& scratch,
+                                    const std::vector<value_type_abs>& solution_norms,
+                                    std::vector<value_type_abs>& errors) {
+    solution_impl(roots, parameters, residual, scratch);
+    compute_errors(roots, cwrap(parameters), cwrap(residual), solution_norms, errors);
+  }
   virtual bool linearEigensystem() const { return false; }
 
   // FIXME Currently only works if called on an empty subspace. Either enforce it or generalise.
@@ -1019,9 +1040,8 @@ protected:
       auto [start_sol, end_sol] = batch;
       auto roots = std::vector<int>(end_sol - start_sol);
       std::iota(begin(roots), end(roots), start_sol);
-      solution_impl(roots, parameters, action, scratch);
       auto errors = std::vector<value_type_abs>(roots.size(), 0);
-      compute_errors(roots, cwrap(parameters), cwrap(action), solution_norms, errors);
+      solution_with_errors(roots, parameters, action, scratch, solution_norms, errors);
       if (batches.size() > 1) {
         for (size_t i = 0; i < roots.size(); ++i)
           temp_solutions.emplace_back(m_handlers->qr().copy(parameters[i]), m_handlers->qr().copy(action[i]));
