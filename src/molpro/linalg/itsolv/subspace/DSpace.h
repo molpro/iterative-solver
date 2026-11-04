@@ -22,6 +22,9 @@ public:
 
   explicit DSpace(std::shared_ptr<Logger> logger) : m_logger(std::move(logger)) {}
 
+  //! Replaces the logger
+  void set_logger(std::shared_ptr<Logger> logger) { m_logger = std::move(logger); }
+
   //! Clears current D space and moves params and action, and any actions of the metric, inside.
   void update(VecRef<Q>& params, VecRef<Q>& actions, const VecRef<Q>& metric_actions = {}) {
     assert(params.size() == actions.size());

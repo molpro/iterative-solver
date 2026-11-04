@@ -117,33 +117,102 @@ std::vector<int> select_working_set(const size_t nw, const std::vector<T>& error
 
 namespace log {
 
-/*!
- * Context used when logging about the beginning of a new iteration
+/*
+ * Events emitted by IterativeSolverTemplate::solve() describing the progress of the solver. They are templated on
+ * the solver's scalar type (IterativeSolver::scalar_type), so subscribe to e.g. log::IterationCompleted<double>.
+ * Solvers driven by explicit add_vector()/end_iteration() calls instead of solve() do not emit them.
  */
-struct NewIteration : ContextBase<NewIteration, true, int, std::vector<double>> {
-  static constexpr const char *name = "NewIteration";
-  static constexpr std::size_t iter = 0;
-  static constexpr std::size_t errors = 1;
-};
-static_assert(context<NewIteration>);
 
 /*!
- * Context used when logging a per-iteration report message
+ * Context emitted once when solve() starts iterating (after P-space and initial-guess setup)
  */
-struct IterationReport : ContextBase<IterationReport, true> {
-  static constexpr const char *name = "IterationReport";
+template <typename Scalar>
+struct SolveStarted {
+  static constexpr std::string_view name = "SolveStarted";
+  struct Payload {
+    std::size_t n_roots;                  //!< number of roots sought
+    int max_iter;                         //!< maximum number of iterations
+    real_t<Scalar> convergence_threshold; //!< threshold on the errors
+    std::size_t pspace_size;              //!< dimension of the P space (0 if none is used)
+    bool initial_guess_generated;         //!< whether an initial guess was generated from the diagonal elements
+  };
+  static std::string format(const Payload& p) {
+    return std::format("n_roots = {}, max_iter = {}, convergence threshold = {}, P-space dimension = {}, initial "
+                       "guess generated = {}",
+                       p.n_roots, p.max_iter, stringify(p.convergence_threshold), p.pspace_size,
+                       p.initial_guess_generated);
+  }
 };
-static_assert(context<IterationReport>);
 
 /*!
- * Context used when logging a summary report message
+ * Context emitted at the beginning of every iteration of solve()
  */
-struct SummaryReport : ContextBase<SummaryReport, true> {
-  static constexpr const char *name = "SummaryReport";
+template <typename Scalar>
+struct NewIteration {
+  static constexpr std::string_view name = "NewIteration";
+  struct Payload {
+    int iter;               //!< 0-based iteration number
+    std::vector<int> roots; //!< roots whose vectors are worked on in this iteration (their number may be smaller than
+                            //!< the number of roots once some have converged; empty if the actions are already known)
+  };
+  static std::string format(const Payload& p) { return std::format("{}, roots {}", p.iter, stringify(p.roots)); }
 };
-static_assert(context<SummaryReport>);
 
-}
+/*!
+ * Context emitted at the end of every iteration of solve()
+ */
+template <typename Scalar>
+struct IterationCompleted {
+  static constexpr std::string_view name = "IterationCompleted";
+  struct Payload {
+    int iter;                           //!< 0-based iteration number
+    std::vector<int> roots;             //!< roots whose vectors were worked on in this iteration
+    std::vector<real_t<Scalar>> errors; //!< current errors of all roots
+    std::vector<Scalar> values;         //!< eigenvalues (eigensystems) or function value (optimisation and
+                                        //!< non-linear equations); empty otherwise
+    std::size_t n_next;                 //!< number of vectors to work on in the next iteration (0 if done)
+  };
+  static std::string format(const Payload& p) {
+    return std::format("{}, roots {}, errors {}, values {}, next {}", p.iter, stringify(p.roots), stringify(p.errors),
+                       stringify(p.values), p.n_next);
+  }
+};
+
+/*!
+ * Context emitted once when solve() is done
+ */
+template <typename Scalar>
+struct SolveFinished {
+  static constexpr std::string_view name = "SolveFinished";
+  struct Payload {
+    int iterations;                     //!< number of iterations performed
+    bool converged;                     //!< same as the return value of solve()
+    std::vector<real_t<Scalar>> errors; //!< final errors of all roots
+    std::vector<Scalar> values;         //!< see IterationCompleted::Payload::values
+  };
+  static std::string format(const Payload& p) {
+    return std::format("iterations = {}, converged = {}, errors {}, values {}", p.iterations, p.converged,
+                       stringify(p.errors), stringify(p.values));
+  }
+};
+
+/*!
+ * Context used when logging a per-iteration report message (the report is the message)
+ */
+struct IterationReport {
+  static constexpr std::string_view name = "IterationReport";
+  struct Payload {};
+};
+
+/*!
+ * Context used when logging a summary report message (the report is the message)
+ */
+struct SummaryReport {
+  static constexpr std::string_view name = "SummaryReport";
+  struct Payload {};
+};
+
+} // namespace log
 
 /*!
  * @brief Implements IterativeSolver interface that is common to all solvers
@@ -337,13 +406,13 @@ public:
   void iteration_report() const {
     std::stringstream sstream;
     report(sstream, false);
-    this->m_logger->template info<log::IterationReport>(sstream.str());
+    this->m_logger->template emit<log::IterationReport>(log::Severity::Normal, log::Verbosity::Info, sstream.str());
   }
 
   void summary_report() const {
     std::stringstream sstream;
     report(sstream, false);
-    this->m_logger->template info<log::SummaryReport>(sstream.str());
+    this->m_logger->template emit<log::SummaryReport>(log::Severity::Normal, log::Verbosity::Info, sstream.str());
   }
 
   void report() const override {
@@ -397,6 +466,16 @@ public:
     m_profiler = std::move(profiler);
   }
   const std::shared_ptr<molpro::profiler::Profiler>& profiler() const override { return m_profiler; }
+
+  //! The values reported in the iteration events: eigenvalues of eigensystems, the function value otherwise
+  std::vector<scalar_type> current_values() const {
+    if constexpr (std::derived_from<Solver<R, Q, P>, LinearEigensystem<R, Q, P>>)
+      return this->eigenvalues();
+    else if (m_xspace->data.count(subspace::EqnData::value) > 0)
+      return {value()};
+    else
+      return {};
+  }
 
   bool solve(const VecRef<R>& parameters, const VecRef<R>& actions, const Problem<R>& problem,
              bool generate_initial_guess = false) override {
@@ -555,24 +634,46 @@ protected:
       set_metric(kind);
     int nwork = parameters.size();
     // a P space replaces any initial guess; without one, max_p > 0 still means the contents of parameters are not used
-    if (pspace.empty() and (generate_initial_guess or (use_diagonals and m_max_p > 0)))
+    const bool initial_guess =
+        pspace.empty() and (generate_initial_guess or (use_diagonals and m_max_p > 0));
+    if (initial_guess)
       generate_initial_guess_from_diagonals(parameters, *selection);
     // the ratios of the diagonal elements are not needed any more
     selection = nullptr;
     ratios.reset();
     if (!pspace.empty())
       nwork = initialise_pspace(pspace, problem, pspace_matrices, parameters, actions);
-    for (auto iter = 0; iter < this->m_max_iter && nwork > 0; iter++) {
-      // the logging context carries the errors as doubles: a log line only needs their magnitude
-      m_logger->template info<log::NewIteration>("Iteration, Current errors", iter,
-                                        std::vector<double>(m_errors.begin(), m_errors.end()));
+    m_logger->template emit<log::SolveStarted<scalar_type>>(log::Severity::Normal, log::Verbosity::Debug, "Solve started",
+                                                            [&] {
+                                                              return typename log::SolveStarted<scalar_type>::Payload{
+                                                                  n_roots(), this->m_max_iter, m_convergence_threshold,
+                                                                  pspace.size(), initial_guess};
+                                                            });
+    // the roots worked on in the current iteration, only recorded if the iteration events are wanted
+    std::vector<int> roots;
+    const bool record_roots =
+        m_logger->template is_wanted<log::NewIteration<scalar_type>>(log::Severity::Normal, log::Verbosity::Debug) ||
+        m_logger->template is_wanted<log::IterationCompleted<scalar_type>>(log::Severity::Normal, log::Verbosity::Info);
+    int iter = 0;
+    for (; iter < this->m_max_iter && nwork > 0; iter++) {
+      // the vectors worked on in this iteration: add_vector() takes up no more vectors than there are in the working
+      // set, and in the first iteration after initialising a P space the actions are already known
+      std::size_t naction = 0;
+      if (this->nonlinear())
+        naction = std::min(std::size_t(1), m_working_set.size());
+      else if (iter > 0 or pspace.empty())
+        naction = std::min(size_t(nwork), m_working_set.size());
+      // add_vector() replaces the working set, so it is recorded beforehand
+      if (record_roots)
+        roots.assign(m_working_set.begin(), m_working_set.begin() + naction);
+      m_logger->template emit<log::NewIteration<scalar_type>>(
+          log::Severity::Normal, log::Verbosity::Debug, "Iteration ",
+          [&] { return typename log::NewIteration<scalar_type>::Payload{iter, roots}; });
       value_type value;
       if (this->nonlinear()) {
         value = problem.residual(*parameters.begin(), *actions.begin());
         nwork = this->add_vector(*parameters.begin(), *actions.begin(), value);
       } else if (iter > 0 or pspace.empty()) {
-        // add_vector() takes up no more vectors than there are in the working set
-        const auto naction = std::min(size_t(nwork), m_working_set.size());
         const auto wparameters = cwrap(parameters.begin(), parameters.begin() + naction);
         const auto wactions = wrap(actions.begin(), actions.begin() + naction);
         if (naction > 0 and metric)
@@ -600,6 +701,11 @@ protected:
         }
         nwork = this->end_iteration(parameters, actions);
       }
+      m_logger->template emit<log::IterationCompleted<scalar_type>>(
+          log::Severity::Normal, log::Verbosity::Info, "Iteration completed ", [&] {
+            return typename log::IterationCompleted<scalar_type>::Payload{iter, roots, {m_errors.begin(), m_errors.end()}, current_values(),
+                                                                          std::size_t(std::max(nwork, 0))};
+          });
       if (verbosity_at_least(Verbosity::Iteration)) {
         iteration_report();
       }
@@ -624,6 +730,12 @@ protected:
         this->m_logger->info("Solver converged");
       }
     }
+    m_logger->template emit<log::SolveFinished<scalar_type>>(
+        log::Severity::Normal, log::Verbosity::Debug, "Solve finished ", [&] {
+          return typename log::SolveFinished<scalar_type>::Payload{iter, nwork == 0 and errors_converged,
+                                                                   {m_errors.begin(), m_errors.end()},
+                                                                   current_values()};
+        });
     return converged;
   }
 

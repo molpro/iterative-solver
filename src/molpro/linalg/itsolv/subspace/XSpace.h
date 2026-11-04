@@ -416,7 +416,11 @@ public:
   CVecRef<Q> cmetric_actionsq() const override { return qspace.cmetric_actions(); }
   CVecRef<Q> cmetric_actionsd() const override { return dspace.cmetric_actions(); }
 
-  void set_logger(std::shared_ptr<Logger> logger) override { m_logger = std::move(logger); }
+  void set_logger(std::shared_ptr<Logger> logger) override {
+    qspace.set_logger(logger);
+    dspace.set_logger(logger);
+    m_logger = std::move(logger);
+  }
 
   //! Set Hermiticity of the subspace. P space can only be used with Hermitian problems
   void set_hermiticity(bool hermitian) { m_hermitian = hermitian; }
