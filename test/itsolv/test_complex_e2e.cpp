@@ -9,6 +9,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include "SolverFactory_value_types.h"
 #include <molpro/linalg/itsolv/SolverFactory-implementation.h>
 
 #include <Eigen/Dense>
@@ -133,10 +134,6 @@ using CC_Q = containers<std::complex<double>>::Q;
 using CC_P = containers<std::complex<double>>::P;
 
 } // namespace
-
-template class molpro::linalg::itsolv::SolverFactory<std::vector<std::complex<double>>,
-                                                     std::deque<std::complex<double>>,
-                                                     std::map<size_t, std::complex<double>>>;
 
 //! A complex hermitian eigenproblem converges to the eigenvalues of the dense matrix, and they are real
 TEST(complex_e2e, davidson_hermitian) {

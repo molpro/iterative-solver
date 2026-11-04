@@ -90,7 +90,7 @@ public:
   int add_vector(const VecRef<R>& parameters, const VecRef<R>& actions) override {
     auto prof = this->profiler()->push("itsolv::add_vector");
     auto& residual = actions.front().get();
-    const value_type_abs error = std::sqrt(std::abs(this->m_handlers->rr().dot(residual, residual)));
+    const value_type_abs error = util::norm(this->m_handlers->rr(), residual);
     m_converged = error < this->m_convergence_threshold;
     using namespace subspace;
     auto& xspace = this->m_xspace;
@@ -175,9 +175,7 @@ public:
   }
 
   size_t end_iteration(R& parameters, R& actions) override {
-    auto wparams = std::vector<std::reference_wrapper<R>>{std::ref(parameters)};
-    auto wactions = std::vector<std::reference_wrapper<R>>{std::ref(actions)};
-    return end_iteration(wparams, wactions);
+    return end_iteration(wrap_arg(parameters), wrap_arg(actions));
   }
 
 protected:

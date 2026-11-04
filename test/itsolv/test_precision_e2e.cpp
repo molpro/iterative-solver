@@ -9,6 +9,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include "SolverFactory_value_types.h"
 #include <molpro/linalg/itsolv/SolverFactory-implementation.h>
 
 #include <cmath>
@@ -97,9 +98,6 @@ constexpr size_t n = 20;
 constexpr size_t nroot = 3;
 
 } // namespace
-
-template class molpro::linalg::itsolv::SolverFactory<std::vector<long double>, std::deque<long double>,
-                                                     std::map<size_t, long double>>;
 
 //! The double-precision run is the reference: it must converge at a threshold double can reach
 TEST(precision_e2e, davidson_double) {

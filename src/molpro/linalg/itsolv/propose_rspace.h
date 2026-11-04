@@ -37,8 +37,7 @@ void normalise(VecRef<R>& params, array::ArrayHandler<R, R>& handler, Logger& lo
                typename array::ArrayHandler<R, R>::value_type_abs thresh =
                    1 / std::numeric_limits<typename array::ArrayHandler<R, R>::value_type_abs>::max()) {
   for (auto& p : params) {
-    // the length of a vector is a magnitude, real even when the elements are complex
-    const typename array::ArrayHandler<R, R>::value_type_abs dot = std::sqrt(std::abs(handler.dot(p, p)));
+    const auto dot = util::norm(handler, p);
     if (dot > thresh and std::isfinite(dot)) {
       handler.scal(1. / dot, p);
     } else {
@@ -611,7 +610,7 @@ auto project_out_and_orthonormalise(const VecRef<R>& rparams, const subspace::Ma
   prof->start("get null_params");
   auto null_params = std::vector<int>{};
   for (size_t i = 0; i < nR; ++i) {
-    auto norm = std::sqrt(std::abs(handlers.rr().dot(rparams[i], rparams[i])));
+    auto norm = util::norm(handlers.rr(), rparams[i]);
     if (norm > norm_thresh) {
       handlers.rr().scal(1. / norm, rparams[i]);
       for (size_t j = i + 1; j < nR; ++j) {

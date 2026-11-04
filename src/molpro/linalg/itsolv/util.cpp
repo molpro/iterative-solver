@@ -1,4 +1,9 @@
 #include "util.h"
+
+#include <charconv>
+#include <stdexcept>
+#include <system_error>
+
 namespace molpro::linalg::itsolv::util {
 
 std::string StringFacet::toupper(std::string in) const {
@@ -33,6 +38,17 @@ void StringFacet::crop_space(std::string &path) {
 static std::string trim_string(std::string s) {
   StringFacet::crop_space(s);
   return s;
+}
+
+std::size_t tosize(const std::string &key, const std::string &value) {
+  const auto s = trim_string(value);
+  std::size_t result = 0;
+  const auto [end, ec] = std::from_chars(s.data(), s.data() + s.size(), result);
+  if (ec == std::errc::result_out_of_range)
+    throw std::invalid_argument("option " + key + " = " + value + " is too large");
+  if (s.empty() || ec != std::errc{} || end != s.data() + s.size())
+    throw std::invalid_argument("option " + key + " = " + value + " is not a non-negative integer");
+  return result;
 }
 
 std::map<std::string, std::string> StringFacet::parse_keyval_string(std::string s) {

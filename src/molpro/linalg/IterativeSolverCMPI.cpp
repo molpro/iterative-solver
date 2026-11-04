@@ -331,15 +331,15 @@ extern "C" void IterativeSolverLinearEquationsInitialize(size_t n, size_t nroot,
   solver->add_equations(rr);
   solver->set_convergence_threshold(thresh);
   solver->set_convergence_threshold_value(thresh_value);
+  // instance.solver->m_verbosity = verbosity;
+  instance.solver->set_verbosity(verbosity);
+  instance.verbosity = verbosity;
   solver->logger().set_verbosity(
       verbosity > 3 ? molpro::linalg::itsolv::log::Verbosity::Trace
                     : (verbosity > 2 ? molpro::linalg::itsolv::log::Verbosity::Debug : molpro::linalg::itsolv::log::Verbosity::Info));
   solver->logger().set_min_severity(
       verbosity > 1 ? molpro::linalg::itsolv::log::Severity::Warning : molpro::linalg::itsolv::log::Severity::Error);
   solver->logger().enable_data_dumps(verbosity > 0);
-  // instance.solver->m_verbosity = verbosity;
-  instance.solver->set_verbosity(verbosity);
-  instance.verbosity = verbosity;
 }
 
 extern "C" void IterativeSolverNonLinearEquationsInitialize(size_t n, size_t* range_begin, size_t* range_end,
