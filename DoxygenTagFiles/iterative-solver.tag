@@ -11075,6 +11075,38 @@
     </member>
   </compound>
   <compound kind="class">
+    <name>molpro::linalg::itsolv::detail::ScopedFpeSuspend</name>
+    <filename>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1ScopedFpeSuspend.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>ScopedFpeSuspend</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1ScopedFpeSuspend.html</anchorfile>
+      <anchor>a9cbd88c7165c84e53d1046b1fdc33da3</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>~ScopedFpeSuspend</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1ScopedFpeSuspend.html</anchorfile>
+      <anchor>a557e11fba2f19a2c7af25e0f6f018dd9</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>ScopedFpeSuspend</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1ScopedFpeSuspend.html</anchorfile>
+      <anchor>a52ee9b5a46dee615f02beb93cbc20265</anchor>
+      <arglist>(const ScopedFpeSuspend &amp;)=delete</arglist>
+    </member>
+    <member kind="function">
+      <type>ScopedFpeSuspend &amp;</type>
+      <name>operator=</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1ScopedFpeSuspend.html</anchorfile>
+      <anchor>a6d8b5cdef9bdc6c05586ac17f526e2f5</anchor>
+      <arglist>(const ScopedFpeSuspend &amp;)=delete</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
     <name>molpro::linalg::array::util::ScopeLock</name>
     <filename>classmolpro_1_1linalg_1_1array_1_1util_1_1ScopeLock.html</filename>
     <member kind="function">
@@ -14609,6 +14641,7 @@
     <class kind="class">molpro::linalg::itsolv::detail::MetricChecker</class>
     <class kind="struct">molpro::linalg::itsolv::detail::MetricSolutions</class>
     <class kind="struct">molpro::linalg::itsolv::detail::orthogonalised_subspace</class>
+    <class kind="class">molpro::linalg::itsolv::detail::ScopedFpeSuspend</class>
     <member kind="function">
       <type>int</type>
       <name>eigensolver_hermitian_kernel</name>
@@ -14622,13 +14655,6 @@
       <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
       <anchor>a903d63a96c78dbf1a6ea78cc9374bb6d</anchor>
       <arglist>(std::false_type, std::span&lt; value_type &gt; a, std::span&lt; value_type &gt; z, std::span&lt; real_type_t&lt; value_type &gt; &gt; w, size_t dimension, size_t nroots)</arglist>
-    </member>
-    <member kind="function">
-      <type>real_type_t&lt; value_type &gt;</type>
-      <name>one_norm</name>
-      <anchorfile>namespacemolpro_1_1linalg_1_1itsolv_1_1detail.html</anchorfile>
-      <anchor>a469b416f025f9d08905b484bac91bfb6</anchor>
-      <arglist>(std::span&lt; const value_type &gt; a, size_t dimension)</arglist>
     </member>
     <member kind="function">
       <type>std::list&lt; SVD&lt; value_type &gt; &gt;</type>

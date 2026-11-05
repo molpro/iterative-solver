@@ -109,7 +109,8 @@ var annotated =
             [ "eigenvalue_order", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1eigenvalue__order" ],
             [ "MetricChecker", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricChecker.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricChecker" ],
             [ "MetricSolutions", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricSolutions.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1MetricSolutions" ],
-            [ "orthogonalised_subspace", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace" ]
+            [ "orthogonalised_subspace", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace.html", "structmolpro_1_1linalg_1_1itsolv_1_1detail_1_1orthogonalised__subspace" ],
+            [ "ScopedFpeSuspend", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1ScopedFpeSuspend.html", "classmolpro_1_1linalg_1_1itsolv_1_1detail_1_1ScopedFpeSuspend" ]
           ] ],
           [ "interpolate_detail", "namespacemolpro_1_1linalg_1_1itsolv_1_1interpolate__detail.html", [
             [ "Morse_problem", "classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem.html", "classmolpro_1_1linalg_1_1itsolv_1_1interpolate__detail_1_1Morse__problem" ]
