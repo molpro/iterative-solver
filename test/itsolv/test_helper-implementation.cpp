@@ -599,6 +599,53 @@ TEST(helper_implementation, eigensolver_hermitian_lowest_matches_full) {
     EXPECT_NEAR(double(evals_long[k]), evals_full[k], 1e-12);
 }
 
+//! ?stemr divides by exactly-zero pivots by design; this must not trap when the host application enables FPEs
+TEST(helper_implementation, eigensolver_hermitian_lowest_survives_enabled_fpe_traps) {
+#ifdef __GLIBC__
+  constexpr int n = 12, nroots = 4;
+  // many exactly degenerate eigenvalues
+  Eigen::MatrixXd H = Eigen::MatrixXd::Zero(n, n);
+  for (int i = 0; i < n; ++i)
+    H(i, i) = 1.0 + (i / 3);
+  const auto old_traps = fegetexcept();
+  feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+  if (fegetexcept() != (FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW)) {
+    // some platforms (e.g. aarch64 under virtualisation) cannot trap
+    fedisableexcept(FE_ALL_EXCEPT);
+    feenableexcept(old_traps);
+    GTEST_SKIP() << "floating-point traps cannot be enabled on this platform";
+  }
+  std::vector<double> evecs(n * nroots), evals(nroots);
+  const auto info = molpro::linalg::itsolv::eigensolver_hermitian_lowest<double>(
+      std::span<const double>{H.data(), size_t(n * n)}, evecs, evals, n, nroots);
+  const auto traps_after = fegetexcept();
+  fedisableexcept(FE_ALL_EXCEPT);
+  feenableexcept(old_traps);
+  EXPECT_EQ(info, 0);
+  EXPECT_EQ(traps_after, FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+  for (int k = 0; k < nroots; ++k)
+    EXPECT_NEAR(evals[k], 1.0 + (k / 3), 1e-12);
+#else
+  GTEST_SKIP() << "needs feenableexcept, a glibc extension";
+#endif
+}
+
+//! The scope must restore the trap mask and the flags that were raised before it, and drop those raised inside
+TEST(helper_implementation, scoped_fpe_suspend_restores_environment) {
+  std::feclearexcept(FE_ALL_EXCEPT);
+  std::feraiseexcept(FE_INEXACT);
+  {
+    molpro::linalg::itsolv::detail::ScopedFpeSuspend suspend;
+    volatile double zero = 0;
+    volatile double result = 1.0 / zero;
+    (void)result;
+    EXPECT_TRUE(std::fetestexcept(FE_DIVBYZERO));
+  }
+  EXPECT_FALSE(std::fetestexcept(FE_DIVBYZERO));
+  EXPECT_TRUE(std::fetestexcept(FE_INEXACT));
+  std::feclearexcept(FE_ALL_EXCEPT);
+}
+
 TEST(helper_implementation, eigenvalues_certainly_above) {
   using molpro::linalg::itsolv::eigenvalues_certainly_above;
   using molpro::linalg::itsolv::has_lapack_kernel_v;
