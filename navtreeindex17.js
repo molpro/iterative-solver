@@ -1,5 +1,11 @@
 var NAVTREEINDEX17 =
 {
+"structmolpro_1_1profiler_1_1Profiler_1_1Proxy.html#af736944486dafc9a533f823ba656e957":[14,0,4,1,5,0,5],
+"structmolpro_1_1profiler_1_1WeakSingleton.html":[14,0,4,1,7],
+"structmolpro_1_1profiler_1_1WeakSingleton.html#a914ac8e10632f06314f5bf81e4845a58":[14,0,4,1,7,0],
+"structmolpro_1_1profiler_1_1detail_1_1AccessCPU.html":[14,0,4,1,0,1],
+"structmolpro_1_1profiler_1_1detail_1_1AccessCPU.html#a5bd501ceac97b99963f876daefdc8226":[14,0,4,1,0,1,0],
+"structmolpro_1_1profiler_1_1detail_1_1AccessCalls.html":[14,0,4,1,0,0],
 "structmolpro_1_1profiler_1_1detail_1_1AccessCalls.html#a0e1d9458d1d8e25ef508498ca1e1d04c":[14,0,4,1,0,0,0],
 "structmolpro_1_1profiler_1_1detail_1_1AccessOperations.html":[14,0,4,1,0,2],
 "structmolpro_1_1profiler_1_1detail_1_1AccessOperations.html#af135568aa0e88453beefea0de64f077e":[14,0,4,1,0,2,0],

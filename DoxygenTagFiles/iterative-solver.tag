@@ -6696,6 +6696,27 @@
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residual, const VecRef&lt; R &gt; &amp;scratch)</arglist>
     </member>
     <member kind="function" protection="protected">
+      <type>void</type>
+      <name>solution_impl</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a689f0433b42ebcc22ef3e6d71f84e589</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;roots, const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residual, const VecRef&lt; R &gt; &amp;scratch, ConstructResidual &amp;&amp;construct_residual_with)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>construct_solutions</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a74a7121cee8b93975b4151da2b7f6277</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;rows, const subspace::Matrix&lt; value_type &gt; &amp;solutions, const VecRef&lt; R &gt; &amp;parameters)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>construct_actions</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a60bb444c45c663066ae303095937db46</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;rows, const subspace::Matrix&lt; value_type &gt; &amp;solutions, const VecRef&lt; R &gt; &amp;actions)</arglist>
+    </member>
+    <member kind="function" protection="protected">
       <type></type>
       <name>IterativeSolverTemplate</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
@@ -6743,6 +6764,13 @@
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
       <anchor>a3e71d806a58853b37ee94351e5631190</anchor>
       <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const CVecRef&lt; R &gt; &amp;residuals, const std::vector&lt; value_type_abs &gt; &amp;solution_norms, std::vector&lt; value_type_abs &gt; &amp;errors)</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>solution_with_errors</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1IterativeSolverTemplate.html</anchorfile>
+      <anchor>a54e8e05ca0912b828dec3bff150903a0</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;roots, const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residual, const VecRef&lt; R &gt; &amp;scratch, const std::vector&lt; value_type_abs &gt; &amp;solution_norms, std::vector&lt; value_type_abs &gt; &amp;errors)</arglist>
     </member>
     <member kind="function" protection="protected" virtualness="virtual">
       <type>virtual bool</type>
@@ -7645,31 +7673,24 @@
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
+      <name>solution_with_errors</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>aebc2500d6628ca046384aa00acfaa87a</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;roots, const VecRef&lt; R &gt; &amp;parameters, const VecRef&lt; R &gt; &amp;residual, const VecRef&lt; R &gt; &amp;scratch, const std::vector&lt; value_type_abs &gt; &amp;solution_norms, std::vector&lt; value_type_abs &gt; &amp;errors) override</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>construct_residual</name>
+      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
+      <anchor>a73a82738ff6f38ccdd9d53fd85577bdb</anchor>
+      <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const VecRef&lt; R &gt; &amp;actions, const detail::MetricSolutions&lt; R, Q &gt; &amp;metric_solutions, std::optional&lt; value_type_abs &gt; *truncated_partner_residual_norm)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
       <name>combine_errors</name>
       <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
       <anchor>ab770873d2c1535aee400e8b2f83ddd2d</anchor>
       <arglist>() override</arglist>
-    </member>
-    <member kind="function" protection="protected">
-      <type>void</type>
-      <name>compute_errors</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a6ce27c350d37cb8ea1ed0538d900946a</anchor>
-      <arglist>(const std::vector&lt; int &gt; &amp;roots, const CVecRef&lt; R &gt; &amp;params, const CVecRef&lt; R &gt; &amp;residuals, const std::vector&lt; value_type_abs &gt; &amp;solution_norms, std::vector&lt; value_type_abs &gt; &amp;errors) override</arglist>
-    </member>
-    <member kind="function" protection="protected">
-      <type>void</type>
-      <name>construct_subspace_vector</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a2963320f3561bd4446b3e329979ebd74</anchor>
-      <arglist>(const subspace::Matrix&lt; scalar_type &gt; &amp;solutions, int row, R &amp;param)</arglist>
-    </member>
-    <member kind="function" protection="protected">
-      <type>void</type>
-      <name>construct_subspace_action</name>
-      <anchorfile>classmolpro_1_1linalg_1_1itsolv_1_1LinearEigensystemDavidson.html</anchorfile>
-      <anchor>a4727d9c7703b03a8ae17762896b3f3a0</anchor>
-      <arglist>(const subspace::Matrix&lt; scalar_type &gt; &amp;solutions, int row, R &amp;action)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
