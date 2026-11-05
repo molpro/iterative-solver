@@ -609,6 +609,12 @@ TEST(helper_implementation, eigensolver_hermitian_lowest_survives_enabled_fpe_tr
     H(i, i) = 1.0 + (i / 3);
   const auto old_traps = fegetexcept();
   feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+  if (fegetexcept() != (FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW)) {
+    // some platforms (e.g. aarch64 under virtualisation) cannot trap
+    fedisableexcept(FE_ALL_EXCEPT);
+    feenableexcept(old_traps);
+    GTEST_SKIP() << "floating-point traps cannot be enabled on this platform";
+  }
   std::vector<double> evecs(n * nroots), evals(nroots);
   const auto info = molpro::linalg::itsolv::eigensolver_hermitian_lowest<double>(
       std::span<const double>{H.data(), size_t(n * n)}, evecs, evals, n, nroots);
