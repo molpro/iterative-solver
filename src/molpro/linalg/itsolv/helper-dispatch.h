@@ -22,6 +22,7 @@
 #include <molpro/linalg/itsolv/helper.h>
 
 #include <algorithm>
+#include <cfenv>
 #include <complex>
 #include <cstddef>
 #include <list>
@@ -287,6 +288,23 @@ int eigensolver_hermitian_lowest_kernel(std::false_type /*use_lapack*/, std::spa
   return info;
 }
 
+//! Suspends floating-point exception traps and discards the flags raised in its scope. LAPACK's ?stemr relies on
+//! IEEE infinities from exactly-zero pivots (?larrc), which would otherwise trap if the host application enables FPEs.
+class ScopedFpeSuspend {
+public:
+  ScopedFpeSuspend() { m_suspended = std::feholdexcept(&m_env) == 0; }
+  ~ScopedFpeSuspend() {
+    if (m_suspended)
+      std::fesetenv(&m_env);
+  }
+  ScopedFpeSuspend(const ScopedFpeSuspend&) = delete;
+  ScopedFpeSuspend& operator=(const ScopedFpeSuspend&) = delete;
+
+private:
+  std::fenv_t m_env;
+  bool m_suspended;
+};
+
 #if defined(HAVE_LAPACKE) || defined(MOLPRO)
 //! LAPACK implementation of the partial hermitian eigenproblem, @see the Eigen overload for the contract
 template <typename value_type>
@@ -299,6 +317,7 @@ int eigensolver_hermitian_lowest_kernel(std::true_type /*use_lapack*/, std::span
   std::vector<lapack_int> support(2 * std::max<size_t>(nroots, 1));
   // ?syevr/?heevr need room for all dimension eigenvalues, though only the first nroots are returned
   std::vector<real_type_t<value_type>> all(dimension);
+  ScopedFpeSuspend fpe_suspend;
   const auto info = lapack::heevr_lowest(LAPACK_COL_MAJOR, store_lower_triangle, lapack_int(dimension), a.data(),
                                          lapack_int(dimension), lapack_int(nroots), &found, all.data(), z.data(),
                                          lapack_int(dimension), support.data());
