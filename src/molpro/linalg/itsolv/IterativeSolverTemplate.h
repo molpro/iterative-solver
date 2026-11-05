@@ -716,15 +716,20 @@ protected:
    */
   void solution_impl(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual,
                      const VecRef<R>& scratch) {
+    solution_impl(roots, parameters, residual, scratch, [this](const auto&... args) { construct_residual(args...); });
+  }
+
+  /*!
+   * @brief Implements solution(), with the residuals constructed by the given function in place of
+   * construct_residual(), which takes the same arguments
+   */
+  template <typename ConstructResidual>
+  void solution_impl(const std::vector<int>& roots, const VecRef<R>& parameters, const VecRef<R>& residual,
+                     const VecRef<R>& scratch, ConstructResidual&& construct_residual_with) {
     // auto prof = profiler()->push("itsolv::solution"); // FIXME two profilers
     auto prof = molpro::Profiler::single();
     check_consistent_number_of_roots_and_solutions(roots, parameters.size());
-    prof->start("construct_solution (parameters)");
-    const auto& dims = m_xspace->dimensions();
-    util::construct_solutions(parameters, roots, m_subspace_solver->solutions(), m_xspace->cparamsp(),
-                              m_xspace->cparamsq(), m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(),
-                              m_handlers->rr(), m_handlers->rp(), m_handlers->rq());
-    prof->stop();
+    construct_solutions(roots, m_subspace_solver->solutions(), parameters);
     auto metric_solutions = detail::MetricSolutions<R, Q>{};
     auto metric_solutions_q = std::vector<Q>{};
     if (m_metric_kind != MetricKind::Identity && m_metric_storage == MetricStorage::OnTheFly && !roots.empty()) {
@@ -745,18 +750,47 @@ protected:
       }
       prof->stop();
     }
-    prof->start("construct_solution (residual)");
-    util::construct_solutions(residual, roots, m_subspace_solver->solutions(), {}, m_xspace->cactionsq(),
-                              m_xspace->cactionsd(), dims.oP(), dims.oQ(), dims.oD(), m_handlers->rr(),
+    construct_actions(roots, m_subspace_solver->solutions(), residual);
+    prof->start("apply");
+    construct_residual_with(roots, cwrap(parameters), residual, metric_solutions);
+    read_handler_counts(m_stats, m_handlers);
+    prof->stop();
+  }
+
+  /*!
+   * @brief Constructs the subspace vectors with the coefficients in the given rows of solutions
+   * @param rows rows of solutions
+   * @param solutions coefficients of subspace vectors in the current subspace, one vector per row
+   * @param parameters receives the subspace vectors
+   */
+  void construct_solutions(const std::vector<int>& rows, const subspace::Matrix<value_type>& solutions,
+                           const VecRef<R>& parameters) {
+    auto prof = molpro::Profiler::single();
+    const auto& dims = m_xspace->dimensions();
+    prof->start("construct_solution (parameters)");
+    util::construct_solutions(parameters, rows, solutions, m_xspace->cparamsp(), m_xspace->cparamsq(),
+                              m_xspace->cparamsd(), dims.oP(), dims.oQ(), dims.oD(), m_handlers->rr(),
                               m_handlers->rp(), m_handlers->rq());
     prof->stop();
-    prof->start("apply");
-    auto pvectors = detail::construct_vectorP(roots, m_subspace_solver->solutions(), m_xspace->dimensions().oP(),
-                                              m_xspace->dimensions().nP);
+  }
+
+  /*!
+   * @brief Constructs the actions on the subspace vectors with the coefficients in the given rows of solutions
+   * @param rows rows of solutions
+   * @param solutions coefficients of subspace vectors in the current subspace, one vector per row
+   * @param actions receives the actions on the subspace vectors
+   */
+  void construct_actions(const std::vector<int>& rows, const subspace::Matrix<value_type>& solutions,
+                         const VecRef<R>& actions) {
+    auto prof = molpro::Profiler::single();
+    const auto& dims = m_xspace->dimensions();
+    prof->start("construct_solution (residual)");
+    util::construct_solutions(actions, rows, solutions, {}, m_xspace->cactionsq(), m_xspace->cactionsd(), dims.oP(),
+                              dims.oQ(), dims.oD(), m_handlers->rr(), m_handlers->rp(), m_handlers->rq());
+    prof->stop();
+    prof->start("apply_p");
     if (m_apply_p)
-      m_apply_p(pvectors, m_xspace->cparamsp(), residual);
-    construct_residual(roots, cwrap(parameters), residual, metric_solutions);
-    read_handler_counts(m_stats, m_handlers);
+      m_apply_p(detail::construct_vectorP(rows, solutions, dims.oP(), dims.nP), m_xspace->cparamsp(), actions);
     prof->stop();
   }
 
@@ -857,6 +891,17 @@ protected:
     if (!solution_norms.empty())
       for (size_t i = 0; i < roots.size(); ++i)
         errors[i] /= solution_norms[roots[i]];
+  }
+  /*!
+   * @brief Constructs the parameters and residuals of roots, as solution_impl() does, and computes their errors, as
+   * compute_errors() does
+   */
+  virtual void solution_with_errors(const std::vector<int>& roots, const VecRef<R>& parameters,
+                                    const VecRef<R>& residual, const VecRef<R>& scratch,
+                                    const std::vector<value_type_abs>& solution_norms,
+                                    std::vector<value_type_abs>& errors) {
+    solution_impl(roots, parameters, residual, scratch);
+    compute_errors(roots, cwrap(parameters), cwrap(residual), solution_norms, errors);
   }
   virtual bool linearEigensystem() const { return false; }
 
@@ -995,9 +1040,8 @@ protected:
       auto [start_sol, end_sol] = batch;
       auto roots = std::vector<int>(end_sol - start_sol);
       std::iota(begin(roots), end(roots), start_sol);
-      solution_impl(roots, parameters, action, scratch);
       auto errors = std::vector<value_type_abs>(roots.size(), 0);
-      compute_errors(roots, cwrap(parameters), cwrap(action), solution_norms, errors);
+      solution_with_errors(roots, parameters, action, scratch, solution_norms, errors);
       if (batches.size() > 1) {
         for (size_t i = 0; i < roots.size(); ++i)
           temp_solutions.emplace_back(m_handlers->qr().copy(parameters[i]), m_handlers->qr().copy(action[i]));
